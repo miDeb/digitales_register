@@ -1,5 +1,4 @@
 
-import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -29,7 +28,7 @@ GradesStateBuilder _loadSubjectsReducer(GradesStateBuilder state, action) {
 GradesStateBuilder _subjectsLoadedReducer(
     GradesStateBuilder state, SubjectsLoadedAction action) {
   return state
-    ..subjects = ListBuilder(action.subjects)
+    ..subjects = action.subjects
     ..serverSemester = action.lastRequestedSemester
     ..loading = false;
 }

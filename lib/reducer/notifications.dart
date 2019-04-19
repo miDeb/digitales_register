@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -13,7 +12,7 @@ TypedReducer<NotificationStateBuilder, NotificationsLoadedAction>
     _createNotificationsLoadedReducer() {
   return TypedReducer(
       (NotificationStateBuilder state, NotificationsLoadedAction action) {
-    return state..notifications = ListBuilder(action.notifications);
+    return state..notifications = action.notifications;
   });
 }
 

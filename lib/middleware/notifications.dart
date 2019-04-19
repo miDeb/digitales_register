@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -23,10 +24,14 @@ void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
   final data = await wrapper.post("api/notification/unread");
 
   if (data != null) {
-    store.dispatch(NotificationsLoadedAction(
-        List<Map<String, dynamic>>.from(data)
-            .map((n) => Notification.parse(n))
-            .toList()));
+    store.dispatch(
+      NotificationsLoadedAction(
+        ListBuilder(
+          List<Map<String, dynamic>>.from(data)
+              .map((n) => Notification.parse(n)),
+        ),
+      ),
+    );
   }
 }
 

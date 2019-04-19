@@ -1,8 +1,10 @@
+import 'package:built_collection/built_collection.dart';
+
 import 'app_state.dart';
 import 'data.dart';
 
 class DaysLoadedAction {
-  final List<Day> loadedDays;
+  final ListBuilder<Day> loadedDays;
 
   DaysLoadedAction(this.loadedDays);
   @override
@@ -136,7 +138,7 @@ class NoInternetAction {
 }
 
 class NotificationsLoadedAction {
-  final List<Notification> notifications;
+  final ListBuilder<Notification> notifications;
 
   NotificationsLoadedAction(this.notifications);
 }
@@ -188,7 +190,7 @@ class LoadSubjectDetailsAction {
 }
 
 class SubjectsLoadedAction {
-  final List<AllSemesterSubject> subjects;
+  final ListBuilder<AllSemesterSubject> subjects;
   final int lastRequestedSemester;
 
   SubjectsLoadedAction(this.subjects, this.lastRequestedSemester);

@@ -19,7 +19,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
     final allDays = state.allDays.build().toList();
     final now = DateTime.now();
     for (var day in allDays) {
-      final newDay = action.loadedDays.firstWhere(
+      final newDay = action.loadedDays.build().firstWhere(
         (d) => d.date == day.date,
         orElse: () => null,
       );
@@ -65,7 +65,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
       }
       day.lastRequested = now;
     }
-    for (var newDay in action.loadedDays) {
+    for (var newDay in action.loadedDays.build()) {
       allDays.add(newDay
         ..lastRequested = now
         ..homework.forEach((h) => h.firstSeen = now));
