@@ -22,7 +22,7 @@ final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
-  return [
+  return <Middleware<AppState>>[
         _saveStateMiddleware,
         _createTap(wrapper),
         _createLoad(),
