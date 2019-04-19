@@ -43,8 +43,17 @@ class SettingsViewModel {
   final bool doubleTapForDone;
   final OnSettingChanged<bool> onSetAskWhenDelete;
   final bool askWhenDelete;
-  SettingsViewModel.fromStore(
-      Store<AppState> store, this.onSetDarkMode)
+  @override
+  operator ==(other) {
+    return other is SettingsViewModel &&
+        other.noPassSaving == noPassSaving &&
+        other.noDataSaving == noDataSaving &&
+        other.noAverageForAllSemester == noAverageForAllSemester &&
+        other.doubleTapForDone == doubleTapForDone &&
+        other.askWhenDelete == askWhenDelete;
+  }
+
+  SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
       : noPassSaving = store.state.settingsState.noPasswordSaving,
         noDataSaving = store.state.settingsState.noDataSaving,
         noAverageForAllSemester =

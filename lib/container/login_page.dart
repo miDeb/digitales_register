@@ -15,6 +15,7 @@ class LoginPage extends StatelessWidget {
           vm: vm,
         );
       },
+      distinct: true,
       converter: (Store store) {
         return LoginPageViewModel.from(store);
       },
@@ -31,6 +32,14 @@ class LoginPageViewModel {
   final SetSafeModeCallback setSafeMode;
   final VoidCallback onReload;
   final bool loading, safeMode, noInternet;
+
+  operator ==(other) {
+    return other is LoginPageViewModel &&
+        other.noInternet == noInternet &&
+        other.error == error &&
+        other.loading == loading &&
+        other.safeMode == safeMode;
+  }
 
   LoginPageViewModel.from(Store<AppState> store)
       : error = store.state.loginState.errorMsg,

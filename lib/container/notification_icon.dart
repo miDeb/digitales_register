@@ -12,6 +12,7 @@ class NotificationIcon extends StatelessWidget {
       builder: (BuildContext context, NotificationIconViewModel vm) {
         return NotificationIconWidget(vm: vm,);
       },
+      distinct: true,
       converter: (store) {
         return NotificationIconViewModel(
             store.state.notificationState.notifications?.length ?? 0,
@@ -24,6 +25,10 @@ class NotificationIcon extends StatelessWidget {
 class NotificationIconViewModel {
   final int notifications;
   final VoidCallback onTap;
+
+  @override operator ==(other){
+    return other is NotificationIconViewModel && other.notifications == notifications;
+  }
 
   NotificationIconViewModel(this.notifications, this.onTap);
 }

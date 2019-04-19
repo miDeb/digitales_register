@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:collection/collection.dart';
 
 import '../app_state.dart';
 import '../data.dart';
@@ -17,17 +18,22 @@ class CalendarWeekContainer extends StatelessWidget {
       builder: (BuildContext context, vm) {
         return CalendarWeek(vm: vm);
       },
+      distinct: true,
       converter: (Store<AppState> store) {
         return CalendarWeekViewModel(store, monday);
       },
     );
   }
 }
-
+Function deepEq = const DeepCollectionEquality().equals;
 typedef void DayCallback(DateTime day);
 
 class CalendarWeekViewModel {
   final List<CalendarDay> days;
+
+  @override operator ==(other){
+    return other is CalendarWeekViewModel && deepEq(other.days, days);
+  }
 
   CalendarWeekViewModel(Store<AppState> store, DateTime monday)
       : days = store.state.calendarState.days.values.where(

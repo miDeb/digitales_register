@@ -12,6 +12,7 @@ class AbsencesPageContainer extends StatelessWidget {
       builder: (BuildContext context, vm) {
         return AbsencesPage(state: vm);
       },
+      distinct: true,
       converter: (Store<AppState> store) {
         return store.state.absenceState;
       },
