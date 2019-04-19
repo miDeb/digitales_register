@@ -14,8 +14,8 @@ import 'container/home_page.dart';
 import 'container/login_page.dart';
 import 'container/notifications_page.dart';
 import 'container/settings_page.dart';
-import 'middleware.dart';
-import 'reducer.dart';
+import 'middleware/middleware.dart';
+import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
 import 'util.dart';
 
