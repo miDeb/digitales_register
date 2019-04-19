@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
@@ -26,7 +25,6 @@ List<Middleware<AppState>> createMiddleware() {
         _saveStateMiddleware,
         _createTap(wrapper),
         _createLoad(),
-        _createSetSettings(),
         _createRefresh(),
         _createNoInternet(),
       ] +
@@ -48,77 +46,21 @@ TypedMiddleware<AppState, TapAction> _createTap(Wrapper wrapper) =>
       },
     );
 
-SettingsState fetchSettings(SharedPreferences prefs) {
-  return SettingsState((b) => b
-    ..askWhenDelete = prefs.getBool("askWhenDeleteReminder") ?? true
-    ..noPasswordSaving = prefs.getBool("safeMode") ?? false
-    ..noDataSaving = prefs.getBool("saveNoData") ?? false
-    ..typeSorted = prefs.getBool("gradesTypeSorted") ?? true
-    ..showCancelled = prefs.getBool("showCancelledGrades") ?? false
-    ..doubleTapForDone = prefs.getBool("doubleTapHDone") ?? false
-    ..noAverageForAllSemester = prefs.getBool("noAvgForAll") ?? false);
-}
-
-TypedMiddleware<AppState, SettingsAction> _createSetSettings() {
-  return TypedMiddleware((Store<AppState> store, SettingsAction action,
-      NextDispatcher next) async {
-    next(action);
-    final preferences = await SharedPreferences.getInstance();
-    preferences.setBool(
-      "saveNoData",
-      store.state.settingsState.noDataSaving,
-    );
-    preferences.setBool(
-      "safeMode",
-      store.state.settingsState.noPasswordSaving,
-    );
-    preferences.setBool(
-      "doubleTapHDone",
-      store.state.settingsState.doubleTapForDone,
-    );
-    preferences.setBool(
-      "noAvgForAll",
-      store.state.settingsState.noAverageForAllSemester,
-    );
-    preferences.setBool(
-      "askWhenDeleteReminder",
-      store.state.settingsState.askWhenDelete,
-    );
-    preferences.setBool(
-      "gradesTypeSorted",
-      store.state.settingsState.typeSorted,
-    );
-    preferences.setBool(
-      "showCancelledGrades",
-      store.state.settingsState.showCancelled,
-    );
-  });
-}
-
 TypedMiddleware<AppState, LoadAction> _createLoad() {
   return TypedMiddleware(
     (Store<AppState> store, LoadAction action, NextDispatcher next) async {
       next(action);
       var saveNoPass = store.state.settingsState?.noPasswordSaving;
-      final preferences = await SharedPreferences.getInstance();
-      if (saveNoPass == null) {
-        saveNoPass = preferences.getBool("safeMode") == true;
-      }
-      store.dispatch(SetSaveNoPassAction(saveNoPass));
-      store.dispatch(SettingsLoadedAction(fetchSettings(preferences)));
 
-      if (saveNoPass) {
+      store.dispatch(SetSaveNoPassAction(saveNoPass));
+      final user = await _secureStorage.read(key: "user");
+      final pass = await _secureStorage.read(key: "pass");
+      if (user != null && pass != null) {
+        store.dispatch(
+          LoginAction(user, pass, true),
+        );
+      } else
         store.dispatch(ShowLoginAction());
-      } else {
-        final user = await _secureStorage.read(key: "user");
-        final pass = await _secureStorage.read(key: "pass");
-        if (user != null && pass != null) {
-          store.dispatch(
-            LoginAction(user, pass, true),
-          );
-        } else
-          store.dispatch(ShowLoginAction());
-      }
     },
   );
 }
@@ -161,29 +103,30 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
         }
         _lastSaving = DateTime.now();
         final user = store.state.loginState.userName.hashCode;
-        Future.wait([
-          _secureStorage.write(
-              key: "$user::grades",
-              value:
-                  json.encode(serializers.serialize(store.state.gradesState))),
-          _secureStorage.write(
-              key: "$user::homework",
-              value: json.encode(serializers.serialize(store.state.dayState))),
-          _secureStorage.write(
-              key: "$user::calendar",
-              value: json
-                  .encode(serializers.serialize(store.state.calendarState))),
-          (store.state.absenceState != null)
-              ? _secureStorage.write(
-                  key: "$user::absences",
-                  value: json
-                      .encode(serializers.serialize(store.state.absenceState)))
-              : Future.value(null),
-          _secureStorage.write(
-              key: "$user::notifications",
-              value: json.encode(
-                  serializers.serialize(store.state.notificationState))),
-        ]);
+        _secureStorage.write(
+            key: "$user::grades",
+            value: json.encode(serializers.serialize(store.state.gradesState)));
+        _secureStorage.write(
+            key: "$user::homework",
+            value: json.encode(serializers.serialize(store.state.dayState)));
+        _secureStorage.write(
+            key: "$user::calendar",
+            value:
+                json.encode(serializers.serialize(store.state.calendarState)));
+        (store.state.absenceState != null)
+            ? _secureStorage.write(
+                key: "$user::absences",
+                value: json
+                    .encode(serializers.serialize(store.state.absenceState)))
+            : Future.value(null);
+        _secureStorage.write(
+            key: "$user::notifications",
+            value: json
+                .encode(serializers.serialize(store.state.notificationState)));
+        _secureStorage.write(
+            key: "$user::settings",
+            value:
+                json.encode(serializers.serialize(store.state.settingsState)));
       });
     } else if (store.state.settingsState.noDataSaving) {
       _secureStorage.deleteAll();

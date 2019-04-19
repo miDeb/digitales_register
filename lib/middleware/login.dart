@@ -95,6 +95,10 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
         ? serializers.deserialize(json.decode(vals["$user::calendar"]))
             as CalendarState
         : store.state.calendarState;
+    final settingsState = vals["$user::settings"] != null
+        ? serializers.deserialize(json.decode(vals["$user::settings"]))
+            as SettingsState
+        : store.state.settingsState;
     store.dispatch(
       MountAppStateAction(
         store.state.rebuild(
@@ -103,7 +107,8 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
             ..gradesState = gradesState.toBuilder()
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
-            ..calendarState = calendarState.toBuilder(),
+            ..calendarState = calendarState.toBuilder()
+            ..settingsState = settingsState.toBuilder(),
         ),
       ),
     );

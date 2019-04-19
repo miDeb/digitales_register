@@ -12,6 +12,7 @@ part 'serializers.g.dart';
   DayState,
   AbsenceState,
   CalendarState,
+  SettingsState,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DaySerializer())
