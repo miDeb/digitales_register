@@ -7,13 +7,7 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({Key key, this.child, this.splash}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return AnimatedCrossFade(
-      firstChild: _SplashWidget(),
-      secondChild: child,
-      crossFadeState:
-          splash ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-      duration: Duration(),
-    );
+    return splash ? _SplashWidget() : child;
   }
 }
 
