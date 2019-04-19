@@ -66,6 +66,10 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "dr DEBUG"
         }
+        profile {
+            applicationIdSuffix ".profile"
+            resValue "string", "app_name", "dr PROFILE"
+        }
     }
 }
 
