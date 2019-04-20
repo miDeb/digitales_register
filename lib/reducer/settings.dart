@@ -4,9 +4,7 @@ import '../actions.dart';
 import '../app_state.dart';
 
 SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
-  return action is SettingsLoadedAction
-      ? action.state.toBuilder()
-      : (state
+  return (state
         ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
         ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
         ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)

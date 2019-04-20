@@ -91,12 +91,6 @@ class TapAction {
 
 abstract class SettingsAction {}
 
-class SettingsLoadedAction implements SettingsAction {
-  final SettingsState state;
-
-  SettingsLoadedAction(this.state);
-}
-
 class SetSaveNoPassAction implements SettingsAction {
   final bool noSave;
 

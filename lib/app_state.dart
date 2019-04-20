@@ -133,23 +133,16 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
 
 abstract class SettingsState
     implements Built<SettingsState, SettingsStateBuilder> {
-  @nullable
   bool get noPasswordSaving;
-  @nullable
   bool get noDataSaving;
 
   /// true = sort grades inside subjects by type;
   ///
   /// false = sort grades inside subjects by date
-  @nullable
   bool get typeSorted;
-  @nullable
   bool get noAverageForAllSemester;
-  @nullable
   bool get doubleTapForDone;
-  @nullable
   bool get askWhenDelete;
-  @nullable
   bool get showCancelled;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
