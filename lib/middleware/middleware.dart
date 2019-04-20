@@ -83,53 +83,65 @@ TypedMiddleware<AppState, NoInternetAction> _createNoInternet() {
   });
 }
 
-var _call = 0;
-var _lastSaving = DateTime(0);
+var _saveUnderway = false;
+
+GradesState _lastGradesState;
+DayState _lastDayState;
+CalendarState _lastCalendarState;
+AbsenceState _lastAbsenceState;
+NotificationState _lastNotificationState;
+SettingsState _lastSettingsState;
+AppState _lastAppState;
 
 _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
-  final stateBefore = store.state;
   next(action);
-  if (store.state.loginState.loggedIn &&
+  if (!_saveUnderway &&
+      store.state.loginState.loggedIn &&
       store.state.loginState.userName != null &&
-      stateBefore != store.state) {
+      _lastAppState != store.state) {
+    final user = store.state.loginState.userName.hashCode;
     if (!store.state.settingsState.noDataSaving) {
-      final call = ++_call;
-      final delay = _lastSaving.difference(DateTime.now()).inSeconds < 5
-          ? Duration()
-          : Duration(seconds: 5);
+      _saveUnderway = true;
+      final delay = Duration(seconds: 5);
       await Future.delayed(delay, () async {
-        if (call < _call) {
-          return;
-        }
-        _lastSaving = DateTime.now();
+        _saveUnderway = false;
+        _lastAppState = store.state;
         final user = store.state.loginState.userName.hashCode;
-        _secureStorage.write(
-            key: "$user::grades",
-            value: json.encode(serializers.serialize(store.state.gradesState)));
-        _secureStorage.write(
-            key: "$user::homework",
-            value: json.encode(serializers.serialize(store.state.dayState)));
-        _secureStorage.write(
-            key: "$user::calendar",
-            value:
-                json.encode(serializers.serialize(store.state.calendarState)));
-        (store.state.absenceState != null)
-            ? _secureStorage.write(
-                key: "$user::absences",
-                value: json
-                    .encode(serializers.serialize(store.state.absenceState)))
-            : Future.value(null);
-        _secureStorage.write(
-            key: "$user::notifications",
-            value: json
-                .encode(serializers.serialize(store.state.notificationState)));
-        _secureStorage.write(
-            key: "$user::settings",
-            value:
-                json.encode(serializers.serialize(store.state.settingsState)));
+        if (_lastGradesState != store.state.gradesState)
+          _secureStorage.write(
+              key: "$user::grades",
+              value:
+                  json.encode(serializers.serialize(store.state.gradesState)));
+        if (_lastDayState != store.state.dayState)
+          _secureStorage.write(
+              key: "$user::homework",
+              value: json.encode(serializers.serialize(store.state.dayState)));
+        if (_lastCalendarState != store.state.calendarState)
+          _secureStorage.write(
+              key: "$user::calendar",
+              value: json
+                  .encode(serializers.serialize(store.state.calendarState)));
+        if (_lastAbsenceState != store.state.absenceState)
+          _secureStorage.write(
+              key: "$user::absences",
+              value:
+                  json.encode(serializers.serialize(store.state.absenceState)));
+        if (_lastNotificationState != store.state.notificationState)
+          _secureStorage.write(
+              key: "$user::notifications",
+              value: json.encode(
+                  serializers.serialize(store.state.notificationState)));
       });
-    } else if (store.state.settingsState.noDataSaving) {
-      _secureStorage.deleteAll();
+      _lastAbsenceState = store.state.absenceState;
+      _lastCalendarState = store.state.calendarState;
+      _lastDayState = store.state.dayState;
+      _lastGradesState = store.state.gradesState;
+      _lastNotificationState = store.state.notificationState;
     }
+    if (_lastSettingsState != store.state.settingsState)
+      _secureStorage.write(
+          key: "$user::settings",
+          value: json.encode(serializers.serialize(store.state.settingsState)));
+    _lastSettingsState = store.state.settingsState;
   }
 }
