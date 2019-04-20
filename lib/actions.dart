@@ -76,9 +76,9 @@ class LoginFailedAction {
 }
 
 class LogoutAction {
-  final bool hard;
+  final bool hard, forced;
 
-  LogoutAction(this.hard);
+  LogoutAction(this.hard, this.forced);
 }
 
 /// Update logout action
@@ -108,6 +108,16 @@ class SetSaveNoDataAction implements SettingsAction {
   @override
   String toString() {
     return "SetSaveNoDataAction(safeMode: $noSave)";
+  }
+}
+
+class SetDeleteDataOnLogoutAction implements SettingsAction {
+  final bool delete;
+
+  SetDeleteDataOnLogoutAction(this.delete);
+  @override
+  String toString() {
+    return "SetDeleteDataOnLogoutAction(safeMode: $delete)";
   }
 }
 
@@ -156,6 +166,8 @@ class RefreshAction {}
 class SavePassAction {}
 
 class DeletePassAction {}
+
+class DeleteDataAction {}
 
 class SetIsLoginRouteAction {
   final bool isLogin;
@@ -263,6 +275,7 @@ class SetGradesTypeSortedAction {
 
   SetGradesTypeSortedAction(this.typeSorted);
 }
+
 class SetGradesShowCancelledAction {
   final bool showCancelled;
 
@@ -289,6 +302,7 @@ class LoadCalendarAction {
 
   LoadCalendarAction(this.startDate);
 }
+
 class CurrentMondayChangedAction {
   final DateTime monday;
 

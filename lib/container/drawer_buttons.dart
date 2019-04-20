@@ -26,7 +26,7 @@ class LogoutButtonViewModel {
   LogoutButtonViewModel.from(Store store)
       : onLogout = store.state.loginState.loggedIn
             ? (() {
-                store.dispatch(LogoutAction(true));
+                store.dispatch(LogoutAction(true, false));
               })
             : null;
 }

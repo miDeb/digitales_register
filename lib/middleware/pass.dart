@@ -23,8 +23,8 @@ void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
     Wrapper wrapper, Store<AppState> store) {
   next(action);
   wrapper.safeMode = action.noSave;
-  if (action.noSave && !store.state.settingsState.noDataSaving) {
-    store.dispatch(SetSaveNoDataAction(true));
+  if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
+    store.dispatch(SetDeleteDataOnLogoutAction(false));
   }
   if (!store.state.loginState.loggedIn) return;
   if (!action.noSave) {

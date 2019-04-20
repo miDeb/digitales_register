@@ -22,8 +22,10 @@ final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
   return <Middleware<AppState>>[
-        _saveStateMiddleware,
         _createTap(wrapper),
+        _saveStateMiddleware,
+        TypedMiddleware(_saveNoDataMiddleware),
+        TypedMiddleware(_deleteDataMiddleware),
         _createLoad(),
         _createRefresh(),
         _createNoInternet(),
@@ -144,4 +146,25 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
           value: json.encode(serializers.serialize(store.state.settingsState)));
     _lastSettingsState = store.state.settingsState;
   }
+}
+
+_saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
+  next(action);
+  if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
+    store.dispatch(SetDeleteDataOnLogoutAction(false));
+  }
+  if (action.noSave) {
+    store.dispatch(DeleteDataAction());
+  }
+}
+
+_deleteDataMiddleware(Store<AppState> store, DeleteDataAction action, next) {
+  final user = store.state.loginState.userName.hashCode;
+  _secureStorage.delete(key: "$user::grades");
+  _secureStorage.delete(key: "$user::notifications");
+  _secureStorage.delete(key: "$user::homework");
+  _secureStorage.delete(key: "$user::calendar");
+  _secureStorage.delete(key: "$user::absences");
+  _lastAbsenceState = _lastAppState = _lastCalendarState = _lastDayState =
+      _lastGradesState = _lastNotificationState = null;
 }

@@ -29,16 +29,23 @@ class SettingsPageWidget extends StatelessWidget {
             value: !vm.noPassSaving,
           ),
           SwitchListTile(
-            title: Text("Offline-Modus aktivieren"),
-            subtitle: vm.noPassSaving
-                ? Text('Nur möglich, wenn "Angemeldet bleiben" aktiviert ist')
-                : null,
-            onChanged: vm.noPassSaving
-                ? null
-                : (bool value) {
-                    vm.onSetNoDataSaving(!value);
-                  },
+            title: Text("Daten lokal speichern"),
+            subtitle:
+                Text('- Offline-Modus\n- Sehen, wann etwas eingetragen wurde'),
+            onChanged: (bool value) {
+              vm.onSetNoDataSaving(!value);
+            },
+            isThreeLine: true,
             value: !vm.noDataSaving,
+          ),
+          SwitchListTile(
+            title: Text("Daten beim Ausloggen löschen"),
+            onChanged: !vm.noPassSaving && !vm.noDataSaving
+                ? (bool value) {
+                    vm.onSetDeleteDataOnLogout(value);
+                  }
+                : null,
+            value: vm.deleteDataOnLogout,
           ),
           Divider(),
           ListTile(

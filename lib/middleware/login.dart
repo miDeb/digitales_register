@@ -33,7 +33,12 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
   if (!store.state.settingsState.noPasswordSaving && action.hard) {
     store.dispatch(DeletePassAction());
   }
-  wrapper.logout(hard: action.hard);
+  if (store.state.settingsState.deleteDataOnLogout && action.hard) {
+    store.dispatch(DeleteDataAction());
+  }
+  if (!action.forced) {
+    wrapper.logout(hard: action.hard);
+  }
   store.dispatch(ShowLoginAction());
 }
 
@@ -50,8 +55,8 @@ void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
   await wrapper.login(
     action.user,
     action.pass,
-    logout: () => store
-        .dispatch(LogoutAction(store.state.settingsState.noPasswordSaving)),
+    logout: () => store.dispatch(
+        LogoutAction(store.state.settingsState.noPasswordSaving, true)),
     configLoaded: () => store.dispatch(
           SetConfigAction(wrapper.config),
         ),

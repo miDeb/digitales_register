@@ -144,10 +144,25 @@ abstract class SettingsState
   bool get doubleTapForDone;
   bool get askWhenDelete;
   bool get showCancelled;
+  bool get deleteDataOnLogout;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
   factory SettingsState([updates(SettingsStateBuilder b)]) = _$SettingsState;
+}
+
+abstract class SettingsStateBuilder
+    implements Builder<SettingsState, SettingsStateBuilder> {
+  SettingsStateBuilder._();
+  factory SettingsStateBuilder() = _$SettingsStateBuilder;
+  bool typeSorted;
+  bool noAverageForAllSemester;
+  bool doubleTapForDone;
+  bool askWhenDelete = true;
+  bool showCancelled;
+  bool deleteDataOnLogout = false; // example for a new setting and backward compatibility
+  bool noPasswordSaving;
+  bool noDataSaving;
 }
 
 abstract class AbsenceState

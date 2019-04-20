@@ -68,7 +68,8 @@ void run() {
           ..noPasswordSaving = false
           ..typeSorted = false
           ..showCancelled = false
-          ..askWhenDelete = true)
+          ..askWhenDelete = true
+          ..deleteDataOnLogout = false)
         ..config = null
         ..gradesState = (GradesStateBuilder()
           ..semester = Semester.all

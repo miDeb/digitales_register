@@ -5,15 +5,16 @@ import '../app_state.dart';
 
 SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
   return (state
-        ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
-        ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
-        ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
-        ..doubleTapForDone =
-            _doubleTapForDoneReducer(state.doubleTapForDone, action)
-        ..noAverageForAllSemester =
-            _noAvgForAllReducer(state.noAverageForAllSemester, action)
-        ..showCancelled = _showCancelledReducer(state.showCancelled, action)
-        ..typeSorted = _sortByTypeReducer(state.typeSorted, action));
+    ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
+    ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
+    ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
+    ..doubleTapForDone =
+        _doubleTapForDoneReducer(state.doubleTapForDone, action)
+    ..noAverageForAllSemester =
+        _noAvgForAllReducer(state.noAverageForAllSemester, action)
+    ..showCancelled = _showCancelledReducer(state.showCancelled, action)
+    ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
+    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action));
 }
 
 final _askWhenDeleteReducer =
@@ -31,3 +32,5 @@ final _saveDataReducer =
     TypedReducer((bool safeMode, SetSaveNoDataAction action) => action.noSave);
 final _savePassReducer =
     TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
+final _deleteOnLogout = TypedReducer(
+    (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
