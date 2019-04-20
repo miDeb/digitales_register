@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -24,7 +23,6 @@ class SortedGradesContainer extends StatelessWidget {
 
 typedef void ViewSubjectDetailCallback(AllSemesterSubject s);
 typedef void SetBoolCallback(bool byType);
-Function deepEq = const DeepCollectionEquality().equals;
 
 class SortedGradesViewModel {
   final List<AllSemesterSubject> subjects;
@@ -44,14 +42,4 @@ class SortedGradesViewModel {
         sortByTypeCallback =
             ((s) => store.dispatch(SetGradesTypeSortedAction(s))),
         noAvgForAllSemester = store.state.settingsState.noAverageForAllSemester;
-
-  @override
-  operator ==(other) {
-    return other is SortedGradesViewModel &&
-        deepEq(other.subjects, subjects) &&
-        other.sortByType == sortByType &&
-        other.noAvgForAllSemester == noAvgForAllSemester &&
-        other.showCancelled == showCancelled &&
-        other.semester == semester;
-  }
 }

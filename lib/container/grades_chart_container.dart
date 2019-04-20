@@ -1,7 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:dr/actions.dart';
-import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
+import 'package:dr/app_state.dart';
 import 'package:dr/ui/grades_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -15,7 +14,6 @@ class GradesChartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, GradesChartViewModel>(
-      distinct: true,
       converter: (Store<AppState> store) {
         return GradesChartViewModel(
           Map.fromIterable(
@@ -47,19 +45,10 @@ class GradesChartContainer extends StatelessWidget {
   }
 }
 
-Function deepEq = const DeepCollectionEquality().equals;
-
 class GradesChartViewModel {
   final Map<SubjectGrades, SubjectGraphConfig> graphs;
   final bool isFullScreen;
   final VoidCallback goFullScreen;
-
-  @override
-  operator ==(other) {
-    return other is GradesChartViewModel &&
-        other.isFullScreen == isFullScreen &&
-        deepEq(graphs, other.graphs);
-  }
 
   GradesChartViewModel(this.graphs, this.isFullScreen, this.goFullScreen);
 }

@@ -13,7 +13,6 @@ class LogoutButton extends StatelessWidget {
       converter: (Store store) {
         return LogoutButtonViewModel.from(store);
       },
-      distinct: true,
       builder: (BuildContext context, LogoutButtonViewModel vm) {
         return LogoutButtonWidget(vm: vm);
       },
@@ -23,11 +22,6 @@ class LogoutButton extends StatelessWidget {
 
 class LogoutButtonViewModel {
   final VoidCallback onLogout;
-
-  @override
-  operator ==(other) {
-    return other is LogoutButtonViewModel;
-  }
 
   LogoutButtonViewModel.from(Store store)
       : onLogout = store.state.loginState.loggedIn
@@ -53,10 +47,6 @@ class SettingsButton extends StatelessWidget {
 
 class SettingsButtonViewModel {
   final VoidCallback onShowSettings;
-  @override
-  operator ==(other) {
-    return other is SettingsButtonViewModel;
-  }
 
   SettingsButtonViewModel.from(Store<AppState> store)
       : onShowSettings = store.state.loginState.loggedIn
@@ -73,7 +63,6 @@ class GradesButton extends StatelessWidget {
       converter: (Store store) {
         return GradesButtonViewModel.from(store);
       },
-      distinct: true,
       builder: (BuildContext context, GradesButtonViewModel vm) {
         return GradesButtonWidget(vm: vm);
       },
@@ -83,10 +72,6 @@ class GradesButton extends StatelessWidget {
 
 class GradesButtonViewModel {
   final VoidCallback onShowGrades;
-  @override
-  operator ==(other) {
-    return other is GradesButtonViewModel;
-  }
 
   GradesButtonViewModel.from(Store<AppState> store)
       : onShowGrades = store.state.config != null ||
@@ -104,7 +89,6 @@ class AbsencesButton extends StatelessWidget {
       converter: (Store store) {
         return AbsencesButtonViewModel.from(store);
       },
-      distinct: true,
       builder: (BuildContext context, AbsencesButtonViewModel vm) {
         return AbsencesButtonWidget(vm: vm);
       },
@@ -114,17 +98,12 @@ class AbsencesButton extends StatelessWidget {
 
 class AbsencesButtonViewModel {
   final VoidCallback onShowAbsences;
-  @override
-  operator ==(other) {
-    return other is AbsencesButtonViewModel;
-  }
 
   AbsencesButtonViewModel.from(Store<AppState> store)
       : onShowAbsences = (() {
           store.dispatch(ShowAbsencesAction());
         });
 }
-
 class CalendarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -132,7 +111,6 @@ class CalendarButton extends StatelessWidget {
       converter: (Store store) {
         return CalendarButtonViewModel.from(store);
       },
-      distinct: true,
       builder: (BuildContext context, CalendarButtonViewModel vm) {
         return CalendarButtonWidget(vm: vm);
       },
@@ -142,10 +120,6 @@ class CalendarButton extends StatelessWidget {
 
 class CalendarButtonViewModel {
   final VoidCallback onShowCalendar;
-  @override
-  operator ==(other) {
-    return other is CalendarButtonViewModel;
-  }
 
   CalendarButtonViewModel.from(Store<AppState> store)
       : onShowCalendar = (() {

@@ -48,7 +48,6 @@ void run() {
   final store = Store<AppState>(
     appReducer,
     middleware: createMiddleware(),
-    distinct: true,
     initialState: AppState((builder) {
       builder
         ..dayState = (DayStateBuilder()

@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -14,7 +13,6 @@ class ChartLegendContainer extends StatelessWidget {
       builder: (BuildContext context, ChartLegendViewModel vm) {
         return ChartLegend(vm: vm);
       },
-      distinct: true,
       converter: (Store<AppState> store) {
         return ChartLegendViewModel(
             store.state.gradesState.graphConfigs
@@ -40,18 +38,10 @@ class ChartLegendContainer extends StatelessWidget {
   }
 }
 
-Function deepEq = const DeepCollectionEquality().equals;
-
 typedef void ChangeThick(String s, int thick);
 
 class ChartLegendViewModel {
   final Map<String, SubjectGraphConfig> configs;
   final ChangeThick onChangeThick;
-
-  @override
-  operator ==(other) {
-    return other is ChartLegendViewModel ?? deepEq(configs, other.configs);
-  }
-
   ChartLegendViewModel(this.configs, this.onChangeThick);
 }

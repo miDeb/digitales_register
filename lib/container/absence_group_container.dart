@@ -17,7 +17,6 @@ class AbsenceGroupContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AbsencesViewModel>(
-      distinct: true,
       builder: (BuildContext context, vm) {
         return AbsenceGroupWidget(vm: vm);
       },
@@ -74,16 +73,6 @@ class AbsencesViewModel {
   final String justifiedString;
   final String reason;
   final AbsenceJustified justified;
-
-  @override
-  operator ==(other) {
-    return other is AbsencesViewModel &&
-        other.fromTo == fromTo &&
-        other.duration == duration &&
-        other.justifiedString == justifiedString &&
-        other.reason == reason &&
-        other.justified == justified;
-  }
 
   AbsencesViewModel(this.fromTo, this.duration, this.justifiedString,
       this.reason, this.justified);

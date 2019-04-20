@@ -15,7 +15,6 @@ class CalendarContainer extends StatelessWidget {
           vm: vm,
         );
       },
-      distinct: true,
       converter: (Store<AppState> store) {
         return CalendarViewModel(store);
       },
@@ -29,11 +28,6 @@ class CalendarViewModel {
   final DateTime currentMonday;
   final VoidCallback nextWeek, prevWeek;
   final DayCallback dayCallback, currentMondayChanged;
-
-  @override
-  operator ==(other) {
-    return other is CalendarViewModel && other.currentMonday == currentMonday;
-  }
 
   CalendarViewModel(Store<AppState> store)
       : currentMonday = store.state.calendarState.currentMonday,

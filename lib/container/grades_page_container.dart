@@ -14,7 +14,6 @@ class GradesPageContainer extends StatelessWidget {
           vm: vm,
         );
       },
-      distinct: true,
       converter: (Store store) {
         return GradesPageViewModel.from(store);
       },
@@ -26,16 +25,11 @@ class GradesPageViewModel {
   final Semester showSemester;
   final ValueChanged<Semester> changeSemester;
   final bool loading;
-  @override
-  operator ==(other) {
-    return other is GradesPageViewModel &&
-        other.showSemester == showSemester &&
-        other.loading == loading;
-  }
+
 
   GradesPageViewModel.from(Store<AppState> store)
       : showSemester = store.state.gradesState.semester,
         changeSemester = ((newSemester) =>
             store.dispatch(SetGradesSemesterAction(newSemester))),
-        loading = store.state.gradesState.loading;
+            loading = store.state.gradesState.loading;
 }

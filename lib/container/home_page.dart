@@ -12,7 +12,6 @@ class HomePage extends StatelessWidget {
       builder: (context, vm) {
         return HomePageContent(vm: vm);
       },
-      distinct: true,
       converter: (store) {
         return HomePageContentViewModel.from(store);
       },
@@ -34,14 +33,8 @@ class HomePageContentViewModel {
         splash = !store.state.loginState.loggedIn,
         refresh = (() => store.dispatch(RefreshAction())),
         reload = (() => store.dispatch(LoadAction()));
-
-  operator ==(other) {
-    return other is HomePageContentViewModel &&
-        other.noInternet == noInternet &&
-        other.hasDays == hasDays &&
-        other.loading == loading &&
-        other.splash == splash &&
-        other.userName == userName &&
-        other.userIcon == userIcon;
+  @override
+  String toString() {
+    return "HomePageContentViewModel(noInternet: $noInternet, hasDays: $hasDays, loading: $loading)";
   }
 }
