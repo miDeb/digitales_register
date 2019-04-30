@@ -73,58 +73,58 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   if (!store.state.settingsState.noPasswordSaving && !action.fromStorage) {
     store.dispatch(SavePassAction());
   }
-  final saveNoData = store.state.settingsState.noDataSaving;
-  if (!saveNoData) {
-    final vals = await secureStorage.readAll();
-    final user = action.userName.hashCode;
-    final dayState = vals["$user::homework"] != null
-        ? serializers.deserialize(json.decode(vals["$user::homework"]))
-            as DayState
-        : store.state.dayState;
-    final gradesState = vals["$user::grades"] != null
-        ? serializers.deserialize(json.decode(vals["$user::grades"]))
-            as GradesState
-        : store.state.gradesState;
-    final notificationState = vals["$user::notifications"] != null
-        ? serializers.deserialize(json.decode(vals["$user::notifications"]))
-            as NotificationState
-        : store.state.notificationState;
-    final absenceState = vals["$user::absences"] != null
-        ? serializers.deserialize(json.decode(vals["$user::absences"]))
-            as AbsenceState
-        : store.state.absenceState;
-    final calendarState = vals["$user::calendar"] != null
-        ? serializers.deserialize(json.decode(vals["$user::calendar"]))
-            as CalendarState
-        : store.state.calendarState;
-    final settingsState = vals["$user::settings"] != null
-        ? serializers.deserialize(json.decode(vals["$user::settings"]))
-            as SettingsState
-        : store.state.settingsState;
-    store.dispatch(
-      MountAppStateAction(
-        store.state.rebuild(
-          (b) => b
-            ..dayState = dayState.toBuilder()
-            ..gradesState = gradesState.toBuilder()
-            ..notificationState = notificationState.toBuilder()
-            ..absenceState = absenceState?.toBuilder()
-            ..calendarState = calendarState.toBuilder()
-            ..settingsState = settingsState.toBuilder(),
-        ),
+
+  final vals = await secureStorage.readAll();
+  final user = action.userName.hashCode;
+  final dayState = vals["$user::homework"] != null
+      ? serializers.deserialize(json.decode(vals["$user::homework"]))
+          as DayState
+      : store.state.dayState;
+  final gradesState = vals["$user::grades"] != null
+      ? serializers.deserialize(json.decode(vals["$user::grades"]))
+          as GradesState
+      : store.state.gradesState;
+  final notificationState = vals["$user::notifications"] != null
+      ? serializers.deserialize(json.decode(vals["$user::notifications"]))
+          as NotificationState
+      : store.state.notificationState;
+  final absenceState = vals["$user::absences"] != null
+      ? serializers.deserialize(json.decode(vals["$user::absences"]))
+          as AbsenceState
+      : store.state.absenceState;
+  final calendarState = vals["$user::calendar"] != null
+      ? serializers.deserialize(json.decode(vals["$user::calendar"]))
+          as CalendarState
+      : store.state.calendarState;
+  final settingsState = vals["$user::settings"] != null
+      ? serializers.deserialize(json.decode(vals["$user::settings"]))
+          as SettingsState
+      : store.state.settingsState;
+  store.dispatch(
+    MountAppStateAction(
+      store.state.rebuild(
+        (b) => b
+          ..dayState = dayState.toBuilder()
+          ..gradesState = gradesState.toBuilder()
+          ..notificationState = notificationState.toBuilder()
+          ..absenceState = absenceState?.toBuilder()
+          ..calendarState = calendarState.toBuilder()
+          ..settingsState = settingsState.toBuilder(),
       ),
-    );
+    ),
+  );
 
-    // next not at the beginning: bug fix (serialization)
-    next(action);
+  // next not at the beginning: bug fix (serialization)
+  next(action);
 
-    if (store.state.currentRouteIsLogin) {
-      navigatorKey.currentState.pop();
-      store.dispatch(SetIsLoginRouteAction(false));
-    }
-    store.dispatch(LoadDaysAction(true));
-    store.dispatch(LoadNotificationsAction());
+  store.dispatch(SetSaveNoPassAction(settingsState.noPasswordSaving));
+
+  if (store.state.currentRouteIsLogin) {
+    navigatorKey.currentState.pop();
+    store.dispatch(SetIsLoginRouteAction(false));
   }
+  store.dispatch(LoadDaysAction(true));
+  store.dispatch(LoadNotificationsAction());
 }
 
 void _loginFailed(
