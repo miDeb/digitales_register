@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
@@ -74,9 +73,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   if (!store.state.settingsState.noPasswordSaving && !action.fromStorage) {
     store.dispatch(SavePassAction());
   }
-  final saveNoData =
-      (await SharedPreferences.getInstance()).getBool("saveNoData") ?? false;
-  store.dispatch(SetSaveNoDataAction(saveNoData));
+  final saveNoData = store.state.settingsState.noDataSaving;
   if (!saveNoData) {
     final vals = await secureStorage.readAll();
     final user = action.userName.hashCode;

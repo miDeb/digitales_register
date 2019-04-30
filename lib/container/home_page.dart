@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
 
 class HomePageContentViewModel {
   final bool noInternet, hasDays, loading, splash;
-  final VoidCallback refresh, reload;
+  final VoidCallback refresh, refreshNoInternet;
   final String userName, userIcon;
   HomePageContentViewModel.from(Store<AppState> store)
       : noInternet = store.state.noInternet,
@@ -32,7 +32,7 @@ class HomePageContentViewModel {
         userIcon = store.state.config?.imgSource,
         splash = !store.state.loginState.loggedIn,
         refresh = (() => store.dispatch(RefreshAction())),
-        reload = (() => store.dispatch(LoadAction()));
+        refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction()));
   @override
   String toString() {
     return "HomePageContentViewModel(noInternet: $noInternet, hasDays: $hasDays, loading: $loading)";

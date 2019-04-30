@@ -68,6 +68,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+      key: ObjectKey(widget.subject),
       title: Text(widget.subject.name),
       leading:
           widget.subject is AllSemesterSubject && widget.noAvgForAllSemester
@@ -91,7 +92,10 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                   .map(
                     (entry) => GradeTypeWidget(
                           typeName: entry.key,
-                          grades: entry.value.where((g) => widget.showCancelled || !g.cancelled).toList(),
+                          grades: entry.value
+                              .where(
+                                  (g) => widget.showCancelled || !g.cancelled)
+                              .toList(),
                         ),
                   )
                   .toList()
@@ -201,16 +205,12 @@ class GradeTypeWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final displayGrades = grades
-        .map((g) => GradeWidget(grade: g))
-        .toList();
+    final displayGrades = grades.map((g) => GradeWidget(grade: g)).toList();
     return displayGrades.isEmpty
         ? SizedBox()
         : ExpansionTile(
             title: Text(typeName),
-            children: grades
-                .map((g) => GradeWidget(grade: g))
-                .toList(),
+            children: grades.map((g) => GradeWidget(grade: g)).toList(),
             initiallyExpanded: true,
           );
   }

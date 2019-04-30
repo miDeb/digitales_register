@@ -423,7 +423,9 @@ class Grade {
 
   toJson() {
     return {
-      "grade": grade == null ? null : "${grade ~/ 100}.${grade % 100}",
+      "grade": grade == null
+          ? null
+          : "${grade ~/ 100}.${(grade % 100).toString().padLeft(2, "0")}",
       "date": date.toIso8601String(),
       "cancelled": cancelled ? 1 : 0,
       "specific": specific,
@@ -432,6 +434,7 @@ class Grade {
       "competences": competences?.map((c) => c.toJson())?.toList(),
       "name": name,
       "id": id,
+      (specific ? "typeName" : "type"): type,
     };
   }
 

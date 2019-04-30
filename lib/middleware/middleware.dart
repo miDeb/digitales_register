@@ -29,6 +29,7 @@ List<Middleware<AppState>> createMiddleware() {
         _createLoad(),
         _createRefresh(),
         _createNoInternet(),
+        _createRefreshNoInternet(wrapper),
       ] +
       daysMiddlewares(wrapper) +
       routingMiddlewares(wrapper) +
@@ -48,13 +49,25 @@ TypedMiddleware<AppState, TapAction> _createTap(Wrapper wrapper) =>
       },
     );
 
+TypedMiddleware<AppState, RefreshNoInternetAction> _createRefreshNoInternet(
+    Wrapper wrapper) {
+  return TypedMiddleware(
+      (Store<AppState> store, RefreshNoInternetAction action, next) async {
+    next(action);
+    if (await wrapper.noInternet) {
+      store.dispatch(NoInternetAction(true));
+    } else {
+      store.dispatch(NoInternetAction(false));
+      store.dispatch(LoadAction());
+    }
+  });
+}
+
 TypedMiddleware<AppState, LoadAction> _createLoad() {
   return TypedMiddleware(
     (Store<AppState> store, LoadAction action, NextDispatcher next) async {
       next(action);
-      var saveNoPass = store.state.settingsState?.noPasswordSaving;
 
-      store.dispatch(SetSaveNoPassAction(saveNoPass));
       final user = await _secureStorage.read(key: "user");
       final pass = await _secureStorage.read(key: "pass");
       if (user != null && pass != null) {

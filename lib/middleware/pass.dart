@@ -43,5 +43,6 @@ void _savePass(NextDispatcher next, SavePassAction action, Wrapper wrapper,
 void _deletePass(NextDispatcher next, DeletePassAction action,
     FlutterSecureStorage storage) {
   next(action);
-  storage.deleteAll();
+  storage.delete(key: "user");
+  storage.delete(key: "pass");
 }

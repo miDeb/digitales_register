@@ -130,6 +130,8 @@ class ShowAbsencesAction {}
 /// Dispatched at the start of the app to trigger load logic
 class LoadAction {}
 
+class RefreshNoInternetAction {}
+
 class NoInternetAction {
   final bool noInternet;
 

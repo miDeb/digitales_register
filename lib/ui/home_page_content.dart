@@ -31,7 +31,7 @@ class HomePageContent extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          vm.reload();
+                          vm.refreshNoInternet();
                         },
                       )
                     : SizedBox(),
