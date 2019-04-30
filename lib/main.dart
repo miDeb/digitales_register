@@ -44,7 +44,6 @@ const MaterialColor white = const MaterialColor(
 );
 
 void run() {
-  print("main");
   final store = Store<AppState>(
     appReducer,
     middleware: createMiddleware(),

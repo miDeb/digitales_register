@@ -11,7 +11,6 @@ class GradesPage extends StatelessWidget {
   const GradesPage({Key key, this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print(vm.loading);
     return Scaffold(
       appBar: AppBar(
         title: Text("Noten"),
