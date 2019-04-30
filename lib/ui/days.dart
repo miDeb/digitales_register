@@ -370,18 +370,18 @@ String formatChanged(Homework hw) {
         "Vor ${DateFormat("EEEE, 'dem' dd.MM. 'um' HH:mm", "de").format(hw.firstSeen)} ";
   } else if (hw.firstSeen.difference(hw.lastNotSeen).inDays < 1) {
     date = "Am ${DateFormat("EEEE, 'dem' dd.MM.", "de").format(hw.firstSeen)}"
-        " zwischen ${DateFormat("HH:mm", "de").format(hw.firstSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
+        " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
   } else {
     date =
-        "Zwischen ${DateFormat("EEEE, 'dem' dd.MM. 'um' HH:mm", "de").format(hw.firstSeen)} "
-        "und ${DateFormat("EEEE, 'dem' dd.MM. 'um' HH:mm", "de").format(hw.lastNotSeen)}";
+        "Zwischen ${DateFormat("EEEE, 'dem' dd.MM. '('HH:mm')'", "de").format(hw.lastNotSeen)} "
+        "und ${DateFormat("EEEE, 'dem' dd.MM. '('HH:mm')'", "de").format(hw.firstSeen)}";
   }
   if (hw.deleted) {
-    return "$date wiederhergestellt.";
+    return "$date gelöscht.";
   } else if (hw.previousVersion == null) {
     return "$date eingetragen.";
   } else if (hw.previousVersion.deleted) {
-    return "$date gelöscht.";
+    return "$date wiederhergestellt.";
   } else {
     return "$date geändert.";
   }
