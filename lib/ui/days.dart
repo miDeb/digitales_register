@@ -1,10 +1,10 @@
-import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
+import '../app_state.dart';
 import '../data.dart';
 import '../util.dart';
 
@@ -96,8 +96,7 @@ class DayWidget extends StatelessWidget {
                                           },
                                         ),
                                         RaisedButton(
-                                          textTheme:
-                                              ButtonTextTheme.primary,
+                                          textTheme: ButtonTextTheme.primary,
                                           child: Text(
                                             "Speichern",
                                           ),

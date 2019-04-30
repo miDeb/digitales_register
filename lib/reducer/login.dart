@@ -10,7 +10,6 @@ final loginReducer = combineReducers<LoginStateBuilder>([
   _createLogoutReducer(),
 ]);
 
-
 TypedReducer<LoginStateBuilder, LoginFailedAction> _createLoginFailedReducer() {
   return TypedReducer((LoginStateBuilder state, LoginFailedAction action) {
     return state

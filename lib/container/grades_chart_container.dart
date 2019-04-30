@@ -1,10 +1,11 @@
-import 'package:dr/actions.dart';
-import 'package:dr/data.dart';
-import 'package:dr/app_state.dart';
-import 'package:dr/ui/grades_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+
+import '../actions.dart';
+import '../app_state.dart';
+import '../data.dart';
+import '../ui/grades_chart.dart';
 
 class GradesChartContainer extends StatelessWidget {
   final bool isFullscreen;

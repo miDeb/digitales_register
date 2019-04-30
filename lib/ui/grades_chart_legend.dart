@@ -68,7 +68,8 @@ class ChartLegend extends StatelessWidget {
                                 });
                                 Future.delayed(Duration(milliseconds: 250), () {
                                   if (call != _call ||
-                                          value.toInt() == entry.value.thick ) return;
+                                      value.toInt() == entry.value.thick)
+                                    return;
                                   vm.onChangeThick(entry.key, value.toInt());
                                 });
                               },

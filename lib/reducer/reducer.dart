@@ -34,10 +34,8 @@ Reducer<AppState> appReducer = (AppState state, action) {
   return newState;
 };
 
-
 final _noInternetReducer =
     TypedReducer<bool, NoInternetAction>((_, action) => action.noInternet);
-
 
 TypedReducer<bool, SetIsLoginRouteAction> _createCurrentRouteReducer() {
   return TypedReducer((bool state, SetIsLoginRouteAction action) {

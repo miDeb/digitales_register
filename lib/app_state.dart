@@ -160,7 +160,8 @@ abstract class SettingsStateBuilder
   bool doubleTapForDone;
   bool askWhenDelete = true;
   bool showCancelled;
-  bool deleteDataOnLogout = false; // example for a new setting and backward compatibility
+  bool deleteDataOnLogout =
+      false; // example for a new setting and backward compatibility
   bool noPasswordSaving;
   bool noDataSaving;
 }

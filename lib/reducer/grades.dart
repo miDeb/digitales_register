@@ -1,4 +1,3 @@
-
 import 'package:redux/redux.dart';
 
 import '../actions.dart';

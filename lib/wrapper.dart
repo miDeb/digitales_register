@@ -153,7 +153,7 @@ class Wrapper {
               await login(user, pass);
               if (!_loggedIn) {
                 return false; // return@post null
-              }else{
+              } else {
                 onRelogin();
               }
             } else {
@@ -222,7 +222,8 @@ class Wrapper {
         onLogout();
       }
     }
-    Requests.clearStoredCookies(Uri.parse("https://vinzentinum.digitalesregister.it").host);
+    Requests.clearStoredCookies(
+        Uri.parse("https://vinzentinum.digitalesregister.it").host);
     _loggedIn = false;
     if (!forceLogout) {
       Requests.get("https://vinzentinum.digitalesregister.it/v2/logout");

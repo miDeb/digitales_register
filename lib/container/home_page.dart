@@ -1,9 +1,10 @@
-import 'package:dr/actions.dart';
-import 'package:dr/app_state.dart';
-import 'package:dr/ui/home_page_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+
+import '../actions.dart';
+import '../app_state.dart';
+import '../ui/home_page_content.dart';
 
 class HomePage extends StatelessWidget {
   @override

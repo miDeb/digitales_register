@@ -61,8 +61,7 @@ class Day {
     DateTime today = dateToday();
     Duration difference = date.difference(today);
     if (difference.inDays == 0) return "Heute";
-    if (difference.inDays == 1)
-      return "Morgen";
+    if (difference.inDays == 1) return "Morgen";
     if (difference.inDays == -1)
       return "Gestern";
     else {

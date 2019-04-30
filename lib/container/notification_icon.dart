@@ -10,7 +10,9 @@ class NotificationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, NotificationIconViewModel>(
       builder: (BuildContext context, NotificationIconViewModel vm) {
-        return NotificationIconWidget(vm: vm,);
+        return NotificationIconWidget(
+          vm: vm,
+        );
       },
       converter: (store) {
         return NotificationIconViewModel(

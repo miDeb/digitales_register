@@ -42,9 +42,7 @@ class AbsenceGroupWidget extends StatelessWidget {
             ),
             Text(
               vm.duration,
-              style: Theme.of(context)
-                  .textTheme
-                  .body1,
+              style: Theme.of(context).textTheme.body1,
             ),
             Row(
               children: <Widget>[
@@ -58,7 +56,10 @@ class AbsenceGroupWidget extends StatelessWidget {
                 Spacer(),
               ],
             ),
-            Text(vm.justifiedString, textAlign: TextAlign.center,),
+            Text(
+              vm.justifiedString,
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),

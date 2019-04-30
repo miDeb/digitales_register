@@ -7,19 +7,19 @@ import '../wrapper.dart';
 
 List<Middleware<AppState>> routingMiddlewares(Wrapper wrapper) => [
       TypedMiddleware<AppState, ShowLoginAction>(
-        (store, _, __)  => _showLogin(wrapper, store),
+        (store, _, __) => _showLogin(wrapper, store),
       ),
       TypedMiddleware<AppState, ShowNotificationsAction>(
-        (store, action, next)  => _showNotifications(next, action),
+        (store, action, next) => _showNotifications(next, action),
       ),
       TypedMiddleware<AppState, ShowSettingsAction>(
-        (store, action, next)  => _showSettings(next, action),
+        (store, action, next) => _showSettings(next, action),
       ),
       TypedMiddleware<AppState, ShowCalendarAction>(
-        (store, action, next)  => _showCalendar(next, action),
+        (store, action, next) => _showCalendar(next, action),
       ),
       TypedMiddleware<AppState, ShowGradesAction>(
-        (store, action, next)  => _showGrades(store, next, action),
+        (store, action, next) => _showGrades(store, next, action),
       ),
       TypedMiddleware<AppState, ShowAbsencesAction>(
         (store, action, next) => _showAbsences(store, next, action),

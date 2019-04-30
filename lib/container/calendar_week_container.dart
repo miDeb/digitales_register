@@ -9,8 +9,7 @@ import '../ui/calendar_week.dart';
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
 
-  const CalendarWeekContainer({Key key, this.monday})
-      : super(key: key);
+  const CalendarWeekContainer({Key key, this.monday}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnector(

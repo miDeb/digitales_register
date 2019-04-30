@@ -104,6 +104,7 @@ class AbsencesButtonViewModel {
           store.dispatch(ShowAbsencesAction());
         });
 }
+
 class CalendarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

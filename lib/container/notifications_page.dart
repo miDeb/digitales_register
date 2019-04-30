@@ -24,7 +24,6 @@ class NotificationPage extends StatelessWidget {
   }
 }
 
-
 class NotificationsViewModel {
   final List<Notification> notifications;
   final SingleArgumentVoidCallback<Notification> deleteNotification;
@@ -34,7 +33,8 @@ class NotificationsViewModel {
       this.notifications, this.deleteNotification, this.deleteAllNotifications);
   NotificationsViewModel.from(Store<AppState> store)
       : notifications = store.state.notificationState.notifications.toList(),
-        deleteNotification = ((notification) => store.dispatch(DeleteNotificationAction(notification))),
-        deleteAllNotifications = (() => store.dispatch(DeleteAllNotificationsAction()));
-      
+        deleteNotification = ((notification) =>
+            store.dispatch(DeleteNotificationAction(notification))),
+        deleteAllNotifications =
+            (() => store.dispatch(DeleteAllNotificationsAction()));
 }

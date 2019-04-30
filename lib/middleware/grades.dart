@@ -110,7 +110,8 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
       }
     }
     store.dispatch(SetGraphConfigsAction(graphConfigsBuilder.build().toMap()));
-    store.dispatch(SubjectsLoadedAction(ListBuilder(loadedSubjects), lastRequested));
+    store.dispatch(
+        SubjectsLoadedAction(ListBuilder(loadedSubjects), lastRequested));
   }
 }
 

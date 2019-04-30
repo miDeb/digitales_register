@@ -20,9 +20,9 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
     final now = DateTime.now();
     for (var day in allDays) {
       final newDay = action.loadedDays.build().firstWhere(
-        (d) => d.date == day.date,
-        orElse: () => null,
-      );
+            (d) => d.date == day.date,
+            orElse: () => null,
+          );
       action.loadedDays.remove(newDay);
       if (newDay == null) continue;
       for (var oldHw in day.homework.toList()) {

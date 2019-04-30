@@ -15,6 +15,7 @@ class LogoutButtonWidget extends StatelessWidget {
     );
   }
 }
+
 class SettingsButtonWidget extends StatelessWidget {
   final SettingsButtonViewModel vm;
 
@@ -28,6 +29,7 @@ class SettingsButtonWidget extends StatelessWidget {
     );
   }
 }
+
 class GradesButtonWidget extends StatelessWidget {
   final GradesButtonViewModel vm;
 
@@ -41,6 +43,7 @@ class GradesButtonWidget extends StatelessWidget {
     );
   }
 }
+
 class AbsencesButtonWidget extends StatelessWidget {
   final AbsencesButtonViewModel vm;
 
@@ -54,6 +57,7 @@ class AbsencesButtonWidget extends StatelessWidget {
     );
   }
 }
+
 class CalendarButtonWidget extends StatelessWidget {
   final CalendarButtonViewModel vm;
 

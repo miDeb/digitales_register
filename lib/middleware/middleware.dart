@@ -178,6 +178,6 @@ _deleteDataMiddleware(Store<AppState> store, DeleteDataAction action, next) {
   _secureStorage.delete(key: "$user::homework");
   _secureStorage.delete(key: "$user::calendar");
   _secureStorage.delete(key: "$user::absences");
-  _lastAbsenceState = _lastAppState = _lastCalendarState = _lastDayState =
-      _lastGradesState = _lastNotificationState = null;
+  _lastAbsenceState = _lastAppState = _lastCalendarState =
+      _lastDayState = _lastGradesState = _lastNotificationState = null;
 }
