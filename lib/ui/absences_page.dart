@@ -29,18 +29,16 @@ class AbsencesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state != null
-        ? ListView(
-            children: <Widget>[
-                  AbsencesStatisticWidget(
-                    stat: state.statistic,
-                  ),
-                ] +
-                List.generate(
-                  state.absences.length,
-                  (n) => AbsenceGroupContainer(
-                      group: state.absences.length - n - 1),
-                ),
-          )
+        ? ListView(children: <Widget>[
+            AbsencesStatisticWidget(
+              stat: state.statistic,
+            ),
+            ...List.generate(
+              state.absences.length,
+              (n) =>
+                  AbsenceGroupContainer(group: state.absences.length - n - 1),
+            ),
+          ])
         : Center(
             child: CircularProgressIndicator(),
           );

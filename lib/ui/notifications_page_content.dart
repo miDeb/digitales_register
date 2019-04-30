@@ -73,15 +73,14 @@ class NotificationWidget extends StatelessWidget {
                       notification.title,
                     ),
                   ),
-                  !isNullOrEmpty(notification.subTitle)
-                      ? Padding(
-                          padding: const EdgeInsets.only(left: 0.0),
-                          child: Text(
-                            notification.subTitle,
-                            style: TextStyle(fontStyle: FontStyle.italic),
-                          ),
-                        )
-                      : SizedBox(),
+                  if (!isNullOrEmpty(notification.subTitle))
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0.0),
+                      child: Text(
+                        notification.subTitle,
+                        style: TextStyle(fontStyle: FontStyle.italic),
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.only(left: 2.0),
                     child: Align(

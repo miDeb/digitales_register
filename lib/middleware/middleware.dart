@@ -22,23 +22,23 @@ final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
   return <Middleware<AppState>>[
-        _createTap(wrapper),
-        _saveStateMiddleware,
-        TypedMiddleware(_saveNoDataMiddleware),
-        TypedMiddleware(_deleteDataMiddleware),
-        _createLoad(),
-        _createRefresh(),
-        _createNoInternet(),
-        _createRefreshNoInternet(wrapper),
-      ] +
-      daysMiddlewares(wrapper) +
-      routingMiddlewares(wrapper) +
-      loginMiddlewares(wrapper, _secureStorage) +
-      notificationsMiddlewares(wrapper) +
-      gradesMiddlewares(wrapper) +
-      absencesMiddlewares(wrapper) +
-      calendarMiddlewares(wrapper) +
-      passMiddlewares(wrapper, _secureStorage);
+    _createTap(wrapper),
+    _saveStateMiddleware,
+    TypedMiddleware(_saveNoDataMiddleware),
+    TypedMiddleware(_deleteDataMiddleware),
+    _createLoad(),
+    _createRefresh(),
+    _createNoInternet(),
+    _createRefreshNoInternet(wrapper),
+    ...daysMiddlewares(wrapper),
+    ...routingMiddlewares(wrapper),
+    ...loginMiddlewares(wrapper, _secureStorage),
+    ...notificationsMiddlewares(wrapper),
+    ...gradesMiddlewares(wrapper),
+    ...absencesMiddlewares(wrapper),
+    ...calendarMiddlewares(wrapper),
+    ...passMiddlewares(wrapper, _secureStorage),
+  ];
 }
 
 TypedMiddleware<AppState, TapAction> _createTap(Wrapper wrapper) =>
