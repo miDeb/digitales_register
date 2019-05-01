@@ -36,6 +36,7 @@ void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
 void _savePass(NextDispatcher next, SavePassAction action, Wrapper wrapper,
     FlutterSecureStorage storage) {
   next(action);
+  if (wrapper.user == null || wrapper.pass == null) return;
   storage.write(key: "user", value: wrapper.user);
   storage.write(key: "pass", value: wrapper.pass);
 }
