@@ -6,6 +6,7 @@ import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
+import '../main.dart';
 import '../serializers.dart';
 import '../wrapper.dart';
 import 'absences.dart';
@@ -30,6 +31,9 @@ List<Middleware<AppState>> createMiddleware() {
     _createRefresh(),
     _createNoInternet(),
     _createRefreshNoInternet(wrapper),
+    TypedMiddleware<AppState, LoggedInAction>(
+      (store, action, next) => _loggedIn(store, action, next, _secureStorage),
+    ),
     ...daysMiddlewares(wrapper),
     ...routingMiddlewares(wrapper),
     ...loginMiddlewares(wrapper, _secureStorage),
@@ -107,6 +111,66 @@ AbsenceState _lastAbsenceState;
 NotificationState _lastNotificationState;
 SettingsState _lastSettingsState;
 AppState _lastAppState;
+
+void _loggedIn(Store<AppState> store, LoggedInAction action,
+    NextDispatcher next, FlutterSecureStorage secureStorage) async {
+  if (!store.state.settingsState.noPasswordSaving && !action.fromStorage) {
+    store.dispatch(SavePassAction());
+  }
+
+  final vals = await secureStorage.readAll();
+  final user = action.userName.hashCode;
+  final dayState = _lastDayState = vals["$user::homework"] != null
+      ? serializers.deserialize(json.decode(vals["$user::homework"]))
+          as DayState
+      : store.state.dayState;
+  final gradesState = _lastGradesState = vals["$user::grades"] != null
+      ? serializers.deserialize(json.decode(vals["$user::grades"]))
+          as GradesState
+      : store.state.gradesState;
+  final notificationState = _lastNotificationState =
+      vals["$user::notifications"] != null
+          ? serializers.deserialize(json.decode(vals["$user::notifications"]))
+              as NotificationState
+          : store.state.notificationState;
+  final absenceState = _lastAbsenceState = vals["$user::absences"] != null
+      ? serializers.deserialize(json.decode(vals["$user::absences"]))
+          as AbsenceState
+      : store.state.absenceState;
+  final calendarState = _lastCalendarState = vals["$user::calendar"] != null
+      ? serializers.deserialize(json.decode(vals["$user::calendar"]))
+          as CalendarState
+      : store.state.calendarState;
+  final settingsState = _lastSettingsState = vals["$user::settings"] != null
+      ? serializers.deserialize(json.decode(vals["$user::settings"]))
+          as SettingsState
+      : store.state.settingsState;
+  store.dispatch(
+    MountAppStateAction(
+      store.state.rebuild(
+        (b) => b
+          ..dayState = dayState.toBuilder()
+          ..gradesState = gradesState.toBuilder()
+          ..notificationState = notificationState.toBuilder()
+          ..absenceState = absenceState?.toBuilder()
+          ..calendarState = calendarState.toBuilder()
+          ..settingsState = settingsState.toBuilder(),
+      ),
+    ),
+  );
+
+  // next not at the beginning: bug fix (serialization)
+  next(action);
+
+  store.dispatch(SetSaveNoPassAction(settingsState.noPasswordSaving));
+
+  if (store.state.currentRouteIsLogin) {
+    navigatorKey.currentState.pop();
+    store.dispatch(SetIsLoginRouteAction(false));
+  }
+  store.dispatch(LoadDaysAction(true));
+  store.dispatch(LoadNotificationsAction());
+}
 
 _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
   next(action);
