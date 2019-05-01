@@ -43,44 +43,46 @@ const MaterialColor white = const MaterialColor(
   },
 );
 
+final initialState = AppState((builder) {
+  builder
+    ..dayState = (DayStateBuilder()
+      ..future = true
+      ..loading = false)
+    ..loginState = (LoginStateBuilder()
+      ..loading = false
+      ..loggedIn = false
+      ..userName = null
+      ..errorMsg = null)
+    ..notificationState = NotificationStateBuilder()
+    ..currentRouteIsLogin = false
+    ..noInternet = false
+    ..settingsState = (SettingsStateBuilder()
+      ..doubleTapForDone = false
+      ..noAverageForAllSemester = true
+      ..noDataSaving = false
+      ..noPasswordSaving = false
+      ..typeSorted = false
+      ..showCancelled = false
+      ..askWhenDelete = true
+      ..deleteDataOnLogout = false)
+    ..config = null
+    ..gradesState = (GradesStateBuilder()
+      ..semester = Semester.all
+      ..subjects = ListBuilder([])
+      ..loading = false
+      ..serverSemester = null
+      ..graphConfigs = MapBuilder({}))
+    ..absenceState = null
+    ..calendarState = (CalendarStateBuilder()
+      ..currentMonday = toMonday(DateTime.now())
+      ..days = MapBuilder());
+});
+
 void run() {
   final store = Store<AppState>(
     appReducer,
     middleware: createMiddleware(),
-    initialState: AppState((builder) {
-      builder
-        ..dayState = (DayStateBuilder()
-          ..future = true
-          ..loading = false)
-        ..loginState = (LoginStateBuilder()
-          ..loading = false
-          ..loggedIn = false
-          ..userName = null
-          ..errorMsg = null)
-        ..notificationState = NotificationStateBuilder()
-        ..currentRouteIsLogin = false
-        ..noInternet = false
-        ..settingsState = (SettingsStateBuilder()
-          ..doubleTapForDone = false
-          ..noAverageForAllSemester = true
-          ..noDataSaving = false
-          ..noPasswordSaving = false
-          ..typeSorted = false
-          ..showCancelled = false
-          ..askWhenDelete = true
-          ..deleteDataOnLogout = false)
-        ..config = null
-        ..gradesState = (GradesStateBuilder()
-          ..semester = Semester.all
-          ..subjects = ListBuilder([])
-          ..loading = false
-          ..serverSemester = null
-          ..graphConfigs = MapBuilder({}))
-        ..absenceState = null
-        ..calendarState = (CalendarStateBuilder()
-          ..currentMonday = toMonday(DateTime.now())
-          ..days = MapBuilder());
-    }),
+    initialState: initialState,
   );
   runApp(
     StoreProvider(

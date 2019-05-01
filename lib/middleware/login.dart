@@ -1,3 +1,4 @@
+import 'package:dr/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
@@ -31,6 +32,7 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
   if (!action.forced) {
     wrapper.logout(hard: action.hard);
   }
+  store.dispatch(MountAppStateAction(initialState));
   store.dispatch(ShowLoginAction());
 }
 
