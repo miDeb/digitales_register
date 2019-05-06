@@ -368,7 +368,7 @@ String formatChanged(Homework hw) {
   if (hw.lastNotSeen == null) {
     date =
         "Vor ${DateFormat("EEEE, 'dem' dd.MM. 'um' HH:mm", "de").format(hw.firstSeen)} ";
-  } else if (hw.firstSeen.difference(hw.lastNotSeen).inDays < 1) {
+  } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen)) {
     date = "Am ${DateFormat("EEEE, 'dem' dd.MM.", "de").format(hw.firstSeen)}"
         " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
   } else {
@@ -385,4 +385,8 @@ String formatChanged(Homework hw) {
   } else {
     return "$date geändert.";
   }
+}
+
+DateTime toDate(DateTime dateTime) {
+  return DateTime(dateTime.year, dateTime.month, dateTime.day);
 }
