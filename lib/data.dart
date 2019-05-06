@@ -162,7 +162,6 @@ class Homework {
         other.label == this.label &&
         other.warning == this.warning &&
         other.checkable == this.checkable &&
-        other.checked == this.checked &&
         other.type == this.type &&
         other.grade == this.grade &&
         other.deleteable == this.deleteable &&
