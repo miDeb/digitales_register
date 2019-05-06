@@ -73,7 +73,6 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
     allDays.sort((a, b) => a.date.compareTo(b.date));
     return state
       ..allDays = ListBuilder(allDays)
-      ..displayDays = ListBuilder(Day.filterFuture(allDays, state.future))
       ..loading = false;
   });
 }
@@ -93,10 +92,7 @@ TypedReducer<DayStateBuilder, LoadDaysAction> _createDaysLoadingReducer() {
 
 TypedReducer<DayStateBuilder, SwitchFutureAction> _createToggleFutureReducer() {
   return TypedReducer((DayStateBuilder state, SwitchFutureAction action) {
-    return state
-      ..displayDays = ListBuilder(
-          Day.filterFuture(state.allDays.build().toList(), !state.future))
-      ..future = !state.future;
+    return state..future = !state.future;
   });
 }
 

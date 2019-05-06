@@ -32,8 +32,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 abstract class DayState implements Built<DayState, DayStateBuilder> {
   bool get loading;
   bool get future;
-  @nullable
-  BuiltList<Day> get displayDays;
+  BuiltList<Day> get displayDays => allDays == null
+      ? null
+      : BuiltList(Day.filterFuture(allDays.toList(), future));
   @nullable
   BuiltList<Day> get allDays;
   bool get hasDays => displayDays?.isNotEmpty == true;
