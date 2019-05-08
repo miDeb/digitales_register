@@ -368,14 +368,14 @@ String formatChanged(Homework hw) {
   String date;
   if (hw.lastNotSeen == null) {
     date =
-        "Vor ${DateFormat("EEEE, dd.MM., HH:mm,", "de").format(hw.firstSeen)} ";
+        "Vor ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)} ";
   } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen)) {
-    date = "Am ${DateFormat("EEEE, dd.MM.,", "de").format(hw.firstSeen)}"
+    date = "Am ${DateFormat("EEEE, dd.MM,", "de").format(hw.firstSeen)}"
         " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
   } else {
     date =
-        "Zwischen ${DateFormat("EEEE, dd.MM., HH:mm,", "de").format(hw.lastNotSeen)} "
-        "und ${DateFormat("EEEE, dd.MM., HH:mm,", "de").format(hw.firstSeen)}";
+        "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen)} "
+        "und ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)}";
   }
   if (hw.deleted) {
     return "$date gelöscht.";
