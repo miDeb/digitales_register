@@ -37,12 +37,15 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now);
-        } else if (newHw != oldHw) {
+        } else if (!newHw.equalsIgnoreCustom(oldHw)) {
           day.homework.remove(oldHw);
           day.homework.add(newHw
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now);
+        } else {
+          day.homework.remove(oldHw);
+          day.homework.add(newHw);
         }
         newDay.homework.remove(newHw);
       }

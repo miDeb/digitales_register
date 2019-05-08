@@ -154,8 +154,8 @@ class Homework {
     this.warning,
     this.deleteable,
   });
-  @override
-  bool operator ==(other) {
+  
+  bool equalsIgnoreCustom(other) {
     return other is Homework &&
         other.id == this.id &&
         other.subtitle == this.subtitle &&
