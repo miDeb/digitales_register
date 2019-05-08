@@ -14,7 +14,8 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
         _noAvgForAllReducer(state.noAverageForAllSemester, action)
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
     ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
-    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action));
+    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
+    ..calendarShowDates = _calendarShowDates(state.calendarShowDates, action));
 }
 
 final _askWhenDeleteReducer =
@@ -34,3 +35,5 @@ final _savePassReducer =
     TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
 final _deleteOnLogout = TypedReducer(
     (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
+final _calendarShowDates = TypedReducer(
+    (bool delete, SetCalendarShowDatesAction action) => action.showDates);

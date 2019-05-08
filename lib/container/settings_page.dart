@@ -45,6 +45,8 @@ class SettingsViewModel {
   final bool askWhenDelete;
   final OnSettingChanged<bool> onSetDeleteDataOnLogout;
   final bool deleteDataOnLogout;
+  final OnSettingChanged<bool> onSetCalendarShowDates;
+  final bool calendarShowDates;
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
       : noPassSaving = store.state.settingsState.noPasswordSaving,
         noDataSaving = store.state.settingsState.noDataSaving,
@@ -53,6 +55,7 @@ class SettingsViewModel {
         doubleTapForDone = store.state.settingsState.doubleTapForDone,
         askWhenDelete = store.state.settingsState.askWhenDelete,
         deleteDataOnLogout = store.state.settingsState.deleteDataOnLogout,
+        calendarShowDates = store.state.settingsState.calendarShowDates,
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
         }),
@@ -70,5 +73,8 @@ class SettingsViewModel {
         }),
         onSetDeleteDataOnLogout = ((bool mode) {
           store.dispatch(SetDeleteDataOnLogoutAction(mode));
+        }),
+        onSetCalendarShowDates = ((bool mode) {
+          store.dispatch(SetCalendarShowDatesAction(mode));
         });
 }

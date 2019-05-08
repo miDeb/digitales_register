@@ -271,6 +271,11 @@ class SetDoubleTapForDoneAction implements SettingsAction {
 
   SetDoubleTapForDoneAction(this.enabled);
 }
+class SetCalendarShowDatesAction implements SettingsAction {
+  final bool showDates;
+
+  SetCalendarShowDatesAction(this.showDates);
+}
 
 class SetGradesTypeSortedAction {
   final bool typeSorted;

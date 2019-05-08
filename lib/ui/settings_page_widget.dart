@@ -91,6 +91,13 @@ class SettingsPageWidget extends StatelessWidget {
             },
             value: vm.askWhenDelete,
           ),
+          SwitchListTile(
+            title: Text("Zusätzlich zum Wochentag das Datum anzeigen"),
+            onChanged: (bool value) {
+              vm.onSetCalendarShowDates(value);
+            },
+            value: vm.calendarShowDates,
+          ),
         ],
       ),
     );

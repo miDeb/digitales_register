@@ -43,6 +43,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
                         child: CalendarDayWidget(
                           calendarDay: d,
                           max: max,
+                          showDate: widget.vm.showDates,
                         ),
                       ),
                 )
@@ -53,14 +54,16 @@ class _CalendarWeekState extends State<CalendarWeek> {
 class CalendarDayWidget extends StatelessWidget {
   final int max;
   final CalendarDay calendarDay;
+  final bool showDate;
 
-  const CalendarDayWidget({Key key, this.max, this.calendarDay})
+  const CalendarDayWidget({Key key, this.max, this.calendarDay, this.showDate})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Text(DateFormat("E", "de").format(calendarDay.date)),
+        if (showDate) Text(DateFormat("dd.MM", "de").format(calendarDay.date)),
         calendarDay.lenght != 0
             ? Expanded(
                 flex: calendarDay.lenght,

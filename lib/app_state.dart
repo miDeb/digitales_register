@@ -146,6 +146,7 @@ abstract class SettingsState
   bool get askWhenDelete;
   bool get showCancelled;
   bool get deleteDataOnLogout;
+  bool get calendarShowDates;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -165,6 +166,7 @@ abstract class SettingsStateBuilder
       false; // example for a new setting and backward compatibility
   bool noPasswordSaving;
   bool noDataSaving;
+  bool calendarShowDates = false;
 }
 
 abstract class AbsenceState

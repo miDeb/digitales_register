@@ -27,6 +27,7 @@ typedef void DayCallback(DateTime day);
 
 class CalendarWeekViewModel {
   final List<CalendarDay> days;
+  final bool showDates;
 
   CalendarWeekViewModel(Store<AppState> store, DateTime monday)
       : days = store.state.calendarState.days.values.where(
@@ -35,5 +36,6 @@ class CalendarWeekViewModel {
             return !date.isBefore(monday) &&
                 date.isBefore(monday.add(Duration(days: 7)));
           },
-        ).toList();
+        ).toList(),
+        showDates = store.state.settingsState.calendarShowDates;
 }
