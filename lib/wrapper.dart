@@ -56,6 +56,7 @@ class Wrapper {
     }
 
     dynamic response;
+    await _clearCookies();
     try {
       response = await Requests.post(
         _loginAddress,
@@ -222,11 +223,15 @@ class Wrapper {
         onLogout();
       }
     }
-    Requests.clearStoredCookies(
-        Uri.parse("https://vinzentinum.digitalesregister.it").host);
     _loggedIn = false;
     if (!forceLogout) {
       Requests.get("https://vinzentinum.digitalesregister.it/v2/logout");
     }
+    _clearCookies();
+  }
+
+  Future<void> _clearCookies() async {
+    await Requests.clearStoredCookies(
+        Uri.parse("https://vinzentinum.digitalesregister.it").host);
   }
 }
