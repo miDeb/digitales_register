@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Notification;
+import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 
 import '../container/notifications_page.dart';
@@ -23,10 +24,15 @@ class NotificationPageContent extends StatelessWidget {
                 if (n == 0)
                   return Align(
                     alignment: Alignment.centerRight,
-                    child: IconButton(
-                      icon: Icon(Icons.done_all),
-                      tooltip: "Alle gelesen",
-                      onPressed: vm.deleteAllNotifications,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text("Alle gelesen"),
+                        IconButton(
+                          icon: Icon(Icons.done_all),
+                          onPressed: vm.deleteAllNotifications,
+                        ),
+                      ],
                     ),
                   );
                 return NotificationWidget(
