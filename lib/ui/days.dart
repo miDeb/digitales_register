@@ -56,6 +56,7 @@ class DayWidget extends StatelessWidget {
           side: BorderSide(color: Colors.grey, width: 0.2),
           borderRadius: BorderRadius.circular(16),
         ),
+        clipBehavior: Clip.hardEdge,
         child: Column(
           children: <Widget>[
                 Row(
