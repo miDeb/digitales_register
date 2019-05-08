@@ -14,10 +14,10 @@ class SplashScreen extends StatelessWidget {
 class _SplashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: Center(
-        child: Image.asset("assets/index.png"),
+    return Center(
+      child: Container(
+        child: Image.asset("assets/transparent.png"),
+        width: 200,
       ),
     );
   }
