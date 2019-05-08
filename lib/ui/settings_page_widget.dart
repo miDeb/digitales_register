@@ -30,8 +30,8 @@ class SettingsPageWidget extends StatelessWidget {
           ),
           SwitchListTile(
             title: Text("Daten lokal speichern"),
-            subtitle:
-                Text('${vm.noPassSaving? "":"- Offline-Modus\n"}- Sehen, wann etwas eingetragen wurde'),
+            subtitle: Text(
+                '${vm.noPassSaving ? "" : "- Offline-Modus\n"}- Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
               vm.onSetNoDataSaving(!value);
             },
@@ -64,7 +64,7 @@ class SettingsPageWidget extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text(
-              "Sonstiges",
+              "Merkheft",
               style: Theme.of(context).textTheme.headline,
             ),
           ),
@@ -77,6 +77,20 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.doubleTapForDone,
           ),
           SwitchListTile(
+            title: Text("Beim Löschen von Erinnerungen fragen"),
+            onChanged: (bool value) {
+              vm.onSetAskWhenDelete(value);
+            },
+            value: vm.askWhenDelete,
+          ),
+          Divider(),
+          ListTile(
+            title: Text(
+              "Noten",
+              style: Theme.of(context).textTheme.headline,
+            ),
+          ),
+          SwitchListTile(
             title: Text(
                 'Keinen Notendurchschnitt berechnen, wenn "Beide Semester" ausgewählt ist'),
             onChanged: (bool value) {
@@ -84,12 +98,12 @@ class SettingsPageWidget extends StatelessWidget {
             },
             value: vm.noAverageForAllSemester,
           ),
-          SwitchListTile(
-            title: Text("Beim Löschen von Erinnerungen fragen"),
-            onChanged: (bool value) {
-              vm.onSetAskWhenDelete(value);
-            },
-            value: vm.askWhenDelete,
+          Divider(),
+          ListTile(
+            title: Text(
+              "Kalender",
+              style: Theme.of(context).textTheme.headline,
+            ),
           ),
           SwitchListTile(
             title: Text("Zusätzlich zum Wochentag das Datum anzeigen"),
