@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart' hide Notification;
-import 'package:flutter/material.dart' as prefix0;
 import 'package:intl/intl.dart';
 
 import '../container/notifications_page.dart';
