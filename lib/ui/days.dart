@@ -140,7 +140,7 @@ class DayWidget extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          "Noch keine Aufgaben",
+                          "Nichts eingetragen",
                           style: Theme.of(context).textTheme.subhead,
                         ),
                       ),
