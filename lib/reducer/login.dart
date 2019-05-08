@@ -33,8 +33,7 @@ TypedReducer<LoginStateBuilder, LoggedInAction> _createLoginSucceededReducer() {
 TypedReducer<LoginStateBuilder, LoggingInAction> _createLoggingInReducer() {
   return TypedReducer((LoginStateBuilder state, LoggingInAction action) {
     return state
-      ..loading = true
-      ..loggedIn = false;
+      ..loading = true;
   });
 }
 
