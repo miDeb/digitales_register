@@ -110,6 +110,22 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: Text("Kalender"),
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.white,
+            child: Text("Heute"),
+            onPressed: () {
+              final date = toMonday(DateTime.now());
+              if (date != _currentMonday) {
+                _controller.animateToPage(pageOf(date),
+                    curve: _animatePageCurve, duration: _animatePageDuration);
+                // setState(() {
+                //   _currentMonday = date;
+                // });
+              }
+            },
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -158,9 +174,9 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                       _controller.animateToPage(pageOf(date),
                           curve: _animatePageCurve,
                           duration: _animatePageDuration);
-                      setState(() {
-                        _currentMonday = date;
-                      });
+                      // setState(() {
+                      //   _currentMonday = date;
+                      // });
                       //widget.vm.dayCallback(date);
                     }
                   },
