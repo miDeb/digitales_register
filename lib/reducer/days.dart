@@ -44,8 +44,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now);
         } else {
-          day.homework.remove(oldHw);
-          day.homework.add(newHw);
+          oldHw.checked = newHw.checked;
         }
         newDay.homework.remove(newHw);
       }
