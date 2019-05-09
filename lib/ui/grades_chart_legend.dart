@@ -66,7 +66,7 @@ class ChartLegend extends StatelessWidget {
                                 setState(() {
                                   width = value;
                                 });
-                                Future.delayed(Duration(milliseconds: 250), () {
+                                Future.delayed(Duration(milliseconds: 100), () {
                                   if (call != _call ||
                                       value.toInt() == entry.value.thick)
                                     return;

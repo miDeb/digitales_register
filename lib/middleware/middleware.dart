@@ -104,13 +104,7 @@ TypedMiddleware<AppState, NoInternetAction> _createNoInternet() {
 
 var _saveUnderway = false;
 
-GradesState _lastGradesState;
-DayState _lastDayState;
-CalendarState _lastCalendarState;
-AbsenceState _lastAbsenceState;
-NotificationState _lastNotificationState;
 SettingsState _lastSettingsState;
-AppState _lastAppState;
 
 void _loggedIn(Store<AppState> store, LoggedInAction action,
     NextDispatcher next, FlutterSecureStorage secureStorage) async {
@@ -119,32 +113,27 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   }
 
   if (!store.state.loginState.loggedIn) {
-    final vals = await secureStorage.readAll();
     final user = action.userName.hashCode;
-    final dayState = _lastDayState = vals["$user::homework"] != null
-        ? serializers.deserialize(json.decode(vals["$user::homework"]))
-            as DayState
+    final vals = json.decode(
+      await secureStorage.read(key: user.toString()) ?? "{}",
+    );
+    final dayState = vals["homework"] != null
+        ? serializers.deserialize(vals["homework"]) as DayState
         : store.state.dayState;
-    final gradesState = _lastGradesState = vals["$user::grades"] != null
-        ? serializers.deserialize(json.decode(vals["$user::grades"]))
-            as GradesState
+    final gradesState = vals["grades"] != null
+        ? serializers.deserialize(vals["grades"]) as GradesState
         : store.state.gradesState;
-    final notificationState = _lastNotificationState =
-        vals["$user::notifications"] != null
-            ? serializers.deserialize(json.decode(vals["$user::notifications"]))
-                as NotificationState
-            : store.state.notificationState;
-    final absenceState = _lastAbsenceState = vals["$user::absences"] != null
-        ? serializers.deserialize(json.decode(vals["$user::absences"]))
-            as AbsenceState
+    final notificationState = vals["notifications"] != null
+        ? serializers.deserialize(vals["notifications"]) as NotificationState
+        : store.state.notificationState;
+    final absenceState = vals["absences"] != null
+        ? serializers.deserialize(vals["absences"]) as AbsenceState
         : store.state.absenceState;
-    final calendarState = _lastCalendarState = vals["$user::calendar"] != null
-        ? serializers.deserialize(json.decode(vals["$user::calendar"]))
-            as CalendarState
+    final calendarState = vals["calendar"] != null
+        ? serializers.deserialize(vals["calendar"]) as CalendarState
         : store.state.calendarState;
-    final settingsState = _lastSettingsState = vals["$user::settings"] != null
-        ? serializers.deserialize(json.decode(vals["$user::settings"]))
-            as SettingsState
+    final settingsState = _lastSettingsState = vals["settings"] != null
+        ? serializers.deserialize(vals["settings"]) as SettingsState
         : store.state.settingsState;
     store.dispatch(
       MountAppStateAction(
@@ -176,56 +165,45 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   store.dispatch(LoadNotificationsAction());
 }
 
+var _lastSave = "";
+
 _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
   next(action);
   if (!_saveUnderway &&
       store.state.loginState.loggedIn &&
-      store.state.loginState.userName != null &&
-      _lastAppState != store.state) {
+      store.state.loginState.userName != null) {
     final user = store.state.loginState.userName.hashCode;
     if (!store.state.settingsState.noDataSaving) {
       _saveUnderway = true;
       final delay = Duration(seconds: 5);
+
       await Future.delayed(delay, () async {
         _saveUnderway = false;
-        _lastAppState = store.state;
-        final user = store.state.loginState.userName.hashCode;
-        if (_lastGradesState != store.state.gradesState)
-          _secureStorage.write(
-              key: "$user::grades",
-              value:
-                  json.encode(serializers.serialize(store.state.gradesState)));
-        if (_lastDayState != store.state.dayState)
-          _secureStorage.write(
-              key: "$user::homework",
-              value: json.encode(serializers.serialize(store.state.dayState)));
-        if (_lastCalendarState != store.state.calendarState)
-          _secureStorage.write(
-              key: "$user::calendar",
-              value: json
-                  .encode(serializers.serialize(store.state.calendarState)));
-        if (_lastAbsenceState != store.state.absenceState)
-          _secureStorage.write(
-              key: "$user::absences",
-              value:
-                  json.encode(serializers.serialize(store.state.absenceState)));
-        if (_lastNotificationState != store.state.notificationState)
-          _secureStorage.write(
-              key: "$user::notifications",
-              value: json.encode(
-                  serializers.serialize(store.state.notificationState)));
+        var start = DateTime.now();
+        final save = json.encode({
+          "grades": serializers.serialize(store.state.gradesState),
+          "homework": serializers.serialize(store.state.dayState),
+          "calendar": serializers.serialize(store.state.calendarState),
+          "absences": serializers.serialize(store.state.absenceState),
+          "notifications": serializers.serialize(store.state.notificationState),
+          "settings": serializers.serialize(store.state.settingsState),
+        });
+        if (_lastSave == save) return;
+        start = DateTime.now();
+        await _secureStorage.write(key: user.toString(), value: save);
       });
-      _lastAbsenceState = store.state.absenceState;
-      _lastCalendarState = store.state.calendarState;
-      _lastDayState = store.state.dayState;
-      _lastGradesState = store.state.gradesState;
-      _lastNotificationState = store.state.notificationState;
+    } else {
+      if (_lastSettingsState != store.state.settingsState)
+        _secureStorage.write(
+          key: "$user",
+          value: json.encode(
+            {
+              "settings": serializers.serialize(store.state.settingsState),
+            },
+          ),
+        );
+      _lastSettingsState = store.state.settingsState;
     }
-    if (_lastSettingsState != store.state.settingsState)
-      _secureStorage.write(
-          key: "$user::settings",
-          value: json.encode(serializers.serialize(store.state.settingsState)));
-    _lastSettingsState = store.state.settingsState;
   }
 }
 
@@ -239,13 +217,17 @@ _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
   }
 }
 
-_deleteDataMiddleware(Store<AppState> store, DeleteDataAction action, next) {
+_deleteDataMiddleware(
+    Store<AppState> store, DeleteDataAction action, next) async {
   final user = store.state.loginState.userName.hashCode;
-  _secureStorage.delete(key: "$user::grades");
-  _secureStorage.delete(key: "$user::notifications");
-  _secureStorage.delete(key: "$user::homework");
-  _secureStorage.delete(key: "$user::calendar");
-  _secureStorage.delete(key: "$user::absences");
-  _lastAbsenceState = _lastAppState = _lastCalendarState =
-      _lastDayState = _lastGradesState = _lastNotificationState = null;
+  await _secureStorage.delete(key: "$user");
+  _lastSave = "";
+  await _secureStorage.write(
+    key: "$user",
+    value: json.encode(
+      {
+        "settings": serializers.serialize(store.state.settingsState),
+      },
+    ),
+  );
 }
