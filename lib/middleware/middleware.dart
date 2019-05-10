@@ -179,7 +179,6 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
 
       await Future.delayed(delay, () async {
         _saveUnderway = false;
-        var start = DateTime.now();
         final save = json.encode({
           "grades": serializers.serialize(store.state.gradesState),
           "homework": serializers.serialize(store.state.dayState),
@@ -189,7 +188,6 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
           "settings": serializers.serialize(store.state.settingsState),
         });
         if (_lastSave == save) return;
-        start = DateTime.now();
         await _secureStorage.write(key: user.toString(), value: save);
       });
     } else {
