@@ -31,7 +31,7 @@ dependencies:
   built_value: ^6.3.2
   dynamic_theme: ^1.0.1
   fluttertoast: ^3.0.3
-  flutter_secure_storage: 
+  flutter_secure_storage:
     git:
       url: "../flutter_secure_storage/"
       ref: my_fixes
