@@ -38,12 +38,12 @@ class SwitchFutureAction {}
 class LoginAction {
   final String user, pass;
 
-  /// To indicate that the data was loaded from storage
-  ///
-  /// Used to understand if we should show stored data
   final bool fromStorage;
+  final bool offlineEnabled;
 
-  LoginAction(this.user, this.pass, this.fromStorage);
+  LoginAction(this.user, this.pass, this.fromStorage,
+      [this.offlineEnabled = false])
+      : assert(!offlineEnabled || fromStorage);
   @override
   String toString() {
     return "LoginAction(user: $user, pass: ..., fromStorage: $fromStorage";
@@ -64,14 +64,13 @@ class LoggedInAction {
 class LoginFailedAction {
   final String cause, username;
 
-  /// see [LoginAction.fromStorage]
-  final bool fromStorage, noInternet;
+  final bool offlineEnabled, noInternet;
 
   LoginFailedAction(
-      this.cause, this.fromStorage, this.noInternet, this.username);
+      this.cause, this.offlineEnabled, this.noInternet, this.username);
   @override
   String toString() {
-    return "LoginFailedAction(fromStorage: $fromStorage, noInternet: $noInternet)";
+    return "LoginFailedAction(fromStorage: $offlineEnabled, noInternet: $noInternet)";
   }
 }
 
@@ -98,6 +97,15 @@ class SetSaveNoPassAction implements SettingsAction {
   @override
   String toString() {
     return "SetSaveNoPassAction(safeMode: $noSave)";
+  }
+}
+class SetOfflineEnabledAction implements SettingsAction {
+  final bool enable;
+
+  SetOfflineEnabledAction(this.enable);
+  @override
+  String toString() {
+    return "SetEnableOfflineAction(enable: $enable)";
   }
 }
 
@@ -271,6 +279,7 @@ class SetDoubleTapForDoneAction implements SettingsAction {
 
   SetDoubleTapForDoneAction(this.enabled);
 }
+
 class SetCalendarShowDatesAction implements SettingsAction {
   final bool showDates;
 

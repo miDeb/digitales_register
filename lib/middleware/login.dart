@@ -38,10 +38,10 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
 
 void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
     Wrapper wrapper) async {
-  action = LoginAction(action.user.trim(), action.pass, action.fromStorage);
+  action = LoginAction(action.user.trim(), action.pass, action.fromStorage,action.offlineEnabled);
   next(action);
   if (action.user == "" || action.pass == "") {
-    store.dispatch(LoginFailedAction("Bitte gib etwas ein", action.fromStorage,
+    store.dispatch(LoginFailedAction("Bitte gib etwas ein", action.offlineEnabled,
         await wrapper.noInternet, action.user));
     return;
   }
@@ -59,7 +59,7 @@ void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
   if (wrapper.loggedIn)
     store.dispatch(LoggedInAction(wrapper.user, action.fromStorage));
   else
-    store.dispatch(LoginFailedAction(wrapper.error, action.fromStorage,
+    store.dispatch(LoginFailedAction(wrapper.error, action.offlineEnabled,
         await wrapper.noInternet, action.user));
 }
 
@@ -67,8 +67,8 @@ void _loginFailed(
     NextDispatcher next, LoginFailedAction action, Store<AppState> store) {
   next(action);
   if (action.noInternet) {
-    if (action.fromStorage) {
-      store.dispatch(LoggedInAction(action.username, action.fromStorage));
+    if (action.offlineEnabled) {
+      store.dispatch(LoggedInAction(action.username, true));
     }
     store.dispatch(NoInternetAction(true));
     return;

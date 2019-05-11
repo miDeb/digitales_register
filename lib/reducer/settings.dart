@@ -5,6 +5,7 @@ import '../app_state.dart';
 
 SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
   return (state
+    ..offlineEnabled = _offlineEnabledReducer(state.offlineEnabled, action)
     ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
     ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
     ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
@@ -33,6 +34,8 @@ final _saveDataReducer =
     TypedReducer((bool safeMode, SetSaveNoDataAction action) => action.noSave);
 final _savePassReducer =
     TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
+final _offlineEnabledReducer = TypedReducer(
+    (bool safeMode, SetOfflineEnabledAction action) => action.enable);
 final _deleteOnLogout = TypedReducer(
     (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
 final _calendarShowDates = TypedReducer(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
@@ -11,13 +13,23 @@ List<Middleware<AppState>> passMiddlewares(
       TypedMiddleware((Store<AppState> store, SetSaveNoPassAction action,
               NextDispatcher next) =>
           _saveNoPass(next, action, wrapper, store)),
+      TypedMiddleware((Store<AppState> store, SetOfflineEnabledAction action,
+              NextDispatcher next) =>
+          _enableOffline(next, action, store)),
       TypedMiddleware(
           (Store<AppState> store, SavePassAction action, NextDispatcher next) =>
-              _savePass(next, action, wrapper, storage)),
+              _savePass(next, action, wrapper, storage, store)),
       TypedMiddleware((Store<AppState> store, DeletePassAction action,
               NextDispatcher next) =>
           _deletePass(next, action, storage))
     ];
+
+void _enableOffline(
+    NextDispatcher next, SetOfflineEnabledAction action, Store<AppState> store) {
+  next(action);
+  if (!store.state.settingsState.noPasswordSaving)
+    store.dispatch(SavePassAction());
+}
 
 void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
     Wrapper wrapper, Store<AppState> store) {
@@ -34,16 +46,23 @@ void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
 }
 
 void _savePass(NextDispatcher next, SavePassAction action, Wrapper wrapper,
-    FlutterSecureStorage storage) {
+    FlutterSecureStorage storage, Store<AppState> store) {
   next(action);
   if (wrapper.user == null || wrapper.pass == null) return;
-  storage.write(key: "user", value: wrapper.user);
-  storage.write(key: "pass", value: wrapper.pass);
+  storage.write(
+    key: "login",
+    value: json.encode(
+      {
+        "user": wrapper.user,
+        "pass": wrapper.pass,
+        "offlineEnabled": store.state.settingsState.offlineEnabled
+      },
+    ),
+  );
 }
 
 void _deletePass(NextDispatcher next, DeletePassAction action,
     FlutterSecureStorage storage) {
   next(action);
-  storage.delete(key: "user");
-  storage.delete(key: "pass");
+  storage.delete(key: "login");
 }

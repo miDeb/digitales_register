@@ -30,12 +30,19 @@ class SettingsPageWidget extends StatelessWidget {
           ),
           SwitchListTile(
             title: Text("Daten lokal speichern"),
-            subtitle: Text(
-                '${vm.noPassSaving ? "" : "- Offline-Modus\n"}- Sehen, wann etwas eingetragen wurde'),
+            subtitle: Text('Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
               vm.onSetNoDataSaving(!value);
             },
-            isThreeLine: true,
+            value: !vm.noDataSaving,
+          ),
+          SwitchListTile(
+            title: Text("Offline-Login"),
+            onChanged: !vm.noPassSaving && !vm.noDataSaving
+                ? (bool value) {
+                    vm.onSetNoDataSaving(!value);
+                  }
+                : null,
             value: !vm.noDataSaving,
           ),
           SwitchListTile(

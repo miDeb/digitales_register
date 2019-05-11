@@ -72,11 +72,13 @@ TypedMiddleware<AppState, LoadAction> _createLoad() {
     (Store<AppState> store, LoadAction action, NextDispatcher next) async {
       next(action);
 
-      final user = await _secureStorage.read(key: "user");
-      final pass = await _secureStorage.read(key: "pass");
+      final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
+      final user = login["user"];
+      final pass = login["pass"];
+      final offlineEnabled = login["offlineEnabled"];
       if (user != null && pass != null) {
         store.dispatch(
-          LoginAction(user, pass, true),
+          LoginAction(user, pass, true, offlineEnabled),
         );
       } else
         store.dispatch(ShowLoginAction());
