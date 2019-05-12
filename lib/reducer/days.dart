@@ -23,8 +23,8 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             (d) => d.date == day.date,
             orElse: () => null,
           );
-      action.loadedDays.remove(newDay);
       if (newDay == null) continue;
+      action.loadedDays.remove(newDay);
       for (var oldHw in day.homework.toList()) {
         final newHw = newDay.homework.firstWhere(
           (d) => d.id == oldHw.id,
