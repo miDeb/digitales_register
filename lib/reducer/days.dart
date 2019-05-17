@@ -32,7 +32,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
         );
         if (newHw == null) {
           day.homework.remove(oldHw);
-          day.homework.add(Homework.parse(oldHw.toJson())
+          day.deletedHomework.add(Homework.parse(oldHw.toJson())
             ..deleted = true
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
