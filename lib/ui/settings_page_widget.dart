@@ -40,10 +40,10 @@ class SettingsPageWidget extends StatelessWidget {
             title: Text("Offline-Login"),
             onChanged: !vm.noPassSaving && !vm.noDataSaving
                 ? (bool value) {
-                    vm.onSetNoDataSaving(!value);
+                    vm.onSetOfflineEnabled(value);
                   }
                 : null,
-            value: !vm.noDataSaving,
+            value: vm.offlineEnabled,
           ),
           SwitchListTile(
             title: Text("Daten beim Ausloggen löschen"),
