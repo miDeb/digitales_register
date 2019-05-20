@@ -88,6 +88,7 @@ class Day {
 class Homework {
   bool deleted;
   final int id;
+  bool isNew = false, isChanged = false;
   final String title, subtitle, label;
   String gradeFormatted, grade;
   bool warning, checkable, checked, deleteable;
@@ -153,8 +154,9 @@ class Homework {
     this.type,
     this.warning,
     this.deleteable,
+    this.isNew,
   });
-  
+
   bool equalsIgnoreCustom(other) {
     return other is Homework &&
         other.id == this.id &&

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../container/days_container.dart';
 import '../container/drawer_buttons.dart';
 import '../container/home_page.dart';
 import '../container/notification_icon.dart';
-import 'days.dart';
 import 'no_internet.dart';
 import 'splash.dart';
 
@@ -94,7 +94,7 @@ class HomePageContentBody extends StatelessWidget {
     }
     final content = vm.hasDays
         ? RefreshIndicator(
-            child: DaysWidget(),
+            child: DaysContainer(),
             onRefresh: () async {
               vm.refresh();
               await Future.delayed(Duration(seconds: 2));
