@@ -15,7 +15,7 @@ List<Middleware<AppState>> passMiddlewares(
           _saveNoPass(next, action, wrapper, store)),
       TypedMiddleware((Store<AppState> store, SetOfflineEnabledAction action,
               NextDispatcher next) =>
-          _enableOffline(next, action, store)),
+          _enableOffline(next, action, wrapper, storage, store)),
       TypedMiddleware(
           (Store<AppState> store, SavePassAction action, NextDispatcher next) =>
               _savePass(next, action, wrapper, storage, store)),
@@ -24,11 +24,19 @@ List<Middleware<AppState>> passMiddlewares(
           _deletePass(next, action, storage))
     ];
 
-void _enableOffline(
-    NextDispatcher next, SetOfflineEnabledAction action, Store<AppState> store) {
+void _enableOffline(NextDispatcher next, SetOfflineEnabledAction action,
+    Wrapper wrapper, FlutterSecureStorage storage, Store<AppState> store) {
   next(action);
-  if (!store.state.settingsState.noPasswordSaving)
-    store.dispatch(SavePassAction());
+  storage.write(
+    key: "login",
+    value: json.encode(
+      {
+        "user": wrapper.user,
+        "pass": wrapper.pass,
+        "offlineEnabled": store.state.settingsState.offlineEnabled
+      },
+    ),
+  );
 }
 
 void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
