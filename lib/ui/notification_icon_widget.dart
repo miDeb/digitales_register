@@ -1,3 +1,4 @@
+import 'package:dr/ui/news_sticker.dart';
 import 'package:flutter/material.dart';
 
 import '../container/notification_icon.dart';
@@ -15,22 +16,8 @@ class NotificationIconWidget extends StatelessWidget {
               children: [
                 Icon(Icons.notifications),
                 Align(
-                  child: Container(
-                    child: Text(
-                      vm.notifications.toString(),
-                      style: Theme.of(context).textTheme.body1.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                    decoration: ShapeDecoration(
-                      color: Colors.red,
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(
-                          color: Colors.red,
-                        ),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                    ),
+                  child: NewsSticker(
+                    text: vm.notifications.toString(),
                   ),
                   alignment: Alignment(
                     -1.2,

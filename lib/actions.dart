@@ -262,6 +262,17 @@ class ToggleDoneAction {
   ToggleDoneAction(this.hw, this.done);
 }
 
+class MarkAsNotNewOrChangedAction{
+  final Homework homework;
+
+  MarkAsNotNewOrChangedAction(this.homework);
+}
+
+class MarkAllAsNotNewOrChangedAction{
+
+  MarkAllAsNotNewOrChangedAction();
+}
+
 class SetAskWhenDeleteAction implements SettingsAction {
   final bool ask;
 

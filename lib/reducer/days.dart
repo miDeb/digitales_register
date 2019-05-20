@@ -13,6 +13,8 @@ final dayReducer = combineReducers<DayStateBuilder>([
   _createHomeworkAddedReducer(),
   _createHomeworkRemovedReducer(),
   _createToggleHomeworkDoneReducer(),
+  _createMarkAsNotNewOrChangedReducer(),
+  _createMarkAllAsNotNewOrChangedReducer(),
 ]);
 TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
   return TypedReducer((DayStateBuilder state, DaysLoadedAction action) {
@@ -34,6 +36,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           day.homework.remove(oldHw);
           day.deletedHomework.add(Homework.parse(oldHw.toJson())
             ..deleted = true
+            ..isNew = true
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now);
@@ -42,7 +45,8 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           day.homework.add(newHw
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
-            ..firstSeen = now);
+            ..firstSeen = now
+            ..isNew = true);
         } else {
           oldHw.checked = newHw.checked;
         }
@@ -58,11 +62,13 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           day.homework.add(newHw
             ..previousVersion = deletedHw
             ..lastNotSeen = day.lastRequested
-            ..firstSeen = now);
+            ..firstSeen = now
+            ..isNew = true);
         } else {
           day.homework.add(newHw
             ..lastNotSeen = day.lastRequested
-            ..firstSeen = now);
+            ..firstSeen = now
+            ..isNew = true);
         }
       }
       day.lastRequested = now;
@@ -119,5 +125,28 @@ TypedReducer<DayStateBuilder, ToggleDoneAction>
   return TypedReducer((DayStateBuilder state, ToggleDoneAction action) {
     action.hw.checked = action.done;
     return state;
+  });
+}
+
+TypedReducer<DayStateBuilder, MarkAsNotNewOrChangedAction>
+    _createMarkAsNotNewOrChangedReducer() {
+  return TypedReducer(
+      (DayStateBuilder state, MarkAsNotNewOrChangedAction action) {
+    action.homework
+      ..isChanged = false
+      ..isNew = false;
+    return state;
+  });
+}
+
+TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
+    _createMarkAllAsNotNewOrChangedReducer() {
+  return TypedReducer(
+      (DayStateBuilder state, MarkAllAsNotNewOrChangedAction action) {
+    return state
+      ..allDays.map((day) => day
+        ..homework.map((homework) => homework
+          ..isChanged = false
+          ..isNew = false));
   });
 }
