@@ -185,7 +185,9 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
           "grades": serializers.serialize(store.state.gradesState),
           "homework": serializers.serialize(store.state.dayState),
           "calendar": serializers.serialize(store.state.calendarState),
-          "absences": serializers.serialize(store.state.absenceState),
+          "absences": store.state.absenceState != null
+              ? serializers.serialize(store.state.absenceState)
+              : null,
           "notifications": serializers.serialize(store.state.notificationState),
           "settings": serializers.serialize(store.state.settingsState),
         });
