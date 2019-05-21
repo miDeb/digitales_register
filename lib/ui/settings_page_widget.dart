@@ -37,6 +37,14 @@ class SettingsPageWidget extends StatelessWidget {
             value: !vm.noDataSaving,
           ),
           SwitchListTile(
+            title: Text("Daten verschlüsselt speichern"),
+            subtitle: Text('Kann langsamer sein'),
+            onChanged: (bool value) {
+                    vm.onSetSaveToSecureStorage(value);
+                  },
+            value: vm.saveToSecureStorage,
+          ),
+          SwitchListTile(
             title: Text("Offline-Login"),
             onChanged: !vm.noPassSaving && !vm.noDataSaving
                 ? (bool value) {

@@ -36,6 +36,8 @@ class SettingsViewModel {
   final bool noPassSaving;
   final OnSettingChanged<bool> onSetNoDataSaving;
   final bool noDataSaving;
+  final OnSettingChanged<bool> onSetSaveToSecureStorage;
+  final bool saveToSecureStorage;
   final OnSettingChanged<bool> onSetDarkMode;
   final OnSettingChanged<bool> onSetNoAverageForAllSemester;
   final bool noAverageForAllSemester;
@@ -59,6 +61,7 @@ class SettingsViewModel {
         deleteDataOnLogout = store.state.settingsState.deleteDataOnLogout,
         calendarShowDates = store.state.settingsState.calendarShowDates,
         offlineEnabled = store.state.settingsState.offlineEnabled,
+        saveToSecureStorage = store.state.settingsState.saveToSecureStorage,
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
         }),
@@ -82,5 +85,8 @@ class SettingsViewModel {
         }),
         onSetOfflineEnabled = ((bool mode) {
           store.dispatch(SetOfflineEnabledAction(mode));
+        }),
+        onSetSaveToSecureStorage = ((bool mode) {
+          store.dispatch(SetSaveToSecureStorageAction(mode));
         });
 }

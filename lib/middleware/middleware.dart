@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -31,6 +33,7 @@ List<Middleware<AppState>> createMiddleware() {
     _createRefresh(),
     _createNoInternet(),
     _createRefreshNoInternet(wrapper),
+    TypedMiddleware(_setSaveToSecureStorageMiddleware),
     TypedMiddleware<AppState, LoggedInAction>(
       (store, action, next) => _loggedIn(store, action, next, _secureStorage),
     ),
@@ -72,7 +75,8 @@ TypedMiddleware<AppState, LoadAction> _createLoad() {
     (Store<AppState> store, LoadAction action, NextDispatcher next) async {
       next(action);
 
-      final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
+      final login =
+          json.decode(await _secureStorage.read(key: "login") ?? "{}");
       final user = login["user"];
       final pass = login["pass"];
       final offlineEnabled = login["offlineEnabled"];
@@ -116,8 +120,12 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
 
   if (!store.state.loginState.loggedIn) {
     final user = action.userName.hashCode;
+    final file =
+        File("${(await getApplicationDocumentsDirectory()).path}/$user");
     final vals = json.decode(
-      await secureStorage.read(key: user.toString()) ?? "{}",
+      await file.exists()
+          ? await file.readAsString()
+          : await secureStorage.read(key: user.toString()) ?? "{}",
     );
     final dayState = vals["homework"] != null
         ? serializers.deserialize(vals["homework"]) as DayState
@@ -177,9 +185,10 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
     final user = store.state.loginState.userName.hashCode;
     if (!store.state.settingsState.noDataSaving) {
       _saveUnderway = true;
-      final delay = Duration(seconds: 5);
+      final delay =
+          action is SaveStateAction ? Duration.zero : Duration(seconds: 5);
 
-      await Future.delayed(delay, () async {
+      Future.delayed(delay, () async {
         _saveUnderway = false;
         final save = json.encode({
           "grades": serializers.serialize(store.state.gradesState),
@@ -192,20 +201,34 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
           "settings": serializers.serialize(store.state.settingsState),
         });
         if (_lastSave == save) return;
-        await _secureStorage.write(key: user.toString(), value: save);
+        writeToStorage(
+          user.toString(),
+          save,
+          store.state.settingsState.saveToSecureStorage,
+        );
       });
     } else {
       if (_lastSettingsState != store.state.settingsState)
-        _secureStorage.write(
-          key: "$user",
-          value: json.encode(
+        writeToStorage(
+          user.toString(),
+          json.encode(
             {
               "settings": serializers.serialize(store.state.settingsState),
             },
           ),
+          store.state.settingsState.saveToSecureStorage,
         );
       _lastSettingsState = store.state.settingsState;
     }
+  }
+}
+
+void writeToStorage(String key, String txt, bool secure) async {
+  if (secure) {
+    _secureStorage.write(key: key, value: txt);
+  } else {
+    File("${(await getApplicationDocumentsDirectory()).path}/$key")
+        .writeAsString(txt);
   }
 }
 
@@ -217,6 +240,19 @@ _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
   if (action.noSave) {
     store.dispatch(DeleteDataAction());
   }
+}
+
+_setSaveToSecureStorageMiddleware(
+    Store<AppState> store, SetSaveToSecureStorageAction action, next) async {
+  next(action);
+  if (action.toSecureStorage) {
+    File("${(await getApplicationDocumentsDirectory()).path}/${store.state.loginState.userName.hashCode}")
+        .delete();
+  } else {
+    _secureStorage.delete(
+        key: store.state.loginState.userName.hashCode.toString());
+  }
+  store.dispatch(SaveStateAction());
 }
 
 _deleteDataMiddleware(

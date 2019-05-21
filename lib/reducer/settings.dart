@@ -16,7 +16,9 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
     ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
     ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
-    ..calendarShowDates = _calendarShowDates(state.calendarShowDates, action));
+    ..calendarShowDates = _calendarShowDates(state.calendarShowDates, action)
+    ..saveToSecureStorage =
+        _saveToSecureStorageReducer(state.saveToSecureStorage, action));
 }
 
 final _askWhenDeleteReducer =
@@ -32,6 +34,9 @@ final _sortByTypeReducer = TypedReducer(
     (bool typeSorted, SetGradesTypeSortedAction action) => action.typeSorted);
 final _saveDataReducer =
     TypedReducer((bool safeMode, SetSaveNoDataAction action) => action.noSave);
+final _saveToSecureStorageReducer = TypedReducer(
+    (bool safeMode, SetSaveToSecureStorageAction action) =>
+        action.toSecureStorage);
 final _savePassReducer =
     TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
 final _offlineEnabledReducer = TypedReducer(

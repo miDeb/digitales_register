@@ -20,7 +20,7 @@ dependencies:
   intl: ^0.15.8
   charts_flutter: ^0.6.0
   tuple: ^1.0.2
-  path_provider: ^0.5.0+1
+  path_provider: ^1.1.0
   requests:
     git:
       url: "../requests/"
