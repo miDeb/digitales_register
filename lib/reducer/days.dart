@@ -145,7 +145,7 @@ TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
       (DayStateBuilder state, MarkAllAsNotNewOrChangedAction action) {
     return state
       ..allDays.map((day) => day
-        ..homework.map((homework) => homework
+        ..homework.forEach((homework) => homework
           ..isChanged = false
           ..isNew = false));
   });
