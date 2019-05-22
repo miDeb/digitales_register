@@ -20,11 +20,11 @@ class DaysWidget extends StatefulWidget {
 class _DaysWidgetState extends State<DaysWidget> {
   final controller = AutoScrollController();
 
-  bool reachedItem = false;
   bool scrollDown = true;
   bool showScrollUp = false;
   int destination, next;
-  Homework destinationHomework;
+  double currentHomeworkOffset;
+  Homework destinationHomework, currentHomework, nextHomework;
   Map<int, int> realIndices = {};
 
   void update() {
@@ -34,46 +34,61 @@ class _DaysWidgetState extends State<DaysWidget> {
         showScrollUp = newScrollUp;
       });
     }
-    if (destination == null) return;
-    final ctx = controller.tagMap[destination]?.context;
-    bool newScrollDirection;
-    if (ctx == null) {
-      newScrollDirection = controller.tagMap.keys.first < destination;
-    } else {
-      final renderBox = ctx.findRenderObject() as RenderBox;
-      final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderBox);
-      final revealedOffset = viewport.getOffsetToReveal(renderBox, 0.5).offset;
-      final currentOffset = controller.offset;
-      newScrollDirection = revealedOffset - currentOffset > 0;
-      if (reachedItem && revealedOffset != currentOffset) {
-        widget.vm.markAsNotNewOrChangedCallback(destinationHomework);
+    if (destination != null) {
+      final ctx = controller.tagMap[destination]?.context;
+      bool newScrollDirection;
+      if (ctx == null && destination != null) {
+        newScrollDirection = controller.tagMap.keys.first < destination;
+      } else {
+        final renderBox = ctx.findRenderObject() as RenderBox;
+        final RenderAbstractViewport viewport =
+            RenderAbstractViewport.of(renderBox);
+        final revealedOffset =
+            viewport.getOffsetToReveal(renderBox, 0.5).offset;
+        final currentOffset = controller.offset;
+        newScrollDirection = revealedOffset - currentOffset > 0;
+        if ((revealedOffset == currentOffset ||
+                scrollDown != newScrollDirection) &&
+            currentHomework == null) {
+          currentHomeworkOffset = currentOffset;
+          currentHomework = destinationHomework;
+          destinationHomework = nextHomework;
+          controller.highlight(destination,
+              highlightDuration: Duration(milliseconds: 500));
+          destination = next;
+          update();
+        }
       }
-      reachedItem = revealedOffset == currentOffset;
+      if (scrollDown != newScrollDirection) {
+        setState(() {
+          scrollDown = newScrollDirection;
+        });
+      }
     }
-    if (scrollDown != newScrollDirection) {
-      widget.vm.markAsNotNewOrChangedCallback(destinationHomework);
-      setState(() {
-        scrollDown = newScrollDirection;
-      });
+    if (currentHomeworkOffset != null &&
+        (controller.offset - currentHomeworkOffset).abs() > 20) {
+      widget.vm.markAsNotNewOrChangedCallback(currentHomework);
+      currentHomework = currentHomeworkOffset = null;
     }
   }
 
   void updateValues() {
     var foundFirst = false, foundSecond = false;
-    var index = 0;
-    var dayIndex = 0;
-    destination = null;
+    var index = 1;
+    var dayIndex = 1;
+    destination = destinationHomework = next = nextHomework = null;
     for (var day in widget.vm.days) {
       realIndices[dayIndex] = index;
       for (var hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
-          if (!foundFirst) {
+          if (!foundFirst && hw != currentHomework) {
             destination = index;
             destinationHomework = hw;
             foundFirst = true;
           } else if (!foundSecond) {
             next = index;
+            nextHomework = hw;
+            foundSecond = true;
           }
         }
         index++;
@@ -131,7 +146,7 @@ class _DaysWidgetState extends State<DaysWidget> {
             day: widget.vm.days[n - 1],
             vm: widget.vm,
             controller: controller,
-            index: realIndices[n - 1] + 1,
+            index: realIndices[n],
           );
         },
       ),
@@ -158,7 +173,7 @@ class _DaysWidgetState extends State<DaysWidget> {
               ),
               mini: true,
             ),
-          if (destination != null) ...[
+          if (currentHomework != null || destination != null)
             FloatingActionButton(
               backgroundColor: Colors.red,
               heroTag: null,
@@ -168,6 +183,7 @@ class _DaysWidgetState extends State<DaysWidget> {
               child: Icon(Icons.close),
               mini: true,
             ),
+          if (destination != null)
             FloatingActionButton.extended(
               backgroundColor: Colors.red,
               icon: Icon(
@@ -176,11 +192,10 @@ class _DaysWidgetState extends State<DaysWidget> {
               onPressed: () async {
                 await controller.scrollToIndex(destination,
                     preferPosition: AutoScrollPosition.middle);
-                controller.highlight(destination,
-                    highlightDuration: Duration(milliseconds: 500));
+                // controller.highlight(destination,
+                //     highlightDuration: Duration(milliseconds: 500));
               },
             ),
-          ],
         ],
       ),
     );
