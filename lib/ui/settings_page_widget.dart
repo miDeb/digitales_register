@@ -40,8 +40,8 @@ class SettingsPageWidget extends StatelessWidget {
             title: Text("Daten verschlüsselt speichern"),
             subtitle: Text('Kann langsamer sein'),
             onChanged: (bool value) {
-                    vm.onSetSaveToSecureStorage(value);
-                  },
+              vm.onSetSaveToSecureStorage(value);
+            },
             value: vm.saveToSecureStorage,
           ),
           SwitchListTile(
@@ -71,9 +71,12 @@ class SettingsPageWidget extends StatelessWidget {
           ),
           SwitchListTile(
             title: Text("Dark Mode"),
-            onChanged: (bool value) {
-              vm.onSetDarkMode(value);
-            },
+            onChanged:
+                MediaQuery.of(context).platformBrightness == Brightness.dark
+                    ? null
+                    : (bool value) {
+                        vm.onSetDarkMode(value);
+                      },
             value: DynamicTheme.of(context).brightness == Brightness.dark,
           ),
           Divider(),

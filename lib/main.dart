@@ -150,6 +150,9 @@ void run() {
                   }
                 },
                 theme: theme,
+                darkTheme: ThemeData(
+                  brightness: Brightness.dark,
+                ),
               ),
         ),
         onPointerDown: (_) => store.dispatch(TapAction()),
