@@ -68,7 +68,8 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           day.homework.add(newHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now
-            ..isNew = true);
+            ..isNew = newHw.type != HomeworkType.gradeGroup &&
+                newHw.type != HomeworkType.homework);
         }
       }
       day.lastRequested = now;
