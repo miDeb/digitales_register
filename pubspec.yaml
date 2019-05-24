@@ -22,9 +22,7 @@ dependencies:
   tuple: ^1.0.2
   path_provider: ^1.1.0
   requests:
-    git:
-      url: "../requests/"
-      ref: myrequests
+    path: "packages/requests/"
   synchronized: ^2.1.0
   flutter_redux: ^0.5.3
   redux: ^3.0.0
@@ -32,9 +30,7 @@ dependencies:
   dynamic_theme: ^1.0.1
   fluttertoast: ^3.0.3
   flutter_secure_storage:
-    git:
-      url: "../flutter_secure_storage/"
-      ref: my_fixes
+    path: "packages/flutter_secure_storage/"
   scroll_to_index: ^1.0.1
 dev_dependencies:
   flutter_launcher_icons: ^0.7.0

@@ -219,11 +219,9 @@ packages:
   flutter_secure_storage:
     dependency: "direct main"
     description:
-      path: "."
-      ref: my_fixes
-      resolved-ref: bb130c048b091349a5c1beb45218c1ca09642f5e
-      url: "../flutter_secure_storage/"
-    source: git
+      path: "packages/flutter_secure_storage"
+      relative: true
+    source: path
     version: "3.2.1+1"
   flutter_test:
     dependency: "direct dev"
@@ -443,11 +441,9 @@ packages:
   requests:
     dependency: "direct main"
     description:
-      path: "."
-      ref: myrequests
-      resolved-ref: f513688b4d8143f9a904238e1c84185f0f3a09fd
-      url: "../requests/"
-    source: git
+      path: "packages/requests"
+      relative: true
+    source: path
     version: "1.0.2"
   scroll_to_index:
     dependency: "direct main"
