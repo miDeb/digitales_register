@@ -1,15 +1,8 @@
-# dr
+# dr [![Codemagic build status](https://api.codemagic.io/apps/5ce8189e9b46f5001a5faba4/5ce8189e9b46f5001a5faba3/status_badge.svg)](https://codemagic.io/apps/5ce8189e9b46f5001a5faba4/5ce8189e9b46f5001a5faba3/latest_build)
 
-A new Flutter project.
+Inoffizielle App für das Digitale Register des Vinzentinums (http://vinzentinum.digitalesregister.it)
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
