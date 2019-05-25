@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../container/sorted_grades_container.dart';
 import '../data.dart';
+import '../util.dart';
 
 class SortedGradesWidget extends StatelessWidget {
   final SortedGradesViewModel vm;
@@ -88,7 +89,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                 ),
       children: widget.subject.hasSpecificGrades
           ? widget.sortByType
-              ? widget.subject.typeSortedGrades.data.entries
+              ? widget.subject.typeSortedEntries.data.entries
                   .map(
                     (entry) => GradeTypeWidget(
                           typeName: entry.key,
@@ -99,9 +100,9 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                         ),
                   )
                   .toList()
-              : widget.subject.grades
+              : widget.subject.entries
                   .where((g) => widget.showCancelled || !g.cancelled)
-                  .map((g) => GradeWidget(grade: g))
+                  .map((g) => g is Grade ? GradeWidget(grade: g): ObservationWidget(observation: g,))
                   .toList()
           : [
               LinearProgressIndicator(),
@@ -117,10 +118,10 @@ class _SubjectWidgetState extends State<SubjectWidget> {
   }
 }
 
+const lineThrough = const TextStyle(decoration: TextDecoration.lineThrough);
+
 class GradeWidget extends StatelessWidget {
   final Grade grade;
-  static final lineThrough =
-      const TextStyle(decoration: TextDecoration.lineThrough);
 
   const GradeWidget({Key key, this.grade}) : super(key: key);
   @override
@@ -157,6 +158,25 @@ class GradeWidget extends StatelessWidget {
   }
 }
 
+class ObservationWidget extends StatelessWidget {
+  final Observation observation;
+
+  const ObservationWidget({Key key, this.observation}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(
+        observation.typeName,
+        style: observation.cancelled ? lineThrough : null,
+      ),
+      subtitle: Text(
+        "${DateFormat("dd/MM/yy").format(observation.date)}${isNullOrEmpty(observation.note) ? "" : ":\n${observation.note}"}",
+        style: observation.cancelled ? lineThrough : null,
+      ),
+    );
+  }
+}
+
 class CompetenceWidget extends StatelessWidget {
   final Competence competence;
   final bool cancelled;
@@ -171,7 +191,7 @@ class CompetenceWidget extends StatelessWidget {
         children: <Widget>[
           Text(
             competence.typeName,
-            style: cancelled ? GradeWidget.lineThrough : null,
+            style: cancelled ? lineThrough : null,
           ),
           Row(
             children: List.generate(
@@ -199,18 +219,18 @@ class Star extends StatelessWidget {
 
 class GradeTypeWidget extends StatelessWidget {
   final String typeName;
-  final List<Grade> grades;
+  final List<GradeEntry> grades;
 
   const GradeTypeWidget({Key key, this.typeName, this.grades})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final displayGrades = grades.map((g) => GradeWidget(grade: g)).toList();
+    final displayGrades = grades.map((g) => g is Grade ? GradeWidget(grade: g): ObservationWidget(observation: g,)).toList();
     return displayGrades.isEmpty
         ? SizedBox()
         : ExpansionTile(
             title: Text(typeName),
-            children: grades.map((g) => GradeWidget(grade: g)).toList(),
+            children: displayGrades,
             initiallyExpanded: true,
           );
   }

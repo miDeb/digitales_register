@@ -258,8 +258,17 @@ abstract class AllSemesterSubject
     return subjects.values.fold([], (list, s) => list..addAll(s.grades));
   }
 
-  TypeSortedGrades get typeSortedGrades {
-    return TypeSortedGrades.from(grades);
+  List<GradeEntry> get entries {
+    return subjects.values.fold([], (list, s) => list..addAll(s.entries));
+  }
+
+  List<Observation> get _observations {
+    return subjects.values
+        .fold([], (list, s) => list..addAll(s._observations ?? []));
+  }
+
+  TypeSortedEntries get typeSortedEntries {
+    return TypeSortedEntries.from(grades, _observations);
   }
 
   int get id {
@@ -291,7 +300,8 @@ abstract class AllSemesterSubject
 
 abstract class Subject {
   List<Grade> get grades;
-  TypeSortedGrades get typeSortedGrades;
+  List<GradeEntry> get entries;
+  TypeSortedEntries get typeSortedEntries;
   int get id;
   String get name;
   int get average;
@@ -301,7 +311,9 @@ abstract class Subject {
 
 class SingleSemesterSubject implements Subject {
   final List<Grade> grades;
-  TypeSortedGrades typeSortedGrades;
+  List<Observation> _observations;
+  List<GradeEntry> entries;
+  TypeSortedEntries typeSortedEntries;
   final int id;
   final String name;
   int average;
@@ -312,14 +324,19 @@ class SingleSemesterSubject implements Subject {
   void replaceWithSpecificData(Map map, int semester) {
     final specificGrades =
         map["grades"].map((g) => Grade.parse(g, isSpecific: true));
+    _observations =
+        List.of(map["observations"]).map((g) => Observation.parse(g)).toList();
     grades.removeWhere((grade) =>
         !grade.specific || specificGrades.any((g) => grade.id == g.id));
     grades
       ..addAll(Iterable.castFrom<dynamic, Grade>(specificGrades))
       ..sort((first, second) => -first.date.compareTo(second.date));
 
+    entries = [...grades, ..._observations]
+      ..sort((first, second) => -first.date.compareTo(second.date));
+
     hasSpecificGrades = true;
-    typeSortedGrades = TypeSortedGrades.from(grades);
+    typeSortedEntries = TypeSortedEntries.from(grades, _observations);
   }
 
   SingleSemesterSubject.parse(Map json)
@@ -327,6 +344,8 @@ class SingleSemesterSubject implements Subject {
             .map((rawGrade) => Grade.parse(rawGrade))
             .toList()
               ..sort((first, second) => -first.date.compareTo(second.date)),
+        _observations =
+            json["observations"]?.map((g) => Observation.parse(g))?.toList(),
         id = json["subject"]["id"],
         name = json["subject"]["name"] {
     average = calculateAverage(grades);
@@ -334,22 +353,18 @@ class SingleSemesterSubject implements Subject {
       averageFormatted = (average / 100).toStringAsFixed(2);
     else
       averageFormatted = "/";
-    typeSortedGrades = TypeSortedGrades.from(grades);
-    hasSpecificGrades = grades.every((g) => g.specific);
-  }
 
-  SingleSemesterSubject({this.grades, this.id, this.name}) {
-    average = calculateAverage(grades);
-    if (average != null)
-      averageFormatted = (average / 100).toStringAsFixed(2);
-    else
-      averageFormatted = "/";
-    typeSortedGrades = TypeSortedGrades.from(grades);
+    entries = [...grades, ...?_observations]
+      ..sort((first, second) => -first.date.compareTo(second.date));
+
+    typeSortedEntries = TypeSortedEntries.from(grades, _observations);
+    hasSpecificGrades = grades.every((g) => g.specific);
   }
 
   toJson() {
     return {
       "grades": grades.map((g) => g.toJson()).toList(),
+      "observations": _observations?.map((o) => o.toJson())?.toList(),
       "subject": {
         "id": id,
         "name": name,
@@ -370,13 +385,18 @@ class SingleSemesterSubject implements Subject {
   }
 }
 
-class TypeSortedGrades {
-  Map<String, List<Grade>> data = {};
-  TypeSortedGrades.from(List<Grade> grades) {
+class TypeSortedEntries {
+  Map<String, List<GradeEntry>> data = {};
+  TypeSortedEntries.from(List<Grade> grades, List<Observation> observations) {
     for (var grade in grades) {
       data.putIfAbsent(grade.type, () => []);
       data[grade.type].add(grade);
     }
+    if (observations != null)
+      for (var observation in observations) {
+        data.putIfAbsent(observation.typeName, () => []);
+        data[observation.typeName].add(observation);
+      }
 
     for (var type in data.values) {
       type.sort((first, second) => -first.date.compareTo(second.date));
@@ -384,7 +404,37 @@ class TypeSortedGrades {
   }
 }
 
-class Grade {
+class GradeEntry {
+  DateTime date;
+  bool cancelled;
+}
+
+class Observation extends GradeEntry {
+  final String typeName;
+  final bool cancelled;
+  final String created;
+  final String note;
+  final DateTime date;
+
+  Observation.parse(Map json)
+      : typeName = json["typeName"],
+        cancelled = json["cancelled"] != 0,
+        created = json["created"],
+        note = json["note"],
+        date = DateTime.parse(json["date"]);
+
+  toJson() {
+    return {
+      "typeName": typeName,
+      "cancelled": cancelled ? 1 : 0,
+      "created": created,
+      "note": note,
+      "date": date.toIso8601String(),
+    };
+  }
+}
+
+class Grade extends GradeEntry {
   final int grade;
   final String gradeFormatted;
   final DateTime date;
