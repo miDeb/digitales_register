@@ -3,6 +3,12 @@ import 'package:built_collection/built_collection.dart';
 import 'app_state.dart';
 import 'data.dart';
 
+class ErrorAction{
+  final Error e;
+
+  ErrorAction(this.e);
+}
+
 class DaysLoadedAction {
   final ListBuilder<Day> loadedDays;
 

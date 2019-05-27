@@ -345,7 +345,7 @@ class SingleSemesterSubject implements Subject {
             .toList()
               ..sort((first, second) => -first.date.compareTo(second.date)),
         _observations =
-            json["observations"]?.map((g) => Observation.parse(g))?.toList(),
+        (json["observations"] as List)?.map((g) => Observation.parse(g))?.toList(),
         id = json["subject"]["id"],
         name = json["subject"]["name"] {
     average = calculateAverage(grades);

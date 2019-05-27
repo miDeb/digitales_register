@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,6 +27,7 @@ final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
   return <Middleware<AppState>>[
+    errorMiddleware,
     _createTap(wrapper),
     _saveStateMiddleware,
     TypedMiddleware(_saveNoDataMiddleware),
@@ -46,6 +49,48 @@ List<Middleware<AppState>> createMiddleware() {
     ...calendarMiddlewares(wrapper),
     ...passMiddlewares(wrapper, _secureStorage),
   ];
+}
+
+void errorMiddleware(Store<AppState> store, action, NextDispatcher next) {
+  void handleError(e) {
+    print(e);
+    navigatorKey.currentState.push(
+      MaterialPageRoute(
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.red,
+              title: Text("Fehler!"),
+            ),
+            body: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  RaisedButton(
+                    child: Text("In die Zwischenablage kopieren"),
+                    onPressed: () => Clipboard.setData(
+                        new ClipboardData(text: e.stackTrace)),
+                  ),
+                  Text(
+                      "Ein unvorhergesehener Fehler ist aufgetreten:\n\n${e.stackTrace}"),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  if (action is ErrorAction) {
+    handleError(action.e);
+  }
+  try {
+    print("a");
+    next(action);
+    print("b");
+  } catch (e) {
+    handleError(e);
+  }
 }
 
 TypedMiddleware<AppState, TapAction> _createTap(Wrapper wrapper) =>
@@ -177,7 +222,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
 
 var _lastSave = "";
 
-_saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) async {
+_saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
   next(action);
   if (!_saveUnderway &&
       store.state.loginState.loggedIn &&
