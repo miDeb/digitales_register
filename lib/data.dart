@@ -344,8 +344,9 @@ class SingleSemesterSubject implements Subject {
             .map((rawGrade) => Grade.parse(rawGrade))
             .toList()
               ..sort((first, second) => -first.date.compareTo(second.date)),
-        _observations =
-        (json["observations"] as List)?.map((g) => Observation.parse(g))?.toList(),
+        _observations = (json["observations"] as List)
+            ?.map((g) => Observation.parse(g))
+            ?.toList(),
         id = json["subject"]["id"],
         name = json["subject"]["name"] {
     average = calculateAverage(grades);
@@ -510,8 +511,11 @@ class Competence {
 
 abstract class AbsenceGroup
     implements Built<AbsenceGroup, AbsenceGroupBuilder> {
+  @nullable
   String get reason;
+  @nullable
   String get reasonSignature;
+  @nullable
   DateTime get reasonTimestamp;
   AbsenceJustified get justified;
   int get hours;

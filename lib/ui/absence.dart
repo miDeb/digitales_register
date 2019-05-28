@@ -23,19 +23,21 @@ class AbsenceGroupWidget extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Text(vm.reason),
-            Row(
-              children: <Widget>[
-                Spacer(),
-                Flexible(
-                  child: Divider(
-                    height: 8,
+            if (vm.reason != null) ...[
+              Text(vm.reason),
+              Row(
+                children: <Widget>[
+                  Spacer(),
+                  Flexible(
+                    child: Divider(
+                      height: 8,
+                    ),
+                    flex: 48,
                   ),
-                  flex: 48,
-                ),
-                Spacer(),
-              ],
-            ),
+                  Spacer(),
+                ],
+              ),
+            ],
             Text(
               vm.fromTo,
               style: Theme.of(context).textTheme.subhead,
