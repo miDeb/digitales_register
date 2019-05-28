@@ -1,13 +1,14 @@
-import 'package:dr/container/days_container.dart';
-import 'package:dr/ui/news_sticker.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
+import '../container/days_container.dart';
 import '../data.dart';
 import '../util.dart';
+import 'dialog.dart';
+import 'news_sticker.dart';
 
 class DaysWidget extends StatefulWidget {
   final DaysViewModel vm;
@@ -73,7 +74,7 @@ class _DaysWidgetState extends State<DaysWidget> {
   }
 
   void updateValues() {
-    var foundFirst = false, foundSecond = false;
+    var foundFirst = false, foundSecond = false, foundCurrentHomework = false;
     var index = 1;
     var dayIndex = 1;
     destination = destinationHomework = next = nextHomework = null;
@@ -81,6 +82,9 @@ class _DaysWidgetState extends State<DaysWidget> {
       realIndices[dayIndex] = index;
       for (var hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
+          if(hw == currentHomework){
+            foundCurrentHomework = true;
+          }
           if (!foundFirst && hw != currentHomework) {
             destination = index;
             destinationHomework = hw;
@@ -94,6 +98,9 @@ class _DaysWidgetState extends State<DaysWidget> {
         index++;
       }
       dayIndex++;
+    }
+    if(!foundCurrentHomework){
+      currentHomework = currentHomeworkOffset = null;
     }
   }
 
@@ -406,7 +413,7 @@ class ItemWidget extends StatelessWidget {
                               showDialog(
                                   context: context,
                                   builder: (_context) {
-                                    return AlertDialog(
+                                    return ListViewCapableAlertDialog(
                                       title: Text(item.title),
                                       content: ListView(
                                         shrinkWrap: true,

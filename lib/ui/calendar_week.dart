@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
+import 'dialog.dart';
 
 class CalendarWeek extends StatefulWidget {
   final CalendarWeekViewModel vm;
@@ -185,9 +186,8 @@ class HourWidget extends StatelessWidget {
                         )
                       : null,
                 ].where((it) => it != null).toList();
-                return AlertDialog(
+                return ListViewCapableAlertDialog(
                     title: Text(hour.subject),
-                    contentPadding: EdgeInsets.all(16.0),
                     content: ListView.separated(
                       itemCount: items.length,
                       shrinkWrap: true,
