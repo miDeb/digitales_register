@@ -8,6 +8,8 @@ import 'package:synchronized/synchronized.dart';
 
 import 'app_state.dart';
 
+typedef void AddNetworkProtocolItem(NetworkProtocolItem item);
+
 class Wrapper {
   static const String _loginAddress =
       "https://vinzentinum.digitalesregister.it/v2/api/auth/login";
@@ -18,7 +20,7 @@ class Wrapper {
   bool get loggedIn => user != null && pass != null;
   bool _loggedIn;
   VoidCallback onLogout, onConfigLoaded, onRelogin;
-
+  AddNetworkProtocolItem onAddProtocolItem;
   bool safeMode;
   static final httpClient = HttpClient();
   Future<bool> get noInternet async {
@@ -38,7 +40,8 @@ class Wrapper {
   Future<void> login(String user, String pass,
       {VoidCallback logout,
       VoidCallback configLoaded,
-      VoidCallback relogin}) async {
+      VoidCallback relogin,
+      AddNetworkProtocolItem addProtocolItem}) async {
     if (logout != null) {
       this.onLogout = logout;
     } else {
@@ -53,6 +56,11 @@ class Wrapper {
       this.onRelogin = relogin;
     } else {
       assert(this.onRelogin != null);
+    }
+    if (addProtocolItem != null) {
+      this.onAddProtocolItem = addProtocolItem;
+    } else {
+      assert(this.onAddProtocolItem != null);
     }
 
     dynamic response;
@@ -172,8 +180,16 @@ class Wrapper {
       );
     } on Exception catch (e) {
       await _handleError(e);
+      onAddProtocolItem(NetworkProtocolItem((b) => b
+        ..address = _baseAddress + url
+        ..response = e.toString()
+        ..parameters = args.toString()));
       return null;
     }
+    onAddProtocolItem(NetworkProtocolItem((b) => b
+      ..address = _baseAddress + url
+      ..response = response.toString()
+      ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
       print(response);
       throw Error();

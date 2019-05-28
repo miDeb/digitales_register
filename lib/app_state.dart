@@ -24,6 +24,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   SettingsState get settingsState;
   @nullable
   CalendarState get calendarState;
+  @nullable
+  NetworkProtocolState get networkProtocolState;
   static Serializer<AppState> get serializer => _$appStateSerializer;
   AppState._();
   factory AppState([updates(AppStateBuilder b)]) = _$AppState;
@@ -191,4 +193,24 @@ abstract class CalendarState
   CalendarState._();
   factory CalendarState([updates(CalendarStateBuilder b)]) = _$CalendarState;
   static Serializer<CalendarState> get serializer => _$calendarStateSerializer;
+}
+
+abstract class NetworkProtocolState
+    implements Built<NetworkProtocolState, NetworkProtocolStateBuilder> {
+  BuiltList<NetworkProtocolItem> get items;
+
+  NetworkProtocolState._();
+  factory NetworkProtocolState([updates(NetworkProtocolStateBuilder b)]) =
+      _$NetworkProtocolState;
+}
+
+abstract class NetworkProtocolItem
+    implements Built<NetworkProtocolItem, NetworkProtocolItemBuilder> {
+  String get address;
+  String get parameters;
+  String get response;
+
+  NetworkProtocolItem._();
+  factory NetworkProtocolItem([updates(NetworkProtocolItemBuilder b)]) =
+      _$NetworkProtocolItem;
 }

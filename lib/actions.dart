@@ -372,3 +372,9 @@ class CalendarLoadedAction {
 }
 
 class ShowCalendarAction {}
+
+class AddNetworkProtocolItemAction{
+  final NetworkProtocolItem item;
+
+  AddNetworkProtocolItemAction(this.item);
+}

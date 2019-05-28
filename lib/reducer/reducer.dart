@@ -1,4 +1,3 @@
-import 'package:dr/reducer/settings.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -8,7 +7,9 @@ import 'calendar.dart';
 import 'days.dart';
 import 'grades.dart';
 import 'login.dart';
+import 'network_protocol.dart';
 import 'notifications.dart';
+import 'settings.dart';
 
 Reducer<AppState> appReducer = (AppState state, action) {
   if (action is MountAppStateAction) {
@@ -29,7 +30,7 @@ Reducer<AppState> appReducer = (AppState state, action) {
           settingsStateReducer(state.settingsState.toBuilder(), action)
       ..absenceState = absenceReducer(state.absenceState?.toBuilder(), action)
       ..calendarState =
-          calendarReducer(state.calendarState?.toBuilder(), action);
+          calendarReducer(state.calendarState?.toBuilder(), action)..networkProtocolState = networkProtocolReducer(state.networkProtocolState?.toBuilder(), action);
   });
   return newState;
 };

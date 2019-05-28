@@ -2,6 +2,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../container/settings_page.dart';
+import 'network_protocol_page.dart';
 
 class SettingsPageWidget extends StatelessWidget {
   final SettingsViewModel vm;
@@ -129,6 +130,21 @@ class SettingsPageWidget extends StatelessWidget {
               vm.onSetCalendarShowDates(value);
             },
             value: vm.calendarShowDates,
+          ),
+          Divider(),
+          ListTile(
+            title: Text(
+              "Erweitert",
+              style: Theme.of(context).textTheme.headline,
+            ),
+          ),
+          ListTile(
+            title: Text("Netzwerkprotokoll (Beta)"),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+               return  NetworkProtocolPage();
+              }));
+            },
           ),
         ],
       ),

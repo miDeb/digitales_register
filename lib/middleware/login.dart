@@ -1,9 +1,9 @@
-import 'package:dr/main.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
+import '../main.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> loginMiddlewares(
@@ -38,11 +38,12 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
 
 void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
     Wrapper wrapper) async {
-  action = LoginAction(action.user.trim(), action.pass, action.fromStorage,action.offlineEnabled);
+  action = LoginAction(action.user.trim(), action.pass, action.fromStorage,
+      action.offlineEnabled);
   next(action);
   if (action.user == "" || action.pass == "") {
-    store.dispatch(LoginFailedAction("Bitte gib etwas ein", action.offlineEnabled,
-        await wrapper.noInternet, action.user));
+    store.dispatch(LoginFailedAction("Bitte gib etwas ein",
+        action.offlineEnabled, await wrapper.noInternet, action.user));
     return;
   }
   store.dispatch(LoggingInAction());
@@ -55,6 +56,8 @@ void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
           SetConfigAction(wrapper.config),
         ),
     relogin: () => store.dispatch(LoggedInAgainAutomatically()),
+    addProtocolItem: (item) =>
+        store.dispatch(AddNetworkProtocolItemAction(item)),
   );
   if (wrapper.loggedIn)
     store.dispatch(LoggedInAction(wrapper.user, action.fromStorage));
