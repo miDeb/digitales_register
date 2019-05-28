@@ -22,8 +22,8 @@ class AbsenceGroupContainer extends StatelessWidget {
       },
       converter: (Store<AppState> store) {
         final absenceGroup = store.state.absenceState.absences[group];
-        final first = absenceGroup.absences.last;
-        final last = absenceGroup.absences.first;
+        final first = absenceGroup.absences.last; //<--- flip is intentional
+        final last = absenceGroup.absences.first; //<---
         var fromTo = "";
         if (first.date == last.date) {
           fromTo += "${DateFormat("d.M.").format(first.date)}, ";
@@ -47,8 +47,8 @@ class AbsenceGroupContainer extends StatelessWidget {
         String justifiedString;
         switch (absenceGroup.justified) {
           case AbsenceJustified.justified:
-            justifiedString =
-                "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp)} von ${absenceGroup.reasonSignature} entschuldigt";
+            justifiedString = absenceGroup.reasonSignature != null && absenceGroup.reasonTimestamp!=null ? 
+                "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp)} von ${absenceGroup.reasonSignature} entschuldigt": "entschuldigt";
             break;
           case AbsenceJustified.forSchool:
             justifiedString = "Im Auftrag der Schule (entschuldigt)";
