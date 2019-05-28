@@ -71,7 +71,7 @@ void errorMiddleware(Store<AppState> store, action, NextDispatcher next) {
                         new ClipboardData(text: e.stackTrace)),
                   ),
                   Text(
-                      "Ein unvorhergesehener Fehler ist aufgetreten:\n\n${e.stackTrace}"),
+                      "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
                 ],
               ),
             ),
@@ -85,9 +85,7 @@ void errorMiddleware(Store<AppState> store, action, NextDispatcher next) {
     handleError(action.e);
   }
   try {
-    print("a");
     next(action);
-    print("b");
   } catch (e) {
     handleError(e);
   }
