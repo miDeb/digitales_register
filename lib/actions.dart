@@ -378,3 +378,9 @@ class AddNetworkProtocolItemAction{
 
   AddNetworkProtocolItemAction(this.item);
 }
+
+class UpdateHomeworkFilterBlacklistAction{
+  final List<HomeworkType> blacklist;
+
+  UpdateHomeworkFilterBlacklistAction(this.blacklist);
+}

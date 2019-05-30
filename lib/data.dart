@@ -209,17 +209,19 @@ String formatGrade(String grade) {
   return grade;
 }
 
-class HomeworkType {
-  final String name;
-  static HomeworkType lessonHomework = HomeworkType._("lessonHomework"),
-      gradeGroup = HomeworkType._("gradeGroup"),
-      grade = HomeworkType._("grade"),
-      unknown = HomeworkType._("unknown"),
-      observation = HomeworkType._("observation"),
-      homework = HomeworkType._("homework");
+class HomeworkType extends EnumClass {
 
-  HomeworkType._(this.name);
+  static const HomeworkType lessonHomework = _$a,
+      gradeGroup = _$b,
+      grade = _$c,
+      unknown = _$d,
+      observation = _$e,
+      homework = _$f;
 
+  const HomeworkType._(String name) : super(name);
+  static BuiltSet<HomeworkType> get values => _$values2;
+  static HomeworkType valueOf(String name) => _$valueOf2(name);
+  static Serializer<HomeworkType> get serializer => _$homeworkTypeSerializer;
   @override
   String toString() {
     return this.name;

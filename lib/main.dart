@@ -31,7 +31,8 @@ final initialState = AppState((builder) {
   builder
     ..dayState = (DayStateBuilder()
       ..future = true
-      ..loading = false)
+      ..loading = false
+      ..blacklist = ListBuilder([]))
     ..loginState = (LoginStateBuilder()
       ..loading = false
       ..loggedIn = false

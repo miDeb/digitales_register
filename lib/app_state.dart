@@ -34,9 +34,23 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 abstract class DayState implements Built<DayState, DayStateBuilder> {
   bool get loading;
   bool get future;
+  @nullable
+  BuiltList<HomeworkType> get blacklist;
   BuiltList<Day> get displayDays => allDays == null
       ? null
-      : BuiltList(Day.filterFuture(allDays.toList(), future));
+      : BuiltList(
+          Day.filterFuture(allDays.toList(), future).map(
+            (day) => Day(
+                  date: day.date,
+                  homework: day.homework.where(
+                    (homework) => !blacklist.contains(homework.type),
+                  ).toList(), 
+                  deletedHomework: day.deletedHomework.where(
+                    (deletedHomework) => !blacklist.contains(deletedHomework.type),
+                  ).toList(), 
+                ),
+          ),
+        );
   @nullable
   BuiltList<Day> get allDays;
   bool get hasDays => displayDays?.isNotEmpty == true;

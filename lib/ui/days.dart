@@ -1,3 +1,4 @@
+import 'package:dr/container/homework_filter_container.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -82,7 +83,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       realIndices[dayIndex] = index;
       for (var hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
-          if(hw == currentHomework){
+          if (hw == currentHomework) {
             foundCurrentHomework = true;
           }
           if (!foundFirst && hw != currentHomework) {
@@ -99,7 +100,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       }
       dayIndex++;
     }
-    if(!foundCurrentHomework){
+    if (!foundCurrentHomework) {
       currentHomework = currentHomeworkOffset = null;
     }
   }
@@ -129,16 +130,20 @@ class _DaysWidgetState extends State<DaysWidget> {
         itemCount: widget.vm.days.length + 1,
         itemBuilder: (context, n) {
           if (n == 0) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: RaisedButton(
-                  child: Text(
-                    widget.vm.future ? "Vergangenheit" : "Zukunft",
+            return Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+                  child: RaisedButton(
+                    child: Text(
+                      widget.vm.future ? "Vergangenheit" : "Zukunft",
+                    ),
+                    onPressed: widget.vm.onSwitchFuture,
                   ),
-                  onPressed: widget.vm.onSwitchFuture,
                 ),
-              ),
+                HomeworkFilterContainer(),
+              ],
             );
           }
           if (n == widget.vm.days.length) {

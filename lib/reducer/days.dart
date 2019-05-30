@@ -15,6 +15,7 @@ final dayReducer = combineReducers<DayStateBuilder>([
   _createToggleHomeworkDoneReducer(),
   _createMarkAsNotNewOrChangedReducer(),
   _createMarkAllAsNotNewOrChangedReducer(),
+  _createUpdateBlacklistReducer(),
 ]);
 TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
   return TypedReducer((DayStateBuilder state, DaysLoadedAction action) {
@@ -149,5 +150,13 @@ TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
         ..homework.forEach((homework) => homework
           ..isChanged = false
           ..isNew = false));
+  });
+}
+
+TypedReducer<DayStateBuilder, UpdateHomeworkFilterBlacklistAction>
+    _createUpdateBlacklistReducer() {
+  return TypedReducer(
+      (DayStateBuilder state, UpdateHomeworkFilterBlacklistAction action) {
+    return state..blacklist = ListBuilder(action.blacklist);
   });
 }

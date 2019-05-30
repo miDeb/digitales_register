@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -192,7 +193,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
       MountAppStateAction(
         store.state.rebuild(
           (b) => b
-            ..dayState = (dayState.toBuilder()..future = true)
+            ..dayState = (dayState.toBuilder()..future = true..blacklist ??= ListBuilder([]))
             ..gradesState = gradesState.toBuilder()
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
