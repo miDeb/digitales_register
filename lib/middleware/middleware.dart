@@ -192,7 +192,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
       MountAppStateAction(
         store.state.rebuild(
           (b) => b
-            ..dayState = dayState.toBuilder()
+            ..dayState = (dayState.toBuilder()..future = true)
             ..gradesState = gradesState.toBuilder()
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
