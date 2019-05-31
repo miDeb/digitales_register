@@ -33,7 +33,7 @@ void _enableOffline(NextDispatcher next, SetOfflineEnabledAction action,
       {
         "user": wrapper.user,
         "pass": wrapper.pass,
-        "offlineEnabled": store.state.settingsState.offlineEnabled
+        "offlineEnabled": action.enable,
       },
     ),
   );

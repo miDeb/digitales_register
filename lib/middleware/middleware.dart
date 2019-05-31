@@ -193,7 +193,9 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
       MountAppStateAction(
         store.state.rebuild(
           (b) => b
-            ..dayState = (dayState.toBuilder()..future = true..blacklist ??= ListBuilder([]))
+            ..dayState = (dayState.toBuilder()
+              ..future = true
+              ..blacklist ??= ListBuilder([]))
             ..gradesState = gradesState.toBuilder()
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
@@ -283,6 +285,8 @@ _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
   }
   if (action.noSave) {
     store.dispatch(DeleteDataAction());
+  } else {
+    store.dispatch(SaveStateAction());
   }
 }
 
