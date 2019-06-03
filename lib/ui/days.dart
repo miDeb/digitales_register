@@ -130,16 +130,18 @@ class _DaysWidgetState extends State<DaysWidget> {
         itemCount: widget.vm.days.length + 1,
         itemBuilder: (context, n) {
           if (n == 0) {
-            return Column(
+            return Stack(
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-                  child: RaisedButton(
-                    child: Text(
-                      widget.vm.future ? "Vergangenheit" : "Zukunft",
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 8.0, vertical: 2),
+                    child: RaisedButton(
+                      child: Text(
+                        widget.vm.future ? "Vergangenheit" : "Zukunft",
+                      ),
+                      onPressed: widget.vm.onSwitchFuture,
                     ),
-                    onPressed: widget.vm.onSwitchFuture,
                   ),
                 ),
                 HomeworkFilterContainer(),
