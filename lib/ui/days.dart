@@ -132,6 +132,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           if (n == 0) {
             return Stack(
               children: [
+                HomeworkFilterContainer(),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -144,7 +145,6 @@ class _DaysWidgetState extends State<DaysWidget> {
                     ),
                   ),
                 ),
-                HomeworkFilterContainer(),
               ],
             );
           }
