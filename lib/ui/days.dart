@@ -231,10 +231,10 @@ class DayWidget extends StatelessWidget {
     return Card(
         elevation: .6,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey, width: 0.2),
+          side: BorderSide(color: Colors.grey, width: 1),
           borderRadius: BorderRadius.circular(16),
         ),
-        clipBehavior: Clip.hardEdge,
+        clipBehavior: Clip.antiAlias,
         child: Column(
           children: <Widget>[
             Row(
@@ -356,7 +356,7 @@ class ItemWidget extends StatelessWidget {
             ? BorderSide(color: Colors.red, width: 2)
             : item.type == HomeworkType.grade || item.checked
                 ? BorderSide(color: Colors.green, width: 2)
-                : BorderSide(color: Colors.grey, width: .2),
+                : BorderSide(color: Colors.grey, width: 1),
         borderRadius: BorderRadius.circular(16),
       ),
       child: GestureDetector(
