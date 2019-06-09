@@ -198,10 +198,24 @@ class HourWidget extends StatelessWidget {
         },
         child: Container(
           child: Center(
-            child: Text(
-              shortSubjectNames[hour.subject] ?? hour.subject,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  (shortSubjectNames[hour.subject] ?? hour.subject),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                for (final room in hour.rooms)
+                  Text(
+                    room,
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .copyWith(fontSize: 12),
+                  ),
+              ],
             ),
           ),
           decoration: hour.hasExam
