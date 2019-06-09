@@ -207,11 +207,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
               onNotification: (n) {
                 _chevronOpacityController.forward();
                 _dateRangeOpacityController.forward();
+                return false;
               },
               child: NotificationListener<ScrollEndNotification>(
                 onNotification: (_) {
                   _chevronOpacityController.reverse();
                   _dateRangeOpacityController.reverse();
+                  return false;
                 },
                 child: PageView.builder(
                   itemBuilder: (BuildContext context, int index) {
