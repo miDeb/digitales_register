@@ -126,6 +126,7 @@ class _DaysWidgetState extends State<DaysWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
+        physics: AlwaysScrollableScrollPhysics(),
         controller: controller,
         itemCount: widget.vm.days.length + 1,
         itemBuilder: (context, n) {
