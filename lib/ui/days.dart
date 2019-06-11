@@ -366,178 +366,173 @@ class ItemWidget extends StatelessWidget {
             : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: <Widget>[
-              item.label != null
-                  ? Row(
+              Expanded(
+                child: Column(
+                  children: <Widget>[
+                    Column(
                       children: <Widget>[
-                        Expanded(
-                          child: Column(
+                        if (item.label != null)
+                          Row(
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      item.label,
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (item.isNew || item.isChanged)
-                                    SizedBox(
-                                      width: 16,
-                                    ),
-                                  if (item.isNew)
-                                    NewsSticker(
-                                      text: "neu",
-                                    ),
-                                  if (item.isChanged)
-                                    NewsSticker(
-                                      text: "geändert",
-                                    ),
-                                ],
+                              Expanded(
+                                child: Text(
+                                  item.label,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              Row(
-                                children: <Widget>[
-                                  Spacer(),
-                                  Flexible(
-                                    child: Divider(),
-                                    flex: 9,
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
+                              if (item.isNew || item.isChanged)
+                                SizedBox(
+                                  width: 16,
+                                ),
+                              if (item.isNew)
+                                NewsSticker(
+                                  text: "neu",
+                                ),
+                              if (item.isChanged)
+                                NewsSticker(
+                                  text: "geändert",
+                                ),
                             ],
                           ),
-                        ),
-                        if (!isHistory)
-                          IconButton(
-                            icon: Icon(
-                              Icons.info_outline,
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (_context) {
-                                    return ListViewCapableAlertDialog(
-                                      title: Text(item.title),
-                                      content: ListView(
-                                        shrinkWrap: true,
-                                        children: <Widget>[
-                                          Text(formatChanged(item)),
-                                          if (item.previousVersion != null)
-                                            ExpansionTile(
-                                              title: Text("Versionen"),
-                                              children: <Widget>[
-                                                ItemWidget(
-                                                  item: item,
-                                                  isHistory: true,
-                                                ),
-                                              ],
-                                            ),
-                                        ],
-                                      ),
-                                      actions: <Widget>[
-                                        RaisedButton(
-                                          textTheme: ButtonTextTheme.primary,
-                                          onPressed: () =>
-                                              Navigator.pop(_context),
-                                          child: Text(
-                                            "Ok",
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  });
-                            },
-                          ),
                       ],
-                    )
-                  : Container(),
-              ListTile(
-                contentPadding: EdgeInsets.only(),
-                title: Text(item.title),
-                subtitle:
-                    isNullOrEmpty(item.subtitle) ? null : Text(item.subtitle),
-                leading: !isHistory && item.deleteable
-                    ? IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () async {
-                          if (askWhenDelete) {
-                            var ask = true;
-                            final delete = await showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    content: StatefulBuilder(
-                                      builder: (context, setState) =>
-                                          SwitchListTile(
-                                            title: Text("Nie fragen"),
-                                            onChanged: (bool value) {
-                                              setState(() => ask = !value);
-                                            },
-                                            value: !ask,
+                    ),
+                    ListTile(
+                      contentPadding: EdgeInsets.only(),
+                      title: Text(item.title),
+                      subtitle: isNullOrEmpty(item.subtitle)
+                          ? null
+                          : Text(item.subtitle),
+                      leading: !isHistory && item.deleteable
+                          ? IconButton(
+                              icon: Icon(Icons.close),
+                              onPressed: () async {
+                                if (askWhenDelete) {
+                                  var ask = true;
+                                  final delete = await showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          content: StatefulBuilder(
+                                            builder: (context, setState) =>
+                                                SwitchListTile(
+                                                  title: Text("Nie fragen"),
+                                                  onChanged: (bool value) {
+                                                    setState(
+                                                        () => ask = !value);
+                                                  },
+                                                  value: !ask,
+                                                ),
                                           ),
-                                    ),
-                                    title: Text("Erinnerung löschen?"),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text("Abbrechen"),
-                                        onPressed: () => Navigator.pop(context),
-                                      ),
-                                      RaisedButton(
-                                        textTheme: ButtonTextTheme.primary,
-                                        child: Text(
-                                          "Löschen",
+                                          title: Text("Erinnerung löschen?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text("Abbrechen"),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            RaisedButton(
+                                              textTheme:
+                                                  ButtonTextTheme.primary,
+                                              child: Text(
+                                                "Löschen",
+                                              ),
+                                              onPressed: () =>
+                                                  Navigator.pop(context, true),
+                                            )
+                                          ],
+                                        );
+                                      });
+                                  if (delete == true) {
+                                    if (!ask) setDoNotAskWhenDelete();
+                                    removeThis();
+                                  }
+                                } else {
+                                  removeThis();
+                                }
+                              },
+                              padding: EdgeInsets.all(0),
+                            )
+                          : null,
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                children: <Widget>[
+                  if (!isHistory && item.label != null)
+                    IconButton(
+                      icon: Icon(
+                        Icons.info_outline,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_context) {
+                            return ListViewCapableAlertDialog(
+                              title: Text(item.title),
+                              content: ListView(
+                                shrinkWrap: true,
+                                children: <Widget>[
+                                  Text(formatChanged(item)),
+                                  if (item.previousVersion != null)
+                                    ExpansionTile(
+                                      title: Text("Versionen"),
+                                      children: <Widget>[
+                                        ItemWidget(
+                                          item: item,
+                                          isHistory: true,
                                         ),
-                                        onPressed: () =>
-                                            Navigator.pop(context, true),
-                                      )
-                                    ],
-                                  );
-                                });
-                            if (delete == true) {
-                              if (!ask) setDoNotAskWhenDelete();
-                              removeThis();
-                            }
-                          } else {
-                            removeThis();
-                          }
-                        },
-                        padding: EdgeInsets.all(0),
-                      )
-                    : null,
-                trailing: item.warning
-                    ? Padding(
+                                      ],
+                                    ),
+                                ],
+                              ),
+                              actions: <Widget>[
+                                RaisedButton(
+                                  textTheme: ButtonTextTheme.primary,
+                                  onPressed: () => Navigator.pop(_context),
+                                  child: Text(
+                                    "Ok",
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  if (item.warning)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        "!",
+                        style: TextStyle(
+                          color: Colors.red.shade900,
+                          fontSize: 30,
+                        ),
+                      ),
+                    )
+                  else
+                    if (item.type == HomeworkType.grade)
+                      Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Text(
-                          "!",
-                          style: TextStyle(
-                            color: Colors.red.shade900,
-                            fontSize: 30,
-                          ),
+                          item.gradeFormatted,
+                          style: TextStyle(color: Colors.green, fontSize: 30),
                         ),
                       )
-                    : item.type == HomeworkType.grade
-                        ? Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Text(
-                              item.gradeFormatted,
-                              style:
-                                  TextStyle(color: Colors.green, fontSize: 30),
-                            ),
-                          )
-                        : !isHistory && item.checkable && !doubleTapForDone
-                            ? Checkbox(
-                                activeColor: Colors.green,
-                                value: item.checked,
-                                onChanged: (done) {
-                                  toggleDone();
-                                },
-                              )
-                            : null,
+                    else
+                      if (!isHistory && item.checkable && !doubleTapForDone)
+                        Checkbox(
+                          activeColor: Colors.green,
+                          value: item.checked,
+                          onChanged: (done) {
+                            toggleDone();
+                          },
+                        ),
+                ],
               ),
               if (isHistory) ...[
                 Divider(),
