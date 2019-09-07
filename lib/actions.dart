@@ -148,8 +148,6 @@ class SetDeleteDataOnLogoutAction implements SettingsAction {
   }
 }
 
-class LoggingInAction {}
-
 class ShowLoginAction {}
 
 class ShowAbsencesAction {}
