@@ -26,8 +26,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () async {
         SystemNavigator.pop();
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(
