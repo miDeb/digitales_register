@@ -39,16 +39,12 @@ main() {
         substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
-  test('test', () {
+  test('parse webpage', () {
     expect(readUserId(source), 3539);
     expect(readFullName(source), "Michael Debertol");
     expect(readImgSource(source),
         "https://vinzentinum.digitalesregister.it/v2/theme/icons/profile_empty.png");
     expect(readAutoLogoutSeconds(source), 300);
-  });
-
-  test("cookies", () {
-    print(Cookie.fromSetCookieValue(headers));
   });
 }
 
