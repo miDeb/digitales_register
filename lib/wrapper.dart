@@ -164,6 +164,7 @@ class Wrapper {
                 return false; // return@post null
               } else {
                 onRelogin();
+                return true;
               }
             } else {
               return false; // return@post null
