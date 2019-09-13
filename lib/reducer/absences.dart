@@ -18,7 +18,7 @@ AbsenceStateBuilder parseAbsences(json) {
     ..delayed = rawStats["delayed"]
     ..justified = rawStats["justified"]
     ..notJustified = rawStats["notJustified"]
-    ..percentage = rawStats["percentage"];
+    ..percentage = rawStats["percentage"].toString();
   final absences = (json["absences"] as List).map((g) {
     return AbsenceGroup(
       (b) => b
