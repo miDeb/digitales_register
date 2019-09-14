@@ -29,16 +29,24 @@ class AbsencesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state != null
-        ? ListView(children: <Widget>[
-            AbsencesStatisticWidget(
-              stat: state.statistic,
-            ),
-            ...List.generate(
-              state.absences.length,
-              (n) =>
-                  AbsenceGroupContainer(group: state.absences.length - n - 1),
-            ),
-          ])
+        ? state.absences.isEmpty
+            ? Center(
+                child: Text(
+                  "Noch keine Absenzen",
+                  style: Theme.of(context).textTheme.display1,
+                ),
+              )
+            : ListView(children: <Widget>[
+                AbsencesStatisticWidget(
+                  stat: state.statistic,
+                ),
+                ...List.generate(
+                  state.absences.length,
+                  (n) => AbsenceGroupContainer(
+                    group: state.absences.length - n - 1,
+                  ),
+                ),
+              ])
         : Center(
             child: CircularProgressIndicator(),
           );
