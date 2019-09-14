@@ -201,7 +201,6 @@ abstract class AbsenceState
 abstract class CalendarState
     implements Built<CalendarState, CalendarStateBuilder> {
   BuiltMap<DateTime, CalendarDay> get days;
-  DateTime get currentMonday;
 
   CalendarState._();
   factory CalendarState([updates(CalendarStateBuilder b)]) = _$CalendarState;

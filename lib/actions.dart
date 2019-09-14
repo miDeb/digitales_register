@@ -340,22 +340,6 @@ class LoadCalendarAction {
   LoadCalendarAction(this.startDate);
 }
 
-class CurrentMondayChangedAction {
-  final DateTime monday;
-
-  CurrentMondayChangedAction(this.monday);
-}
-
-class LoadPrevWeekCalendarAction {}
-
-class LoadNextWeekCalendarAction {}
-
-class LoadWeekOfDayCalendarAction {
-  final DateTime weekDay;
-
-  LoadWeekOfDayCalendarAction(this.weekDay);
-}
-
 class CalendarLoadedAction {
   final result;
 

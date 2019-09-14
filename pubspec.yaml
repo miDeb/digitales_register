@@ -32,6 +32,7 @@ dependencies:
   flutter_secure_storage:
     path: "packages/flutter_secure_storage/"
   scroll_to_index: ^1.0.1
+
 dev_dependencies:
   flutter_launcher_icons: ^0.7.0
   flutter_test:

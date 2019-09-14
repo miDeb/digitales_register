@@ -36,7 +36,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _currentMonday = widget.vm.currentMonday;
+    _currentMonday = toMonday(DateTime.now());
     _controller = PageController(
       initialPage: pageOf(_currentMonday),
     )..addListener(_pageViewControllerListener);
@@ -57,7 +57,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     _dateRangeOpacityAnimation =
         _dateRangeOpacityController.drive(_dateRangeOpacityTween);
 
-    widget.vm.dayCallback(widget.vm.currentMonday);
+    widget.vm.dayCallback(_currentMonday);
 
     super.initState();
   }
@@ -75,26 +75,12 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     animatingPages = [floor, ceil];
   }
 
-  @override
-  didUpdateWidget(Calendar oldWidget) {
-    if (widget.vm.currentMonday != _currentMonday) {
-      _controller.animateToPage(
-        pageOf(widget.vm.currentMonday),
-        curve: _animatePageCurve,
-        duration: _animatePageDuration,
-      );
-      _currentMonday = widget.vm.currentMonday;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
   void _handlePageChanged(int newPage) {
     final newMonday = mondayOf(newPage);
     if (newMonday != _currentMonday) {
       setState(() {
         _currentMonday = newMonday;
       });
-      widget.vm.currentMondayChanged(newMonday);
     }
   }
 
@@ -120,9 +106,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 if (date != _currentMonday) {
                   _controller.animateToPage(pageOf(date),
                       curve: _animatePageCurve, duration: _animatePageDuration);
-                  // setState(() {
-                  //   _currentMonday = date;
-                  // });
                 }
               },
             ),
@@ -133,7 +116,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
           Card(
             clipBehavior: Clip.antiAlias,
             child: Row(
-              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Expanded(
                   child: FadeTransition(
@@ -147,7 +129,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                         _controller.previousPage(
                             curve: _animatePageCurve,
                             duration: _animatePageDuration);
-                        //widget.vm.prevWeek();
                       },
                     ),
                   ),
@@ -175,10 +156,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                       _controller.animateToPage(pageOf(date),
                           curve: _animatePageCurve,
                           duration: _animatePageDuration);
-                      // setState(() {
-                      //   _currentMonday = date;
-                      // });
-                      //widget.vm.dayCallback(date);
                     }
                   },
                 ),
@@ -194,7 +171,6 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                         _controller.nextPage(
                             curve: _animatePageCurve,
                             duration: _animatePageDuration);
-                        //widget.vm.nextWeek();
                       },
                     ),
                   ),

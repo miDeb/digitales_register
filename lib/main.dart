@@ -17,7 +17,6 @@ import 'container/settings_page.dart';
 import 'middleware/middleware.dart';
 import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
-import 'util.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -59,7 +58,6 @@ final initialState = AppState((builder) {
       ..graphConfigs = MapBuilder({}))
     ..absenceState = null
     ..calendarState = (CalendarStateBuilder()
-      ..currentMonday = toMonday(DateTime.now())
       ..days = MapBuilder());
 });
 

@@ -7,7 +7,6 @@ import '../data.dart';
 
 final calendarReducer = combineReducers<CalendarStateBuilder>([
   _calendarLoadedReducer.call,
-  _calendarDaySetReducer.call,
 ]);
 
 final _calendarLoadedReducer =
@@ -18,12 +17,6 @@ final _calendarLoadedReducer =
     return MapEntry(date, parseCalendarDay(e, date).build());
   });
   return state..days.addAll(t);
-});
-
-final _calendarDaySetReducer =
-    TypedReducer<CalendarStateBuilder, CurrentMondayChangedAction>(
-        (state, action) {
-  return state..currentMonday = action.monday;
 });
 
 CalendarDayBuilder parseCalendarDay(day, DateTime date) {

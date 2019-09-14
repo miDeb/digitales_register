@@ -26,26 +26,10 @@ class CalendarContainer extends StatelessWidget {
 typedef void DayCallback(DateTime day);
 
 class CalendarViewModel {
-  final DateTime currentMonday;
-  final VoidCallback nextWeek, prevWeek;
-  final DayCallback dayCallback, currentMondayChanged;
-
-  bool operator ==(other) {
-    return other is CalendarViewModel && other.currentMonday == currentMonday;
-  }
+  final DayCallback dayCallback;
 
   CalendarViewModel(Store<AppState> store)
-      : currentMonday = store.state.calendarState.currentMonday,
-        nextWeek = (() {
-          store.dispatch(LoadNextWeekCalendarAction());
-        }),
-        prevWeek = (() {
-          store.dispatch(LoadPrevWeekCalendarAction());
-        }),
-        dayCallback = ((day) {
-          store.dispatch(LoadWeekOfDayCalendarAction(day));
-        }),
-        currentMondayChanged = ((day) {
-          store.dispatch(CurrentMondayChangedAction(day));
+      : dayCallback = ((day) {
+          store.dispatch(LoadCalendarAction(day));
         });
 }
