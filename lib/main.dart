@@ -86,59 +86,60 @@ void run() {
                   );
           },
           themedWidgetBuilder: (context, theme) => MaterialApp(
-                localizationsDelegates: [
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                ],
-                supportedLocales: [
-                  const Locale("de"),
-                ],
-                navigatorKey: navigatorKey,
-                initialRoute: "/",
-                onGenerateRoute: (RouteSettings settings) {
-                  List<String> pathElements = settings.name.split("/");
-                  if (pathElements[0] != "") return null;
-                  switch (pathElements[1]) {
-                    case "":
-                      return MaterialPageRoute(
-                        builder: (_) => HomePage(),
-                      );
-                    case "login":
-                      return MaterialPageRoute(
-                        builder: (_) => LoginPage(),
-                      );
-                    case "notifications":
-                      return MaterialPageRoute(
-                        builder: (_) => NotificationPage(),
-                        fullscreenDialog: true,
-                      );
-                    case "settings":
-                      return MaterialPageRoute(
-                          builder: (_) => SettingsPageContainer());
-                    case "grades":
-                      return MaterialPageRoute(
-                        builder: (_) => GradesPageContainer(),
-                      );
-                    case "absences":
-                      return MaterialPageRoute(
-                        builder: (_) => AbsencesPageContainer(),
-                      );
-                    case "calendar":
-                      return MaterialPageRoute(
-                        builder: (_) => CalendarContainer(),
-                      );
-                    case "gradesChart":
-                      return MaterialPageRoute(
-                        builder: (_) => GradesChartPage(),
-                        fullscreenDialog: true,
-                      );
-                  }
-                },
-                theme: theme,
-                darkTheme: ThemeData(
-                  brightness: Brightness.dark,
-                ),
-              ),
+            localizationsDelegates: [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: [
+              const Locale("de"),
+            ],
+            navigatorKey: navigatorKey,
+            initialRoute: "/",
+            onGenerateRoute: (RouteSettings settings) {
+              List<String> pathElements = settings.name.split("/");
+              if (pathElements[0] != "") return null;
+              switch (pathElements[1]) {
+                case "":
+                  return MaterialPageRoute(
+                    builder: (_) => HomePage(),
+                  );
+                case "login":
+                  return MaterialPageRoute(
+                    builder: (_) => LoginPage(),
+                  );
+                case "notifications":
+                  return MaterialPageRoute(
+                    builder: (_) => NotificationPage(),
+                    fullscreenDialog: true,
+                  );
+                case "settings":
+                  return MaterialPageRoute(
+                      builder: (_) => SettingsPageContainer());
+                case "grades":
+                  return MaterialPageRoute(
+                    builder: (_) => GradesPageContainer(),
+                  );
+                case "absences":
+                  return MaterialPageRoute(
+                    builder: (_) => AbsencesPageContainer(),
+                  );
+                case "calendar":
+                  return MaterialPageRoute(
+                    builder: (_) => CalendarContainer(),
+                  );
+                case "gradesChart":
+                  return MaterialPageRoute(
+                    builder: (_) => GradesChartPage(),
+                    fullscreenDialog: true,
+                  );
+              }
+            },
+            theme: theme,
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+              primarySwatch: Colors.teal,
+            ),
+          ),
         ),
         onPointerDown: (_) => store.dispatch(TapAction()),
       ),
