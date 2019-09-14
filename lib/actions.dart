@@ -105,15 +105,6 @@ class SetSaveNoPassAction implements SettingsAction {
     return "SetSaveNoPassAction(safeMode: $noSave)";
   }
 }
-class SetSaveToSecureStorageAction implements SettingsAction {
-  final bool toSecureStorage;
-
-  SetSaveToSecureStorageAction(this.toSecureStorage);
-  @override
-  String toString() {
-    return "SetSaveToSecureStorageAction(safeMode: $toSecureStorage)";
-  }
-}
 
 /// Immediately save state!
 class SaveStateAction{}

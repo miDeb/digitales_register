@@ -37,7 +37,6 @@ List<Middleware<AppState>> createMiddleware() {
     _createRefresh(),
     _createNoInternet(),
     _createRefreshNoInternet(wrapper),
-    TypedMiddleware(_setSaveToSecureStorageMiddleware),
     TypedMiddleware<AppState, LoggedInAction>(
       (store, action, next) => _loggedIn(store, action, next, _secureStorage),
     ),
@@ -250,7 +249,7 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
         writeToStorage(
           user.toString(),
           save,
-          store.state.settingsState.saveToSecureStorage,
+          false,
         );
       });
     } else {
@@ -262,7 +261,7 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
               "settings": serializers.serialize(store.state.settingsState),
             },
           ),
-          store.state.settingsState.saveToSecureStorage,
+          false,
         );
       _lastSettingsState = store.state.settingsState;
     }
@@ -288,19 +287,6 @@ _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
   } else {
     store.dispatch(SaveStateAction());
   }
-}
-
-_setSaveToSecureStorageMiddleware(
-    Store<AppState> store, SetSaveToSecureStorageAction action, next) async {
-  next(action);
-  if (action.toSecureStorage) {
-    File("${(await getApplicationDocumentsDirectory()).path}/${store.state.loginState.userName.hashCode}")
-        .delete();
-  } else {
-    _secureStorage.delete(
-        key: store.state.loginState.userName.hashCode.toString());
-  }
-  store.dispatch(SaveStateAction());
 }
 
 _deleteDataMiddleware(

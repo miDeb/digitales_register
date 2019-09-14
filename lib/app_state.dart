@@ -164,7 +164,6 @@ abstract class SettingsState
   bool get deleteDataOnLogout;
   bool get calendarShowDates;
   bool get offlineEnabled;
-  bool get saveToSecureStorage;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
