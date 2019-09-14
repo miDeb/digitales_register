@@ -131,7 +131,7 @@ class SettingsPageWidget extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text("Netzwerkprotokoll (Beta)"),
+            title: Text("Netzwerkprotokoll"),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                return  NetworkProtocolPage();
