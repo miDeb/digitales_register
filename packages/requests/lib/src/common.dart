@@ -6,10 +6,11 @@ class Common {
   static Map<String, String> cookies = {};
 
   static void storageSet(String key, String value) {
-    if (value == null)
+    if (value == null) {
       cookies.remove(key);
-    else
+    } else {
       cookies[key] = value;
+    }
   }
 
   static String storageGet(String key) {
@@ -21,7 +22,7 @@ class Common {
   }
 
   static String toJson(dynamic object) {
-    var encoder = new JsonEncoder.withIndent("     ");
+    var encoder = JsonEncoder.withIndent("     ");
     return encoder.convert(object);
   }
 

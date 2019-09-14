@@ -7,7 +7,7 @@ import 'dart:core';
 import 'common.dart';
 import 'event.dart';
 
-final Logger log = new Logger('requests');
+final Logger log = Logger('requests');
 
 class Requests {
   const Requests();
@@ -72,7 +72,7 @@ class Requests {
     } catch (e) {
       log.shout(
           "problem reading stored cookies. fallback with empty cookies $e");
-      return new Map<String, String>();
+      return Map<String, String>();
     }
   }
 
@@ -262,7 +262,7 @@ class Requests {
         future = client.patch(uri, body: bodyString, headers: headers);
         break;
       default:
-        throw new Exception('unsupported http method $method"');
+        throw Exception('unsupported http method $method"');
     }
 
     var response = await future.timeout(Duration(seconds: timeoutSeconds));

@@ -76,23 +76,23 @@ class _ItemsWidgetState extends State<ItemsWidget> {
         body: new ListView.builder(
           itemCount: _items.length,
           itemBuilder: (BuildContext context, int index) => new ListTile(
-                trailing: new PopupMenuButton(
-                    onSelected: (_ItemActions action) =>
-                        _performAction(action, _items[index]),
-                    itemBuilder: (BuildContext context) =>
-                        <PopupMenuEntry<_ItemActions>>[
-                          new PopupMenuItem(
-                            value: _ItemActions.delete,
-                            child: new Text('Delete'),
-                          ),
-                          new PopupMenuItem(
-                            value: _ItemActions.edit,
-                            child: new Text('Edit'),
-                          ),
-                        ]),
-                title: new Text(_items[index].value),
-                subtitle: new Text(_items[index].key),
-              ),
+            trailing: new PopupMenuButton(
+                onSelected: (_ItemActions action) =>
+                    _performAction(action, _items[index]),
+                itemBuilder: (BuildContext context) =>
+                    <PopupMenuEntry<_ItemActions>>[
+                      new PopupMenuItem(
+                        value: _ItemActions.delete,
+                        child: new Text('Delete'),
+                      ),
+                      new PopupMenuItem(
+                        value: _ItemActions.edit,
+                        child: new Text('Edit'),
+                      ),
+                    ]),
+            title: new Text(_items[index].value),
+            subtitle: new Text(_items[index].key),
+          ),
         ),
       );
 
@@ -126,10 +126,10 @@ class _ItemsWidgetState extends State<ItemsWidget> {
 }
 
 class _EditItemWidget extends StatelessWidget {
-  final TextEditingController _controller;
-
   _EditItemWidget(String text)
       : _controller = new TextEditingController(text: text);
+
+  final TextEditingController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -152,8 +152,8 @@ class _EditItemWidget extends StatelessWidget {
 }
 
 class _SecItem {
+  _SecItem(this.key, this.value);
+
   final String key;
   final String value;
-
-  _SecItem(this.key, this.value);
 }
