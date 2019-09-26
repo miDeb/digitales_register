@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../container/calendar_container.dart';
 import '../container/calendar_week_container.dart';
 import '../util.dart';
-import 'my_date_picker.dart';
 
 class Calendar extends StatefulWidget {
   final CalendarViewModel vm;
@@ -145,7 +144,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     ),
                   ),
                   onTap: () async {
-                    final result = await showMyDatePicker(
+                    final result = await showDatePicker(
                         context: context,
                         firstDate: DateTime(2018),
                         lastDate: DateTime(2020),
