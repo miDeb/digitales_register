@@ -23,6 +23,7 @@ class _DaysWidgetState extends State<DaysWidget> {
   final controller = AutoScrollController();
 
   bool _showScrollUp = false;
+  bool _afterFirstFrame = false;
 
   List<int> _targets = [];
   List<int> _focused = [];
@@ -105,12 +106,17 @@ class _DaysWidgetState extends State<DaysWidget> {
     controller.addListener(() {
       update();
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) => update());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      update();
+      _afterFirstFrame = true;
+      setState(() {});
+    });
     super.initState();
   }
 
   @override
   void didUpdateWidget(DaysWidget oldWidget) {
+    _afterFirstFrame = false;
     updateValues();
     update();
 
@@ -193,7 +199,7 @@ class _DaysWidgetState extends State<DaysWidget> {
               child: Icon(Icons.close),
               mini: true,
             ),
-          if (_targets.isNotEmpty)
+          if (_targets.isNotEmpty && _afterFirstFrame)
             FloatingActionButton.extended(
               backgroundColor: Colors.red,
               icon: Icon(Icons.arrow_drop_down),
