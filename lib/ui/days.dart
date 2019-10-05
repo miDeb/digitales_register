@@ -135,6 +135,20 @@ class _DaysWidgetState extends State<DaysWidget> {
             return Stack(
               children: [
                 HomeworkFilterContainer(),
+                Positioned(
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: AbsorbPointer(child: Container()),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -229,100 +243,86 @@ class DayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var i = index;
-    return Card(
-        elevation: .6,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.grey, width: 1),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Column(
+    return Column(
+      children: <Widget>[
+        Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 8, left: 15),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      day.displayName,
-                      style: Theme.of(context).textTheme.title,
-                    ),
-                  ),
-                ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () async {
-                    final message = await showDialog(
-                        context: context,
-                        builder: (context) {
-                          String message = "";
-                          return StatefulBuilder(
-                            builder: (context, setState) => AlertDialog(
-                              title: Text("Erinnerung"),
-                              content: TextField(
-                                onChanged: (msg) {
-                                  setState(() => message = msg);
-                                },
-                                decoration: InputDecoration(
-                                    hintText: 'zB. Hausaufgabe'),
-                              ),
-                              actions: <Widget>[
-                                FlatButton(
-                                  child: Text("Abbrechen"),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                RaisedButton(
-                                  textTheme: ButtonTextTheme.primary,
-                                  child: Text(
-                                    "Speichern",
-                                  ),
-                                  onPressed: isNullOrEmpty(message)
-                                      ? null
-                                      : () {
-                                          Navigator.pop(context, message);
-                                        },
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-                    if (message != null) {
-                      vm.addReminderCallback(day, message);
-                    }
-                  },
-                  padding: EdgeInsets.only(
-                    top: 8,
-                    bottom: 8,
-                    right: 15,
-                  ),
-                ),
-              ],
-            ),
-            for (final hw in day.homework)
-              ItemWidget(
-                item: hw,
-                toggleDone: () => vm.toggleDoneCallback(hw, !hw.checked),
-                removeThis: () => vm.removeReminderCallback(hw, day),
-                setDoNotAskWhenDelete: vm.setDoNotWhenDeleteCallback,
-                askWhenDelete: vm.askWhenDelete,
-                doubleTapForDone: vm.doubleTapForDone,
-                controller: controller,
-                index: i++,
-              ),
-            if (day.homework.isEmpty)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 15),
+              child: Align(
+                alignment: Alignment.centerLeft,
                 child: Text(
-                  "Nichts eingetragen",
-                  style: Theme.of(context).textTheme.subhead,
+                  day.displayName,
+                  style: Theme.of(context).textTheme.title,
                 ),
               ),
+            ),
+            Spacer(),
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () async {
+                final message = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      String message = "";
+                      return StatefulBuilder(
+                        builder: (context, setState) => AlertDialog(
+                          title: Text("Erinnerung"),
+                          content: TextField(
+                            onChanged: (msg) {
+                              setState(() => message = msg);
+                            },
+                            decoration:
+                                InputDecoration(hintText: 'zB. Hausaufgabe'),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text("Abbrechen"),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                            ),
+                            RaisedButton(
+                              textTheme: ButtonTextTheme.primary,
+                              child: Text(
+                                "Speichern",
+                              ),
+                              onPressed: isNullOrEmpty(message)
+                                  ? null
+                                  : () {
+                                      Navigator.pop(context, message);
+                                    },
+                            ),
+                          ],
+                        ),
+                      );
+                    });
+                if (message != null) {
+                  vm.addReminderCallback(day, message);
+                }
+              },
+              padding: EdgeInsets.only(
+                top: 8,
+                bottom: 8,
+                right: 15,
+              ),
+            ),
           ],
-        ));
+        ),
+        for (final hw in day.homework)
+          ItemWidget(
+            item: hw,
+            toggleDone: () => vm.toggleDoneCallback(hw, !hw.checked),
+            removeThis: () => vm.removeReminderCallback(hw, day),
+            setDoNotAskWhenDelete: vm.setDoNotWhenDeleteCallback,
+            askWhenDelete: vm.askWhenDelete,
+            doubleTapForDone: vm.doubleTapForDone,
+            controller: controller,
+            index: i++,
+          ),
+        Divider(),
+      ],
+    );
   }
 }
 
@@ -351,15 +351,16 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Card(
-      elevation: .6,
+      elevation: 0,
       shape: RoundedRectangleBorder(
         side: item.warning
-            ? BorderSide(color: Colors.red, width: 2)
+            ? BorderSide(color: Colors.red, width: 1.5)
             : item.type == HomeworkType.grade || item.checked
-                ? BorderSide(color: Colors.green, width: 2)
-                : BorderSide(color: Colors.grey, width: 1),
+                ? BorderSide(color: Colors.green, width: 1.5)
+                : BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
+      color: Colors.transparent,
       child: GestureDetector(
         onDoubleTap: !isHistory && doubleTapForDone && item.checkable
             ? toggleDone
@@ -373,34 +374,30 @@ class ItemWidget extends StatelessWidget {
                   Expanded(
                     child: Column(
                       children: <Widget>[
-                        Column(
-                          children: <Widget>[
-                            if (item.label != null)
-                              Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(
-                                      item.label,
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  if (item.isNew || item.isChanged)
-                                    SizedBox(
-                                      width: 16,
-                                    ),
-                                  if (item.isNew)
-                                    NewsSticker(
-                                      text: "neu",
-                                    ),
-                                  if (item.isChanged)
-                                    NewsSticker(
-                                      text: "geändert",
-                                    ),
-                                ],
+                        if (item.label != null)
+                          Stack(
+                            overflow: Overflow.visible,
+                            children: <Widget>[
+                              Center(
+                                child: Text(
+                                  item.label,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                          ],
-                        ),
+                              if (item.isNew || item.isChanged)
+                                Positioned(
+                                  right: 0,
+                                  child: item.isNew
+                                      ? NewsSticker(
+                                          text: "neu",
+                                        )
+                                      : NewsSticker(
+                                          text: "geändert",
+                                        ),
+                                )
+                            ],
+                          ),
                         ListTile(
                           contentPadding: EdgeInsets.only(),
                           title: Text(item.title),
@@ -558,7 +555,7 @@ class ItemWidget extends StatelessWidget {
         key: ValueKey(index),
         controller: controller,
         child: child,
-        highlightColor: Colors.grey,
+        highlightColor: Colors.grey.withOpacity(0.5),
       );
     }
     return Column(
