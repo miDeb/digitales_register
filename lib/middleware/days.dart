@@ -48,6 +48,7 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
             (d) => Day.parse(d),
           ),
         ),
+        action.future,
       ),
     );
   }

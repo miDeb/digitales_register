@@ -21,12 +21,17 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
   return TypedReducer((DayStateBuilder state, DaysLoadedAction action) {
     final allDays = state.allDays.build().toList();
     final now = DateTime.now();
-    for (var day in allDays) {
+    for (var day in List.of(allDays)) {
       final newDay = action.loadedDays.build().firstWhere(
             (d) => d.date == day.date,
             orElse: () => null,
           );
-      if (newDay == null) continue;
+      if (newDay == null) {
+        if (!action.future && day.date.isBefore(DateTime.now())) {
+          allDays.remove(day);
+        }
+        continue;
+      }
       action.loadedDays.remove(newDay);
       for (var oldHw in day.homework.toList()) {
         final newHw = newDay.homework.firstWhere(

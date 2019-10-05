@@ -11,8 +11,9 @@ class ErrorAction{
 
 class DaysLoadedAction {
   final ListBuilder<Day> loadedDays;
+  final bool future;
 
-  DaysLoadedAction(this.loadedDays);
+  DaysLoadedAction(this.loadedDays, this.future);
   @override
   String toString() {
     return "DaysLoadedAction(loadedDays: $loadedDays";
