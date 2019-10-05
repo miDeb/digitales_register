@@ -63,9 +63,9 @@ class _DaysWidgetState extends State<DaysWidget> {
           highlightDuration: Duration(milliseconds: 500),
           cancelExistHighlights: false,
         );
+        if (_targets.isEmpty) setState(() {});
       }
     }
-    if (_targets.isEmpty) setState(() {});
     for (final focusedItem in _focused.toList()) {
       final distance = _distanceToItem(focusedItem);
       if (distance == null || distance > 50) {
