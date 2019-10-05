@@ -22,86 +22,80 @@ class DaysWidget extends StatefulWidget {
 class _DaysWidgetState extends State<DaysWidget> {
   final controller = AutoScrollController();
 
-  bool scrollDown = true;
-  bool showScrollUp = false;
-  int destination, next;
-  double currentHomeworkOffset;
-  Homework destinationHomework, currentHomework, nextHomework;
-  Map<int, int> realIndices = {};
+  bool _showScrollUp = false;
 
-  void update() {
+  List<int> _targets = [];
+  List<int> _focused = [];
+  Map<int, int> _dayStartIndices = {};
+  Map<int, Homework> homeworkIndexes = {};
+
+  void _updateShowScrollUp() {
     final newScrollUp = controller.offset > 250;
-    if (showScrollUp != newScrollUp) {
+    if (_showScrollUp != newScrollUp) {
       setState(() {
-        showScrollUp = newScrollUp;
+        _showScrollUp = newScrollUp;
       });
-    }
-    if (destination != null) {
-      final ctx = controller.tagMap[destination]?.context;
-      bool newScrollDirection;
-      if (ctx == null && destination != null) {
-        newScrollDirection = controller.tagMap.keys.first < destination;
-      } else {
-        final renderBox = ctx.findRenderObject() as RenderBox;
-        final RenderAbstractViewport viewport =
-            RenderAbstractViewport.of(renderBox);
-        final revealedOffset =
-            viewport.getOffsetToReveal(renderBox, 0.5).offset;
-        final currentOffset = controller.offset;
-        newScrollDirection = revealedOffset - currentOffset > 0;
-        if ((revealedOffset == currentOffset ||
-                scrollDown != newScrollDirection) &&
-            currentHomework == null) {
-          currentHomeworkOffset = currentOffset;
-          currentHomework = destinationHomework;
-          destinationHomework = nextHomework;
-          controller.highlight(destination,
-              highlightDuration: Duration(milliseconds: 500));
-          destination = next;
-          update();
-        }
-      }
-      if (scrollDown != newScrollDirection) {
-        setState(() {
-          scrollDown = newScrollDirection;
-        });
-      }
-    }
-    if (currentHomeworkOffset != null &&
-        (controller.offset - currentHomeworkOffset).abs() > 20) {
-      widget.vm.markAsNotNewOrChangedCallback(currentHomework);
-      currentHomework = currentHomeworkOffset = null;
     }
   }
 
+  double _distanceToItem(int item) {
+    final ctx = controller.tagMap[item]?.context;
+    if (ctx != null) {
+      final renderBox = ctx.findRenderObject() as RenderBox;
+      final RenderAbstractViewport viewport =
+          RenderAbstractViewport.of(renderBox);
+      var offsetToReveal = viewport.getOffsetToReveal(renderBox, 0.5).offset;
+      if (offsetToReveal < 0) offsetToReveal = 0;
+      final currentOffset = controller.offset;
+      return (offsetToReveal - currentOffset).abs();
+    }
+    return null;
+  }
+
+  void _updateReachedHomeworks() {
+    for (final target in _targets.toList()) {
+      final distance = _distanceToItem(target);
+      if (distance != null && distance < 50) {
+        _focused.add(target);
+        _targets.remove(target);
+        controller.highlight(
+          target,
+          highlightDuration: Duration(milliseconds: 500),
+          cancelExistHighlights: false,
+        );
+      }
+    }
+    if (_targets.isEmpty) setState(() {});
+    for (final focusedItem in _focused.toList()) {
+      final distance = _distanceToItem(focusedItem);
+      if (distance == null || distance > 50) {
+        _focused.remove(focusedItem);
+        widget.vm.markAsNotNewOrChangedCallback(homeworkIndexes[focusedItem]);
+      }
+    }
+  }
+
+  void update() {
+    _updateShowScrollUp();
+    _updateReachedHomeworks();
+  }
+
   void updateValues() {
-    var foundFirst = false, foundSecond = false, foundCurrentHomework = false;
-    var index = 1;
-    var dayIndex = 1;
-    destination = destinationHomework = next = nextHomework = null;
+    _targets.clear();
+    _focused.clear();
+    var index = 0;
+    var dayIndex = 0;
     for (var day in widget.vm.days) {
-      realIndices[dayIndex] = index;
+      index++;
+      _dayStartIndices[dayIndex] = index;
       for (var hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
-          if (hw == currentHomework) {
-            foundCurrentHomework = true;
-          }
-          if (!foundFirst && hw != currentHomework) {
-            destination = index;
-            destinationHomework = hw;
-            foundFirst = true;
-          } else if (!foundSecond) {
-            next = index;
-            nextHomework = hw;
-            foundSecond = true;
-          }
+          _targets.add(index);
         }
+        homeworkIndexes[index] = hw;
         index++;
       }
       dayIndex++;
-    }
-    if (!foundCurrentHomework) {
-      currentHomework = currentHomeworkOffset = null;
     }
   }
 
@@ -111,6 +105,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     controller.addListener(() {
       update();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => update());
     super.initState();
   }
 
@@ -161,7 +156,7 @@ class _DaysWidgetState extends State<DaysWidget> {
             day: widget.vm.days[n - 1],
             vm: widget.vm,
             controller: controller,
-            index: realIndices[n],
+            index: _dayStartIndices[n - 1],
           );
         },
       ),
@@ -169,7 +164,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          if (showScrollUp)
+          if (_showScrollUp)
             FloatingActionButton(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               heroTag: null,
@@ -188,7 +183,7 @@ class _DaysWidgetState extends State<DaysWidget> {
               ),
               mini: true,
             ),
-          if (currentHomework != null || destination != null)
+          if (_targets.isNotEmpty || _focused.isNotEmpty)
             FloatingActionButton(
               backgroundColor: Colors.red,
               heroTag: null,
@@ -198,17 +193,16 @@ class _DaysWidgetState extends State<DaysWidget> {
               child: Icon(Icons.close),
               mini: true,
             ),
-          if (destination != null)
+          if (_targets.isNotEmpty)
             FloatingActionButton.extended(
               backgroundColor: Colors.red,
-              icon: Icon(
-                  scrollDown ? Icons.arrow_drop_down : Icons.arrow_drop_up),
+              icon: Icon(Icons.arrow_drop_down),
               label: Text("Neue Einträge"),
               onPressed: () async {
-                await controller.scrollToIndex(destination,
-                    preferPosition: AutoScrollPosition.middle);
-                // controller.highlight(destination,
-                //     highlightDuration: Duration(milliseconds: 500));
+                await controller.scrollToIndex(
+                  _targets.first,
+                  preferPosition: AutoScrollPosition.middle,
+                );
               },
             ),
         ],
