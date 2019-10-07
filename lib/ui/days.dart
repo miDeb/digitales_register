@@ -353,9 +353,9 @@ class ItemWidget extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: item.warning
-            ? BorderSide(color: Colors.red, width: 1.5)
+            ? BorderSide(color: Colors.red, width: 1)
             : item.type == HomeworkType.grade || item.checked
-                ? BorderSide(color: Colors.green, width: 1.5)
+                ? BorderSide(color: Colors.green, width: 0)
                 : BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),

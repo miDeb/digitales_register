@@ -61,10 +61,11 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey, width: 0.2),
+        side: BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
-      elevation: .6,
+      color: Colors.transparent,
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

@@ -112,70 +112,92 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       ),
       body: Column(
         children: <Widget>[
-          Card(
-            clipBehavior: Clip.antiAlias,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: FadeTransition(
-                    opacity: _chevronOpacityAnimation,
-                    child: InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(9).copyWith(right: 8),
-                        child: Icon(Icons.chevron_left),
+          Stack(
+            children: <Widget>[
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                child: Card(
+                  child: Container(),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.grey, width: 0),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  color: Colors.transparent,
+                  elevation: 0,
+                ),
+              ),
+              Card(
+                clipBehavior: Clip.antiAlias,
+                color: Colors.transparent,
+                elevation: 0,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: FadeTransition(
+                        opacity: _chevronOpacityAnimation,
+                        child: InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(9).copyWith(right: 8),
+                            child: Icon(Icons.chevron_left),
+                          ),
+                          onTap: () {
+                            _controller.previousPage(
+                                curve: _animatePageCurve,
+                                duration: _animatePageDuration);
+                          },
+                        ),
                       ),
-                      onTap: () {
-                        _controller.previousPage(
-                            curve: _animatePageCurve,
-                            duration: _animatePageDuration);
+                    ),
+                    InkWell(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        child: FadeTransition(
+                          opacity: _dateRangeOpacityAnimation,
+                          child: Text(
+                            "${_dateFormat.format(_currentMonday)} - ${_dateFormat.format(_currentMonday.add(Duration(days: 6)))}",
+                            style: Theme.of(context).textTheme.title,
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        final result = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(2018),
+                            lastDate: DateTime(2020),
+                            initialDate: _currentMonday);
+                        if (result == null) return;
+                        final date = toMonday(result);
+                        if (date != _currentMonday) {
+                          _controller.animateToPage(pageOf(date),
+                              curve: _animatePageCurve,
+                              duration: _animatePageDuration);
+                        }
                       },
                     ),
-                  ),
-                ),
-                InkWell(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: FadeTransition(
-                      opacity: _dateRangeOpacityAnimation,
-                      child: Text(
-                        "${_dateFormat.format(_currentMonday)} - ${_dateFormat.format(_currentMonday.add(Duration(days: 6)))}",
-                        style: Theme.of(context).textTheme.title,
+                    Expanded(
+                      child: FadeTransition(
+                        opacity: _chevronOpacityAnimation,
+                        child: InkWell(
+                          child: Padding(
+                            padding: const EdgeInsets.all(9).copyWith(left: 8),
+                            child: Icon(Icons.chevron_right),
+                          ),
+                          onTap: () {
+                            _controller.nextPage(
+                                curve: _animatePageCurve,
+                                duration: _animatePageDuration);
+                          },
+                        ),
                       ),
                     ),
-                  ),
-                  onTap: () async {
-                    final result = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2018),
-                        lastDate: DateTime(2020),
-                        initialDate: _currentMonday);
-                    if (result == null) return;
-                    final date = toMonday(result);
-                    if (date != _currentMonday) {
-                      _controller.animateToPage(pageOf(date),
-                          curve: _animatePageCurve,
-                          duration: _animatePageDuration);
-                    }
-                  },
+                  ],
                 ),
-                Expanded(
-                  child: FadeTransition(
-                    opacity: _chevronOpacityAnimation,
-                    child: InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(9).copyWith(left: 8),
-                        child: Icon(Icons.chevron_right),
-                      ),
-                      onTap: () {
-                        _controller.nextPage(
-                            curve: _animatePageCurve,
-                            duration: _animatePageDuration);
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
           Expanded(
             child: NotificationListener<ScrollStartNotification>(

@@ -41,12 +41,12 @@ class _CalendarWeekState extends State<CalendarWeek> {
             children: widget.vm.days
                 .map(
                   (d) => Expanded(
-                        child: CalendarDayWidget(
-                          calendarDay: d,
-                          max: max,
-                          showDate: widget.vm.showDates,
-                        ),
-                      ),
+                    child: CalendarDayWidget(
+                      calendarDay: d,
+                      max: max,
+                      showDate: widget.vm.showDates,
+                    ),
+                  ),
                 )
                 .toList());
   }
@@ -68,18 +68,33 @@ class CalendarDayWidget extends StatelessWidget {
         calendarDay.lenght != 0
             ? Expanded(
                 flex: calendarDay.lenght,
-                child: Card(
-                  clipBehavior: Clip.antiAlias,
-                  child: Column(
-                    children: List.generate(
-                      calendarDay.hours.length * 2 - 1,
-                      (n) => n % 2 == 0
-                          ? HourWidget(hour: calendarDay.hours[n ~/ 2])
-                          : Divider(
-                              height: 0,
-                            ),
+                child: Stack(
+                  children: <Widget>[
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.grey, width: 0),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Container(),
+                      color: Colors.transparent,
+                      elevation: 0,
                     ),
-                  ),
+                    Card(
+                      color: Colors.transparent,
+                      elevation: 0,
+                      clipBehavior: Clip.antiAlias,
+                      child: Column(
+                        children: List.generate(
+                          calendarDay.hours.length * 2 - 1,
+                          (n) => n % 2 == 0
+                              ? HourWidget(hour: calendarDay.hours[n ~/ 2])
+                              : Divider(
+                                  height: 0,
+                                ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               )
             : Expanded(

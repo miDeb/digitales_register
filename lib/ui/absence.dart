@@ -10,15 +10,15 @@ class AbsenceGroupWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: .6,
       shape: RoundedRectangleBorder(
-        side: vm.justified == AbsenceJustified.notYetJustified
-            ? BorderSide(color: Colors.red, width: 2)
-            : vm.justified == AbsenceJustified.notJustified
-                ? BorderSide(color: Colors.orange, width: 2)
-                : BorderSide(color: Colors.green, width: 2),
+        side: vm.justified == AbsenceJustified.notYetJustified ||
+                vm.justified == AbsenceJustified.notJustified
+            ? BorderSide(color: Colors.red, width: 1)
+            : BorderSide(color: Colors.green, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
+      color: Colors.transparent,
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
