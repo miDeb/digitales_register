@@ -158,7 +158,6 @@ abstract class SettingsState
   /// false = sort grades inside subjects by date
   bool get typeSorted;
   bool get noAverageForAllSemester;
-  bool get doubleTapForDone;
   bool get askWhenDelete;
   bool get showCancelled;
   bool get deleteDataOnLogout;
@@ -176,7 +175,6 @@ abstract class SettingsStateBuilder
   factory SettingsStateBuilder() = _$SettingsStateBuilder;
   bool typeSorted;
   bool noAverageForAllSemester;
-  bool doubleTapForDone;
   bool askWhenDelete = true;
   bool showCancelled;
   bool deleteDataOnLogout =

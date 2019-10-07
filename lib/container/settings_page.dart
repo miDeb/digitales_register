@@ -39,8 +39,6 @@ class SettingsViewModel {
   final OnSettingChanged<bool> onSetDarkMode;
   final OnSettingChanged<bool> onSetNoAverageForAllSemester;
   final bool noAverageForAllSemester;
-  final OnSettingChanged<bool> onSetDoubleTapForDone;
-  final bool doubleTapForDone;
   final OnSettingChanged<bool> onSetAskWhenDelete;
   final bool askWhenDelete;
   final OnSettingChanged<bool> onSetDeleteDataOnLogout;
@@ -54,7 +52,6 @@ class SettingsViewModel {
         noDataSaving = store.state.settingsState.noDataSaving,
         noAverageForAllSemester =
             store.state.settingsState.noAverageForAllSemester,
-        doubleTapForDone = store.state.settingsState.doubleTapForDone,
         askWhenDelete = store.state.settingsState.askWhenDelete,
         deleteDataOnLogout = store.state.settingsState.deleteDataOnLogout,
         calendarShowDates = store.state.settingsState.calendarShowDates,
@@ -67,9 +64,6 @@ class SettingsViewModel {
         }),
         onSetAskWhenDelete = ((bool mode) {
           store.dispatch(SetAskWhenDeleteAction(mode));
-        }),
-        onSetDoubleTapForDone = ((bool mode) {
-          store.dispatch(SetDoubleTapForDoneAction(mode));
         }),
         onSetNoAverageForAllSemester = ((bool mode) {
           store.dispatch(SetNoAverageForAllAction(mode));

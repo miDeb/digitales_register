@@ -80,14 +80,6 @@ class SettingsPageWidget extends StatelessWidget {
             ),
           ),
           SwitchListTile(
-            title: Text(
-                "Doppelt tippen, um Hausaufgaben als erledigt zu markieren"),
-            onChanged: (bool value) {
-              vm.onSetDoubleTapForDone(value);
-            },
-            value: vm.doubleTapForDone,
-          ),
-          SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
               vm.onSetAskWhenDelete(value);

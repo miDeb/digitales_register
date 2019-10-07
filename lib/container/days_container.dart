@@ -33,7 +33,6 @@ class DaysViewModel {
   final VoidCallback onSwitchFuture;
   final bool future;
   final bool askWhenDelete;
-  final bool doubleTapForDone;
   final AddReminderCallback addReminderCallback;
   final RemoveReminderCallback removeReminderCallback;
   final ToggleDoneCallback toggleDoneCallback;
@@ -44,7 +43,6 @@ class DaysViewModel {
       : days = store.state.dayState.displayDays.toList(),
         onSwitchFuture = (() => store.dispatch(SwitchFutureAction())),
         future = store.state.dayState.future,
-        doubleTapForDone = store.state.settingsState.doubleTapForDone,
         addReminderCallback =
             ((day, msg) => store.dispatch(AddReminderAction(msg, day.date))),
         removeReminderCallback =

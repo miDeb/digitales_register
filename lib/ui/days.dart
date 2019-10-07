@@ -315,7 +315,6 @@ class DayWidget extends StatelessWidget {
             removeThis: () => vm.removeReminderCallback(hw, day),
             setDoNotAskWhenDelete: vm.setDoNotWhenDeleteCallback,
             askWhenDelete: vm.askWhenDelete,
-            doubleTapForDone: vm.doubleTapForDone,
             controller: controller,
             index: i++,
           ),
@@ -330,7 +329,7 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, doubleTapForDone, isHistory;
+  final bool askWhenDelete, isHistory;
 
   final AutoScrollController controller;
   final int index;
@@ -342,7 +341,6 @@ class ItemWidget extends StatelessWidget {
       this.toggleDone,
       this.askWhenDelete,
       this.setDoNotAskWhenDelete,
-      this.doubleTapForDone,
       this.isHistory = false,
       this.controller,
       this.index})
@@ -361,7 +359,7 @@ class ItemWidget extends StatelessWidget {
       ),
       color: Colors.transparent,
       child: GestureDetector(
-        onDoubleTap: !isHistory && doubleTapForDone && item.checkable
+        onDoubleTap: !isHistory && item.checkable
             ? toggleDone
             : null,
         child: Padding(
@@ -523,8 +521,7 @@ class ItemWidget extends StatelessWidget {
                           ),
                         )
                       else if (!isHistory &&
-                          item.checkable &&
-                          !doubleTapForDone)
+                          item.checkable)
                         Checkbox(
                           activeColor: Colors.green,
                           value: item.checked,

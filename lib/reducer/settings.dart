@@ -9,8 +9,6 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
     ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
     ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
-    ..doubleTapForDone =
-        _doubleTapForDoneReducer(state.doubleTapForDone, action)
     ..noAverageForAllSemester =
         _noAvgForAllReducer(state.noAverageForAllSemester, action)
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
@@ -26,8 +24,6 @@ final _noAvgForAllReducer =
 final _showCancelledReducer = TypedReducer(
     (bool showCancelled, SetGradesShowCancelledAction action) =>
         action.showCancelled);
-final _doubleTapForDoneReducer = TypedReducer(
-    (bool enabled, SetDoubleTapForDoneAction action) => action.enabled);
 final _sortByTypeReducer = TypedReducer(
     (bool typeSorted, SetGradesTypeSortedAction action) => action.typeSorted);
 final _saveDataReducer =
