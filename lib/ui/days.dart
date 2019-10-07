@@ -116,7 +116,6 @@ class _DaysWidgetState extends State<DaysWidget> {
 
   @override
   void didUpdateWidget(DaysWidget oldWidget) {
-    _afterFirstFrame = false;
     updateValues();
     update();
 
