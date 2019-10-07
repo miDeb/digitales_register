@@ -268,6 +268,7 @@ class DayWidget extends StatelessWidget {
                         builder: (context, setState) => AlertDialog(
                           title: Text("Erinnerung"),
                           content: TextField(
+                            maxLines: null,
                             onChanged: (msg) {
                               setState(() => message = msg);
                             },
@@ -359,9 +360,7 @@ class ItemWidget extends StatelessWidget {
       ),
       color: Colors.transparent,
       child: GestureDetector(
-        onDoubleTap: !isHistory && item.checkable
-            ? toggleDone
-            : null,
+        onDoubleTap: !isHistory && item.checkable ? toggleDone : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -520,8 +519,7 @@ class ItemWidget extends StatelessWidget {
                             style: TextStyle(color: Colors.green, fontSize: 30),
                           ),
                         )
-                      else if (!isHistory &&
-                          item.checkable)
+                      else if (!isHistory && item.checkable)
                         Checkbox(
                           activeColor: Colors.green,
                           value: item.checked,
