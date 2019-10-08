@@ -132,6 +132,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         itemBuilder: (context, n) {
           if (n == 0) {
             return Stack(
+              alignment: Alignment.center,
               children: [
                 HomeworkFilterContainer(),
                 Positioned(
@@ -149,15 +150,11 @@ class _DaysWidgetState extends State<DaysWidget> {
                   ),
                 ),
                 Center(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 8.0, vertical: 2),
-                    child: RaisedButton(
-                      child: Text(
-                        widget.vm.future ? "Vergangenheit" : "Zukunft",
-                      ),
-                      onPressed: widget.vm.onSwitchFuture,
+                  child: RaisedButton(
+                    child: Text(
+                      widget.vm.future ? "Vergangenheit" : "Zukunft",
                     ),
+                    onPressed: widget.vm.onSwitchFuture,
                   ),
                 ),
               ],
@@ -302,8 +299,6 @@ class DayWidget extends StatelessWidget {
                 }
               },
               padding: EdgeInsets.only(
-                top: 8,
-                bottom: 8,
                 right: 15,
               ),
             ),
@@ -501,23 +496,17 @@ class ItemWidget extends StatelessWidget {
                           },
                         ),
                       if (item.warning)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            "!",
-                            style: TextStyle(
-                              color: Colors.red.shade900,
-                              fontSize: 30,
-                            ),
+                        Text(
+                          "!",
+                          style: TextStyle(
+                            color: Colors.red.shade900,
+                            fontSize: 30,
                           ),
                         )
                       else if (item.type == HomeworkType.grade)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Text(
-                            item.gradeFormatted,
-                            style: TextStyle(color: Colors.green, fontSize: 30),
-                          ),
+                        Text(
+                          item.gradeFormatted,
+                          style: TextStyle(color: Colors.green, fontSize: 30),
                         )
                       else if (!isHistory && item.checkable)
                         Checkbox(
