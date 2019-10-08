@@ -73,7 +73,7 @@ class CalendarDayWidget extends StatelessWidget {
                     Card(
                       shape: RoundedRectangleBorder(
                         side: BorderSide(color: Colors.grey, width: 0),
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(8),
                       ),
                       child: Container(),
                       color: Colors.transparent,
@@ -83,6 +83,9 @@ class CalendarDayWidget extends StatelessWidget {
                       color: Colors.transparent,
                       elevation: 0,
                       clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
                       child: Column(
                         children: List.generate(
                           calendarDay.hours.length * 2 - 1,
@@ -121,6 +124,7 @@ class HourWidget extends StatelessWidget {
     "Italienisch": "ITA",
     "Bewegung und Sport": "SPORT",
     "Recht und Wirtschaft": "RW",
+    "Griechisch": "GR",
   };
   final CalendarHour hour;
   HourWidget({Key key, this.hour}) : super(key: key);
@@ -131,85 +135,74 @@ class HourWidget extends StatelessWidget {
       child: InkWell(
         onTap: () {
           showDialog(
-              context: context,
-              builder: (_) {
-                final items = [
-                  hour.hasDescription
-                      ? Text(hour.description)
-                      : Text(
-                          "(keine Beschreibung)",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w100,
-                              color: Colors.grey,
-                              fontStyle: FontStyle.italic),
+            context: context,
+            builder: (_) {
+              final items = [
+                if (hour.hasDescription) Text(hour.description),
+                if (hour.hasHomework)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Hausaufgabe: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                  hour.hasHomework
-                      ? RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Hausaufgabe: ",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: hour.homework),
-                            ],
-                            style: DefaultTextStyle.of(context).style,
-                          ),
-                        )
-                      : null,
-                  hour.hasExam
-                      ? RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Test/Schularbeit/Prüfung: ",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: hour.exam),
-                            ],
-                            style: DefaultTextStyle.of(context).style,
-                          ),
-                        )
-                      : null,
-                  hour.rooms.isNotEmpty
-                      ? RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Räume: ",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(text: formatList(hour.rooms.toList())),
-                            ],
-                            style: DefaultTextStyle.of(context).style,
-                          ),
-                        )
-                      : null,
-                  hour.teachers.isNotEmpty
-                      ? RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text: "Lehrer: ",
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              TextSpan(
-                                  text: formatList(hour.teachers.toList())),
-                            ],
-                            style: DefaultTextStyle.of(context).style,
-                          ),
-                        )
-                      : null,
-                ].where((it) => it != null).toList();
-                return ListViewCapableAlertDialog(
-                    title: Text(hour.subject),
-                    content: ListView.separated(
-                      itemCount: items.length,
-                      shrinkWrap: true,
-                      separatorBuilder: (_, __) => Divider(),
-                      itemBuilder: (context, i) => items[i],
-                    ));
-              });
+                        TextSpan(text: hour.homework),
+                      ],
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
+                if (hour.hasExam)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Test: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: hour.exam),
+                      ],
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
+                if (hour.rooms.isNotEmpty)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Räume: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: formatList(hour.rooms.toList())),
+                      ],
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
+                if (hour.teachers.isNotEmpty)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Lehrer: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: formatList(hour.teachers.toList())),
+                      ],
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
+              ];
+              return ListViewCapableAlertDialog(
+                title: Text(hour.subject),
+                content: ListView.separated(
+                  itemCount: items.length,
+                  shrinkWrap: true,
+                  separatorBuilder: (_, __) => Divider(),
+                  itemBuilder: (context, i) => items[i],
+                ),
+              );
+            },
+          );
         },
         child: Container(
           child: Center(
