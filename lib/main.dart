@@ -56,8 +56,7 @@ final initialState = AppState((builder) {
       ..serverSemester = null
       ..graphConfigs = MapBuilder({}))
     ..absenceState = null
-    ..calendarState = (CalendarStateBuilder()
-      ..days = MapBuilder());
+    ..calendarState = (CalendarStateBuilder()..days = MapBuilder());
 });
 
 void run() {
@@ -129,6 +128,8 @@ void run() {
                     builder: (_) => GradesChartPage(),
                     fullscreenDialog: true,
                   );
+                default:
+                  throw Exception("Unknown Route");
               }
             },
             theme: theme,
