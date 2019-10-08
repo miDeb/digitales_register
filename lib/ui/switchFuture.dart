@@ -20,6 +20,9 @@ class _ViewModel {
   operator ==(other) {
     return other is _ViewModel && other.future == this.future;
   }
+
+  @override
+  int get hashCode => future.hashCode;
 }
 
 class SwitchFuture extends StatelessWidget {
