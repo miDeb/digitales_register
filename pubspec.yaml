@@ -17,28 +17,28 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: ^0.15.8
-  charts_flutter: ^0.6.0
-  tuple: ^1.0.2
-  path_provider: ^1.1.0
+  intl: any
+  charts_flutter: any
+  tuple: any
+  path_provider: any
   requests:
     path: "packages/requests/"
-  synchronized: ^2.1.0
-  flutter_redux: ^0.5.3
-  redux: ^3.0.0
-  built_value: ^6.3.2
-  dynamic_theme: ^1.0.1
-  fluttertoast: ^3.0.3
+  synchronized: any
+  flutter_redux: any
+  redux: any
+  built_value: any
+  dynamic_theme: any
+  fluttertoast: any
   flutter_secure_storage:
     path: "packages/flutter_secure_storage/"
-  scroll_to_index: ^1.0.1
+  scroll_to_index: any
 
 dev_dependencies:
-  flutter_launcher_icons: ^0.7.0
+  flutter_launcher_icons: any
   flutter_test:
     sdk: flutter
-  build_runner: ^1.3.1
-  built_value_generator: ^6.3.2
+  build_runner: any
+  built_value_generator: any
 
 flutter_icons:
   android: "launcher_icon"
