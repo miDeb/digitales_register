@@ -132,7 +132,6 @@ class _DaysWidgetState extends State<DaysWidget> {
         itemBuilder: (context, n) {
           if (n == 0) {
             return Stack(
-              alignment: Alignment.center,
               children: [
                 HomeworkFilterContainer(),
                 Positioned(
@@ -149,12 +148,15 @@ class _DaysWidgetState extends State<DaysWidget> {
                     ],
                   ),
                 ),
-                Center(
-                  child: RaisedButton(
-                    child: Text(
-                      widget.vm.future ? "Vergangenheit" : "Zukunft",
+                Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Center(
+                    child: RaisedButton(
+                      child: Text(
+                        widget.vm.future ? "Vergangenheit" : "Zukunft",
+                      ),
+                      onPressed: widget.vm.onSwitchFuture,
                     ),
-                    onPressed: widget.vm.onSwitchFuture,
                   ),
                 ),
               ],
