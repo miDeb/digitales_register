@@ -18,7 +18,7 @@ class SettingsPageWidget extends StatelessWidget {
         children: <Widget>[
           ListTile(
             title: Text(
-              "Sicherheit",
+              "Anmeldung",
               style: Theme.of(context).textTheme.headline,
             ),
           ),
