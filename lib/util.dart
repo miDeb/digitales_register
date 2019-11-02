@@ -15,8 +15,10 @@ bool isNullOrEmpty(String s) {
 }
 
 DateTime toMonday(DateTime date) {
-  final s = date.subtract(
-    Duration(days: date.weekday - 1),
-  );
+  final s = date.weekday >= 6
+      ? date.add(Duration(days: 8 - date.weekday))
+      : date.subtract(
+          Duration(days: date.weekday - 1),
+        );
   return DateTime.utc(s.year, s.month, s.day);
 }

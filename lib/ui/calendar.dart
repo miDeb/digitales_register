@@ -99,7 +99,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
           if (toMonday(DateTime.now()) != _currentMonday)
             FlatButton(
               textColor: Colors.white,
-              child: Text("Heute"),
+              child: Text("Aktuelle Woche"),
               onPressed: () {
                 final date = toMonday(DateTime.now());
                 if (date != _currentMonday) {
