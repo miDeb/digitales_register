@@ -296,12 +296,6 @@ class SetNoAverageForAllAction implements SettingsAction {
   SetNoAverageForAllAction(this.noAvg);
 }
 
-class SetCalendarShowDatesAction implements SettingsAction {
-  final bool showDates;
-
-  SetCalendarShowDatesAction(this.showDates);
-}
-
 class SetGradesTypeSortedAction {
   final bool typeSorted;
 

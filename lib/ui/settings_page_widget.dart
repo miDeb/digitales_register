@@ -104,20 +104,6 @@ class SettingsPageWidget extends StatelessWidget {
           Divider(),
           ListTile(
             title: Text(
-              "Kalender",
-              style: Theme.of(context).textTheme.headline,
-            ),
-          ),
-          SwitchListTile(
-            title: Text("Zusätzlich zum Wochentag das Datum anzeigen"),
-            onChanged: (bool value) {
-              vm.onSetCalendarShowDates(value);
-            },
-            value: vm.calendarShowDates,
-          ),
-          Divider(),
-          ListTile(
-            title: Text(
               "Erweitert",
               style: Theme.of(context).textTheme.headline,
             ),

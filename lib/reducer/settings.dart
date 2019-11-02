@@ -13,8 +13,7 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
         _noAvgForAllReducer(state.noAverageForAllSemester, action)
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
     ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
-    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
-    ..calendarShowDates = _calendarShowDates(state.calendarShowDates, action));
+    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action));
 }
 
 final _askWhenDeleteReducer =
@@ -34,5 +33,3 @@ final _offlineEnabledReducer = TypedReducer(
     (bool safeMode, SetOfflineEnabledAction action) => action.enable);
 final _deleteOnLogout = TypedReducer(
     (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
-final _calendarShowDates = TypedReducer(
-    (bool delete, SetCalendarShowDatesAction action) => action.showDates);
