@@ -166,7 +166,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
     final file =
         File("${(await getApplicationDocumentsDirectory()).path}/$user");
     final vals = json.decode(
-      await file.exists()
+      await file.exists() && await file.length() > 0
           ? await file.readAsString()
           : await secureStorage.read(key: user.toString()) ?? "{}",
     );
@@ -249,7 +249,6 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
         writeToStorage(
           user.toString(),
           save,
-          false,
         );
       });
     } else {
@@ -261,20 +260,15 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
               "settings": serializers.serialize(store.state.settingsState),
             },
           ),
-          false,
         );
       _lastSettingsState = store.state.settingsState;
     }
   }
 }
 
-void writeToStorage(String key, String txt, bool secure) async {
-  if (secure) {
-    _secureStorage.write(key: key, value: txt);
-  } else {
-    File("${(await getApplicationDocumentsDirectory()).path}/$key")
-        .writeAsString(txt);
-  }
+void writeToStorage(String key, String txt) async {
+  File("${(await getApplicationDocumentsDirectory()).path}/$key")
+      .writeAsString(txt, flush: true);
 }
 
 _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
