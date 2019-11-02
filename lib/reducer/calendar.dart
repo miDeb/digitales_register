@@ -20,23 +20,37 @@ final _calendarLoadedReducer =
 });
 
 CalendarDayBuilder parseCalendarDay(day, DateTime date) {
+  // needed because JSON now looks like:
+  // "2019-11-04": {
+  //    "1": {
+  //      "1": {
+  //        "1": {
+  //           // actual data
+  //        },
+  //        "2"...
+  //      },
+  //    },
+  // }
+  if ((day as Map).length == 1)
+    return parseCalendarDay((day as Map).values.single, date);
   return CalendarDayBuilder()
     ..date = date
     ..hours = ListBuilder(((day as Map).values.toList()
-          ..removeWhere((e) => e == null)
+          ..removeWhere((e) => e == null || e["isLesson"] == 0)
           ..sort((a, b) => a["hour"].compareTo(b["hour"])))
         .map((h) => parseHour(h).build()));
 }
 
 CalendarHourBuilder parseHour(hour) {
+  final lesson = hour["lesson"];
   return CalendarHourBuilder()
-    ..description = hour["description"]
-    ..exam = hour["exam"]["name"]
-    ..fromHour = hour["hour"]
-    ..toHour = hour["toHour"]
-    ..homework = hour["homework"]["name"] ?? ""
-    ..rooms = ListBuilder((hour["rooms"] as List).map((r) => r["name"]))
-    ..subject = hour["subject"]["name"]
-    ..teachers = ListBuilder((hour["teachers"] as List)
+    ..description = lesson["description"]
+    ..exam = lesson["exam"]["name"]
+    ..fromHour = lesson["hour"]
+    ..toHour = lesson["toHour"]
+    ..homework = lesson["homework"]["name"] ?? ""
+    ..rooms = ListBuilder((lesson["rooms"] as List).map((r) => r["name"]))
+    ..subject = lesson["subject"]["name"]
+    ..teachers = ListBuilder((lesson["teachers"] as List)
         .map((r) => "${r["firstName"]} ${r["lastName"]}"));
 }
