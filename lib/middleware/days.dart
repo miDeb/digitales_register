@@ -33,7 +33,7 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
     Store<AppState> store) async {
   next(action);
   final data = await wrapper
-      .post("api/student/dashboard/dashboard", {"viewFuture": action.future});
+      .post("/api/student/dashboard/dashboard", {"viewFuture": action.future});
   if (data == null) {
     store.dispatch(
       await wrapper.noInternet
@@ -70,7 +70,7 @@ void _addReminder(Store<AppState> store, AddReminderAction action, next,
     Wrapper wrapper) async {
   next(action);
 
-  final result = await wrapper.post("api/student/dashboard/save_reminder", {
+  final result = await wrapper.post("/api/student/dashboard/save_reminder", {
     "date": DateFormat("yyyy-MM-dd").format(action.date),
     "text": action.msg,
   });
@@ -96,7 +96,7 @@ void _deleteHomework(Store<AppState> store, DeleteHomeworkAction action, next,
     Wrapper wrapper) async {
   next(action);
 
-  final result = await wrapper.post("api/student/dashboard/delete_reminder", {
+  final result = await wrapper.post("/api/student/dashboard/delete_reminder", {
     "id": action.hw.id,
   });
   if (result != null && result["success"]) {
@@ -115,7 +115,7 @@ void _deleteHomework(Store<AppState> store, DeleteHomeworkAction action, next,
 void _toggleDone(Store<AppState> store, ToggleDoneAction action, next,
     Wrapper wrapper) async {
   next(action);
-  final result = await wrapper.post("api/student/dashboard/toggle_reminder", {
+  final result = await wrapper.post("/api/student/dashboard/toggle_reminder", {
     "id": action.hw.id,
     "type": action.hw.type.name,
     "value": action.done,

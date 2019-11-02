@@ -38,8 +38,8 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
 
 void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
     Wrapper wrapper) async {
-  action = LoginAction(action.user.trim(), action.pass, action.fromStorage,
-      action.offlineEnabled);
+  action = LoginAction(action.user.trim(), action.pass, action.url.trim(),
+      action.fromStorage, action.offlineEnabled);
   next(action);
   if (action.user == "" || action.pass == "") {
     store.dispatch(LoginFailedAction("Bitte gib etwas ein",
@@ -50,11 +50,12 @@ void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
   await wrapper.login(
     action.user,
     action.pass,
+    action.url,
     logout: () => store.dispatch(
         LogoutAction(store.state.settingsState.noPasswordSaving, true)),
     configLoaded: () => store.dispatch(
-          SetConfigAction(wrapper.config),
-        ),
+      SetConfigAction(wrapper.config),
+    ),
     relogin: () => store.dispatch(LoggedInAgainAutomatically()),
     addProtocolItem: (item) =>
         store.dispatch(AddNetworkProtocolItemAction(item)),

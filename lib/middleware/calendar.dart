@@ -14,7 +14,7 @@ List<Middleware<AppState>> calendarMiddlewares(Wrapper wrapper) => [
 void _load(Store store, LoadCalendarAction action, NextDispatcher next,
     Wrapper wrapper) async {
   next(action);
-  final data = await wrapper.post("api/calendar/student",
+  final data = await wrapper.post("/api/calendar/student",
       {"startDate": DateFormat("yyyy-MM-dd").format(action.startDate)});
 
   if (data != null) {

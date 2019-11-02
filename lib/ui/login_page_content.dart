@@ -15,7 +15,15 @@ class LoginPageContent extends StatefulWidget {
 
 class _LoginPageContentState extends State<LoginPageContent> {
   final _usernameController = TextEditingController(),
-      _passwordController = TextEditingController();
+      _passwordController = TextEditingController(),
+      _urlController = TextEditingController.fromValue(
+    TextEditingValue(
+      text: "https://.digitalesregister.it",
+      selection: TextSelection.fromPosition(
+        TextPosition(offset: 8),
+      ),
+    ),
+  );
   bool safeMode;
   @override
   void initState() {
@@ -62,6 +70,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: Column(children: [
                             TextField(
+                              decoration: InputDecoration(labelText: 'Adresse'),
+                              controller: _urlController,
+                              enabled: !widget.vm.loading,
+                              autofocus: true,
+                            ),
+                            Divider(),
+                            TextField(
                               decoration:
                                   InputDecoration(labelText: 'Username'),
                               controller: _usernameController,
@@ -80,8 +95,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   : () {
                                       widget.vm.setSafeMode(safeMode);
                                       widget.vm.onLogin(
-                                          _usernameController.value.text,
-                                          _passwordController.value.text);
+                                        _usernameController.value.text,
+                                        _passwordController.value.text,
+                                        _urlController.text,
+                                      );
                                     },
                               child: Text('Login'),
                             ),

@@ -1,6 +1,6 @@
 # dr [![Codemagic build status](https://api.codemagic.io/apps/5ce8189e9b46f5001a5faba4/5ce8189e9b46f5001a5faba3/status_badge.svg)](https://codemagic.io/apps/5ce8189e9b46f5001a5faba4/5ce8189e9b46f5001a5faba3/latest_build)
 
-Inoffizielle App für das Digitale Register des Vinzentinums (http://vinzentinum.digitalesregister.it)
+Inoffizielle App für das Digitale Register (http://xxxxxx.digitalesregister.it)
 
 ## Getting Started
 

@@ -13,7 +13,7 @@ List<Middleware<AppState>> absencesMiddlewares(Wrapper wrapper) => [
 void _loadAbsences(Store<AppState> store, LoadAbsencesAction action, next,
     Wrapper wrapper) async {
   next(action);
-  final response = await wrapper.post("api/student/dashboard/absences");
+  final response = await wrapper.post("/api/student/dashboard/absences");
   if (response != null) {
     store.dispatch(AbsencesLoadedAction(response));
   }

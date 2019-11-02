@@ -22,7 +22,7 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-typedef void LoginCallback(String user, String pass);
+typedef void LoginCallback(String user, String pass, String url);
 typedef void SetSafeModeCallback(bool safeMode);
 
 class LoginPageViewModel {
@@ -34,8 +34,8 @@ class LoginPageViewModel {
 
   LoginPageViewModel.from(Store<AppState> store)
       : error = store.state.loginState.errorMsg,
-        onLogin =
-            ((user, pass) => store.dispatch(LoginAction(user, pass, false))),
+        onLogin = ((user, pass, url) =>
+            store.dispatch(LoginAction(user, pass, url, false))),
         setSafeMode =
             ((bool safeMode) => store.dispatch(SetSaveNoPassAction(safeMode))),
         loading = store.state.loginState.loading,

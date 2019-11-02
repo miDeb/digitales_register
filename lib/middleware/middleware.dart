@@ -122,10 +122,12 @@ TypedMiddleware<AppState, LoadAction> _createLoad() {
           json.decode(await _secureStorage.read(key: "login") ?? "{}");
       final user = login["user"];
       final pass = login["pass"];
+      final url = login["url"] ??
+          "https://vinzentinum.digitalesregister.it"; // be backwards compatible
       final offlineEnabled = login["offlineEnabled"];
       if (user != null && pass != null) {
         store.dispatch(
-          LoginAction(user, pass, true, offlineEnabled),
+          LoginAction(user, pass, url, true, offlineEnabled),
         );
       } else
         store.dispatch(ShowLoginAction());

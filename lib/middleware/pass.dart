@@ -63,6 +63,7 @@ void _savePass(NextDispatcher next, SavePassAction action, Wrapper wrapper,
       {
         "user": wrapper.user,
         "pass": wrapper.pass,
+        "url": wrapper.url,
         "offlineEnabled": store.state.settingsState.offlineEnabled
       },
     ),

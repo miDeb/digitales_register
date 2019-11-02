@@ -11,11 +11,9 @@ import 'app_state.dart';
 typedef void AddNetworkProtocolItem(NetworkProtocolItem item);
 
 class Wrapper {
-  static const String _loginAddress =
-      "https://vinzentinum.digitalesregister.it/v2/api/auth/login";
-  static const String _baseAddress =
-      "https://vinzentinum.digitalesregister.it/v2/";
-  String user, pass;
+  String get _loginAddress => "$baseAddress/api/auth/login";
+  String get baseAddress => "$url/v2";
+  String user, pass, url;
 
   bool get loggedIn => user != null && pass != null;
   bool _loggedIn;
@@ -37,7 +35,7 @@ class Wrapper {
   DateTime lastInteraction = DateTime.now();
   DateTime _serverLogoutTime;
   Config config;
-  Future<void> login(String user, String pass,
+  Future<void> login(String user, String pass, String url,
       {VoidCallback logout,
       VoidCallback configLoaded,
       VoidCallback relogin,
@@ -62,7 +60,7 @@ class Wrapper {
     } else {
       assert(this.onAddProtocolItem != null);
     }
-
+    this.url = url;
     dynamic response;
     await _clearCookies();
     try {
@@ -97,11 +95,9 @@ class Wrapper {
   Future<void> _loadConfig() async {
     String source;
     try {
-      source =
-          await Requests.get("https://vinzentinum.digitalesregister.it/v2");
+      source = await Requests.get(baseAddress);
     } on TimeoutException {
-      source =
-          await Requests.get("https://vinzentinum.digitalesregister.it/v2");
+      source = await Requests.get(baseAddress);
     }
     final id = _readUserId(source);
     final fullName = _readFullName(source);
@@ -159,7 +155,7 @@ class Wrapper {
               return true; // local return
             }
             if (user != null && pass != null) {
-              await login(user, pass);
+              await login(user, pass, url);
               if (!_loggedIn) {
                 return false; // return@post null
               } else {
@@ -175,20 +171,20 @@ class Wrapper {
     dynamic response;
     try {
       response = await Requests.post(
-        _baseAddress + url,
+        baseAddress + url,
         body: args,
         json: json,
       );
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
-        ..address = _baseAddress + url
+        ..address = baseAddress + url
         ..response = e.toString()
         ..parameters = args.toString()));
       return null;
     }
     onAddProtocolItem(NetworkProtocolItem((b) => b
-      ..address = _baseAddress + url
+      ..address = baseAddress + url
       ..response = response.toString()
       ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
@@ -211,7 +207,7 @@ class Wrapper {
     if (!_loggedIn) return;
     if (DateTime.now().add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = await post("api/auth/extendSession", {
+      final result = await post("/api/auth/extendSession", {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       });
       if (result == null) {
@@ -242,13 +238,12 @@ class Wrapper {
     }
     _loggedIn = false;
     if (!forceLogout) {
-      Requests.get("https://vinzentinum.digitalesregister.it/v2/logout");
+      Requests.get("$baseAddress/logout");
     }
     _clearCookies();
   }
 
   Future<void> _clearCookies() async {
-    await Requests.clearStoredCookies(
-        Uri.parse("https://vinzentinum.digitalesregister.it").host);
+    await Requests.clearStoredCookies(Uri.parse(url).host);
   }
 }

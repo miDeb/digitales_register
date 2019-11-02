@@ -3,7 +3,7 @@ import 'package:built_collection/built_collection.dart';
 import 'app_state.dart';
 import 'data.dart';
 
-class ErrorAction{
+class ErrorAction {
   final Error e;
 
   ErrorAction(this.e);
@@ -43,12 +43,12 @@ class LoadDaysAction {
 class SwitchFutureAction {}
 
 class LoginAction {
-  final String user, pass;
+  final String user, pass, url;
 
   final bool fromStorage;
   final bool offlineEnabled;
 
-  LoginAction(this.user, this.pass, this.fromStorage,
+  LoginAction(this.user, this.pass, this.url, this.fromStorage,
       [this.offlineEnabled = false])
       : assert(!offlineEnabled || fromStorage);
   @override
@@ -108,7 +108,7 @@ class SetSaveNoPassAction implements SettingsAction {
 }
 
 /// Immediately save state!
-class SaveStateAction{}
+class SaveStateAction {}
 
 class SetOfflineEnabledAction implements SettingsAction {
   final bool enable;
@@ -273,14 +273,13 @@ class ToggleDoneAction {
   ToggleDoneAction(this.hw, this.done);
 }
 
-class MarkAsNotNewOrChangedAction{
+class MarkAsNotNewOrChangedAction {
   final Homework homework;
 
   MarkAsNotNewOrChangedAction(this.homework);
 }
 
-class MarkAllAsNotNewOrChangedAction{
-
+class MarkAllAsNotNewOrChangedAction {
   MarkAllAsNotNewOrChangedAction();
 }
 
@@ -337,13 +336,13 @@ class CalendarLoadedAction {
 
 class ShowCalendarAction {}
 
-class AddNetworkProtocolItemAction{
+class AddNetworkProtocolItemAction {
   final NetworkProtocolItem item;
 
   AddNetworkProtocolItemAction(this.item);
 }
 
-class UpdateHomeworkFilterBlacklistAction{
+class UpdateHomeworkFilterBlacklistAction {
   final List<HomeworkType> blacklist;
 
   UpdateHomeworkFilterBlacklistAction(this.blacklist);

@@ -25,8 +25,8 @@ List<Middleware<AppState>> gradesMiddlewares(Wrapper wrapper) => [
       ),
     ];
 
-const String _subjects = "api/student/all_subjects";
-const String _subjectsDetail = "api/student/subject_detail";
+const String _subjects = "/api/student/all_subjects";
+const String _subjectsDetail = "/api/student/subject_detail";
 
 final _gradesLock = new Lock();
 
@@ -71,7 +71,7 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
       }
       while (neededSemester.isNotEmpty) {
         await Requests.get(
-            "https://vinzentinum.digitalesregister.it/v2/?semesterWechsel=${lastRequested = neededSemester.removeLast()}");
+            "${wrapper.baseAddress}/?semesterWechsel=${lastRequested = neededSemester.removeLast()}");
         var data = await wrapper.post(_subjects, {
           "studentId": store.state.config.userId,
         });
@@ -144,7 +144,7 @@ void _loadDetail(Store<AppState> store, NextDispatcher next,
       }
       while (neededSemester.isNotEmpty) {
         await Requests.get(
-            "https://vinzentinum.digitalesregister.it/v2/?semesterWechsel=${lastRequested = neededSemester.removeLast()}");
+            "${wrapper.baseAddress}/?semesterWechsel=${lastRequested = neededSemester.removeLast()}");
         var data = await wrapper.post(_subjectsDetail, {
           "studentId": store.state.config.userId,
           "subjectId": action.subject.id

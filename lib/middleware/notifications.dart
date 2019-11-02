@@ -21,7 +21,7 @@ List<Middleware<AppState>> notificationsMiddlewares(Wrapper wrapper) => [
 void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
     Store<AppState> store) async {
   next(action);
-  final data = await wrapper.post("api/notification/unread");
+  final data = await wrapper.post("/api/notification/unread");
 
   if (data != null) {
     store.dispatch(
@@ -44,7 +44,7 @@ void _delete(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
   next(action);
 
   wrapper.post(
-      "api/notification/markAsRead", {"id": action.notification.id}, false);
+      "/api/notification/markAsRead", {"id": action.notification.id}, false);
 }
 
 void _deleteAll(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
@@ -54,5 +54,5 @@ void _deleteAll(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
     return;
   }
   next(action);
-  wrapper.post("api/notification/markAsRead", {}, false);
+  wrapper.post("/api/notification/markAsRead", {}, false);
 }
