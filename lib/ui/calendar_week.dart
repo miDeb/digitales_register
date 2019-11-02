@@ -99,7 +99,10 @@ class CalendarDayWidget extends StatelessWidget {
                 ),
               )
             : Expanded(
-                child: Text("Frei"),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text("Frei"),
+                ),
               ),
         Expanded(
           flex: max - calendarDay.lenght,
