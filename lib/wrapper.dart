@@ -155,7 +155,7 @@ class Wrapper {
               return true; // local return
             }
             if (user != null && pass != null) {
-              await login(user, pass, url);
+              await login(user, pass, this.url);
               if (!_loggedIn) {
                 return false; // return@post null
               } else {
