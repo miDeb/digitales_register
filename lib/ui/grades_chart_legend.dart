@@ -17,28 +17,24 @@ class ChartLegend extends StatelessWidget {
           height: height / 2 - 90,
           child: ListView(
             children: vm.configs.entries.map((entry) {
-              var width = entry.value.thick.toDouble();
+              var thickness = entry.value.thick.toDouble();
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Row(
                   children: [
                     Container(
                       width: 30,
+                      height: 12,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          vertical: 5,
                           horizontal: 7,
                         ),
                         child: Center(
                           child: Container(
+                            height: thickness,
                             decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Color(entry.value.color),
-                                  width: width,
-                                ),
-                              ),
-                            ),
+                                color: Color(entry.value.color),
+                                borderRadius: BorderRadius.circular(10)),
                           ),
                         ),
                       ),
@@ -60,25 +56,24 @@ class ChartLegend extends StatelessWidget {
                     Expanded(
                       child: StatefulBuilder(
                         builder: (context, setState) => Slider(
-                              onChanged: (double value) {
-                                if (value.toInt() == width) return;
-                                final _call = ++call;
-                                setState(() {
-                                  width = value;
-                                });
-                                Future.delayed(Duration(milliseconds: 100), () {
-                                  if (call != _call ||
-                                      value.toInt() == entry.value.thick)
-                                    return;
-                                  vm.onChangeThick(entry.key, value.toInt());
-                                });
-                              },
-                              value: width,
-                              min: 0,
-                              max: 5,
-                              divisions: 5,
-                              activeColor: Theme.of(context).accentColor,
-                            ),
+                          onChanged: (double value) {
+                            if (value.toInt() == thickness) return;
+                            final _call = ++call;
+                            setState(() {
+                              thickness = value;
+                            });
+                            Future.delayed(Duration(milliseconds: 100), () {
+                              if (call != _call ||
+                                  value.toInt() == entry.value.thick) return;
+                              vm.onChangeThick(entry.key, value.toInt());
+                            });
+                          },
+                          value: thickness,
+                          min: 0,
+                          max: 5,
+                          divisions: 5,
+                          activeColor: Theme.of(context).accentColor,
+                        ),
                       ),
                       flex: 2,
                     ),
