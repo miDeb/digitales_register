@@ -131,18 +131,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                InkWell(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: FadeTransition(
-                      opacity: _dateRangeOpacityAnimation,
-                      child: Text(
-                        "${_dateFormat.format(_currentMonday)} - ${_dateFormat.format(_currentMonday.add(Duration(days: 4)))}",
-                        style: Theme.of(context).textTheme.title,
-                      ),
+                FlatButton(
+                  child: FadeTransition(
+                    opacity: _dateRangeOpacityAnimation,
+                    child: Text(
+                      "${_dateFormat.format(_currentMonday)} - ${_dateFormat.format(_currentMonday.add(Duration(days: 4)))}",
+                      style: Theme.of(context).textTheme.title,
                     ),
                   ),
-                  onTap: () async {
+                  onPressed: () async {
                     final result = await showDatePicker(
                         context: context,
                         firstDate: DateTime(2018),
