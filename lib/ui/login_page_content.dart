@@ -74,6 +74,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               controller: _urlController,
                               enabled: !widget.vm.loading,
                               autofocus: true,
+                              keyboardType: TextInputType.url,
                             ),
                             Divider(),
                             TextField(
