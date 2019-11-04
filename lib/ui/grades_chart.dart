@@ -46,19 +46,20 @@ class GradesChart extends StatelessWidget {
   }
 
   List<charts.TickSpec<DateTime>> createDomainAxisTags(Locale locale) {
-    var firstMonth = grades[0].data.first.key;
-    var lastMonth = grades[0].data.last.key;
+    var firstMonth;
+    var lastMonth;
     for (final sub in grades) {
       if (sub.data.isEmpty) continue;
       final firstSubjectDate = sub.data.last.key;
       final lastSubjectDate = sub.data.first.key;
-      if (firstSubjectDate.isBefore(firstMonth)) {
+      if (firstMonth == null || firstSubjectDate.isBefore(firstMonth)) {
         firstMonth = firstSubjectDate;
       }
-      if (lastSubjectDate.isAfter(lastMonth)) {
+      if (lastMonth == null || lastSubjectDate.isAfter(lastMonth)) {
         lastMonth = lastSubjectDate;
       }
     }
+    if(firstMonth == null) return [];
     final dates = [
       DateTime(firstMonth.year, firstMonth.month,
           firstMonth.day < 15 ? 15 : firstMonth.day)
