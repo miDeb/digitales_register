@@ -103,11 +103,21 @@ class Wrapper {
     final fullName = _readFullName(source);
     final imgSource = _readImgSource(source);
     final autoLogout = _readAutoLogoutSeconds(source);
+    final currentSemesterMaybe = _readCurrentSemester(source);
     config = Config((b) => b
       ..userId = id
       ..autoLogoutSeconds = autoLogout
       ..fullName = fullName
-      ..imgSource = imgSource);
+      ..imgSource = imgSource
+      ..currentSemesterMaybe = currentSemesterMaybe);
+  }
+
+  int _readCurrentSemester(String source) {
+    if (source.contains("semesterWechsel=1")) return 2;
+    if (source.contains("semesterWechsel=2"))
+      return 1;
+    else
+      return null;
   }
 
   int _readAutoLogoutSeconds(String source) {

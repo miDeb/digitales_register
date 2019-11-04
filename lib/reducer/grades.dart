@@ -14,6 +14,9 @@ final gradesReducer = combineReducers<GradesStateBuilder>([
   TypedReducer<GradesStateBuilder, LoggedInAgainAutomatically>(
     _afterAutoRelogin,
   ),
+  TypedReducer<GradesStateBuilder, SetConfigAction>(
+    _setCurrentSemester,
+  ),
 ]);
 GradesStateBuilder _loadSubjectsReducer(GradesStateBuilder state, action) {
   if (action is LoadSubjectsAction) {
@@ -45,4 +48,15 @@ GradesStateBuilder _setGradesSemesterReducer(
 GradesStateBuilder _afterAutoRelogin(
     GradesStateBuilder state, LoggedInAgainAutomatically action) {
   return state..serverSemester = null;
+}
+
+GradesStateBuilder _setCurrentSemester(
+    GradesStateBuilder state, SetConfigAction action) {
+  if (action.config.currentSemesterMaybe == 1) {
+    state..semester = Semester.first;
+  }
+  if (action.config.currentSemesterMaybe == 2) {
+    state..semester = Semester.second;
+  }
+  return state;
 }

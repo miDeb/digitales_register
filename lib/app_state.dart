@@ -93,6 +93,8 @@ abstract class Config implements Built<Config, ConfigBuilder> {
   int get autoLogoutSeconds;
   String get fullName;
   String get imgSource;
+  @nullable
+  int get currentSemesterMaybe;
   static Serializer<Config> get serializer => _$configSerializer;
 
   Config._();
