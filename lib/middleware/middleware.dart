@@ -197,7 +197,8 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
             ..dayState = (dayState.toBuilder()
               ..future = true
               ..blacklist ??= ListBuilder([]))
-            ..gradesState = gradesState.toBuilder()
+            ..gradesState = (gradesState.toBuilder()
+              ..semester = store.state.gradesState.semester.toBuilder())
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
             ..calendarState = calendarState.toBuilder()
