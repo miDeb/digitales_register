@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:collection/collection.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
@@ -44,6 +45,7 @@ class _CalendarWeekState extends State<CalendarWeek> {
                     child: CalendarDayWidget(
                       calendarDay: d,
                       max: max,
+                      subjectNicks: widget.vm.subjectNicks,
                     ),
                   ),
                 )
@@ -54,8 +56,10 @@ class _CalendarWeekState extends State<CalendarWeek> {
 class CalendarDayWidget extends StatelessWidget {
   final int max;
   final CalendarDay calendarDay;
+  final Map<String, String> subjectNicks;
 
-  const CalendarDayWidget({Key key, this.max, this.calendarDay})
+  const CalendarDayWidget(
+      {Key key, this.max, this.calendarDay, this.subjectNicks})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -88,7 +92,10 @@ class CalendarDayWidget extends StatelessWidget {
                         children: List.generate(
                           calendarDay.hours.length * 2 - 1,
                           (n) => n % 2 == 0
-                              ? HourWidget(hour: calendarDay.hours[n ~/ 2])
+                              ? HourWidget(
+                                  hour: calendarDay.hours[n ~/ 2],
+                                  subjectNicks: subjectNicks,
+                                )
                               : Divider(
                                   height: 0,
                                 ),
@@ -114,21 +121,9 @@ class CalendarDayWidget extends StatelessWidget {
 }
 
 class HourWidget extends StatelessWidget {
-  final shortSubjectNames = const {
-    "Deutsch": "DEU",
-    "Mathematik": "MAT",
-    "Latein": "LAT",
-    "Religion": "REL",
-    "Englisch": "ENG",
-    "Naturwissenschaften": "NAT",
-    "Geschichte": "GESCH",
-    "Italienisch": "ITA",
-    "Bewegung und Sport": "SPORT",
-    "Recht und Wirtschaft": "RW",
-    "Griechisch": "GR",
-  };
   final CalendarHour hour;
-  HourWidget({Key key, this.hour}) : super(key: key);
+  final Map<String, String> subjectNicks;
+  HourWidget({Key key, this.hour, this.subjectNicks}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -211,7 +206,13 @@ class HourWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (shortSubjectNames[hour.subject] ?? hour.subject),
+                  (subjectNicks.entries
+                          .firstWhere(
+                              (entry) => equalsIgnoreAsciiCase(
+                                  entry.key, hour.subject),
+                              orElse: () => null)
+                          ?.value ??
+                      hour.subject),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

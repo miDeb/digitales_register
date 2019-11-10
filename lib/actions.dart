@@ -140,6 +140,16 @@ class SetDeleteDataOnLogoutAction implements SettingsAction {
   }
 }
 
+class SetSubjectNicksAction implements SettingsAction {
+  final Map<String, String> subjectNicks;
+
+  SetSubjectNicksAction(this.subjectNicks);
+  @override
+  String toString() {
+    return "SetSubjectNicksAction(subjectNicks: $subjectNicks)";
+  }
+}
+
 class LoggingInAction {}
 
 class ShowLoginAction {}

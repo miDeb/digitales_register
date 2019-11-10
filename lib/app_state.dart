@@ -164,6 +164,7 @@ abstract class SettingsState
   bool get showCancelled;
   bool get deleteDataOnLogout;
   bool get offlineEnabled;
+  BuiltMap<String, String> get subjectNicks;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -184,6 +185,19 @@ abstract class SettingsStateBuilder
   bool noDataSaving;
   bool offlineEnabled = true;
   bool saveToSecureStorage = true;
+  MapBuilder<String, String> subjectNicks = MapBuilder({
+    "Deutsch": "Deu",
+    "Mathematik": "Mat",
+    "Latein": "Lat",
+    "Religion": "Rel",
+    "Englisch": "Eng",
+    "Naturwissenschaften": "Nat",
+    "Geschichte": "Gesch",
+    "Italienisch": "Ita",
+    "Bewegung und Sport": "Sport",
+    "Recht und Wirtschaft": "Rw",
+    "Griechisch": "Gr",
+  });
 }
 
 abstract class AbsenceState
