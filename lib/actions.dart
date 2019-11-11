@@ -357,3 +357,7 @@ class UpdateHomeworkFilterBlacklistAction {
 
   UpdateHomeworkFilterBlacklistAction(this.blacklist);
 }
+
+class ShowEditCalendarSubjectNicksAction {}
+
+class CloseCalendarSubjectNicksBarAction {}

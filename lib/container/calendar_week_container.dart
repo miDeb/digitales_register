@@ -5,6 +5,7 @@ import 'package:redux/redux.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/calendar_week.dart';
+import 'package:dr/actions.dart';
 
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
@@ -28,6 +29,9 @@ typedef void DayCallback(DateTime day);
 class CalendarWeekViewModel {
   final List<CalendarDay> days;
   final Map<String, String> subjectNicks;
+  final VoidCallback showEditSubjectNicks;
+  final VoidCallback closeShowEditNicksBar;
+  final bool showEditNicksBar;
 
   CalendarWeekViewModel(Store<AppState> store, DateTime monday)
       : days = store.state.calendarState.days.values.where(
@@ -37,5 +41,10 @@ class CalendarWeekViewModel {
                 date.isBefore(monday.add(Duration(days: 7)));
           },
         ).toList(),
-        subjectNicks = store.state.settingsState.subjectNicks.toMap();
+        subjectNicks = store.state.settingsState.subjectNicks.toMap(),
+        showEditSubjectNicks =
+            (() => store.dispatch(ShowEditCalendarSubjectNicksAction())),
+        closeShowEditNicksBar =
+            (() => store.dispatch(CloseCalendarSubjectNicksBarAction())),
+        showEditNicksBar = store.state.settingsState.showCalendarNicksBar;
 }

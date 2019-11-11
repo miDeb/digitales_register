@@ -34,22 +34,61 @@ class _CalendarWeekState extends State<CalendarWeek> {
   @override
   Widget build(BuildContext context) {
     final max = widget.vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
+    final hasSubjectNamesWithouNick = widget.vm.days.any(
+      (day) => day.hours.any(
+        (hour) => widget.vm.subjectNicks.entries.every(
+          (entry) => !equalsIgnoreAsciiCase(entry.key, hour.subject),
+        ),
+      ),
+    );
     return loading
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : Row(
-            children: widget.vm.days
-                .map(
-                  (d) => Expanded(
-                    child: CalendarDayWidget(
-                      calendarDay: d,
-                      max: max,
-                      subjectNicks: widget.vm.subjectNicks,
-                    ),
+        : Column(
+            children: <Widget>[
+              Expanded(
+                child: Row(
+                    children: widget.vm.days
+                        .map(
+                          (d) => Expanded(
+                            child: CalendarDayWidget(
+                              calendarDay: d,
+                              max: max,
+                              subjectNicks: widget.vm.subjectNicks,
+                            ),
+                          ),
+                        )
+                        .toList()),
+              ),
+              if (hasSubjectNamesWithouNick && widget.vm.showEditNicksBar)
+                Container(
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(0, -1.5),
+                          spreadRadius: 1.5,
+                          blurRadius: 2),
+                    ],
+                    color: Theme.of(context).scaffoldBackgroundColor,
                   ),
-                )
-                .toList());
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      FlatButton(
+                        child: Text("Kürzel bearbeiten"),
+                        onPressed: widget.vm.showEditSubjectNicks,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: widget.vm.closeShowEditNicksBar,
+                      ),
+                    ],
+                  ),
+                ),
+            ],
+          );
   }
 }
 

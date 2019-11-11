@@ -15,6 +15,9 @@ List<Middleware<AppState>> routingMiddlewares(Wrapper wrapper) => [
       TypedMiddleware<AppState, ShowSettingsAction>(
         (store, action, next) => _showSettings(next, action),
       ),
+      TypedMiddleware<AppState, ShowEditCalendarSubjectNicksAction>(
+        (store, action, next) => _showEditCalendarSubjectNicks(next, action),
+      ),
       TypedMiddleware<AppState, ShowCalendarAction>(
         (store, action, next) => _showCalendar(next, action),
       ),
@@ -45,6 +48,12 @@ void _showNotifications(NextDispatcher next, ShowNotificationsAction action) {
 }
 
 void _showSettings(NextDispatcher next, ShowSettingsAction action) {
+  navigatorKey.currentState.pushNamed("/settings");
+  next(action);
+}
+
+void _showEditCalendarSubjectNicks(
+    NextDispatcher next, ShowEditCalendarSubjectNicksAction action) {
   navigatorKey.currentState.pushNamed("/settings");
   next(action);
 }

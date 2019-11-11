@@ -1,26 +1,39 @@
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../container/settings_page.dart';
 import 'network_protocol_page.dart';
 
 class SettingsPageWidget extends StatelessWidget {
   final SettingsViewModel vm;
+  final controller = AutoScrollController();
 
-  const SettingsPageWidget({Key key, this.vm}) : super(key: key);
+  SettingsPageWidget({Key key, this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    if (vm.showSubjectNicks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
+      });
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text("Einstellungen"),
       ),
       body: ListView(
+        controller: controller,
         children: <Widget>[
-          ListTile(
-            title: Text(
-              "Anmeldung",
-              style: Theme.of(context).textTheme.headline,
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Anmeldung",
+                style: Theme.of(context).textTheme.headline,
+              ),
             ),
+            controller: controller,
+            index: 0,
+            key: ObjectKey(0),
           ),
           SwitchListTile(
             title: Text("Angemeldet bleiben"),
@@ -56,11 +69,16 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.deleteDataOnLogout,
           ),
           Divider(),
-          ListTile(
-            title: Text(
-              "Erscheinung",
-              style: Theme.of(context).textTheme.headline,
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Erscheinung",
+                style: Theme.of(context).textTheme.headline,
+              ),
             ),
+            controller: controller,
+            index: 1,
+            key: ObjectKey(1),
           ),
           SwitchListTile(
             title: Text("Dark Mode"),
@@ -73,11 +91,16 @@ class SettingsPageWidget extends StatelessWidget {
             value: DynamicTheme.of(context).brightness == Brightness.dark,
           ),
           Divider(),
-          ListTile(
-            title: Text(
-              "Merkheft",
-              style: Theme.of(context).textTheme.headline,
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Merkheft",
+                style: Theme.of(context).textTheme.headline,
+              ),
             ),
+            controller: controller,
+            index: 2,
+            key: ObjectKey(2),
           ),
           SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),
@@ -87,11 +110,16 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.askWhenDelete,
           ),
           Divider(),
-          ListTile(
-            title: Text(
-              "Noten",
-              style: Theme.of(context).textTheme.headline,
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Noten",
+                style: Theme.of(context).textTheme.headline,
+              ),
             ),
+            controller: controller,
+            index: 3,
+            key: ObjectKey(3),
           ),
           SwitchListTile(
             title: Text(
@@ -102,15 +130,23 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.noAverageForAllSemester,
           ),
           Divider(),
-          ListTile(
-            title: Text(
-              "Kalender",
-              style: Theme.of(context).textTheme.headline,
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Kalender",
+                style: Theme.of(context).textTheme.headline,
+              ),
             ),
+            controller: controller,
+            index: 4,
+            key: ObjectKey(4),
           ),
           ExpansionTile(
-              title: Text("Fächerkürzel"),
-              children: List.generate(vm.subjectNicks.length + 1, (i) {
+            initiallyExpanded: vm.showSubjectNicks,
+            title: Text("Fächerkürzel"),
+            children: List.generate(
+              vm.subjectNicks.length + 1,
+              (i) {
                 if (i == 0)
                   return ListTile(
                     trailing: IconButton(
@@ -180,20 +216,32 @@ class SettingsPageWidget extends StatelessWidget {
                     ],
                   ),
                 );
-              })),
-          Divider(),
-          ListTile(
-            title: Text(
-              "Erweitert",
-              style: Theme.of(context).textTheme.headline,
+              },
             ),
+          ),
+          Divider(),
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Erweitert",
+                style: Theme.of(context).textTheme.headline,
+              ),
+            ),
+            controller: controller,
+            index: 5,
+            key: ObjectKey(5),
           ),
           ListTile(
             title: Text("Netzwerkprotokoll"),
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return NetworkProtocolPage();
-              }));
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return NetworkProtocolPage();
+                  },
+                ),
+              );
             },
           ),
         ],

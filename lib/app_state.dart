@@ -41,14 +41,19 @@ abstract class DayState implements Built<DayState, DayStateBuilder> {
       : BuiltList(
           Day.filterFuture(allDays.toList(), future).map(
             (day) => Day(
-                  date: day.date,
-                  homework: day.homework.where(
+              date: day.date,
+              homework: day.homework
+                  .where(
                     (homework) => !blacklist.contains(homework.type),
-                  ).toList(), 
-                  deletedHomework: day.deletedHomework.where(
-                    (deletedHomework) => !blacklist.contains(deletedHomework.type),
-                  ).toList(), 
-                ),
+                  )
+                  .toList(),
+              deletedHomework: day.deletedHomework
+                  .where(
+                    (deletedHomework) =>
+                        !blacklist.contains(deletedHomework.type),
+                  )
+                  .toList(),
+            ),
           ),
         );
   @nullable
@@ -165,6 +170,13 @@ abstract class SettingsState
   bool get deleteDataOnLogout;
   bool get offlineEnabled;
   BuiltMap<String, String> get subjectNicks;
+  
+  // This is not a setting, but relevant for the UI behavior
+  // of the settings page and is therefore not serialized
+  @nullable
+  @BuiltValueField(serialize: false)
+  bool get scrollToSubjectNicks;
+  bool get showCalendarNicksBar;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -185,6 +197,7 @@ abstract class SettingsStateBuilder
   bool noDataSaving;
   bool offlineEnabled = true;
   bool saveToSecureStorage = true;
+  bool showCalendarNicksBar = true;
   MapBuilder<String, String> subjectNicks = MapBuilder({
     "Deutsch": "Deu",
     "Mathematik": "Mat",
@@ -198,6 +211,7 @@ abstract class SettingsStateBuilder
     "Recht und Wirtschaft": "Rw",
     "Griechisch": "Gr",
   });
+  bool scrollToSubjectNicks;
 }
 
 abstract class AbsenceState

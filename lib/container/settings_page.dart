@@ -47,6 +47,7 @@ class SettingsViewModel {
   final bool offlineEnabled;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final Map<String, String> subjectNicks;
+  final bool showSubjectNicks;
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
       : noPassSaving = store.state.settingsState.noPasswordSaving,
         noDataSaving = store.state.settingsState.noDataSaving,
@@ -56,6 +57,7 @@ class SettingsViewModel {
         deleteDataOnLogout = store.state.settingsState.deleteDataOnLogout,
         offlineEnabled = store.state.settingsState.offlineEnabled,
         subjectNicks = store.state.settingsState.subjectNicks.toMap(),
+        showSubjectNicks = store.state.settingsState.scrollToSubjectNicks,
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
         }),

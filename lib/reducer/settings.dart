@@ -15,7 +15,11 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
     ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
     ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
-    ..subjectNicks = _subjectNicksReducer(state.subjectNicks, action));
+    ..subjectNicks = _subjectNicksReducer(state.subjectNicks, action)
+    ..scrollToSubjectNicks =
+        _scrollToSubjectNicksReducer(state.scrollToSubjectNicks, action)
+    ..showCalendarNicksBar =
+        _showCalendarNicksBarReducer(state.showCalendarNicksBar, action));
 }
 
 final _askWhenDeleteReducer =
@@ -38,3 +42,13 @@ final _deleteOnLogout = TypedReducer(
 final _subjectNicksReducer = TypedReducer(
     (MapBuilder<String, String> nicks, SetSubjectNicksAction action) =>
         MapBuilder<String, String>(action.subjectNicks));
+final _scrollToSubjectNicksReducer = combineReducers<bool>(
+  [
+    TypedReducer(
+        (bool scrollToNicks, ShowEditCalendarSubjectNicksAction action) =>
+            true),
+    TypedReducer((bool scrollToNicks, ShowSettingsAction action) => false),
+  ],
+);
+final _showCalendarNicksBarReducer = TypedReducer(
+    (bool show, CloseCalendarSubjectNicksBarAction action) => false);
