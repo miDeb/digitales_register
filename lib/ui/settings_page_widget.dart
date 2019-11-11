@@ -1,3 +1,4 @@
+import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -152,8 +153,12 @@ class SettingsPageWidget extends StatelessWidget {
                     trailing: IconButton(
                       icon: Icon(Icons.add),
                       onPressed: () async {
-                        final newValue =
-                            await showEditSubjectNick(context, "", "");
+                        final newValue = await showEditSubjectNick(
+                          context,
+                          "",
+                          "",
+                          vm.allSubjects,
+                        );
                         if (newValue != null) {
                           vm.onSetSubjectNicks(
                             Map.of(vm.subjectNicks)
@@ -201,8 +206,12 @@ class SettingsPageWidget extends StatelessWidget {
                       IconButton(
                         icon: Icon(Icons.edit),
                         onPressed: () async {
-                          final newValue =
-                              await showEditSubjectNick(context, key, value);
+                          final newValue = await showEditSubjectNick(
+                            context,
+                            key,
+                            value,
+                            List.of(vm.allSubjects)..add(key),
+                          );
                           if (newValue != null) {
                             vm.onSetSubjectNicks(
                               Map.fromEntries(
@@ -249,13 +258,14 @@ class SettingsPageWidget extends StatelessWidget {
     );
   }
 
-  Future<MapEntry<String, String>> showEditSubjectNick(
-      BuildContext context, String key, String value) async {
+  Future<MapEntry<String, String>> showEditSubjectNick(BuildContext context,
+      String key, String value, List<String> suggestions) async {
     return await showDialog(
       context: context,
       builder: (context) {
         final subjectController = TextEditingController(text: key);
         final nickController = TextEditingController(text: value);
+        final subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
@@ -267,9 +277,24 @@ class SettingsPageWidget extends StatelessWidget {
                     title: Text("Fach"),
                     trailing: SizedBox(
                       width: 100,
-                      child: TextField(
+                      child: AutoCompleteTextField<String>(
+                        key: subjectKey,
+                        itemBuilder: (BuildContext context, String suggestion) {
+                          return ListTile(title: Text(suggestion));
+                        },
+                        textChanged: (_) => setState(() {}),
+                        clearOnSubmit: false,
+                        itemFilter: (String suggestion, String query) {
+                          return suggestion
+                              .toLowerCase()
+                              .contains(query.toLowerCase());
+                        },
+                        itemSorter: (String a, String b) {
+                          return a.compareTo(b);
+                        },
+                        itemSubmitted: (_) {},
+                        suggestions: suggestions,
                         controller: subjectController,
-                        onChanged: (_) => setState(() {}),
                       ),
                     ),
                   ),

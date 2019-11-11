@@ -48,6 +48,7 @@ class SettingsViewModel {
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final Map<String, String> subjectNicks;
   final bool showSubjectNicks;
+  final List<String> allSubjects;
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
       : noPassSaving = store.state.settingsState.noPasswordSaving,
         noDataSaving = store.state.settingsState.noDataSaving,
@@ -58,6 +59,7 @@ class SettingsViewModel {
         offlineEnabled = store.state.settingsState.offlineEnabled,
         subjectNicks = store.state.settingsState.subjectNicks.toMap(),
         showSubjectNicks = store.state.settingsState.scrollToSubjectNicks,
+        allSubjects = extractAllSubjects(store.state),
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
         }),
@@ -79,4 +81,20 @@ class SettingsViewModel {
         onSetSubjectNicks = ((Map<String, String> nicks) {
           store.dispatch(SetSubjectNicksAction(nicks));
         });
+
+  static List<String> extractAllSubjects(AppState appState) {
+    final subjects = <String>[];
+    for (final day in appState.calendarState.days.values) {
+      for (final hour in day.hours) {
+        if (!subjects.contains(hour.subject)) subjects.add(hour.subject);
+      }
+    }
+    for (final subject in appState.gradesState.subjects) {
+      if (!subjects.contains(subject.name)) subjects.add(subject.name);
+    }
+    subjects.removeWhere(
+      (subject) => appState.settingsState.subjectNicks.containsKey(subject),
+    );
+    return subjects;
+  }
 }

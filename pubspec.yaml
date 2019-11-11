@@ -31,7 +31,8 @@ dependencies:
   fluttertoast: any
   flutter_secure_storage:
     path: "packages/flutter_secure_storage/"
-  scroll_to_index: any
+  scroll_to_index: any 
+  autocomplete_textfield: ^1.7.3
 
 dev_dependencies:
   flutter_launcher_icons: any
