@@ -304,6 +304,7 @@ class SettingsPageWidget extends StatelessWidget {
                       width: 100,
                       child: TextField(
                         controller: nickController,
+                        textCapitalization: TextCapitalization.sentences,
                         onChanged: (_) => setState(() {}),
                       ),
                     ),
