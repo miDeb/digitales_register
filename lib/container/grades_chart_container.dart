@@ -25,13 +25,13 @@ class GradesChartContainer extends StatelessWidget {
                 return ass;
             }),
             key: (s) => SubjectGrades(
-                  Map.fromIterable(
-                    List<Grade>.of((s as Subject).grades)
-                      ..removeWhere((g) => g.cancelled || g.grade == null),
-                    key: (g) => (g as Grade).date,
-                    value: (g) => (g as Grade).grade,
-                  ),
-                ),
+              Map.fromIterable(
+                List<Grade>.of((s as Subject).grades)
+                  ..removeWhere((g) => g.cancelled || g.grade == null),
+                key: (g) => (g as Grade).date,
+                value: (g) => (g as Grade).grade,
+              ),
+            ),
             value: (s) =>
                 store.state.gradesState.graphConfigs[(s as Subject).id],
           ),

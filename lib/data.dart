@@ -210,7 +210,6 @@ String formatGrade(String grade) {
 }
 
 class HomeworkType extends EnumClass {
-
   static const HomeworkType lessonHomework = _$a,
       gradeGroup = _$b,
       grade = _$c,

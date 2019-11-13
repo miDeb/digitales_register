@@ -59,7 +59,7 @@ class GradesChart extends StatelessWidget {
         lastMonth = lastSubjectDate;
       }
     }
-    if(firstMonth == null) return [];
+    if (firstMonth == null) return [];
     final dates = [
       DateTime(firstMonth.year, firstMonth.month,
           firstMonth.day < 15 ? 15 : firstMonth.day)

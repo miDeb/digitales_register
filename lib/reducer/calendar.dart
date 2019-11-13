@@ -5,10 +5,12 @@ import '../actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-Reducer<CalendarStateBuilder> calendarReducer = (CalendarStateBuilder state, action) {
+Reducer<CalendarStateBuilder> calendarReducer =
+    (CalendarStateBuilder state, action) {
   return state
     ..days = TypedReducer(_calendarLoadedReducer)(state.days, action)
-    ..currentMonday = TypedReducer(_currentMondayReducer)(state.currentMonday, action);
+    ..currentMonday =
+        TypedReducer(_currentMondayReducer)(state.currentMonday, action);
 };
 
 MapBuilder<DateTime, CalendarDay> _calendarLoadedReducer(
@@ -20,7 +22,8 @@ MapBuilder<DateTime, CalendarDay> _calendarLoadedReducer(
   return state..addAll(t);
 }
 
-DateTime _currentMondayReducer(DateTime currentMonday, SetCalendarCurrentMondayAction action){
+DateTime _currentMondayReducer(
+    DateTime currentMonday, SetCalendarCurrentMondayAction action) {
   return action.monday;
 }
 

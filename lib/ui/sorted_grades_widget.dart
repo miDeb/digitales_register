@@ -92,17 +92,20 @@ class _SubjectWidgetState extends State<SubjectWidget> {
               ? widget.subject.typeSortedEntries.data.entries
                   .map(
                     (entry) => GradeTypeWidget(
-                          typeName: entry.key,
-                          grades: entry.value
-                              .where(
-                                  (g) => widget.showCancelled || !g.cancelled)
-                              .toList(),
-                        ),
+                      typeName: entry.key,
+                      grades: entry.value
+                          .where((g) => widget.showCancelled || !g.cancelled)
+                          .toList(),
+                    ),
                   )
                   .toList()
               : widget.subject.entries
                   .where((g) => widget.showCancelled || !g.cancelled)
-                  .map((g) => g is Grade ? GradeWidget(grade: g): ObservationWidget(observation: g,))
+                  .map((g) => g is Grade
+                      ? GradeWidget(grade: g)
+                      : ObservationWidget(
+                          observation: g,
+                        ))
                   .toList()
           : [
               LinearProgressIndicator(),
@@ -197,8 +200,8 @@ class CompetenceWidget extends StatelessWidget {
             children: List.generate(
               5,
               (n) => Star(
-                    filled: n < competence.grade,
-                  ),
+                filled: n < competence.grade,
+              ),
             ),
           ),
         ],
@@ -225,7 +228,13 @@ class GradeTypeWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final displayGrades = grades.map((g) => g is Grade ? GradeWidget(grade: g): ObservationWidget(observation: g,)).toList();
+    final displayGrades = grades
+        .map((g) => g is Grade
+            ? GradeWidget(grade: g)
+            : ObservationWidget(
+                observation: g,
+              ))
+        .toList();
     return displayGrades.isEmpty
         ? SizedBox()
         : ExpansionTile(

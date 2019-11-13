@@ -59,7 +59,8 @@ void _showEditCalendarSubjectNicks(
   next(action);
 }
 
-void _showCalendar(Store<AppState> store,NextDispatcher next, ShowCalendarAction action) {
+void _showCalendar(
+    Store<AppState> store, NextDispatcher next, ShowCalendarAction action) {
   navigatorKey.currentState.pushNamed("/calendar");
   store.dispatch(SetCalendarCurrentMondayAction(toMonday(DateTime.now())));
   next(action);

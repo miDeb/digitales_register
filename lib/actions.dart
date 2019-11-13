@@ -362,7 +362,7 @@ class ShowEditCalendarSubjectNicksAction {}
 
 class CloseCalendarSubjectNicksBarAction {}
 
-class SetCalendarCurrentMondayAction{
+class SetCalendarCurrentMondayAction {
   final DateTime monday;
 
   SetCalendarCurrentMondayAction(this.monday);

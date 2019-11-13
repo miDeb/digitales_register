@@ -410,14 +410,12 @@ class ItemWidget extends StatelessWidget {
                                                   SwitchListTile(
                                                 title: Text("Nie fragen"),
                                                 onChanged: (bool value) {
-                                                  setState(
-                                                      () => ask = !value);
+                                                  setState(() => ask = !value);
                                                 },
                                                 value: !ask,
                                               ),
                                             ),
-                                            title:
-                                                Text("Erinnerung löschen?"),
+                                            title: Text("Erinnerung löschen?"),
                                             actions: <Widget>[
                                               FlatButton(
                                                 child: Text("Abbrechen"),
@@ -430,9 +428,8 @@ class ItemWidget extends StatelessWidget {
                                                 child: Text(
                                                   "Löschen",
                                                 ),
-                                                onPressed: () =>
-                                                    Navigator.pop(
-                                                        context, true),
+                                                onPressed: () => Navigator.pop(
+                                                    context, true),
                                               )
                                             ],
                                           );

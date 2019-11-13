@@ -47,8 +47,10 @@ class AbsenceGroupContainer extends StatelessWidget {
         String justifiedString;
         switch (absenceGroup.justified) {
           case AbsenceJustified.justified:
-            justifiedString = absenceGroup.reasonSignature != null && absenceGroup.reasonTimestamp!=null ? 
-                "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp)} von ${absenceGroup.reasonSignature} entschuldigt": "entschuldigt";
+            justifiedString = absenceGroup.reasonSignature != null &&
+                    absenceGroup.reasonTimestamp != null
+                ? "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp)} von ${absenceGroup.reasonSignature} entschuldigt"
+                : "entschuldigt";
             break;
           case AbsenceJustified.forSchool:
             justifiedString = "Im Auftrag der Schule (entschuldigt)";

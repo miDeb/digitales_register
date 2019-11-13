@@ -30,7 +30,9 @@ Reducer<AppState> appReducer = (AppState state, action) {
           settingsStateReducer(state.settingsState.toBuilder(), action)
       ..absenceState = absenceReducer(state.absenceState?.toBuilder(), action)
       ..calendarState =
-          calendarReducer(state.calendarState?.toBuilder(), action)..networkProtocolState = networkProtocolReducer(state.networkProtocolState?.toBuilder(), action);
+          calendarReducer(state.calendarState?.toBuilder(), action)
+      ..networkProtocolState = networkProtocolReducer(
+          state.networkProtocolState?.toBuilder(), action);
   });
   return newState;
 };

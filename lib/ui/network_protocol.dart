@@ -14,7 +14,7 @@ class NetworkProtocol extends StatelessWidget {
             child: Text("Nichts vorhanden"),
           )
         : ListView.builder(
-          itemCount: items.length,
+            itemCount: items.length,
             itemBuilder: (context, index) {
               return _Item(
                 item: items[index],

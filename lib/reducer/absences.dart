@@ -24,7 +24,9 @@ AbsenceStateBuilder parseAbsences(json) {
       (b) => b
         ..justified = AbsenceJustified.fromInt(g["justified"])
         ..reasonSignature = g["reason_signature"]
-        ..reasonTimestamp = g["reason_timestamp"] is String ? DateTime.tryParse(g["reason_timestamp"]) : null
+        ..reasonTimestamp = g["reason_timestamp"] is String
+            ? DateTime.tryParse(g["reason_timestamp"])
+            : null
         ..reason = g["reason"]
         ..absences = ListBuilder(
           (g["group"] as List).map(

@@ -18,8 +18,8 @@ class HomeworkFilterContainer extends StatelessWidget {
         return HomeworkFilterVM(
           store.state.dayState.blacklist.toList(),
           (newBlacklist) => store.dispatch(
-                UpdateHomeworkFilterBlacklistAction(newBlacklist),
-              ),
+            UpdateHomeworkFilterBlacklistAction(newBlacklist),
+          ),
           HomeworkType.values.toList(),
         );
       },
