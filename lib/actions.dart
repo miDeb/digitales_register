@@ -95,9 +95,7 @@ class TapAction {
   }
 }
 
-abstract class SettingsAction {}
-
-class SetSaveNoPassAction implements SettingsAction {
+class SetSaveNoPassAction {
   final bool noSave;
 
   SetSaveNoPassAction(this.noSave);
@@ -110,7 +108,7 @@ class SetSaveNoPassAction implements SettingsAction {
 /// Immediately save state!
 class SaveStateAction {}
 
-class SetOfflineEnabledAction implements SettingsAction {
+class SetOfflineEnabledAction {
   final bool enable;
 
   SetOfflineEnabledAction(this.enable);
@@ -120,7 +118,7 @@ class SetOfflineEnabledAction implements SettingsAction {
   }
 }
 
-class SetSaveNoDataAction implements SettingsAction {
+class SetSaveNoDataAction {
   final bool noSave;
 
   SetSaveNoDataAction(this.noSave);
@@ -130,7 +128,7 @@ class SetSaveNoDataAction implements SettingsAction {
   }
 }
 
-class SetDeleteDataOnLogoutAction implements SettingsAction {
+class SetDeleteDataOnLogoutAction {
   final bool delete;
 
   SetDeleteDataOnLogoutAction(this.delete);
@@ -140,7 +138,7 @@ class SetDeleteDataOnLogoutAction implements SettingsAction {
   }
 }
 
-class SetSubjectNicksAction implements SettingsAction {
+class SetSubjectNicksAction {
   final Map<String, String> subjectNicks;
 
   SetSubjectNicksAction(this.subjectNicks);
@@ -293,13 +291,13 @@ class MarkAllAsNotNewOrChangedAction {
   MarkAllAsNotNewOrChangedAction();
 }
 
-class SetAskWhenDeleteAction implements SettingsAction {
+class SetAskWhenDeleteAction {
   final bool ask;
 
   SetAskWhenDeleteAction(this.ask);
 }
 
-class SetNoAverageForAllAction implements SettingsAction {
+class SetNoAverageForAllAction {
   final bool noAvg;
 
   SetNoAverageForAllAction(this.noAvg);
@@ -360,7 +358,11 @@ class UpdateHomeworkFilterBlacklistAction {
 
 class ShowEditCalendarSubjectNicksAction {}
 
-class CloseCalendarSubjectNicksBarAction {}
+class SetShowCalendarSubjectNicksBarAction {
+  final bool show;
+
+  SetShowCalendarSubjectNicksBarAction(this.show);
+}
 
 class SetCalendarCurrentMondayAction {
   final DateTime monday;
