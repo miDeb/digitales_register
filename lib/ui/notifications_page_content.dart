@@ -23,15 +23,16 @@ class NotificationPageContent extends StatelessWidget {
                 if (n == 0)
                   return Align(
                     alignment: Alignment.centerRight,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Text("Alle gelesen"),
-                        IconButton(
-                          icon: Icon(Icons.done_all),
-                          onPressed: vm.deleteAllNotifications,
-                        ),
-                      ],
+                    child: FlatButton(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          Text("Alle gelesen"),
+                          SizedBox(width: 8),
+                          Icon(Icons.done_all),
+                        ],
+                      ),
+                      onPressed: vm.deleteAllNotifications,
                     ),
                   );
                 return NotificationWidget(
@@ -89,7 +90,7 @@ class NotificationWidget extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        DateFormat("d/M/yy H:mm").format(notification.timeSent),
+                        DateFormat("d.M.yy H:mm").format(notification.timeSent),
                         style: Theme.of(context).textTheme.caption,
                       ),
                     ),
