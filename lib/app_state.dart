@@ -3,6 +3,7 @@ library app_state;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
 
 import 'data.dart';
@@ -170,7 +171,7 @@ abstract class SettingsState
   bool get deleteDataOnLogout;
   bool get offlineEnabled;
   BuiltMap<String, String> get subjectNicks;
-  
+
   // This is not a setting, but relevant for the UI behavior
   // of the settings page and is therefore not serialized
   @nullable
@@ -227,6 +228,23 @@ abstract class AbsenceState
 abstract class CalendarState
     implements Built<CalendarState, CalendarStateBuilder> {
   BuiltMap<DateTime, CalendarDay> get days;
+  @nullable
+  @BuiltValueField(serialize: false)
+  DateTime get currentMonday;
+
+  List<CalendarDay> get currentDays {
+    return daysForWeek(currentMonday);
+  }
+
+  List<CalendarDay> daysForWeek(DateTime monday) {
+    return days.values.where(
+      (d) {
+        final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
+        return !date.isBefore(monday) &&
+            date.isBefore(monday.add(Duration(days: 7)));
+      },
+    ).toList();
+  }
 
   CalendarState._();
   factory CalendarState([updates(CalendarStateBuilder b)]) = _$CalendarState;

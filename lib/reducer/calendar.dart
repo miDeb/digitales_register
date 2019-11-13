@@ -5,19 +5,24 @@ import '../actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final calendarReducer = combineReducers<CalendarStateBuilder>([
-  _calendarLoadedReducer.call,
-]);
+Reducer<CalendarStateBuilder> calendarReducer = (CalendarStateBuilder state, action) {
+  return state
+    ..days = TypedReducer(_calendarLoadedReducer)(state.days, action)
+    ..currentMonday = TypedReducer(_currentMondayReducer)(state.currentMonday, action);
+};
 
-final _calendarLoadedReducer =
-    TypedReducer<CalendarStateBuilder, CalendarLoadedAction>(
-        (CalendarStateBuilder state, CalendarLoadedAction action) {
+MapBuilder<DateTime, CalendarDay> _calendarLoadedReducer(
+    MapBuilder<DateTime, CalendarDay> state, CalendarLoadedAction action) {
   final t = (action.result as Map).map((k, e) {
     final date = DateTime.parse(k);
     return MapEntry(date, parseCalendarDay(e, date).build());
   });
-  return state..days.addAll(t);
-});
+  return state..addAll(t);
+}
+
+DateTime _currentMondayReducer(DateTime currentMonday, SetCalendarCurrentMondayAction action){
+  return action.monday;
+}
 
 CalendarDayBuilder parseCalendarDay(day, DateTime date) {
   // needed because JSON now looks like:

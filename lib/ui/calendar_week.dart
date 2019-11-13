@@ -61,32 +61,6 @@ class _CalendarWeekState extends State<CalendarWeek> {
                         )
                         .toList()),
               ),
-              if (hasSubjectNamesWithouNick && widget.vm.showEditNicksBar)
-                Container(
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(0, -1.5),
-                          spreadRadius: 1.5,
-                          blurRadius: 2),
-                    ],
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      FlatButton(
-                        child: Text("Kürzel bearbeiten"),
-                        onPressed: widget.vm.showEditSubjectNicks,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: widget.vm.closeShowEditNicksBar,
-                      ),
-                    ],
-                  ),
-                ),
             ],
           );
   }

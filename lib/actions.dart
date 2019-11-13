@@ -361,3 +361,9 @@ class UpdateHomeworkFilterBlacklistAction {
 class ShowEditCalendarSubjectNicksAction {}
 
 class CloseCalendarSubjectNicksBarAction {}
+
+class SetCalendarCurrentMondayAction{
+  final DateTime monday;
+
+  SetCalendarCurrentMondayAction(this.monday);
+}

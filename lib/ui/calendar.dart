@@ -17,7 +17,6 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   PageController _controller;
-  DateTime _currentMonday;
   AnimationController _chevronOpacityController;
   Animation<double> _chevronOpacityAnimation;
   AnimationController _dateRangeOpacityController;
@@ -35,12 +34,11 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _currentMonday = toMonday(DateTime.now());
     _controller = PageController(
-      initialPage: pageOf(_currentMonday),
+      initialPage: pageOf(widget.vm.currentMonday),
     )..addListener(_pageViewControllerListener);
 
-    animatingPages = [pageOf(_currentMonday)];
+    animatingPages = [pageOf(widget.vm.currentMonday)];
 
     _chevronOpacityController = AnimationController(
       duration: _animatePageDuration,
@@ -56,7 +54,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     _dateRangeOpacityAnimation =
         _dateRangeOpacityController.drive(_dateRangeOpacityTween);
 
-    widget.vm.dayCallback(_currentMonday);
+    widget.vm.dayCallback(widget.vm.currentMonday);
 
     super.initState();
   }
@@ -76,10 +74,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 
   void _handlePageChanged(int newPage) {
     final newMonday = mondayOf(newPage);
-    if (newMonday != _currentMonday) {
-      setState(() {
-        _currentMonday = newMonday;
-      });
+    if (newMonday != widget.vm.currentMonday) {
+      widget.vm.currentMondayCallback(newMonday);
     }
   }
 
@@ -96,16 +92,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text("Kalender"),
         actions: <Widget>[
-          if (toMonday(DateTime.now()) != _currentMonday)
+          if (toMonday(DateTime.now()) != widget.vm.currentMonday)
             FlatButton(
               textColor: Colors.white,
               child: Text("Aktuelle Woche"),
               onPressed: () {
                 final date = toMonday(DateTime.now());
-                if (date != _currentMonday) {
-                  _controller.animateToPage(pageOf(date),
-                      curve: _animatePageCurve, duration: _animatePageDuration);
-                }
+                _controller.animateToPage(pageOf(date),
+                    curve: _animatePageCurve, duration: _animatePageDuration);
               },
             ),
         ],
@@ -135,7 +129,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   child: FadeTransition(
                     opacity: _dateRangeOpacityAnimation,
                     child: Text(
-                      "${_dateFormat.format(_currentMonday)} - ${_dateFormat.format(_currentMonday.add(Duration(days: 4)))}",
+                      "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
                       style: Theme.of(context).textTheme.title,
                     ),
                   ),
@@ -144,14 +138,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                         context: context,
                         firstDate: DateTime(2018),
                         lastDate: DateTime(2050),
-                        initialDate: _currentMonday,
+                        initialDate: widget.vm.currentMonday,
                         selectableDayPredicate: (final day) {
                           return day.weekday != DateTime.sunday &&
                               day.weekday != DateTime.saturday;
                         });
                     if (result == null) return;
                     final date = toMonday(result);
-                    if (date != _currentMonday) {
+                    if (date != widget.vm.currentMonday) {
                       _controller.animateToPage(
                         pageOf(date),
                         curve: _animatePageCurve,
@@ -204,6 +198,11 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
               ),
             ),
           ),
+          EditNickBar(
+            show: widget.vm.showEditNicksBar,
+            onShowEditNicks: widget.vm.showEditSubjectNicks,
+            onClose: widget.vm.closeEditNicksBar,
+          ),
         ],
       ),
     );
@@ -215,3 +214,55 @@ int pageOf(DateTime monday) =>
 
 DateTime mondayOf(int page) =>
     DateTime.utc(2010, 1, 4).add(Duration(days: page * 7));
+
+class EditNickBar extends StatelessWidget {
+  final bool show;
+  final VoidCallback onShowEditNicks, onClose;
+
+  const EditNickBar({Key key, this.show, this.onShowEditNicks, this.onClose})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedCrossFade(
+      duration: Duration(milliseconds: 250),
+      firstChild: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black12,
+              offset: Offset(0, -1.5),
+              spreadRadius: 1.5,
+              blurRadius: 2,
+            ),
+          ],
+          color: Theme.of(context).scaffoldBackgroundColor,
+        ),
+        child: Material(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Expanded(
+                child: FlatButton(
+                  child: Row(
+                    children: <Widget>[
+                      Text("Kürzel bearbeiten"),
+                      Spacer(),
+                    ],
+                  ),
+                  onPressed: onShowEditNicks,
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: onClose,
+              ),
+            ],
+          ),
+        ),
+      ),
+      secondChild: Container(),
+      crossFadeState:
+          show ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+    );
+  }
+}

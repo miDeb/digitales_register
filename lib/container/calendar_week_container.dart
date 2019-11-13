@@ -29,22 +29,8 @@ typedef void DayCallback(DateTime day);
 class CalendarWeekViewModel {
   final List<CalendarDay> days;
   final Map<String, String> subjectNicks;
-  final VoidCallback showEditSubjectNicks;
-  final VoidCallback closeShowEditNicksBar;
-  final bool showEditNicksBar;
 
   CalendarWeekViewModel(Store<AppState> store, DateTime monday)
-      : days = store.state.calendarState.days.values.where(
-          (d) {
-            final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
-            return !date.isBefore(monday) &&
-                date.isBefore(monday.add(Duration(days: 7)));
-          },
-        ).toList(),
-        subjectNicks = store.state.settingsState.subjectNicks.toMap(),
-        showEditSubjectNicks =
-            (() => store.dispatch(ShowEditCalendarSubjectNicksAction())),
-        closeShowEditNicksBar =
-            (() => store.dispatch(CloseCalendarSubjectNicksBarAction())),
-        showEditNicksBar = store.state.settingsState.showCalendarNicksBar;
+      : days = store.state.calendarState.daysForWeek(monday),
+        subjectNicks = store.state.settingsState.subjectNicks.toMap();
 }

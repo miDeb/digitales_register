@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:collection/collection.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
@@ -27,9 +28,31 @@ typedef void DayCallback(DateTime day);
 
 class CalendarViewModel {
   final DayCallback dayCallback;
+  final DayCallback currentMondayCallback;
+  final VoidCallback showEditSubjectNicks;
+  final VoidCallback closeEditNicksBar;
+  final bool showEditNicksBar;
+  final DateTime first;
+  final DateTime last;
+  final DateTime currentMonday;
 
   CalendarViewModel(Store<AppState> store)
-      : dayCallback = ((day) {
-          store.dispatch(LoadCalendarAction(day));
-        });
+      : showEditSubjectNicks =
+            (() => store.dispatch(ShowEditCalendarSubjectNicksAction())),
+        closeEditNicksBar =
+            (() => store.dispatch(CloseCalendarSubjectNicksBarAction())),
+        dayCallback = ((day) => store.dispatch(LoadCalendarAction(day))),
+        currentMondayCallback =
+            ((day) => store.dispatch(SetCalendarCurrentMondayAction(day))),
+        first = store.state.calendarState.currentDays.first.date,
+        last = store.state.calendarState.currentDays.last.date,
+        currentMonday = store.state.calendarState.currentMonday,
+        showEditNicksBar = store.state.calendarState.currentDays.any(
+              (day) => day.hours.any(
+                (hour) => store.state.settingsState.subjectNicks.entries.every(
+                  (entry) => !equalsIgnoreAsciiCase(entry.key, hour.subject),
+                ),
+              ),
+            ) &&
+            store.state.settingsState.showCalendarNicksBar;
 }

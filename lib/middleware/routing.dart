@@ -3,6 +3,7 @@ import 'package:redux/redux.dart';
 import '../actions.dart';
 import '../app_state.dart';
 import '../main.dart';
+import '../util.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> routingMiddlewares(Wrapper wrapper) => [
@@ -19,7 +20,7 @@ List<Middleware<AppState>> routingMiddlewares(Wrapper wrapper) => [
         (store, action, next) => _showEditCalendarSubjectNicks(next, action),
       ),
       TypedMiddleware<AppState, ShowCalendarAction>(
-        (store, action, next) => _showCalendar(next, action),
+        (store, action, next) => _showCalendar(store, next, action),
       ),
       TypedMiddleware<AppState, ShowGradesAction>(
         (store, action, next) => _showGrades(store, next, action),
@@ -58,8 +59,9 @@ void _showEditCalendarSubjectNicks(
   next(action);
 }
 
-void _showCalendar(NextDispatcher next, ShowCalendarAction action) {
+void _showCalendar(Store<AppState> store,NextDispatcher next, ShowCalendarAction action) {
   navigatorKey.currentState.pushNamed("/calendar");
+  store.dispatch(SetCalendarCurrentMondayAction(toMonday(DateTime.now())));
   next(action);
 }
 
