@@ -228,6 +228,15 @@ class SettingsPageWidget extends StatelessWidget {
               },
             ),
           ),
+          SwitchListTile(
+            title: Text("Hinweis zum Bearbeiten von Kürzeln"),
+            subtitle: Text(
+                "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
+            onChanged: (bool value) {
+              vm.onSetShowCalendarEditNicksBar(value);
+            },
+            value: vm.showCalendarEditNicksBar,
+          ),
           Divider(),
           AutoScrollTag(
             child: ListTile(

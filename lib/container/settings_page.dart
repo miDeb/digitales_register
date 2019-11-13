@@ -47,6 +47,8 @@ class SettingsViewModel {
   final bool offlineEnabled;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final Map<String, String> subjectNicks;
+  final OnSettingChanged<bool> onSetShowCalendarEditNicksBar;
+  final bool showCalendarEditNicksBar;
   final bool showSubjectNicks;
   final List<String> allSubjects;
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
@@ -59,6 +61,8 @@ class SettingsViewModel {
         offlineEnabled = store.state.settingsState.offlineEnabled,
         subjectNicks = store.state.settingsState.subjectNicks.toMap(),
         showSubjectNicks = store.state.settingsState.scrollToSubjectNicks,
+        showCalendarEditNicksBar =
+            store.state.settingsState.showCalendarNicksBar,
         allSubjects = extractAllSubjects(store.state),
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
@@ -80,6 +84,9 @@ class SettingsViewModel {
         }),
         onSetSubjectNicks = ((Map<String, String> nicks) {
           store.dispatch(SetSubjectNicksAction(nicks));
+        }),
+        onSetShowCalendarEditNicksBar = ((bool mode) {
+          store.dispatch(SetShowCalendarSubjectNicksBarAction(mode));
         });
 
   static List<String> extractAllSubjects(AppState appState) {

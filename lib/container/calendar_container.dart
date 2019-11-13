@@ -40,7 +40,7 @@ class CalendarViewModel {
       : showEditSubjectNicks =
             (() => store.dispatch(ShowEditCalendarSubjectNicksAction())),
         closeEditNicksBar =
-            (() => store.dispatch(CloseCalendarSubjectNicksBarAction())),
+            (() => store.dispatch(SetShowCalendarSubjectNicksBarAction(false))),
         dayCallback = ((day) => store.dispatch(LoadCalendarAction(day))),
         currentMondayCallback =
             ((day) => store.dispatch(SetCalendarCurrentMondayAction(day))),

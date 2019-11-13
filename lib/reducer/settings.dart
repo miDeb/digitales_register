@@ -51,4 +51,4 @@ final _scrollToSubjectNicksReducer = combineReducers<bool>(
   ],
 );
 final _showCalendarNicksBarReducer = TypedReducer(
-    (bool show, CloseCalendarSubjectNicksBarAction action) => false);
+    (bool show, SetShowCalendarSubjectNicksBarAction action) => action.show);
