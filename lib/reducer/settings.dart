@@ -19,7 +19,9 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..scrollToSubjectNicks =
         _scrollToSubjectNicksReducer(state.scrollToSubjectNicks, action)
     ..showCalendarNicksBar =
-        _showCalendarNicksBarReducer(state.showCalendarNicksBar, action));
+        _showCalendarNicksBarReducer(state.showCalendarNicksBar, action)
+    ..showGradesDiagram =
+        _showGradesDiagramReducer(state.showGradesDiagram, action));
 }
 
 final _askWhenDeleteReducer =
@@ -52,3 +54,5 @@ final _scrollToSubjectNicksReducer = combineReducers<bool>(
 );
 final _showCalendarNicksBarReducer = TypedReducer(
     (bool show, SetShowCalendarSubjectNicksBarAction action) => action.show);
+final _showGradesDiagramReducer =
+    TypedReducer((bool show, SetShowGradesDiagramAction action) => action.show);

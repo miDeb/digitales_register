@@ -364,6 +364,12 @@ class SetShowCalendarSubjectNicksBarAction {
   SetShowCalendarSubjectNicksBarAction(this.show);
 }
 
+class SetShowGradesDiagramAction {
+  final bool show;
+
+  SetShowGradesDiagramAction(this.show);
+}
+
 class SetCalendarCurrentMondayAction {
   final DateTime monday;
 

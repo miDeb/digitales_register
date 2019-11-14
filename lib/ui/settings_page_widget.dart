@@ -123,6 +123,13 @@ class SettingsPageWidget extends StatelessWidget {
             key: ObjectKey(3),
           ),
           SwitchListTile(
+            title: Text("Noten in einem Diagramm darstellen"),
+            onChanged: (bool value) {
+              vm.onSetShowGradesDiagram(value);
+            },
+            value: vm.showGradesDiagram,
+          ),
+          SwitchListTile(
             title: Text(
                 'Keinen Notendurchschnitt berechnen, wenn "Beide Semester" ausgewählt ist'),
             onChanged: (bool value) {

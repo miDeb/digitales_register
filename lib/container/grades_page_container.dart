@@ -26,10 +26,12 @@ class GradesPageViewModel {
   final Semester showSemester;
   final ValueChanged<Semester> changeSemester;
   final bool loading;
+  final bool showGradesDiagram;
 
   GradesPageViewModel.from(Store<AppState> store)
       : showSemester = store.state.gradesState.semester,
         changeSemester = ((newSemester) =>
             store.dispatch(SetGradesSemesterAction(newSemester))),
-        loading = store.state.gradesState.loading;
+        loading = store.state.gradesState.loading,
+        showGradesDiagram = store.state.settingsState.showGradesDiagram;
 }

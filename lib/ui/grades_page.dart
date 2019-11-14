@@ -49,11 +49,12 @@ class GradesPage extends StatelessWidget {
             )
           : ListView(
               children: <Widget>[
-                SizedBox(
-                  child: GradesChartContainer(isFullscreen: false),
-                  height: 150,
-                  width: 250,
-                ),
+                if (vm.showGradesDiagram)
+                  SizedBox(
+                    child: GradesChartContainer(isFullscreen: false),
+                    height: 150,
+                    width: 250,
+                  ),
                 SortedGradesContainer(),
               ],
             ),

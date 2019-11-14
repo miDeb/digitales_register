@@ -178,6 +178,7 @@ abstract class SettingsState
   @BuiltValueField(serialize: false)
   bool get scrollToSubjectNicks;
   bool get showCalendarNicksBar;
+  bool get showGradesDiagram;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -199,6 +200,7 @@ abstract class SettingsStateBuilder
   bool offlineEnabled = true;
   bool saveToSecureStorage = true;
   bool showCalendarNicksBar = true;
+  bool showGradesDiagram = true;
   MapBuilder<String, String> subjectNicks = MapBuilder({
     "Deutsch": "Deu",
     "Mathematik": "Mat",
