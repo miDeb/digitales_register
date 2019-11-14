@@ -225,6 +225,19 @@ class HourWidget extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+                for (final teacher in hour.teachers)
+                  Text(
+                    teacher.lastName,
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .copyWith(fontSize: 12),
+                  ),
+                if (hour.rooms.isNotEmpty)
+                  SizedBox(
+                    height: 5,
+                  ),
                 for (final room in hour.rooms)
                   Text(
                     room,
