@@ -251,7 +251,7 @@ class HourWidget extends StatelessWidget {
 
   String formatList(List<String> teachers) {
     if (teachers.length <= 2) return teachers.join(" und ");
-    return teachers.sublist(0, teachers.length - 2).join(", ") +
+    return teachers.sublist(0, teachers.length - 1).join(", ") +
         " und " +
         teachers.last;
   }
