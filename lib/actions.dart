@@ -297,12 +297,6 @@ class SetAskWhenDeleteAction {
   SetAskWhenDeleteAction(this.ask);
 }
 
-class SetNoAverageForAllAction {
-  final bool noAvg;
-
-  SetNoAverageForAllAction(this.noAvg);
-}
-
 class SetGradesTypeSortedAction {
   final bool typeSorted;
 

@@ -10,8 +10,6 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
     ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
     ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
-    ..noAverageForAllSemester =
-        _noAvgForAllReducer(state.noAverageForAllSemester, action)
     ..showCancelled = _showCancelledReducer(state.showCancelled, action)
     ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
     ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
@@ -28,8 +26,6 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
 
 final _askWhenDeleteReducer =
     TypedReducer((bool ask, SetAskWhenDeleteAction action) => action.ask);
-final _noAvgForAllReducer =
-    TypedReducer((bool noAvg, SetNoAverageForAllAction action) => action.noAvg);
 final _showCancelledReducer = TypedReducer(
     (bool showCancelled, SetGradesShowCancelledAction action) =>
         action.showCancelled);

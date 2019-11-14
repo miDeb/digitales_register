@@ -38,7 +38,8 @@ class GradesPageViewModel {
         loading = store.state.gradesState.loading,
         showGradesDiagram = store.state.settingsState.showGradesDiagram,
         showAllSubjectsAverage =
-            store.state.settingsState.showAllSubjectsAverage;
+            store.state.settingsState.showAllSubjectsAverage &&
+                store.state.gradesState.semester.n != null;
 
   static String calculateAllSubjectsAverage(AppState state) {
     var sum = 0;

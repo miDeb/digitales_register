@@ -27,7 +27,7 @@ typedef void SetBoolCallback(bool byType);
 class SortedGradesViewModel {
   final List<AllSemesterSubject> subjects;
   final int semester;
-  final bool sortByType, noAvgForAllSemester, showCancelled;
+  final bool sortByType, showCancelled;
   final ViewSubjectDetailCallback viewSubjectDetail;
   final SetBoolCallback sortByTypeCallback, showCancelledCallback;
   SortedGradesViewModel.from(Store<AppState> store)
@@ -40,6 +40,5 @@ class SortedGradesViewModel {
         showCancelledCallback =
             ((s) => store.dispatch(SetGradesShowCancelledAction(s))),
         sortByTypeCallback =
-            ((s) => store.dispatch(SetGradesTypeSortedAction(s))),
-        noAvgForAllSemester = store.state.settingsState.noAverageForAllSemester;
+            ((s) => store.dispatch(SetGradesTypeSortedAction(s)));
 }

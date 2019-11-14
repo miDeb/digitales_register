@@ -41,7 +41,6 @@ final initialState = AppState((builder) {
     ..currentRouteIsLogin = false
     ..noInternet = false
     ..settingsState = (SettingsStateBuilder()
-      ..noAverageForAllSemester = true
       ..noDataSaving = false
       ..noPasswordSaving = false
       ..typeSorted = false

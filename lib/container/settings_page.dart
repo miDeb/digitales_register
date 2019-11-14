@@ -37,8 +37,6 @@ class SettingsViewModel {
   final OnSettingChanged<bool> onSetNoDataSaving;
   final bool noDataSaving;
   final OnSettingChanged<bool> onSetDarkMode;
-  final OnSettingChanged<bool> onSetNoAverageForAllSemester;
-  final bool noAverageForAllSemester;
   final OnSettingChanged<bool> onSetAskWhenDelete;
   final bool askWhenDelete;
   final OnSettingChanged<bool> onSetDeleteDataOnLogout;
@@ -58,8 +56,6 @@ class SettingsViewModel {
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
       : noPassSaving = store.state.settingsState.noPasswordSaving,
         noDataSaving = store.state.settingsState.noDataSaving,
-        noAverageForAllSemester =
-            store.state.settingsState.noAverageForAllSemester,
         askWhenDelete = store.state.settingsState.askWhenDelete,
         deleteDataOnLogout = store.state.settingsState.deleteDataOnLogout,
         offlineEnabled = store.state.settingsState.offlineEnabled,
@@ -79,9 +75,6 @@ class SettingsViewModel {
         }),
         onSetAskWhenDelete = ((bool mode) {
           store.dispatch(SetAskWhenDeleteAction(mode));
-        }),
-        onSetNoAverageForAllSemester = ((bool mode) {
-          store.dispatch(SetNoAverageForAllAction(mode));
         }),
         onSetDeleteDataOnLogout = ((bool mode) {
           store.dispatch(SetDeleteDataOnLogoutAction(mode));

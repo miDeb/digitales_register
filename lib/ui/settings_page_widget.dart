@@ -130,14 +130,6 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.showGradesDiagram,
           ),
           SwitchListTile(
-            title: Text(
-                'Keinen Notendurchschnitt berechnen, wenn "Beide Semester" ausgewählt ist'),
-            onChanged: (bool value) {
-              vm.onSetNoAverageForAllSemester(value);
-            },
-            value: vm.noAverageForAllSemester,
-          ),
-          SwitchListTile(
             title: Text('Durchschnitt aller Fächer ausrechnen'),
             onChanged: (bool value) {
               vm.onSetShowAllSubjectsAverage(value);

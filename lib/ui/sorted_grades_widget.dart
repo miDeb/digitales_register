@@ -33,7 +33,6 @@ class SortedGradesWidget extends StatelessWidget {
                     subject: vm.semester == null ? s : s.subjects[vm.semester],
                     sortByType: vm.sortByType,
                     viewSubjectDetail: () => vm.viewSubjectDetail(s),
-                    noAvgForAllSemester: vm.noAvgForAllSemester,
                     showCancelled: vm.showCancelled,
                   ))
               .toList(),
@@ -44,7 +43,7 @@ class SortedGradesWidget extends StatelessWidget {
 }
 
 class SubjectWidget extends StatefulWidget {
-  final bool sortByType, noAvgForAllSemester, showCancelled;
+  final bool sortByType, showCancelled;
   final Subject subject;
   final VoidCallback viewSubjectDetail;
 
@@ -53,7 +52,6 @@ class SubjectWidget extends StatefulWidget {
       this.sortByType,
       this.subject,
       this.viewSubjectDetail,
-      this.noAvgForAllSemester,
       this.showCancelled})
       : super(key: key);
 
@@ -74,22 +72,21 @@ class _SubjectWidgetState extends State<SubjectWidget> {
     return ExpansionTile(
       key: ObjectKey(widget.subject),
       title: Text(widget.subject.name),
-      leading:
-          widget.subject is AllSemesterSubject && widget.noAvgForAllSemester
-              ? null
-              : Text.rich(
+      leading: widget.subject is AllSemesterSubject
+          ? null
+          : Text.rich(
+              TextSpan(
+                text: 'Ø ',
+                children: <TextSpan>[
                   TextSpan(
-                    text: 'Ø ',
-                    children: <TextSpan>[
-                      TextSpan(
-                        text: widget.subject.averageFormatted,
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ],
+                    text: widget.subject.averageFormatted,
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
-                ),
+                ],
+              ),
+            ),
       children: widget.subject.hasSpecificGrades
           ? widget.sortByType
               ? widget.subject.typeSortedEntries.data.entries
