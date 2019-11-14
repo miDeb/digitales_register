@@ -23,6 +23,9 @@ class SortedGradesWidget extends StatelessWidget {
           onChanged: vm.showCancelledCallback,
           value: vm.showCancelled,
         ),
+        Divider(
+          height: 0,
+        ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: vm.subjects
