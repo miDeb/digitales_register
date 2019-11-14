@@ -130,7 +130,7 @@ class SettingsPageWidget extends StatelessWidget {
             value: vm.showGradesDiagram,
           ),
           SwitchListTile(
-            title: Text('Durchschnitt aller Fächer ausrechnen'),
+            title: Text('Durchschnitt aller Fächer anzeigen'),
             onChanged: (bool value) {
               vm.onSetShowAllSubjectsAverage(value);
             },
