@@ -605,9 +605,24 @@ abstract class CalendarHour
   bool get hasExam => !isNullOrEmpty(exam);
   bool get hasHomework => !isNullOrEmpty(homework);
   bool get hasDescription => !isNullOrEmpty(description);
-  BuiltList<String> get teachers;
+
+  // Legacy field "teachers" was just a List of Strings, formatted firstName lastName
+  // and has been replaced, but the wireName had to be changed
+  @BuiltValueField(wireName: "teachersNew")
+  BuiltList<Teacher> get teachers;
+
+  static void _initializeBuilder(CalendarHourBuilder b) =>
+      b..teachers = ListBuilder([]);
 
   static Serializer<CalendarHour> get serializer => _$calendarHourSerializer;
   CalendarHour._();
   factory CalendarHour([updates(CalendarHourBuilder b)]) = _$CalendarHour;
+}
+
+abstract class Teacher implements Built<Teacher, TeacherBuilder> {
+  String get firstName;
+  String get lastName;
+  static Serializer<Teacher> get serializer => _$teacherSerializer;
+  Teacher._();
+  factory Teacher([updates(TeacherBuilder b)]) = _$Teacher;
 }

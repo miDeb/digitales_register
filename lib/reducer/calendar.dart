@@ -59,6 +59,13 @@ CalendarHourBuilder parseHour(hour) {
     ..homework = lesson["homework"]["name"] ?? ""
     ..rooms = ListBuilder((lesson["rooms"] as List).map((r) => r["name"]))
     ..subject = lesson["subject"]["name"]
-    ..teachers = ListBuilder((lesson["teachers"] as List)
-        .map((r) => "${r["firstName"]} ${r["lastName"]}"));
+    ..teachers = ListBuilder(
+      (lesson["teachers"] as List).map(
+        (r) => Teacher(
+          (b) => b
+            ..firstName = r["firstName"]
+            ..lastName = r["lastName"],
+        ),
+      ),
+    );
 }

@@ -188,7 +188,10 @@ class HourWidget extends StatelessWidget {
                           text: "Lehrer: ",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        TextSpan(text: formatList(hour.teachers.toList())),
+                        TextSpan(
+                            text: formatList(hour.teachers
+                                .map((t) => "${t.firstName} ${t.lastName}")
+                                .toList())),
                       ],
                       style: DefaultTextStyle.of(context).style,
                     ),
