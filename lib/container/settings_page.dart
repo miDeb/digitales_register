@@ -105,6 +105,12 @@ class SettingsViewModel {
     for (final subject in appState.gradesState.subjects) {
       if (!subjects.contains(subject.name)) subjects.add(subject.name);
     }
+    for (final day in appState.dayState.allDays) {
+      for (final homework in day.homework) {
+        if (homework.label != null && !subjects.contains(homework.label))
+          subjects.add(homework.label);
+      }
+    }
     subjects.removeWhere(
       (subject) => appState.settingsState.subjectNicks.containsKey(subject),
     );
