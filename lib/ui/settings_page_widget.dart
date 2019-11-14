@@ -137,6 +137,13 @@ class SettingsPageWidget extends StatelessWidget {
             },
             value: vm.noAverageForAllSemester,
           ),
+          SwitchListTile(
+            title: Text('Durchschnitt aller Fächer ausrechnen'),
+            onChanged: (bool value) {
+              vm.onSetShowAllSubjectsAverage(value);
+            },
+            value: vm.showAllSubjectsAverage,
+          ),
           Divider(),
           AutoScrollTag(
             child: ListTile(

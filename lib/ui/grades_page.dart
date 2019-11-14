@@ -55,6 +55,15 @@ class GradesPage extends StatelessWidget {
                     height: 150,
                     width: 250,
                   ),
+                if (vm.showAllSubjectsAverage) ...[
+                  ListTile(
+                    title: Text("Ø aller Fächer"),
+                    trailing: Text(vm.allSubjectsAverage),
+                  ),
+                  Divider(
+                    height: 0,
+                  ),
+                ],
                 SortedGradesContainer(),
               ],
             ),

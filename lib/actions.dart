@@ -370,6 +370,12 @@ class SetShowGradesDiagramAction {
   SetShowGradesDiagramAction(this.show);
 }
 
+class SetShowAllSubjectsAverageAction {
+  final bool show;
+
+  SetShowAllSubjectsAverageAction(this.show);
+}
+
 class SetCalendarCurrentMondayAction {
   final DateTime monday;
 

@@ -51,6 +51,8 @@ class SettingsViewModel {
   final bool showCalendarEditNicksBar;
   final OnSettingChanged<bool> onSetShowGradesDiagram;
   final bool showGradesDiagram;
+  final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
+  final bool showAllSubjectsAverage;
   final bool showSubjectNicks;
   final List<String> allSubjects;
   SettingsViewModel.fromStore(Store<AppState> store, this.onSetDarkMode)
@@ -66,6 +68,8 @@ class SettingsViewModel {
         showCalendarEditNicksBar =
             store.state.settingsState.showCalendarNicksBar,
         showGradesDiagram = store.state.settingsState.showGradesDiagram,
+        showAllSubjectsAverage =
+            store.state.settingsState.showAllSubjectsAverage,
         allSubjects = extractAllSubjects(store.state),
         onSetNoPassSaving = ((bool mode) {
           store.dispatch(SetSaveNoPassAction(mode));
@@ -93,6 +97,9 @@ class SettingsViewModel {
         }),
         onSetShowGradesDiagram = ((bool mode) {
           store.dispatch(SetShowGradesDiagramAction(mode));
+        }),
+        onSetShowAllSubjectsAverage = ((bool mode) {
+          store.dispatch(SetShowAllSubjectsAverageAction(mode));
         });
 
   static List<String> extractAllSubjects(AppState appState) {
