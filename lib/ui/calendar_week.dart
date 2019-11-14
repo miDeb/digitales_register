@@ -72,7 +72,10 @@ class CalendarDayWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(DateFormat("E", "de").format(calendarDay.date)),
-        Text(DateFormat("dd.MM", "de").format(calendarDay.date)),
+        Text(
+          DateFormat("dd.MM", "de").format(calendarDay.date),
+          style: DefaultTextStyle.of(context).style.copyWith(fontSize: 12),
+        ),
         calendarDay.lenght != 0
             ? Expanded(
                 flex: calendarDay.lenght,
@@ -225,6 +228,10 @@ class HourWidget extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+                if (hour.teachers.isNotEmpty)
+                  SizedBox(
+                    height: 5,
+                  ),
                 for (final teacher in hour.teachers)
                   Text(
                     teacher.lastName,
@@ -232,7 +239,7 @@ class HourWidget extends StatelessWidget {
                     overflow: TextOverflow.clip,
                     style: DefaultTextStyle.of(context)
                         .style
-                        .copyWith(fontSize: 12),
+                        .copyWith(fontSize: 11),
                   ),
                 if (hour.rooms.isNotEmpty)
                   SizedBox(
@@ -245,7 +252,7 @@ class HourWidget extends StatelessWidget {
                     overflow: TextOverflow.clip,
                     style: DefaultTextStyle.of(context)
                         .style
-                        .copyWith(fontSize: 12),
+                        .copyWith(fontSize: 11),
                   ),
               ],
             ),

@@ -32,7 +32,7 @@ dependencies:
   flutter_secure_storage:
     path: "packages/flutter_secure_storage/"
   scroll_to_index: any 
-  autocomplete_textfield: ^1.7.3
+  autocomplete_textfield: any
 
 dev_dependencies:
   flutter_launcher_icons: any
