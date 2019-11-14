@@ -3,7 +3,6 @@ library app_state;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
 
 import 'data.dart';

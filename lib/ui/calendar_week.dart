@@ -34,13 +34,6 @@ class _CalendarWeekState extends State<CalendarWeek> {
   @override
   Widget build(BuildContext context) {
     final max = widget.vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
-    final hasSubjectNamesWithouNick = widget.vm.days.any(
-      (day) => day.hours.any(
-        (hour) => widget.vm.subjectNicks.entries.every(
-          (entry) => !equalsIgnoreAsciiCase(entry.key, hour.subject),
-        ),
-      ),
-    );
     return loading
         ? Center(
             child: CircularProgressIndicator(),

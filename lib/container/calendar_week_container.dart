@@ -5,7 +5,6 @@ import 'package:redux/redux.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/calendar_week.dart';
-import 'package:dr/actions.dart';
 
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
