@@ -80,9 +80,11 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                 children: <TextSpan>[
                   TextSpan(
                     text: widget.subject.averageFormatted,
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                    ),
+                    style: widget.subject.averageFormatted == "/"
+                        ? null
+                        : TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
                   ),
                 ],
               ),
