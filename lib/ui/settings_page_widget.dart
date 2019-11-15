@@ -285,43 +285,51 @@ class SettingsPageWidget extends StatelessWidget {
           builder: (context, setState) {
             return AlertDialog(
               title: Text("Kürzel bearbeiten"),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
+              content: Row(
                 children: [
-                  ListTile(
-                    title: Text("Fach"),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: AutoCompleteTextField<String>(
-                        key: subjectKey,
-                        itemBuilder: (BuildContext context, String suggestion) {
-                          return ListTile(title: Text(suggestion));
-                        },
-                        textChanged: (_) => setState(() {}),
-                        clearOnSubmit: false,
-                        itemFilter: (String suggestion, String query) {
-                          return suggestion
-                              .toLowerCase()
-                              .contains(query.toLowerCase());
-                        },
-                        itemSorter: (String a, String b) {
-                          return a.compareTo(b);
-                        },
-                        itemSubmitted: (_) {},
-                        suggestions: suggestions,
-                        controller: subjectController,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text("Fach"),
+                      SizedBox(
+                        height: 27,
                       ),
-                    ),
+                      Text("Kürzel"),
+                    ],
                   ),
-                  ListTile(
-                    title: Text("Kürzel"),
-                    trailing: SizedBox(
-                      width: 100,
-                      child: TextField(
-                        controller: nickController,
-                        textCapitalization: TextCapitalization.sentences,
-                        onChanged: (_) => setState(() {}),
-                      ),
+                  SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        AutoCompleteTextField<String>(
+                          key: subjectKey,
+                          itemBuilder:
+                              (BuildContext context, String suggestion) {
+                            return ListTile(title: Text(suggestion));
+                          },
+                          textChanged: (_) => setState(() {}),
+                          clearOnSubmit: false,
+                          itemFilter: (String suggestion, String query) {
+                            return suggestion
+                                .toLowerCase()
+                                .contains(query.toLowerCase());
+                          },
+                          itemSorter: (String a, String b) {
+                            return a.compareTo(b);
+                          },
+                          itemSubmitted: (_) {},
+                          suggestions: suggestions,
+                          controller: subjectController,
+                        ),
+                        TextField(
+                          controller: nickController,
+                          textCapitalization: TextCapitalization.sentences,
+                          onChanged: (_) => setState(() {}),
+                        ),
+                      ],
                     ),
                   ),
                 ],
