@@ -44,8 +44,12 @@ class CalendarViewModel {
         dayCallback = ((day) => store.dispatch(LoadCalendarAction(day))),
         currentMondayCallback =
             ((day) => store.dispatch(SetCalendarCurrentMondayAction(day))),
-        first = store.state.calendarState.currentDays.first.date,
-        last = store.state.calendarState.currentDays.last.date,
+        first = store.state.calendarState.currentDays.isEmpty
+            ? null
+            : store.state.calendarState.currentDays.first.date,
+        last = store.state.calendarState.currentDays.isEmpty
+            ? null
+            : store.state.calendarState.currentDays.last.date,
         currentMonday = store.state.calendarState.currentMonday,
         showEditNicksBar = store.state.calendarState.currentDays.any(
               (day) => day.hours.any(

@@ -129,7 +129,9 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   child: FadeTransition(
                     opacity: _dateRangeOpacityAnimation,
                     child: Text(
-                      "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
+                      widget.vm.first != null && widget.vm.last != null
+                          ? "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}"
+                          : "........ - ........",
                       style: Theme.of(context).textTheme.title,
                     ),
                   ),
