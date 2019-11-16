@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
+import '../linux.dart';
 import '../main.dart';
 import '../serializers.dart';
 import '../wrapper.dart';
@@ -23,7 +23,7 @@ import 'notifications.dart';
 import 'pass.dart';
 import 'routing.dart';
 
-final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();

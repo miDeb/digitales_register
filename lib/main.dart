@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:built_collection/built_collection.dart';
-import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -14,6 +16,7 @@ import 'container/home_page.dart';
 import 'container/login_page.dart';
 import 'container/notifications_page.dart';
 import 'container/settings_page.dart';
+import 'linux.dart';
 import 'middleware/middleware.dart';
 import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
@@ -23,6 +26,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 typedef void SingleArgumentVoidCallback<T>(T arg);
 
 void main() {
+  _setTargetPlatformForDesktop();
   run();
 }
 
@@ -144,4 +148,19 @@ void run() {
     ),
   );
   store.dispatch(LoadAction());
+}
+
+/// If the current platform is desktop, override the default platform to
+/// a supported platform (iOS for macOS, Android for Linux and Windows).
+/// Otherwise, do nothing.
+void _setTargetPlatformForDesktop() {
+  TargetPlatform targetPlatform;
+  if (Platform.isMacOS) {
+    targetPlatform = TargetPlatform.iOS;
+  } else if (Platform.isLinux || Platform.isWindows) {
+    targetPlatform = TargetPlatform.android;
+  }
+  if (targetPlatform != null) {
+    debugDefaultTargetPlatformOverride = targetPlatform;
+  }
 }

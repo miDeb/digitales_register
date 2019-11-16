@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -81,16 +83,17 @@ class SettingsPageWidget extends StatelessWidget {
             index: 1,
             key: ObjectKey(1),
           ),
-          SwitchListTile(
-            title: Text("Dark Mode"),
-            onChanged:
-                MediaQuery.of(context).platformBrightness == Brightness.dark
-                    ? null
-                    : (bool value) {
-                        vm.onSetDarkMode(value);
-                      },
-            value: DynamicTheme.of(context).brightness == Brightness.dark,
-          ),
+          if (!Platform.isLinux)
+            SwitchListTile(
+              title: Text("Dark Mode"),
+              onChanged:
+                  MediaQuery.of(context).platformBrightness == Brightness.dark
+                      ? null
+                      : (bool value) {
+                          vm.onSetDarkMode(value);
+                        },
+              value: DynamicTheme.of(context).brightness == Brightness.dark,
+            ),
           Divider(),
           AutoScrollTag(
             child: ListTile(
