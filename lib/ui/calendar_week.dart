@@ -6,35 +6,15 @@ import '../container/calendar_week_container.dart';
 import '../data.dart';
 import 'dialog.dart';
 
-class CalendarWeek extends StatefulWidget {
+class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
 
   const CalendarWeek({Key key, this.vm}) : super(key: key);
 
   @override
-  _CalendarWeekState createState() => _CalendarWeekState();
-}
-
-class _CalendarWeekState extends State<CalendarWeek> {
-  bool loading = false;
-  @override
-  void initState() {
-    loading = widget.vm.days.isEmpty;
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(CalendarWeek oldWidget) {
-    if (widget.vm.days.isNotEmpty) {
-      loading = false;
-    }
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final max = widget.vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
-    return loading
+    final max = vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
+    return vm.days.isEmpty
         ? Center(
             child: CircularProgressIndicator(),
           )
@@ -42,13 +22,13 @@ class _CalendarWeekState extends State<CalendarWeek> {
             children: <Widget>[
               Expanded(
                 child: Row(
-                    children: widget.vm.days
+                    children: vm.days
                         .map(
                           (d) => Expanded(
                             child: CalendarDayWidget(
                               calendarDay: d,
                               max: max,
-                              subjectNicks: widget.vm.subjectNicks,
+                              subjectNicks: vm.subjectNicks,
                             ),
                           ),
                         )
