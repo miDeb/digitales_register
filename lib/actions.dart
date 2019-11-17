@@ -53,7 +53,7 @@ class LoginAction {
       : assert(!offlineEnabled || fromStorage);
   @override
   String toString() {
-    return "LoginAction(user: $user, pass: ..., fromStorage: $fromStorage";
+    return "LoginAction(user: $user, pass: ..., fromStorage: $fromStorage)";
   }
 }
 
