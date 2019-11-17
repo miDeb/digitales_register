@@ -33,6 +33,7 @@ dependencies:
     path: "packages/flutter_secure_storage/"
   scroll_to_index: any 
   autocomplete_textfield: any
+  quiver_hashcode: any
 
 dev_dependencies:
   flutter_launcher_icons: any

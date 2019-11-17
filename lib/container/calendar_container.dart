@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:quiver_hashcode/hashcode.dart';
 import 'package:redux/redux.dart';
 import 'package:collection/collection.dart';
 
@@ -35,6 +36,18 @@ class CalendarViewModel {
   final DateTime first;
   final DateTime last;
   final DateTime currentMonday;
+
+  @override
+  operator ==(other) {
+    return other is CalendarViewModel &&
+        other.showEditNicksBar == showEditNicksBar &&
+        other.first == first &&
+        other.last == last &&
+        other.currentMonday == currentMonday;
+  }
+
+  @override
+  int get hashCode => hash4(showEditNicksBar, first, last, currentMonday);
 
   CalendarViewModel(Store<AppState> store)
       : showEditSubjectNicks =
