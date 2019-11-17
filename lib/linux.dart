@@ -99,7 +99,7 @@ class DynamicTheme extends StatelessWidget {
 /// only based on the local directory there
 Future<Directory> getApplicationDocumentsDirectory() async {
   if (Platform.isLinux) {
-    return Directory("appData");
+    return Directory("linux/appData");
   }
   return await path_provider.getApplicationDocumentsDirectory();
 }
