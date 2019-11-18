@@ -178,6 +178,7 @@ abstract class SettingsState
   bool get showCalendarNicksBar;
   bool get showGradesDiagram;
   bool get showAllSubjectsAverage;
+  bool get dashboardMarkNewOrChangedEntries;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -214,6 +215,7 @@ abstract class SettingsStateBuilder
     "Griechisch": "Gr",
   });
   bool scrollToSubjectNicks;
+  bool dashboardMarkNewOrChangedEntries = true;
 }
 
 abstract class AbsenceState

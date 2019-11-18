@@ -107,6 +107,13 @@ class SettingsPageWidget extends StatelessWidget {
             key: ObjectKey(2),
           ),
           SwitchListTile(
+            title: Text("Neue oder geänderte Einträge markieren"),
+            onChanged: (bool value) {
+              vm.onSetDashboardMarkNewOrChangedEntries(value);
+            },
+            value: vm.dashboardMarkNewOrChangedEntries,
+          ),
+          SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
               vm.onSetAskWhenDelete(value);

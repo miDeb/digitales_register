@@ -49,6 +49,7 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
           ),
         ),
         action.future,
+        store.state.settingsState.dashboardMarkNewOrChangedEntries,
       ),
     );
   }

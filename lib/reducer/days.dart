@@ -42,7 +42,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           day.homework.remove(oldHw);
           day.deletedHomework.add(Homework.parse(oldHw.toJson())
             ..deleted = true
-            ..isChanged = true
+            ..isChanged = action.markNewOrChangedEntries
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now);
@@ -52,7 +52,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             ..previousVersion = oldHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now
-            ..isChanged = true);
+            ..isChanged = action.markNewOrChangedEntries);
         } else {
           oldHw.checked = newHw.checked;
         }
@@ -69,13 +69,14 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             ..previousVersion = deletedHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now
-            ..isChanged = true);
+            ..isChanged = action.markNewOrChangedEntries);
         } else {
           day.homework.add(newHw
             ..lastNotSeen = day.lastRequested
             ..firstSeen = now
             ..isNew = newHw.type != HomeworkType.grade &&
-                newHw.type != HomeworkType.homework);
+                newHw.type != HomeworkType.homework &&
+                action.markNewOrChangedEntries);
         }
       }
       day.lastRequested = now;

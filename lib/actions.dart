@@ -11,9 +11,9 @@ class ErrorAction {
 
 class DaysLoadedAction {
   final ListBuilder<Day> loadedDays;
-  final bool future;
+  final bool future, markNewOrChangedEntries;
 
-  DaysLoadedAction(this.loadedDays, this.future);
+  DaysLoadedAction(this.loadedDays, this.future, this.markNewOrChangedEntries);
   @override
   String toString() {
     return "DaysLoadedAction(loadedDays: $loadedDays";
@@ -368,6 +368,12 @@ class SetShowAllSubjectsAverageAction {
   final bool show;
 
   SetShowAllSubjectsAverageAction(this.show);
+}
+
+class SetDashboardMarkNewOrChangedEntriesAction {
+  final bool mark;
+
+  SetDashboardMarkNewOrChangedEntriesAction(this.mark);
 }
 
 class SetCalendarCurrentMondayAction {
