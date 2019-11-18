@@ -21,7 +21,7 @@ class CalendarWeekContainer extends StatelessWidget {
       converter: (Store<AppState> store) {
         return CalendarWeekViewModel(store, monday);
       },
-     distinct: true,
+      distinct: true,
     );
   }
 }
