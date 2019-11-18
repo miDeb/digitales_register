@@ -27,7 +27,11 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             orElse: () => null,
           );
       if (newDay == null) {
-        if (!action.future && day.date.isBefore(DateTime.now())) {
+        if (!action.future &&
+            day.date.isBefore(
+              DateTime.now().subtract(Duration(
+                  days: 1)), // subtract to not accidentally delete today
+            )) {
           allDays.remove(day);
         }
         continue;
