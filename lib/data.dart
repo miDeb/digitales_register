@@ -52,8 +52,7 @@ class Day {
 
   static List<Day> filterFuture(List<Day> allDays, bool future) {
     return allDays.where((Day day) {
-      final today = Day.dateToday();
-      return future ? !day.date.isBefore(today) : !day.date.isAfter(today);
+      return _isFuture(day.date) == future;
     }).toList();
   }
 
