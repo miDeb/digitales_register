@@ -33,7 +33,7 @@ class GradesChartContainer extends StatelessWidget {
               ),
             ),
             value: (s) =>
-                store.state.gradesState.graphConfigs[(s as Subject).id],
+                store.state.settingsState.graphConfigs[(s as Subject).id],
           ),
           isFullscreen,
           () => store.dispatch(ShowFullscreenChartAciton()),

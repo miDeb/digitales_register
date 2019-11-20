@@ -56,8 +56,7 @@ final initialState = AppState((builder) {
       ..semester = Semester.all
       ..subjects = ListBuilder([])
       ..loading = false
-      ..serverSemester = null
-      ..graphConfigs = MapBuilder({}))
+      ..serverSemester = null)
     ..absenceState = null
     ..calendarState = (CalendarStateBuilder()..days = MapBuilder());
 });

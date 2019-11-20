@@ -24,7 +24,8 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
         _showAllSubjectsAverageReducer(state.showAllSubjectsAverage, action)
     ..dashboardMarkNewOrChangedEntries =
         _dashboardMarkNewOrChangedEntriesReducer(
-            state.dashboardMarkNewOrChangedEntries, action));
+            state.dashboardMarkNewOrChangedEntries, action)
+    ..graphConfigs = _setGradesGraphConfigReducer(state.graphConfigs, action));
 }
 
 final _askWhenDeleteReducer =
@@ -62,3 +63,6 @@ final _showAllSubjectsAverageReducer = TypedReducer(
 final _dashboardMarkNewOrChangedEntriesReducer = TypedReducer(
     (bool mark, SetDashboardMarkNewOrChangedEntriesAction action) =>
         action.mark);
+final _setGradesGraphConfigReducer = TypedReducer(
+    (BuiltMap<int, SubjectGraphConfig> state, SetGraphConfigsAction action) =>
+        BuiltMap<int, SubjectGraphConfig>(action.configs));

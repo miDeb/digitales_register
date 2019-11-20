@@ -15,7 +15,7 @@ class ChartLegendContainer extends StatelessWidget {
       },
       converter: (Store<AppState> store) {
         return ChartLegendViewModel(
-            store.state.gradesState.graphConfigs
+            store.state.settingsState.graphConfigs
                 .map(
                   (id, config) => MapEntry(
                       store.state.gradesState.subjects
@@ -27,7 +27,7 @@ class ChartLegendContainer extends StatelessWidget {
           final id = store.state.gradesState.subjects
               .firstWhere((s) => s.name == name)
               .id;
-          final configs = store.state.gradesState.graphConfigs.toBuilder();
+          final configs = store.state.settingsState.graphConfigs.toBuilder();
           configs.updateValue(id, (config) {
             return config.rebuild((b) => b.thick = thick);
           });

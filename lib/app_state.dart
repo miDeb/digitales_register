@@ -111,7 +111,6 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   bool get hasGrades => subjects?.isEmpty != true;
   Semester get semester;
   BuiltList<AllSemesterSubject> get subjects;
-  BuiltMap<int, SubjectGraphConfig> get graphConfigs;
 
   /// If unknown: null
   @nullable
@@ -179,6 +178,8 @@ abstract class SettingsState
   bool get showGradesDiagram;
   bool get showAllSubjectsAverage;
   bool get dashboardMarkNewOrChangedEntries;
+  BuiltMap<int, SubjectGraphConfig> get graphConfigs;
+
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
 
@@ -216,6 +217,7 @@ abstract class SettingsStateBuilder
   });
   bool scrollToSubjectNicks;
   bool dashboardMarkNewOrChangedEntries = true;
+  BuiltMap<int, SubjectGraphConfig> graphConfigs = BuiltMap({});
 }
 
 abstract class AbsenceState

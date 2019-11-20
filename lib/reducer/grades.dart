@@ -5,8 +5,6 @@ import '../app_state.dart';
 
 final gradesReducer = combineReducers<GradesStateBuilder>([
   _loadSubjectsReducer,
-  TypedReducer<GradesStateBuilder, SetGraphConfigsAction>(
-      _setGradesGraphConfigRecuder),
   TypedReducer<GradesStateBuilder, SubjectsLoadedAction>(
       _subjectsLoadedReducer),
   TypedReducer<GradesStateBuilder, SetGradesSemesterAction>(
@@ -33,11 +31,6 @@ GradesStateBuilder _subjectsLoadedReducer(
     ..subjects = action.subjects
     ..serverSemester = action.lastRequestedSemester
     ..loading = false;
-}
-
-GradesStateBuilder _setGradesGraphConfigRecuder(
-    GradesStateBuilder state, SetGraphConfigsAction action) {
-  return state..graphConfigs.replace(action.configs);
 }
 
 GradesStateBuilder _setGradesSemesterReducer(

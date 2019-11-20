@@ -95,7 +95,7 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
       }
       if (loadedSubjects.isNotEmpty) {
         final graphConfigsBuilder =
-            store.state.gradesState.graphConfigs.toBuilder();
+            store.state.settingsState.graphConfigs.toBuilder();
         for (var subject in loadedSubjects) {
           if (!graphConfigsBuilder.build().containsKey(subject.id)) {
             graphConfigsBuilder.update(
