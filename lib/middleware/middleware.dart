@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
+import 'package:dr/middleware/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -48,6 +49,7 @@ List<Middleware<AppState>> createMiddleware() {
     ...absencesMiddlewares(wrapper),
     ...calendarMiddlewares(wrapper),
     ...passMiddlewares(wrapper, _secureStorage),
+    ...settingsMiddleware
   ];
 }
 
