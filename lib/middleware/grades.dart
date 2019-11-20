@@ -10,9 +10,14 @@ import '../data.dart';
 import '../wrapper.dart';
 
 final _colors = List.of(Colors.primaries)
-  ..remove(Colors.pink)
-  ..remove(Colors.lightBlue)
-  ..remove(Colors.lightGreen);
+  ..removeWhere((c) => _similarColors.contains(c));
+
+final _similarColors = [
+  Colors.lime,
+  Colors.lightBlue,
+  Colors.cyan,
+  Colors.amber
+];
 
 const _defaultThick = 2;
 
@@ -96,6 +101,12 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
       if (loadedSubjects.isNotEmpty) {
         final graphConfigsBuilder =
             store.state.settingsState.graphConfigs.toBuilder();
+
+        for (final entry in store.state.settingsState.graphConfigs.entries) {
+          if (!loadedSubjects.any((s) => s.id == entry.key)) {
+            graphConfigsBuilder.remove(entry);
+          }
+        }
         for (var subject in loadedSubjects) {
           if (!graphConfigsBuilder.build().containsKey(subject.id)) {
             graphConfigsBuilder.update(
@@ -108,6 +119,14 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
                             .build()
                             .values
                             .any((config) => config.color == color.value),
+                        orElse: () => _similarColors.firstWhere(
+                          (color) => !graphConfigsBuilder
+                              .build()
+                              .values
+                              .any((config) => config.color == color.value),
+                          orElse: () =>
+                              (List.of(Colors.primaries)..shuffle()).first,
+                        ),
                       )
                       .value),
             );
