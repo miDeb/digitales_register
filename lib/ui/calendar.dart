@@ -227,42 +227,51 @@ class EditNickBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       duration: Duration(milliseconds: 250),
-      firstChild: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              offset: Offset(0, -1.5),
-              spreadRadius: 1.5,
-              blurRadius: 2,
+      firstChild: Material(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 8,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    offset: Offset(0, -1.5),
+                    spreadRadius: 1.5,
+                    blurRadius: 2,
+                  ),
+                ],
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: FlatButton(
+                      child: Row(
+                        children: <Widget>[
+                          Text("Kürzel bearbeiten"),
+                          Spacer(),
+                        ],
+                      ),
+                      onPressed: onShowEditNicks,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: onClose,
+                  ),
+                ],
+              ),
             ),
           ],
-          color: Theme.of(context).scaffoldBackgroundColor,
-        ),
-        child: Material(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Expanded(
-                child: FlatButton(
-                  child: Row(
-                    children: <Widget>[
-                      Text("Kürzel bearbeiten"),
-                      Spacer(),
-                    ],
-                  ),
-                  onPressed: onShowEditNicks,
-                ),
-              ),
-              IconButton(
-                icon: Icon(Icons.close),
-                onPressed: onClose,
-              ),
-            ],
-          ),
         ),
       ),
-      secondChild: Container(),
+      secondChild: SizedBox(
+        height: 8,
+      ),
       crossFadeState:
           show ? CrossFadeState.showFirst : CrossFadeState.showSecond,
     );
