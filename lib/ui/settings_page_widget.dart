@@ -8,14 +8,31 @@ import 'package:scroll_to_index/scroll_to_index.dart';
 import '../container/settings_page.dart';
 import 'network_protocol_page.dart';
 
-class SettingsPageWidget extends StatelessWidget {
+class SettingsPageWidget extends StatefulWidget {
   final SettingsViewModel vm;
-  final controller = AutoScrollController();
 
   SettingsPageWidget({Key key, this.vm}) : super(key: key);
+
+  @override
+  _SettingsPageWidgetState createState() => _SettingsPageWidgetState();
+}
+
+class _SettingsPageWidgetState extends State<SettingsPageWidget> {
+  final controller = AutoScrollController();
+
+  @override
+  void initState() {
+    if (widget.vm.showSubjectNicks) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (vm.showSubjectNicks) {
+    if (widget.vm.showSubjectNicks) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
       });
@@ -41,35 +58,35 @@ class SettingsPageWidget extends StatelessWidget {
           SwitchListTile(
             title: Text("Angemeldet bleiben"),
             onChanged: (bool value) {
-              vm.onSetNoPassSaving(!value);
+              widget.vm.onSetNoPassSaving(!value);
             },
-            value: !vm.noPassSaving,
+            value: !widget.vm.noPassSaving,
           ),
           SwitchListTile(
             title: Text("Daten lokal speichern"),
             subtitle: Text('Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
-              vm.onSetNoDataSaving(!value);
+              widget.vm.onSetNoDataSaving(!value);
             },
-            value: !vm.noDataSaving,
+            value: !widget.vm.noDataSaving,
           ),
           SwitchListTile(
             title: Text("Offline-Login"),
-            onChanged: !vm.noPassSaving && !vm.noDataSaving
+            onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
-                    vm.onSetOfflineEnabled(value);
+                    widget.vm.onSetOfflineEnabled(value);
                   }
                 : null,
-            value: vm.offlineEnabled,
+            value: widget.vm.offlineEnabled,
           ),
           SwitchListTile(
             title: Text("Daten beim Ausloggen löschen"),
-            onChanged: !vm.noPassSaving && !vm.noDataSaving
+            onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
-                    vm.onSetDeleteDataOnLogout(value);
+                    widget.vm.onSetDeleteDataOnLogout(value);
                   }
                 : null,
-            value: vm.deleteDataOnLogout,
+            value: widget.vm.deleteDataOnLogout,
           ),
           Divider(),
           AutoScrollTag(
@@ -90,7 +107,7 @@ class SettingsPageWidget extends StatelessWidget {
                   MediaQuery.of(context).platformBrightness == Brightness.dark
                       ? null
                       : (bool value) {
-                          vm.onSetDarkMode(value);
+                          widget.vm.onSetDarkMode(value);
                         },
               value: DynamicTheme.of(context).brightness == Brightness.dark,
             ),
@@ -109,16 +126,16 @@ class SettingsPageWidget extends StatelessWidget {
           SwitchListTile(
             title: Text("Neue oder geänderte Einträge markieren"),
             onChanged: (bool value) {
-              vm.onSetDashboardMarkNewOrChangedEntries(value);
+              widget.vm.onSetDashboardMarkNewOrChangedEntries(value);
             },
-            value: vm.dashboardMarkNewOrChangedEntries,
+            value: widget.vm.dashboardMarkNewOrChangedEntries,
           ),
           SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
-              vm.onSetAskWhenDelete(value);
+              widget.vm.onSetAskWhenDelete(value);
             },
-            value: vm.askWhenDelete,
+            value: widget.vm.askWhenDelete,
           ),
           Divider(),
           AutoScrollTag(
@@ -135,16 +152,16 @@ class SettingsPageWidget extends StatelessWidget {
           SwitchListTile(
             title: Text("Noten in einem Diagramm darstellen"),
             onChanged: (bool value) {
-              vm.onSetShowGradesDiagram(value);
+              widget.vm.onSetShowGradesDiagram(value);
             },
-            value: vm.showGradesDiagram,
+            value: widget.vm.showGradesDiagram,
           ),
           SwitchListTile(
             title: Text('Durchschnitt aller Fächer anzeigen'),
             onChanged: (bool value) {
-              vm.onSetShowAllSubjectsAverage(value);
+              widget.vm.onSetShowAllSubjectsAverage(value);
             },
-            value: vm.showAllSubjectsAverage,
+            value: widget.vm.showAllSubjectsAverage,
           ),
           Divider(),
           AutoScrollTag(
@@ -159,10 +176,10 @@ class SettingsPageWidget extends StatelessWidget {
             key: ObjectKey(4),
           ),
           ExpansionTile(
-            initiallyExpanded: vm.showSubjectNicks,
+            initiallyExpanded: widget.vm.showSubjectNicks,
             title: Text("Fächerkürzel"),
             children: List.generate(
-              vm.subjectNicks.length + 1,
+              widget.vm.subjectNicks.length + 1,
               (i) {
                 if (i == 0)
                   return ListTile(
@@ -173,19 +190,19 @@ class SettingsPageWidget extends StatelessWidget {
                           context,
                           "",
                           "",
-                          vm.allSubjects,
+                          widget.vm.allSubjects,
                         );
                         if (newValue != null) {
-                          vm.onSetSubjectNicks(
-                            Map.of(vm.subjectNicks)
+                          widget.vm.onSetSubjectNicks(
+                            Map.of(widget.vm.subjectNicks)
                               ..[newValue.key] = newValue.value,
                           );
                         }
                       },
                     ),
                   );
-                final key = vm.subjectNicks.entries.toList()[i - 1].key;
-                final value = vm.subjectNicks[key];
+                final key = widget.vm.subjectNicks.entries.toList()[i - 1].key;
+                final value = widget.vm.subjectNicks[key];
                 return ListTile(
                   title: Text(key),
                   subtitle: Text(value),
@@ -214,8 +231,8 @@ class SettingsPageWidget extends StatelessWidget {
                                 );
                               });
                           if (delete == true)
-                            vm.onSetSubjectNicks(
-                              Map.of(vm.subjectNicks)..remove(key),
+                            widget.vm.onSetSubjectNicks(
+                              Map.of(widget.vm.subjectNicks)..remove(key),
                             );
                         },
                       ),
@@ -226,12 +243,12 @@ class SettingsPageWidget extends StatelessWidget {
                             context,
                             key,
                             value,
-                            List.of(vm.allSubjects)..add(key),
+                            List.of(widget.vm.allSubjects)..add(key),
                           );
                           if (newValue != null) {
-                            vm.onSetSubjectNicks(
+                            widget.vm.onSetSubjectNicks(
                               Map.fromEntries(
-                                List.of(vm.subjectNicks.entries)
+                                List.of(widget.vm.subjectNicks.entries)
                                   ..[i - 1] = newValue,
                               ),
                             );
@@ -249,9 +266,9 @@ class SettingsPageWidget extends StatelessWidget {
             subtitle: Text(
                 "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
             onChanged: (bool value) {
-              vm.onSetShowCalendarEditNicksBar(value);
+              widget.vm.onSetShowCalendarEditNicksBar(value);
             },
-            value: vm.showCalendarEditNicksBar,
+            value: widget.vm.showCalendarEditNicksBar,
           ),
           Divider(),
           AutoScrollTag(
