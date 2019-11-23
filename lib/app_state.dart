@@ -214,6 +214,7 @@ abstract class SettingsStateBuilder
     "Bewegung und Sport": "Sport",
     "Recht und Wirtschaft": "Rw",
     "Griechisch": "Gr",
+    "FÜ": "Fü",
   });
   bool scrollToSubjectNicks;
   bool dashboardMarkNewOrChangedEntries = true;
