@@ -6,40 +6,16 @@ import 'util.dart';
 
 part 'data.g.dart';
 
-class Day {
-  final List<Homework> homework, deletedHomework;
-  final DateTime date;
-  String displayName;
-  bool future;
-  DateTime lastRequested;
-
-  Day.parse(Map map)
-      : date = DateTime.parse(map["date"]),
-        lastRequested = DateTime.parse(
-            map["lastRequested"] ?? DateTime.now().toIso8601String()),
-        homework = (List<Map<String, dynamic>>.from(map["items"]))
-            .map((m) => Homework.parse(m))
-            .toList(),
-        deletedHomework =
-            (List<Map<String, dynamic>>.from(map["deletedItems"] ?? []))
-                .map((m) => Homework.parse(m))
-                .toList() {
-    displayName = format(date);
-    future = _isFuture(date);
-  }
-
-  Day({this.homework, this.date, this.deletedHomework})
-      : displayName = format(date),
-        future = _isFuture(date);
-
-  toJson() {
-    return {
-      "date": date.toIso8601String(),
-      "lastRequested": lastRequested.toIso8601String(),
-      "items": homework.map((h) => h.toJson()).toList(),
-      "deletedItems": deletedHomework.map((h) => h.toJson()).toList(),
-    };
-  }
+abstract class Day implements Built<Day, DayBuilder> {
+  factory Day([void Function(DayBuilder) updates]) = _$Day;
+  Day._();
+  static Serializer<Day> get serializer => _$daySerializer;
+  BuiltList<Homework> get homework;
+  BuiltList<Homework> get deletedHomework;
+  DateTime get date;
+  String get displayName => format(date);
+  bool get future => _isFuture(date);
+  DateTime get lastRequested;
 
   static DateTime dateToday() {
     DateTime now = DateTime.now();
@@ -48,12 +24,6 @@ class Day {
 
   static bool _isFuture(DateTime date) {
     return !date.isBefore(dateToday());
-  }
-
-  static List<Day> filterFuture(List<Day> allDays, bool future) {
-    return allDays.where((Day day) {
-      return _isFuture(day.date) == future;
-    }).toList();
   }
 
   static String format(DateTime date) {
@@ -76,11 +46,6 @@ class Day {
       String dateString = "${date.day}.${date.month}.";
       return "$weekday, $dateString";
     }
-  }
-
-  @override
-  String toString() {
-    return displayName;
   }
 }
 

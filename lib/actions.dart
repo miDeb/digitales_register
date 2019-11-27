@@ -10,13 +10,13 @@ class ErrorAction {
 }
 
 class DaysLoadedAction {
-  final ListBuilder<Day> loadedDays;
+  final dynamic data;
   final bool future, markNewOrChangedEntries;
 
-  DaysLoadedAction(this.loadedDays, this.future, this.markNewOrChangedEntries);
+  DaysLoadedAction(this.data, this.future, this.markNewOrChangedEntries);
   @override
   String toString() {
-    return "DaysLoadedAction(loadedDays: $loadedDays";
+    return "DaysLoadedAction(data: $data)";
   }
 }
 

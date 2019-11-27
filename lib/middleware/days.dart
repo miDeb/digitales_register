@@ -1,4 +1,3 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
@@ -43,11 +42,7 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
   } else {
     store.dispatch(
       DaysLoadedAction(
-        ListBuilder(
-          List<Map<String, dynamic>>.from(data).map(
-            (d) => Day.parse(d),
-          ),
-        ),
+       data,
         action.future,
         store.state.settingsState.dashboardMarkNewOrChangedEntries,
       ),
