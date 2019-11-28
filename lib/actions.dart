@@ -171,9 +171,9 @@ class NoInternetAction {
 }
 
 class NotificationsLoadedAction {
-  final ListBuilder<Notification> notifications;
+  final dynamic data;
 
-  NotificationsLoadedAction(this.notifications);
+  NotificationsLoadedAction(this.data);
 }
 
 class ShowNotificationsAction {}

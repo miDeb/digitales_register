@@ -16,7 +16,6 @@ part 'serializers.g.dart';
 ])
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(SubjectSerializer())
-      ..add(NotificationSerializer())
       ..add(DateTimeSerializer()))
     .build();
 
@@ -36,25 +35,6 @@ class SubjectSerializer implements PrimitiveSerializer<SingleSemesterSubject> {
   SingleSemesterSubject deserialize(Serializers serializers, serialized,
       {FullType specifiedType = FullType.unspecified}) {
     return SingleSemesterSubject.parse(serialized);
-  }
-}
-
-class NotificationSerializer implements PrimitiveSerializer<Notification> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([Notification]);
-  @override
-  final String wireName = 'Notification';
-
-  @override
-  Object serialize(Serializers serializers, Notification notification,
-      {FullType specifiedType = FullType.unspecified}) {
-    return notification.toJson();
-  }
-
-  @override
-  Notification deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return Notification.parse(serialized);
   }
 }
 

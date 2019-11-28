@@ -135,29 +135,18 @@ class HomeworkType extends EnumClass {
   }
 }
 
-class Notification {
-  final int id;
-  final String title, subTitle;
-  final DateTime timeSent;
-  Notification.parse(Map data)
-      : id = data["id"],
-        title = data["title"],
-        subTitle = data["subTitle"],
-        timeSent = DateTime.parse(data["timeSent"]);
-  Notification({
-    this.id,
-    this.timeSent,
-    this.title,
-    this.subTitle,
-  });
-  toJson() {
-    return {
-      "id": id,
-      "title": title,
-      "subTitle": subTitle,
-      "timeSent": timeSent.toIso8601String(),
-    };
-  }
+abstract class Notification
+    implements Built<Notification, NotificationBuilder> {
+  Notification._();
+  factory Notification([void Function(NotificationBuilder) updates]) =
+      _$Notification;
+  static Serializer<Notification> get serializer => _$notificationSerializer;
+
+  int get id;
+  String get title;
+  @nullable
+  String get subTitle;
+  DateTime get timeSent;
 }
 
 abstract class AllSemesterSubject
