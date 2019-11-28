@@ -15,30 +15,10 @@ part 'serializers.g.dart';
   SettingsState,
 ])
 final Serializers serializers = (_$serializers.toBuilder()
-      ..add(HomeworkSerializer())
       ..add(SubjectSerializer())
       ..add(NotificationSerializer())
       ..add(DateTimeSerializer()))
     .build();
-
-class HomeworkSerializer implements PrimitiveSerializer<Homework> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([Homework]);
-  @override
-  final String wireName = 'Homework';
-
-  @override
-  Object serialize(Serializers serializers, Homework homework,
-      {FullType specifiedType = FullType.unspecified}) {
-    return homework.toJson();
-  }
-
-  @override
-  Homework deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return Homework.parse(serialized);
-  }
-}
 
 class SubjectSerializer implements PrimitiveSerializer<SingleSemesterSubject> {
   @override

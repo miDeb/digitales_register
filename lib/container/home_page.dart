@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
 
 class HomePageContentViewModel {
   final bool noInternet, loading, splash;
-  final VoidCallback  refreshNoInternet;
+  final VoidCallback refreshNoInternet;
   final String userName, userIcon;
   HomePageContentViewModel.from(Store<AppState> store)
       : noInternet = store.state.noInternet,

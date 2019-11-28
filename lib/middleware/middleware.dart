@@ -6,7 +6,6 @@ import 'package:dr/middleware/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
@@ -29,6 +28,10 @@ final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
   return <Middleware<AppState>>[
+    (store, action, next) {
+      print(action);
+      next(action);
+    },
     errorMiddleware,
     _createTap(wrapper),
     _saveStateMiddleware,
@@ -150,7 +153,7 @@ TypedMiddleware<AppState, RefreshAction> _createRefresh() {
 TypedMiddleware<AppState, NoInternetAction> _createNoInternet() {
   return TypedMiddleware(
       (Store<AppState> store, NoInternetAction action, NextDispatcher next) {
-    if (action.noInternet) Fluttertoast.showToast(msg: "Kein Internet");
+    if (action.noInternet) showToast(msg: "Kein Internet");
     next(action);
   });
 }
@@ -168,7 +171,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   if (!store.state.loginState.loggedIn) {
     final user = action.userName.hashCode;
     final file =
-        File("${(await getApplicationDocumentsDirectory()).path}/$user");
+        File("${(await getApplicationDocumentsDirectory()).path}/$user.data");
     final vals = json.decode(
       await file.exists() && await file.length() > 0
           ? await file.readAsString()
@@ -272,7 +275,7 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
 }
 
 void writeToStorage(String key, String txt) async {
-  File("${(await getApplicationDocumentsDirectory()).path}/$key")
+  File("${(await getApplicationDocumentsDirectory()).path}/$key.data")
       .writeAsString(txt, flush: true);
 }
 

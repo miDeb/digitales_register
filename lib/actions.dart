@@ -261,10 +261,10 @@ class AddReminderAction {
 }
 
 class HomeworkAddedAction {
-  final Homework hw;
+  final dynamic data;
   final DateTime date;
 
-  HomeworkAddedAction(this.hw, this.date);
+  HomeworkAddedAction(this.data, this.date);
 }
 
 class DeleteHomeworkAction {

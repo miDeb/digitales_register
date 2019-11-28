@@ -1,10 +1,9 @@
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:dr/linux.dart';
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
-import '../data.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> daysMiddlewares(Wrapper wrapper) => [
@@ -42,7 +41,7 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
   } else {
     store.dispatch(
       DaysLoadedAction(
-       data,
+        data,
         action.future,
         store.state.settingsState.dashboardMarkNewOrChangedEntries,
       ),
@@ -75,14 +74,12 @@ void _addReminder(Store<AppState> store, AddReminderAction action, next,
       store.dispatch(NoInternetAction(true));
       return;
     }
-    Fluttertoast.showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
     return;
   }
   store.dispatch(
     HomeworkAddedAction(
-      Homework.parse(
-        result,
-      ),
+      result,
       action.date,
     ),
   );
@@ -103,7 +100,7 @@ void _deleteHomework(Store<AppState> store, DeleteHomeworkAction action, next,
       store.dispatch(NoInternetAction(true));
       return;
     }
-    Fluttertoast.showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
     return;
   }
 }
@@ -125,7 +122,7 @@ void _toggleDone(Store<AppState> store, ToggleDoneAction action, next,
       store.dispatch(NoInternetAction(true));
       return;
     }
-    Fluttertoast.showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
     return;
   }
 }

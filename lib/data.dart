@@ -17,6 +17,12 @@ abstract class Day implements Built<Day, DayBuilder> {
   bool get future => _isFuture(date);
   DateTime get lastRequested;
 
+  static void _initializeBuilder(DayBuilder builder) {
+    builder
+      ..lastRequested = DateTime.now()
+      ..deletedHomework = ListBuilder([]);
+  }
+
   static DateTime dateToday() {
     DateTime now = DateTime.now();
     return DateTime(now.year, now.month, now.day);
@@ -49,17 +55,48 @@ abstract class Day implements Built<Day, DayBuilder> {
   }
 }
 
-class Homework {
-  bool deleted;
-  final int id;
-  bool isNew = false, isChanged = false;
-  final String title, subtitle, label;
-  String gradeFormatted, grade;
-  bool warning, checkable, checked, deleteable;
-  HomeworkType type;
-  Homework previousVersion;
-  DateTime lastNotSeen, firstSeen;
+abstract class Homework implements Built<Homework, HomeworkBuilder> {
+  Homework._();
+  factory Homework([void Function(HomeworkBuilder) updates]) = _$Homework;
+  static Serializer<Homework> get serializer => _$homeworkSerializer;
 
+  bool get deleted;
+  int get id;
+  bool get isNew;
+  bool get isChanged;
+  String get title;
+  String get subtitle;
+  @nullable
+  String get label;
+  @nullable
+  String get gradeFormatted;
+  @nullable
+  String get grade;
+  bool get warning;
+  bool get checkable;
+  @BuiltValueField(compare: false)
+  bool get checked;
+  bool get deleteable;
+  HomeworkType get type;
+  @BuiltValueField(compare: false)
+  @nullable
+  Homework get previousVersion;
+  @BuiltValueField(compare: false)
+  @nullable
+  DateTime get lastNotSeen;
+  @BuiltValueField(compare: false)
+  DateTime get firstSeen;
+
+  static void _initializeBuilder(HomeworkBuilder b) => b
+    ..isNew = false
+    ..isChanged = false
+    ..deleted = false
+    ..warning = false
+    ..checkable = false
+    ..deleteable = false
+    ..deleted = false
+    ..firstSeen = DateTime.now();
+  /* 
   Homework.parse(Map<String, dynamic> map)
       : id = map["id"],
         deleted = map["deleted"] ?? false,
@@ -120,7 +157,7 @@ class Homework {
     this.deleteable,
     this.isNew,
   });
-
+ */ /*
   bool equalsIgnoreCustom(other) {
     return other is Homework &&
         other.id == this.id &&
@@ -132,8 +169,8 @@ class Homework {
         other.grade == this.grade &&
         other.deleteable == this.deleteable &&
         other.title == this.title;
-  }
-
+  }*/
+/*
   toJson() {
     return {
       "id": id,
@@ -151,7 +188,7 @@ class Homework {
       "lastNotSeen": lastNotSeen?.toIso8601String(),
       "previousVersion": previousVersion?.toJson(),
     };
-  }
+  }*/
 }
 
 String formatGrade(String grade) {

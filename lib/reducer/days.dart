@@ -51,21 +51,22 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           );
           if (newHw == null) {
             b.homework.remove(oldHw);
-            b.deletedHomework.add(Homework.parse(oldHw.toJson())
+            b.deletedHomework.add(oldHw.rebuild((b) => b
               ..deleted = true
               ..isChanged = action.markNewOrChangedEntries
-              ..previousVersion = oldHw
+              ..previousVersion = oldHw.toBuilder()
               ..lastNotSeen = day.lastRequested
-              ..firstSeen = now);
-          } else if (!newHw.equalsIgnoreCustom(oldHw)) {
+              ..firstSeen = now));
+          } else if (newHw != oldHw) {
             b.homework.remove(oldHw);
-            b.homework.add(newHw
-              ..previousVersion = oldHw
+            b.homework.add(newHw.rebuild((b) => b
+              ..previousVersion = oldHw.toBuilder()
               ..lastNotSeen = day.lastRequested
               ..firstSeen = now
-              ..isChanged = action.markNewOrChangedEntries);
+              ..isChanged = action.markNewOrChangedEntries));
           } else {
-            oldHw.checked = newHw.checked;
+            b.homework[b.homework.build().indexOf(oldHw)] =
+                oldHw.rebuild((b) => b..checked = newHw.checked);
           }
           newHomework.remove(newHw);
         }
@@ -76,18 +77,18 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
           );
           if (deletedHw != null) {
             b.deletedHomework.remove(deletedHw);
-            b.homework.add(newHw
-              ..previousVersion = deletedHw
+            b.homework.add(newHw.rebuild((b) => b
+              ..previousVersion = deletedHw.toBuilder()
               ..lastNotSeen = day.lastRequested
               ..firstSeen = now
-              ..isChanged = action.markNewOrChangedEntries);
+              ..isChanged = action.markNewOrChangedEntries));
           } else {
-            b.homework.add(newHw
+            b.homework.add(newHw.rebuild((b) => b
               ..lastNotSeen = day.lastRequested
               ..firstSeen = now
               ..isNew = newHw.type != HomeworkType.grade &&
                   newHw.type != HomeworkType.homework &&
-                  action.markNewOrChangedEntries);
+                  action.markNewOrChangedEntries));
           }
         }
         b.lastRequested = now;
@@ -96,7 +97,7 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
     for (var newDay in loadedDays) {
       allDays.add(newDay.rebuild((b) => b
         ..lastRequested = now
-        ..homework.map((h) => h..firstSeen = now)));
+        ..homework.map((h) => h.rebuild((b) => b..firstSeen = now))));
     }
     allDays.sort((a, b) => a.date.compareTo(b.date));
     return state
@@ -106,19 +107,55 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
 }
 
 Day _parseDay(data) {
-  return Day(
-    (b) => b
-      ..date = DateTime.parse(data["date"])
-      ..lastRequested = DateTime.parse(
-          data["lastRequested"] ?? DateTime.now().toIso8601String())
-      ..homework = ListBuilder((List<Map<String, dynamic>>.from(data["items"]))
-          .map((m) => Homework.parse(m)))
-      ..deletedHomework = ListBuilder(
-        (List<Map<String, dynamic>>.from(data["deletedItems"] ?? [])).map(
-          (m) => Homework.parse(m),
-        ),
-      ),
-  );
+  return Day((b) => b
+    ..date = DateTime.parse(data["date"])
+    ..homework = ListBuilder((List<Map<String, dynamic>>.from(data["items"]))
+        .map((m) => _parseHomework(m))));
+}
+
+Homework _parseHomework(data) {
+  return Homework((b) {
+    b
+      ..id = data["id"]
+      ..title = data["title"]
+      ..subtitle = data["subtitle"]
+      ..label = data["label"]
+      ..warning = data["warning"] ?? b.warning
+      ..checkable = data["checkable"] ?? b.checkable
+      ..checked = data["checked"] is bool
+          ? data["checked"]
+          : (data["checked"] ?? 0) != 0
+      ..deleteable = data["deleteable"] ?? b.deleteable;
+
+    final typeString = data["type"];
+    HomeworkType type;
+    switch (typeString) {
+      case "lessonHomework":
+        type = HomeworkType.lessonHomework;
+        break;
+      case "gradeGroup":
+        type = HomeworkType.gradeGroup;
+        break;
+      case "grade":
+        type = HomeworkType.grade;
+        break;
+      case "observation":
+        type = HomeworkType.observation;
+        break;
+      case "homework":
+        type = HomeworkType.homework;
+        break;
+      default:
+        type = HomeworkType.unknown;
+        break;
+    }
+    b..type = type;
+
+    if (type == HomeworkType.grade) {
+      b..gradeFormatted = formatGrade(data["grade"]);
+      b..grade = data["grade"];
+    }
+  });
 }
 
 TypedReducer<DayStateBuilder, DaysNotLoadedAction>
@@ -145,7 +182,7 @@ TypedReducer<DayStateBuilder, HomeworkAddedAction>
   return TypedReducer((DayStateBuilder state, HomeworkAddedAction action) {
     return state
       ..allDays.map((day) => day.date == action.date
-          ? day.rebuild((b) => b..homework.add(action.hw))
+          ? day.rebuild((b) => b..homework.add(_parseHomework(action.data)))
           : day);
   });
 }
@@ -161,8 +198,12 @@ TypedReducer<DayStateBuilder, DeleteHomeworkAction>
 TypedReducer<DayStateBuilder, ToggleDoneAction>
     _createToggleHomeworkDoneReducer() {
   return TypedReducer((DayStateBuilder state, ToggleDoneAction action) {
-    action.hw.checked = action.done;
-    return state;
+    return state
+      ..allDays.map((day) => day.homework.contains(action.hw)
+          ? day.rebuild((b) => b
+            ..homework[day.homework.indexOf(action.hw)] =
+                action.hw.rebuild((hb) => hb..checked = action.done))
+          : day);
   });
 }
 
@@ -170,10 +211,14 @@ TypedReducer<DayStateBuilder, MarkAsNotNewOrChangedAction>
     _createMarkAsNotNewOrChangedReducer() {
   return TypedReducer(
       (DayStateBuilder state, MarkAsNotNewOrChangedAction action) {
-    action.homework
-      ..isChanged = false
-      ..isNew = false;
-    return state;
+    return state
+      ..allDays.map((day) => day.homework.contains(action.homework)
+          ? day.rebuild((b) => b
+            ..homework[day.homework.indexOf(action.homework)] =
+                action.homework.rebuild((hb) => hb
+                  ..isChanged = false
+                  ..isNew = false))
+          : day);
   });
 }
 
@@ -182,10 +227,14 @@ TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
   return TypedReducer(
       (DayStateBuilder state, MarkAllAsNotNewOrChangedAction action) {
     return state
-      ..allDays.map((day) => day
-        ..homework.forEach((homework) => homework
-          ..isChanged = false
-          ..isNew = false));
+      ..allDays.map(
+        (day) => day
+          ..homework.map(
+            (homework) => homework.rebuild((b) => b
+              ..isChanged = false
+              ..isNew = false),
+          ),
+      );
   });
 }
 

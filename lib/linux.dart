@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     as secure_storage;
 import 'package:dynamic_theme/dynamic_theme.dart' as dynamic_theme;
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
@@ -102,4 +103,13 @@ Future<Directory> getApplicationDocumentsDirectory() async {
     return Directory("linux/appData");
   }
   return await path_provider.getApplicationDocumentsDirectory();
+}
+
+void showToast({String msg}) {
+  if (Platform.isLinux) {
+    print(
+        "TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
+  } else {
+    Fluttertoast.showToast(msg: msg);
+  }
 }
