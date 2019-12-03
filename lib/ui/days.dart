@@ -10,16 +10,56 @@ import '../data.dart';
 import '../util.dart';
 import 'dialog.dart';
 import 'news_sticker.dart';
+import 'no_internet.dart';
 
-class DaysWidget extends StatefulWidget {
+class DaysWidget extends StatelessWidget {
   final DaysViewModel vm;
 
   const DaysWidget({Key key, this.vm}) : super(key: key);
-  @override
-  _DaysWidgetState createState() => _DaysWidgetState();
+
+  Widget build(BuildContext context) {
+    if (vm.days.isEmpty && vm.loading && !vm.noInternet) {
+      return Center(child: CircularProgressIndicator());
+    }
+    final content = vm.days.isNotEmpty
+        ? RefreshIndicator(
+            child: DaysListWidget(
+              vm: vm,
+            ),
+            onRefresh: () async {
+              vm.refresh();
+            },
+          )
+        : vm.noInternet
+            ? Center(
+                child: NoInternet(),
+              )
+            : Center(
+                child: Text(
+                  "Keine Einträge vorhanden",
+                  style: Theme.of(context).textTheme.display1,
+                ),
+              );
+    return vm.loading
+        ? Stack(
+            children: <Widget>[
+              content,
+              LinearProgressIndicator(),
+            ],
+          )
+        : content;
+  }
 }
 
-class _DaysWidgetState extends State<DaysWidget> {
+class DaysListWidget extends StatefulWidget {
+  final DaysViewModel vm;
+
+  const DaysListWidget({Key key, this.vm}) : super(key: key);
+  @override
+  _DaysListWidgetState createState() => _DaysListWidgetState();
+}
+
+class _DaysListWidgetState extends State<DaysListWidget> {
   final controller = AutoScrollController();
 
   bool _showScrollUp = false;
@@ -115,7 +155,7 @@ class _DaysWidgetState extends State<DaysWidget> {
   }
 
   @override
-  void didUpdateWidget(DaysWidget oldWidget) {
+  void didUpdateWidget(DaysListWidget oldWidget) {
     updateValues();
     update();
 

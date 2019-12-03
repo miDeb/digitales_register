@@ -1,3 +1,4 @@
+import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,12 +30,15 @@ class SortedGradesWidget extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: vm.subjects
-              .map((s) => SubjectWidget(
-                    subject: vm.semester == null ? s : s.subjects[vm.semester],
-                    sortByType: vm.sortByType,
-                    viewSubjectDetail: () => vm.viewSubjectDetail(s),
-                    showCancelled: vm.showCancelled,
-                  ))
+              .map(
+                (s) => SubjectWidget(
+                  subject: s,
+                  sortByType: vm.sortByType,
+                  viewSubjectDetail: () => vm.viewSubjectDetail(s),
+                  showCancelled: vm.showCancelled,
+                  semester: vm.semester,
+                ),
+              )
               .toList(),
         ),
       ],
@@ -45,6 +49,7 @@ class SortedGradesWidget extends StatelessWidget {
 class SubjectWidget extends StatefulWidget {
   final bool sortByType, showCancelled;
   final Subject subject;
+  final Semester semester;
   final VoidCallback viewSubjectDetail;
 
   const SubjectWidget(
@@ -52,7 +57,8 @@ class SubjectWidget extends StatefulWidget {
       this.sortByType,
       this.subject,
       this.viewSubjectDetail,
-      this.showCancelled})
+      this.showCancelled,
+      this.semester})
       : super(key: key);
 
   @override
@@ -63,51 +69,56 @@ class _SubjectWidgetState extends State<SubjectWidget> {
   bool closed = true;
   @override
   void didUpdateWidget(SubjectWidget oldWidget) {
-    closed = true;
+    if (oldWidget.semester != widget.semester) closed = true;
     super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
+    final entries = widget.subject.detailEntries(widget.semester);
     return ExpansionTile(
       key: ObjectKey(widget.subject),
       title: Text(widget.subject.name),
-      leading: widget.subject is AllSemesterSubject
-          ? null
-          : Text.rich(
+      leading: widget.semester != Semester.all
+          ? Text.rich(
               TextSpan(
                 text: 'Ø ',
                 children: <TextSpan>[
                   TextSpan(
-                    text: widget.subject.averageFormatted,
-                    style: widget.subject.averageFormatted == "/"
-                        ? null
-                        : TextStyle(
-                            decoration: TextDecoration.underline,
-                          ),
+                    text: widget.subject.averageFormatted(widget.semester),
+                    style:
+                        widget.subject.averageFormatted(widget.semester) == "/"
+                            ? null
+                            : TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
                   ),
                 ],
               ),
-            ),
-      children: widget.subject.hasSpecificGrades
+            )
+          : null,
+      children: entries != null
           ? widget.sortByType
-              ? widget.subject.typeSortedEntries.data.entries
+              ? Subject.sortByType(entries)
+                  .entries
                   .map(
                     (entry) => GradeTypeWidget(
                       typeName: entry.key,
-                      grades: entry.value
+                      entries: entry.value
                           .where((g) => widget.showCancelled || !g.cancelled)
                           .toList(),
                     ),
                   )
                   .toList()
-              : widget.subject.entries
+              : entries
                   .where((g) => widget.showCancelled || !g.cancelled)
-                  .map((g) => g is Grade
-                      ? GradeWidget(grade: g)
-                      : ObservationWidget(
-                          observation: g,
-                        ))
+                  .map(
+                    (g) => g is GradeDetail
+                        ? GradeWidget(grade: g)
+                        : ObservationWidget(
+                            observation: g,
+                          ),
+                  )
                   .toList()
           : [
               LinearProgressIndicator(),
@@ -126,7 +137,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
 const lineThrough = const TextStyle(decoration: TextDecoration.lineThrough);
 
 class GradeWidget extends StatelessWidget {
-  final Grade grade;
+  final GradeDetail grade;
 
   const GradeWidget({Key key, this.grade}) : super(key: key);
   @override
@@ -224,18 +235,20 @@ class Star extends StatelessWidget {
 
 class GradeTypeWidget extends StatelessWidget {
   final String typeName;
-  final List<GradeEntry> grades;
+  final List<DetailEntry> entries;
 
-  const GradeTypeWidget({Key key, this.typeName, this.grades})
+  const GradeTypeWidget({Key key, this.typeName, this.entries})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final displayGrades = grades
-        .map((g) => g is Grade
-            ? GradeWidget(grade: g)
-            : ObservationWidget(
-                observation: g,
-              ))
+    final displayGrades = entries
+        .map(
+          (g) => g is GradeDetail
+              ? GradeWidget(grade: g)
+              : ObservationWidget(
+                  observation: g,
+                ),
+        )
         .toList();
     return displayGrades.isEmpty
         ? SizedBox()

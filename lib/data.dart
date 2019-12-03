@@ -2,43 +2,26 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 
+import 'app_state.dart';
 import 'util.dart';
 
 part 'data.g.dart';
 
-class Day {
-  final List<Homework> homework, deletedHomework;
-  final DateTime date;
-  String displayName;
-  bool future;
-  DateTime lastRequested;
+abstract class Day implements Built<Day, DayBuilder> {
+  factory Day([void Function(DayBuilder) updates]) = _$Day;
+  Day._();
+  static Serializer<Day> get serializer => _$daySerializer;
+  BuiltList<Homework> get homework;
+  BuiltList<Homework> get deletedHomework;
+  DateTime get date;
+  String get displayName => format(date);
+  bool get future => _isFuture(date);
+  DateTime get lastRequested;
 
-  Day.parse(Map map)
-      : date = DateTime.parse(map["date"]),
-        lastRequested = DateTime.parse(
-            map["lastRequested"] ?? DateTime.now().toIso8601String()),
-        homework = (List<Map<String, dynamic>>.from(map["items"]))
-            .map((m) => Homework.parse(m))
-            .toList(),
-        deletedHomework =
-            (List<Map<String, dynamic>>.from(map["deletedItems"] ?? []))
-                .map((m) => Homework.parse(m))
-                .toList() {
-    displayName = format(date);
-    future = _isFuture(date);
-  }
-
-  Day({this.homework, this.date, this.deletedHomework})
-      : displayName = format(date),
-        future = _isFuture(date);
-
-  toJson() {
-    return {
-      "date": date.toIso8601String(),
-      "lastRequested": lastRequested.toIso8601String(),
-      "items": homework.map((h) => h.toJson()).toList(),
-      "deletedItems": deletedHomework.map((h) => h.toJson()).toList(),
-    };
+  static void _initializeBuilder(DayBuilder builder) {
+    builder
+      ..lastRequested = DateTime.now()
+      ..deletedHomework = ListBuilder([]);
   }
 
   static DateTime dateToday() {
@@ -48,12 +31,6 @@ class Day {
 
   static bool _isFuture(DateTime date) {
     return !date.isBefore(dateToday());
-  }
-
-  static List<Day> filterFuture(List<Day> allDays, bool future) {
-    return allDays.where((Day day) {
-      return _isFuture(day.date) == future;
-    }).toList();
   }
 
   static String format(DateTime date) {
@@ -77,116 +54,49 @@ class Day {
       return "$weekday, $dateString";
     }
   }
-
-  @override
-  String toString() {
-    return displayName;
-  }
 }
 
-class Homework {
-  bool deleted;
-  final int id;
-  bool isNew = false, isChanged = false;
-  final String title, subtitle, label;
-  String gradeFormatted, grade;
-  bool warning, checkable, checked, deleteable;
-  HomeworkType type;
-  Homework previousVersion;
-  DateTime lastNotSeen, firstSeen;
+abstract class Homework implements Built<Homework, HomeworkBuilder> {
+  Homework._();
+  factory Homework([void Function(HomeworkBuilder) updates]) = _$Homework;
+  static Serializer<Homework> get serializer => _$homeworkSerializer;
 
-  Homework.parse(Map<String, dynamic> map)
-      : id = map["id"],
-        deleted = map["deleted"] ?? false,
-        title = map["title"],
-        subtitle = map["subtitle"],
-        label = map["label"],
-        warning = map["warning"] ?? false,
-        checkable = map["checkable"] ?? false,
-        checked = map["checked"] is bool
-            ? map["checked"] ?? false
-            : (map["checked"] ?? 0) != 0,
-        deleteable = map["deleteable"] ?? false,
-        lastNotSeen = map["lastNotSeen"] != null
-            ? DateTime.parse(map["lastNotSeen"])
-            : null,
-        firstSeen = DateTime.parse(
-            map["firstSeen"] ?? DateTime.now().toIso8601String()),
-        previousVersion = map["previousVersion"] != null
-            ? Homework.parse(map["previousVersion"])
-            : null {
-    final typeString = map["type"];
-    switch (typeString) {
-      case "lessonHomework":
-        type = HomeworkType.lessonHomework;
-        break;
-      case "gradeGroup":
-        type = HomeworkType.gradeGroup;
-        break;
-      case "grade":
-        type = HomeworkType.grade;
-        break;
-      case "observation":
-        type = HomeworkType.observation;
-        break;
-      case "homework":
-        type = HomeworkType.homework;
-        break;
-      default:
-        type = HomeworkType.unknown;
-        break;
-    }
-    if (type == HomeworkType.grade) {
-      gradeFormatted = formatGrade(map["grade"]);
-      grade = map["grade"];
-    }
-  }
+  bool get deleted;
+  int get id;
+  bool get isNew;
+  bool get isChanged;
+  String get title;
+  String get subtitle;
+  @nullable
+  String get label;
+  @nullable
+  String get gradeFormatted;
+  @nullable
+  String get grade;
+  bool get warning;
+  bool get checkable;
+  @BuiltValueField(compare: false)
+  bool get checked;
+  bool get deleteable;
+  HomeworkType get type;
+  @BuiltValueField(compare: false)
+  @nullable
+  Homework get previousVersion;
+  @BuiltValueField(compare: false)
+  @nullable
+  DateTime get lastNotSeen;
+  @BuiltValueField(compare: false)
+  DateTime get firstSeen;
 
-  Homework({
-    this.checkable,
-    this.checked,
-    this.gradeFormatted,
-    this.id,
-    this.label,
-    this.subtitle,
-    this.title,
-    this.type,
-    this.warning,
-    this.deleteable,
-    this.isNew,
-  });
-
-  bool equalsIgnoreCustom(other) {
-    return other is Homework &&
-        other.id == this.id &&
-        other.subtitle == this.subtitle &&
-        other.label == this.label &&
-        other.warning == this.warning &&
-        other.checkable == this.checkable &&
-        other.type == this.type &&
-        other.grade == this.grade &&
-        other.deleteable == this.deleteable &&
-        other.title == this.title;
-  }
-
-  toJson() {
-    return {
-      "id": id,
-      "title": title,
-      "subtitle": subtitle,
-      "label": label,
-      "warning": warning,
-      "checkable": checkable,
-      "checked": checked,
-      "type": type.name,
-      "grade": grade,
-      "deleted": deleted,
-      "deleteable": deleteable,
-      "firstSeen": firstSeen?.toIso8601String(),
-      "lastNotSeen": lastNotSeen?.toIso8601String(),
-      "previousVersion": previousVersion?.toJson(),
-    };
-  }
+  static void _initializeBuilder(HomeworkBuilder b) => b
+    ..isNew = false
+    ..isChanged = false
+    ..deleted = false
+    ..warning = false
+    ..checkable = false
+    ..deleteable = false
+    ..deleted = false
+    ..firstSeen = DateTime.now();
 }
 
 String formatGrade(String grade) {
@@ -226,154 +136,43 @@ class HomeworkType extends EnumClass {
   }
 }
 
-class Notification {
-  final int id;
-  final String title, subTitle;
-  final DateTime timeSent;
-  Notification.parse(Map data)
-      : id = data["id"],
-        title = data["title"],
-        subTitle = data["subTitle"],
-        timeSent = DateTime.parse(data["timeSent"]);
-  Notification({
-    this.id,
-    this.timeSent,
-    this.title,
-    this.subTitle,
-  });
-  toJson() {
-    return {
-      "id": id,
-      "title": title,
-      "subTitle": subTitle,
-      "timeSent": timeSent.toIso8601String(),
-    };
-  }
+abstract class Notification
+    implements Built<Notification, NotificationBuilder> {
+  Notification._();
+  factory Notification([void Function(NotificationBuilder) updates]) =
+      _$Notification;
+  static Serializer<Notification> get serializer => _$notificationSerializer;
+
+  int get id;
+  String get title;
+  @nullable
+  String get subTitle;
+  DateTime get timeSent;
 }
 
-abstract class AllSemesterSubject
-    implements Built<AllSemesterSubject, AllSemesterSubjectBuilder>, Subject {
-  BuiltMap<int, SingleSemesterSubject> get subjects;
-  List<Grade> get grades {
-    return subjects.values.fold([], (list, s) => list..addAll(s.grades));
-  }
+abstract class Subject implements Built<Subject, SubjectBuilder> {
+  Subject._();
+  factory Subject([void Function(SubjectBuilder) updates]) = _$Subject;
+  static Serializer<Subject> get serializer => _$subjectSerializer;
 
-  List<GradeEntry> get entries {
-    return subjects.values.fold([], (list, s) => list..addAll(s.entries));
-  }
-
-  List<Observation> get _observations {
-    return subjects.values
-        .fold([], (list, s) => list..addAll(s._observations ?? []));
-  }
-
-  TypeSortedEntries get typeSortedEntries {
-    return TypeSortedEntries.from(grades, _observations);
-  }
-
-  int get id {
-    return subjects.values.first.id;
-  }
-
-  String get name {
-    return subjects.values.first.name;
-  }
-
-  int get average {
-    return SingleSemesterSubject.calculateAverage(grades);
-  }
-
-  String get averageFormatted {
-    return average != null ? (average / 100).toStringAsFixed(2) : "/";
-  }
-
-  bool get hasSpecificGrades {
-    return !subjects.values.any((s) => !s.hasSpecificGrades);
-  }
-
-  AllSemesterSubject._();
-  factory AllSemesterSubject([updates(AllSemesterSubjectBuilder b)]) =
-      _$AllSemesterSubject;
-  static Serializer<AllSemesterSubject> get serializer =>
-      _$allSemesterSubjectSerializer;
-}
-
-abstract class Subject {
-  List<Grade> get grades;
-  List<GradeEntry> get entries;
-  TypeSortedEntries get typeSortedEntries;
+  BuiltMap<Semester, BuiltList<GradeAll>> get gradesAll;
+  BuiltMap<Semester, BuiltList<GradeDetail>> get grades;
+  BuiltMap<Semester, BuiltList<Observation>> get observations;
   int get id;
   String get name;
-  int get average;
-  String get averageFormatted;
-  bool get hasSpecificGrades;
-}
 
-class SingleSemesterSubject implements Subject {
-  final List<Grade> grades;
-  List<Observation> _observations;
-  List<GradeEntry> entries;
-  TypeSortedEntries typeSortedEntries;
-  final int id;
-  final String name;
-  int average;
-  String averageFormatted;
-
-  bool hasSpecificGrades = false;
-
-  void replaceWithSpecificData(Map map, int semester) {
-    final specificGrades =
-        map["grades"].map((g) => Grade.parse(g, isSpecific: true));
-    _observations =
-        List.of(map["observations"]).map((g) => Observation.parse(g)).toList();
-    grades.removeWhere((grade) =>
-        !grade.specific || specificGrades.any((g) => grade.id == g.id));
-    grades
-      ..addAll(Iterable.castFrom<dynamic, Grade>(specificGrades))
-      ..sort((first, second) => -first.date.compareTo(second.date));
-
-    entries = [...grades, ..._observations]
-      ..sort((first, second) => -first.date.compareTo(second.date));
-
-    hasSpecificGrades = true;
-    typeSortedEntries = TypeSortedEntries.from(grades, _observations);
+  List<DetailEntry> detailEntries(Semester semester) {
+    if (grades[semester] == null || observations[semester] == null) return null;
+    return <DetailEntry>[
+      ...grades[semester],
+      ...observations[semester],
+    ]..sort((a, b) => a.date.compareTo(b.date));
   }
 
-  SingleSemesterSubject.parse(Map json)
-      : grades = (json["grades"] as List)
-            .map((rawGrade) => Grade.parse(rawGrade))
-            .toList()
-              ..sort((first, second) => -first.date.compareTo(second.date)),
-        _observations = (json["observations"] as List)
-            ?.map((g) => Observation.parse(g))
-            ?.toList(),
-        id = json["subject"]["id"],
-        name = json["subject"]["name"] {
-    average = calculateAverage(grades);
-    if (average != null)
-      averageFormatted = (average / 100).toStringAsFixed(2);
-    else
-      averageFormatted = "/";
-
-    entries = [...grades, ...?_observations]
-      ..sort((first, second) => -first.date.compareTo(second.date));
-
-    typeSortedEntries = TypeSortedEntries.from(grades, _observations);
-    hasSpecificGrades = grades.every((g) => g.specific);
-  }
-
-  toJson() {
-    return {
-      "grades": grades.map((g) => g.toJson()).toList(),
-      "observations": _observations?.map((o) => o.toJson())?.toList(),
-      "subject": {
-        "id": id,
-        "name": name,
-      }
-    };
-  }
-
-  static int calculateAverage(List<Grade> grades) {
+  int average(Semester semester) {
+    assert(semester != Semester.all);
+    final grades = gradesAll[semester];
+    if (grades == null) return null;
     var sum = 0;
     var n = 0;
     for (var grade in grades) {
@@ -384,129 +183,109 @@ class SingleSemesterSubject implements Subject {
     if (n == 0) return null;
     return (sum / n).round();
   }
-}
 
-class TypeSortedEntries {
-  Map<String, List<GradeEntry>> data = {};
-  TypeSortedEntries.from(List<Grade> grades, List<Observation> observations) {
-    for (var grade in grades) {
-      data.putIfAbsent(grade.type, () => []);
-      data[grade.type].add(grade);
-    }
-    if (observations != null)
-      for (var observation in observations) {
-        data.putIfAbsent(observation.typeName, () => []);
-        data[observation.typeName].add(observation);
+  String averageFormatted(Semester semester) {
+    final avg = average(semester);
+    if (avg != null) {
+      return "${avg ~/ 100},${avg % 100}";
+    } else
+      return "/";
+  }
+
+  static Map<String, List<DetailEntry>> sortByType(List<DetailEntry> entries) {
+    final m = Map<String, List<DetailEntry>>();
+    for (final entry in entries) {
+      String type;
+      if (entry is Observation) {
+        type = "Beobachtung";
+      } else if (entry is GradeDetail) {
+        type = entry.type;
       }
+      if (m.containsKey(type))
+        m[type].add(entry);
+      else
+        m[type] = [entry];
+    }
+    return m;
+  }
+}
 
-    for (var type in data.values) {
-      type.sort((first, second) => -first.date.compareTo(second.date));
+abstract class _Entry {
+  DateTime get date;
+  bool get cancelled;
+}
+
+abstract class DetailEntry implements _Entry {}
+
+abstract class Observation
+    implements _Entry, DetailEntry, Built<Observation, ObservationBuilder> {
+  Observation._();
+  factory Observation([void Function(ObservationBuilder) updates]) =
+      _$Observation;
+  static Serializer<Observation> get serializer => _$observationSerializer;
+
+  String get typeName;
+  String get created;
+  String get note;
+}
+
+abstract class _BasicGrade implements _Entry {
+  int get grade;
+  int get weightPercentage;
+  DateTime get date;
+  String get type;
+}
+
+abstract class GradeAll
+    implements _BasicGrade, Built<GradeAll, GradeAllBuilder> {
+  GradeAll._();
+  factory GradeAll([void Function(GradeAllBuilder) updates]) = _$GradeAll;
+  static Serializer<GradeAll> get serializer => _$gradeAllSerializer;
+}
+
+abstract class GradeDetail
+    implements
+        _BasicGrade,
+        DetailEntry,
+        Built<GradeDetail, GradeDetailBuilder> {
+  GradeDetail._();
+  factory GradeDetail([void Function(GradeDetailBuilder) updates]) =
+      _$GradeDetail;
+  static Serializer<GradeDetail> get serializer => _$gradeDetailSerializer;
+
+  String get gradeFormatted => _formatGrade(grade);
+
+  static String _formatGrade(int grade) {
+    final mainGrade = grade ~/ 100;
+    final decimals = grade % 100;
+    switch (decimals) {
+      case 0:
+        return "$mainGrade";
+      case 25:
+        return "$mainGrade+";
+      case 50:
+        return "$mainGrade/${mainGrade + 1}";
+      case 75:
+        return "${mainGrade + 1}-";
+      default:
+        return grade.toString();
     }
   }
+
+  int get id;
+  BuiltList<Competence> get competences;
+  String get name;
+  String get created;
 }
 
-class GradeEntry {
-  DateTime date;
-  bool cancelled;
-}
+abstract class Competence implements Built<Competence, CompetenceBuilder> {
+  Competence._();
+  factory Competence([void Function(CompetenceBuilder) updates]) = _$Competence;
+  static Serializer<Competence> get serializer => _$competenceSerializer;
 
-class Observation extends GradeEntry {
-  final String typeName;
-  final bool cancelled;
-  final String created;
-  final String note;
-  final DateTime date;
-
-  Observation.parse(Map json)
-      : typeName = json["typeName"],
-        cancelled = json["cancelled"] != 0,
-        created = json["created"],
-        note = json["note"],
-        date = DateTime.parse(json["date"]);
-
-  toJson() {
-    return {
-      "typeName": typeName,
-      "cancelled": cancelled ? 1 : 0,
-      "created": created,
-      "note": note,
-      "date": date.toIso8601String(),
-    };
-  }
-}
-
-class Grade extends GradeEntry {
-  final int grade;
-  final String gradeFormatted;
-  final DateTime date;
-  final int weightPercentage;
-  final bool cancelled;
-  // ! name for all_subjects: type, name for subject_detail: typeName !
-  final String type;
-  final bool specific;
-  static bool _isSpecific(json, bool _specific) {
-    return _specific ?? json["specific"] ?? false;
-  }
-
-  final int id;
-  Grade.parse(Map json, {bool isSpecific})
-      : grade = json["grade"]
-//.toString()
-            ?.split(".")
-            ?.map((string) => int.parse(string))
-            ?.fold(0, (prev, current) {
-          return prev == 0 ? current * 100 : prev + current;
-        }),
-        gradeFormatted = formatGrade(json["grade"]),
-        date = DateTime.parse(json["date"]),
-        weightPercentage = json["weight"],
-        cancelled = json["cancelled"] != 0,
-        type = _isSpecific(json, isSpecific) ? json["typeName"] : json["type"],
-        created = _isSpecific(json, isSpecific) ? json["created"] : null,
-        competences = _isSpecific(json, isSpecific)
-            ? (json["competences"] as List)
-                .map((c) => Competence.from(c))
-                .toList()
-            : null,
-        name = _isSpecific(json, isSpecific) ? json["name"] : null,
-        id = _isSpecific(json, isSpecific) ? json["id"] : null,
-        specific = _isSpecific(json, isSpecific);
-
-  toJson() {
-    return {
-      "grade": grade == null
-          ? null
-          : "${grade ~/ 100}.${(grade % 100).toString().padLeft(2, "0")}",
-      "date": date.toIso8601String(),
-      "cancelled": cancelled ? 1 : 0,
-      "specific": specific,
-      "weight": weightPercentage,
-      "created": created,
-      "competences": competences?.map((c) => c.toJson())?.toList(),
-      "name": name,
-      "id": id,
-      (specific ? "typeName" : "type"): type,
-    };
-  }
-
-  final List<Competence> competences;
-  final String name;
-  final String created;
-}
-
-class Competence {
-  final String typeName;
+  String get typeName;
   // $grade of 5
-  final int grade;
-  Competence.from(Map map)
-      : typeName = map["typeName"],
-        grade = double.parse(map["grade"].toString()).toInt();
-  toJson() {
-    return {
-      "typeName": typeName,
-      "grade": grade.toDouble().toString(),
-    };
-  }
+  int get grade;
 }
 
 abstract class AbsenceGroup

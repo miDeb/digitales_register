@@ -36,29 +36,8 @@ abstract class DayState implements Built<DayState, DayStateBuilder> {
   bool get future;
   @nullable
   BuiltList<HomeworkType> get blacklist;
-  BuiltList<Day> get displayDays => allDays == null
-      ? null
-      : BuiltList(
-          Day.filterFuture(allDays.toList(), future).map(
-            (day) => Day(
-              date: day.date,
-              homework: day.homework
-                  .where(
-                    (homework) => !blacklist.contains(homework.type),
-                  )
-                  .toList(),
-              deletedHomework: day.deletedHomework
-                  .where(
-                    (deletedHomework) =>
-                        !blacklist.contains(deletedHomework.type),
-                  )
-                  .toList(),
-            ),
-          ),
-        );
   @nullable
   BuiltList<Day> get allDays;
-  bool get hasDays => displayDays?.isNotEmpty == true;
   static Serializer<DayState> get serializer => _$dayStateSerializer;
 
   DayState._();
@@ -110,12 +89,12 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   bool get loading;
   bool get hasGrades => subjects?.isEmpty != true;
   Semester get semester;
-  BuiltList<AllSemesterSubject> get subjects;
+  BuiltList<Subject> get subjects;
 
   /// If unknown: null
   @nullable
   @BuiltValueField(serialize: false)
-  int get serverSemester;
+  Semester get serverSemester;
 
   static Serializer<GradesState> get serializer => _$gradesStateSerializer;
 
@@ -142,11 +121,11 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   int get n;
   static final first = _$Semester((b) => b
     ..name = "1. Semester"
-    ..n = 1).toBuilder();
+    ..n = 1);
   static final second = _$Semester((b) => b
     ..name = "2. Semester"
-    ..n = 2).toBuilder();
-  static final all = _$Semester((b) => b..name = "Beide Semester").toBuilder();
+    ..n = 2);
+  static final all = _$Semester((b) => b..name = "Beide Semester");
   static final values = [first, second, all];
   static Serializer<Semester> get serializer => _$semesterSerializer;
 

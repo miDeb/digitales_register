@@ -70,7 +70,7 @@ packages:
       name: build_daemon
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.2"
+    version: "2.1.0"
   build_resolvers:
     dependency: transitive
     description:
@@ -84,7 +84,7 @@ packages:
       name: build_runner
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.2"
+    version: "1.7.1"
   build_runner_core:
     dependency: transitive
     description:
@@ -98,21 +98,21 @@ packages:
       name: built_collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.0"
+    version: "4.2.2"
   built_value:
     dependency: "direct main"
     description:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.0"
+    version: "6.8.2"
   built_value_generator:
     dependency: "direct dev"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.0.0"
+    version: "6.8.2"
   charcode:
     dependency: transitive
     description:
@@ -147,7 +147,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.0"
   collection:
     dependency: transitive
     description:
@@ -407,7 +407,7 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.2"
+    version: "1.4.5"
   pedantic:
     dependency: transitive
     description:
@@ -491,7 +491,7 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4+5"
+    version: "0.5.4+6"
   shelf:
     dependency: transitive
     description:
@@ -545,7 +545,7 @@ packages:
       name: stream_transform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.20"
+    version: "0.0.19"
   string_scanner:
     dependency: transitive
     description:
@@ -559,7 +559,7 @@ packages:
       name: synchronized
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0+1"
+    version: "2.1.0+2"
   term_glyph:
     dependency: transitive
     description:
@@ -608,7 +608,7 @@ packages:
       name: watcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.7+12"
+    version: "0.9.7+13"
   web_socket_channel:
     dependency: transitive
     description:
@@ -631,5 +631,5 @@ packages:
     source: hosted
     version: "2.2.0"
 sdks:
-  dart: ">=2.6.0 <3.0.0"
-  flutter: ">=1.6.7 <2.0.0"
+  dart: ">=2.4.0 <3.0.0"
+  flutter: ">=1.9.1+hotfix.5 <2.0.0"

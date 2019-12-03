@@ -21,21 +21,19 @@ class HomePage extends StatelessWidget {
 }
 
 class HomePageContentViewModel {
-  final bool noInternet, hasDays, loading, splash;
-  final VoidCallback refresh, refreshNoInternet;
+  final bool noInternet, loading, splash;
+  final VoidCallback refreshNoInternet;
   final String userName, userIcon;
   HomePageContentViewModel.from(Store<AppState> store)
       : noInternet = store.state.noInternet,
-        hasDays = store.state.dayState.hasDays,
         loading = store.state.dayState.loading,
         userName =
             store.state.config?.fullName ?? store.state.loginState.userName,
         userIcon = store.state.config?.imgSource,
         splash = !store.state.loginState.loggedIn,
-        refresh = (() => store.dispatch(RefreshAction())),
         refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction()));
   @override
   String toString() {
-    return "HomePageContentViewModel(noInternet: $noInternet, hasDays: $hasDays, loading: $loading)";
+    return "HomePageContentViewModel(noInternet: $noInternet, loading: $loading)";
   }
 }

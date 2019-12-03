@@ -7,76 +7,24 @@ import 'data.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
-  GradesState,
-  NotificationState,
-  DayState,
-  AbsenceState,
-  CalendarState,
-  SettingsState,
+  AppState,
+  // needed due to https://github.com/google/built_value.dart/issues/124
+  GradeAll,
+  GradeDetail,
+  Observation,
+  //
 ])
 final Serializers serializers = (_$serializers.toBuilder()
-      ..add(DaySerializer())
-      ..add(SubjectSerializer())
-      ..add(NotificationSerializer())
-      ..add(DateTimeSerializer()))
+      ..add(DateTimeSerializer())
+      // needed due to https://github.com/google/built_value.dart/issues/124
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(GradeAll)]),
+          () => new ListBuilder<GradeAll>())
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(GradeDetail)]),
+          () => new ListBuilder<GradeDetail>())
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(Observation)]),
+          () => new ListBuilder<Observation>()))
+    //
     .build();
-
-class DaySerializer implements PrimitiveSerializer<Day> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([Day]);
-  @override
-  final String wireName = 'Day';
-
-  @override
-  Object serialize(Serializers serializers, Day day,
-      {FullType specifiedType = FullType.unspecified}) {
-    return day.toJson();
-  }
-
-  @override
-  Day deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return Day.parse(serialized);
-  }
-}
-
-class SubjectSerializer implements PrimitiveSerializer<SingleSemesterSubject> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([SingleSemesterSubject]);
-  @override
-  final String wireName = 'Subject';
-
-  @override
-  Object serialize(Serializers serializers, SingleSemesterSubject subject,
-      {FullType specifiedType = FullType.unspecified}) {
-    return subject.toJson();
-  }
-
-  @override
-  SingleSemesterSubject deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return SingleSemesterSubject.parse(serialized);
-  }
-}
-
-class NotificationSerializer implements PrimitiveSerializer<Notification> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([Notification]);
-  @override
-  final String wireName = 'Notification';
-
-  @override
-  Object serialize(Serializers serializers, Notification notification,
-      {FullType specifiedType = FullType.unspecified}) {
-    return notification.toJson();
-  }
-
-  @override
-  Notification deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return Notification.parse(serialized);
-  }
-}
 
 class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
   final bool structured = false;

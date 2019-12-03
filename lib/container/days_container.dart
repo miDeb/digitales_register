@@ -39,10 +39,33 @@ class DaysViewModel {
   final VoidCallback setDoNotWhenDeleteCallback;
   final MarkAsNotNewOrChangedCallback markAsNotNewOrChangedCallback;
   final VoidCallback markAllAsNotNewOrChangedCallback;
+  final bool noInternet, loading;
+  final VoidCallback refresh, refreshNoInternet;
+
   DaysViewModel.from(Store<AppState> store)
-      : days = store.state.dayState.displayDays.toList(),
+      : days = store.state.dayState.allDays
+                ?.where((day) => day.future == store.state.dayState.future)
+                ?.map(
+                  (day) => day.rebuild(
+                    (b) => b
+                      ..deletedHomework.where(
+                        (hw) =>
+                            !store.state.dayState.blacklist.contains(hw.label),
+                      )
+                      ..homework.where(
+                        (hw) =>
+                            !store.state.dayState.blacklist.contains(hw.label),
+                      ),
+                  ),
+                )
+                ?.toList() ??
+            [],
         onSwitchFuture = (() => store.dispatch(SwitchFutureAction())),
+        noInternet = store.state.noInternet,
+        refresh = (() => store.dispatch(RefreshAction())),
+        refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction())),
         future = store.state.dayState.future,
+        loading = store.state.dayState.loading,
         addReminderCallback =
             ((day, msg) => store.dispatch(AddReminderAction(msg, day.date))),
         removeReminderCallback =

@@ -1,7 +1,9 @@
 import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
+import '../data.dart';
 
 final notificationsReducer = combineReducers<NotificationStateBuilder>([
   _createNotificationsLoadedReducer(),
@@ -12,8 +14,24 @@ TypedReducer<NotificationStateBuilder, NotificationsLoadedAction>
     _createNotificationsLoadedReducer() {
   return TypedReducer(
       (NotificationStateBuilder state, NotificationsLoadedAction action) {
-    return state..notifications = action.notifications;
+    return state..notifications = _parseNotifications(action.data);
   });
+}
+
+ListBuilder<Notification> _parseNotifications(data) {
+  return ListBuilder(
+    data.map(
+      (n) => Notification(
+        (b) => b
+          ..id = n["id"]
+          ..title = n["title"]
+          ..subTitle = n["subTitle"]
+          ..timeSent = DateTime.parse(
+            n["timeSent"],
+          ),
+      ),
+    ),
+  );
 }
 
 TypedReducer<NotificationStateBuilder, DeleteNotificationAction>

@@ -32,23 +32,21 @@ class GradesPageViewModel {
 
   GradesPageViewModel.from(Store<AppState> store)
       : showSemester = store.state.gradesState.semester,
-        allSubjectsAverage = calculateAllSubjectsAverage(store.state),
         changeSemester = ((newSemester) =>
             store.dispatch(SetGradesSemesterAction(newSemester))),
         loading = store.state.gradesState.loading,
+        allSubjectsAverage = calculateAllSubjectsAverage(store.state),
         showGradesDiagram = store.state.settingsState.showGradesDiagram,
         showAllSubjectsAverage =
             store.state.settingsState.showAllSubjectsAverage &&
                 store.state.gradesState.semester.n != null;
 
   static String calculateAllSubjectsAverage(AppState state) {
+    if (state.gradesState.semester == Semester.all) return null;
     var sum = 0;
     var n = 0;
-    for (final allSemesterSubject in state.gradesState.subjects) {
-      final subject = state.gradesState.semester.n == null
-          ? allSemesterSubject
-          : allSemesterSubject.subjects[state.gradesState.semester.n];
-      final average = subject.average;
+    for (final subject in state.gradesState.subjects) {
+      final average = subject.average(state.gradesState.semester);
       if (average != null) {
         sum += average;
         n++;

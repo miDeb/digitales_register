@@ -18,20 +18,22 @@ class GradesChartContainer extends StatelessWidget {
       converter: (Store<AppState> store) {
         return GradesChartViewModel(
           Map.fromIterable(
-            store.state.gradesState.subjects.map((ass) {
-              if (store.state.gradesState.semester.n != null) {
-                return ass.subjects[store.state.gradesState.semester.n];
-              } else
-                return ass;
-            }),
-            key: (s) => SubjectGrades(
-              Map.fromIterable(
-                List<Grade>.of((s as Subject).grades)
-                  ..removeWhere((g) => g.cancelled || g.grade == null),
-                key: (g) => (g as Grade).date,
-                value: (g) => (g as Grade).grade,
-              ),
-            ),
+            store.state.gradesState.subjects,
+            key: (subject) {
+              final grades = store.state.gradesState.semester == Semester.all
+                  ? subject.gradesAll.values.fold<List<GradeAll>>(
+                      <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
+                  : subject.gradesAll[store.state.gradesState.semester]
+                      .toList();
+
+              return SubjectGrades(
+                Map.fromIterable(
+                  grades..removeWhere((g) => g.cancelled || g.grade == null),
+                  key: (g) => (g as GradeAll).date,
+                  value: (g) => (g as GradeAll).grade,
+                ),
+              );
+            },
             value: (s) =>
                 store.state.settingsState.graphConfigs[(s as Subject).id],
           ),

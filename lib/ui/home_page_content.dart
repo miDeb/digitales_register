@@ -4,7 +4,6 @@ import '../container/days_container.dart';
 import '../container/drawer_buttons.dart';
 import '../container/home_page.dart';
 import '../container/notification_icon.dart';
-import 'no_internet.dart';
 import 'splash.dart';
 
 class HomePageContent extends StatelessWidget {
@@ -76,44 +75,9 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
       body: SplashScreen(
-        child: HomePageContentBody(vm: vm),
+        child: DaysContainer(),
         splash: vm.splash,
       ),
     );
-  }
-}
-
-class HomePageContentBody extends StatelessWidget {
-  final HomePageContentViewModel vm;
-
-  const HomePageContentBody({Key key, @required this.vm}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    if (!vm.hasDays && vm.loading && !vm.noInternet) {
-      return Center(child: CircularProgressIndicator());
-    }
-    final content = vm.hasDays
-        ? RefreshIndicator(
-            child: DaysContainer(),
-            onRefresh: () async {
-              vm.refresh();
-              await Future.delayed(Duration(seconds: 2));
-            },
-          )
-        : vm.noInternet
-            ? Center(
-                child: NoInternet(),
-              )
-            : Container();
-    return vm.loading
-        ? Stack(
-            children: <Widget>[
-              content,
-              vm.hasDays
-                  ? LinearProgressIndicator()
-                  : CircularProgressIndicator(),
-            ],
-          )
-        : content;
   }
 }

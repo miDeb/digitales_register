@@ -1,9 +1,7 @@
-import 'package:built_collection/built_collection.dart';
 import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
-import '../data.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> notificationsMiddlewares(Wrapper wrapper) => [
@@ -26,10 +24,7 @@ void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
   if (data != null) {
     store.dispatch(
       NotificationsLoadedAction(
-        ListBuilder(
-          List<Map<String, dynamic>>.from(data)
-              .map((n) => Notification.parse(n)),
-        ),
+        data,
       ),
     );
   }

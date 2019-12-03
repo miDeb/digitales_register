@@ -21,22 +21,22 @@ class SortedGradesContainer extends StatelessWidget {
   }
 }
 
-typedef void ViewSubjectDetailCallback(AllSemesterSubject s);
+typedef void ViewSubjectDetailCallback(Subject s);
 typedef void SetBoolCallback(bool byType);
 
 class SortedGradesViewModel {
-  final List<AllSemesterSubject> subjects;
-  final int semester;
+  final List<Subject> subjects;
+  final Semester semester;
   final bool sortByType, showCancelled;
   final ViewSubjectDetailCallback viewSubjectDetail;
   final SetBoolCallback sortByTypeCallback, showCancelledCallback;
   SortedGradesViewModel.from(Store<AppState> store)
       : subjects = store.state.gradesState.subjects.toList(),
         sortByType = store.state.settingsState.typeSorted,
-        semester = store.state.gradesState.semester.n,
+        semester = store.state.gradesState.semester,
         showCancelled = store.state.settingsState.showCancelled == true,
-        viewSubjectDetail =
-            ((s) => store.dispatch(LoadSubjectDetailsAction(s))),
+        viewSubjectDetail = ((s) => store.dispatch(
+            LoadSubjectDetailsAction(s, store.state.gradesState.semester))),
         showCancelledCallback =
             ((s) => store.dispatch(SetGradesShowCancelledAction(s))),
         sortByTypeCallback =

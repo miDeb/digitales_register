@@ -1,5 +1,3 @@
-import 'package:built_collection/built_collection.dart';
-
 import 'app_state.dart';
 import 'data.dart';
 
@@ -10,13 +8,13 @@ class ErrorAction {
 }
 
 class DaysLoadedAction {
-  final ListBuilder<Day> loadedDays;
+  final dynamic data;
   final bool future, markNewOrChangedEntries;
 
-  DaysLoadedAction(this.loadedDays, this.future, this.markNewOrChangedEntries);
+  DaysLoadedAction(this.data, this.future, this.markNewOrChangedEntries);
   @override
   String toString() {
-    return "DaysLoadedAction(loadedDays: $loadedDays";
+    return "DaysLoadedAction(data: $data)";
   }
 }
 
@@ -171,9 +169,9 @@ class NoInternetAction {
 }
 
 class NotificationsLoadedAction {
-  final ListBuilder<Notification> notifications;
+  final dynamic data;
 
-  NotificationsLoadedAction(this.notifications);
+  NotificationsLoadedAction(this.data);
 }
 
 class ShowNotificationsAction {}
@@ -216,19 +214,38 @@ class SetGradesSemesterAction {
   SetGradesSemesterAction(this.newSemester);
 }
 
-class LoadSubjectsAction {}
+class LoadSubjectsAction {
+  final Semester semester;
+
+  LoadSubjectsAction(this.semester);
+}
 
 class LoadSubjectDetailsAction {
-  final AllSemesterSubject subject;
+  final Subject subject;
+  final Semester semester;
 
-  LoadSubjectDetailsAction(this.subject);
+  LoadSubjectDetailsAction(this.subject, this.semester);
 }
 
 class SubjectsLoadedAction {
-  final ListBuilder<AllSemesterSubject> subjects;
-  final int lastRequestedSemester;
+  final dynamic data;
+  final Semester semester;
 
-  SubjectsLoadedAction(this.subjects, this.lastRequestedSemester);
+  SubjectsLoadedAction(this.data, this.semester);
+}
+
+class UpdateGradesGraphConfigsAction {
+  final List<Subject> subjects;
+
+  UpdateGradesGraphConfigsAction(this.subjects);
+}
+
+class SubjectLoadedAction {
+  final dynamic data;
+  final Subject subject;
+  final Semester semester;
+
+  SubjectLoadedAction(this.data, this.semester, this.subject);
 }
 
 class SetGraphConfigsAction {
@@ -261,10 +278,10 @@ class AddReminderAction {
 }
 
 class HomeworkAddedAction {
-  final Homework hw;
+  final dynamic data;
   final DateTime date;
 
-  HomeworkAddedAction(this.hw, this.date);
+  HomeworkAddedAction(this.data, this.date);
 }
 
 class DeleteHomeworkAction {
