@@ -50,8 +50,10 @@ class GradesChart extends StatelessWidget {
     DateTime lastMonth;
     for (final sub in grades) {
       if (sub.data.isEmpty) continue;
-      final firstSubjectDate = sub.data.last.key;
-      final lastSubjectDate = sub.data.first.key;
+      final firstSubjectDate = sub.data.first.key;
+      assert(sub.data.every((e) => !e.key.isBefore(firstSubjectDate)));
+      final lastSubjectDate = sub.data.last.key;
+      assert(sub.data.every((e) => !e.key.isAfter(lastSubjectDate)));
       if (firstMonth == null || firstSubjectDate.isBefore(firstMonth)) {
         firstMonth = firstSubjectDate;
       }

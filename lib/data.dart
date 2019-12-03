@@ -166,7 +166,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
     return <DetailEntry>[
       ...grades[semester],
       ...observations[semester],
-    ]..sort((a, b) => a.date.compareTo(b.date));
+    ]..sort((a, b) => -a.date.compareTo(b.date));
   }
 
   int average(Semester semester) {
