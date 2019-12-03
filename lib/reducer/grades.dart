@@ -26,7 +26,6 @@ final gradesReducer = combineReducers<GradesStateBuilder>([
 
 GradesStateBuilder _loadSubjectsReducer(GradesStateBuilder state, action) {
   if (action is LoadSubjectsAction) {
-    print("HERE");
     return state..loading = true;
   } else if (action is NoInternetAction) {
     return state..loading = false;
@@ -169,7 +168,6 @@ Competence _parseCompetence(dynamic data) {
 
 GradesStateBuilder _setGradesSemesterReducer(
     GradesStateBuilder state, SetGradesSemesterAction action) {
-  print(" setsemester: ${state.loading}");
   return state..semester.replace(action.newSemester);
 }
 
