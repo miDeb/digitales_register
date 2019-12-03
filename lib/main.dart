@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dr/main_dev.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -27,6 +28,7 @@ typedef void SingleArgumentVoidCallback<T>(T arg);
 void main() {
   _setTargetPlatformForDesktop();
   run();
+  // runDev();
 }
 
 void run() {
