@@ -28,10 +28,6 @@ final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 List<Middleware<AppState>> createMiddleware() {
   final wrapper = Wrapper();
   return <Middleware<AppState>>[
-    (store, action, next) {
-      print(action);
-      next(action);
-    },
     errorMiddleware,
     _createTap(wrapper),
     _saveStateMiddleware,
@@ -171,7 +167,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   if (!store.state.loginState.loggedIn) {
     final user = action.userName.hashCode;
     final file =
-        File("${(await getApplicationDocumentsDirectory()).path}/$user.data");
+        File("${(await getApplicationDocumentsDirectory()).path}/$user.json");
     final vals = json.decode(
       await file.exists() && await file.length() > 0
           ? await file.readAsString()
@@ -275,7 +271,7 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
 }
 
 void writeToStorage(String key, String txt) async {
-  File("${(await getApplicationDocumentsDirectory()).path}/$key.data")
+  File("${(await getApplicationDocumentsDirectory()).path}/$key.json")
       .writeAsString(txt, flush: true);
 }
 
