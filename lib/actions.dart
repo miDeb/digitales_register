@@ -1,5 +1,3 @@
-import 'package:built_collection/built_collection.dart';
-
 import 'app_state.dart';
 import 'data.dart';
 
@@ -216,19 +214,38 @@ class SetGradesSemesterAction {
   SetGradesSemesterAction(this.newSemester);
 }
 
-class LoadSubjectsAction {}
+class LoadSubjectsAction {
+  final Semester semester;
+
+  LoadSubjectsAction(this.semester);
+}
 
 class LoadSubjectDetailsAction {
-  final AllSemesterSubject subject;
+  final Subject subject;
+  final Semester semester;
 
-  LoadSubjectDetailsAction(this.subject);
+  LoadSubjectDetailsAction(this.subject, this.semester);
 }
 
 class SubjectsLoadedAction {
-  final ListBuilder<AllSemesterSubject> subjects;
-  final int lastRequestedSemester;
+  final dynamic data;
+  final Semester semester;
 
-  SubjectsLoadedAction(this.subjects, this.lastRequestedSemester);
+  SubjectsLoadedAction(this.data, this.semester);
+}
+
+class UpdateGradesGraphConfigsAction {
+  final List<Subject> subjects;
+
+  UpdateGradesGraphConfigsAction(this.subjects);
+}
+
+class SubjectLoadedAction {
+  final dynamic data;
+  final Subject subject;
+  final Semester semester;
+
+  SubjectLoadedAction(this.data, this.semester, this.subject);
 }
 
 class SetGraphConfigsAction {

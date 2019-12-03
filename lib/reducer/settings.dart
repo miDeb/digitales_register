@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -25,7 +26,12 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..dashboardMarkNewOrChangedEntries =
         _dashboardMarkNewOrChangedEntriesReducer(
             state.dashboardMarkNewOrChangedEntries, action)
-    ..graphConfigs = _setGradesGraphConfigReducer(state.graphConfigs, action));
+    ..graphConfigs = combineReducers<BuiltMap<int, SubjectGraphConfig>>(
+      [
+        _updateGradeGraphConfigsReducer,
+        _setGradesGraphConfigReducer,
+      ],
+    )(state.graphConfigs, action));
 }
 
 final _askWhenDeleteReducer =
@@ -66,3 +72,51 @@ final _dashboardMarkNewOrChangedEntriesReducer = TypedReducer(
 final _setGradesGraphConfigReducer = TypedReducer(
     (BuiltMap<int, SubjectGraphConfig> state, SetGraphConfigsAction action) =>
         BuiltMap<int, SubjectGraphConfig>(action.configs));
+
+final _colors = List.of(Colors.primaries)
+  ..removeWhere((c) => _similarColors.contains(c));
+
+final _similarColors = [
+  Colors.lime,
+  Colors.lightBlue,
+  Colors.cyan,
+  Colors.amber
+];
+
+const _defaultThick = 2;
+final _updateGradeGraphConfigsReducer = TypedReducer<
+        BuiltMap<int, SubjectGraphConfig>, UpdateGradesGraphConfigsAction>(
+    (state, UpdateGradesGraphConfigsAction action) {
+  final graphConfigsBuilder = state.toBuilder();
+
+  for (final entry in state.entries) {
+    if (!action.subjects.any((s) => s.id == entry.key)) {
+      graphConfigsBuilder.remove(entry);
+    }
+  }
+  for (var subject in action.subjects) {
+    if (!graphConfigsBuilder.build().containsKey(subject.id)) {
+      graphConfigsBuilder.update(
+        (b) => b
+          ..[subject.id] = SubjectGraphConfig((b) => b
+            ..thick = _defaultThick
+            ..color = _colors
+                .firstWhere(
+                  (color) => !graphConfigsBuilder
+                      .build()
+                      .values
+                      .any((config) => config.color == color.value),
+                  orElse: () => _similarColors.firstWhere(
+                    (color) => !graphConfigsBuilder
+                        .build()
+                        .values
+                        .any((config) => config.color == color.value),
+                    orElse: () => (List.of(Colors.primaries)..shuffle()).first,
+                  ),
+                )
+                .value),
+      );
+    }
+  }
+  return graphConfigsBuilder.build();
+});

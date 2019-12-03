@@ -22,17 +22,18 @@ class GradesPage extends StatelessWidget {
                     child: DropdownButton<Semester>(
                       value: vm.showSemester,
                       items: Semester.values
-                          .map((s) => DropdownMenuItem(
-                                child: Text(
-                                  s.name,
-                                  style: (Theme.of(context)
-                                              .appBarTheme
-                                              .textTheme ??
-                                          Theme.of(context).primaryTextTheme)
-                                      .body1,
-                                ),
-                                value: s.build(),
-                              ))
+                          .map(
+                            (s) => DropdownMenuItem(
+                              child: Text(
+                                s.name,
+                                style:
+                                    (Theme.of(context).appBarTheme.textTheme ??
+                                            Theme.of(context).primaryTextTheme)
+                                        .body1,
+                              ),
+                              value: s,
+                            ),
+                          )
                           .toList(),
                       onChanged: (value) {
                         if (vm.showSemester != value) vm.changeSemester(value);

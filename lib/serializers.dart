@@ -7,36 +7,24 @@ import 'data.dart';
 part 'serializers.g.dart';
 
 @SerializersFor(const [
-  GradesState,
-  NotificationState,
-  DayState,
-  AbsenceState,
-  CalendarState,
-  SettingsState,
+  AppState,
+  // needed due to https://github.com/google/built_value.dart/issues/124
+  GradeAll,
+  GradeDetail,
+  Observation,
+  //
 ])
 final Serializers serializers = (_$serializers.toBuilder()
-      ..add(SubjectSerializer())
-      ..add(DateTimeSerializer()))
+      ..add(DateTimeSerializer())
+      // needed due to https://github.com/google/built_value.dart/issues/124
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(GradeAll)]),
+          () => new ListBuilder<GradeAll>())
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(GradeDetail)]),
+          () => new ListBuilder<GradeDetail>())
+      ..addBuilderFactory(new FullType(BuiltList, [new FullType(Observation)]),
+          () => new ListBuilder<Observation>()))
+    //
     .build();
-
-class SubjectSerializer implements PrimitiveSerializer<SingleSemesterSubject> {
-  @override
-  final Iterable<Type> types = new BuiltList<Type>([SingleSemesterSubject]);
-  @override
-  final String wireName = 'Subject';
-
-  @override
-  Object serialize(Serializers serializers, SingleSemesterSubject subject,
-      {FullType specifiedType = FullType.unspecified}) {
-    return subject.toJson();
-  }
-
-  @override
-  SingleSemesterSubject deserialize(Serializers serializers, serialized,
-      {FullType specifiedType = FullType.unspecified}) {
-    return SingleSemesterSubject.parse(serialized);
-  }
-}
 
 class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
   final bool structured = false;

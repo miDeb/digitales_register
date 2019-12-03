@@ -46,8 +46,8 @@ class GradesChart extends StatelessWidget {
   }
 
   List<charts.TickSpec<DateTime>> createDomainAxisTags(Locale locale) {
-    var firstMonth;
-    var lastMonth;
+    DateTime firstMonth;
+    DateTime lastMonth;
     for (final sub in grades) {
       if (sub.data.isEmpty) continue;
       final firstSubjectDate = sub.data.last.key;

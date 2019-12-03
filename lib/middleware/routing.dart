@@ -69,7 +69,7 @@ void _showCalendar(
 void _showGrades(
     Store<AppState> store, NextDispatcher next, ShowGradesAction action) {
   navigatorKey.currentState.pushNamed("/grades");
-  store.dispatch(LoadSubjectsAction());
+  store.dispatch(LoadSubjectsAction(store.state.gradesState.semester));
   next(action);
 }
 
