@@ -26,7 +26,7 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     ..dashboardMarkNewOrChangedEntries =
         _dashboardMarkNewOrChangedEntriesReducer(
             state.dashboardMarkNewOrChangedEntries, action)
-    ..graphConfigs = combineReducers<BuiltMap<int, SubjectGraphConfig>>(
+    ..graphConfigs = combineReducers<MapBuilder<int, SubjectGraphConfig>>(
       [
         _updateGradeGraphConfigsReducer,
         _setGradesGraphConfigReducer,
@@ -70,8 +70,8 @@ final _dashboardMarkNewOrChangedEntriesReducer = TypedReducer(
     (bool mark, SetDashboardMarkNewOrChangedEntriesAction action) =>
         action.mark);
 final _setGradesGraphConfigReducer = TypedReducer(
-    (BuiltMap<int, SubjectGraphConfig> state, SetGraphConfigsAction action) =>
-        BuiltMap<int, SubjectGraphConfig>(action.configs));
+    (MapBuilder<int, SubjectGraphConfig> state, SetGraphConfigsAction action) =>
+        MapBuilder<int, SubjectGraphConfig>(action.configs));
 
 final _colors = List.of(Colors.primaries)
   ..removeWhere((c) => _similarColors.contains(c));
@@ -85,9 +85,9 @@ final _similarColors = [
 
 const _defaultThick = 2;
 final _updateGradeGraphConfigsReducer = TypedReducer<
-        BuiltMap<int, SubjectGraphConfig>, UpdateGradesGraphConfigsAction>(
-    (state, UpdateGradesGraphConfigsAction action) {
-  final graphConfigsBuilder = state.toBuilder();
+        MapBuilder<int, SubjectGraphConfig>, UpdateGradesGraphConfigsAction>(
+    (graphConfigsBuilder, UpdateGradesGraphConfigsAction action) {
+  final state = graphConfigsBuilder.build();
 
   for (final entry in state.entries) {
     if (!action.subjects.any((s) => s.id == entry.key)) {
@@ -118,5 +118,5 @@ final _updateGradeGraphConfigsReducer = TypedReducer<
       );
     }
   }
-  return graphConfigsBuilder.build();
+  return graphConfigsBuilder;
 });

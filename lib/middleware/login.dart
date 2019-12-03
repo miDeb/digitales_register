@@ -3,7 +3,6 @@ import 'package:redux/redux.dart';
 
 import '../actions.dart';
 import '../app_state.dart';
-import '../main.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> loginMiddlewares(
@@ -32,7 +31,7 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
   if (!action.forced) {
     wrapper.logout(hard: action.hard);
   }
-  store.dispatch(MountAppStateAction(initialState));
+  store.dispatch(MountAppStateAction(AppState()));
   store.dispatch(ShowLoginAction());
 }
 

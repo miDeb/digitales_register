@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -30,42 +29,11 @@ void main() {
   run();
 }
 
-final initialState = AppState((builder) {
-  builder
-    ..dayState = (DayStateBuilder()
-      ..future = true
-      ..loading = false
-      ..blacklist = ListBuilder([]))
-    ..loginState = (LoginStateBuilder()
-      ..loading = false
-      ..loggedIn = false
-      ..userName = null
-      ..errorMsg = null)
-    ..notificationState = NotificationStateBuilder()
-    ..currentRouteIsLogin = false
-    ..noInternet = false
-    ..settingsState = (SettingsStateBuilder()
-      ..noDataSaving = false
-      ..noPasswordSaving = false
-      ..typeSorted = false
-      ..showCancelled = false
-      ..askWhenDelete = true
-      ..deleteDataOnLogout = false)
-    ..config = null
-    ..gradesState = (GradesStateBuilder()
-      ..semester = Semester.all.toBuilder()
-      ..subjects = ListBuilder([])
-      ..loading = false
-      ..serverSemester = null)
-    ..absenceState = null
-    ..calendarState = (CalendarStateBuilder()..days = MapBuilder());
-});
-
 void run() {
   final store = Store<AppState>(
     appReducer,
     middleware: createMiddleware(),
-    initialState: initialState,
+    initialState: AppState(),
   );
   runApp(
     StoreProvider(

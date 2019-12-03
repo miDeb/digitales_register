@@ -22,13 +22,23 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool get currentRouteIsLogin;
   @nullable
   SettingsState get settingsState;
-  @nullable
   CalendarState get calendarState;
   @nullable
   NetworkProtocolState get networkProtocolState;
   static Serializer<AppState> get serializer => _$appStateSerializer;
   AppState._();
   factory AppState([updates(AppStateBuilder b)]) = _$AppState;
+  static void _initializeBuilder(AppStateBuilder builder) {
+    builder
+      ..dayState = DayStateBuilder()
+      ..loginState = LoginStateBuilder()
+      ..notificationState = NotificationStateBuilder()
+      ..gradesState = GradesStateBuilder()
+      ..calendarState = CalendarStateBuilder()
+      ..settingsState = SettingsStateBuilder()
+      ..currentRouteIsLogin = false
+      ..noInternet = false;
+  }
 }
 
 abstract class DayState implements Built<DayState, DayStateBuilder> {
@@ -42,6 +52,12 @@ abstract class DayState implements Built<DayState, DayStateBuilder> {
 
   DayState._();
   factory DayState([updates(DayStateBuilder b)]) = _$DayState;
+  static void _initializeBuilder(DayStateBuilder builder) {
+    builder
+      ..future = true
+      ..loading = false
+      ..blacklist = ListBuilder([]);
+  }
 }
 
 abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
@@ -54,6 +70,11 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   static Serializer<LoginState> get serializer => _$loginStateSerializer;
   LoginState._();
   factory LoginState([updates(LoginStateBuilder b)]) = _$LoginState;
+  static void _initializeBuilder(LoginStateBuilder builder) {
+    builder
+      ..loggedIn = false
+      ..loading = false;
+  }
 }
 
 @immutable
@@ -100,6 +121,12 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
 
   GradesState._();
   factory GradesState([updates(GradesStateBuilder b)]) = _$GradesState;
+  static void _initializeBuilder(GradesStateBuilder builder) {
+    builder
+      ..semester = Semester.all.toBuilder()
+      ..subjects = ListBuilder([])
+      ..loading = false;
+  }
 }
 
 abstract class SubjectGraphConfig
@@ -161,10 +188,39 @@ abstract class SettingsState
 
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
-
   factory SettingsState([updates(SettingsStateBuilder b)]) = _$SettingsState;
+  static void _initializeBuilder(SettingsStateBuilder builder) {
+    builder
+      ..noPasswordSaving = false
+      ..noDataSaving = false
+      ..typeSorted = false
+      ..askWhenDelete = false
+      ..showCancelled = false
+      ..deleteDataOnLogout = false
+      ..offlineEnabled = true
+      ..subjectNicks = MapBuilder<String, String>({
+        "Deutsch": "Deu",
+        "Mathematik": "Mat",
+        "Latein": "Lat",
+        "Religion": "Rel",
+        "Englisch": "Eng",
+        "Naturwissenschaften": "Nat",
+        "Geschichte": "Gesch",
+        "Italienisch": "Ita",
+        "Bewegung und Sport": "Sport",
+        "Recht und Wirtschaft": "Rw",
+        "Griechisch": "Gr",
+        "FÜ": "Fü",
+      })
+      ..showCalendarNicksBar = true
+      ..showGradesDiagram = true
+      ..showAllSubjectsAverage = true
+      ..dashboardMarkNewOrChangedEntries = true
+      ..graphConfigs = MapBuilder<int, SubjectGraphConfig>();
+  }
 }
 
+/* 
 abstract class SettingsStateBuilder
     implements Builder<SettingsState, SettingsStateBuilder> {
   SettingsStateBuilder._();
@@ -177,7 +233,6 @@ abstract class SettingsStateBuilder
   bool noPasswordSaving;
   bool noDataSaving;
   bool offlineEnabled = true;
-  bool saveToSecureStorage = true;
   bool showCalendarNicksBar = true;
   bool showGradesDiagram = true;
   bool showAllSubjectsAverage = true;
@@ -197,9 +252,8 @@ abstract class SettingsStateBuilder
   });
   bool scrollToSubjectNicks;
   bool dashboardMarkNewOrChangedEntries = true;
-  BuiltMap<int, SubjectGraphConfig> graphConfigs = BuiltMap({});
 }
-
+ */
 abstract class AbsenceState
     implements Built<AbsenceState, AbsenceStateBuilder> {
   AbsenceState._();
@@ -234,6 +288,9 @@ abstract class CalendarState
   CalendarState._();
   factory CalendarState([updates(CalendarStateBuilder b)]) = _$CalendarState;
   static Serializer<CalendarState> get serializer => _$calendarStateSerializer;
+  static void _initializeBuilder(CalendarStateBuilder builder) {
+    builder..days = MapBuilder<DateTime, CalendarDay>();
+  }
 }
 
 abstract class NetworkProtocolState
