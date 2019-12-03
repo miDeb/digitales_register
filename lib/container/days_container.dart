@@ -50,11 +50,11 @@ class DaysViewModel {
                     (b) => b
                       ..deletedHomework.where(
                         (hw) =>
-                            !store.state.dayState.blacklist.contains(hw.label),
+                            !store.state.dayState.blacklist.contains(hw.type),
                       )
                       ..homework.where(
                         (hw) =>
-                            !store.state.dayState.blacklist.contains(hw.label),
+                            !store.state.dayState.blacklist.contains(hw.type),
                       ),
                   ),
                 )
