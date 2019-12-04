@@ -19,90 +19,92 @@ final dayReducer = combineReducers<DayStateBuilder>([
 ]);
 TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
   return TypedReducer((DayStateBuilder state, DaysLoadedAction action) {
-    final allDays = state.allDays.build().toList();
-
     List<Day> loadedDays = List.from(action.data.map(
       (d) => _parseDay(d),
     ));
 
+    List<Day> daysToDelete = [];
+
     final now = DateTime.now();
-    for (var day in List.of(allDays)) {
-      day.rebuild((b) {
-        final newDay = loadedDays.firstWhere(
-          (d) => d.date == day.date,
-          orElse: () => null,
-        );
-        if (newDay == null) {
-          if (!action.future &&
-              day.date.isBefore(
-                DateTime.now().subtract(Duration(
-                    days: 1)), // subtract to not accidentally delete today
-              )) {
-            allDays.remove(day);
-          }
-          return;
-        }
-        loadedDays.remove(newDay);
-        final newHomework = newDay.homework.toList();
-        for (var oldHw in day.homework.toList()) {
-          final newHw = newHomework.firstWhere(
-            (d) => d.id == oldHw.id,
+    state.allDays.map(
+      (day) => day.rebuild(
+        (b) {
+          final newDay = loadedDays.firstWhere(
+            (d) => d.date == day.date,
             orElse: () => null,
           );
-          if (newHw == null) {
-            b.homework.remove(oldHw);
-            b.deletedHomework.add(oldHw.rebuild((b) => b
-              ..deleted = true
-              ..isChanged = action.markNewOrChangedEntries
-              ..previousVersion = oldHw.toBuilder()
-              ..lastNotSeen = day.lastRequested
-              ..firstSeen = now));
-          } else if (newHw != oldHw) {
-            b.homework.remove(oldHw);
-            b.homework.add(newHw.rebuild((b) => b
-              ..previousVersion = oldHw.toBuilder()
-              ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
-              ..isChanged = action.markNewOrChangedEntries));
-          } else {
-            b.homework[b.homework.build().indexOf(oldHw)] =
-                oldHw.rebuild((b) => b..checked = newHw.checked);
+          if (newDay == null) {
+            if (!action.future &&
+                day.date.isBefore(
+                  DateTime.now().subtract(Duration(
+                      days: 1)), // subtract to not accidentally delete today
+                )) {
+              daysToDelete.add(day);
+            }
+            return;
           }
-          newHomework.remove(newHw);
-        }
-        for (var newHw in newHomework) {
-          final deletedHw = day.deletedHomework.firstWhere(
-            (d) => d.id == newHw.id,
-            orElse: () => null,
-          );
-          if (deletedHw != null) {
-            b.deletedHomework.remove(deletedHw);
-            b.homework.add(newHw.rebuild((b) => b
-              ..previousVersion = deletedHw.toBuilder()
-              ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
-              ..isChanged = action.markNewOrChangedEntries));
-          } else {
-            b.homework.add(newHw.rebuild((b) => b
-              ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
-              ..isNew = newHw.type != HomeworkType.grade &&
-                  newHw.type != HomeworkType.homework &&
-                  action.markNewOrChangedEntries));
+          loadedDays.remove(newDay);
+          final newHomework = newDay.homework.toList();
+          for (var oldHw in day.homework.toList()) {
+            final newHw = newHomework.firstWhere(
+              (d) => d.id == oldHw.id,
+              orElse: () => null,
+            );
+            if (newHw == null) {
+              b.homework.remove(oldHw);
+              b.deletedHomework.add(oldHw.rebuild((b) => b
+                ..deleted = true
+                ..isChanged = action.markNewOrChangedEntries
+                ..previousVersion = oldHw.toBuilder()
+                ..lastNotSeen = day.lastRequested
+                ..firstSeen = now));
+            } else if (newHw != oldHw) {
+              b.homework.remove(oldHw);
+              b.homework.add(newHw.rebuild((b) => b
+                ..previousVersion = oldHw.toBuilder()
+                ..lastNotSeen = day.lastRequested
+                ..firstSeen = now
+                ..isChanged = action.markNewOrChangedEntries));
+            } else {
+              b.homework[b.homework.build().indexOf(oldHw)] =
+                  oldHw.rebuild((b) => b..checked = newHw.checked);
+            }
+            newHomework.remove(newHw);
           }
-        }
-        b.lastRequested = now;
-      });
-    }
+          for (var newHw in newHomework) {
+            final deletedHw = day.deletedHomework.firstWhere(
+              (d) => d.id == newHw.id,
+              orElse: () => null,
+            );
+            if (deletedHw != null) {
+              b.deletedHomework.remove(deletedHw);
+              b.homework.add(newHw.rebuild((b) => b
+                ..previousVersion = deletedHw.toBuilder()
+                ..lastNotSeen = day.lastRequested
+                ..firstSeen = now
+                ..isChanged = action.markNewOrChangedEntries));
+            } else {
+              b.homework.add(newHw.rebuild((b) => b
+                ..lastNotSeen = day.lastRequested
+                ..firstSeen = now
+                ..isNew = newHw.type != HomeworkType.grade &&
+                    newHw.type != HomeworkType.homework &&
+                    action.markNewOrChangedEntries));
+            }
+          }
+          b.lastRequested = now;
+        },
+      ),
+    );
+    state.allDays.removeWhere((day) => daysToDelete.contains(day));
+
     for (var newDay in loadedDays) {
-      allDays.add(newDay.rebuild((b) => b
+      state.allDays.add(newDay.rebuild((b) => b
         ..lastRequested = now
         ..homework.map((h) => h.rebuild((b) => b..firstSeen = now))));
     }
-    allDays.sort((a, b) => a.date.compareTo(b.date));
-    return state
-      ..allDays = ListBuilder(allDays)
-      ..loading = false;
+    state.allDays.sort((a, b) => a.date.compareTo(b.date));
+    return state..loading = false;
   });
 }
 
