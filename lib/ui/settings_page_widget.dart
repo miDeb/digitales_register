@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../container/settings_page.dart';
@@ -294,6 +295,24 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 ),
               );
             },
+          ),
+          FutureBuilder(
+            future: PackageInfo.fromPlatform(),
+            builder: (context, info) => AboutListTile(
+              child: Text("Über diese App"),
+              icon: Icon(Icons.info_outline),
+              applicationIcon: Container(
+                child: Image.asset("assets/transparent.png"),
+                width: 100,
+              ),
+              applicationName: "Digitales Register (Client)",
+              applicationVersion: info.hasData
+                  ? (info.data as PackageInfo).version
+                  : "Unbekannte Version",
+              aboutBoxChildren: <Widget>[
+                Text("Alternativer Client für das Digitale Register. ")
+              ],
+            ),
           ),
         ],
       ),
