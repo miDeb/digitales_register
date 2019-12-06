@@ -53,12 +53,16 @@ TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
             );
             if (newHw == null) {
               b.homework.remove(oldHw);
-              b.deletedHomework.add(oldHw.rebuild((b) => b
-                ..deleted = true
-                ..isChanged = action.markNewOrChangedEntries
-                ..previousVersion = oldHw.toBuilder()
-                ..lastNotSeen = day.lastRequested
-                ..firstSeen = now));
+              if (oldHw.type != HomeworkType.homework) {
+                b.deletedHomework.add(
+                  oldHw.rebuild((b) => b
+                    ..deleted = true
+                    ..isChanged = action.markNewOrChangedEntries
+                    ..previousVersion = oldHw.toBuilder()
+                    ..lastNotSeen = day.lastRequested
+                    ..firstSeen = now),
+                );
+              }
             } else if (newHw != oldHw) {
               b.homework.remove(oldHw);
               b.homework.add(newHw.rebuild((b) => b
