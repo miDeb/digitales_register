@@ -27,6 +27,7 @@ typedef void AddReminderCallback(Day day, String reminder);
 typedef void RemoveReminderCallback(Homework hw, Day day);
 typedef void ToggleDoneCallback(Homework hw, bool done);
 typedef void MarkAsNotNewOrChangedCallback(Homework hw);
+typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
 
 class DaysViewModel {
   final List<Day> days;
@@ -38,6 +39,7 @@ class DaysViewModel {
   final ToggleDoneCallback toggleDoneCallback;
   final VoidCallback setDoNotWhenDeleteCallback;
   final MarkAsNotNewOrChangedCallback markAsNotNewOrChangedCallback;
+  final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
   final VoidCallback markAllAsNotNewOrChangedCallback;
   final bool noInternet, loading;
   final VoidCallback refresh, refreshNoInternet;
@@ -77,6 +79,8 @@ class DaysViewModel {
             (() => store.dispatch(SetAskWhenDeleteAction(false))),
         markAsNotNewOrChangedCallback = ((homework) =>
             store.dispatch(MarkAsNotNewOrChangedAction(homework))),
+        markDeletedHomeworkAsSeenCallback =
+            ((day) => store.dispatch(MarkDeletedHomeworkAsSeenAction(day))),
         markAllAsNotNewOrChangedCallback =
             (() => store.dispatch(MarkAllAsNotNewOrChangedAction()));
 }

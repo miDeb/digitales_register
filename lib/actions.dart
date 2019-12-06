@@ -304,6 +304,12 @@ class MarkAsNotNewOrChangedAction {
   MarkAsNotNewOrChangedAction(this.homework);
 }
 
+class MarkDeletedHomeworkAsSeenAction {
+  final Day day;
+
+  MarkDeletedHomeworkAsSeenAction(this.day);
+}
+
 class MarkAllAsNotNewOrChangedAction {
   MarkAllAsNotNewOrChangedAction();
 }

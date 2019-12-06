@@ -11,6 +11,7 @@ import '../util.dart';
 import 'dialog.dart';
 import 'news_sticker.dart';
 import 'no_internet.dart';
+import 'sub_icon.dart';
 
 class DaysWidget extends StatelessWidget {
   final DaysViewModel vm;
@@ -68,7 +69,8 @@ class _DaysListWidgetState extends State<DaysListWidget> {
   List<int> _targets = [];
   List<int> _focused = [];
   Map<int, int> _dayStartIndices = {};
-  Map<int, Homework> homeworkIndexes = {};
+  Map<int, Homework> _homeworkIndexes = {};
+  Map<int, Day> _dayIndexes = {};
 
   void _updateShowScrollUp() {
     final newScrollUp = controller.offset > 250;
@@ -111,7 +113,17 @@ class _DaysListWidgetState extends State<DaysListWidget> {
       final distance = _distanceToItem(focusedItem);
       if (distance == null || distance > 50) {
         _focused.remove(focusedItem);
-        widget.vm.markAsNotNewOrChangedCallback(homeworkIndexes[focusedItem]);
+        if (_dayIndexes.containsKey(focusedItem)) {
+          widget.vm.markDeletedHomeworkAsSeenCallback(_dayIndexes[focusedItem]);
+        } else if (_homeworkIndexes.containsKey(focusedItem)) {
+          widget.vm
+              .markAsNotNewOrChangedCallback(_homeworkIndexes[focusedItem]);
+        } else {
+          assert(
+            false,
+            "A target index should either be a new/changed homework or a day (deleted homework)",
+          );
+        }
       }
     }
   }
@@ -127,13 +139,17 @@ class _DaysListWidgetState extends State<DaysListWidget> {
     var index = 0;
     var dayIndex = 0;
     for (var day in widget.vm.days) {
-      index++;
       _dayStartIndices[dayIndex] = index;
+      if (day.deletedHomework.any((h) => h.isChanged)) {
+        _targets.add(index);
+        _dayIndexes[index] = day;
+      }
+      index++;
       for (var hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
           _targets.add(index);
         }
-        homeworkIndexes[index] = hw;
+        _homeworkIndexes[index] = hw;
         index++;
       }
       dayIndex++;
@@ -295,6 +311,53 @@ class DayWidget extends StatelessWidget {
                 ),
               ),
             ),
+            if (day.deletedHomework.isNotEmpty)
+              AutoScrollTag(
+                child: IconButton(
+                  icon: SubIcon(
+                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                    icon: Icons.info_outline,
+                    subIcon: Icons.delete,
+                    subIconColor: day.deletedHomework.any((h) => h.isChanged)
+                        ? Colors.red
+                        : null,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_context) {
+                        return ListViewCapableAlertDialog(
+                          title: Text("Gelöschte Einträge"),
+                          content: ListView(
+                            shrinkWrap: true,
+                            children: day.deletedHomework
+                                .map(
+                                  (i) => ItemWidget(
+                                    item: i,
+                                    isDeletedView: true,
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                          actions: <Widget>[
+                            RaisedButton(
+                              textTheme: ButtonTextTheme.primary,
+                              onPressed: () => Navigator.pop(_context),
+                              child: Text(
+                                "Ok",
+                              ),
+                            )
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+                controller: controller,
+                index: index,
+                key: ValueKey(index),
+                highlightColor: Colors.grey.withOpacity(0.5),
+              ),
             Spacer(),
             IconButton(
               icon: Icon(Icons.add),
@@ -340,9 +403,6 @@ class DayWidget extends StatelessWidget {
                   vm.addReminderCallback(day, message);
                 }
               },
-              padding: EdgeInsets.only(
-                right: 15,
-              ),
             ),
           ],
         ),
@@ -354,7 +414,7 @@ class DayWidget extends StatelessWidget {
             setDoNotAskWhenDelete: vm.setDoNotWhenDeleteCallback,
             askWhenDelete: vm.askWhenDelete,
             controller: controller,
-            index: i++,
+            index: ++i,
           ),
         Divider(),
       ],
@@ -367,22 +427,23 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, isHistory;
+  final bool askWhenDelete, isHistory, isDeletedView;
 
   final AutoScrollController controller;
   final int index;
 
-  const ItemWidget(
-      {Key key,
-      this.item,
-      this.removeThis,
-      this.toggleDone,
-      this.askWhenDelete,
-      this.setDoNotAskWhenDelete,
-      this.isHistory = false,
-      this.controller,
-      this.index})
-      : super(key: key);
+  const ItemWidget({
+    Key key,
+    this.item,
+    this.removeThis,
+    this.toggleDone,
+    this.askWhenDelete,
+    this.setDoNotAskWhenDelete,
+    this.isHistory = false,
+    this.controller,
+    this.index,
+    this.isDeletedView = false,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Widget child = Card(
@@ -423,9 +484,13 @@ class ItemWidget extends StatelessWidget {
                                     ? NewsSticker(
                                         text: "neu",
                                       )
-                                    : NewsSticker(
-                                        text: "geändert",
-                                      ),
+                                    : item.deleted
+                                        ? NewsSticker(
+                                            text: "gelöscht",
+                                          )
+                                        : NewsSticker(
+                                            text: "geändert",
+                                          ),
                               )
                           ],
                         ),
@@ -435,7 +500,7 @@ class ItemWidget extends StatelessWidget {
                         subtitle: isNullOrEmpty(item.subtitle)
                             ? null
                             : Text(item.subtitle),
-                        leading: !isHistory && item.deleteable
+                        leading: !isHistory && !isDeletedView && item.deleteable
                             ? IconButton(
                                 icon: Icon(Icons.close),
                                 onPressed: () async {
@@ -493,9 +558,17 @@ class ItemWidget extends StatelessWidget {
                   children: <Widget>[
                     if (!isHistory && item.label != null)
                       IconButton(
-                        icon: Icon(
-                          Icons.info_outline,
-                        ),
+                        icon: item.previousVersion != null
+                            ? SubIcon(
+                                backgroundColor: isDeletedView
+                                    ? Theme.of(context).dialogBackgroundColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                                icon: Icons.info_outline,
+                                subIcon: Icons.edit,
+                              )
+                            : Icon(
+                                Icons.info_outline,
+                              ),
                         onPressed: () {
                           showDialog(
                             context: context,
@@ -545,7 +618,7 @@ class ItemWidget extends StatelessWidget {
                         item.gradeFormatted,
                         style: TextStyle(color: Colors.green, fontSize: 30),
                       )
-                    else if (!isHistory && item.checkable)
+                    else if (!isHistory && !isDeletedView && item.checkable)
                       Checkbox(
                         activeColor: Colors.green,
                         value: item.checked,
@@ -568,7 +641,7 @@ class ItemWidget extends StatelessWidget {
         ),
       ),
     );
-    if (!isHistory) {
+    if (!isHistory && !isDeletedView) {
       child = AutoScrollTag(
         index: index,
         key: ValueKey(index),

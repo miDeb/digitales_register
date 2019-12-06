@@ -15,6 +15,7 @@ final dayReducer = combineReducers<DayStateBuilder>([
   _createToggleHomeworkDoneReducer(),
   _createMarkAsNotNewOrChangedReducer(),
   _createMarkAllAsNotNewOrChangedReducer(),
+  _createMarkDeletedHomeworkAsSeenReducer(),
   _createUpdateBlacklistReducer(),
 ]);
 TypedReducer<DayStateBuilder, DaysLoadedAction> _createDaysLoadedReducer() {
@@ -224,6 +225,22 @@ TypedReducer<DayStateBuilder, MarkAsNotNewOrChangedAction>
   });
 }
 
+TypedReducer<DayStateBuilder, MarkDeletedHomeworkAsSeenAction>
+    _createMarkDeletedHomeworkAsSeenReducer() {
+  return TypedReducer(
+      (DayStateBuilder state, MarkDeletedHomeworkAsSeenAction action) {
+    return state
+      ..allDays.map((day) => day == action.day
+          ? day.rebuild(
+              (b) => b
+                ..deletedHomework.map(
+                  (h) => h.rebuild((b) => b..isChanged = false),
+                ),
+            )
+          : day);
+  });
+}
+
 TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
     _createMarkAllAsNotNewOrChangedReducer() {
   return TypedReducer(
@@ -236,6 +253,9 @@ TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
               (homework) => homework.rebuild((b) => b
                 ..isChanged = false
                 ..isNew = false),
+            )
+            ..deletedHomework.map(
+              (homework) => homework.rebuild((b) => b..isChanged = false),
             ),
         ),
       );
