@@ -230,12 +230,14 @@ TypedReducer<DayStateBuilder, MarkAllAsNotNewOrChangedAction>
       (DayStateBuilder state, MarkAllAsNotNewOrChangedAction action) {
     return state
       ..allDays.map(
-        (day) => day
-          ..homework.map(
-            (homework) => homework.rebuild((b) => b
-              ..isChanged = false
-              ..isNew = false),
-          ),
+        (day) => day.rebuild(
+          (b) => b
+            ..homework.map(
+              (homework) => homework.rebuild((b) => b
+                ..isChanged = false
+                ..isNew = false),
+            ),
+        ),
       );
   });
 }
