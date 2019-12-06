@@ -384,9 +384,6 @@ abstract class CalendarHour
   bool get hasHomework => !isNullOrEmpty(homework);
   bool get hasDescription => !isNullOrEmpty(description);
 
-  // Legacy field "teachers" was just a List of Strings, formatted firstName lastName
-  // and has been replaced, but the wireName had to be changed
-  @BuiltValueField(wireName: "teachersNew")
   BuiltList<Teacher> get teachers;
 
   static void _initializeBuilder(CalendarHourBuilder b) =>
