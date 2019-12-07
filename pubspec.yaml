@@ -23,7 +23,6 @@ dependencies:
   path_provider: any
   requests:
     path: "packages/requests/"
-  synchronized: any
   flutter_redux: any
   redux: any
   built_value: any
@@ -37,6 +36,7 @@ dependencies:
   flutter_redux_dev_tools: any
   redux_dev_tools: any
   package_info: any
+  mutex: any
 
 dev_dependencies:
   flutter_launcher_icons: any

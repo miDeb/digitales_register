@@ -3,8 +3,8 @@ import 'dart:io';
 import 'dart:ui' show VoidCallback;
 
 import 'package:meta/meta.dart';
+import 'package:mutex/mutex.dart';
 import 'package:requests/requests.dart';
-import 'package:synchronized/synchronized.dart';
 
 import 'app_state.dart';
 
@@ -156,28 +156,26 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
-  var lock = new Lock();
+  var _mutex = new Mutex();
   Future<dynamic> post(String url,
       [Map<String, dynamic> args = const {}, bool json = true]) async {
+    await _mutex.acquire();
     if (!_loggedIn) {
-      if (await lock.synchronized(() async {
-            if (_loggedIn) {
-              return true; // local return
-            }
-            if (user != null && pass != null) {
-              await login(user, pass, this.url);
-              if (!_loggedIn) {
-                return false; // return@post null
-              } else {
-                onRelogin();
-                return true;
-              }
-            } else {
-              return false; // return@post null
-            }
-          }) ==
-          false) return null;
+      if (user != null && pass != null) {
+        await login(user, pass, this.url);
+        if (!_loggedIn) {
+          _mutex.release();
+          return null;
+        } else {
+          onRelogin();
+        }
+      } else {
+        _mutex.release();
+        return null;
+      }
     }
+    _mutex.release();
+
     dynamic response;
     try {
       response = await Requests.post(
