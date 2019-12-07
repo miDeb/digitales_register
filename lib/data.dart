@@ -162,6 +162,16 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   String get name;
 
   List<DetailEntry> detailEntries(Semester semester) {
+    if (semester == Semester.all) {
+      final entries = (List.of(Semester.values)..remove(Semester.all))
+          .map((s) => detailEntries(s))
+          .toList();
+      if (entries.any((e) => e == null)) {
+        return null;
+      } else {
+        return entries.fold([], (a, b) => [...a, ...b]);
+      }
+    }
     if (grades[semester] == null || observations[semester] == null) return null;
     return <DetailEntry>[
       ...grades[semester],
