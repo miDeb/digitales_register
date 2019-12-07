@@ -166,8 +166,8 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
 
   if (!store.state.loginState.loggedIn) {
     final user = action.userName.hashCode;
-    final file =
-        File("${(await getApplicationDocumentsDirectory()).path}/$user.json");
+    final file = File(
+        "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     final vals = json.decode(
       await file.exists() && await file.length() > 0
           ? await file.readAsString()
@@ -271,7 +271,7 @@ _saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
 }
 
 void writeToStorage(String key, String txt) async {
-  File("${(await getApplicationDocumentsDirectory()).path}/$key.json")
+  File("${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json")
       .writeAsString(txt, flush: true);
 }
 
