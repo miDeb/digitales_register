@@ -39,6 +39,7 @@ class DaysWidget extends StatelessWidget {
                 child: Text(
                   "Keine Einträge vorhanden",
                   style: Theme.of(context).textTheme.display1,
+                  textAlign: TextAlign.center,
                 ),
               );
     return vm.loading
