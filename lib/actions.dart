@@ -258,12 +258,6 @@ class ShowFullscreenChartAciton {}
 
 class ShowGradesAction {}
 
-class SetIsDarkMode {
-  final bool darkMode;
-
-  SetIsDarkMode(this.darkMode);
-}
-
 class MountAppStateAction {
   final AppState appState;
 
