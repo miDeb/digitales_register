@@ -63,7 +63,9 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
   bool get deleted;
   int get id;
+  @BuiltValueField(compare: false)
   bool get isNew;
+  @BuiltValueField(compare: false)
   bool get isChanged;
   String get title;
   String get subtitle;
