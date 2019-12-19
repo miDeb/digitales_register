@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/grades_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_page.dart';
 
@@ -32,8 +32,11 @@ class GradesPageViewModel {
 
   GradesPageViewModel.from(Store<AppState> store)
       : showSemester = store.state.gradesState.semester,
-        changeSemester = ((newSemester) =>
-            store.dispatch(SetGradesSemesterAction(newSemester))),
+        changeSemester = ((newSemester) => store.dispatch(
+              SetSemesterAction(
+                (b) => b..semester = newSemester.toBuilder(),
+              ),
+            )),
         loading = store.state.gradesState.loading,
         allSubjectsAverage = calculateAllSubjectsAverage(store.state),
         showGradesDiagram = store.state.settingsState.showGradesDiagram,

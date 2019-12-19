@@ -1,4 +1,3 @@
-import 'package:dr/container/homework_filter_container.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -6,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../container/days_container.dart';
+import '../container/homework_filter_container.dart';
 import '../data.dart';
 import '../util.dart';
 import 'dialog.dart';
@@ -412,7 +412,7 @@ class DayWidget extends StatelessWidget {
             item: hw,
             toggleDone: () => vm.toggleDoneCallback(hw, !hw.checked),
             removeThis: () => vm.removeReminderCallback(hw, day),
-            setDoNotAskWhenDelete: vm.setDoNotWhenDeleteCallback,
+            setDoNotAskWhenDelete: vm.setDoNotAskWhenDeleteCallback,
             askWhenDelete: vm.askWhenDelete,
             controller: controller,
             index: ++i,

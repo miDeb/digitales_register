@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/grades_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/sorted_grades_widget.dart';
@@ -36,9 +37,14 @@ class SortedGradesViewModel {
         semester = store.state.gradesState.semester,
         showCancelled = store.state.settingsState.showCancelled == true,
         viewSubjectDetail = ((s) => store.dispatch(
-            LoadSubjectDetailsAction(s, store.state.gradesState.semester))),
-        showCancelledCallback =
-            ((s) => store.dispatch(SetGradesShowCancelledAction(s))),
-        sortByTypeCallback =
-            ((s) => store.dispatch(SetGradesTypeSortedAction(s)));
+              LoadSubjectDetailsAction(
+                (b) => b
+                  ..subject = s.toBuilder()
+                  ..semester = store.state.gradesState.semester.toBuilder(),
+              ),
+            )),
+        showCancelledCallback = ((s) => store.dispatch(
+            SetGradesShowCancelledAction((b) => b..showCancelled = s))),
+        sortByTypeCallback = ((s) => store
+            .dispatch(SetGradesTypeSortedAction((b) => b..typeSorted = s)));
 }

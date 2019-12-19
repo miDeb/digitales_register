@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../actions.dart';
+import '../actions/routing_actions.dart';
 import '../app_state.dart';
 import '../ui/notification_icon_widget.dart';
 

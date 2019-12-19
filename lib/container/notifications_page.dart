@@ -4,7 +4,7 @@ import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/notifications_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../main.dart';
@@ -33,8 +33,11 @@ class NotificationsViewModel {
       this.notifications, this.deleteNotification, this.deleteAllNotifications);
   NotificationsViewModel.from(Store<AppState> store)
       : notifications = store.state.notificationState.notifications.toList(),
-        deleteNotification = ((notification) =>
-            store.dispatch(DeleteNotificationAction(notification))),
+        deleteNotification = ((notification) => store.dispatch(
+              DeleteNotificationAction(
+                (b) => b..notification = notification.toBuilder(),
+              ),
+            )),
         deleteAllNotifications =
             (() => store.dispatch(DeleteAllNotificationsAction()));
 }

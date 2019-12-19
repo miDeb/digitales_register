@@ -1,7 +1,7 @@
-import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../app_state.dart';
 import '../container/sorted_grades_container.dart';
 import '../data.dart';
 import '../util.dart';

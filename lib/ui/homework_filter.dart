@@ -1,6 +1,7 @@
-import 'package:dr/container/homework_filter_container.dart';
-import 'package:dr/data.dart';
 import 'package:flutter/material.dart';
+
+import '../container/homework_filter_container.dart';
+import '../data.dart';
 
 class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;

@@ -1,7 +1,10 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/login_actions.dart';
+import '../actions/routing_actions.dart';
+import '../actions/save_pass_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -31,18 +34,28 @@ void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
   if (!action.forced) {
     wrapper.logout(hard: action.hard);
   }
-  store.dispatch(MountAppStateAction(AppState()));
+  store.dispatch(MountAppStateAction());
   store.dispatch(ShowLoginAction());
 }
 
 void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
     Wrapper wrapper) async {
-  action = LoginAction(action.user.trim(), action.pass, action.url.trim(),
-      action.fromStorage, action.offlineEnabled);
+  action = action.rebuild(
+    (b) => b
+      ..user = action.user.trim()
+      ..url = action.url.trim(),
+  );
   next(action);
   if (action.user == "" || action.pass == "") {
-    store.dispatch(LoginFailedAction("Bitte gib etwas ein",
-        action.offlineEnabled, await wrapper.noInternet, action.user));
+    store.dispatch(
+      LoginFailedAction(
+        (b) async => b
+          ..cause = "Bitte gib etwas ein"
+          ..offlineEnabled = action.offlineEnabled
+          ..noInternet = await wrapper.noInternet
+          ..username = action.user,
+      ),
+    );
     return;
   }
   store.dispatch(LoggingInAction());
@@ -51,19 +64,42 @@ void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
     action.pass,
     action.url,
     logout: () => store.dispatch(
-        LogoutAction(store.state.settingsState.noPasswordSaving, true)),
+      LogoutAction(
+        (b) => b
+          ..hard = store.state.settingsState.noPasswordSaving
+          ..forced = true,
+      ),
+    ),
     configLoaded: () => store.dispatch(
-      SetConfigAction(wrapper.config),
+      SetConfigAction(
+        (b) => b..config = wrapper.config.toBuilder(),
+      ),
     ),
     relogin: () => store.dispatch(LoggedInAgainAutomatically()),
-    addProtocolItem: (item) =>
-        store.dispatch(AddNetworkProtocolItemAction(item)),
+    addProtocolItem: (item) => store.dispatch(
+      AddNetworkProtocolItemAction(
+        (b) => b..item = item.toBuilder(),
+      ),
+    ),
   );
   if (wrapper.loggedIn)
-    store.dispatch(LoggedInAction(wrapper.user, action.fromStorage));
+    store.dispatch(
+      LoggedInAction(
+        (b) => b
+          ..username = wrapper.user
+          ..fromStorage = action.fromStorage,
+      ),
+    );
   else
-    store.dispatch(LoginFailedAction(wrapper.error, action.offlineEnabled,
-        await wrapper.noInternet, action.user));
+    store.dispatch(
+      LoginFailedAction(
+        (b) async => b
+          ..cause = wrapper.error
+          ..offlineEnabled = action.offlineEnabled
+          ..noInternet = await wrapper.noInternet
+          ..username = action.user,
+      ),
+    );
 }
 
 void _loginFailed(
@@ -71,9 +107,15 @@ void _loginFailed(
   next(action);
   if (action.noInternet) {
     if (action.offlineEnabled) {
-      store.dispatch(LoggedInAction(action.username, true));
+      store.dispatch(
+        LoggedInAction(
+          (b) => b
+            ..username = action.username
+            ..fromStorage = true,
+        ),
+      );
     }
-    store.dispatch(NoInternetAction(true));
+    store.dispatch(NoInternetAction((b) => b..noInternet = true));
     return;
   }
   if (!store.state.currentRouteIsLogin) {

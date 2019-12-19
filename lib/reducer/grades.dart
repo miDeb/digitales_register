@@ -1,7 +1,9 @@
-import 'package:redux/redux.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/grades_actions.dart';
+import '../actions/login_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
@@ -10,10 +12,10 @@ final gradesReducer = combineReducers<GradesStateBuilder>([
   TypedReducer<GradesStateBuilder, SubjectsLoadedAction>(
     _subjectsLoadedReducer,
   ),
-  TypedReducer<GradesStateBuilder, SubjectLoadedAction>(
+  TypedReducer<GradesStateBuilder, SubjectDetailLoadedAction>(
     _subjectLoadedReducer,
   ),
-  TypedReducer<GradesStateBuilder, SetGradesSemesterAction>(
+  TypedReducer<GradesStateBuilder, SetSemesterAction>(
     _setGradesSemesterReducer,
   ),
   TypedReducer<GradesStateBuilder, LoggedInAgainAutomatically>(
@@ -84,19 +86,20 @@ _updateSubjects(BuiltList<Subject> subjects,
 }
 
 GradesStateBuilder _subjectLoadedReducer(
-    GradesStateBuilder state, SubjectLoadedAction action) {
+    GradesStateBuilder state, SubjectDetailLoadedAction action) {
+  final data = action.data as Map;
   return state
     ..subjects.map(
       (s) => s.id == action.subject.id
           ? s.rebuild(
               (b) => b
                 ..grades[action.semester] = BuiltList(
-                  action.data["grades"].map(
+                  data["grades"].map(
                     (g) => _parseGrade(g),
                   ),
                 )
                 ..observations[action.semester] = BuiltList(
-                  action.data["observations"].map(
+                  data["observations"].map(
                     (o) => _parseObservation(o),
                   ),
                 ),
@@ -167,8 +170,8 @@ Competence _parseCompetence(dynamic data) {
 }
 
 GradesStateBuilder _setGradesSemesterReducer(
-    GradesStateBuilder state, SetGradesSemesterAction action) {
-  return state..semester.replace(action.newSemester);
+    GradesStateBuilder state, SetSemesterAction action) {
+  return state..semester.replace(action.semester);
 }
 
 GradesStateBuilder _afterAutoRelogin(

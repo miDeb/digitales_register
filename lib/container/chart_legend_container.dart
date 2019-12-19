@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_chart_legend.dart';
 
@@ -31,7 +31,7 @@ class ChartLegendContainer extends StatelessWidget {
           configs.updateValue(id, (config) {
             return config.rebuild((b) => b.thick = thick);
           });
-          store.dispatch(SetGraphConfigsAction(configs.build().toMap()));
+          store.dispatch(SetGraphConfigsAction((b) => b..configs = configs));
         });
       },
     );

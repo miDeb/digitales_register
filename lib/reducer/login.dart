@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/login_actions.dart';
 import '../app_state.dart';
 
 final loginReducer = combineReducers<LoginStateBuilder>([
@@ -24,7 +24,7 @@ TypedReducer<LoginStateBuilder, LoggedInAction> _createLoginSucceededReducer() {
   return TypedReducer((LoginStateBuilder state, LoggedInAction action) {
     return state
       ..errorMsg = null
-      ..userName = action.userName
+      ..userName = action.username
       ..loading = false
       ..loggedIn = true;
   });

@@ -1,8 +1,10 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
-import 'package:built_collection/built_collection.dart';
 
-import '../actions.dart';
+import '../actions/grades_actions.dart';
+import '../actions/routing_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 
 SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
@@ -34,8 +36,8 @@ SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
     )(state.graphConfigs, action));
 }
 
-final _askWhenDeleteReducer =
-    TypedReducer((bool ask, SetAskWhenDeleteAction action) => action.ask);
+final _askWhenDeleteReducer = TypedReducer(
+    (bool ask, SetAskWhenDeleteReminderAction action) => action.ask);
 final _showCancelledReducer = TypedReducer(
     (bool showCancelled, SetGradesShowCancelledAction action) =>
         action.showCancelled);
@@ -46,7 +48,7 @@ final _saveDataReducer =
 final _savePassReducer =
     TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
 final _offlineEnabledReducer = TypedReducer(
-    (bool safeMode, SetOfflineEnabledAction action) => action.enable);
+    (bool safeMode, SetOfflineEnabledAction action) => action.enabled);
 final _deleteOnLogout = TypedReducer(
     (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
 final _subjectNicksReducer = TypedReducer(
@@ -84,9 +86,9 @@ final _similarColors = [
 ];
 
 const _defaultThick = 2;
-final _updateGradeGraphConfigsReducer = TypedReducer<
-        MapBuilder<int, SubjectGraphConfig>, UpdateGradesGraphConfigsAction>(
-    (graphConfigsBuilder, UpdateGradesGraphConfigsAction action) {
+final _updateGradeGraphConfigsReducer =
+    TypedReducer<MapBuilder<int, SubjectGraphConfig>, UpdateGraphConfigsAction>(
+        (graphConfigsBuilder, UpdateGraphConfigsAction action) {
   final state = graphConfigsBuilder.build();
 
   for (final entry in state.entries) {

@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:dr/main_dev.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import 'actions.dart';
+import 'actions/app_actions.dart';
+import 'actions/login_actions.dart';
 import 'app_state.dart';
 import 'container/absences_page_container.dart';
 import 'container/calendar_container.dart';
@@ -17,6 +17,7 @@ import 'container/login_page.dart';
 import 'container/notifications_page.dart';
 import 'container/settings_page.dart';
 import 'linux.dart';
+import 'main_dev.dart';
 import 'middleware/middleware.dart';
 import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
@@ -111,7 +112,7 @@ void run() {
             ),
           ),
         ),
-        onPointerDown: (_) => store.dispatch(TapAction()),
+        onPointerDown: (_) => store.dispatch(UpdateLogoutAction()),
       ),
       store: store,
     ),

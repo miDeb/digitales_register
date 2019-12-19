@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/calendar_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -18,6 +18,10 @@ void _load(Store store, LoadCalendarAction action, NextDispatcher next,
       {"startDate": DateFormat("yyyy-MM-dd").format(action.startDate)});
 
   if (data != null) {
-    store.dispatch(CalendarLoadedAction(data));
+    store.dispatch(
+      CalendarLoadedAction(
+        (b) => b..result = data,
+      ),
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/absences_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -15,6 +15,10 @@ void _loadAbsences(Store<AppState> store, LoadAbsencesAction action, next,
   next(action);
   final response = await wrapper.post("/api/student/dashboard/absences");
   if (response != null) {
-    store.dispatch(AbsencesLoadedAction(response));
+    store.dispatch(
+      AbsencesLoadedAction(
+        (b) => b..absences = response,
+      ),
+    );
   }
 }
