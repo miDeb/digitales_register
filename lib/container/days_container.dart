@@ -1,11 +1,13 @@
-import 'package:dr/ui/days.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/dashboard_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../ui/days.dart';
 
 class DaysContainer extends StatelessWidget {
   @override
@@ -37,7 +39,7 @@ class DaysViewModel {
   final AddReminderCallback addReminderCallback;
   final RemoveReminderCallback removeReminderCallback;
   final ToggleDoneCallback toggleDoneCallback;
-  final VoidCallback setDoNotWhenDeleteCallback;
+  final VoidCallback setDoNotAskWhenDeleteCallback;
   final MarkAsNotNewOrChangedCallback markAsNotNewOrChangedCallback;
   final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
   final VoidCallback markAllAsNotNewOrChangedCallback;
@@ -68,19 +70,44 @@ class DaysViewModel {
         refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction())),
         future = store.state.dayState.future,
         loading = store.state.dayState.loading,
-        addReminderCallback =
-            ((day, msg) => store.dispatch(AddReminderAction(msg, day.date))),
-        removeReminderCallback =
-            ((hw, day) => store.dispatch(DeleteHomeworkAction(hw, day.date))),
-        toggleDoneCallback =
-            ((hw, done) => store.dispatch(ToggleDoneAction(hw, done))),
+        addReminderCallback = ((day, msg) => store.dispatch(
+              AddReminderAction(
+                (b) => b
+                  ..msg = msg
+                  ..date = day.date,
+              ),
+            )),
+        removeReminderCallback = ((hw, day) => store.dispatch(
+              DeleteHomeworkAction(
+                (b) => b
+                  ..hw = hw.toBuilder()
+                  ..date = day.date,
+              ),
+            )),
+        toggleDoneCallback = ((hw, done) => store.dispatch(
+              ToggleDoneAction(
+                (b) => b
+                  ..hw = hw.toBuilder()
+                  ..done = done,
+              ),
+            )),
         askWhenDelete = store.state.settingsState.askWhenDelete,
-        setDoNotWhenDeleteCallback =
-            (() => store.dispatch(SetAskWhenDeleteAction(false))),
-        markAsNotNewOrChangedCallback = ((homework) =>
-            store.dispatch(MarkAsNotNewOrChangedAction(homework))),
-        markDeletedHomeworkAsSeenCallback =
-            ((day) => store.dispatch(MarkDeletedHomeworkAsSeenAction(day))),
-        markAllAsNotNewOrChangedCallback =
-            (() => store.dispatch(MarkAllAsNotNewOrChangedAction()));
+        setDoNotAskWhenDeleteCallback = (() => store.dispatch(
+              SetAskWhenDeleteReminderAction(
+                (b) => b..ask = false,
+              ),
+            )),
+        markAsNotNewOrChangedCallback = ((homework) => store.dispatch(
+              MarkAsNotNewOrChangedAction(
+                (b) => b..homework = homework.toBuilder(),
+              ),
+            )),
+        markDeletedHomeworkAsSeenCallback = ((day) => store.dispatch(
+              MarkDeletedHomeworkAsSeenAction(
+                (b) => b..day = day.toBuilder(),
+              ),
+            )),
+        markAllAsNotNewOrChangedCallback = (() => store.dispatch(
+              MarkAllAsNotNewOrChangedAction(),
+            ));
 }

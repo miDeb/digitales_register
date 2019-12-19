@@ -1,10 +1,12 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:quiver_hashcode/hashcode.dart';
 import 'package:redux/redux.dart';
-import 'package:collection/collection.dart';
 
-import '../actions.dart';
+import '../actions/calendar_actions.dart';
+import '../actions/routing_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../ui/calendar.dart';
 
@@ -52,11 +54,18 @@ class CalendarViewModel {
   CalendarViewModel(Store<AppState> store)
       : showEditSubjectNicks =
             (() => store.dispatch(ShowEditCalendarSubjectNicksAction())),
-        closeEditNicksBar =
-            (() => store.dispatch(SetShowCalendarSubjectNicksBarAction(false))),
-        dayCallback = ((day) => store.dispatch(LoadCalendarAction(day))),
-        currentMondayCallback =
-            ((day) => store.dispatch(SetCalendarCurrentMondayAction(day))),
+        closeEditNicksBar = (() => store.dispatch(
+            SetShowCalendarSubjectNicksBarAction((b) => b..show = false))),
+        dayCallback = ((day) => store.dispatch(
+              LoadCalendarAction(
+                (b) => b..startDate = day,
+              ),
+            )),
+        currentMondayCallback = ((day) => store.dispatch(
+              SetCalendarCurrentMondayAction(
+                (b) => b..monday = day,
+              ),
+            )),
         first = store.state.calendarState.currentDays.isEmpty
             ? null
             : store.state.calendarState.currentDays.first.date,

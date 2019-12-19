@@ -2,13 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:dr/middleware/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/dashboard_actions.dart';
+import '../actions/login_actions.dart';
+import '../actions/notifications_actions.dart';
+import '../actions/routing_actions.dart';
+import '../actions/save_pass_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../linux.dart';
 import '../main.dart';
@@ -22,6 +27,7 @@ import 'login.dart';
 import 'notifications.dart';
 import 'pass.dart';
 import 'routing.dart';
+import 'settings.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 
@@ -92,7 +98,7 @@ void errorMiddleware(Store<AppState> store, action, NextDispatcher next) {
   }
 }
 
-TypedMiddleware<AppState, TapAction> _createTap(Wrapper wrapper) =>
+TypedMiddleware<AppState, UpdateLogoutAction> _createTap(Wrapper wrapper) =>
     TypedMiddleware(
       (_, __, ___) {
         wrapper.interaction();
@@ -106,9 +112,17 @@ TypedMiddleware<AppState, RefreshNoInternetAction> _createRefreshNoInternet(
       (Store<AppState> store, RefreshNoInternetAction action, next) async {
     next(action);
     if (await wrapper.noInternet) {
-      store.dispatch(NoInternetAction(true));
+      store.dispatch(
+        NoInternetAction(
+          (b) => b..noInternet = true,
+        ),
+      );
     } else {
-      store.dispatch(NoInternetAction(false));
+      store.dispatch(
+        NoInternetAction(
+          (b) => b..noInternet = false,
+        ),
+      );
       store.dispatch(LoadAction());
     }
   });
@@ -128,7 +142,14 @@ TypedMiddleware<AppState, LoadAction> _createLoad() {
       final offlineEnabled = login["offlineEnabled"];
       if (user != null && pass != null) {
         store.dispatch(
-          LoginAction(user, pass, url, true, offlineEnabled),
+          LoginAction(
+            (b) => b
+              ..user = user
+              ..pass = pass
+              ..url = url
+              ..fromStorage = true
+              ..offlineEnabled = offlineEnabled,
+          ),
         );
       } else
         store.dispatch(ShowLoginAction());
@@ -140,7 +161,11 @@ TypedMiddleware<AppState, RefreshAction> _createRefresh() {
   return TypedMiddleware(
     (Store<AppState> store, RefreshAction action, NextDispatcher next) async {
       next(action);
-      store.dispatch(LoadDaysAction(store.state.dayState.future));
+      store.dispatch(
+        LoadDaysAction(
+          (b) => b..future = store.state.dayState.future,
+        ),
+      );
       store.dispatch(LoadNotificationsAction());
     },
   );
@@ -165,7 +190,7 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
   }
 
   if (!store.state.loginState.loggedIn) {
-    final user = action.userName.hashCode;
+    final user = action.username.hashCode;
     final file = File(
         "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     final vals = json.decode(
@@ -193,8 +218,8 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
         : store.state.settingsState;
     store.dispatch(
       MountAppStateAction(
-        store.state.rebuild(
-          (b) => b
+        (b) => b
+          ..appState = (store.state.toBuilder()
             ..dayState = (dayState.toBuilder()
               ..future = true
               ..blacklist ??= ListBuilder([]))
@@ -203,24 +228,35 @@ void _loggedIn(Store<AppState> store, LoggedInAction action,
             ..notificationState = notificationState.toBuilder()
             ..absenceState = absenceState?.toBuilder()
             ..calendarState = calendarState.toBuilder()
-            ..settingsState = settingsState.toBuilder(),
-        ),
+            ..settingsState = settingsState.toBuilder()),
       ),
     );
 
     // next not at the beginning: bug fix (serialization)
     next(action);
 
-    store.dispatch(SetSaveNoPassAction(settingsState.noPasswordSaving));
+    store.dispatch(
+      SetSaveNoPassAction(
+        (b) => b..noSave = settingsState.noPasswordSaving,
+      ),
+    );
 
     if (store.state.currentRouteIsLogin) {
       navigatorKey.currentState.pop();
-      store.dispatch(SetIsLoginRouteAction(false));
+      store.dispatch(
+        SetRouteIsLoginAction(
+          (b) => b..isLogin = false,
+        ),
+      );
     }
   } else {
     next(action);
   }
-  store.dispatch(LoadDaysAction(true));
+  store.dispatch(
+    LoadDaysAction(
+      (b) => b..future = true,
+    ),
+  );
   store.dispatch(LoadNotificationsAction());
 }
 
@@ -278,7 +314,11 @@ void writeToStorage(String key, String txt) async {
 _saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
   next(action);
   if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
-    store.dispatch(SetDeleteDataOnLogoutAction(false));
+    store.dispatch(
+      SetDeleteDataOnLogoutAction(
+        (b) => b..delete = false,
+      ),
+    );
   }
   if (action.noSave) {
     store.dispatch(DeleteDataAction());

@@ -1,8 +1,9 @@
+import '../actions/app_actions.dart';
 import 'package:mutex/mutex.dart';
 import 'package:redux/redux.dart';
 import 'package:requests/requests.dart';
 
-import '../actions.dart';
+import '../actions/grades_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -26,9 +27,13 @@ const String _subjectsDetail = "/api/student/subject_detail";
 
 SemesterLock _gradesLock;
 
-void _setSemester(Store<AppState> store, SetGradesSemesterAction action,
-    NextDispatcher next) {
-  store.dispatch(LoadSubjectsAction(action.newSemester));
+void _setSemester(
+    Store<AppState> store, SetSemesterAction action, NextDispatcher next) {
+  store.dispatch(
+    LoadSubjectsAction(
+      (b) => b..semester = action.semester.toBuilder(),
+    ),
+  );
   next(action);
 }
 
@@ -37,7 +42,11 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
   next(action);
 
   if (await wrapper.noInternet) {
-    store.dispatch(NoInternetAction(true));
+    store.dispatch(
+      NoInternetAction(
+        (b) => b..noInternet = true,
+      ),
+    );
     return;
   }
 
@@ -50,9 +59,18 @@ void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
         _subjects,
         {"studentId": store.state.config.userId},
       );
-      store.dispatch(SubjectsLoadedAction(data, s));
-      store.dispatch(UpdateGradesGraphConfigsAction(
-          store.state.gradesState.subjects.toList()));
+      store.dispatch(
+        SubjectsLoadedAction(
+          (b) => b
+            ..data = data
+            ..semester = s.toBuilder(),
+        ),
+      );
+      store.dispatch(
+        UpdateGraphConfigsAction(
+          (b) => b..subjects = store.state.gradesState.subjects.toBuilder(),
+        ),
+      );
     },
   );
 }
@@ -62,7 +80,11 @@ void _loadDetail(Store<AppState> store, NextDispatcher next,
   next(action);
 
   if (await wrapper.noInternet) {
-    store.dispatch(NoInternetAction(true));
+    store.dispatch(
+      NoInternetAction(
+        (b) => b..noInternet = true,
+      ),
+    );
     return;
   }
 
@@ -75,7 +97,14 @@ void _loadDetail(Store<AppState> store, NextDispatcher next,
         "studentId": store.state.config.userId,
         "subjectId": action.subject.id
       });
-      store.dispatch(SubjectLoadedAction(data, s, action.subject));
+      store.dispatch(
+        SubjectDetailLoadedAction(
+          (b) => b
+            ..data = data
+            ..semester = s.toBuilder()
+            ..subject = action.subject.toBuilder(),
+        ),
+      );
     },
   );
 }

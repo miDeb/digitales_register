@@ -1,9 +1,10 @@
-import 'package:dr/linux.dart';
 import 'package:intl/intl.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
+import '../linux.dart';
 import '../wrapper.dart';
 
 List<Middleware<AppState>> daysMiddlewares(Wrapper wrapper) => [
@@ -35,15 +36,21 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
   if (data == null) {
     store.dispatch(
       await wrapper.noInternet
-          ? DaysNotLoadedAction.noInternet()
-          : DaysNotLoadedAction(wrapper.error),
+          ? DaysNotLoadedAction((b) => b..noInternet = true)
+          : DaysNotLoadedAction((b) => b..errorMsg = wrapper.error),
     );
   } else {
+    if (data is! List) {
+      // TODO: Handle unexpected response
+      return;
+    }
     store.dispatch(
       DaysLoadedAction(
-        data,
-        action.future,
-        store.state.settingsState.dashboardMarkNewOrChangedEntries,
+        (b) => b
+          ..data = data
+          ..future = action.future
+          ..markNewOrChangedEntries =
+              store.state.settingsState.dashboardMarkNewOrChangedEntries,
       ),
     );
   }
@@ -52,13 +59,22 @@ void _loadDays(NextDispatcher next, LoadDaysAction action, Wrapper wrapper,
 void _daysNotLoaded(void next(dynamic action), DaysNotLoadedAction action,
     Store<AppState> store) {
   next(action);
-  if (action.noInternet) store.dispatch(NoInternetAction(true));
+  if (action.noInternet)
+    store.dispatch(
+      NoInternetAction(
+        (b) => b..noInternet = true,
+      ),
+    );
 }
 
 void _switchFuture(
     NextDispatcher next, SwitchFutureAction action, Store<AppState> store) {
   next(action);
-  store.dispatch(LoadDaysAction(store.state.dayState.future));
+  store.dispatch(
+    LoadDaysAction(
+      (b) => b..future = store.state.dayState.future,
+    ),
+  );
 }
 
 void _addReminder(Store<AppState> store, AddReminderAction action, next,
@@ -71,7 +87,11 @@ void _addReminder(Store<AppState> store, AddReminderAction action, next,
   });
   if (result == null) {
     if (await wrapper.noInternet) {
-      store.dispatch(NoInternetAction(true));
+      store.dispatch(
+        NoInternetAction(
+          (b) => b..noInternet = true,
+        ),
+      );
       return;
     }
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
@@ -79,8 +99,9 @@ void _addReminder(Store<AppState> store, AddReminderAction action, next,
   }
   store.dispatch(
     HomeworkAddedAction(
-      result,
-      action.date,
+      (b) => b
+        ..data = result
+        ..date = action.date,
     ),
   );
 }
@@ -95,9 +116,19 @@ void _deleteHomework(Store<AppState> store, DeleteHomeworkAction action, next,
   if (result != null && result["success"]) {
     // already called next
   } else {
-    next(HomeworkAddedAction(action.hw, action.date));
+    next(
+      HomeworkAddedAction(
+        (b) => b
+          ..data = action.hw
+          ..date = action.date,
+      ),
+    );
     if (await wrapper.noInternet) {
-      store.dispatch(NoInternetAction(true));
+      store.dispatch(
+        NoInternetAction(
+          (b) => b..noInternet = true,
+        ),
+      );
       return;
     }
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
@@ -117,9 +148,19 @@ void _toggleDone(Store<AppState> store, ToggleDoneAction action, next,
     next(
         action); // duplicate - protection from multiple, failing and not failing requests
   } else {
-    next(ToggleDoneAction(action.hw, !action.hw.checked));
+    next(
+      ToggleDoneAction(
+        (b) => b
+          ..hw = action.hw.toBuilder()
+          ..done = !action.hw.checked,
+      ),
+    );
     if (await wrapper.noInternet) {
-      store.dispatch(NoInternetAction(true));
+      store.dispatch(
+        NoInternetAction(
+          (b) => b..noInternet = true,
+        ),
+      );
       return;
     }
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");

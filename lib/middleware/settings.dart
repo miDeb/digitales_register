@@ -1,6 +1,7 @@
-import 'package:dr/actions.dart';
 import 'package:redux/redux.dart';
 
+import '../actions/dashboard_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 
 List<Middleware<AppState>> settingsMiddleware = [

@@ -1,9 +1,10 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../ui/settings_page_widget.dart';
 
@@ -72,34 +73,38 @@ class SettingsViewModel {
             store.state.settingsState.dashboardMarkNewOrChangedEntries,
         allSubjects = extractAllSubjects(store.state),
         onSetNoPassSaving = ((bool mode) {
-          store.dispatch(SetSaveNoPassAction(mode));
+          store.dispatch(SetSaveNoPassAction((b) => b..noSave = mode));
         }),
         onSetNoDataSaving = ((bool mode) {
-          store.dispatch(SetSaveNoDataAction(mode));
+          store.dispatch(SetSaveNoDataAction((b) => b..noSave = mode));
         }),
         onSetAskWhenDelete = ((bool mode) {
-          store.dispatch(SetAskWhenDeleteAction(mode));
+          store.dispatch(SetAskWhenDeleteReminderAction((b) => b..ask = mode));
         }),
         onSetDeleteDataOnLogout = ((bool mode) {
-          store.dispatch(SetDeleteDataOnLogoutAction(mode));
+          store.dispatch(SetDeleteDataOnLogoutAction((b) => b..delete = mode));
         }),
         onSetOfflineEnabled = ((bool mode) {
-          store.dispatch(SetOfflineEnabledAction(mode));
+          store.dispatch(SetOfflineEnabledAction((b) => b..enabled = mode));
         }),
         onSetSubjectNicks = ((Map<String, String> nicks) {
-          store.dispatch(SetSubjectNicksAction(nicks));
+          store.dispatch(SetSubjectNicksAction(
+              (b) => b..subjectNicks = MapBuilder<String, String>(nicks)));
         }),
         onSetShowCalendarEditNicksBar = ((bool mode) {
-          store.dispatch(SetShowCalendarSubjectNicksBarAction(mode));
+          store.dispatch(
+              SetShowCalendarSubjectNicksBarAction((b) => b..show = mode));
         }),
         onSetShowGradesDiagram = ((bool mode) {
-          store.dispatch(SetShowGradesDiagramAction(mode));
+          store.dispatch(SetShowGradesDiagramAction((b) => b..show = mode));
         }),
         onSetShowAllSubjectsAverage = ((bool mode) {
-          store.dispatch(SetShowAllSubjectsAverageAction(mode));
+          store
+              .dispatch(SetShowAllSubjectsAverageAction((b) => b..show = mode));
         }),
         onSetDashboardMarkNewOrChangedEntries = ((bool mode) {
-          store.dispatch(SetDashboardMarkNewOrChangedEntriesAction(mode));
+          store.dispatch(
+              SetDashboardMarkNewOrChangedEntriesAction((b) => b..mark = mode));
         });
 
   static List<String> extractAllSubjects(AppState appState) {

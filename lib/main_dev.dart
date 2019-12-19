@@ -4,7 +4,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_redux_dev_tools/flutter_redux_dev_tools.dart';
 import 'package:redux_dev_tools/redux_dev_tools.dart';
 
-import 'actions.dart';
+import 'actions/app_actions.dart';
+import 'actions/login_actions.dart';
 import 'app_state.dart';
 import 'container/absences_page_container.dart';
 import 'container/calendar_container.dart';
@@ -106,7 +107,7 @@ void runDev() {
             ),
           ),
         ),
-        onPointerDown: (_) => store.dispatch(TapAction()),
+        onPointerDown: (_) => store.dispatch(UpdateLogoutAction()),
       ),
       store: store,
     ),

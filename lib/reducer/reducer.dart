@@ -1,6 +1,6 @@
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
 import '../app_state.dart';
 import 'absences.dart';
 import 'calendar.dart';
@@ -40,8 +40,8 @@ Reducer<AppState> appReducer = (AppState state, action) {
 final _noInternetReducer =
     TypedReducer<bool, NoInternetAction>((_, action) => action.noInternet);
 
-TypedReducer<bool, SetIsLoginRouteAction> _createCurrentRouteReducer() {
-  return TypedReducer((bool state, SetIsLoginRouteAction action) {
+TypedReducer<bool, SetRouteIsLoginAction> _createCurrentRouteReducer() {
+  return TypedReducer((bool state, SetRouteIsLoginAction action) {
     return action.isLogin;
   });
 }

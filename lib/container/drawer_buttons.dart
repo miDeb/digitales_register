@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/login_actions.dart';
+import '../actions/routing_actions.dart';
 import '../app_state.dart';
 import '../ui/drawer_buttons_widgets.dart';
 
@@ -26,7 +27,11 @@ class LogoutButtonViewModel {
   LogoutButtonViewModel.from(Store store)
       : onLogout = store.state.loginState.loggedIn
             ? (() {
-                store.dispatch(LogoutAction(true, false));
+                store.dispatch(LogoutAction(
+                  (b) => b
+                    ..hard = true
+                    ..forced = false,
+                ));
               })
             : null;
 }

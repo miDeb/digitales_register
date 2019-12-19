@@ -1,6 +1,7 @@
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/notifications_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -24,7 +25,7 @@ void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
   if (data != null) {
     store.dispatch(
       NotificationsLoadedAction(
-        data,
+        (b) => b..data = data,
       ),
     );
   }
@@ -33,7 +34,11 @@ void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
 void _delete(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
     DeleteNotificationAction action) async {
   if (await wrapper.noInternet) {
-    store.dispatch(NoInternetAction(true));
+    store.dispatch(
+      NoInternetAction(
+        (b) => b..noInternet = true,
+      ),
+    );
     return;
   }
   next(action);
@@ -45,7 +50,11 @@ void _delete(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
 void _deleteAll(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
     DeleteAllNotificationsAction action) async {
   if (await wrapper.noInternet) {
-    store.dispatch(NoInternetAction(true));
+    store.dispatch(
+      NoInternetAction(
+        (b) => b..noInternet = true,
+      ),
+    );
     return;
   }
   next(action);

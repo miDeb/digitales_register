@@ -1,11 +1,12 @@
-import 'package:dr/actions.dart';
-import 'package:dr/ui/homework_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:built_collection/built_collection.dart';
 
+import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../ui/homework_filter.dart';
 
 class HomeworkFilterContainer extends StatelessWidget {
   @override
@@ -18,7 +19,9 @@ class HomeworkFilterContainer extends StatelessWidget {
         return HomeworkFilterVM(
           store.state.dayState.blacklist.toList(),
           (newBlacklist) => store.dispatch(
-            UpdateHomeworkFilterBlacklistAction(newBlacklist),
+            UpdateHomeworkFilterBlacklistAction(
+              (b) => b..blacklist = ListBuilder(newBlacklist),
+            ),
           ),
           HomeworkType.values.toList(),
         );

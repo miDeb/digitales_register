@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/save_pass_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../wrapper.dart';
 
@@ -33,7 +34,7 @@ void _enableOffline(NextDispatcher next, SetOfflineEnabledAction action,
       {
         "user": wrapper.user,
         "pass": wrapper.pass,
-        "offlineEnabled": action.enable,
+        "offlineEnabled": action.enabled,
       },
     ),
   );
@@ -44,7 +45,7 @@ void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
   next(action);
   wrapper.safeMode = action.noSave;
   if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
-    store.dispatch(SetDeleteDataOnLogoutAction(false));
+    store.dispatch(SetDeleteDataOnLogoutAction((b) => b..delete = false));
   }
   if (!store.state.loginState.loggedIn) return;
   if (!action.noSave) {

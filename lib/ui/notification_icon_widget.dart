@@ -1,7 +1,7 @@
-import 'package:dr/ui/news_sticker.dart';
 import 'package:flutter/material.dart';
 
 import '../container/notification_icon.dart';
+import 'news_sticker.dart';
 
 class NotificationIconWidget extends StatelessWidget {
   final NotificationIconViewModel vm;

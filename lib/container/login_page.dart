@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/app_actions.dart';
+import '../actions/login_actions.dart';
+import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../ui/login_page_content.dart';
 
@@ -34,10 +36,20 @@ class LoginPageViewModel {
 
   LoginPageViewModel.from(Store<AppState> store)
       : error = store.state.loginState.errorMsg,
-        onLogin = ((user, pass, url) =>
-            store.dispatch(LoginAction(user, pass, url, false))),
-        setSafeMode =
-            ((bool safeMode) => store.dispatch(SetSaveNoPassAction(safeMode))),
+        onLogin = ((user, pass, url) => store.dispatch(
+              LoginAction(
+                (b) => b
+                  ..user = user
+                  ..pass = pass
+                  ..url = url
+                  ..fromStorage = false,
+              ),
+            )),
+        setSafeMode = ((bool safeMode) => store.dispatch(
+              SetSaveNoPassAction(
+                (b) => b..noSave = safeMode,
+              ),
+            )),
         loading = store.state.loginState.loading,
         safeMode = store.state.settingsState.noPasswordSaving,
         noInternet = store.state.noInternet,

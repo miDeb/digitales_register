@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-import '../actions.dart';
+import '../actions/routing_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/grades_chart.dart';
@@ -38,7 +38,7 @@ class GradesChartContainer extends StatelessWidget {
                 store.state.settingsState.graphConfigs[(s as Subject).id],
           ),
           isFullscreen,
-          () => store.dispatch(ShowFullscreenChartAciton()),
+          () => store.dispatch(ShowFullscreenChartAction()),
         );
       },
       builder: (BuildContext context, GradesChartViewModel vm) {
