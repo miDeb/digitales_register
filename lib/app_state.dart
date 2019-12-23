@@ -11,19 +11,24 @@ part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
   DashboardState get dashboardState;
+  @BuiltValueField(serialize: false)
   LoginState get loginState;
   NotificationState get notificationState;
   GradesState get gradesState;
   @nullable
   AbsencesState get absencesState;
   @nullable
+  @BuiltValueField(serialize: false)
   Config get config;
+  @BuiltValueField(serialize: false)
   bool get noInternet;
+  @BuiltValueField(serialize: false)
   bool get currentRouteIsLogin;
   @nullable
   SettingsState get settingsState;
   CalendarState get calendarState;
   @nullable
+  @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
   static Serializer<AppState> get serializer => _$appStateSerializer;
   AppState._();

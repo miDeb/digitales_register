@@ -179,46 +179,30 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     final user = action.payload.username.hashCode;
     final file = File(
         "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
-    final vals = json.decode(
-      await file.exists() && await file.length() > 0
-          ? await file.readAsString()
-          : await _secureStorage.read(key: user.toString()) ?? "{}",
-    );
-    final dayState = vals["homework"] != null
-        ? serializers.deserialize(vals["homework"]) as DashboardState
-        : api.state.dashboardState;
-    final gradesState = vals["grades"] != null
-        ? serializers.deserialize(vals["grades"]) as GradesState
-        : api.state.gradesState;
-    final notificationState = vals["notifications"] != null
-        ? serializers.deserialize(vals["notifications"]) as NotificationState
-        : api.state.notificationState;
-    final absenceState = vals["absences"] != null
-        ? serializers.deserialize(vals["absences"]) as AbsencesState
-        : api.state.absencesState;
-    final calendarState = vals["calendar"] != null
-        ? serializers.deserialize(vals["calendar"]) as CalendarState
-        : api.state.calendarState;
-    final settingsState = _lastSettingsState = vals["settings"] != null
-        ? serializers.deserialize(vals["settings"]) as SettingsState
-        : api.state.settingsState;
-    api.actions.mountAppState(
-      api.state.rebuild((b) => b
-        ..dashboardState = (dayState.toBuilder()
-          ..future = true
-          ..blacklist ??= ListBuilder([]))
-        ..gradesState = (gradesState.toBuilder()
-          ..semester = gradesState.semester.toBuilder())
-        ..notificationState = notificationState.toBuilder()
-        ..absencesState = absenceState?.toBuilder()
-        ..calendarState = calendarState.toBuilder()
-        ..settingsState = settingsState.toBuilder()),
-    );
+    if (await file.exists()) {
+      AppState serializedState =
+          serializers.deserialize(json.decode(await file.readAsString()));
+      api.actions.mountAppState(
+        api.state.rebuild((b) => b
+          ..dashboardState = (serializedState.dashboardState.toBuilder()
+            ..future = true
+            ..blacklist ??= ListBuilder([]))
+          ..gradesState = (serializedState.gradesState.toBuilder()
+            ..semester = api.state.gradesState.semester.toBuilder())
+          ..notificationState = serializedState.notificationState.toBuilder()
+          ..absencesState = serializedState.absencesState?.toBuilder()
+          ..calendarState = serializedState.calendarState.toBuilder()
+          ..settingsState = serializedState.settingsState.toBuilder()),
+      );
 
-    // next not at the beginning: bug fix (serialization)
-    next(action);
+      // next not at the beginning: bug fix (serialization)
+      next(action);
 
-    api.actions.settingsActions.saveNoPass(settingsState.noPasswordSaving);
+      api.actions.settingsActions
+          .saveNoPass(serializedState.settingsState.noPasswordSaving);
+    } else {
+      next(action);
+    }
 
     if (api.state.currentRouteIsLogin) {
       navigatorKey.currentState.pop();
@@ -245,39 +229,33 @@ NextActionHandler _saveStateMiddleware(
                 ? Duration.zero
                 : Duration(seconds: 5);
             _saveUnderway = true;
-            Future.delayed(delay, () async {
-              _saveUnderway = false;
-              if (!api.state.settingsState.noDataSaving) {
-                final save = json.encode({
-                  "grades": serializers.serialize(api.state.gradesState),
-                  "homework": serializers.serialize(api.state.dashboardState),
-                  "calendar": serializers.serialize(api.state.calendarState),
-                  "absences": api.state.absencesState != null
-                      ? serializers.serialize(api.state.absencesState)
-                      : null,
-                  "notifications":
-                      serializers.serialize(api.state.notificationState),
-                  "settings": serializers.serialize(api.state.settingsState),
-                });
-                if (_lastSave == save) return;
-                _writeToStorage(
-                  user.toString(),
-                  save,
-                );
-              } else {
-                if (_lastSettingsState != api.state.settingsState)
+            Future.delayed(
+              delay,
+              () async {
+                _saveUnderway = false;
+                if (!api.state.settingsState.noDataSaving) {
+                  final save = json.encode(serializers.serialize(api.state));
+                  if (_lastSave == save) return;
+                  _lastSave = save;
                   _writeToStorage(
                     user.toString(),
-                    json.encode(
-                      {
-                        "settings":
-                            serializers.serialize(api.state.settingsState),
-                      },
-                    ),
+                    save,
                   );
-                _lastSettingsState = api.state.settingsState;
-              }
-            });
+                } else {
+                  if (_lastSettingsState != api.state.settingsState)
+                    _writeToStorage(
+                      user.toString(),
+                      json.encode(
+                        {
+                          "settings":
+                              serializers.serialize(api.state.settingsState),
+                        },
+                      ),
+                    );
+                  _lastSettingsState = api.state.settingsState;
+                }
+              },
+            );
           }
         };
 
@@ -287,7 +265,11 @@ Future<File> _storageFile(String key) async {
 }
 
 void _writeToStorage(String key, String txt) async {
-  (await _storageFile(key)).writeAsString(txt, flush: true);
+  final file = await _storageFile(key);
+  if (!await file.exists()) {
+    await file.create();
+  }
+  (await _storageFile(key)).writeAsString(txt);
 }
 
 void _saveNoData(
@@ -308,5 +290,7 @@ void _deleteData(
   final file = await _storageFile(
     api.state.loginState.userName.hashCode.toString(),
   );
-  file.delete();
+  if (await file.exists()) {
+    file.delete();
+  }
 }
