@@ -61,16 +61,19 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..fromStorage = action.payload.fromStorage,
       ),
     );
-  else
+  else {
+    final noInternet = await _wrapper.noInternet;
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
-        (b) async => b
+        (b) => b
           ..cause = _wrapper.error
           ..offlineEnabled = action.payload.offlineEnabled
-          ..noInternet = await _wrapper.noInternet
-          ..username = action.payload.user,
+          ..noInternet = noInternet
+          ..username = action.payload.user
+          ..fromStorage = action.payload.fromStorage,
       ),
     );
+  }
 }
 
 void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
