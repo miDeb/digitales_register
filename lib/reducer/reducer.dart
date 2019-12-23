@@ -12,6 +12,7 @@ import 'notifications.dart';
 import 'settings.dart';
 
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
+  ..add(AppActionsNames.mountAppState, _mountState)
   ..add(AppActionsNames.noInternet, _noInternet)
   ..add(AppActionsNames.isLoginRoute, _currentRouteIsLogin)
   ..add(AppActionsNames.setConfig, _config)
@@ -35,4 +36,9 @@ void _currentRouteIsLogin(
 
 void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
   builder..config.replace(action.payload);
+}
+
+void _mountState(
+    AppState state, Action<AppState> action, AppStateBuilder builder) {
+  builder.replace(action.payload);
 }
