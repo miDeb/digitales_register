@@ -109,6 +109,7 @@ abstract class Config implements Built<Config, ConfigBuilder> {
 }
 
 abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
+  @BuiltValueField(serialize: false)
   bool get loading;
   bool get hasGrades => subjects?.isEmpty != true;
   Semester get semester;
