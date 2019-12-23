@@ -1,62 +1,45 @@
-import 'package:redux/redux.dart';
+part of 'middleware.dart';
 
-import '../actions/app_actions.dart';
-import '../actions/notifications_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
+final _notificationsMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(NotificationsActionsNames.load, _loadNotifications)
+      ..add(NotificationsActionsNames.delete, _deleteNotification)
+      ..add(NotificationsActionsNames.deleteAll, _deleteAllNotifications);
 
-List<Middleware<AppState>> notificationsMiddlewares(Wrapper wrapper) => [
-      TypedMiddleware<AppState, LoadNotificationsAction>(
-        (store, action, next) => _load(next, action, wrapper, store),
-      ),
-      TypedMiddleware<AppState, DeleteNotificationAction>(
-        (store, action, next) => _delete(wrapper, store, next, action),
-      ),
-      TypedMiddleware<AppState, DeleteAllNotificationsAction>(
-        (store, action, next) => _deleteAll(wrapper, store, next, action),
-      ),
-    ];
-
-void _load(NextDispatcher next, LoadNotificationsAction action, Wrapper wrapper,
-    Store<AppState> store) async {
+void _loadNotifications(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   next(action);
-  final data = await wrapper.post("/api/notification/unread");
+  final data = await _wrapper.post("/api/notification/unread");
 
   if (data != null) {
-    store.dispatch(
-      NotificationsLoadedAction(
-        (b) => b..data = data,
-      ),
-    );
+    api.actions.notificationsActions.loaded(data);
   }
 }
 
-void _delete(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
-    DeleteNotificationAction action) async {
-  if (await wrapper.noInternet) {
-    store.dispatch(
-      NoInternetAction(
-        (b) => b..noInternet = true,
-      ),
-    );
+void _deleteNotification(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<Notification> action) async {
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
     return;
   }
   next(action);
 
-  wrapper.post(
-      "/api/notification/markAsRead", {"id": action.notification.id}, false);
+  _wrapper.post(
+      "/api/notification/markAsRead", {"id": action.payload.id}, false);
 }
 
-void _deleteAll(Wrapper wrapper, Store<AppState> store, NextDispatcher next,
-    DeleteAllNotificationsAction action) async {
-  if (await wrapper.noInternet) {
-    store.dispatch(
-      NoInternetAction(
-        (b) => b..noInternet = true,
-      ),
-    );
+void _deleteAllNotifications(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
     return;
   }
   next(action);
-  wrapper.post("/api/notification/markAsRead", {}, false);
+  _wrapper.post("/api/notification/markAsRead", {}, false);
 }

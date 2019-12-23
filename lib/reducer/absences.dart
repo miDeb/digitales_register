@@ -1,16 +1,22 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/absences_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final absenceReducer =
-    TypedReducer<AbsenceStateBuilder, AbsencesLoadedAction>((state, action) {
-  return parseAbsences(action.absences);
-});
+final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    AbsencesState, AbsencesStateBuilder>(
+  (s) => s.absencesState,
+  (b) => b.absencesState,
+)..add(AbsencesActionsNames.loaded, _loaded);
 
-AbsenceStateBuilder parseAbsences(json) {
+void _loaded(
+    AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
+  return builder.replace(parseAbsences(action.payload));
+}
+
+AbsencesState parseAbsences(json) {
   final rawStats = json["statistics"];
   final stats = AbsenceStatisticBuilder()
     ..counter = rawStats["counter"]
@@ -56,7 +62,9 @@ AbsenceStateBuilder parseAbsences(json) {
         }),
     );
   });
-  return AbsenceStateBuilder()
-    ..statistic = stats
-    ..absences = ListBuilder(absences);
+  return AbsencesState(
+    (b) => b
+      ..statistic = stats
+      ..absences = ListBuilder(absences),
+  );
 }

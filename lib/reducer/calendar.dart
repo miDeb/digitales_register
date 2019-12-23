@@ -1,33 +1,33 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/calendar_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-Reducer<CalendarStateBuilder> calendarReducer =
-    (CalendarStateBuilder state, action) {
-  return state
-    ..days = TypedReducer(_calendarLoadedReducer)(state.days, action)
-    ..currentMonday =
-        TypedReducer(_currentMondayReducer)(state.currentMonday, action);
-};
+final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    CalendarState, CalendarStateBuilder>(
+  (s) => s.calendarState,
+  (b) => b.calendarState,
+)
+  ..add(CalendarActionsNames.loaded, _loaded)
+  ..add(CalendarActionsNames.setCurrentMonday, _currentMonday);
 
-MapBuilder<DateTime, CalendarDay> _calendarLoadedReducer(
-    MapBuilder<DateTime, CalendarDay> state, CalendarLoadedAction action) {
-  final t = (action.result as Map).map((k, e) {
+void _loaded(
+    CalendarState state, Action<Object> action, CalendarStateBuilder builder) {
+  final t = (action.payload as Map).map((k, e) {
     final date = DateTime.parse(k);
-    return MapEntry(date, parseCalendarDay(e, date).build());
+    return MapEntry(date, _parseCalendarDay(e, date).build());
   });
-  return state..addAll(t);
+  builder.days.addAll(t);
 }
 
-DateTime _currentMondayReducer(
-    DateTime currentMonday, SetCalendarCurrentMondayAction action) {
-  return action.monday;
+void _currentMonday(CalendarState state, Action<DateTime> action,
+    CalendarStateBuilder builder) {
+  builder..currentMonday = action.payload;
 }
 
-CalendarDayBuilder parseCalendarDay(day, DateTime date) {
+CalendarDayBuilder _parseCalendarDay(day, DateTime date) {
   // needed because JSON now looks like:
   // "2019-11-04": {
   //    "1": {
@@ -40,16 +40,16 @@ CalendarDayBuilder parseCalendarDay(day, DateTime date) {
   //    },
   // }
   if ((day as Map).length == 1)
-    return parseCalendarDay((day as Map).values.single, date);
+    return _parseCalendarDay((day as Map).values.single, date);
   return CalendarDayBuilder()
     ..date = date
     ..hours = ListBuilder(((day as Map).values.toList()
           ..removeWhere((e) => e == null || e["isLesson"] == 0)
           ..sort((a, b) => a["hour"].compareTo(b["hour"])))
-        .map((h) => parseHour(h).build()));
+        .map((h) => _parseHour(h).build()));
 }
 
-CalendarHourBuilder parseHour(hour) {
+CalendarHourBuilder _parseHour(hour) {
   final lesson = hour["lesson"];
   return CalendarHourBuilder()
     ..description = lesson["description"]

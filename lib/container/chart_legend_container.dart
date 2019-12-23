@@ -1,47 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:tuple/tuple.dart';
 
-import '../actions/settings_actions.dart';
+import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_chart_legend.dart';
 
 class ChartLegendContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, ChartLegendViewModel>(
-      builder: (BuildContext context, ChartLegendViewModel vm) {
-        return ChartLegend(vm: vm);
+    return StoreConnection<AppState, AppActions,
+        Map<Tuple2<String, int>, SubjectGraphConfig>>(
+      builder: (context, vm, actions) {
+        return ChartLegend(
+          vm: vm,
+          onSetConfig: (id, config) {
+            actions.settingsActions.setGraphConfig(MapEntry(id, config));
+          },
+        );
       },
-      converter: (Store<AppState> store) {
-        return ChartLegendViewModel(
-            store.state.settingsState.graphConfigs
-                .map(
-                  (id, config) => MapEntry(
-                      store.state.gradesState.subjects
-                          .firstWhere((s) => s.id == id)
-                          .name,
-                      config),
-                )
-                .toMap(), (name, thick) {
-          final id = store.state.gradesState.subjects
-              .firstWhere((s) => s.name == name)
-              .id;
-          final configs = store.state.settingsState.graphConfigs.toBuilder();
-          configs.updateValue(id, (config) {
-            return config.rebuild((b) => b.thick = thick);
-          });
-          store.dispatch(SetGraphConfigsAction((b) => b..configs = configs));
-        });
+      connect: (state) {
+        return state.settingsState.graphConfigs
+            .map(
+              (id, config) => MapEntry(
+                Tuple2(
+                  state.gradesState.subjects.firstWhere((s) => s.id == id).name,
+                  id,
+                ),
+                config,
+              ),
+            )
+            .toMap();
       },
     );
   }
 }
 
-typedef void ChangeThick(String s, int thick);
-
 class ChartLegendViewModel {
-  final Map<String, SubjectGraphConfig> configs;
-  final ChangeThick onChangeThick;
-  ChartLegendViewModel(this.configs, this.onChangeThick);
+  final Map<Tuple2<String, int>, SubjectGraphConfig> configs;
+  ChartLegendViewModel(this.configs);
 }

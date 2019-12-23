@@ -5,7 +5,7 @@ import '../container/absence_group_container.dart';
 import '../data.dart';
 
 class AbsencesPage extends StatelessWidget {
-  final AbsenceState state;
+  final AbsencesState state;
 
   const AbsencesPage({Key key, @required this.state}) : super(key: key);
   @override
@@ -22,7 +22,7 @@ class AbsencesPage extends StatelessWidget {
 }
 
 class AbsencesBody extends StatelessWidget {
-  final AbsenceState state;
+  final AbsencesState state;
 
   const AbsencesBody({Key key, @required this.state}) : super(key: key);
 

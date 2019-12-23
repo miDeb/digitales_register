@@ -1,27 +1,20 @@
-import 'package:intl/intl.dart';
-import 'package:redux/redux.dart';
+part of 'middleware.dart';
 
-import '../actions/calendar_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
+final _calendarMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(CalendarActionsNames.load, _loadCalendar);
 
-List<Middleware<AppState>> calendarMiddlewares(Wrapper wrapper) => [
-      TypedMiddleware<AppState, LoadCalendarAction>(
-        (store, action, next) => _load(store, action, next, wrapper),
-      ),
-    ];
-
-void _load(Store store, LoadCalendarAction action, NextDispatcher next,
-    Wrapper wrapper) async {
+void _loadCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<DateTime> action) async {
   next(action);
-  final data = await wrapper.post("/api/calendar/student",
-      {"startDate": DateFormat("yyyy-MM-dd").format(action.startDate)});
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
+    return;
+  }
+  final data = await _wrapper.post("/api/calendar/student",
+      {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 
   if (data != null) {
-    store.dispatch(
-      CalendarLoadedAction(
-        (b) => b..result = data,
-      ),
-    );
+    api.actions.calendarActions.loaded(data);
   }
 }

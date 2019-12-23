@@ -1,5 +1,5 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../actions/grades_actions.dart';
@@ -7,40 +7,29 @@ import '../actions/login_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final gradesReducer = combineReducers<GradesStateBuilder>([
-  _loadSubjectsReducer,
-  TypedReducer<GradesStateBuilder, SubjectsLoadedAction>(
-    _subjectsLoadedReducer,
-  ),
-  TypedReducer<GradesStateBuilder, SubjectDetailLoadedAction>(
-    _subjectLoadedReducer,
-  ),
-  TypedReducer<GradesStateBuilder, SetSemesterAction>(
-    _setGradesSemesterReducer,
-  ),
-  TypedReducer<GradesStateBuilder, LoggedInAgainAutomatically>(
-    _afterAutoRelogin,
-  ),
-  TypedReducer<GradesStateBuilder, SetConfigAction>(
-    _setCurrentSemester,
-  ),
-]);
+final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    GradesState, GradesStateBuilder>(
+  (s) => s.gradesState,
+  (b) => b.gradesState,
+)
+  ..add(GradesActionsNames.load, _loading)
+  ..add(GradesActionsNames.loaded, _loaded)
+  ..add(GradesActionsNames.setSemester, _setSemester)
+  ..add(LoginActionsNames.automaticallyReloggedIn, _afterAutoRelogin)
+  ..add(GradesActionsNames.detailsLoaded, _detailsLoaded)
+  ..add(AppActionsNames.setConfig, _setConfig);
 
-GradesStateBuilder _loadSubjectsReducer(GradesStateBuilder state, action) {
-  if (action is LoadSubjectsAction) {
-    return state..loading = true;
-  } else if (action is NoInternetAction) {
-    return state..loading = false;
-  } else
-    return state;
+void _loading(
+    GradesState state, Action<Semester> action, GradesStateBuilder builder) {
+  builder.loading = true;
 }
 
-GradesStateBuilder _subjectsLoadedReducer(
-    GradesStateBuilder state, SubjectsLoadedAction action) {
-  _updateSubjects(
-      state.subjects.build(), state.subjects, action.data, action.semester);
-  return state
-    ..serverSemester = action.semester.toBuilder()
+void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
+    GradesStateBuilder builder) {
+  _updateSubjects(state.subjects, builder.subjects, action.payload.data,
+      action.payload.semester);
+  builder
+    ..serverSemester.replace(action.payload.semester)
     ..loading = false;
 }
 
@@ -85,27 +74,26 @@ _updateSubjects(BuiltList<Subject> subjects,
   }
 }
 
-GradesStateBuilder _subjectLoadedReducer(
-    GradesStateBuilder state, SubjectDetailLoadedAction action) {
-  final data = action.data as Map;
-  return state
-    ..subjects.map(
-      (s) => s.id == action.subject.id
-          ? s.rebuild(
-              (b) => b
-                ..grades[action.semester] = BuiltList(
-                  data["grades"].map(
-                    (g) => _parseGrade(g),
-                  ),
-                )
-                ..observations[action.semester] = BuiltList(
-                  data["observations"].map(
-                    (o) => _parseObservation(o),
-                  ),
+void _detailsLoaded(GradesState state,
+    Action<SubjectDetailLoadedPayload> action, GradesStateBuilder builder) {
+  final data = action.payload.data as Map;
+  builder.subjects.map(
+    (s) => s.id == action.payload.subject.id
+        ? s.rebuild(
+            (b) => b
+              ..grades[action.payload.semester] = BuiltList(
+                data["grades"].map(
+                  (g) => _parseGrade(g),
                 ),
-            )
-          : s,
-    );
+              )
+              ..observations[action.payload.semester] = BuiltList(
+                data["observations"].map(
+                  (o) => _parseObservation(o),
+                ),
+              ),
+          )
+        : s,
+  );
 }
 
 Observation _parseObservation(dynamic data) {
@@ -169,23 +157,22 @@ Competence _parseCompetence(dynamic data) {
     ..grade = data["grade"]);
 }
 
-GradesStateBuilder _setGradesSemesterReducer(
-    GradesStateBuilder state, SetSemesterAction action) {
-  return state..semester.replace(action.semester);
+void _setSemester(
+    GradesState state, Action<Semester> action, GradesStateBuilder builder) {
+  builder.semester.replace(action.payload);
 }
 
-GradesStateBuilder _afterAutoRelogin(
-    GradesStateBuilder state, LoggedInAgainAutomatically action) {
-  return state..serverSemester = null;
+void _afterAutoRelogin(
+    GradesState state, Action<void> action, GradesStateBuilder builder) {
+  builder.serverSemester = null;
 }
 
-GradesStateBuilder _setCurrentSemester(
-    GradesStateBuilder state, SetConfigAction action) {
-  if (action.config.currentSemesterMaybe == 1) {
-    state..semester = Semester.first.toBuilder();
+void _setConfig(
+    GradesState state, Action<Config> action, GradesStateBuilder builder) {
+  if (action.payload.currentSemesterMaybe == 1) {
+    builder.semester.replace(Semester.first);
   }
-  if (action.config.currentSemesterMaybe == 2) {
-    state..semester = Semester.second.toBuilder();
+  if (action.payload.currentSemesterMaybe == 2) {
+    builder.semester.replace(Semester.second);
   }
-  return state;
 }

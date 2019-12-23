@@ -1,15 +1,16 @@
+import 'package:dr/container/notification_icon_container.dart';
 import 'package:flutter/material.dart';
 
 import '../container/days_container.dart';
 import '../container/drawer_buttons.dart';
 import '../container/home_page.dart';
-import '../container/notification_icon.dart';
 import 'splash.dart';
 
 class HomePageContent extends StatelessWidget {
   final HomePageContentViewModel vm;
+  final VoidCallback refreshNoInternet;
 
-  HomePageContent({Key key, this.vm}) : super(key: key);
+  HomePageContent({Key key, this.vm, this.refreshNoInternet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,12 +30,10 @@ class HomePageContent extends StatelessWidget {
                             )
                           ],
                         ),
-                        onTap: () {
-                          vm.refreshNoInternet();
-                        },
+                        onTap: refreshNoInternet,
                       )
                     : SizedBox(),
-                NotificationIcon(),
+                NotificationIconContainer(),
               ],
             ),
       drawer: vm.splash

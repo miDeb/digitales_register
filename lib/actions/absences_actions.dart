@@ -1,21 +1,11 @@
-import 'package:built_value/built_value.dart';
+import 'package:built_redux/built_redux.dart';
 
 part 'absences_actions.g.dart';
 
-abstract class LoadAbsencesAction
-    implements Built<LoadAbsencesAction, LoadAbsencesActionBuilder> {
-  LoadAbsencesAction._();
-  factory LoadAbsencesAction(
-          [void Function(LoadAbsencesActionBuilder) updates]) =
-      _$LoadAbsencesAction;
-}
+abstract class AbsencesActions extends ReduxActions {
+  AbsencesActions._();
+  factory AbsencesActions() => new _$AbsencesActions();
 
-abstract class AbsencesLoadedAction
-    implements Built<AbsencesLoadedAction, AbsencesLoadedActionBuilder> {
-  AbsencesLoadedAction._();
-  factory AbsencesLoadedAction(
-          [void Function(AbsencesLoadedActionBuilder) updates]) =
-      _$AbsencesLoadedAction;
-
-  Object get absences;
+  ActionDispatcher<void> load;
+  ActionDispatcher<dynamic> loaded;
 }

@@ -6,22 +6,33 @@ import '../container/sorted_grades_container.dart';
 import '../data.dart';
 import '../util.dart';
 
+typedef void ViewSubjectDetailCallback(Subject s);
+typedef void SetBoolCallback(bool byType);
+
 class SortedGradesWidget extends StatelessWidget {
   final SortedGradesViewModel vm;
+  final ViewSubjectDetailCallback viewSubjectDetail;
+  final SetBoolCallback sortByTypeCallback, showCancelledCallback;
 
-  const SortedGradesWidget({Key key, @required this.vm}) : super(key: key);
+  const SortedGradesWidget({
+    Key key,
+    @required this.vm,
+    this.viewSubjectDetail,
+    this.sortByTypeCallback,
+    this.showCancelledCallback,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         SwitchListTile(
           title: Text("Noten nach Art sortieren"),
-          onChanged: vm.sortByTypeCallback,
+          onChanged: sortByTypeCallback,
           value: vm.sortByType,
         ),
         SwitchListTile(
           title: Text("Gelöschte Noten anzeigen"),
-          onChanged: vm.showCancelledCallback,
+          onChanged: showCancelledCallback,
           value: vm.showCancelled,
         ),
         Divider(
@@ -34,7 +45,7 @@ class SortedGradesWidget extends StatelessWidget {
                 (s) => SubjectWidget(
                   subject: s,
                   sortByType: vm.sortByType,
-                  viewSubjectDetail: () => vm.viewSubjectDetail(s),
+                  viewSubjectDetail: () => viewSubjectDetail(s),
                   showCancelled: vm.showCancelled,
                   semester: vm.semester,
                 ),

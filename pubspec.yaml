@@ -23,8 +23,6 @@ dependencies:
   path_provider: any
   requests:
     path: "packages/requests/"
-  flutter_redux: any
-  redux: any
   built_value: any
   dynamic_theme: any
   fluttertoast: any
@@ -32,12 +30,18 @@ dependencies:
     path: "packages/flutter_secure_storage/"
   scroll_to_index: any 
   autocomplete_textfield: any
-  quiver_hashcode: any
-  flutter_redux_dev_tools: any
-  redux_dev_tools: any
   package_info: any
   mutex: any
-
+  built_redux: 
+    git: 
+      url: https://github.com/miDeb/built_redux.git
+      ref: master
+  flutter_built_redux: any
+dependency_overrides:
+  built_redux: 
+    git: 
+      url: https://github.com/miDeb/built_redux.git
+      ref: master
 dev_dependencies:
   flutter_launcher_icons: any
   flutter_test:

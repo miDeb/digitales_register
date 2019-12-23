@@ -1,21 +1,22 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/notifications_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final notificationsReducer = combineReducers<NotificationStateBuilder>([
-  _createNotificationsLoadedReducer(),
-  _createDeleteNotificationReducer(),
-  _createDeleteAllNotificationsReducer(),
-]);
-TypedReducer<NotificationStateBuilder, NotificationsLoadedAction>
-    _createNotificationsLoadedReducer() {
-  return TypedReducer(
-      (NotificationStateBuilder state, NotificationsLoadedAction action) {
-    return state..notifications = _parseNotifications(action.data);
-  });
+final notificationsReducerBuilder = NestedReducerBuilder<AppState,
+    AppStateBuilder, NotificationState, NotificationStateBuilder>(
+  (s) => s.notificationState,
+  (b) => b.notificationState,
+)
+  ..add(NotificationsActionsNames.loaded, _loaded)
+  ..add(NotificationsActionsNames.delete, _delete)
+  ..add(NotificationsActionsNames.deleteAll, _deleteAll);
+
+void _loaded(NotificationState state, Action<Object> action,
+    NotificationStateBuilder builder) {
+  builder.notifications = _parseNotifications(action.payload);
 }
 
 ListBuilder<Notification> _parseNotifications(data) {
@@ -34,18 +35,12 @@ ListBuilder<Notification> _parseNotifications(data) {
   );
 }
 
-TypedReducer<NotificationStateBuilder, DeleteNotificationAction>
-    _createDeleteNotificationReducer() {
-  return TypedReducer(
-      (NotificationStateBuilder state, DeleteNotificationAction action) {
-    return state..notifications.remove(action.notification);
-  });
+void _delete(NotificationState state, Action<Notification> action,
+    NotificationStateBuilder builder) {
+  builder.notifications.remove(action.payload);
 }
 
-TypedReducer<NotificationStateBuilder, DeleteAllNotificationsAction>
-    _createDeleteAllNotificationsReducer() {
-  return TypedReducer(
-      (NotificationStateBuilder state, DeleteAllNotificationsAction action) {
-    return state..notifications.clear();
-  });
+void _deleteAll(NotificationState state, Action<void> action,
+    NotificationStateBuilder builder) {
+  builder.notifications.clear();
 }

@@ -2,342 +2,311 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
+import 'package:built_redux/built_redux.dart';
+import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:redux/redux.dart';
+import 'package:intl/intl.dart';
+import 'package:mutex/mutex.dart';
+import 'package:requests/requests.dart';
 
+import '../actions/absences_actions.dart';
 import '../actions/app_actions.dart';
+import '../actions/calendar_actions.dart';
 import '../actions/dashboard_actions.dart';
+import '../actions/grades_actions.dart';
 import '../actions/login_actions.dart';
 import '../actions/notifications_actions.dart';
 import '../actions/routing_actions.dart';
 import '../actions/save_pass_actions.dart';
 import '../actions/settings_actions.dart';
 import '../app_state.dart';
+import '../data.dart';
 import '../linux.dart';
 import '../main.dart';
 import '../serializers.dart';
+import '../util.dart';
 import '../wrapper.dart';
-import 'absences.dart';
-import 'calendar.dart';
-import 'days.dart';
-import 'grades.dart';
-import 'login.dart';
-import 'notifications.dart';
-import 'pass.dart';
-import 'routing.dart';
-import 'settings.dart';
+
+part 'absences.dart';
+part 'calendar.dart';
+part 'dashboard.dart';
+part 'grades.dart';
+part 'login.dart';
+part 'notifications.dart';
+part 'pass.dart';
+part 'routing.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
+final _wrapper = Wrapper();
 
-List<Middleware<AppState>> createMiddleware() {
-  final wrapper = Wrapper();
-  return <Middleware<AppState>>[
-    errorMiddleware,
-    _createTap(wrapper),
-    _saveStateMiddleware,
-    TypedMiddleware(_saveNoDataMiddleware),
-    TypedMiddleware(_deleteDataMiddleware),
-    _createLoad(),
-    _createRefresh(),
-    _createNoInternet(),
-    _createRefreshNoInternet(wrapper),
-    TypedMiddleware<AppState, LoggedInAction>(
-      (store, action, next) => _loggedIn(store, action, next, _secureStorage),
-    ),
-    ...daysMiddlewares(wrapper),
-    ...routingMiddlewares(wrapper),
-    ...loginMiddlewares(wrapper, _secureStorage),
-    ...notificationsMiddlewares(wrapper),
-    ...gradesMiddlewares(wrapper),
-    ...absencesMiddlewares(wrapper),
-    ...calendarMiddlewares(wrapper),
-    ...passMiddlewares(wrapper, _secureStorage),
-    ...settingsMiddleware
-  ];
+final middleware = [
+  _errorMiddleware,
+  _saveStateMiddleware,
+  (MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+        ..add(LoginActionsNames.updateLogout, _tap)
+        ..add(SettingsActionsNames.saveNoData, _saveNoData)
+        ..add(AppActionsNames.deleteData, _deleteData)
+        ..add(AppActionsNames.load, _load)
+        ..add(DashboardActionsNames.refresh, _refresh)
+        ..add(AppActionsNames.noInternet, _noInternet)
+        ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
+        ..add(LoginActionsNames.loggedIn, _loggedIn)
+        ..combine(_absencesMiddleware)
+        ..combine(_calendarMiddleware)
+        ..combine(_dashboardMiddleware)
+        ..combine(_gradesMiddleware)
+        ..combine(_loginMiddleware)
+        ..combine(_notificationsMiddleware)
+        ..combine(_passMiddleware)
+        ..combine(_routingMiddleware))
+      .build(),
+];
+
+NextActionHandler _errorMiddleware(
+        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+    (ActionHandler next) => (Action action) {
+          void handleError(e) {
+            print(e);
+            navigatorKey.currentState.push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return Scaffold(
+                    appBar: AppBar(
+                      backgroundColor: Colors.red,
+                      title: Text("Fehler!"),
+                    ),
+                    body: SingleChildScrollView(
+                      child: Column(
+                        children: <Widget>[
+                          RaisedButton(
+                            child: Text("In die Zwischenablage kopieren"),
+                            onPressed: () => Clipboard.setData(
+                                new ClipboardData(text: e.stackTrace)),
+                          ),
+                          Text(
+                              "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+
+          if (action.name == AppActionsNames.error.name) {
+            handleError(action.payload);
+          } else {
+            try {
+              next(action);
+            } catch (e) {
+              handleError(e);
+            }
+          }
+        };
+
+void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  _wrapper.interaction();
+  // do not call next: this action is only to update the logout time
 }
 
-void errorMiddleware(Store<AppState> store, action, NextDispatcher next) {
-  void handleError(e) {
-    print(e);
-    navigatorKey.currentState.push(
-      MaterialPageRoute(
-        builder: (context) {
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.red,
-              title: Text("Fehler!"),
-            ),
-            body: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("In die Zwischenablage kopieren"),
-                    onPressed: () => Clipboard.setData(
-                        new ClipboardData(text: e.stackTrace)),
-                  ),
-                  Text(
-                      "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
-                ],
-              ),
-            ),
-          );
-        },
+void _refreshNoInternet(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
+  next(action);
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
+  } else {
+    api.actions.noInternet(false);
+
+    api.actions.load();
+  }
+}
+
+void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
+  next(action);
+
+  final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
+  final user = login["user"];
+  final pass = login["pass"];
+  final url = login["url"] ??
+      "https://vinzentinum.digitalesregister.it"; // be backwards compatible
+  final offlineEnabled = login["offlineEnabled"];
+  if (user != null && pass != null) {
+    api.actions.loginActions.login(
+      LoginAction(
+        (b) => b
+          ..user = user
+          ..pass = pass
+          ..url = url
+          ..fromStorage = true
+          ..offlineEnabled = offlineEnabled,
       ),
     );
-  }
-
-  if (action is ErrorAction) {
-    handleError(action.e);
-  }
-  try {
-    next(action);
-  } catch (e) {
-    handleError(e);
-  }
+  } else
+    api.actions.routingActions.showLogin();
 }
 
-TypedMiddleware<AppState, UpdateLogoutAction> _createTap(Wrapper wrapper) =>
-    TypedMiddleware(
-      (_, __, ___) {
-        wrapper.interaction();
-        // do not call next: this action is only to update the logout time
-      },
-    );
-
-TypedMiddleware<AppState, RefreshNoInternetAction> _createRefreshNoInternet(
-    Wrapper wrapper) {
-  return TypedMiddleware(
-      (Store<AppState> store, RefreshNoInternetAction action, next) async {
-    next(action);
-    if (await wrapper.noInternet) {
-      store.dispatch(
-        NoInternetAction(
-          (b) => b..noInternet = true,
-        ),
-      );
-    } else {
-      store.dispatch(
-        NoInternetAction(
-          (b) => b..noInternet = false,
-        ),
-      );
-      store.dispatch(LoadAction());
-    }
-  });
+void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  next(action);
+  api.actions.dashboardActions.load(api.state.dashboardState.future);
+  api.actions.notificationsActions.load();
 }
 
-TypedMiddleware<AppState, LoadAction> _createLoad() {
-  return TypedMiddleware(
-    (Store<AppState> store, LoadAction action, NextDispatcher next) async {
-      next(action);
-
-      final login =
-          json.decode(await _secureStorage.read(key: "login") ?? "{}");
-      final user = login["user"];
-      final pass = login["pass"];
-      final url = login["url"] ??
-          "https://vinzentinum.digitalesregister.it"; // be backwards compatible
-      final offlineEnabled = login["offlineEnabled"];
-      if (user != null && pass != null) {
-        store.dispatch(
-          LoginAction(
-            (b) => b
-              ..user = user
-              ..pass = pass
-              ..url = url
-              ..fromStorage = true
-              ..offlineEnabled = offlineEnabled,
-          ),
-        );
-      } else
-        store.dispatch(ShowLoginAction());
-    },
-  );
-}
-
-TypedMiddleware<AppState, RefreshAction> _createRefresh() {
-  return TypedMiddleware(
-    (Store<AppState> store, RefreshAction action, NextDispatcher next) async {
-      next(action);
-      store.dispatch(
-        LoadDaysAction(
-          (b) => b..future = store.state.dayState.future,
-        ),
-      );
-      store.dispatch(LoadNotificationsAction());
-    },
-  );
-}
-
-TypedMiddleware<AppState, NoInternetAction> _createNoInternet() {
-  return TypedMiddleware(
-      (Store<AppState> store, NoInternetAction action, NextDispatcher next) {
-    if (action.noInternet) showToast(msg: "Kein Internet");
-    next(action);
-  });
+void _noInternet(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<bool> action) {
+  if (action.payload) showToast(msg: "Kein Internet");
+  next(action);
 }
 
 var _saveUnderway = false;
 
 SettingsState _lastSettingsState;
 
-void _loggedIn(Store<AppState> store, LoggedInAction action,
-    NextDispatcher next, FlutterSecureStorage secureStorage) async {
-  if (!store.state.settingsState.noPasswordSaving && !action.fromStorage) {
-    store.dispatch(SavePassAction());
+void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoggedInPayload> action) async {
+  if (!api.state.settingsState.noPasswordSaving &&
+      !action.payload.fromStorage) {
+    api.actions.savePassActions.save();
   }
 
-  if (!store.state.loginState.loggedIn) {
-    final user = action.username.hashCode;
+  if (!api.state.loginState.loggedIn) {
+    final user = action.payload.username.hashCode;
     final file = File(
         "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     final vals = json.decode(
       await file.exists() && await file.length() > 0
           ? await file.readAsString()
-          : await secureStorage.read(key: user.toString()) ?? "{}",
+          : await _secureStorage.read(key: user.toString()) ?? "{}",
     );
     final dayState = vals["homework"] != null
-        ? serializers.deserialize(vals["homework"]) as DayState
-        : store.state.dayState;
+        ? serializers.deserialize(vals["homework"]) as DashboardState
+        : api.state.dashboardState;
     final gradesState = vals["grades"] != null
         ? serializers.deserialize(vals["grades"]) as GradesState
-        : store.state.gradesState;
+        : api.state.gradesState;
     final notificationState = vals["notifications"] != null
         ? serializers.deserialize(vals["notifications"]) as NotificationState
-        : store.state.notificationState;
+        : api.state.notificationState;
     final absenceState = vals["absences"] != null
-        ? serializers.deserialize(vals["absences"]) as AbsenceState
-        : store.state.absenceState;
+        ? serializers.deserialize(vals["absences"]) as AbsencesState
+        : api.state.absencesState;
     final calendarState = vals["calendar"] != null
         ? serializers.deserialize(vals["calendar"]) as CalendarState
-        : store.state.calendarState;
+        : api.state.calendarState;
     final settingsState = _lastSettingsState = vals["settings"] != null
         ? serializers.deserialize(vals["settings"]) as SettingsState
-        : store.state.settingsState;
-    store.dispatch(
-      MountAppStateAction(
-        (b) => b
-          ..appState = (store.state.toBuilder()
-            ..dayState = (dayState.toBuilder()
-              ..future = true
-              ..blacklist ??= ListBuilder([]))
-            ..gradesState = (gradesState.toBuilder()
-              ..semester = store.state.gradesState.semester.toBuilder())
-            ..notificationState = notificationState.toBuilder()
-            ..absenceState = absenceState?.toBuilder()
-            ..calendarState = calendarState.toBuilder()
-            ..settingsState = settingsState.toBuilder()),
-      ),
+        : api.state.settingsState;
+    api.actions.mountAppState(
+      api.state.rebuild((b) => b
+        ..dashboardState = (dayState.toBuilder()
+          ..future = true
+          ..blacklist ??= ListBuilder([]))
+        ..gradesState = (gradesState.toBuilder()
+          ..semester = gradesState.semester.toBuilder())
+        ..notificationState = notificationState.toBuilder()
+        ..absencesState = absenceState?.toBuilder()
+        ..calendarState = calendarState.toBuilder()
+        ..settingsState = settingsState.toBuilder()),
     );
 
     // next not at the beginning: bug fix (serialization)
     next(action);
 
-    store.dispatch(
-      SetSaveNoPassAction(
-        (b) => b..noSave = settingsState.noPasswordSaving,
-      ),
-    );
+    api.actions.settingsActions.saveNoPass(settingsState.noPasswordSaving);
 
-    if (store.state.currentRouteIsLogin) {
+    if (api.state.currentRouteIsLogin) {
       navigatorKey.currentState.pop();
-      store.dispatch(
-        SetRouteIsLoginAction(
-          (b) => b..isLogin = false,
-        ),
-      );
+      api.actions.isLoginRoute(false);
     }
   } else {
     next(action);
   }
-  store.dispatch(
-    LoadDaysAction(
-      (b) => b..future = true,
-    ),
-  );
-  store.dispatch(LoadNotificationsAction());
+  api.actions.dashboardActions.load(api.state.dashboardState.future);
+  api.actions.notificationsActions.load();
 }
 
 var _lastSave = "";
 
-_saveStateMiddleware(Store<AppState> store, action, NextDispatcher next) {
+NextActionHandler _saveStateMiddleware(
+        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+    (ActionHandler next) => (Action action) {
+          next(action);
+          if (!_saveUnderway &&
+              api.state.loginState.loggedIn &&
+              api.state.loginState.userName != null) {
+            final user = api.state.loginState.userName.hashCode;
+            final delay = action.name == AppActionsNames.saveState.name
+                ? Duration.zero
+                : Duration(seconds: 5);
+            _saveUnderway = true;
+            Future.delayed(delay, () async {
+              _saveUnderway = false;
+              if (!api.state.settingsState.noDataSaving) {
+                final save = json.encode({
+                  "grades": serializers.serialize(api.state.gradesState),
+                  "homework": serializers.serialize(api.state.dashboardState),
+                  "calendar": serializers.serialize(api.state.calendarState),
+                  "absences": api.state.absencesState != null
+                      ? serializers.serialize(api.state.absencesState)
+                      : null,
+                  "notifications":
+                      serializers.serialize(api.state.notificationState),
+                  "settings": serializers.serialize(api.state.settingsState),
+                });
+                if (_lastSave == save) return;
+                _writeToStorage(
+                  user.toString(),
+                  save,
+                );
+              } else {
+                if (_lastSettingsState != api.state.settingsState)
+                  _writeToStorage(
+                    user.toString(),
+                    json.encode(
+                      {
+                        "settings":
+                            serializers.serialize(api.state.settingsState),
+                      },
+                    ),
+                  );
+                _lastSettingsState = api.state.settingsState;
+              }
+            });
+          }
+        };
+
+Future<File> _storageFile(String key) async {
+  return File(
+      "${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
+}
+
+void _writeToStorage(String key, String txt) async {
+  (await _storageFile(key)).writeAsString(txt, flush: true);
+}
+
+void _saveNoData(
+  MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+  ActionHandler next,
+  Action<void> action,
+) {
   next(action);
-  if (!_saveUnderway &&
-      store.state.loginState.loggedIn &&
-      store.state.loginState.userName != null) {
-    final user = store.state.loginState.userName.hashCode;
-    if (!store.state.settingsState.noDataSaving) {
-      _saveUnderway = true;
-      final delay =
-          action is SaveStateAction ? Duration.zero : Duration(seconds: 5);
-
-      Future.delayed(delay, () async {
-        _saveUnderway = false;
-        final save = json.encode({
-          "grades": serializers.serialize(store.state.gradesState),
-          "homework": serializers.serialize(store.state.dayState),
-          "calendar": serializers.serialize(store.state.calendarState),
-          "absences": store.state.absenceState != null
-              ? serializers.serialize(store.state.absenceState)
-              : null,
-          "notifications": serializers.serialize(store.state.notificationState),
-          "settings": serializers.serialize(store.state.settingsState),
-        });
-        if (_lastSave == save) return;
-        writeToStorage(
-          user.toString(),
-          save,
-        );
-      });
-    } else {
-      if (_lastSettingsState != store.state.settingsState)
-        writeToStorage(
-          user.toString(),
-          json.encode(
-            {
-              "settings": serializers.serialize(store.state.settingsState),
-            },
-          ),
-        );
-      _lastSettingsState = store.state.settingsState;
-    }
-  }
+  api.actions.saveState();
 }
 
-void writeToStorage(String key, String txt) async {
-  File("${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json")
-      .writeAsString(txt, flush: true);
-}
-
-_saveNoDataMiddleware(Store<AppState> store, SetSaveNoDataAction action, next) {
+void _deleteData(
+  MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+  ActionHandler next,
+  Action<void> action,
+) async {
   next(action);
-  if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
-    store.dispatch(
-      SetDeleteDataOnLogoutAction(
-        (b) => b..delete = false,
-      ),
-    );
-  }
-  if (action.noSave) {
-    store.dispatch(DeleteDataAction());
-  } else {
-    store.dispatch(SaveStateAction());
-  }
-}
-
-_deleteDataMiddleware(
-    Store<AppState> store, DeleteDataAction action, next) async {
-  final user = store.state.loginState.userName.hashCode;
-  await _secureStorage.delete(key: "$user");
-  _lastSave = "";
-  await _secureStorage.write(
-    key: "$user",
-    value: json.encode(
-      {
-        "settings": serializers.serialize(store.state.settingsState),
-      },
-    ),
+  final file = await _storageFile(
+    api.state.loginState.userName.hashCode.toString(),
   );
+  file.delete();
 }

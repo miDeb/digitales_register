@@ -1,79 +1,145 @@
 import 'package:built_collection/built_collection.dart';
-import 'package:flutter/material.dart';
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
+import 'package:flutter/material.dart' hide Action;
 
-import '../actions/grades_actions.dart';
 import '../actions/routing_actions.dart';
 import '../actions/settings_actions.dart';
 import '../app_state.dart';
+import '../data.dart';
 
-SettingsStateBuilder settingsStateReducer(SettingsStateBuilder state, action) {
-  return (state
-    ..offlineEnabled = _offlineEnabledReducer(state.offlineEnabled, action)
-    ..noDataSaving = _saveDataReducer(state.noDataSaving, action)
-    ..noPasswordSaving = _savePassReducer(state.noPasswordSaving, action)
-    ..askWhenDelete = _askWhenDeleteReducer(state.askWhenDelete, action)
-    ..showCancelled = _showCancelledReducer(state.showCancelled, action)
-    ..typeSorted = _sortByTypeReducer(state.typeSorted, action)
-    ..deleteDataOnLogout = _deleteOnLogout(state.deleteDataOnLogout, action)
-    ..subjectNicks = _subjectNicksReducer(state.subjectNicks, action)
-    ..scrollToSubjectNicks =
-        _scrollToSubjectNicksReducer(state.scrollToSubjectNicks, action)
-    ..showCalendarNicksBar =
-        _showCalendarNicksBarReducer(state.showCalendarNicksBar, action)
-    ..showGradesDiagram =
-        _showGradesDiagramReducer(state.showGradesDiagram, action)
-    ..showAllSubjectsAverage =
-        _showAllSubjectsAverageReducer(state.showAllSubjectsAverage, action)
-    ..dashboardMarkNewOrChangedEntries =
-        _dashboardMarkNewOrChangedEntriesReducer(
-            state.dashboardMarkNewOrChangedEntries, action)
-    ..graphConfigs = combineReducers<MapBuilder<int, SubjectGraphConfig>>(
-      [
-        _updateGradeGraphConfigsReducer,
-        _setGradesGraphConfigReducer,
-      ],
-    )(state.graphConfigs, action));
+final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    SettingsState, SettingsStateBuilder>(
+  (s) => s.settingsState,
+  (b) => b.settingsState,
+)
+  ..add(SettingsActionsNames.offlineEnabled, _offlineEnabled)
+  ..add(SettingsActionsNames.saveNoData, _saveNoData)
+  ..add(SettingsActionsNames.saveNoPass, _saveNoPass)
+  ..add(SettingsActionsNames.askWhenDeleteReminder, _askWhenDeleteReminder)
+  ..add(SettingsActionsNames.showCancelledGrades, _showCancelledGrades)
+  ..add(SettingsActionsNames.gradesTypeSorted, _gradesTypeSorted)
+  ..add(SettingsActionsNames.deleteDataOnLogout, _deleteDataOnLogout)
+  ..add(SettingsActionsNames.subjectNicks, _subjectNicks)
+  ..add(
+      RoutingActionsNames.showEditCalendarSubjectNicks, _showEditCalendarNicks)
+  ..add(RoutingActionsNames.showSettings, _showSettings)
+  ..add(SettingsActionsNames.showCalendarSubjectNicksBar, _calendarNicksBar)
+  ..add(SettingsActionsNames.showGradesDiagram, _gradesChart)
+  ..add(SettingsActionsNames.showAllSubjectsAverage, _allSubjectsAverage)
+  ..add(SettingsActionsNames.markNotSeenDashboardEntries,
+      _markNotSeenDashboardEntries)
+  ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
+  ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig);
+
+void _askWhenDeleteReminder(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.askWhenDelete = action.payload;
 }
 
-final _askWhenDeleteReducer = TypedReducer(
-    (bool ask, SetAskWhenDeleteReminderAction action) => action.ask);
-final _showCancelledReducer = TypedReducer(
-    (bool showCancelled, SetGradesShowCancelledAction action) =>
-        action.showCancelled);
-final _sortByTypeReducer = TypedReducer(
-    (bool typeSorted, SetGradesTypeSortedAction action) => action.typeSorted);
-final _saveDataReducer =
-    TypedReducer((bool safeMode, SetSaveNoDataAction action) => action.noSave);
-final _savePassReducer =
-    TypedReducer((bool safeMode, SetSaveNoPassAction action) => action.noSave);
-final _offlineEnabledReducer = TypedReducer(
-    (bool safeMode, SetOfflineEnabledAction action) => action.enabled);
-final _deleteOnLogout = TypedReducer(
-    (bool delete, SetDeleteDataOnLogoutAction action) => action.delete);
-final _subjectNicksReducer = TypedReducer(
-    (MapBuilder<String, String> nicks, SetSubjectNicksAction action) =>
-        MapBuilder<String, String>(action.subjectNicks));
-final _scrollToSubjectNicksReducer = combineReducers<bool>(
-  [
-    TypedReducer(
-        (bool scrollToNicks, ShowEditCalendarSubjectNicksAction action) =>
-            true),
-    TypedReducer((bool scrollToNicks, ShowSettingsAction action) => false),
-  ],
-);
-final _showCalendarNicksBarReducer = TypedReducer(
-    (bool show, SetShowCalendarSubjectNicksBarAction action) => action.show);
-final _showGradesDiagramReducer =
-    TypedReducer((bool show, SetShowGradesDiagramAction action) => action.show);
-final _showAllSubjectsAverageReducer = TypedReducer(
-    (bool show, SetShowAllSubjectsAverageAction action) => action.show);
-final _dashboardMarkNewOrChangedEntriesReducer = TypedReducer(
-    (bool mark, SetDashboardMarkNewOrChangedEntriesAction action) =>
-        action.mark);
-final _setGradesGraphConfigReducer = TypedReducer(
-    (MapBuilder<int, SubjectGraphConfig> state, SetGraphConfigsAction action) =>
-        MapBuilder<int, SubjectGraphConfig>(action.configs));
+void _showCancelledGrades(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.showCancelled = action.payload;
+}
+
+void _gradesTypeSorted(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.typeSorted = action.payload;
+}
+
+void _saveNoData(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.noDataSaving = action.payload;
+}
+
+void _saveNoPass(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.noPasswordSaving = action.payload;
+}
+
+void _offlineEnabled(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.offlineEnabled = action.payload;
+}
+
+void _deleteDataOnLogout(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.deleteDataOnLogout = action.payload;
+}
+
+void _subjectNicks(SettingsState state, Action<BuiltMap<String, String>> action,
+    SettingsStateBuilder builder) {
+  builder.subjectNicks.replace(action.payload);
+}
+
+void _showEditCalendarNicks(
+    SettingsState state, Action<void> action, SettingsStateBuilder builder) {
+  builder.scrollToSubjectNicks = true;
+}
+
+void _showSettings(
+    SettingsState state, Action<void> action, SettingsStateBuilder builder) {
+  builder.scrollToSubjectNicks = false;
+}
+
+void _calendarNicksBar(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.showCalendarNicksBar = action.payload;
+}
+
+void _gradesChart(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.showGradesDiagram = action.payload;
+}
+
+void _allSubjectsAverage(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.showAllSubjectsAverage = action.payload;
+}
+
+void _setGradeGraphConfig(
+    SettingsState state,
+    Action<MapEntry<int, SubjectGraphConfig>> action,
+    SettingsStateBuilder builder) {
+  builder.graphConfigs[action.payload.key] = action.payload.value;
+}
+
+void _markNotSeenDashboardEntries(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.dashboardMarkNewOrChangedEntries = action.payload;
+}
+
+void _updateGradeGraphConfigs(SettingsState state,
+    Action<BuiltList<Subject>> action, SettingsStateBuilder builder) {
+  for (final entry in state.graphConfigs.entries) {
+    if (!action.payload.any((s) => s.id == entry.key)) {
+      builder.graphConfigs.remove(entry);
+    }
+  }
+  for (var subject in action.payload) {
+    if (!builder.graphConfigs.build().containsKey(subject.id)) {
+      builder.graphConfigs.update(
+        (b) => b
+          ..[subject.id] = SubjectGraphConfig((b) => b
+            ..thick = _defaultThick
+            ..color = _colors
+                .firstWhere(
+                  (color) => !builder.graphConfigs
+                      .build()
+                      .values
+                      .any((config) => config.color == color.value),
+                  orElse: () => _similarColors.firstWhere(
+                    (color) => !builder.graphConfigs
+                        .build()
+                        .values
+                        .any((config) => config.color == color.value),
+                    orElse: () => (List.of(Colors.primaries)..shuffle()).first,
+                  ),
+                )
+                .value),
+      );
+    }
+  }
+}
 
 final _colors = List.of(Colors.primaries)
   ..removeWhere((c) => _similarColors.contains(c));
@@ -86,39 +152,3 @@ final _similarColors = [
 ];
 
 const _defaultThick = 2;
-final _updateGradeGraphConfigsReducer =
-    TypedReducer<MapBuilder<int, SubjectGraphConfig>, UpdateGraphConfigsAction>(
-        (graphConfigsBuilder, UpdateGraphConfigsAction action) {
-  final state = graphConfigsBuilder.build();
-
-  for (final entry in state.entries) {
-    if (!action.subjects.any((s) => s.id == entry.key)) {
-      graphConfigsBuilder.remove(entry);
-    }
-  }
-  for (var subject in action.subjects) {
-    if (!graphConfigsBuilder.build().containsKey(subject.id)) {
-      graphConfigsBuilder.update(
-        (b) => b
-          ..[subject.id] = SubjectGraphConfig((b) => b
-            ..thick = _defaultThick
-            ..color = _colors
-                .firstWhere(
-                  (color) => !graphConfigsBuilder
-                      .build()
-                      .values
-                      .any((config) => config.color == color.value),
-                  orElse: () => _similarColors.firstWhere(
-                    (color) => !graphConfigsBuilder
-                        .build()
-                        .values
-                        .any((config) => config.color == color.value),
-                    orElse: () => (List.of(Colors.primaries)..shuffle()).first,
-                  ),
-                )
-                .value),
-      );
-    }
-  }
-  return graphConfigsBuilder;
-});

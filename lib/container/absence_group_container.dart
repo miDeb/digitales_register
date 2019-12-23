@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:intl/intl.dart';
-import 'package:redux/redux.dart';
 
+import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/absence.dart';
@@ -16,12 +16,12 @@ class AbsenceGroupContainer extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, AbsencesViewModel>(
-      builder: (BuildContext context, vm) {
+    return StoreConnection<AppState, AppActions, AbsencesViewModel>(
+      builder: (context, vm, actions) {
         return AbsenceGroupWidget(vm: vm);
       },
-      converter: (Store<AppState> store) {
-        final absenceGroup = store.state.absenceState.absences[group];
+      connect: (state) {
+        final absenceGroup = state.absencesState.absences[group];
         final first = absenceGroup.absences.last; //<--- flip is intentional
         final last = absenceGroup.absences.first; //<---
         var fromTo = "";

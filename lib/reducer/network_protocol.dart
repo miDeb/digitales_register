@@ -1,11 +1,15 @@
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 
-final networkProtocolReducer = TypedReducer(_networkProtocolReducer);
+final networkProtocolReducerBuilder = NestedReducerBuilder<AppState,
+    AppStateBuilder, NetworkProtocolState, NetworkProtocolStateBuilder>(
+  (s) => s.networkProtocolState,
+  (b) => b.networkProtocolState,
+)..add(AppActionsNames.addNetworkProtocolItem, _networkProtocol);
 
-NetworkProtocolStateBuilder _networkProtocolReducer(
-    NetworkProtocolStateBuilder state, AddNetworkProtocolItemAction action) {
-  return (state ?? NetworkProtocolStateBuilder())..items.add(action.item);
+void _networkProtocol(NetworkProtocolState state,
+    Action<NetworkProtocolItem> action, NetworkProtocolStateBuilder builder) {
+  builder.items.add(action.payload);
 }

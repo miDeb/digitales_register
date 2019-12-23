@@ -1,125 +1,93 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:redux/redux.dart';
+part of 'middleware.dart';
 
-import '../actions/app_actions.dart';
-import '../actions/login_actions.dart';
-import '../actions/routing_actions.dart';
-import '../actions/save_pass_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
+final _loginMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(LoginActionsNames.logout, _logout)
+      ..add(LoginActionsNames.login, _login)
+      ..add(LoginActionsNames.loginFailed, _loginFailed);
 
-List<Middleware<AppState>> loginMiddlewares(
-        Wrapper wrapper, FlutterSecureStorage secureStorage) =>
-    [
-      TypedMiddleware<AppState, LogoutAction>(
-        (store, action, next) => _logout(next, action, store, wrapper),
-      ),
-      TypedMiddleware<AppState, LoginAction>(
-        (store, action, next) => _login(action, next, store, wrapper),
-      ),
-      TypedMiddleware<AppState, LoginFailedAction>(
-        (store, action, next) => _loginFailed(next, action, store),
-      ),
-    ];
-
-void _logout(NextDispatcher next, LogoutAction action, Store<AppState> store,
-    Wrapper wrapper) {
+void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LogoutPayload> action) {
   next(action);
-  if (!store.state.settingsState.noPasswordSaving && action.hard) {
-    store.dispatch(DeletePassAction());
+  if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
+    api.actions.savePassActions.delete();
   }
-  if (store.state.settingsState.deleteDataOnLogout && action.hard) {
-    store.dispatch(DeleteDataAction());
+  if (api.state.settingsState.deleteDataOnLogout && action.payload.hard) {
+    api.actions.deleteData();
   }
-  if (!action.forced) {
-    wrapper.logout(hard: action.hard);
+  if (!action.payload.forced) {
+    _wrapper.logout(hard: action.payload.hard);
   }
-  store.dispatch(MountAppStateAction());
-  store.dispatch(ShowLoginAction());
+  api.actions.mountAppState(AppState());
+  api.actions.routingActions.showLogin();
 }
 
-void _login(LoginAction action, NextDispatcher next, Store<AppState> store,
-    Wrapper wrapper) async {
-  action = action.rebuild(
-    (b) => b
-      ..user = action.user.trim()
-      ..url = action.url.trim(),
-  );
+void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoginAction> action) async {
   next(action);
-  if (action.user == "" || action.pass == "") {
-    store.dispatch(
-      LoginFailedAction(
+  if (action.payload.user == "" || action.payload.pass == "") {
+    api.actions.loginActions.loginFailed(
+      LoginFailedPayload(
         (b) async => b
           ..cause = "Bitte gib etwas ein"
-          ..offlineEnabled = action.offlineEnabled
-          ..noInternet = await wrapper.noInternet
-          ..username = action.user,
+          ..offlineEnabled = action.payload.offlineEnabled
+          ..noInternet = await _wrapper.noInternet
+          ..username = action.payload.user,
       ),
     );
     return;
   }
-  store.dispatch(LoggingInAction());
-  await wrapper.login(
-    action.user,
-    action.pass,
-    action.url,
-    logout: () => store.dispatch(
-      LogoutAction(
+  api.actions.loginActions.loggingIn();
+  await _wrapper.login(
+    action.payload.user,
+    action.payload.pass,
+    action.payload.url,
+    logout: () => api.actions.loginActions.logout(
+      LogoutPayload(
         (b) => b
-          ..hard = store.state.settingsState.noPasswordSaving
+          ..hard = api.state.settingsState.noPasswordSaving
           ..forced = true,
       ),
     ),
-    configLoaded: () => store.dispatch(
-      SetConfigAction(
-        (b) => b..config = wrapper.config.toBuilder(),
-      ),
-    ),
-    relogin: () => store.dispatch(LoggedInAgainAutomatically()),
-    addProtocolItem: (item) => store.dispatch(
-      AddNetworkProtocolItemAction(
-        (b) => b..item = item.toBuilder(),
-      ),
-    ),
+    configLoaded: () => api.actions.setConfig(_wrapper.config),
+    relogin: api.actions.loginActions.automaticallyReloggedIn,
+    addProtocolItem: api.actions.addNetworkProtocolItem,
   );
-  if (wrapper.loggedIn)
-    store.dispatch(
-      LoggedInAction(
+  if (_wrapper.loggedIn)
+    api.actions.loginActions.loggedIn(
+      LoggedInPayload(
         (b) => b
-          ..username = wrapper.user
-          ..fromStorage = action.fromStorage,
+          ..username = _wrapper.user
+          ..fromStorage = action.payload.fromStorage,
       ),
     );
   else
-    store.dispatch(
-      LoginFailedAction(
+    api.actions.loginActions.loginFailed(
+      LoginFailedPayload(
         (b) async => b
-          ..cause = wrapper.error
-          ..offlineEnabled = action.offlineEnabled
-          ..noInternet = await wrapper.noInternet
-          ..username = action.user,
+          ..cause = _wrapper.error
+          ..offlineEnabled = action.payload.offlineEnabled
+          ..noInternet = await _wrapper.noInternet
+          ..username = action.payload.user,
       ),
     );
 }
 
-void _loginFailed(
-    NextDispatcher next, LoginFailedAction action, Store<AppState> store) {
+void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoginFailedPayload> action) {
   next(action);
-  if (action.noInternet) {
-    if (action.offlineEnabled) {
-      store.dispatch(
-        LoggedInAction(
+  if (action.payload.noInternet) {
+    if (action.payload.offlineEnabled) {
+      api.actions.loginActions.loggingIn(
+        LoggedInPayload(
           (b) => b
-            ..username = action.username
+            ..username = action.payload.username
             ..fromStorage = true,
         ),
       );
     }
-    store.dispatch(NoInternetAction((b) => b..noInternet = true));
+    api.actions.noInternet(true);
     return;
   }
-  if (!store.state.currentRouteIsLogin) {
-    // loginScreen not already shown
-    store.dispatch(ShowLoginAction());
-  }
+  api.actions.routingActions.showLogin();
 }

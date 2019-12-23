@@ -1,73 +1,54 @@
+import 'package:built_redux/built_redux.dart';
 import 'package:built_value/built_value.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../app_state.dart';
 import '../data.dart';
 
 part 'grades_actions.g.dart';
 
-abstract class SetSemesterAction
-    implements Built<SetSemesterAction, SetSemesterActionBuilder> {
-  SetSemesterAction._();
-  factory SetSemesterAction([void Function(SetSemesterActionBuilder) updates]) =
-      _$SetSemesterAction;
+abstract class GradesActions extends ReduxActions {
+  GradesActions._();
+  factory GradesActions() => new _$GradesActions();
 
-  Semester get semester;
+  ActionDispatcher<Semester> setSemester;
+  ActionDispatcher<Semester> load;
+  ActionDispatcher<LoadSubjectDetailsPayload> loadDetails;
+  ActionDispatcher<SubjectsLoadedPayload> loaded;
+  ActionDispatcher<SubjectDetailLoadedPayload> detailsLoaded;
 }
 
-abstract class LoadSubjectsAction
-    implements Built<LoadSubjectsAction, LoadSubjectsActionBuilder> {
-  LoadSubjectsAction._();
-  factory LoadSubjectsAction(
-          [void Function(LoadSubjectsActionBuilder) updates]) =
-      _$LoadSubjectsAction;
-
-  Semester get semester;
-}
-
-abstract class LoadSubjectDetailsAction
+abstract class LoadSubjectDetailsPayload
     implements
-        Built<LoadSubjectDetailsAction, LoadSubjectDetailsActionBuilder> {
-  LoadSubjectDetailsAction._();
-  factory LoadSubjectDetailsAction(
-          [void Function(LoadSubjectDetailsActionBuilder) updates]) =
-      _$LoadSubjectDetailsAction;
+        Built<LoadSubjectDetailsPayload, LoadSubjectDetailsPayloadBuilder> {
+  LoadSubjectDetailsPayload._();
+  factory LoadSubjectDetailsPayload(
+          [void Function(LoadSubjectDetailsPayloadBuilder) updates]) =
+      _$LoadSubjectDetailsPayload;
 
   Semester get semester;
   Subject get subject;
 }
 
-abstract class SubjectsLoadedAction
-    implements Built<SubjectsLoadedAction, SubjectsLoadedActionBuilder> {
-  SubjectsLoadedAction._();
-  factory SubjectsLoadedAction(
-          [void Function(SubjectsLoadedActionBuilder) updates]) =
-      _$SubjectsLoadedAction;
+abstract class SubjectsLoadedPayload
+    implements Built<SubjectsLoadedPayload, SubjectsLoadedPayloadBuilder> {
+  SubjectsLoadedPayload._();
+  factory SubjectsLoadedPayload(
+          [void Function(SubjectsLoadedPayloadBuilder) updates]) =
+      _$SubjectsLoadedPayload;
 
   Semester get semester;
   Object get data;
 }
 
-abstract class SubjectDetailLoadedAction
+abstract class SubjectDetailLoadedPayload
     implements
-        Built<SubjectDetailLoadedAction, SubjectDetailLoadedActionBuilder> {
-  SubjectDetailLoadedAction._();
-  factory SubjectDetailLoadedAction(
-          [void Function(SubjectDetailLoadedActionBuilder) updates]) =
-      _$SubjectDetailLoadedAction;
+        Built<SubjectDetailLoadedPayload, SubjectDetailLoadedPayloadBuilder> {
+  SubjectDetailLoadedPayload._();
+  factory SubjectDetailLoadedPayload(
+          [void Function(SubjectDetailLoadedPayloadBuilder) updates]) =
+      _$SubjectDetailLoadedPayload;
 
   Semester get semester;
   Subject get subject;
   Object get data;
-}
-
-abstract class UpdateGraphConfigsAction
-    implements
-        Built<UpdateGraphConfigsAction, UpdateGraphConfigsActionBuilder> {
-  UpdateGraphConfigsAction._();
-  factory UpdateGraphConfigsAction(
-          [void Function(UpdateGraphConfigsActionBuilder) updates]) =
-      _$UpdateGraphConfigsAction;
-
-  BuiltList<Subject> get subjects;
 }

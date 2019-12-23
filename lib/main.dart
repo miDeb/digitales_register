@@ -1,23 +1,21 @@
 import 'dart:io';
 
+import 'package:dr/container/notifications_page_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import 'actions/app_actions.dart';
-import 'actions/login_actions.dart';
 import 'app_state.dart';
 import 'container/absences_page_container.dart';
 import 'container/calendar_container.dart';
 import 'container/grades_page_container.dart';
 import 'container/home_page.dart';
 import 'container/login_page.dart';
-import 'container/notifications_page.dart';
 import 'container/settings_page.dart';
 import 'linux.dart';
-import 'main_dev.dart';
 import 'middleware/middleware.dart';
 import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
@@ -29,17 +27,17 @@ typedef void SingleArgumentVoidCallback<T>(T arg);
 void main() {
   _setTargetPlatformForDesktop();
   run();
-  // runDev();
 }
 
 void run() {
-  final store = Store<AppState>(
-    appReducer,
-    middleware: createMiddleware(),
-    initialState: AppState(),
+  final store = Store<AppState, AppStateBuilder, AppActions>(
+    appReducerBuilder.build(),
+    AppState(),
+    AppActions(),
+    middleware: middleware,
   );
   runApp(
-    StoreProvider(
+    ReduxProvider(
       child: Listener(
         child: DynamicTheme(
           defaultBrightness: Brightness.light,
@@ -78,7 +76,7 @@ void run() {
                   );
                 case "notifications":
                   return MaterialPageRoute(
-                    builder: (_) => NotificationPage(),
+                    builder: (_) => NotificationPageContainer(),
                     fullscreenDialog: true,
                   );
                 case "settings":
@@ -112,12 +110,12 @@ void run() {
             ),
           ),
         ),
-        onPointerDown: (_) => store.dispatch(UpdateLogoutAction()),
+        onPointerDown: (_) => store.actions.loginActions.updateLogout(),
       ),
       store: store,
     ),
   );
-  store.dispatch(LoadAction());
+  store.actions.load();
 }
 
 /// If the current platform is desktop, override the default platform to
