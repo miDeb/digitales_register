@@ -21,10 +21,6 @@ void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Semester> action) async {
-  if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
-    return;
-  }
   next(action);
   _doForSemester(
     action.payload == Semester.all
@@ -35,6 +31,10 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         _subjects,
         {"studentId": api.state.config.userId},
       );
+      if (data == null && await _wrapper.noInternet) {
+        api.actions.noInternet(true);
+        return;
+      }
       api.actions.gradesActions.loaded(
         SubjectsLoadedPayload(
           (b) => b
@@ -54,11 +54,6 @@ void _loadGradesDetails(
     Action<LoadSubjectDetailsPayload> action) async {
   next(action);
 
-  if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
-    return;
-  }
-
   _doForSemester(
     action.payload.semester == Semester.all
         ? [Semester.first, Semester.second]
@@ -68,6 +63,10 @@ void _loadGradesDetails(
         "studentId": api.state.config.userId,
         "subjectId": action.payload.subject.id
       });
+      if (data == null && await _wrapper.noInternet) {
+        api.actions.noInternet(true);
+        return;
+      }
       api.actions.gradesActions.detailsLoaded(
         SubjectDetailLoadedPayload(
           (b) => b
