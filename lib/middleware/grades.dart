@@ -1,108 +1,79 @@
-import '../actions/app_actions.dart';
-import 'package:mutex/mutex.dart';
-import 'package:redux/redux.dart';
-import 'package:requests/requests.dart';
+part of 'middleware.dart';
 
-import '../actions/grades_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
+final _gradesMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(GradesActionsNames.setSemester, _setSemester)
+      ..add(GradesActionsNames.load, _loadGrades)
+      ..add(GradesActionsNames.loadDetails, _loadGradesDetails);
 
-List<Middleware<AppState>> gradesMiddlewares(Wrapper wrapper) {
-  _gradesLock = SemesterLock((s) async {
-    await Requests.get("${wrapper.baseAddress}/?semesterWechsel=${s.n}");
-  });
-  return [
-    TypedMiddleware<AppState, LoadSubjectsAction>(
-      (store, action, next) => _load(next, action, wrapper, store),
-    ),
-    TypedMiddleware<AppState, LoadSubjectDetailsAction>(
-      (store, action, next) => _loadDetail(store, next, action, wrapper),
-    ),
-    TypedMiddleware(_setSemester),
-  ];
-}
+final _gradesLock = SemesterLock((s) async {
+  await Requests.get("${_wrapper.baseAddress}/?semesterWechsel=${s.n}");
+});
 
 const String _subjects = "/api/student/all_subjects";
 const String _subjectsDetail = "/api/student/subject_detail";
 
-SemesterLock _gradesLock;
-
-void _setSemester(
-    Store<AppState> store, SetSemesterAction action, NextDispatcher next) {
-  store.dispatch(
-    LoadSubjectsAction(
-      (b) => b..semester = action.semester.toBuilder(),
-    ),
-  );
+void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<Semester> action) {
   next(action);
+  api.actions.gradesActions.load(action.payload);
 }
 
-void _load(NextDispatcher next, LoadSubjectsAction action, Wrapper wrapper,
-    Store<AppState> store) async {
-  next(action);
-
-  if (await wrapper.noInternet) {
-    store.dispatch(
-      NoInternetAction(
-        (b) => b..noInternet = true,
-      ),
-    );
+void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<Semester> action) async {
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
     return;
   }
-
+  next(action);
   _doForSemester(
-    action.semester == Semester.all
+    action.payload == Semester.all
         ? [Semester.first, Semester.second]
-        : [action.semester],
+        : [action.payload],
     (s) async {
-      var data = await wrapper.post(
+      var data = await _wrapper.post(
         _subjects,
-        {"studentId": store.state.config.userId},
+        {"studentId": api.state.config.userId},
       );
-      store.dispatch(
-        SubjectsLoadedAction(
+      api.actions.gradesActions.loaded(
+        SubjectsLoadedPayload(
           (b) => b
             ..data = data
             ..semester = s.toBuilder(),
         ),
       );
-      store.dispatch(
-        UpdateGraphConfigsAction(
-          (b) => b..subjects = store.state.gradesState.subjects.toBuilder(),
-        ),
-      );
+      api.actions.settingsActions
+          .updateGraphConfig(api.state.gradesState.subjects);
     },
   );
 }
 
-void _loadDetail(Store<AppState> store, NextDispatcher next,
-    LoadSubjectDetailsAction action, Wrapper wrapper) async {
+void _loadGradesDetails(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<LoadSubjectDetailsPayload> action) async {
   next(action);
 
-  if (await wrapper.noInternet) {
-    store.dispatch(
-      NoInternetAction(
-        (b) => b..noInternet = true,
-      ),
-    );
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
     return;
   }
 
   _doForSemester(
-    action.semester == Semester.all
+    action.payload.semester == Semester.all
         ? [Semester.first, Semester.second]
-        : [action.semester],
+        : [action.payload.semester],
     (s) async {
-      var data = await wrapper.post(_subjectsDetail, {
-        "studentId": store.state.config.userId,
-        "subjectId": action.subject.id
+      var data = await _wrapper.post(_subjectsDetail, {
+        "studentId": api.state.config.userId,
+        "subjectId": action.payload.subject.id
       });
-      store.dispatch(
-        SubjectDetailLoadedAction(
+      api.actions.gradesActions.detailsLoaded(
+        SubjectDetailLoadedPayload(
           (b) => b
             ..data = data
             ..semester = s.toBuilder()
-            ..subject = action.subject.toBuilder(),
+            ..subject = action.payload.subject.toBuilder(),
         ),
       );
     },

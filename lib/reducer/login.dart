@@ -1,45 +1,44 @@
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/login_actions.dart';
 import '../app_state.dart';
 
-final loginReducer = combineReducers<LoginStateBuilder>([
-  _createLoginFailedReducer(),
-  _createLoginSucceededReducer(),
-  _createLoggingInReducer(),
-  _createLogoutReducer(),
-]);
+final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    LoginState, LoginStateBuilder>(
+  (s) => s.loginState,
+  (b) => b.loginState,
+)
+  ..add(LoginActionsNames.loginFailed, _loginFailed)
+  ..add(LoginActionsNames.loggedIn, _loggedIn)
+  ..add(LoginActionsNames.loggingIn, _loggingIn)
+  ..add(LoginActionsNames.logout, _logout);
 
-TypedReducer<LoginStateBuilder, LoginFailedAction> _createLoginFailedReducer() {
-  return TypedReducer((LoginStateBuilder state, LoginFailedAction action) {
-    return state
-      ..errorMsg = action.cause
-      ..userName = action.username
-      ..loading = false
-      ..loggedIn = false;
-  });
+void _loginFailed(LoginState state, Action<LoginFailedPayload> action,
+    LoginStateBuilder builder) {
+  builder
+    ..errorMsg = action.payload.cause
+    ..userName = action.payload.username
+    ..loading = false
+    ..loggedIn = false;
 }
 
-TypedReducer<LoginStateBuilder, LoggedInAction> _createLoginSucceededReducer() {
-  return TypedReducer((LoginStateBuilder state, LoggedInAction action) {
-    return state
-      ..errorMsg = null
-      ..userName = action.username
-      ..loading = false
-      ..loggedIn = true;
-  });
+void _loggedIn(LoginState state, Action<LoggedInPayload> action,
+    LoginStateBuilder builder) {
+  builder
+    ..errorMsg = null
+    ..userName = action.payload.username
+    ..loading = false
+    ..loggedIn = true;
 }
 
-TypedReducer<LoginStateBuilder, LoggingInAction> _createLoggingInReducer() {
-  return TypedReducer((LoginStateBuilder state, LoggingInAction action) {
-    return state..loading = true;
-  });
+void _loggingIn(
+    LoginState state, Action<void> action, LoginStateBuilder builder) {
+  builder..loading = true;
 }
 
-TypedReducer<LoginStateBuilder, LogoutAction> _createLogoutReducer() {
-  return TypedReducer((LoginStateBuilder state, LogoutAction action) {
-    return state
-      ..loggedIn = false
-      ..userName = null;
-  });
+void _logout(
+    LoginState state, Action<LogoutPayload> action, LoginStateBuilder builder) {
+  builder
+    ..loggedIn = false
+    ..userName = null;
 }

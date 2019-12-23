@@ -4,10 +4,22 @@ import 'package:flutter/services.dart';
 import '../container/login_page.dart';
 import 'no_internet.dart';
 
+typedef void LoginCallback(String user, String pass, String url);
+typedef void SetSafeModeCallback(bool safeMode);
+
 class LoginPageContent extends StatefulWidget {
   final LoginPageViewModel vm;
+  final LoginCallback onLogin;
+  final SetSafeModeCallback setSaveNoPass;
+  final VoidCallback onReload;
 
-  LoginPageContent({Key key, @required this.vm}) : super(key: key);
+  LoginPageContent({
+    Key key,
+    @required this.vm,
+    this.onLogin,
+    this.setSaveNoPass,
+    this.onReload,
+  }) : super(key: key);
 
   @override
   _LoginPageContentState createState() => _LoginPageContentState();
@@ -54,7 +66,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     ),
                     RaisedButton(
                       child: Text("Nochmal versuchen"),
-                      onPressed: () => widget.vm.onReload(),
+                      onPressed: () => widget.onReload(),
                     ),
                   ],
                 ),
@@ -94,8 +106,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               onPressed: widget.vm.loading
                                   ? null
                                   : () {
-                                      widget.vm.setSafeMode(safeMode);
-                                      widget.vm.onLogin(
+                                      widget.setSaveNoPass(safeMode);
+                                      widget.onLogin(
                                         _usernameController.value.text,
                                         _passwordController.value.text,
                                         _urlController.text,

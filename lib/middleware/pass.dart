@@ -1,78 +1,58 @@
-import 'dart:convert';
+part of 'middleware.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:redux/redux.dart';
+final _passMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(SettingsActionsNames.offlineEnabled, _enableOffline)
+      ..add(SettingsActionsNames.saveNoPass, _setSavePass)
+      ..add(SavePassActionsNames.save, _savePass)
+      ..add(SavePassActionsNames.delete, _deletePass);
 
-import '../actions/save_pass_actions.dart';
-import '../actions/settings_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
-
-List<Middleware<AppState>> passMiddlewares(
-        Wrapper wrapper, FlutterSecureStorage storage) =>
-    [
-      TypedMiddleware((Store<AppState> store, SetSaveNoPassAction action,
-              NextDispatcher next) =>
-          _saveNoPass(next, action, wrapper, store)),
-      TypedMiddleware((Store<AppState> store, SetOfflineEnabledAction action,
-              NextDispatcher next) =>
-          _enableOffline(next, action, wrapper, storage, store)),
-      TypedMiddleware(
-          (Store<AppState> store, SavePassAction action, NextDispatcher next) =>
-              _savePass(next, action, wrapper, storage, store)),
-      TypedMiddleware((Store<AppState> store, DeletePassAction action,
-              NextDispatcher next) =>
-          _deletePass(next, action, storage))
-    ];
-
-void _enableOffline(NextDispatcher next, SetOfflineEnabledAction action,
-    Wrapper wrapper, FlutterSecureStorage storage, Store<AppState> store) {
+void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<bool> action) async {
   next(action);
-  storage.write(
+  _secureStorage.write(
     key: "login",
     value: json.encode(
       {
-        "user": wrapper.user,
-        "pass": wrapper.pass,
-        "offlineEnabled": action.enabled,
+        "user": _wrapper.user,
+        "pass": _wrapper.pass,
+        "offlineEnabled": action.payload,
       },
     ),
   );
 }
 
-void _saveNoPass(NextDispatcher next, SetSaveNoPassAction action,
-    Wrapper wrapper, Store<AppState> store) {
+void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<bool> action) async {
   next(action);
-  wrapper.safeMode = action.noSave;
-  if (action.noSave && store.state.settingsState.deleteDataOnLogout) {
-    store.dispatch(SetDeleteDataOnLogoutAction((b) => b..delete = false));
+  _wrapper.safeMode = action.payload;
+  if (!api.state.loginState.loggedIn) return;
+  if (!action.payload) {
+    api.actions.savePassActions.save();
+  } else {
+    api.actions.savePassActions.delete();
   }
-  if (!store.state.loginState.loggedIn) return;
-  if (!action.noSave) {
-    store.dispatch(SavePassAction());
-  } else
-    store.dispatch(DeletePassAction());
 }
 
-void _savePass(NextDispatcher next, SavePassAction action, Wrapper wrapper,
-    FlutterSecureStorage storage, Store<AppState> store) {
+void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   next(action);
-  if (wrapper.user == null || wrapper.pass == null) return;
-  storage.write(
+  if (_wrapper.user == null || _wrapper.pass == null) return;
+  _secureStorage.write(
     key: "login",
     value: json.encode(
       {
-        "user": wrapper.user,
-        "pass": wrapper.pass,
-        "url": wrapper.url,
-        "offlineEnabled": store.state.settingsState.offlineEnabled
+        "user": _wrapper.user,
+        "pass": _wrapper.pass,
+        "url": _wrapper.url,
+        "offlineEnabled": api.state.settingsState.offlineEnabled
       },
     ),
   );
 }
 
-void _deletePass(NextDispatcher next, DeletePassAction action,
-    FlutterSecureStorage storage) {
+void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   next(action);
-  storage.delete(key: "login");
+  _secureStorage.delete(key: "login");
 }

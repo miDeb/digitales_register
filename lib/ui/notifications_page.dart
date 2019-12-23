@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart' hide Notification;
 import 'package:intl/intl.dart';
 
-import '../container/notifications_page.dart';
 import '../data.dart';
 import '../main.dart';
 import '../util.dart';
 
-class NotificationPageContent extends StatelessWidget {
-  final NotificationsViewModel vm;
+class NotificationPage extends StatelessWidget {
+  final List<Notification> notifications;
+  final SingleArgumentVoidCallback<Notification> deleteNotification;
+  final VoidCallback deleteAllNotifications;
 
-  const NotificationPageContent({Key key, this.vm}) : super(key: key);
+  const NotificationPage(
+      {Key key,
+      this.notifications,
+      this.deleteNotification,
+      this.deleteAllNotifications})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Benachrichtigungen"),
       ),
-      body: vm.notifications.length != 0
+      body: notifications.length != 0
           ? ListView.builder(
-              itemCount: vm.notifications.length + 1,
+              itemCount: notifications.length + 1,
               itemBuilder: (_, n) {
                 if (n == 0)
                   return Align(
@@ -32,12 +38,12 @@ class NotificationPageContent extends StatelessWidget {
                           Icon(Icons.done_all),
                         ],
                       ),
-                      onPressed: vm.deleteAllNotifications,
+                      onPressed: deleteAllNotifications,
                     ),
                   );
                 return NotificationWidget(
-                  notification: vm.notifications[n - 1],
-                  onDelete: vm.deleteNotification,
+                  notification: notifications[n - 1],
+                  onDelete: deleteNotification,
                 );
               },
             )

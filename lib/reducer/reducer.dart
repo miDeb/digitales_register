@@ -1,51 +1,38 @@
-import 'package:redux/redux.dart';
+import 'package:built_redux/built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 import 'absences.dart';
 import 'calendar.dart';
-import 'days.dart';
+import 'dashboard.dart';
 import 'grades.dart';
 import 'login.dart';
 import 'network_protocol.dart';
 import 'notifications.dart';
 import 'settings.dart';
 
-Reducer<AppState> appReducer = (AppState state, action) {
-  if (action is MountAppStateAction) {
-    return action.appState;
-  }
-  final newState = AppState((builder) {
-    builder
-      ..dayState = dayReducer(state.dayState.toBuilder(), action)
-      ..loginState = loginReducer(state.loginState.toBuilder(), action)
-      ..noInternet = _noInternetReducer(state.noInternet, action)
-      ..notificationState =
-          notificationsReducer(state.notificationState.toBuilder(), action)
-      ..currentRouteIsLogin =
-          _createCurrentRouteReducer()(state.currentRouteIsLogin, action)
-      ..config = _configReducer(state.config?.toBuilder(), action)
-      ..gradesState = gradesReducer(state.gradesState.toBuilder(), action)
-      ..settingsState =
-          settingsStateReducer(state.settingsState.toBuilder(), action)
-      ..absenceState = absenceReducer(state.absenceState?.toBuilder(), action)
-      ..calendarState =
-          calendarReducer(state.calendarState?.toBuilder(), action)
-      ..networkProtocolState = networkProtocolReducer(
-          state.networkProtocolState?.toBuilder(), action);
-  });
-  return newState;
-};
+final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
+  ..add(AppActionsNames.noInternet, _noInternet)
+  ..add(AppActionsNames.isLoginRoute, _currentRouteIsLogin)
+  ..add(AppActionsNames.setConfig, _config)
+  ..combineNested(absencesReducerBuilder)
+  ..combineNested(calendarReducerBuilder)
+  ..combineNested(dashboardReducerBuilder)
+  ..combineNested(gradesReducerBuilder)
+  ..combineNested(loginReducerBuilder)
+  ..combineNested(networkProtocolReducerBuilder)
+  ..combineNested(notificationsReducerBuilder)
+  ..combineNested(settingsReducerBuilder);
 
-final _noInternetReducer =
-    TypedReducer<bool, NoInternetAction>((_, action) => action.noInternet);
-
-TypedReducer<bool, SetRouteIsLoginAction> _createCurrentRouteReducer() {
-  return TypedReducer((bool state, SetRouteIsLoginAction action) {
-    return action.isLogin;
-  });
+void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
+  builder..noInternet = action.payload;
 }
 
-final _configReducer = TypedReducer(
-    (ConfigBuilder config, SetConfigAction action) =>
-        (config ?? ConfigBuilder())..replace(action.config));
+void _currentRouteIsLogin(
+    AppState state, Action<bool> action, AppStateBuilder builder) {
+  builder..currentRouteIsLogin = action.payload;
+}
+
+void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
+  builder..config.replace(action.payload);
+}

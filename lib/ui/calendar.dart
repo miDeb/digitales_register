@@ -6,10 +6,24 @@ import '../container/calendar_container.dart';
 import '../container/calendar_week_container.dart';
 import '../util.dart';
 
+typedef void DayCallback(DateTime day);
+
 class Calendar extends StatefulWidget {
   final CalendarViewModel vm;
 
-  const Calendar({Key key, this.vm}) : super(key: key);
+  final DayCallback dayCallback;
+  final DayCallback currentMondayCallback;
+  final VoidCallback showEditSubjectNicks;
+  final VoidCallback closeEditNicksBar;
+
+  const Calendar({
+    Key key,
+    this.vm,
+    this.dayCallback,
+    this.currentMondayCallback,
+    this.showEditSubjectNicks,
+    this.closeEditNicksBar,
+  }) : super(key: key);
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -54,7 +68,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     _dateRangeOpacityAnimation =
         _dateRangeOpacityController.drive(_dateRangeOpacityTween);
 
-    widget.vm.dayCallback(widget.vm.currentMonday);
+    widget.dayCallback(widget.vm.currentMonday);
 
     super.initState();
   }
@@ -64,10 +78,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   void _pageViewControllerListener() {
     final floor = _controller.page.floor(), ceil = _controller.page.ceil();
     if (!animatingPages.contains(floor)) {
-      widget.vm.dayCallback(mondayOf(floor));
+      widget.dayCallback(mondayOf(floor));
     }
     if (ceil != floor && !animatingPages.contains(ceil)) {
-      widget.vm.dayCallback(mondayOf(ceil));
+      widget.dayCallback(mondayOf(ceil));
     }
     animatingPages = [floor, ceil];
   }
@@ -75,7 +89,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   void _handlePageChanged(int newPage) {
     final newMonday = mondayOf(newPage);
     if (newMonday != widget.vm.currentMonday) {
-      widget.vm.currentMondayCallback(newMonday);
+      widget.currentMondayCallback(newMonday);
     }
   }
 
@@ -202,8 +216,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
           ),
           EditNickBar(
             show: widget.vm.showEditNicksBar,
-            onShowEditNicks: widget.vm.showEditSubjectNicks,
-            onClose: widget.vm.closeEditNicksBar,
+            onShowEditNicks: widget.showEditSubjectNicks,
+            onClose: widget.closeEditNicksBar,
           ),
         ],
       ),

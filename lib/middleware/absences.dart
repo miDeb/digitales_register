@@ -1,24 +1,18 @@
-import 'package:redux/redux.dart';
+part of 'middleware.dart';
 
-import '../actions/absences_actions.dart';
-import '../app_state.dart';
-import '../wrapper.dart';
+final _absencesMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(AbsencesActionsNames.load, _loadAbsences);
 
-List<Middleware<AppState>> absencesMiddlewares(Wrapper wrapper) => [
-      TypedMiddleware<AppState, LoadAbsencesAction>(
-        (store, action, next) => _loadAbsences(store, action, next, wrapper),
-      ),
-    ];
-
-void _loadAbsences(Store<AppState> store, LoadAbsencesAction action, next,
-    Wrapper wrapper) async {
+void _loadAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
   next(action);
-  final response = await wrapper.post("/api/student/dashboard/absences");
+  if (await _wrapper.noInternet) {
+    api.actions.noInternet(true);
+    return;
+  }
+  final response = await _wrapper.post("/api/student/dashboard/absences");
   if (response != null) {
-    store.dispatch(
-      AbsencesLoadedAction(
-        (b) => b..absences = response,
-      ),
-    );
+    api.actions.absencesActions.loaded(response);
   }
 }

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 
-import '../actions/routing_actions.dart';
+import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/grades_chart.dart';
@@ -14,35 +13,34 @@ class GradesChartContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, GradesChartViewModel>(
-      converter: (Store<AppState> store) {
-        return GradesChartViewModel(
-          Map.fromIterable(
-            store.state.gradesState.subjects,
-            key: (subject) {
-              final grades = store.state.gradesState.semester == Semester.all
-                  ? subject.gradesAll.values.fold<List<GradeAll>>(
-                      <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
-                  : subject.gradesAll[store.state.gradesState.semester]
-                      .toList();
+    return StoreConnection<AppState, AppActions,
+        Map<SubjectGrades, SubjectGraphConfig>>(
+      connect: (state) {
+        return Map.fromIterable(
+          state.gradesState.subjects,
+          key: (subject) {
+            final grades = state.gradesState.semester == Semester.all
+                ? subject.gradesAll.values.fold<List<GradeAll>>(
+                    <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
+                : subject.gradesAll[state.gradesState.semester].toList();
 
-              return SubjectGrades(
-                Map.fromIterable(
-                  grades..removeWhere((g) => g.cancelled || g.grade == null),
-                  key: (g) => (g as GradeAll).date,
-                  value: (g) => (g as GradeAll).grade,
-                ),
-              );
-            },
-            value: (s) =>
-                store.state.settingsState.graphConfigs[(s as Subject).id],
-          ),
-          isFullscreen,
-          () => store.dispatch(ShowFullscreenChartAction()),
+            return SubjectGrades(
+              Map.fromIterable(
+                grades..removeWhere((g) => g.cancelled || g.grade == null),
+                key: (g) => (g as GradeAll).date,
+                value: (g) => (g as GradeAll).grade,
+              ),
+            );
+          },
+          value: (s) => state.settingsState.graphConfigs[(s as Subject).id],
         );
       },
-      builder: (BuildContext context, GradesChartViewModel vm) {
-        return GradesChart(vm: vm);
+      builder: (context, vm, actions) {
+        return GradesChart(
+          graphs: vm,
+          isFullscreen: isFullscreen,
+          goFullscreen: actions.routingActions.showGradesChart,
+        );
       },
     );
   }

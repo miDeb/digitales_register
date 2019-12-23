@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 import '../container/homework_filter_container.dart';
 import '../data.dart';
 
+typedef void HomeworkBlacklistCallback(List<HomeworkType> blacklist);
+
 class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;
+  final HomeworkBlacklistCallback callback;
 
-  const HomeworkFilter({Key key, this.vm}) : super(key: key);
+  const HomeworkFilter({Key key, this.vm, this.callback}) : super(key: key);
 
   @override
   _HomeworkFilterState createState() => _HomeworkFilterState();
@@ -18,44 +21,49 @@ class _HomeworkFilterState extends State<HomeworkFilter>
   Widget build(BuildContext context) {
     super.build(context);
     return ExpansionTile(
-        title: Row(
-          children: <Widget>[
-            Spacer(),
-            Icon(Icons.filter_list),
-          ],
+      title: Row(
+        children: <Widget>[
+          Spacer(),
+          Icon(Icons.filter_list),
+        ],
+      ),
+      children: [
+        CheckboxListTile(
+          onChanged: (v) => widget.callback(
+            v
+                ? (widget.vm.currentBlacklist
+                  ..remove(HomeworkType.grade)
+                  ..remove(HomeworkType.gradeGroup))
+                : (widget.vm.currentBlacklist
+                  ..add(HomeworkType.grade)
+                  ..add(HomeworkType.gradeGroup)),
+          ),
+          title: Text("Noten & Tests"),
+          value: !widget.vm.currentBlacklist.contains(HomeworkType.grade),
         ),
-        children: [
-          CheckboxListTile(
-              onChanged: (v) => widget.vm.callback(v
-                  ? (widget.vm.currentBlacklist
-                    ..remove(HomeworkType.grade)
-                    ..remove(HomeworkType.gradeGroup))
-                  : (widget.vm.currentBlacklist
-                    ..add(HomeworkType.grade)
-                    ..add(HomeworkType.gradeGroup))),
-              title: Text("Noten & Tests"),
-              value: !widget.vm.currentBlacklist.contains(HomeworkType.grade)),
-          CheckboxListTile(
-              onChanged: (v) => widget.vm.callback(v
-                  ? (widget.vm.currentBlacklist
-                    ..remove(HomeworkType.homework)
-                    ..remove(HomeworkType.lessonHomework))
-                  : (widget.vm.currentBlacklist
-                    ..add(HomeworkType.homework)
-                    ..add(HomeworkType.lessonHomework))),
-              title: Text("Hausaufgaben & Erinnerungen"),
-              value:
-                  !widget.vm.currentBlacklist.contains(HomeworkType.homework)),
-          CheckboxListTile(
-              onChanged: (v) => widget.vm.callback(v
-                  ? (widget.vm.currentBlacklist
-                    ..remove(HomeworkType.observation))
-                  : (widget.vm.currentBlacklist
-                    ..add(HomeworkType.observation))),
-              title: Text("Beobachtungen"),
-              value: !widget.vm.currentBlacklist
-                  .contains(HomeworkType.observation)),
-        ]);
+        CheckboxListTile(
+            onChanged: (v) => widget.callback(
+                  v
+                      ? (widget.vm.currentBlacklist
+                        ..remove(HomeworkType.homework)
+                        ..remove(HomeworkType.lessonHomework))
+                      : (widget.vm.currentBlacklist
+                        ..add(HomeworkType.homework)
+                        ..add(HomeworkType.lessonHomework)),
+                ),
+            title: Text("Hausaufgaben & Erinnerungen"),
+            value: !widget.vm.currentBlacklist.contains(HomeworkType.homework)),
+        CheckboxListTile(
+          onChanged: (v) => widget.callback(
+            v
+                ? (widget.vm.currentBlacklist..remove(HomeworkType.observation))
+                : (widget.vm.currentBlacklist..add(HomeworkType.observation)),
+          ),
+          title: Text("Beobachtungen"),
+          value: !widget.vm.currentBlacklist.contains(HomeworkType.observation),
+        ),
+      ],
+    );
   }
 
   @override

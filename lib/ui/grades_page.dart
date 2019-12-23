@@ -7,8 +7,9 @@ import '../container/sorted_grades_container.dart';
 
 class GradesPage extends StatelessWidget {
   final GradesPageViewModel vm;
+  final ValueChanged<Semester> changeSemester;
 
-  const GradesPage({Key key, this.vm}) : super(key: key);
+  const GradesPage({Key key, this.vm, this.changeSemester}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,7 @@ class GradesPage extends StatelessWidget {
                           )
                           .toList(),
                       onChanged: (value) {
-                        if (vm.showSemester != value) vm.changeSemester(value);
+                        if (vm.showSemester != value) changeSemester(value);
                       },
                     ),
                   ),

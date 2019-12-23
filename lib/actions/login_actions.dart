@@ -1,5 +1,20 @@
 import 'package:built_value/built_value.dart';
+import 'package:built_redux/built_redux.dart';
+
 part 'login_actions.g.dart';
+
+abstract class LoginActions extends ReduxActions {
+  LoginActions._();
+  factory LoginActions() => new _$LoginActions();
+
+  ActionDispatcher<LoginAction> login;
+  ActionDispatcher<LoggedInPayload> loggedIn;
+  ActionDispatcher<LoginFailedPayload> loginFailed;
+  ActionDispatcher<LogoutPayload> logout;
+  ActionDispatcher<void> updateLogout;
+  ActionDispatcher<void> loggingIn;
+  ActionDispatcher<void> automaticallyReloggedIn;
+}
 
 abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
   LoginAction._();
@@ -28,21 +43,22 @@ abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
   bool get offlineEnabled;
 }
 
-abstract class LoggedInAction
-    implements Built<LoggedInAction, LoggedInActionBuilder> {
-  LoggedInAction._();
-  factory LoggedInAction([void Function(LoggedInActionBuilder) updates]) =
-      _$LoggedInAction;
+abstract class LoggedInPayload
+    implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
+  LoggedInPayload._();
+  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) =
+      _$LoggedInPayload;
 
   String get username;
   bool get fromStorage;
 }
 
-abstract class LoginFailedAction
-    implements Built<LoginFailedAction, LoginFailedActionBuilder> {
-  LoginFailedAction._();
-  factory LoginFailedAction([void Function(LoginFailedActionBuilder) updates]) =
-      _$LoginFailedAction;
+abstract class LoginFailedPayload
+    implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
+  LoginFailedPayload._();
+  factory LoginFailedPayload(
+          [void Function(LoginFailedPayloadBuilder) updates]) =
+      _$LoginFailedPayload;
 
   String get cause;
   String get username;
@@ -51,36 +67,12 @@ abstract class LoginFailedAction
   bool get noInternet;
 }
 
-abstract class LogoutAction
-    implements Built<LogoutAction, LogoutActionBuilder> {
-  LogoutAction._();
-  factory LogoutAction([void Function(LogoutActionBuilder) updates]) =
-      _$LogoutAction;
+abstract class LogoutPayload
+    implements Built<LogoutPayload, LogoutPayloadBuilder> {
+  LogoutPayload._();
+  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) =
+      _$LogoutPayload;
 
   bool get hard;
   bool get forced;
-}
-
-abstract class UpdateLogoutAction
-    implements Built<UpdateLogoutAction, UpdateLogoutActionBuilder> {
-  UpdateLogoutAction._();
-  factory UpdateLogoutAction(
-          [void Function(UpdateLogoutActionBuilder) updates]) =
-      _$UpdateLogoutAction;
-}
-
-abstract class LoggingInAction
-    implements Built<LoggingInAction, LoggingInActionBuilder> {
-  LoggingInAction._();
-  factory LoggingInAction([void Function(LoggingInActionBuilder) updates]) =
-      _$LoggingInAction;
-}
-
-abstract class LoggedInAgainAutomatically
-    implements
-        Built<LoggedInAgainAutomatically, LoggedInAgainAutomaticallyBuilder> {
-  LoggedInAgainAutomatically._();
-  factory LoggedInAgainAutomatically(
-          [void Function(LoggedInAgainAutomaticallyBuilder) updates]) =
-      _$LoggedInAgainAutomatically;
 }

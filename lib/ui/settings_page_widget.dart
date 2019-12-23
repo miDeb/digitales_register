@@ -10,9 +10,34 @@ import '../container/settings_page.dart';
 import 'network_protocol_page.dart';
 
 class SettingsPageWidget extends StatefulWidget {
+  final OnSettingChanged<bool> onSetNoPassSaving;
+  final OnSettingChanged<bool> onSetNoDataSaving;
+  final OnSettingChanged<bool> onSetAskWhenDelete;
+  final OnSettingChanged<bool> onSetDeleteDataOnLogout;
+  final OnSettingChanged<bool> onSetOfflineEnabled;
+  final OnSettingChanged<bool> onSetShowCalendarEditNicksBar;
+  final OnSettingChanged<bool> onSetShowGradesDiagram;
+  final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
+  final OnSettingChanged<bool> onSetDashboardMarkNewOrChangedEntries;
+  final OnSettingChanged<bool> onSetDarkMode;
+  final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final SettingsViewModel vm;
 
-  SettingsPageWidget({Key key, this.vm}) : super(key: key);
+  SettingsPageWidget({
+    Key key,
+    this.onSetNoPassSaving,
+    this.onSetNoDataSaving,
+    this.onSetAskWhenDelete,
+    this.onSetDeleteDataOnLogout,
+    this.onSetOfflineEnabled,
+    this.onSetShowCalendarEditNicksBar,
+    this.onSetShowGradesDiagram,
+    this.onSetShowAllSubjectsAverage,
+    this.onSetDashboardMarkNewOrChangedEntries,
+    this.onSetDarkMode,
+    this.onSetSubjectNicks,
+    this.vm,
+  }) : super(key: key);
 
   @override
   _SettingsPageWidgetState createState() => _SettingsPageWidgetState();
@@ -59,7 +84,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           SwitchListTile(
             title: Text("Angemeldet bleiben"),
             onChanged: (bool value) {
-              widget.vm.onSetNoPassSaving(!value);
+              widget.onSetNoPassSaving(!value);
             },
             value: !widget.vm.noPassSaving,
           ),
@@ -67,7 +92,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: Text("Daten lokal speichern"),
             subtitle: Text('Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
-              widget.vm.onSetNoDataSaving(!value);
+              widget.onSetNoDataSaving(!value);
             },
             value: !widget.vm.noDataSaving,
           ),
@@ -75,7 +100,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: Text("Offline-Login"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
-                    widget.vm.onSetOfflineEnabled(value);
+                    widget.onSetOfflineEnabled(value);
                   }
                 : null,
             value: widget.vm.offlineEnabled,
@@ -84,7 +109,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: Text("Daten beim Ausloggen löschen"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
-                    widget.vm.onSetDeleteDataOnLogout(value);
+                    widget.onSetDeleteDataOnLogout(value);
                   }
                 : null,
             value: widget.vm.deleteDataOnLogout,
@@ -108,7 +133,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   MediaQuery.of(context).platformBrightness == Brightness.dark
                       ? null
                       : (bool value) {
-                          widget.vm.onSetDarkMode(value);
+                          widget.onSetDarkMode(value);
                         },
               value: DynamicTheme.of(context).brightness == Brightness.dark,
             ),
@@ -127,14 +152,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           SwitchListTile(
             title: Text("Neue oder geänderte Einträge markieren"),
             onChanged: (bool value) {
-              widget.vm.onSetDashboardMarkNewOrChangedEntries(value);
+              widget.onSetDashboardMarkNewOrChangedEntries(value);
             },
             value: widget.vm.dashboardMarkNewOrChangedEntries,
           ),
           SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
-              widget.vm.onSetAskWhenDelete(value);
+              widget.onSetAskWhenDelete(value);
             },
             value: widget.vm.askWhenDelete,
           ),
@@ -153,14 +178,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           SwitchListTile(
             title: Text("Noten in einem Diagramm darstellen"),
             onChanged: (bool value) {
-              widget.vm.onSetShowGradesDiagram(value);
+              widget.onSetShowGradesDiagram(value);
             },
             value: widget.vm.showGradesDiagram,
           ),
           SwitchListTile(
             title: Text('Durchschnitt aller Fächer anzeigen'),
             onChanged: (bool value) {
-              widget.vm.onSetShowAllSubjectsAverage(value);
+              widget.onSetShowAllSubjectsAverage(value);
             },
             value: widget.vm.showAllSubjectsAverage,
           ),
@@ -194,7 +219,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                           widget.vm.allSubjects,
                         );
                         if (newValue != null) {
-                          widget.vm.onSetSubjectNicks(
+                          widget.onSetSubjectNicks(
                             Map.of(widget.vm.subjectNicks)
                               ..[newValue.key] = newValue.value,
                           );
@@ -232,7 +257,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                                 );
                               });
                           if (delete == true)
-                            widget.vm.onSetSubjectNicks(
+                            widget.onSetSubjectNicks(
                               Map.of(widget.vm.subjectNicks)..remove(key),
                             );
                         },
@@ -247,7 +272,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                             List.of(widget.vm.allSubjects)..add(key),
                           );
                           if (newValue != null) {
-                            widget.vm.onSetSubjectNicks(
+                            widget.onSetSubjectNicks(
                               Map.fromEntries(
                                 List.of(widget.vm.subjectNicks.entries)
                                   ..[i - 1] = newValue,
@@ -267,7 +292,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             subtitle: Text(
                 "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
             onChanged: (bool value) {
-              widget.vm.onSetShowCalendarEditNicksBar(value);
+              widget.onSetShowCalendarEditNicksBar(value);
             },
             value: widget.vm.showCalendarEditNicksBar,
           ),

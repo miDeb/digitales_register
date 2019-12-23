@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../container/notification_icon.dart';
 import 'news_sticker.dart';
 
-class NotificationIconWidget extends StatelessWidget {
-  final NotificationIconViewModel vm;
+class NotificationIcon extends StatelessWidget {
+  final int notifications;
+  final VoidCallback onTap;
 
-  const NotificationIconWidget({Key key, this.vm}) : super(key: key);
+  const NotificationIcon({Key key, this.notifications, this.onTap})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return vm.notifications != 0
+    return notifications != 0
         ? IconButton(
             icon: Stack(
               fit: StackFit.expand,
@@ -17,7 +18,7 @@ class NotificationIconWidget extends StatelessWidget {
                 Icon(Icons.notifications),
                 Align(
                   child: NewsSticker(
-                    text: vm.notifications.toString(),
+                    text: notifications.toString(),
                   ),
                   alignment: Alignment(
                     -1.2,
@@ -26,9 +27,7 @@ class NotificationIconWidget extends StatelessWidget {
                 ),
               ],
             ),
-            onPressed: () {
-              vm.onTap();
-            },
+            onPressed: onTap,
           )
         : SizedBox();
   }

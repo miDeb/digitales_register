@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
@@ -9,12 +8,15 @@ import '../ui/home_page_content.dart';
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, HomePageContentViewModel>(
-      builder: (context, vm) {
-        return HomePageContent(vm: vm);
+    return StoreConnection<AppState, AppActions, HomePageContentViewModel>(
+      builder: (context, vm, actions) {
+        return HomePageContent(
+          vm: vm,
+          refreshNoInternet: actions.refreshNoInternet,
+        );
       },
-      converter: (store) {
-        return HomePageContentViewModel.from(store);
+      connect: (state) {
+        return HomePageContentViewModel.from(state);
       },
     );
   }
@@ -22,16 +24,13 @@ class HomePage extends StatelessWidget {
 
 class HomePageContentViewModel {
   final bool noInternet, loading, splash;
-  final VoidCallback refreshNoInternet;
   final String userName, userIcon;
-  HomePageContentViewModel.from(Store<AppState> store)
-      : noInternet = store.state.noInternet,
-        loading = store.state.dayState.loading,
-        userName =
-            store.state.config?.fullName ?? store.state.loginState.userName,
-        userIcon = store.state.config?.imgSource,
-        splash = !store.state.loginState.loggedIn,
-        refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction()));
+  HomePageContentViewModel.from(AppState state)
+      : noInternet = state.noInternet,
+        loading = state.dashboardState.loading,
+        userName = state.config?.fullName ?? state.loginState.userName,
+        userIcon = state.config?.imgSource,
+        splash = !state.loginState.loggedIn;
   @override
   String toString() {
     return "HomePageContentViewModel(noInternet: $noInternet, loading: $loading)";

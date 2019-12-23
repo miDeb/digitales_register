@@ -6,17 +6,23 @@ import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../util.dart';
 
+// TODO: What's the purpose of this?
 final colors = List.of(Colors.primaries)
   ..remove(Colors.pink)
   ..remove(Colors.lightBlue)
   ..remove(Colors.lightGreen);
 
 class GradesChart extends StatelessWidget {
-  final GradesChartViewModel vm;
+  final VoidCallback goFullscreen;
+  final bool isFullscreen;
   final List<charts.Series<MapEntry<DateTime, int>, DateTime>> grades;
 
-  GradesChart({Key key, this.vm})
-      : grades = convert(vm.graphs),
+  GradesChart({
+    Key key,
+    Map<SubjectGrades, SubjectGraphConfig> graphs,
+    this.goFullscreen,
+    this.isFullscreen,
+  })  : grades = convert(graphs),
         super(key: key);
 
   static List<charts.Series<MapEntry<DateTime, int>, DateTime>> convert(
@@ -32,7 +38,10 @@ class GradesChart extends StatelessWidget {
                 ? null
                 : charts.Series<MapEntry<DateTime, int>, DateTime>(
                     colorFn: (_, __) => charts.Color(
-                        r: color.red, g: color.green, b: color.blue),
+                      r: color.red,
+                      g: color.green,
+                      b: color.blue,
+                    ),
                     domainFn: (grade, _) => grade.key,
                     measureFn: (grade, _) => grade.value / 100,
                     data: s.grades.entries.toList(),
@@ -98,49 +107,51 @@ class GradesChart extends StatelessWidget {
     return Hero(
       tag: 1337,
       child: maybeWrap(
-          Center(
-            child: charts.TimeSeriesChart(
-              grades,
-              animate: false,
-              primaryMeasureAxis: charts.NumericAxisSpec(
-                tickProviderSpec: charts.StaticNumericTickProviderSpec(
-                  [
-                    charts.TickSpec(3),
-                    charts.TickSpec(4),
-                    charts.TickSpec(5),
-                    charts.TickSpec(6),
-                    charts.TickSpec(7),
-                    charts.TickSpec(8),
-                    charts.TickSpec(9),
-                    charts.TickSpec(10),
-                  ],
-                ),
+        Center(
+          child: charts.TimeSeriesChart(
+            grades,
+            animate: false,
+            primaryMeasureAxis: charts.NumericAxisSpec(
+              tickProviderSpec: charts.StaticNumericTickProviderSpec(
+                [
+                  charts.TickSpec(3),
+                  charts.TickSpec(4),
+                  charts.TickSpec(5),
+                  charts.TickSpec(6),
+                  charts.TickSpec(7),
+                  charts.TickSpec(8),
+                  charts.TickSpec(9),
+                  charts.TickSpec(10),
+                ],
               ),
-              defaultInteractions: false,
-              domainAxis: new charts.DateTimeAxisSpec(
-                tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
-                  createDomainAxisTags(
-                    Localizations.localeOf(context),
-                  ),
+            ),
+            defaultInteractions: false,
+            domainAxis: new charts.DateTimeAxisSpec(
+              tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
+                createDomainAxisTags(
+                  Localizations.localeOf(context),
                 ),
               ),
             ),
           ),
-          !vm.isFullScreen, (widget) {
-        return GestureDetector(
-          child: Stack(
-            children: <Widget>[
-              widget,
-              Positioned(
-                child: Icon(Icons.fullscreen),
-                right: 20,
-                bottom: 20,
-              ),
-            ],
-          ),
-          onTap: () => vm.goFullScreen(),
-        );
-      }),
+        ),
+        !isFullscreen,
+        (widget) {
+          return GestureDetector(
+            child: Stack(
+              children: <Widget>[
+                widget,
+                Positioned(
+                  child: Icon(Icons.fullscreen),
+                  right: 20,
+                  bottom: 20,
+                ),
+              ],
+            ),
+            onTap: goFullscreen,
+          );
+        },
+      ),
     );
   }
 }

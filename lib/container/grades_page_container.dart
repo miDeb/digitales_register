@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 
-import '../actions/grades_actions.dart';
+import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_page.dart';
 
 class GradesPageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, GradesPageViewModel>(
-      builder: (BuildContext context, GradesPageViewModel vm) {
+    return StoreConnection<AppState, AppActions, GradesPageViewModel>(
+      builder: (context, vm, actions) {
         return GradesPage(
           vm: vm,
+          changeSemester: actions.gradesActions.setSemester,
         );
       },
-      converter: (Store store) {
-        return GradesPageViewModel.from(store);
+      connect: (state) {
+        return GradesPageViewModel.from(state);
       },
     );
   }
@@ -24,25 +24,18 @@ class GradesPageContainer extends StatelessWidget {
 
 class GradesPageViewModel {
   final Semester showSemester;
-  final ValueChanged<Semester> changeSemester;
   final String allSubjectsAverage;
   final bool loading;
   final bool showGradesDiagram;
   final bool showAllSubjectsAverage;
 
-  GradesPageViewModel.from(Store<AppState> store)
-      : showSemester = store.state.gradesState.semester,
-        changeSemester = ((newSemester) => store.dispatch(
-              SetSemesterAction(
-                (b) => b..semester = newSemester.toBuilder(),
-              ),
-            )),
-        loading = store.state.gradesState.loading,
-        allSubjectsAverage = calculateAllSubjectsAverage(store.state),
-        showGradesDiagram = store.state.settingsState.showGradesDiagram,
-        showAllSubjectsAverage =
-            store.state.settingsState.showAllSubjectsAverage &&
-                store.state.gradesState.semester.n != null;
+  GradesPageViewModel.from(AppState state)
+      : showSemester = state.gradesState.semester,
+        loading = state.gradesState.loading,
+        allSubjectsAverage = calculateAllSubjectsAverage(state),
+        showGradesDiagram = state.settingsState.showGradesDiagram,
+        showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage &&
+            state.gradesState.semester.n != null;
 
   static String calculateAllSubjectsAverage(AppState state) {
     if (state.gradesState.semester == Semester.all) return null;

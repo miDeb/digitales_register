@@ -13,10 +13,39 @@ import 'news_sticker.dart';
 import 'no_internet.dart';
 import 'sub_icon.dart';
 
+typedef void AddReminderCallback(Day day, String reminder);
+typedef void RemoveReminderCallback(Homework hw, Day day);
+typedef void ToggleDoneCallback(Homework hw, bool done);
+typedef void MarkAsNotNewOrChangedCallback(Homework hw);
+typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
+
 class DaysWidget extends StatelessWidget {
   final DaysViewModel vm;
 
-  const DaysWidget({Key key, this.vm}) : super(key: key);
+  final VoidCallback onSwitchFuture;
+  final AddReminderCallback addReminderCallback;
+  final RemoveReminderCallback removeReminderCallback;
+  final ToggleDoneCallback toggleDoneCallback;
+  final VoidCallback setDoNotAskWhenDeleteCallback;
+  final MarkAsNotNewOrChangedCallback markAsSeenCallback;
+  final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
+  final VoidCallback markAllAsSeenCallback;
+  final VoidCallback refresh, refreshNoInternet;
+
+  const DaysWidget({
+    Key key,
+    this.vm,
+    this.onSwitchFuture,
+    this.addReminderCallback,
+    this.removeReminderCallback,
+    this.toggleDoneCallback,
+    this.setDoNotAskWhenDeleteCallback,
+    this.markAsSeenCallback,
+    this.markDeletedHomeworkAsSeenCallback,
+    this.markAllAsSeenCallback,
+    this.refresh,
+    this.refreshNoInternet,
+  }) : super(key: key);
 
   Widget build(BuildContext context) {
     if (vm.days.isEmpty && vm.loading && !vm.noInternet) {
@@ -26,9 +55,18 @@ class DaysWidget extends StatelessWidget {
         ? RefreshIndicator(
             child: DaysListWidget(
               vm: vm,
+              markAsSeenCallback: markAsSeenCallback,
+              markAllAsSeenCallback: markAllAsSeenCallback,
+              markDeletedHomeworkAsSeenCallback:
+                  markDeletedHomeworkAsSeenCallback,
+              addReminderCallback: addReminderCallback,
+              removeReminderCallback: removeReminderCallback,
+              onSwitchFuture: onSwitchFuture,
+              toggleDoneCallback: toggleDoneCallback,
+              setDoNotAskWhenDeleteCallback: setDoNotAskWhenDeleteCallback,
             ),
             onRefresh: () async {
-              vm.refresh();
+              refresh();
             },
           )
         : vm.noInternet
@@ -56,7 +94,27 @@ class DaysWidget extends StatelessWidget {
 class DaysListWidget extends StatefulWidget {
   final DaysViewModel vm;
 
-  const DaysListWidget({Key key, this.vm}) : super(key: key);
+  final MarkAsNotNewOrChangedCallback markAsSeenCallback;
+  final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
+  final VoidCallback markAllAsSeenCallback;
+  final AddReminderCallback addReminderCallback;
+  final RemoveReminderCallback removeReminderCallback;
+  final VoidCallback onSwitchFuture;
+  final ToggleDoneCallback toggleDoneCallback;
+  final VoidCallback setDoNotAskWhenDeleteCallback;
+
+  const DaysListWidget({
+    Key key,
+    this.vm,
+    this.markAsSeenCallback,
+    this.markDeletedHomeworkAsSeenCallback,
+    this.addReminderCallback,
+    this.removeReminderCallback,
+    this.markAllAsSeenCallback,
+    this.onSwitchFuture,
+    this.toggleDoneCallback,
+    this.setDoNotAskWhenDeleteCallback,
+  }) : super(key: key);
   @override
   _DaysListWidgetState createState() => _DaysListWidgetState();
 }
@@ -115,10 +173,9 @@ class _DaysListWidgetState extends State<DaysListWidget> {
       if (distance == null || distance > 50) {
         _focused.remove(focusedItem);
         if (_dayIndexes.containsKey(focusedItem)) {
-          widget.vm.markDeletedHomeworkAsSeenCallback(_dayIndexes[focusedItem]);
+          widget.markDeletedHomeworkAsSeenCallback(_dayIndexes[focusedItem]);
         } else if (_homeworkIndexes.containsKey(focusedItem)) {
-          widget.vm
-              .markAsNotNewOrChangedCallback(_homeworkIndexes[focusedItem]);
+          widget.markAsSeenCallback(_homeworkIndexes[focusedItem]);
         } else {
           assert(
             false,
@@ -212,7 +269,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                       child: Text(
                         widget.vm.future ? "Vergangenheit" : "Zukunft",
                       ),
-                      onPressed: widget.vm.onSwitchFuture,
+                      onPressed: widget.onSwitchFuture,
                     ),
                   ),
                 ),
@@ -232,6 +289,10 @@ class _DaysListWidgetState extends State<DaysListWidget> {
             vm: widget.vm,
             controller: controller,
             index: _dayStartIndices[n - 1],
+            addReminderCallback: widget.addReminderCallback,
+            removeReminderCallback: widget.removeReminderCallback,
+            toggleDoneCallback: widget.toggleDoneCallback,
+            setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
           );
         },
       ),
@@ -263,7 +324,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               backgroundColor: Colors.red,
               heroTag: null,
               onPressed: () {
-                widget.vm.markAllAsNotNewOrChangedCallback();
+                widget.markAllAsSeenCallback();
               },
               child: Icon(Icons.close),
               mini: true,
@@ -288,13 +349,28 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
 class DayWidget extends StatelessWidget {
   final DaysViewModel vm;
+
+  final AddReminderCallback addReminderCallback;
+  final RemoveReminderCallback removeReminderCallback;
+  final ToggleDoneCallback toggleDoneCallback;
+  final VoidCallback setDoNotAskWhenDeleteCallback;
+
   final Day day;
 
   final AutoScrollController controller;
   final int index;
 
-  const DayWidget({Key key, this.day, this.vm, this.controller, this.index})
-      : super(key: key);
+  const DayWidget({
+    Key key,
+    this.day,
+    this.vm,
+    this.controller,
+    this.index,
+    this.addReminderCallback,
+    this.removeReminderCallback,
+    this.toggleDoneCallback,
+    this.setDoNotAskWhenDeleteCallback,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var i = index;
@@ -401,7 +477,7 @@ class DayWidget extends StatelessWidget {
                       );
                     });
                 if (message != null) {
-                  vm.addReminderCallback(day, message);
+                  addReminderCallback(day, message);
                 }
               },
             ),
@@ -410,9 +486,9 @@ class DayWidget extends StatelessWidget {
         for (final hw in day.homework)
           ItemWidget(
             item: hw,
-            toggleDone: () => vm.toggleDoneCallback(hw, !hw.checked),
-            removeThis: () => vm.removeReminderCallback(hw, day),
-            setDoNotAskWhenDelete: vm.setDoNotAskWhenDeleteCallback,
+            toggleDone: () => toggleDoneCallback(hw, !hw.checked),
+            removeThis: () => removeReminderCallback(hw, day),
+            setDoNotAskWhenDelete: setDoNotAskWhenDeleteCallback,
             askWhenDelete: vm.askWhenDelete,
             controller: controller,
             index: ++i,

@@ -1,73 +1,71 @@
 import 'package:flutter/material.dart';
 
-import '../container/drawer_buttons.dart';
-
 class LogoutButtonWidget extends StatelessWidget {
-  final LogoutButtonViewModel vm;
+  final VoidCallback onLogout;
 
-  const LogoutButtonWidget({Key key, this.vm}) : super(key: key);
+  const LogoutButtonWidget({Key key, this.onLogout}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text("Logout"),
       trailing: Icon(Icons.exit_to_app),
-      onTap: vm.onLogout,
+      onTap: onLogout,
     );
   }
 }
 
 class SettingsButtonWidget extends StatelessWidget {
-  final SettingsButtonViewModel vm;
+  final VoidCallback onShowSettings;
 
-  const SettingsButtonWidget({Key key, this.vm}) : super(key: key);
+  const SettingsButtonWidget({Key key, this.onShowSettings}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text("Einstellungen"),
       trailing: Icon(Icons.settings),
-      onTap: vm.onShowSettings,
+      onTap: onShowSettings,
     );
   }
 }
 
 class GradesButtonWidget extends StatelessWidget {
-  final GradesButtonViewModel vm;
+  final VoidCallback onShowGrades;
 
-  const GradesButtonWidget({Key key, this.vm}) : super(key: key);
+  const GradesButtonWidget({Key key, this.onShowGrades}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text("Noten"),
       trailing: Icon(Icons.grade),
-      onTap: vm.onShowGrades,
+      onTap: onShowGrades,
     );
   }
 }
 
 class AbsencesButtonWidget extends StatelessWidget {
-  final AbsencesButtonViewModel vm;
+  final VoidCallback onShowAbsences;
 
-  const AbsencesButtonWidget({Key key, this.vm}) : super(key: key);
+  const AbsencesButtonWidget({Key key, this.onShowAbsences}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text("Absenzen"),
       trailing: Icon(Icons.hotel),
-      onTap: vm.onShowAbsences,
+      onTap: onShowAbsences,
     );
   }
 }
 
 class CalendarButtonWidget extends StatelessWidget {
-  final CalendarButtonViewModel vm;
+  final VoidCallback onShowCalendar;
 
-  const CalendarButtonWidget({Key key, this.vm}) : super(key: key);
+  const CalendarButtonWidget({Key key, this.onShowCalendar}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
       title: Text("Kalender"),
       trailing: Icon(Icons.calendar_today),
-      onTap: vm.onShowCalendar,
+      onTap: onShowCalendar,
     );
   }
 }

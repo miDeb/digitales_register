@@ -1,17 +1,11 @@
-import 'package:built_value/built_value.dart';
+import 'package:built_redux/built_redux.dart';
 
 part 'save_pass_actions.g.dart';
 
-abstract class SavePassAction
-    implements Built<SavePassAction, SavePassActionBuilder> {
-  SavePassAction._();
-  factory SavePassAction([void Function(SavePassActionBuilder) updates]) =
-      _$SavePassAction;
-}
+abstract class SavePassActions extends ReduxActions {
+  SavePassActions._();
+  factory SavePassActions() => new _$SavePassActions();
 
-abstract class DeletePassAction
-    implements Built<DeletePassAction, DeletePassActionBuilder> {
-  DeletePassAction._();
-  factory DeletePassAction([void Function(DeletePassActionBuilder) updates]) =
-      _$DeletePassAction;
+  ActionDispatcher<void> save;
+  ActionDispatcher<void> delete;
 }

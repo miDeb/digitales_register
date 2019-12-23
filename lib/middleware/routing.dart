@@ -1,103 +1,74 @@
-import 'package:redux/redux.dart';
+part of 'middleware.dart';
 
-import '../actions/absences_actions.dart';
-import '../actions/app_actions.dart';
-import '../actions/calendar_actions.dart';
-import '../actions/grades_actions.dart';
-import '../actions/routing_actions.dart';
-import '../app_state.dart';
-import '../main.dart';
-import '../util.dart';
-import '../wrapper.dart';
+final _routingMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(RoutingActionsNames.showLogin, _showLogin)
+      ..add(RoutingActionsNames.showNotifications, _showNotifications)
+      ..add(RoutingActionsNames.showSettings, _showSettings)
+      ..add(RoutingActionsNames.showEditCalendarSubjectNicks,
+          _showEditCalendarSubjectNicks)
+      ..add(RoutingActionsNames.showCalendar, _showCalendar)
+      ..add(RoutingActionsNames.showAbsences, _showAbsences)
+      ..add(RoutingActionsNames.showGradesChart, _showGradesChart)
+      ..add(RoutingActionsNames.showGrades, _showGrades);
 
-List<Middleware<AppState>> routingMiddlewares(Wrapper wrapper) => [
-      TypedMiddleware<AppState, ShowLoginAction>(
-        (store, _, __) => _showLogin(wrapper, store),
-      ),
-      TypedMiddleware<AppState, ShowNotificationsAction>(
-        (store, action, next) => _showNotifications(next, action),
-      ),
-      TypedMiddleware<AppState, ShowSettingsAction>(
-        (store, action, next) => _showSettings(next, action),
-      ),
-      TypedMiddleware<AppState, ShowEditCalendarSubjectNicksAction>(
-        (store, action, next) => _showEditCalendarSubjectNicks(next, action),
-      ),
-      TypedMiddleware<AppState, ShowCalendarAction>(
-        (store, action, next) => _showCalendar(store, next, action),
-      ),
-      TypedMiddleware<AppState, ShowGradesAction>(
-        (store, action, next) => _showGrades(store, next, action),
-      ),
-      TypedMiddleware<AppState, ShowAbsencesAction>(
-        (store, action, next) => _showAbsences(store, next, action),
-      ),
-      TypedMiddleware<AppState, ShowFullscreenChartAction>(
-        (store, action, next) => _showGradesChart(next, action),
-      ),
-    ];
-
-void _showLogin(Wrapper wrapper, Store<AppState> store) {
-  store.dispatch(
-    NoInternetAction(
-      (b) async => b..noInternet = await wrapper.noInternet,
-    ),
+void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
+  next(action);
+  api.actions.noInternet(
+    await _wrapper.noInternet,
   );
-  if (store.state.currentRouteIsLogin) return;
+  if (api.state.currentRouteIsLogin) return;
   navigatorKey.currentState.pushNamed("/login");
-  store.dispatch(
-    SetRouteIsLoginAction(
-      (b) => b..isLogin = true,
-    ),
-  );
+  api.actions.isLoginRoute(true);
 }
 
-void _showNotifications(NextDispatcher next, ShowNotificationsAction action) {
+void _showNotifications(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) {
   navigatorKey.currentState.pushNamed("/notifications");
   next(action);
 }
 
-void _showSettings(NextDispatcher next, ShowSettingsAction action) {
+void _showSettings(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/settings");
   next(action);
 }
 
 void _showEditCalendarSubjectNicks(
-    NextDispatcher next, ShowEditCalendarSubjectNicksAction action) {
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) {
   navigatorKey.currentState.pushNamed("/settings");
   next(action);
 }
 
-void _showCalendar(
-    Store<AppState> store, NextDispatcher next, ShowCalendarAction action) {
+void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/calendar");
-  store.dispatch(
-    SetCalendarCurrentMondayAction(
-      (b) => b..monday = toMonday(DateTime.now()),
-    ),
-  );
+  api.actions.calendarActions.setCurrentMonday(toMonday(DateTime.now()));
+
   next(action);
 }
 
-void _showGrades(
-    Store<AppState> store, NextDispatcher next, ShowGradesAction action) {
+void _showGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/grades");
-  store.dispatch(
-    LoadSubjectsAction(
-      (b) => b..semester = store.state.gradesState.semester.toBuilder(),
-    ),
-  );
+  api.actions.gradesActions.load(api.state.gradesState.semester);
   next(action);
 }
 
-void _showAbsences(
-    Store<AppState> store, NextDispatcher next, ShowAbsencesAction action) {
+void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/absences");
-  store.dispatch(LoadAbsencesAction());
+  api.actions.absencesActions.load();
   next(action);
 }
 
-void _showGradesChart(NextDispatcher next, ShowFullscreenChartAction action) {
+void _showGradesChart(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/gradesChart");
   next(action);
 }

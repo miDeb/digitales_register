@@ -10,12 +10,12 @@ import 'data.dart';
 part 'app_state.g.dart';
 
 abstract class AppState implements Built<AppState, AppStateBuilder> {
-  DayState get dayState;
+  DashboardState get dashboardState;
   LoginState get loginState;
   NotificationState get notificationState;
   GradesState get gradesState;
   @nullable
-  AbsenceState get absenceState;
+  AbsencesState get absencesState;
   @nullable
   Config get config;
   bool get noInternet;
@@ -30,7 +30,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   factory AppState([updates(AppStateBuilder b)]) = _$AppState;
   static void _initializeBuilder(AppStateBuilder builder) {
     builder
-      ..dayState = DayStateBuilder()
+      ..dashboardState = DashboardStateBuilder()
       ..loginState = LoginStateBuilder()
       ..notificationState = NotificationStateBuilder()
       ..gradesState = GradesStateBuilder()
@@ -41,18 +41,20 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   }
 }
 
-abstract class DayState implements Built<DayState, DayStateBuilder> {
+abstract class DashboardState
+    implements Built<DashboardState, DashboardStateBuilder> {
   bool get loading;
   bool get future;
   @nullable
   BuiltList<HomeworkType> get blacklist;
   @nullable
   BuiltList<Day> get allDays;
-  static Serializer<DayState> get serializer => _$dayStateSerializer;
+  static Serializer<DashboardState> get serializer =>
+      _$dashboardStateSerializer;
 
-  DayState._();
-  factory DayState([updates(DayStateBuilder b)]) = _$DayState;
-  static void _initializeBuilder(DayStateBuilder builder) {
+  DashboardState._();
+  factory DashboardState([updates(DashboardStateBuilder b)]) = _$DashboardState;
+  static void _initializeBuilder(DashboardStateBuilder builder) {
     builder
       ..future = true
       ..loading = false
@@ -254,11 +256,11 @@ abstract class SettingsStateBuilder
   bool dashboardMarkNewOrChangedEntries = true;
 }
  */
-abstract class AbsenceState
-    implements Built<AbsenceState, AbsenceStateBuilder> {
-  AbsenceState._();
-  factory AbsenceState([updates(AbsenceStateBuilder b)]) = _$AbsenceState;
-  static Serializer<AbsenceState> get serializer => _$absenceStateSerializer;
+abstract class AbsencesState
+    implements Built<AbsencesState, AbsencesStateBuilder> {
+  AbsencesState._();
+  factory AbsencesState([updates(AbsencesStateBuilder b)]) = _$AbsencesState;
+  static Serializer<AbsencesState> get serializer => _$absencesStateSerializer;
 
   AbsenceStatistic get statistic;
   BuiltList<AbsenceGroup> get absences;

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../actions/dashboard_actions.dart';
-import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/days.dart';
@@ -12,14 +10,45 @@ import '../ui/days.dart';
 class DaysContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, DaysViewModel>(
-      builder: (BuildContext context, DaysViewModel vm) {
+    return StoreConnection<AppState, AppActions, DaysViewModel>(
+      builder: (context, vm, actions) {
         return DaysWidget(
           vm: vm,
+          onSwitchFuture: actions.dashboardActions.switchFuture,
+          refresh: actions.dashboardActions.refresh,
+          refreshNoInternet: actions.refreshNoInternet,
+          addReminderCallback: (day, msg) {
+            actions.dashboardActions.addReminder(
+              AddReminderPayload(
+                (b) => b
+                  ..msg = msg
+                  ..date = day.date,
+              ),
+            );
+          },
+          removeReminderCallback: (hw, day) {
+            actions.dashboardActions.deleteHomework(hw);
+          },
+          toggleDoneCallback: (hw, done) {
+            actions.dashboardActions.toggleDone(
+              ToggleDonePayload(
+                (b) => b
+                  ..hw = hw.toBuilder()
+                  ..done = done,
+              ),
+            );
+          },
+          setDoNotAskWhenDeleteCallback: () {
+            actions.settingsActions.askWhenDeleteReminder(false);
+          },
+          markAsSeenCallback: actions.dashboardActions.markAsSeen,
+          markDeletedHomeworkAsSeenCallback:
+              actions.dashboardActions.markDeletedHomeworkAsSeen,
+          markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
         );
       },
-      converter: (Store<AppState> store) {
-        return DaysViewModel.from(store);
+      connect: (state) {
+        return DaysViewModel.from(state);
       },
     );
   }
@@ -33,81 +62,30 @@ typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
 
 class DaysViewModel {
   final List<Day> days;
-  final VoidCallback onSwitchFuture;
   final bool future;
   final bool askWhenDelete;
-  final AddReminderCallback addReminderCallback;
-  final RemoveReminderCallback removeReminderCallback;
-  final ToggleDoneCallback toggleDoneCallback;
-  final VoidCallback setDoNotAskWhenDeleteCallback;
-  final MarkAsNotNewOrChangedCallback markAsNotNewOrChangedCallback;
-  final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
-  final VoidCallback markAllAsNotNewOrChangedCallback;
   final bool noInternet, loading;
-  final VoidCallback refresh, refreshNoInternet;
 
-  DaysViewModel.from(Store<AppState> store)
-      : days = store.state.dayState.allDays
-                ?.where((day) => day.future == store.state.dayState.future)
+  DaysViewModel.from(AppState state)
+      : days = state.dashboardState.allDays
+                ?.where((day) => day.future == state.dashboardState.future)
                 ?.map(
                   (day) => day.rebuild(
                     (b) => b
                       ..deletedHomework.where(
                         (hw) =>
-                            !store.state.dayState.blacklist.contains(hw.type),
+                            !state.dashboardState.blacklist.contains(hw.type),
                       )
                       ..homework.where(
                         (hw) =>
-                            !store.state.dayState.blacklist.contains(hw.type),
+                            !state.dashboardState.blacklist.contains(hw.type),
                       ),
                   ),
                 )
                 ?.toList() ??
             [],
-        onSwitchFuture = (() => store.dispatch(SwitchFutureAction())),
-        noInternet = store.state.noInternet,
-        refresh = (() => store.dispatch(RefreshAction())),
-        refreshNoInternet = (() => store.dispatch(RefreshNoInternetAction())),
-        future = store.state.dayState.future,
-        loading = store.state.dayState.loading,
-        addReminderCallback = ((day, msg) => store.dispatch(
-              AddReminderAction(
-                (b) => b
-                  ..msg = msg
-                  ..date = day.date,
-              ),
-            )),
-        removeReminderCallback = ((hw, day) => store.dispatch(
-              DeleteHomeworkAction(
-                (b) => b
-                  ..hw = hw.toBuilder()
-                  ..date = day.date,
-              ),
-            )),
-        toggleDoneCallback = ((hw, done) => store.dispatch(
-              ToggleDoneAction(
-                (b) => b
-                  ..hw = hw.toBuilder()
-                  ..done = done,
-              ),
-            )),
-        askWhenDelete = store.state.settingsState.askWhenDelete,
-        setDoNotAskWhenDeleteCallback = (() => store.dispatch(
-              SetAskWhenDeleteReminderAction(
-                (b) => b..ask = false,
-              ),
-            )),
-        markAsNotNewOrChangedCallback = ((homework) => store.dispatch(
-              MarkAsNotNewOrChangedAction(
-                (b) => b..homework = homework.toBuilder(),
-              ),
-            )),
-        markDeletedHomeworkAsSeenCallback = ((day) => store.dispatch(
-              MarkDeletedHomeworkAsSeenAction(
-                (b) => b..day = day.toBuilder(),
-              ),
-            )),
-        markAllAsNotNewOrChangedCallback = (() => store.dispatch(
-              MarkAllAsNotNewOrChangedAction(),
-            ));
+        noInternet = state.noInternet,
+        future = state.dashboardState.future,
+        loading = state.dashboardState.loading,
+        askWhenDelete = state.settingsState.askWhenDelete;
 }
