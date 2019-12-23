@@ -241,24 +241,24 @@ class EditNickBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
       duration: Duration(milliseconds: 250),
-      firstChild: Material(
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              height: 8,
+      firstChild: Column(
+        children: <Widget>[
+          SizedBox(
+            height: 8,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  offset: Offset(0, -1.5),
+                  spreadRadius: 1.5,
+                  blurRadius: 2,
+                ),
+              ],
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
-            Container(
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black12,
-                    offset: Offset(0, -1.5),
-                    spreadRadius: 1.5,
-                    blurRadius: 2,
-                  ),
-                ],
-                color: Theme.of(context).scaffoldBackgroundColor,
-              ),
+            child: Material(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -280,10 +280,10 @@ class EditNickBar extends StatelessWidget {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      secondChild: SizedBox(
+      secondChild: Container(
         height: 8,
       ),
       crossFadeState:
