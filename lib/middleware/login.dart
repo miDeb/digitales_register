@@ -81,7 +81,7 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   next(action);
   if (action.payload.noInternet) {
     if (action.payload.offlineEnabled) {
-      api.actions.loginActions.loggingIn(
+      api.actions.loginActions.loggedIn(
         LoggedInPayload(
           (b) => b
             ..username = action.payload.username
