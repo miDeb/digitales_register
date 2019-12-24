@@ -168,11 +168,9 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
       final entries = (List.of(Semester.values)..remove(Semester.all))
           .map((s) => detailEntries(s))
           .toList();
-      if (entries.any((e) => e == null)) {
-        return null;
-      } else {
-        return entries.fold([], (a, b) => [...a, ...b]);
-      }
+      entries.removeWhere((e) => e == null);
+      if(entries.isEmpty) return null;
+      return entries.fold([], (a, b) => [...a, ...b]);
     }
     if (grades[semester] == null || observations[semester] == null) return null;
     return <DetailEntry>[
