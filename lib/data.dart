@@ -63,9 +63,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
   bool get deleted;
   int get id;
-  @BuiltValueField(compare: false)
   bool get isNew;
-  @BuiltValueField(compare: false)
   bool get isChanged;
   String get title;
   String get subtitle;
@@ -77,18 +75,26 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   String get grade;
   bool get warning;
   bool get checkable;
-  @BuiltValueField(compare: false)
   bool get checked;
   bool get deleteable;
   HomeworkType get type;
-  @BuiltValueField(compare: false)
   @nullable
   Homework get previousVersion;
-  @BuiltValueField(compare: false)
   @nullable
   DateTime get lastNotSeen;
-  @BuiltValueField(compare: false)
   DateTime get firstSeen;
+
+  bool serverEquals(Homework other) {
+    return deleted == other.deleted &&
+        id == other.id &&
+        title == other.title &&
+        subtitle == other.subtitle &&
+        label == other.label &&
+        gradeFormatted == other.gradeFormatted &&
+        grade == other.grade &&
+        warning == other.warning &&
+        type == other.type;
+  }
 
   static void _initializeBuilder(HomeworkBuilder b) => b
     ..isNew = false
@@ -169,7 +175,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
           .map((s) => detailEntries(s))
           .toList();
       entries.removeWhere((e) => e == null);
-      if(entries.isEmpty) return null;
+      if (entries.isEmpty) return null;
       return entries.fold([], (a, b) => [...a, ...b]);
     }
     if (grades[semester] == null || observations[semester] == null) return null;

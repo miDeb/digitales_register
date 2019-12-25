@@ -71,7 +71,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
                   ..firstSeen = now),
               );
             }
-          } else if (newHw != oldHw) {
+          } else if (!newHw.serverEquals(oldHw)) {
             b.homework.remove(oldHw);
             b.homework.add(newHw.rebuild((b) => b
               ..previousVersion = oldHw.toBuilder()
