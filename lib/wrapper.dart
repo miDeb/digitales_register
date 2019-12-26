@@ -99,12 +99,16 @@ class Wrapper {
     } on TimeoutException {
       source = await Requests.get(baseAddress);
     }
+    config = parseConfig(source);
+  }
+
+  static Config parseConfig(String source) {
     final id = _readUserId(source);
     final fullName = _readFullName(source);
     final imgSource = _readImgSource(source);
     final autoLogout = _readAutoLogoutSeconds(source);
     final currentSemesterMaybe = _readCurrentSemester(source);
-    config = Config((b) => b
+    return Config((b) => b
       ..userId = id
       ..autoLogoutSeconds = autoLogout
       ..fullName = fullName
@@ -112,7 +116,7 @@ class Wrapper {
       ..currentSemesterMaybe = currentSemesterMaybe);
   }
 
-  int _readCurrentSemester(String source) {
+  static int _readCurrentSemester(String source) {
     if (source.contains("semesterWechsel=1")) return 2;
     if (source.contains("semesterWechsel=2"))
       return 1;
@@ -120,7 +124,7 @@ class Wrapper {
       return null;
   }
 
-  int _readAutoLogoutSeconds(String source) {
+  static int _readAutoLogoutSeconds(String source) {
     var substringFromId = source.substring(
         source.indexOf("auto_logout_seconds: ") +
             "auto_logout_seconds: ".length);
@@ -128,28 +132,28 @@ class Wrapper {
         substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
-  int _readUserId(String source) {
+  static int _readUserId(String source) {
     var substringFromId = source
         .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
     return int.parse(
         substringFromId.substring(0, substringFromId.indexOf(";")).trim());
   }
 
-  String _readAfterImgId(String source) {
+  static String _readAfterImgId(String source) {
     return source
         .substring(source.indexOf("navigationProfilePicture") +
             "navigationProfilePicture".length)
         .trim();
   }
 
-  String _readFullName(String source) {
+  static String _readFullName(String source) {
     final afterImgId = _readAfterImgId(source);
     return afterImgId
         .substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<"))
         .trim();
   }
 
-  String _readImgSource(String source) {
+  static String _readImgSource(String source) {
     final afterImgId = _readAfterImgId(source);
     final afterStart =
         afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
