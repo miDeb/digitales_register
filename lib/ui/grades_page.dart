@@ -4,6 +4,8 @@ import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../container/grades_page_container.dart';
 import '../container/sorted_grades_container.dart';
+import '../util.dart';
+import 'no_internet.dart';
 
 class GradesPage extends StatelessWidget {
   final GradesPageViewModel vm;
@@ -45,30 +47,38 @@ class GradesPage extends StatelessWidget {
                 ),
               ],
       ),
-      body: vm.loading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView(
-              children: <Widget>[
-                if (vm.showGradesDiagram)
-                  SizedBox(
-                    child: GradesChartContainer(isFullscreen: false),
-                    height: 150,
-                    width: 250,
+      body: !vm.hasData && vm.noInternet
+          ? NoInternet()
+          : vm.loading && !vm.hasData
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : maybeWrap(
+                  ListView(
+                    children: <Widget>[
+                      if (vm.showGradesDiagram)
+                        SizedBox(
+                          child: GradesChartContainer(isFullscreen: false),
+                          height: 150,
+                          width: 250,
+                        ),
+                      if (vm.showAllSubjectsAverage) ...[
+                        ListTile(
+                          title: Text("Ø aller Fächer"),
+                          trailing: Text(vm.allSubjectsAverage),
+                        ),
+                        Divider(
+                          height: 0,
+                        ),
+                      ],
+                      SortedGradesContainer(),
+                    ],
                   ),
-                if (vm.showAllSubjectsAverage) ...[
-                  ListTile(
-                    title: Text("Ø aller Fächer"),
-                    trailing: Text(vm.allSubjectsAverage),
+                  vm.loading,
+                  (widget) => Stack(
+                    children: <Widget>[LinearProgressIndicator(), widget],
                   ),
-                  Divider(
-                    height: 0,
-                  ),
-                ],
-                SortedGradesContainer(),
-              ],
-            ),
+                ),
     );
   }
 }

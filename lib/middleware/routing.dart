@@ -15,9 +15,6 @@ final _routingMiddleware =
 void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  api.actions.noInternet(
-    await _wrapper.noInternet,
-  );
   if (api.state.currentRouteIsLogin) return;
   navigatorKey.currentState.pushNamed("/login");
   api.actions.isLoginRoute(true);

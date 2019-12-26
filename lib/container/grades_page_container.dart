@@ -28,11 +28,19 @@ class GradesPageViewModel {
   final bool loading;
   final bool showGradesDiagram;
   final bool showAllSubjectsAverage;
+  final bool hasData;
+  final bool noInternet;
 
   GradesPageViewModel.from(AppState state)
       : showSemester = state.gradesState.semester,
         loading = state.gradesState.loading,
         allSubjectsAverage = calculateAllSubjectsAverage(state),
+        hasData = state.gradesState.subjects.any(
+          (s) => state.gradesState.semester != Semester.all
+              ? s.gradesAll.containsKey(state.gradesState.semester)
+              : s.gradesAll.isNotEmpty,
+        ),
+        noInternet = state.noInternet,
         showGradesDiagram = state.settingsState.showGradesDiagram,
         showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage &&
             state.gradesState.semester.n != null;

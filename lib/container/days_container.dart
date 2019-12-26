@@ -16,7 +16,6 @@ class DaysContainer extends StatelessWidget {
           vm: vm,
           onSwitchFuture: actions.dashboardActions.switchFuture,
           refresh: actions.dashboardActions.refresh,
-          refreshNoInternet: actions.refreshNoInternet,
           addReminderCallback: (day, msg) {
             actions.dashboardActions.addReminder(
               AddReminderPayload(

@@ -9,13 +9,15 @@ class NotificationPage extends StatelessWidget {
   final List<Notification> notifications;
   final SingleArgumentVoidCallback<Notification> deleteNotification;
   final VoidCallback deleteAllNotifications;
+  final bool noInternet;
 
-  const NotificationPage(
-      {Key key,
-      this.notifications,
-      this.deleteNotification,
-      this.deleteAllNotifications})
-      : super(key: key);
+  const NotificationPage({
+    Key key,
+    this.notifications,
+    this.deleteNotification,
+    this.deleteAllNotifications,
+    this.noInternet,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +40,13 @@ class NotificationPage extends StatelessWidget {
                           Icon(Icons.done_all),
                         ],
                       ),
-                      onPressed: deleteAllNotifications,
+                      onPressed: noInternet ? null : deleteAllNotifications,
                     ),
                   );
                 return NotificationWidget(
                   notification: notifications[n - 1],
                   onDelete: deleteNotification,
+                  noInternet: noInternet,
                 );
               },
             )
@@ -59,10 +62,14 @@ class NotificationPage extends StatelessWidget {
 
 class NotificationWidget extends StatelessWidget {
   final Notification notification;
+  final bool noInternet;
   final SingleArgumentVoidCallback<Notification> onDelete;
 
   const NotificationWidget(
-      {Key key, @required this.notification, @required this.onDelete})
+      {Key key,
+      @required this.notification,
+      @required this.onDelete,
+      this.noInternet})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -109,7 +116,7 @@ class NotificationWidget extends StatelessWidget {
                 Icons.done,
               ),
               tooltip: "Gelesen",
-              onPressed: () => onDelete(notification),
+              onPressed: noInternet ? null : () => onDelete(notification),
             ),
           ],
         ),

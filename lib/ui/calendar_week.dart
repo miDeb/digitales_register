@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import '../container/calendar_week_container.dart';
 import '../data.dart';
 import 'dialog.dart';
+import 'no_internet.dart';
 
 class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
@@ -15,9 +16,11 @@ class CalendarWeek extends StatelessWidget {
   Widget build(BuildContext context) {
     final max = vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
     return vm.days.isEmpty
-        ? Center(
-            child: CircularProgressIndicator(),
-          )
+        ? vm.noInternet
+            ? NoInternet()
+            : Center(
+                child: CircularProgressIndicator(),
+              )
         : Column(
             children: <Widget>[
               Expanded(

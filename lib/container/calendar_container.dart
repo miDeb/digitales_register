@@ -31,7 +31,7 @@ class CalendarContainer extends StatelessWidget {
 typedef void DayCallback(DateTime day);
 
 class CalendarViewModel {
-  final bool showEditNicksBar;
+  final bool showEditNicksBar, noInternet;
   final DateTime first;
   final DateTime last;
   final DateTime currentMonday;
@@ -51,5 +51,6 @@ class CalendarViewModel {
                 ),
               ),
             ) &&
-            state.settingsState.showCalendarNicksBar;
+            state.settingsState.showCalendarNicksBar,
+        noInternet = state.noInternet;
 }

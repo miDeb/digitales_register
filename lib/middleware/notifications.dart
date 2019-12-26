@@ -10,6 +10,8 @@ void _loadNotifications(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
+  if (api.state.noInternet) return;
+
   next(action);
   final data = await _wrapper.post("/api/notification/unread");
 
@@ -26,10 +28,7 @@ void _deleteNotification(
 
   _wrapper.post(
       "/api/notification/markAsRead", {"id": action.payload.id}, false);
-
-  if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
-  }
+  api.actions.refreshNoInternet();
 }
 
 void _deleteAllNotifications(
@@ -40,7 +39,5 @@ void _deleteAllNotifications(
 
   _wrapper.post("/api/notification/markAsRead", {}, false);
 
-  if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
-  }
+  api.actions.refreshNoInternet();
 }

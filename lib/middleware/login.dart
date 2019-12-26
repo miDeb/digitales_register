@@ -18,8 +18,10 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (!action.payload.forced) {
     _wrapper.logout(hard: action.payload.hard);
   }
-  api.actions.mountAppState(AppState());
-  api.actions.routingActions.showLogin();
+  if (action.payload.hard) {
+    api.actions.mountAppState(AppState());
+    api.actions.load();
+  }
 }
 
 void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -31,7 +33,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         (b) async => b
           ..cause = "Bitte gib etwas ein"
           ..offlineEnabled = action.payload.offlineEnabled
-          ..noInternet = await _wrapper.noInternet
+          ..noInternet = false
           ..username = action.payload.user,
       ),
     );
@@ -88,9 +90,9 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             ..fromStorage = true,
         ),
       );
+      return;
     }
     api.actions.noInternet(true);
-    return;
   }
   api.actions.routingActions.showLogin();
 }

@@ -48,6 +48,7 @@ class SortedGradesWidget extends StatelessWidget {
                   viewSubjectDetail: () => viewSubjectDetail(s),
                   showCancelled: vm.showCancelled,
                   semester: vm.semester,
+                  noInternet: vm.noInternet,
                 ),
               )
               .toList(),
@@ -58,19 +59,20 @@ class SortedGradesWidget extends StatelessWidget {
 }
 
 class SubjectWidget extends StatefulWidget {
-  final bool sortByType, showCancelled;
+  final bool sortByType, showCancelled, noInternet;
   final Subject subject;
   final Semester semester;
   final VoidCallback viewSubjectDetail;
 
-  const SubjectWidget(
-      {Key key,
-      this.sortByType,
-      this.subject,
-      this.viewSubjectDetail,
-      this.showCancelled,
-      this.semester})
-      : super(key: key);
+  const SubjectWidget({
+    Key key,
+    this.sortByType,
+    this.subject,
+    this.viewSubjectDetail,
+    this.showCancelled,
+    this.semester,
+    this.noInternet,
+  }) : super(key: key);
 
   @override
   _SubjectWidgetState createState() => _SubjectWidgetState();
@@ -87,60 +89,66 @@ class _SubjectWidgetState extends State<SubjectWidget> {
   @override
   Widget build(BuildContext context) {
     final entries = widget.subject.detailEntries(widget.semester);
-    return ExpansionTile(
-      key: ObjectKey(widget.subject),
-      title: Text(widget.subject.name),
-      leading: widget.semester != Semester.all
-          ? Text.rich(
-              TextSpan(
-                text: 'Ø ',
-                children: <TextSpan>[
-                  TextSpan(
-                    text: widget.subject.averageFormatted(widget.semester),
-                    style:
-                        widget.subject.averageFormatted(widget.semester) == "/"
-                            ? null
-                            : TextStyle(
-                                decoration: TextDecoration.underline,
-                              ),
-                  ),
-                ],
-              ),
-            )
-          : null,
-      children: entries != null
-          ? widget.sortByType
-              ? Subject.sortByType(entries)
-                  .entries
-                  .map(
-                    (entry) => GradeTypeWidget(
-                      typeName: entry.key,
-                      entries: entry.value
-                          .where((g) => widget.showCancelled || !g.cancelled)
-                          .toList(),
+    return AbsorbPointer(
+      absorbing: widget.noInternet && entries == null,
+      child: ExpansionTile(
+        key: ObjectKey(widget.subject),
+        title: Text(widget.subject.name),
+        leading: widget.semester != Semester.all
+            ? Text.rich(
+                TextSpan(
+                  text: 'Ø ',
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: widget.subject.averageFormatted(widget.semester),
+                      style: widget.subject.averageFormatted(widget.semester) ==
+                              "/"
+                          ? null
+                          : TextStyle(
+                              decoration: TextDecoration.underline,
+                            ),
                     ),
-                  )
-                  .toList()
-              : entries
-                  .where((g) => widget.showCancelled || !g.cancelled)
-                  .map(
-                    (g) => g is GradeDetail
-                        ? GradeWidget(grade: g)
-                        : ObservationWidget(
-                            observation: g,
-                          ),
-                  )
-                  .toList()
-          : [
-              LinearProgressIndicator(),
-            ],
-      onExpansionChanged: (expansion) {
-        closed = !expansion;
-        if (expansion) {
-          widget.viewSubjectDetail();
-        }
-      },
-      initiallyExpanded: !closed,
+                  ],
+                ),
+              )
+            : null,
+        trailing: widget.noInternet && entries == null ? SizedBox() : null,
+        children: entries != null
+            ? widget.sortByType
+                ? Subject.sortByType(entries)
+                    .entries
+                    .map(
+                      (entry) => GradeTypeWidget(
+                        typeName: entry.key,
+                        entries: entry.value
+                            .where((g) => widget.showCancelled || !g.cancelled)
+                            .toList(),
+                      ),
+                    )
+                    .toList()
+                : entries
+                    .where((g) => widget.showCancelled || !g.cancelled)
+                    .map(
+                      (g) => g is GradeDetail
+                          ? GradeWidget(grade: g)
+                          : ObservationWidget(
+                              observation: g,
+                            ),
+                    )
+                    .toList()
+            : widget.noInternet
+                ? []
+                : [
+                    LinearProgressIndicator(),
+                  ],
+        onExpansionChanged: (expansion) {
+          closed = !expansion;
+          if (expansion) {
+            widget.viewSubjectDetail();
+          }
+        },
+        initiallyExpanded: !closed,
+      ),
     );
   }
 }

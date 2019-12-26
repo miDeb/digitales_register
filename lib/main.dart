@@ -115,7 +115,9 @@ void run() {
       store: store,
     ),
   );
-  store.actions.load();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    store.actions.load();
+  });
 }
 
 /// If the current platform is desktop, override the default platform to

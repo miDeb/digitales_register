@@ -142,12 +142,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 FlatButton(
                   child: FadeTransition(
                     opacity: _dateRangeOpacityAnimation,
-                    child: Text(
-                      widget.vm.first != null && widget.vm.last != null
-                          ? "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}"
-                          : "........ - ........",
-                      style: Theme.of(context).textTheme.title,
-                    ),
+                    child: widget.vm.first != null && widget.vm.last != null
+                        ? Text(
+                            "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
+                            style: Theme.of(context).textTheme.title,
+                          )
+                        : widget.vm.noInternet
+                            ? Text("Wähle ein Datum")
+                            : CircularProgressIndicator(),
                   ),
                   onPressed: () async {
                     final result = await showDatePicker(

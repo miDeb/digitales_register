@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import '../app_state.dart';
 import '../container/absence_group_container.dart';
 import '../data.dart';
+import 'no_internet.dart';
 
 class AbsencesPage extends StatelessWidget {
   final AbsencesState state;
+  final bool noInternet;
 
-  const AbsencesPage({Key key, @required this.state}) : super(key: key);
+  const AbsencesPage({Key key, @required this.state, this.noInternet})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,6 +19,7 @@ class AbsencesPage extends StatelessWidget {
       ),
       body: AbsencesBody(
         state: state,
+        noInternet: noInternet,
       ),
     );
   }
@@ -23,8 +27,10 @@ class AbsencesPage extends StatelessWidget {
 
 class AbsencesBody extends StatelessWidget {
   final AbsencesState state;
+  final bool noInternet;
 
-  const AbsencesBody({Key key, @required this.state}) : super(key: key);
+  const AbsencesBody({Key key, @required this.state, this.noInternet})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +53,11 @@ class AbsencesBody extends StatelessWidget {
                   ),
                 ),
               ])
-        : Center(
-            child: CircularProgressIndicator(),
-          );
+        : noInternet
+            ? NoInternet()
+            : Center(
+                child: CircularProgressIndicator(),
+              );
   }
 }
 

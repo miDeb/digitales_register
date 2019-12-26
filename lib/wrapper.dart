@@ -15,7 +15,7 @@ class Wrapper {
   String get baseAddress => "$url/v2";
   String user, pass, url;
 
-  bool get loggedIn => user != null && pass != null;
+  bool get loggedIn => _loggedIn;
   bool _loggedIn;
   VoidCallback onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem onAddProtocolItem;

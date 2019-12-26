@@ -38,10 +38,11 @@ typedef void SetBoolCallback(bool byType);
 class SortedGradesViewModel {
   final List<Subject> subjects;
   final Semester semester;
-  final bool sortByType, showCancelled;
+  final bool sortByType, showCancelled, noInternet;
   SortedGradesViewModel(AppState state)
       : subjects = state.gradesState.subjects.toList(),
         sortByType = state.settingsState.typeSorted,
         semester = state.gradesState.semester,
-        showCancelled = state.settingsState.showCancelled == true;
+        showCancelled = state.settingsState.showCancelled,
+        noInternet = state.noInternet;
 }

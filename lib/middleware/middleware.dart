@@ -49,7 +49,6 @@ final middleware = [
         ..add(AppActionsNames.deleteData, _deleteData)
         ..add(AppActionsNames.load, _load)
         ..add(DashboardActionsNames.refresh, _refresh)
-        ..add(AppActionsNames.noInternet, _noInternet)
         ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
         ..add(LoginActionsNames.loggedIn, _loggedIn)
         ..combine(_absencesMiddleware)
@@ -115,13 +114,12 @@ void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _refreshNoInternet(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) async {
+    Action<bool> action) async {
   next(action);
-  if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
-  } else {
-    api.actions.noInternet(false);
-
+  final noInternet = await _wrapper.noInternet;
+  final prevNoInternet = api.state.noInternet;
+  api.actions.noInternet(noInternet);
+  if (prevNoInternet != noInternet && action.payload != true) {
     api.actions.load();
   }
 }
@@ -129,7 +127,10 @@ void _refreshNoInternet(
 void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-
+  if (api.state.currentRouteIsLogin) {
+    navigatorKey.currentState.pop();
+    api.actions.isLoginRoute(false);
+  }
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
@@ -147,8 +148,10 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..offlineEnabled = offlineEnabled,
       ),
     );
-  } else
+  } else {
     api.actions.routingActions.showLogin();
+  }
+  api.actions.refreshNoInternet(true);
 }
 
 void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -156,12 +159,6 @@ void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
-}
-
-void _noInternet(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) {
-  if (action.payload) showToast(msg: "Kein Internet");
-  next(action);
 }
 
 var _saveUnderway = false;
@@ -188,7 +185,9 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             ..future = true
             ..blacklist ??= ListBuilder([]))
           ..gradesState = (serializedState.gradesState.toBuilder()
-            ..semester = api.state.gradesState.semester.toBuilder())
+            ..semester = api.state.gradesState.semester == Semester.all
+                ? serializedState.gradesState.semester.toBuilder()
+                : api.state.gradesState.semester.toBuilder())
           ..notificationState = serializedState.notificationState.toBuilder()
           ..absencesState = serializedState.absencesState?.toBuilder()
           ..calendarState = serializedState.calendarState.toBuilder()

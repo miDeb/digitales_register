@@ -6,11 +6,12 @@ final _absencesMiddleware =
 
 void _loadAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
+  if (api.state.noInternet) return;
   next(action);
   final response = await _wrapper.post("/api/student/dashboard/absences");
   if (response != null) {
     api.actions.absencesActions.loaded(response);
-  } else if (await _wrapper.noInternet) {
-    api.actions.noInternet(true);
+  } else {
+    api.actions.refreshNoInternet();
   }
 }

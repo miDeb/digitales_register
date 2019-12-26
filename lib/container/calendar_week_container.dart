@@ -28,8 +28,10 @@ typedef void DayCallback(DateTime day);
 class CalendarWeekViewModel {
   final List<CalendarDay> days;
   final Map<String, String> subjectNicks;
+  final bool noInternet;
 
   CalendarWeekViewModel(AppState state, DateTime monday)
       : days = state.calendarState.daysForWeek(monday),
-        subjectNicks = state.settingsState.subjectNicks.toMap();
+        subjectNicks = state.settingsState.subjectNicks.toMap(),
+        noInternet = state.noInternet;
 }

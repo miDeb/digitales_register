@@ -30,7 +30,7 @@ class DaysWidget extends StatelessWidget {
   final MarkAsNotNewOrChangedCallback markAsSeenCallback;
   final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
   final VoidCallback markAllAsSeenCallback;
-  final VoidCallback refresh, refreshNoInternet;
+  final VoidCallback refresh;
 
   const DaysWidget({
     Key key,
@@ -44,31 +44,32 @@ class DaysWidget extends StatelessWidget {
     this.markDeletedHomeworkAsSeenCallback,
     this.markAllAsSeenCallback,
     this.refresh,
-    this.refreshNoInternet,
   }) : super(key: key);
 
   Widget build(BuildContext context) {
     if (vm.days.isEmpty && vm.loading && !vm.noInternet) {
       return Center(child: CircularProgressIndicator());
     }
+    final list = DaysListWidget(
+      vm: vm,
+      markAsSeenCallback: markAsSeenCallback,
+      markAllAsSeenCallback: markAllAsSeenCallback,
+      markDeletedHomeworkAsSeenCallback: markDeletedHomeworkAsSeenCallback,
+      addReminderCallback: addReminderCallback,
+      removeReminderCallback: removeReminderCallback,
+      onSwitchFuture: onSwitchFuture,
+      toggleDoneCallback: toggleDoneCallback,
+      setDoNotAskWhenDeleteCallback: setDoNotAskWhenDeleteCallback,
+    );
     final content = vm.days.isNotEmpty
-        ? RefreshIndicator(
-            child: DaysListWidget(
-              vm: vm,
-              markAsSeenCallback: markAsSeenCallback,
-              markAllAsSeenCallback: markAllAsSeenCallback,
-              markDeletedHomeworkAsSeenCallback:
-                  markDeletedHomeworkAsSeenCallback,
-              addReminderCallback: addReminderCallback,
-              removeReminderCallback: removeReminderCallback,
-              onSwitchFuture: onSwitchFuture,
-              toggleDoneCallback: toggleDoneCallback,
-              setDoNotAskWhenDeleteCallback: setDoNotAskWhenDeleteCallback,
-            ),
-            onRefresh: () async {
-              refresh();
-            },
-          )
+        ? vm.noInternet
+            ? list
+            : RefreshIndicator(
+                child: list,
+                onRefresh: () async {
+                  refresh();
+                },
+              )
         : vm.noInternet
             ? Center(
                 child: NoInternet(),
@@ -438,48 +439,50 @@ class DayWidget extends StatelessWidget {
             Spacer(),
             IconButton(
               icon: Icon(Icons.add),
-              onPressed: () async {
-                final message = await showDialog(
-                    context: context,
-                    builder: (context) {
-                      String message = "";
-                      return StatefulBuilder(
-                        builder: (context, setState) => AlertDialog(
-                          title: Text("Erinnerung"),
-                          content: TextField(
-                            maxLines: null,
-                            onChanged: (msg) {
-                              setState(() => message = msg);
-                            },
-                            decoration:
-                                InputDecoration(hintText: 'zB. Hausaufgabe'),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                              child: Text("Abbrechen"),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            RaisedButton(
-                              textTheme: ButtonTextTheme.primary,
-                              child: Text(
-                                "Speichern",
-                              ),
-                              onPressed: isNullOrEmpty(message)
-                                  ? null
-                                  : () {
-                                      Navigator.pop(context, message);
+              onPressed: vm.noInternet
+                  ? null
+                  : () async {
+                      final message = await showDialog(
+                          context: context,
+                          builder: (context) {
+                            String message = "";
+                            return StatefulBuilder(
+                              builder: (context, setState) => AlertDialog(
+                                title: Text("Erinnerung"),
+                                content: TextField(
+                                  maxLines: null,
+                                  onChanged: (msg) {
+                                    setState(() => message = msg);
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: 'zB. Hausaufgabe'),
+                                ),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    child: Text("Abbrechen"),
+                                    onPressed: () {
+                                      Navigator.pop(context);
                                     },
-                            ),
-                          ],
-                        ),
-                      );
-                    });
-                if (message != null) {
-                  addReminderCallback(day, message);
-                }
-              },
+                                  ),
+                                  RaisedButton(
+                                    textTheme: ButtonTextTheme.primary,
+                                    child: Text(
+                                      "Speichern",
+                                    ),
+                                    onPressed: isNullOrEmpty(message)
+                                        ? null
+                                        : () {
+                                            Navigator.pop(context, message);
+                                          },
+                                  ),
+                                ],
+                              ),
+                            );
+                          });
+                      if (message != null) {
+                        addReminderCallback(day, message);
+                      }
+                    },
             ),
           ],
         ),
@@ -490,6 +493,7 @@ class DayWidget extends StatelessWidget {
             removeThis: () => removeReminderCallback(hw, day),
             setDoNotAskWhenDelete: setDoNotAskWhenDeleteCallback,
             askWhenDelete: vm.askWhenDelete,
+            noInternet: vm.noInternet,
             controller: controller,
             index: ++i,
           ),
@@ -504,7 +508,7 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, isHistory, isDeletedView;
+  final bool askWhenDelete, isHistory, isDeletedView, noInternet;
 
   final AutoScrollController controller;
   final int index;
@@ -520,6 +524,7 @@ class ItemWidget extends StatelessWidget {
     this.controller,
     this.index,
     this.isDeletedView = false,
+    this.noInternet,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -580,50 +585,57 @@ class ItemWidget extends StatelessWidget {
                         leading: !isHistory && !isDeletedView && item.deleteable
                             ? IconButton(
                                 icon: Icon(Icons.close),
-                                onPressed: () async {
-                                  if (askWhenDelete) {
-                                    var ask = true;
-                                    final delete = await showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            content: StatefulBuilder(
-                                              builder: (context, setState) =>
-                                                  SwitchListTile(
-                                                title: Text("Nie fragen"),
-                                                onChanged: (bool value) {
-                                                  setState(() => ask = !value);
-                                                },
-                                                value: !ask,
-                                              ),
-                                            ),
-                                            title: Text("Erinnerung löschen?"),
-                                            actions: <Widget>[
-                                              FlatButton(
-                                                child: Text("Abbrechen"),
-                                                onPressed: () =>
-                                                    Navigator.pop(context),
-                                              ),
-                                              RaisedButton(
-                                                textTheme:
-                                                    ButtonTextTheme.primary,
-                                                child: Text(
-                                                  "Löschen",
-                                                ),
-                                                onPressed: () => Navigator.pop(
-                                                    context, true),
-                                              )
-                                            ],
-                                          );
-                                        });
-                                    if (delete == true) {
-                                      if (!ask) setDoNotAskWhenDelete();
-                                      removeThis();
-                                    }
-                                  } else {
-                                    removeThis();
-                                  }
-                                },
+                                onPressed: noInternet
+                                    ? null
+                                    : () async {
+                                        if (askWhenDelete) {
+                                          var ask = true;
+                                          final delete = await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  content: StatefulBuilder(
+                                                    builder:
+                                                        (context, setState) =>
+                                                            SwitchListTile(
+                                                      title: Text("Nie fragen"),
+                                                      onChanged: (bool value) {
+                                                        setState(
+                                                            () => ask = !value);
+                                                      },
+                                                      value: !ask,
+                                                    ),
+                                                  ),
+                                                  title: Text(
+                                                      "Erinnerung löschen?"),
+                                                  actions: <Widget>[
+                                                    FlatButton(
+                                                      child: Text("Abbrechen"),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context),
+                                                    ),
+                                                    RaisedButton(
+                                                      textTheme: ButtonTextTheme
+                                                          .primary,
+                                                      child: Text(
+                                                        "Löschen",
+                                                      ),
+                                                      onPressed: () =>
+                                                          Navigator.pop(
+                                                              context, true),
+                                                    )
+                                                  ],
+                                                );
+                                              });
+                                          if (delete == true) {
+                                            if (!ask) setDoNotAskWhenDelete();
+                                            removeThis();
+                                          }
+                                        } else {
+                                          removeThis();
+                                        }
+                                      },
                                 padding: EdgeInsets.all(0),
                               )
                             : null,
@@ -699,9 +711,11 @@ class ItemWidget extends StatelessWidget {
                       Checkbox(
                         activeColor: Colors.green,
                         value: item.checked,
-                        onChanged: (done) {
-                          toggleDone();
-                        },
+                        onChanged: noInternet
+                            ? null
+                            : (done) {
+                                toggleDone();
+                              },
                       ),
                   ],
                 ),

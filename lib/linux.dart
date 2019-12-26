@@ -105,11 +105,11 @@ Future<Directory> getApplicationDocumentsDirectory() async {
   return await path_provider.getApplicationDocumentsDirectory();
 }
 
-void showToast({String msg}) {
+void showToast({String msg, Toast toastLength}) {
   if (Platform.isLinux) {
     print(
         "TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
   } else {
-    Fluttertoast.showToast(msg: msg);
+    Fluttertoast.showToast(msg: msg, toastLength: toastLength);
   }
 }

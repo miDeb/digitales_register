@@ -20,7 +20,7 @@ abstract class AppActions extends ReduxActions {
   ActionDispatcher<void> saveState;
   ActionDispatcher<void> deleteData;
   ActionDispatcher<void> load;
-  ActionDispatcher<void> refreshNoInternet;
+  ActionDispatcher<bool> refreshNoInternet;
   ActionDispatcher<bool> noInternet;
   ActionDispatcher<bool> isLoginRoute;
   ActionDispatcher<Config> setConfig;

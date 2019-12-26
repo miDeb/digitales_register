@@ -20,17 +20,15 @@ class HomePageContent extends StatelessWidget {
               title: Text("Register"),
               actions: <Widget>[
                 vm.noInternet && !vm.loading
-                    ? InkWell(
+                    ? FlatButton(
                         child: Row(
                           children: <Widget>[
                             Text("Kein Internet"),
+                            SizedBox(width: 8),
                             Icon(Icons.refresh),
-                            SizedBox(
-                              width: 16,
-                            )
                           ],
                         ),
-                        onTap: refreshNoInternet,
+                        onPressed: refreshNoInternet,
                       )
                     : SizedBox(),
                 NotificationIconContainer(),

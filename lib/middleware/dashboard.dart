@@ -11,14 +11,14 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
 
 void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
+  if (api.state.noInternet) return;
+
   next(action);
   final data = await _wrapper
       .post("/api/student/dashboard/dashboard", {"viewFuture": action.payload});
 
   if (data is! List) {
-    if (await _wrapper.noInternet) {
-      api.actions.noInternet(true);
-    }
+    api.actions.refreshNoInternet();
     api.actions.dashboardActions.notLoaded();
     return;
   }
@@ -48,9 +48,7 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   });
   if (result == null) {
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
-    if (await _wrapper.noInternet) {
-      api.actions.noInternet(true);
-    }
+    api.actions.refreshNoInternet();
     return;
   }
   api.actions.dashboardActions.homeworkAdded(
@@ -71,9 +69,7 @@ void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     next(action);
   } else {
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
-    if (await _wrapper.noInternet) {
-      api.actions.noInternet(true);
-    }
+    api.actions.refreshNoInternet();
     return;
   }
 }
@@ -101,9 +97,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
-    if (await _wrapper.noInternet) {
-      api.actions.noInternet(true);
-    }
+    api.actions.refreshNoInternet();
     return;
   }
 }
