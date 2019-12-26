@@ -17,35 +17,32 @@ class GradesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Noten"),
-        actions: vm.loading
-            ? null
-            : <Widget>[
-                Theme(
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<Semester>(
-                      value: vm.showSemester,
-                      items: Semester.values
-                          .map(
-                            (s) => DropdownMenuItem(
-                              child: Text(
-                                s.name,
-                                style:
-                                    (Theme.of(context).appBarTheme.textTheme ??
-                                            Theme.of(context).primaryTextTheme)
-                                        .body1,
-                              ),
-                              value: s,
-                            ),
-                          )
-                          .toList(),
-                      onChanged: (value) {
-                        if (vm.showSemester != value) changeSemester(value);
-                      },
-                    ),
-                  ),
-                  data: ThemeData.dark(),
-                ),
-              ],
+        actions: <Widget>[
+          Theme(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<Semester>(
+                value: vm.showSemester,
+                items: Semester.values
+                    .map(
+                      (s) => DropdownMenuItem(
+                        child: Text(
+                          s.name,
+                          style: (Theme.of(context).appBarTheme.textTheme ??
+                                  Theme.of(context).primaryTextTheme)
+                              .body1,
+                        ),
+                        value: s,
+                      ),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  if (vm.showSemester != value) changeSemester(value);
+                },
+              ),
+            ),
+            data: ThemeData.dark(),
+          ),
+        ],
       ),
       body: !vm.hasData && vm.noInternet
           ? NoInternet()
