@@ -10,9 +10,10 @@ final _passMiddleware =
 void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
   next(action);
-  final user = await _secureStorage.read(key: "user");
-  final pass = await _secureStorage.read(key: "pass");
-  final url = await _secureStorage.read(key: "url");
+  final login = json.decode(await _secureStorage.read(key: "login"));
+  final user = login["user"];
+  final pass = login["pass"];
+  final url = login["url"];
   _secureStorage.write(
     key: "login",
     value: json.encode(
