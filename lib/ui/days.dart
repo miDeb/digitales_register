@@ -243,7 +243,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
       body: ListView.builder(
         physics: AlwaysScrollableScrollPhysics(),
         controller: controller,
-        itemCount: widget.vm.days.length + 1,
+        itemCount: widget.vm.days.length + 2,
         itemBuilder: (context, n) {
           if (n == 0) {
             return Stack(
@@ -277,7 +277,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               ],
             );
           }
-          if (n == widget.vm.days.length) {
+          if (n == widget.vm.days.length + 1) {
             return SizedBox(
               height: 160,
             );
