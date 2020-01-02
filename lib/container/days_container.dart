@@ -66,23 +66,29 @@ class DaysViewModel {
   final bool noInternet, loading;
 
   DaysViewModel.from(AppState state)
-      : days = state.dashboardState.allDays
-                ?.where((day) => day.future == state.dashboardState.future)
-                ?.map(
-                  (day) => day.rebuild(
-                    (b) => b
-                      ..deletedHomework.where(
-                        (hw) =>
-                            !state.dashboardState.blacklist.contains(hw.type),
-                      )
-                      ..homework.where(
-                        (hw) =>
-                            !state.dashboardState.blacklist.contains(hw.type),
-                      ),
-                  ),
-                )
-                ?.toList() ??
-            [],
+      : days = (() {
+          final unorderedDays = state.dashboardState.allDays
+                  ?.where((day) => day.future == state.dashboardState.future)
+                  ?.map(
+                    (day) => day.rebuild(
+                      (b) => b
+                        ..deletedHomework.where(
+                          (hw) =>
+                              !state.dashboardState.blacklist.contains(hw.type),
+                        )
+                        ..homework.where(
+                          (hw) =>
+                              !state.dashboardState.blacklist.contains(hw.type),
+                        ),
+                    ),
+                  )
+                  ?.toList() ??
+              [];
+          if (!state.dashboardState.future)
+            return unorderedDays?.reversed?.toList();
+          else
+            return unorderedDays;
+        })(),
         noInternet = state.noInternet,
         future = state.dashboardState.future,
         loading = state.dashboardState.loading,

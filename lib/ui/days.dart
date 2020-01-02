@@ -282,9 +282,6 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               height: 160,
             );
           }
-          if (!widget.vm.future) {
-            n = widget.vm.days.length + 1 - n;
-          }
           return DayWidget(
             day: widget.vm.days[n - 1],
             vm: widget.vm,
