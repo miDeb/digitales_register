@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,9 +10,7 @@ import '../container/homework_filter_container.dart';
 import '../data.dart';
 import '../util.dart';
 import 'dialog.dart';
-import 'news_sticker.dart';
 import 'no_internet.dart';
-import 'sub_icon.dart';
 
 typedef void AddReminderCallback(Day day, String reminder);
 typedef void RemoveReminderCallback(Homework hw, Day day);
@@ -389,13 +388,15 @@ class DayWidget extends StatelessWidget {
             if (day.deletedHomework.isNotEmpty)
               AutoScrollTag(
                 child: IconButton(
-                  icon: SubIcon(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    icon: Icons.info_outline,
-                    subIcon: Icons.delete,
-                    subIconColor: day.deletedHomework.any((h) => h.isChanged)
+                  icon: Badge(
+                    child: Icon(Icons.info_outline),
+                    badgeContent: Icon(Icons.delete, size: 15),
+                    badgeColor: day.deletedHomework.any((h) => h.isChanged)
                         ? Colors.red
-                        : null,
+                        : Theme.of(context).scaffoldBackgroundColor,
+                    padding: EdgeInsets.zero,
+                    position: BadgePosition.topRight(),
+                    elevation: 0,
                   ),
                   onPressed: () {
                     showDialog(
@@ -560,15 +561,25 @@ class ItemWidget extends StatelessWidget {
                               Positioned(
                                 right: 0,
                                 child: item.isNew
-                                    ? NewsSticker(
-                                        text: "neu",
+                                    ? Badge(
+                                        shape: BadgeShape.square,
+                                        borderRadius: 20,
+                                        badgeContent: Text("neu"),
                                       )
                                     : item.deleted
-                                        ? NewsSticker(
-                                            text: "gelöscht",
+                                        ? Badge(
+                                            shape: BadgeShape.square,
+                                            borderRadius: 20,
+                                            badgeContent: Text(
+                                              "gelöscht",
+                                            ),
                                           )
-                                        : NewsSticker(
-                                            text: "geändert",
+                                        : Badge(
+                                            borderRadius: 20,
+                                            shape: BadgeShape.square,
+                                            badgeContent: Text(
+                                              "geändert",
+                                            ),
                                           ),
                               )
                           ],
@@ -645,12 +656,16 @@ class ItemWidget extends StatelessWidget {
                     if (!isHistory && item.label != null)
                       IconButton(
                         icon: item.previousVersion != null
-                            ? SubIcon(
-                                backgroundColor: isDeletedView
+                            ? Badge(
+                                child: Icon(
+                                  Icons.info_outline,
+                                ),
+                                badgeContent: Icon(Icons.edit, size: 15),
+                                padding: EdgeInsets.zero,
+                                badgeColor: isDeletedView
                                     ? Theme.of(context).dialogBackgroundColor
                                     : Theme.of(context).scaffoldBackgroundColor,
-                                icon: Icons.info_outline,
-                                subIcon: Icons.edit,
+                                elevation: 0,
                               )
                             : Icon(
                                 Icons.info_outline,

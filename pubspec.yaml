@@ -37,6 +37,7 @@ dependencies:
       url: https://github.com/miDeb/built_redux.git
       ref: master
   flutter_built_redux: any
+  badges: any
 dependency_overrides:
   built_redux: 
     git: 

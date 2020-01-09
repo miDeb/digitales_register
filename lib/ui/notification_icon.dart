@@ -1,6 +1,5 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-
-import 'news_sticker.dart';
 
 class NotificationIcon extends StatelessWidget {
   final int notifications;
@@ -12,20 +11,10 @@ class NotificationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return notifications != 0
         ? IconButton(
-            icon: Stack(
-              fit: StackFit.expand,
-              children: [
-                Icon(Icons.notifications),
-                Align(
-                  child: NewsSticker(
-                    text: notifications.toString(),
-                  ),
-                  alignment: Alignment(
-                    -1.2,
-                    1,
-                  ),
-                ),
-              ],
+            icon: Badge(
+              child: Icon(Icons.notifications),
+              badgeContent: Text(notifications.toString()),
+              position: BadgePosition.bottomLeft(),
             ),
             onPressed: onTap,
           )
