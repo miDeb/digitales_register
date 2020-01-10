@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dr/actions/login_actions.dart';
 import 'package:dr/container/notifications_page_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -115,9 +116,25 @@ void run() {
       store: store,
     ),
   );
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    store.actions.load();
-  });
+  WidgetsBinding.instance
+    ..addPostFrameCallback((_) {
+      store.actions.load();
+    })
+    ..addObserver(
+      LifecycleObserver(
+        store.actions.load,
+        () {
+          navigatorKey.currentState.popUntil((route) => route.isFirst);
+          store.actions.loginActions.logout(
+            LogoutPayload(
+              (b) => b
+                ..hard = store.state.settingsState.noPasswordSaving
+                ..forced = false,
+            ),
+          );
+        },
+      ),
+    );
 }
 
 /// If the current platform is desktop, override the default platform to
@@ -132,5 +149,21 @@ void _setTargetPlatformForDesktop() {
   }
   if (targetPlatform != null) {
     debugDefaultTargetPlatformOverride = targetPlatform;
+  }
+}
+
+class LifecycleObserver with WidgetsBindingObserver {
+  final VoidCallback onReload;
+  final VoidCallback onLogout;
+
+  LifecycleObserver(this.onReload, this.onLogout);
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      onReload();
+    }
+    if (state == AppLifecycleState.paused) {
+      onLogout();
+    }
   }
 }
