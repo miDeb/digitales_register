@@ -106,12 +106,12 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       appBar: AppBar(
         title: Text("Kalender"),
         actions: <Widget>[
-          if (toMonday(DateTime.now()) != widget.vm.currentMonday)
+          if (toMonday(now) != widget.vm.currentMonday)
             FlatButton(
               textColor: Colors.white,
               child: Text("Aktuelle Woche"),
               onPressed: () {
-                final date = toMonday(DateTime.now());
+                final date = toMonday(now);
                 _controller.animateToPage(pageOf(date),
                     curve: _animatePageCurve, duration: _animatePageDuration);
               },

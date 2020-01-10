@@ -4,6 +4,7 @@ import 'package:built_redux/built_redux.dart';
 import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../util.dart';
 
 final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     DashboardState, DashboardStateBuilder>(
@@ -33,7 +34,6 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
 
   List<Day> daysToDelete = [];
 
-  final now = DateTime.now();
   builder.allDays.map(
     (day) => day.rebuild(
       (b) {
@@ -44,7 +44,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
         if (newDay == null) {
           if (!action.payload.future &&
               day.date.isBefore(
-                DateTime.now().subtract(
+                now.subtract(
                   Duration(days: 1),
                 ), // subtract to not accidentally delete today
               )) {

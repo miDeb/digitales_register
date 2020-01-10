@@ -22,3 +22,6 @@ DateTime toMonday(DateTime date) {
         );
   return DateTime.utc(s.year, s.month, s.day);
 }
+
+DateTime get now => mockNow ?? DateTime.now();
+DateTime mockNow;

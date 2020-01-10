@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui' show VoidCallback;
 
+import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 import 'package:requests/requests.dart';
@@ -32,7 +33,7 @@ class Wrapper {
 
   String error;
 
-  DateTime lastInteraction = DateTime.now();
+  DateTime lastInteraction = now;
   DateTime _serverLogoutTime;
   Config config;
   Future<void> login(String user, String pass, String url,
@@ -82,7 +83,7 @@ class Wrapper {
       error = null;
       await _loadConfig().then((_) {
         _serverLogoutTime =
-            DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
+            now.add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
         onConfigLoaded();
       });
@@ -217,7 +218,7 @@ class Wrapper {
 
   void _updateLogout() async {
     if (!_loggedIn) return;
-    if (DateTime.now().add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
+    if (now.add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
       final result = await post("/api/auth/extendSession", {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
@@ -238,7 +239,7 @@ class Wrapper {
   }
 
   void interaction() {
-    lastInteraction = DateTime.now();
+    lastInteraction = now;
   }
 
   void logout({@required bool hard, bool forceLogout = false}) {
