@@ -41,10 +41,16 @@ typedef void SetSafeModeCallback(bool safeMode);
 class LoginPageViewModel {
   final String error;
   final bool loading, safeMode, noInternet;
+  final Map<String, String> servers;
 
   LoginPageViewModel.from(AppState state)
       : error = state.loginState.errorMsg,
         loading = state.loginState.loading,
         safeMode = state.settingsState.noPasswordSaving,
-        noInternet = state.noInternet;
+        noInternet = state.noInternet,
+        servers = _servers;
 }
+
+const _servers = {
+  "Vinzentinum": "https://vinzentinum.digitalesregister.it",
+};
