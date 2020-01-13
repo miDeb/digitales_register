@@ -143,7 +143,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                       ],
                     ),
                   ),
-                  widget.vm.loading ? LinearProgressIndicator() : SizedBox(),
+                  if (widget.vm.loading) LinearProgressIndicator(),
                 ],
               ),
       ),
