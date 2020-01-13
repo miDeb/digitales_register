@@ -335,7 +335,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
-                Text("Alternativer Client für das Digitale Register. ")
+                Text("Alternativer Client für das Digitale Register.")
               ],
             ),
           ),
