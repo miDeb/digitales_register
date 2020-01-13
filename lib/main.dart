@@ -119,22 +119,23 @@ void run() {
   WidgetsBinding.instance
     ..addPostFrameCallback((_) {
       store.actions.load();
-    })
-    ..addObserver(
-      LifecycleObserver(
-        store.actions.load,
-        () {
-          navigatorKey.currentState.popUntil((route) => route.isFirst);
-          store.actions.loginActions.logout(
-            LogoutPayload(
-              (b) => b
-                ..hard = store.state.settingsState.noPasswordSaving
-                ..forced = false,
-            ),
-          );
-        },
-      ),
-    );
+      WidgetsBinding.instance
+        ..addObserver(
+          LifecycleObserver(
+            store.actions.load,
+            () {
+              navigatorKey.currentState.popUntil((route) => route.isFirst);
+              store.actions.loginActions.logout(
+                LogoutPayload(
+                  (b) => b
+                    ..hard = store.state.settingsState.noPasswordSaving
+                    ..forced = false,
+                ),
+              );
+            },
+          ),
+        );
+    });
 }
 
 /// If the current platform is desktop, override the default platform to
@@ -160,9 +161,11 @@ class LifecycleObserver with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      print("reload");
       onReload();
     }
     if (state == AppLifecycleState.paused) {
+      print("logout");
       onLogout();
     }
   }
