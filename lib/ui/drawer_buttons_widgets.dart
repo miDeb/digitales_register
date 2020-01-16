@@ -9,7 +9,10 @@ class LogoutButtonWidget extends StatelessWidget {
     return ListTile(
       title: Text("Logout"),
       trailing: Icon(Icons.exit_to_app),
-      onTap: onLogout,
+      onTap: () {
+        Navigator.of(context).pop();
+        onLogout();
+      },
     );
   }
 }
@@ -23,7 +26,10 @@ class SettingsButtonWidget extends StatelessWidget {
     return ListTile(
       title: Text("Einstellungen"),
       trailing: Icon(Icons.settings),
-      onTap: onShowSettings,
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowSettings();
+      },
     );
   }
 }
@@ -37,7 +43,10 @@ class GradesButtonWidget extends StatelessWidget {
     return ListTile(
       title: Text("Noten"),
       trailing: Icon(Icons.grade),
-      onTap: onShowGrades,
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowGrades();
+      },
     );
   }
 }
@@ -51,7 +60,10 @@ class AbsencesButtonWidget extends StatelessWidget {
     return ListTile(
       title: Text("Absenzen"),
       trailing: Icon(Icons.hotel),
-      onTap: onShowAbsences,
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowAbsences();
+      },
     );
   }
 }
@@ -65,7 +77,10 @@ class CalendarButtonWidget extends StatelessWidget {
     return ListTile(
       title: Text("Kalender"),
       trailing: Icon(Icons.calendar_today),
-      onTap: onShowCalendar,
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowCalendar();
+      },
     );
   }
 }
