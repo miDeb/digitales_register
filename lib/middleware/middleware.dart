@@ -230,7 +230,7 @@ NextActionHandler _saveStateMiddleware(
             _saveUnderway = true;
             Future.delayed(
               delay,
-              () async {
+              () {
                 _saveUnderway = false;
                 if (!api.state.settingsState.noDataSaving) {
                   final save = json.encode(serializers.serialize(api.state));
