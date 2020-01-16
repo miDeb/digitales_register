@@ -163,11 +163,9 @@ class LifecycleObserver with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      print("reload");
       onReload();
     }
     if (state == AppLifecycleState.paused) {
-      print("logout");
       onLogout();
     }
   }
