@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dr/actions/login_actions.dart';
 import 'package:dr/container/notifications_page_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
