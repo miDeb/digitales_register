@@ -91,6 +91,6 @@ class DaysViewModel {
         })(),
         noInternet = state.noInternet,
         future = state.dashboardState.future,
-        loading = state.dashboardState.loading,
+        loading = state.dashboardState.loading || state.loginState.loading,
         askWhenDelete = state.settingsState.askWhenDelete;
 }
