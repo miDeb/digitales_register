@@ -123,17 +123,12 @@ void run() {
         WidgetsBinding.instance
           ..addObserver(
             LifecycleObserver(
-              store.actions.load,
               () {
                 navigatorKey.currentState.popUntil((route) => route.isFirst);
-                store.actions.loginActions.logout(
-                  LogoutPayload(
-                    (b) => b
-                      ..hard = store.state.settingsState.noPasswordSaving
-                      ..forced = false,
-                  ),
-                );
+                store.actions.load();
               },
+              // this might not finish in time:
+              store.actions.saveState,
             ),
           );
       },
