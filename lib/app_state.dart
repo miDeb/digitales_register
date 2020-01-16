@@ -165,7 +165,6 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   static Serializer<Semester> get serializer => _$semesterSerializer;
 
   Semester._();
-  factory Semester._i([updates(SemesterBuilder b)]) = _$Semester;
 }
 
 abstract class SettingsState
