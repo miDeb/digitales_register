@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
 import '../container/homework_filter_container.dart';
@@ -24,7 +25,13 @@ class _HomeworkFilterState extends State<HomeworkFilter>
       title: Row(
         children: <Widget>[
           Spacer(),
-          Icon(Icons.filter_list),
+          Badge(
+            child: Icon(Icons.filter_list),
+            badgeContent: Container(
+              color: Colors.red,
+            ),
+            showBadge: widget.vm.currentBlacklist.isNotEmpty,
+          )
         ],
       ),
       children: [
