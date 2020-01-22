@@ -506,7 +506,7 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, isHistory, isDeletedView, noInternet;
+  final bool askWhenDelete, isHistory, isDeletedView, noInternet, isCurrent;
 
   final AutoScrollController controller;
   final int index;
@@ -523,6 +523,7 @@ class ItemWidget extends StatelessWidget {
     this.index,
     this.isDeletedView = false,
     this.noInternet,
+    this.isCurrent = true,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -557,30 +558,24 @@ class ItemWidget extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (item.isNew || item.isChanged)
+                            if ((!isHistory &&
+                                    (item.isNew || item.isChanged)) ||
+                                (isHistory && isCurrent))
                               Positioned(
                                 right: 0,
-                                child: item.isNew
-                                    ? Badge(
-                                        shape: BadgeShape.square,
-                                        borderRadius: 20,
-                                        badgeContent: Text("neu"),
-                                      )
-                                    : item.deleted
-                                        ? Badge(
-                                            shape: BadgeShape.square,
-                                            borderRadius: 20,
-                                            badgeContent: Text(
-                                              "gelöscht",
-                                            ),
-                                          )
-                                        : Badge(
-                                            borderRadius: 20,
-                                            shape: BadgeShape.square,
-                                            badgeContent: Text(
-                                              "geändert",
-                                            ),
-                                          ),
+                                child: Badge(
+                                  shape: BadgeShape.square,
+                                  borderRadius: 20,
+                                  badgeContent: Text(
+                                    isHistory && isCurrent
+                                        ? "aktuell"
+                                        : item.isNew
+                                            ? "neu"
+                                            : item.deleted
+                                                ? "gelöscht"
+                                                : "geändert",
+                                  ),
+                                ),
                               )
                           ],
                         ),
@@ -759,6 +754,7 @@ class ItemWidget extends StatelessWidget {
         if (isHistory && item.previousVersion != null)
           ItemWidget(
             isHistory: true,
+            isCurrent: false,
             item: item.previousVersion,
           ),
       ],
