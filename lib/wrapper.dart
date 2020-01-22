@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui' show VoidCallback;
+import 'package:http/http.dart' as http;
 
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
@@ -20,12 +20,14 @@ class Wrapper {
   VoidCallback onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem onAddProtocolItem;
   bool safeMode;
-  static final httpClient = HttpClient();
   Future<bool> get noInternet async {
     try {
-      await httpClient.getUrl(Uri.parse("https://example.com"));
-      return false;
-    } on SocketException {
+      final result = await http.get(baseAddress);
+      if (result.statusCode == 200) {
+        return false;
+      }
+      return true;
+    } catch (e) {
       return true;
     }
   }
