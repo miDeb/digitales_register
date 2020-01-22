@@ -86,7 +86,6 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
   bool serverEquals(Homework other) {
     return deleted == other.deleted &&
-        id == other.id &&
         title == other.title &&
         subtitle == other.subtitle &&
         label == other.label &&
