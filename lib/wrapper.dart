@@ -11,8 +11,8 @@ import 'app_state.dart';
 typedef void AddNetworkProtocolItem(NetworkProtocolItem item);
 
 class Wrapper {
-  String get _loginAddress => "$baseAddress/api/auth/login";
-  String get baseAddress => "$url/v2";
+  String get _loginAdress => "$baseAdress/api/auth/login";
+  String get baseAdress => "$url/v2";
   String user, pass, url;
 
   bool get loggedIn => _loggedIn;
@@ -22,7 +22,7 @@ class Wrapper {
   bool safeMode;
   Future<bool> get noInternet async {
     try {
-      final result = await http.get(baseAddress);
+      final result = await http.get(baseAdress);
       if (result.statusCode == 200) {
         return false;
       }
@@ -67,7 +67,7 @@ class Wrapper {
     await _clearCookies();
     try {
       response = await Requests.post(
-        _loginAddress,
+        _loginAdress,
         body: {"username": user, "password": pass},
         json: true,
       );
@@ -97,9 +97,9 @@ class Wrapper {
   Future<void> _loadConfig() async {
     String source;
     try {
-      source = await Requests.get(baseAddress);
+      source = await Requests.get(baseAdress);
     } on TimeoutException {
-      source = await Requests.get(baseAddress);
+      source = await Requests.get(baseAdress);
     }
     final id = _readUserId(source);
     final fullName = _readFullName(source);
@@ -181,20 +181,20 @@ class Wrapper {
     dynamic response;
     try {
       response = await Requests.post(
-        baseAddress + url,
+        baseAdress + url,
         body: args,
         json: json,
       );
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
-        ..address = baseAddress + url
+        ..address = baseAdress + url
         ..response = e.toString()
         ..parameters = args.toString()));
       return null;
     }
     onAddProtocolItem(NetworkProtocolItem((b) => b
-      ..address = baseAddress + url
+      ..address = baseAdress + url
       ..response = response.toString()
       ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
@@ -248,7 +248,7 @@ class Wrapper {
     }
     _loggedIn = false;
     if (!forceLogout) {
-      Requests.get("$baseAddress/logout");
+      Requests.get("$baseAdress/logout");
     }
     _clearCookies();
   }
