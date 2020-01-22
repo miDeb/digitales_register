@@ -55,9 +55,14 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
         loadedDays.remove(newDay);
         final newHomework = newDay.homework.toList();
         for (var oldHw in day.homework.toList()) {
+          // look if there is any matching id first
           final newHw = newHomework.firstWhere(
             (d) => d.id == oldHw.id,
-            orElse: () => null,
+            // then look for other similarities
+            orElse: () => newHomework.firstWhere(
+              (d) => d.isSuccessorOf(oldHw),
+              orElse: () => null,
+            ),
           );
           if (newHw == null) {
             b.homework.remove(oldHw);
