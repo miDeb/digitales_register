@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
 Widget maybeWrap(Widget widget, bool wrap, Widget wrapWidget(Widget w)) {
@@ -29,3 +30,5 @@ extension MapEntryToTuple<K, V> on MapEntry<K, V> {
     return Tuple2(this.key, this.value);
   }
 }
+
+NumberFormat gradeAverageFormat = NumberFormat("#0.##", "de");

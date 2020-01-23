@@ -246,7 +246,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   String averageFormatted(Semester semester) {
     final avg = average(semester);
     if (avg != null) {
-      return "${avg ~/ 100},${avg % 100}";
+      return gradeAverageFormat.format(avg / 100);
     } else
       return "/";
   }
@@ -327,7 +327,7 @@ abstract class GradeDetail
       case 75:
         return "${mainGrade + 1}-";
       default:
-        return grade.toString();
+        return gradeAverageFormat.format(grade / 100);
     }
   }
 
