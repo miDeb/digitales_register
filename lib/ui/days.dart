@@ -538,13 +538,17 @@ class ItemWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    top: 8,
+                    bottom: 6,
+                  ),
                   child: Column(
                     children: <Widget>[
                       if (item.label != null)
@@ -646,103 +650,103 @@ class ItemWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  children: <Widget>[
-                    if (!isHistory && item.label != null)
-                      IconButton(
-                        icon: (isDeletedView
-                                    ? item.previousVersion.previousVersion
-                                    : item.previousVersion) !=
-                                null
-                            ? Badge(
-                                child: Icon(
-                                  Icons.info_outline,
-                                ),
-                                badgeContent: Icon(Icons.edit, size: 15),
-                                padding: EdgeInsets.zero,
-                                badgeColor: isDeletedView
-                                    ? Theme.of(context).dialogBackgroundColor
-                                    : Theme.of(context).scaffoldBackgroundColor,
-                                elevation: 0,
-                              )
-                            : Icon(
+              ),
+              Column(
+                children: <Widget>[
+                  if (!isHistory && item.label != null)
+                    IconButton(
+                      icon: (isDeletedView
+                                  ? item.previousVersion.previousVersion
+                                  : item.previousVersion) !=
+                              null
+                          ? Badge(
+                              child: Icon(
                                 Icons.info_outline,
                               ),
-                        onPressed: () {
-                          // if we are in the deleted view, show the history for the previous item
-                          final historyItem =
-                              isDeletedView ? item.previousVersion : item;
-                          showDialog(
-                            context: context,
-                            builder: (_context) {
-                              return ListViewCapableAlertDialog(
-                                title: Text(historyItem.title),
-                                content: ListView(
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    Text(formatChanged(historyItem)),
-                                    if (historyItem.previousVersion != null)
-                                      ExpansionTile(
-                                        title: Text("Versionen"),
-                                        children: <Widget>[
-                                          ItemWidget(
-                                            item: historyItem,
-                                            isHistory: true,
-                                          ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                                actions: <Widget>[
-                                  RaisedButton(
-                                    textTheme: ButtonTextTheme.primary,
-                                    onPressed: () => Navigator.pop(_context),
-                                    child: Text(
-                                      "Ok",
+                              badgeContent: Icon(Icons.edit, size: 15),
+                              padding: EdgeInsets.zero,
+                              badgeColor: isDeletedView
+                                  ? Theme.of(context).dialogBackgroundColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              elevation: 0,
+                            )
+                          : Icon(
+                              Icons.info_outline,
+                            ),
+                      onPressed: () {
+                        // if we are in the deleted view, show the history for the previous item
+                        final historyItem =
+                            isDeletedView ? item.previousVersion : item;
+                        showDialog(
+                          context: context,
+                          builder: (_context) {
+                            return ListViewCapableAlertDialog(
+                              title: Text(historyItem.title),
+                              content: ListView(
+                                shrinkWrap: true,
+                                children: <Widget>[
+                                  Text(formatChanged(historyItem)),
+                                  if (historyItem.previousVersion != null)
+                                    ExpansionTile(
+                                      title: Text("Versionen"),
+                                      children: <Widget>[
+                                        ItemWidget(
+                                          item: historyItem,
+                                          isHistory: true,
+                                        ),
+                                      ],
                                     ),
-                                  )
                                 ],
-                              );
+                              ),
+                              actions: <Widget>[
+                                RaisedButton(
+                                  textTheme: ButtonTextTheme.primary,
+                                  onPressed: () => Navigator.pop(_context),
+                                  child: Text(
+                                    "Ok",
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  if (item.warning)
+                    Text(
+                      "!",
+                      style: TextStyle(
+                        color: Colors.red.shade900,
+                        fontSize: 30,
+                      ),
+                    )
+                  else if (item.type == HomeworkType.grade)
+                    Text(
+                      item.gradeFormatted,
+                      style: TextStyle(color: Colors.green, fontSize: 30),
+                    )
+                  else if (!isHistory && !isDeletedView && item.checkable)
+                    Checkbox(
+                      activeColor: Colors.green,
+                      value: item.checked,
+                      onChanged: noInternet
+                          ? null
+                          : (done) {
+                              toggleDone();
                             },
-                          );
-                        },
-                      ),
-                    if (item.warning)
-                      Text(
-                        "!",
-                        style: TextStyle(
-                          color: Colors.red.shade900,
-                          fontSize: 30,
-                        ),
-                      )
-                    else if (item.type == HomeworkType.grade)
-                      Text(
-                        item.gradeFormatted,
-                        style: TextStyle(color: Colors.green, fontSize: 30),
-                      )
-                    else if (!isHistory && !isDeletedView && item.checkable)
-                      Checkbox(
-                        activeColor: Colors.green,
-                        value: item.checked,
-                        onChanged: noInternet
-                            ? null
-                            : (done) {
-                                toggleDone();
-                              },
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            if (isHistory || isDeletedView) ...[
-              Divider(),
-              Text(
-                formatChanged(item),
-                style: Theme.of(context).textTheme.caption,
+                    ),
+                ],
               ),
-            ]
-          ],
-        ),
+            ],
+          ),
+          if (isHistory || isDeletedView) ...[
+            Divider(),
+            Text(
+              formatChanged(item),
+              style: Theme.of(context).textTheme.caption,
+            ),
+          ]
+        ],
       ),
     );
     if (!isHistory && !isDeletedView) {
