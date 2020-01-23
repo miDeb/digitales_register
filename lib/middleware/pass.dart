@@ -1,14 +1,13 @@
 part of 'middleware.dart';
 
-final _passMiddleware =
-    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-      ..add(SettingsActionsNames.offlineEnabled, _enableOffline)
-      ..add(SettingsActionsNames.saveNoPass, _setSavePass)
-      ..add(SavePassActionsNames.save, _savePass)
-      ..add(SavePassActionsNames.delete, _deletePass);
+final _passMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+  ..add(SettingsActionsNames.offlineEnabled, _enableOffline)
+  ..add(SettingsActionsNames.saveNoPass, _setSavePass)
+  ..add(SavePassActionsNames.save, _savePass)
+  ..add(SavePassActionsNames.delete, _deletePass);
 
-void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<bool> action) async {
   next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
   final user = login["user"];
@@ -27,8 +26,8 @@ void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<bool> action) async {
   next(action);
   _wrapper.safeMode = action.payload;
   if (!api.state.loginState.loggedIn) return;
@@ -39,8 +38,8 @@ void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
   next(action);
   if (_wrapper.user == null || _wrapper.pass == null) return;
   _secureStorage.write(
@@ -56,8 +55,8 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
   next(action);
   _secureStorage.delete(key: "login");
 }

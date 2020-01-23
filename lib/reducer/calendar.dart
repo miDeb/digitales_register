@@ -5,16 +5,15 @@ import '../actions/calendar_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
-    CalendarState, CalendarStateBuilder>(
+final calendarReducerBuilder =
+    NestedReducerBuilder<AppState, AppStateBuilder, CalendarState, CalendarStateBuilder>(
   (s) => s.calendarState,
   (b) => b.calendarState,
 )
-  ..add(CalendarActionsNames.loaded, _loaded)
-  ..add(CalendarActionsNames.setCurrentMonday, _currentMonday);
+      ..add(CalendarActionsNames.loaded, _loaded)
+      ..add(CalendarActionsNames.setCurrentMonday, _currentMonday);
 
-void _loaded(
-    CalendarState state, Action<Object> action, CalendarStateBuilder builder) {
+void _loaded(CalendarState state, Action<Object> action, CalendarStateBuilder builder) {
   final t = (action.payload as Map).map((k, e) {
     final date = DateTime.parse(k);
     return MapEntry(date, _parseCalendarDay(e, date).build());
@@ -22,8 +21,7 @@ void _loaded(
   builder.days.addAll(t);
 }
 
-void _currentMonday(CalendarState state, Action<DateTime> action,
-    CalendarStateBuilder builder) {
+void _currentMonday(CalendarState state, Action<DateTime> action, CalendarStateBuilder builder) {
   builder..currentMonday = action.payload;
 }
 
@@ -39,8 +37,7 @@ CalendarDayBuilder _parseCalendarDay(day, DateTime date) {
   //      },
   //    },
   // }
-  if ((day as Map).length == 1)
-    return _parseCalendarDay((day as Map).values.single, date);
+  if ((day as Map).length == 1) return _parseCalendarDay((day as Map).values.single, date);
   return CalendarDayBuilder()
     ..date = date
     ..hours = ListBuilder(((day as Map).values.toList()

@@ -10,8 +10,7 @@ import '../ui/notifications_page.dart';
 class NotificationPageContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnection<AppState, AppActions,
-        Tuple2<List<Notification>, bool>>(
+    return StoreConnection<AppState, AppActions, Tuple2<List<Notification>, bool>>(
       builder: (context, vm, actions) {
         return NotificationPage(
           notifications: vm.item1,
@@ -21,8 +20,7 @@ class NotificationPageContainer extends StatelessWidget {
         );
       },
       connect: (state) {
-        return Tuple2(
-            state.notificationState.notifications.toList(), state.noInternet);
+        return Tuple2(state.notificationState.notifications.toList(), state.noInternet);
       },
     );
   }

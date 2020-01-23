@@ -9,8 +9,7 @@ class AbsencesPage extends StatelessWidget {
   final AbsencesState state;
   final bool noInternet;
 
-  const AbsencesPage({Key key, @required this.state, this.noInternet})
-      : super(key: key);
+  const AbsencesPage({Key key, @required this.state, this.noInternet}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +28,7 @@ class AbsencesBody extends StatelessWidget {
   final AbsencesState state;
   final bool noInternet;
 
-  const AbsencesBody({Key key, @required this.state, this.noInternet})
-      : super(key: key);
+  const AbsencesBody({Key key, @required this.state, this.noInternet}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +62,7 @@ class AbsencesBody extends StatelessWidget {
 class AbsencesStatisticWidget extends StatelessWidget {
   final AbsenceStatistic stat;
 
-  const AbsencesStatisticWidget({Key key, @required this.stat})
-      : super(key: key);
+  const AbsencesStatisticWidget({Key key, @required this.stat}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(

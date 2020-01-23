@@ -29,8 +29,7 @@ void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder..noInternet = action.payload;
 }
 
-void _currentRouteIsLogin(
-    AppState state, Action<bool> action, AppStateBuilder builder) {
+void _currentRouteIsLogin(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder..currentRouteIsLogin = action.payload;
 }
 
@@ -38,7 +37,6 @@ void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
   builder..config.replace(action.payload);
 }
 
-void _mountState(
-    AppState state, Action<AppState> action, AppStateBuilder builder) {
+void _mountState(AppState state, Action<AppState> action, AppStateBuilder builder) {
   builder.replace(action.payload);
 }

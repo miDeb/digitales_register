@@ -41,8 +41,7 @@ class DaysContainer extends StatelessWidget {
             actions.settingsActions.askWhenDeleteReminder(false);
           },
           markAsSeenCallback: actions.dashboardActions.markAsSeen,
-          markDeletedHomeworkAsSeenCallback:
-              actions.dashboardActions.markDeletedHomeworkAsSeen,
+          markDeletedHomeworkAsSeenCallback: actions.dashboardActions.markDeletedHomeworkAsSeen,
           markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
         );
       },
@@ -73,12 +72,10 @@ class DaysViewModel {
                     (day) => day.rebuild(
                       (b) => b
                         ..deletedHomework.where(
-                          (hw) =>
-                              !state.dashboardState.blacklist.contains(hw.type),
+                          (hw) => !state.dashboardState.blacklist.contains(hw.type),
                         )
                         ..homework.where(
-                          (hw) =>
-                              !state.dashboardState.blacklist.contains(hw.type),
+                          (hw) => !state.dashboardState.blacklist.contains(hw.type),
                         ),
                     ),
                   )

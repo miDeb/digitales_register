@@ -66,10 +66,7 @@ class NotificationWidget extends StatelessWidget {
   final SingleArgumentVoidCallback<Notification> onDelete;
 
   const NotificationWidget(
-      {Key key,
-      @required this.notification,
-      @required this.onDelete,
-      this.noInternet})
+      {Key key, @required this.notification, @required this.onDelete, this.noInternet})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

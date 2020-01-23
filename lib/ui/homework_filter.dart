@@ -16,8 +16,7 @@ class HomeworkFilter extends StatefulWidget {
   _HomeworkFilterState createState() => _HomeworkFilterState();
 }
 
-class _HomeworkFilterState extends State<HomeworkFilter>
-    with AutomaticKeepAliveClientMixin {
+class _HomeworkFilterState extends State<HomeworkFilter> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);

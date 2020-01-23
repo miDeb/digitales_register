@@ -9,8 +9,7 @@ import '../ui/grades_chart_legend.dart';
 class ChartLegendContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnection<AppState, AppActions,
-        Map<Tuple2<String, int>, SubjectGraphConfig>>(
+    return StoreConnection<AppState, AppActions, Map<Tuple2<String, int>, SubjectGraphConfig>>(
       builder: (context, vm, actions) {
         return ChartLegend(
           vm: vm,

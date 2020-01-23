@@ -18,8 +18,7 @@ abstract class LoginActions extends ReduxActions {
 
 abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
   LoginAction._();
-  factory LoginAction([void Function(LoginActionBuilder) updates]) =
-      _$LoginAction;
+  factory LoginAction([void Function(LoginActionBuilder) updates]) = _$LoginAction;
 
   @override
   String toString() {
@@ -43,21 +42,17 @@ abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
   bool get offlineEnabled;
 }
 
-abstract class LoggedInPayload
-    implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
+abstract class LoggedInPayload implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
   LoggedInPayload._();
-  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) =
-      _$LoggedInPayload;
+  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) = _$LoggedInPayload;
 
   String get username;
   bool get fromStorage;
 }
 
-abstract class LoginFailedPayload
-    implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
+abstract class LoginFailedPayload implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
   LoginFailedPayload._();
-  factory LoginFailedPayload(
-          [void Function(LoginFailedPayloadBuilder) updates]) =
+  factory LoginFailedPayload([void Function(LoginFailedPayloadBuilder) updates]) =
       _$LoginFailedPayload;
 
   String get cause;
@@ -67,11 +62,9 @@ abstract class LoginFailedPayload
   bool get noInternet;
 }
 
-abstract class LogoutPayload
-    implements Built<LogoutPayload, LogoutPayloadBuilder> {
+abstract class LogoutPayload implements Built<LogoutPayload, LogoutPayloadBuilder> {
   LogoutPayload._();
-  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) =
-      _$LogoutPayload;
+  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) = _$LogoutPayload;
 
   bool get hard;
   bool get forced;

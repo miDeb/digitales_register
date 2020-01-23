@@ -15,16 +15,14 @@ class FlutterSecureStorage {
   /// [value] and [key] shoudn't be null.
   /// Can throw a [PlatformException].
   Future<void> write({@required String key, @required String value}) async =>
-      _channel
-          .invokeMethod('write', <String, String>{'key': key, 'value': value});
+      _channel.invokeMethod('write', <String, String>{'key': key, 'value': value});
 
   /// Decrypts and returns the value for the given [key] or null if [key] is not in the storage.
   ///
   /// [key] shoudn't be null.
   /// Can throw a [PlatformException].
   Future<String> read({@required String key}) async {
-    final String value =
-        await _channel.invokeMethod('read', <String, String>{'key': key});
+    final String value = await _channel.invokeMethod('read', <String, String>{'key': key});
     return value;
   }
 

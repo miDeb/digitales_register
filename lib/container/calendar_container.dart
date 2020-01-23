@@ -13,10 +13,8 @@ class CalendarContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return Calendar(
           vm: vm,
-          showEditSubjectNicks:
-              actions.routingActions.showEditCalendarSubjectNicks,
-          closeEditNicksBar: () =>
-              actions.settingsActions.showCalendarSubjectNicksBar(false),
+          showEditSubjectNicks: actions.routingActions.showEditCalendarSubjectNicks,
+          closeEditNicksBar: () => actions.settingsActions.showCalendarSubjectNicksBar(false),
           dayCallback: actions.calendarActions.load,
           currentMondayCallback: actions.calendarActions.setCurrentMonday,
         );

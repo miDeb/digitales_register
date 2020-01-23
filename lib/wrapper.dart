@@ -83,8 +83,7 @@ class Wrapper {
       this.pass = pass;
       error = null;
       await _loadConfig().then((_) {
-        _serverLogoutTime =
-            DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
+        _serverLogoutTime = DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
         onConfigLoaded();
       });
@@ -123,44 +122,36 @@ class Wrapper {
   }
 
   int _readAutoLogoutSeconds(String source) {
-    var substringFromId = source.substring(
-        source.indexOf("auto_logout_seconds: ") +
-            "auto_logout_seconds: ".length);
-    return int.parse(
-        substringFromId.substring(0, substringFromId.indexOf(",")).trim());
+    var substringFromId =
+        source.substring(source.indexOf("auto_logout_seconds: ") + "auto_logout_seconds: ".length);
+    return int.parse(substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
   int _readUserId(String source) {
-    var substringFromId = source
-        .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
-    return int.parse(
-        substringFromId.substring(0, substringFromId.indexOf(";")).trim());
+    var substringFromId =
+        source.substring(source.indexOf("currentUserId=") + "currentUserId=".length);
+    return int.parse(substringFromId.substring(0, substringFromId.indexOf(";")).trim());
   }
 
   String _readAfterImgId(String source) {
     return source
-        .substring(source.indexOf("navigationProfilePicture") +
-            "navigationProfilePicture".length)
+        .substring(source.indexOf("navigationProfilePicture") + "navigationProfilePicture".length)
         .trim();
   }
 
   String _readFullName(String source) {
     final afterImgId = _readAfterImgId(source);
-    return afterImgId
-        .substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<"))
-        .trim();
+    return afterImgId.substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<")).trim();
   }
 
   String _readImgSource(String source) {
     final afterImgId = _readAfterImgId(source);
-    final afterStart =
-        afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
+    final afterStart = afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
   var _mutex = new Mutex();
-  Future<dynamic> post(String url,
-      [Map<String, dynamic> args = const {}, bool json = true]) async {
+  Future<dynamic> post(String url, [Map<String, dynamic> args = const {}, bool json = true]) async {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -228,8 +219,7 @@ class Wrapper {
         logout(hard: safeMode, forceLogout: true);
         return;
       } else {
-        _serverLogoutTime =
-            DateTime.fromMillisecondsSinceEpoch(result["newExpiration"] * 1000);
+        _serverLogoutTime = DateTime.fromMillisecondsSinceEpoch(result["newExpiration"] * 1000);
       }
     }
     Future.delayed(Duration(seconds: 5), _updateLogout);

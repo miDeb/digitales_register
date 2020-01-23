@@ -1,13 +1,12 @@
 part of 'middleware.dart';
 
-final _loginMiddleware =
-    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-      ..add(LoginActionsNames.logout, _logout)
-      ..add(LoginActionsNames.login, _login)
-      ..add(LoginActionsNames.loginFailed, _loginFailed);
+final _loginMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+  ..add(LoginActionsNames.logout, _logout)
+  ..add(LoginActionsNames.login, _login)
+  ..add(LoginActionsNames.loginFailed, _loginFailed);
 
-void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LogoutPayload> action) {
+void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<LogoutPayload> action) {
   next(action);
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
     api.actions.savePassActions.delete();
@@ -24,8 +23,8 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoginAction> action) async {
+void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<LoginAction> action) async {
   next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
     api.actions.loginActions.loginFailed(
@@ -78,8 +77,8 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoginFailedPayload> action) {
+void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<LoginFailedPayload> action) {
   next(action);
   if (action.payload.noInternet) {
     if (action.payload.offlineEnabled) {

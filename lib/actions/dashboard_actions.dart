@@ -25,8 +25,7 @@ abstract class DashboardActions extends ReduxActions {
   ActionDispatcher<void> refresh;
 }
 
-abstract class DaysLoadedPayload
-    implements Built<DaysLoadedPayload, DaysLoadedPayloadBuilder> {
+abstract class DaysLoadedPayload implements Built<DaysLoadedPayload, DaysLoadedPayloadBuilder> {
   DaysLoadedPayload._();
   factory DaysLoadedPayload([void Function(DaysLoadedPayloadBuilder) updates]) =
       _$DaysLoadedPayload;
@@ -39,27 +38,23 @@ abstract class DaysLoadedPayload
 abstract class HomeworkAddedPayload
     implements Built<HomeworkAddedPayload, HomeworkAddedPayloadBuilder> {
   HomeworkAddedPayload._();
-  factory HomeworkAddedPayload(
-          [void Function(HomeworkAddedPayloadBuilder) updates]) =
+  factory HomeworkAddedPayload([void Function(HomeworkAddedPayloadBuilder) updates]) =
       _$HomeworkAddedPayload;
 
   Object get data;
   DateTime get date;
 }
 
-abstract class AddReminderPayload
-    implements Built<AddReminderPayload, AddReminderPayloadBuilder> {
+abstract class AddReminderPayload implements Built<AddReminderPayload, AddReminderPayloadBuilder> {
   AddReminderPayload._();
-  factory AddReminderPayload(
-          [void Function(AddReminderPayloadBuilder) updates]) =
+  factory AddReminderPayload([void Function(AddReminderPayloadBuilder) updates]) =
       _$AddReminderPayload;
 
   String get msg;
   DateTime get date;
 }
 
-abstract class ToggleDonePayload
-    implements Built<ToggleDonePayload, ToggleDonePayloadBuilder> {
+abstract class ToggleDonePayload implements Built<ToggleDonePayload, ToggleDonePayloadBuilder> {
   ToggleDonePayload._();
   factory ToggleDonePayload([void Function(ToggleDonePayloadBuilder) updates]) =
       _$ToggleDonePayload;

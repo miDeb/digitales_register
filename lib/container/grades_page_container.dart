@@ -43,8 +43,8 @@ class GradesPageViewModel {
         ),
         noInternet = state.noInternet,
         showGradesDiagram = state.settingsState.showGradesDiagram,
-        showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage &&
-            state.gradesState.semester.n != null;
+        showAllSubjectsAverage =
+            state.settingsState.showAllSubjectsAverage && state.gradesState.semester.n != null;
 
   static String calculateAllSubjectsAverage(AppState state) {
     if (state.gradesState.semester == Semester.all) return null;

@@ -7,67 +7,59 @@ import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
-    SettingsState, SettingsStateBuilder>(
+final settingsReducerBuilder =
+    NestedReducerBuilder<AppState, AppStateBuilder, SettingsState, SettingsStateBuilder>(
   (s) => s.settingsState,
   (b) => b.settingsState,
 )
-  ..add(SettingsActionsNames.offlineEnabled, _offlineEnabled)
-  ..add(SettingsActionsNames.saveNoData, _saveNoData)
-  ..add(SettingsActionsNames.saveNoPass, _saveNoPass)
-  ..add(SettingsActionsNames.askWhenDeleteReminder, _askWhenDeleteReminder)
-  ..add(SettingsActionsNames.showCancelledGrades, _showCancelledGrades)
-  ..add(SettingsActionsNames.gradesTypeSorted, _gradesTypeSorted)
-  ..add(SettingsActionsNames.deleteDataOnLogout, _deleteDataOnLogout)
-  ..add(SettingsActionsNames.subjectNicks, _subjectNicks)
-  ..add(
-      RoutingActionsNames.showEditCalendarSubjectNicks, _showEditCalendarNicks)
-  ..add(RoutingActionsNames.showSettings, _showSettings)
-  ..add(SettingsActionsNames.showCalendarSubjectNicksBar, _calendarNicksBar)
-  ..add(SettingsActionsNames.showGradesDiagram, _gradesChart)
-  ..add(SettingsActionsNames.showAllSubjectsAverage, _allSubjectsAverage)
-  ..add(SettingsActionsNames.markNotSeenDashboardEntries,
-      _markNotSeenDashboardEntries)
-  ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
-  ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig);
+      ..add(SettingsActionsNames.offlineEnabled, _offlineEnabled)
+      ..add(SettingsActionsNames.saveNoData, _saveNoData)
+      ..add(SettingsActionsNames.saveNoPass, _saveNoPass)
+      ..add(SettingsActionsNames.askWhenDeleteReminder, _askWhenDeleteReminder)
+      ..add(SettingsActionsNames.showCancelledGrades, _showCancelledGrades)
+      ..add(SettingsActionsNames.gradesTypeSorted, _gradesTypeSorted)
+      ..add(SettingsActionsNames.deleteDataOnLogout, _deleteDataOnLogout)
+      ..add(SettingsActionsNames.subjectNicks, _subjectNicks)
+      ..add(RoutingActionsNames.showEditCalendarSubjectNicks, _showEditCalendarNicks)
+      ..add(RoutingActionsNames.showSettings, _showSettings)
+      ..add(SettingsActionsNames.showCalendarSubjectNicksBar, _calendarNicksBar)
+      ..add(SettingsActionsNames.showGradesDiagram, _gradesChart)
+      ..add(SettingsActionsNames.showAllSubjectsAverage, _allSubjectsAverage)
+      ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenDashboardEntries)
+      ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
+      ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig);
 
 void _askWhenDeleteReminder(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.askWhenDelete = action.payload;
 }
 
-void _showCancelledGrades(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _showCancelledGrades(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.showCancelled = action.payload;
 }
 
-void _gradesTypeSorted(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _gradesTypeSorted(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.typeSorted = action.payload;
 }
 
-void _saveNoData(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _saveNoData(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.noDataSaving = action.payload;
 }
 
-void _saveNoPass(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _saveNoPass(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.noPasswordSaving = action.payload;
 }
 
-void _offlineEnabled(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _offlineEnabled(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.offlineEnabled = action.payload;
 }
 
-void _deleteDataOnLogout(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _deleteDataOnLogout(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.deleteDataOnLogout = action.payload;
 }
 
-void _subjectNicks(SettingsState state, Action<BuiltMap<String, String>> action,
-    SettingsStateBuilder builder) {
+void _subjectNicks(
+    SettingsState state, Action<BuiltMap<String, String>> action, SettingsStateBuilder builder) {
   builder.subjectNicks.replace(action.payload);
 }
 
@@ -76,29 +68,23 @@ void _showEditCalendarNicks(
   builder.scrollToSubjectNicks = true;
 }
 
-void _showSettings(
-    SettingsState state, Action<void> action, SettingsStateBuilder builder) {
+void _showSettings(SettingsState state, Action<void> action, SettingsStateBuilder builder) {
   builder.scrollToSubjectNicks = false;
 }
 
-void _calendarNicksBar(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _calendarNicksBar(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.showCalendarNicksBar = action.payload;
 }
 
-void _gradesChart(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _gradesChart(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.showGradesDiagram = action.payload;
 }
 
-void _allSubjectsAverage(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+void _allSubjectsAverage(SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.showAllSubjectsAverage = action.payload;
 }
 
-void _setGradeGraphConfig(
-    SettingsState state,
-    Action<MapEntry<int, SubjectGraphConfig>> action,
+void _setGradeGraphConfig(SettingsState state, Action<MapEntry<int, SubjectGraphConfig>> action,
     SettingsStateBuilder builder) {
   builder.graphConfigs[action.payload.key] = action.payload.value;
 }
@@ -108,8 +94,8 @@ void _markNotSeenDashboardEntries(
   builder.dashboardMarkNewOrChangedEntries = action.payload;
 }
 
-void _updateGradeGraphConfigs(SettingsState state,
-    Action<BuiltList<Subject>> action, SettingsStateBuilder builder) {
+void _updateGradeGraphConfigs(
+    SettingsState state, Action<BuiltList<Subject>> action, SettingsStateBuilder builder) {
   for (final entry in state.graphConfigs.entries) {
     if (!action.payload.any((s) => s.id == entry.key)) {
       builder.graphConfigs.remove(entry);
@@ -141,14 +127,8 @@ void _updateGradeGraphConfigs(SettingsState state,
   }
 }
 
-final _colors = List.of(Colors.primaries)
-  ..removeWhere((c) => _similarColors.contains(c));
+final _colors = List.of(Colors.primaries)..removeWhere((c) => _similarColors.contains(c));
 
-final _similarColors = [
-  Colors.lime,
-  Colors.lightBlue,
-  Colors.cyan,
-  Colors.amber
-];
+final _similarColors = [Colors.lime, Colors.lightBlue, Colors.cyan, Colors.amber];
 
 const _defaultThick = 2;

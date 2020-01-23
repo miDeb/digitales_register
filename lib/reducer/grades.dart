@@ -7,38 +7,34 @@ import '../actions/login_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
-    GradesState, GradesStateBuilder>(
+final gradesReducerBuilder =
+    NestedReducerBuilder<AppState, AppStateBuilder, GradesState, GradesStateBuilder>(
   (s) => s.gradesState,
   (b) => b.gradesState,
 )
-  ..add(GradesActionsNames.load, _loading)
-  ..add(GradesActionsNames.loaded, _loaded)
-  ..add(GradesActionsNames.setSemester, _setSemester)
-  ..add(LoginActionsNames.automaticallyReloggedIn, _afterAutoRelogin)
-  ..add(GradesActionsNames.detailsLoaded, _detailsLoaded)
-  ..add(AppActionsNames.setConfig, _setConfig);
+      ..add(GradesActionsNames.load, _loading)
+      ..add(GradesActionsNames.loaded, _loaded)
+      ..add(GradesActionsNames.setSemester, _setSemester)
+      ..add(LoginActionsNames.automaticallyReloggedIn, _afterAutoRelogin)
+      ..add(GradesActionsNames.detailsLoaded, _detailsLoaded)
+      ..add(AppActionsNames.setConfig, _setConfig);
 
-void _loading(
-    GradesState state, Action<Semester> action, GradesStateBuilder builder) {
+void _loading(GradesState state, Action<Semester> action, GradesStateBuilder builder) {
   builder.loading = true;
 }
 
-void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
-    GradesStateBuilder builder) {
-  _updateSubjects(state.subjects, builder.subjects, action.payload.data,
-      action.payload.semester);
+void _loaded(GradesState state, Action<SubjectsLoadedPayload> action, GradesStateBuilder builder) {
+  _updateSubjects(state.subjects, builder.subjects, action.payload.data, action.payload.semester);
   builder
     ..serverSemester.replace(action.payload.semester)
     ..loading = false;
 }
 
-_updateSubjects(BuiltList<Subject> subjects,
-    ListBuilder<Subject> subjectsBuilder, dynamic data, Semester semester) {
+_updateSubjects(BuiltList<Subject> subjects, ListBuilder<Subject> subjectsBuilder, dynamic data,
+    Semester semester) {
   for (final subject in List.of(data["subjects"])) {
     final newId = subject["subject"]["id"];
-    final oldSubject =
-        subjects.singleWhere((s) => s.id == newId, orElse: () => null);
+    final oldSubject = subjects.singleWhere((s) => s.id == newId, orElse: () => null);
     if (oldSubject != null) {
       // just update the grades
       subjectsBuilder[subjects.indexOf(oldSubject)] = oldSubject.rebuild(
@@ -74,8 +70,8 @@ _updateSubjects(BuiltList<Subject> subjects,
   }
 }
 
-void _detailsLoaded(GradesState state,
-    Action<SubjectDetailLoadedPayload> action, GradesStateBuilder builder) {
+void _detailsLoaded(
+    GradesState state, Action<SubjectDetailLoadedPayload> action, GradesStateBuilder builder) {
   final data = action.payload.data as Map;
   builder.subjects.map(
     (s) => s.id == action.payload.subject.id
@@ -157,18 +153,15 @@ Competence _parseCompetence(dynamic data) {
     ..grade = data["grade"]);
 }
 
-void _setSemester(
-    GradesState state, Action<Semester> action, GradesStateBuilder builder) {
+void _setSemester(GradesState state, Action<Semester> action, GradesStateBuilder builder) {
   builder.semester.replace(action.payload);
 }
 
-void _afterAutoRelogin(
-    GradesState state, Action<void> action, GradesStateBuilder builder) {
+void _afterAutoRelogin(GradesState state, Action<void> action, GradesStateBuilder builder) {
   builder.serverSemester = null;
 }
 
-void _setConfig(
-    GradesState state, Action<Config> action, GradesStateBuilder builder) {
+void _setConfig(GradesState state, Action<Config> action, GradesStateBuilder builder) {
   if (action.payload.currentSemesterMaybe == 1) {
     builder.semester.replace(Semester.first);
   }

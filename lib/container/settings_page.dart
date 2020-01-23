@@ -16,9 +16,7 @@ class SettingsPageContainer extends StatelessWidget {
           vm: vm,
           onSetDarkMode: (dm) {
             DynamicTheme.of(context).setBrightness(
-              Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light
-                  : Brightness.dark,
+              Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark,
             );
           },
           onSetNoPassSaving: actions.settingsActions.saveNoPass,
@@ -26,13 +24,10 @@ class SettingsPageContainer extends StatelessWidget {
           onSetAskWhenDelete: actions.settingsActions.askWhenDeleteReminder,
           onSetDeleteDataOnLogout: actions.settingsActions.deleteDataOnLogout,
           onSetOfflineEnabled: actions.settingsActions.offlineEnabled,
-          onSetSubjectNicks: (map) =>
-              actions.settingsActions.subjectNicks(BuiltMap(map)),
-          onSetShowCalendarEditNicksBar:
-              actions.settingsActions.showCalendarSubjectNicksBar,
+          onSetSubjectNicks: (map) => actions.settingsActions.subjectNicks(BuiltMap(map)),
+          onSetShowCalendarEditNicksBar: actions.settingsActions.showCalendarSubjectNicksBar,
           onSetShowGradesDiagram: actions.settingsActions.showGradesDiagram,
-          onSetShowAllSubjectsAverage:
-              actions.settingsActions.showAllSubjectsAverage,
+          onSetShowAllSubjectsAverage: actions.settingsActions.showAllSubjectsAverage,
           onSetDashboardMarkNewOrChangedEntries:
               actions.settingsActions.markNotSeenDashboardEntries,
         );
@@ -70,8 +65,7 @@ class SettingsViewModel {
         showCalendarEditNicksBar = state.settingsState.showCalendarNicksBar,
         showGradesDiagram = state.settingsState.showGradesDiagram,
         showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
-        dashboardMarkNewOrChangedEntries =
-            state.settingsState.dashboardMarkNewOrChangedEntries,
+        dashboardMarkNewOrChangedEntries = state.settingsState.dashboardMarkNewOrChangedEntries,
         allSubjects = extractAllSubjects(state);
 
   static List<String> extractAllSubjects(AppState appState) {

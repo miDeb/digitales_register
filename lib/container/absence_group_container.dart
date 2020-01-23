@@ -62,8 +62,8 @@ class AbsenceGroupContainer extends StatelessWidget {
             justifiedString = "Noch nicht entschuldigt";
             break;
         }
-        return AbsencesViewModel(fromTo, duration, justifiedString,
-            absenceGroup.reason, absenceGroup.justified);
+        return AbsencesViewModel(
+            fromTo, duration, justifiedString, absenceGroup.reason, absenceGroup.justified);
       },
     );
   }
@@ -76,6 +76,5 @@ class AbsencesViewModel {
   final String reason;
   final AbsenceJustified justified;
 
-  AbsencesViewModel(this.fromTo, this.duration, this.justifiedString,
-      this.reason, this.justified);
+  AbsencesViewModel(this.fromTo, this.duration, this.justifiedString, this.reason, this.justified);
 }

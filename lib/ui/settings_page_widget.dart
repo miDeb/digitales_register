@@ -129,12 +129,11 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           if (!Platform.isLinux)
             SwitchListTile(
               title: Text("Dark Mode"),
-              onChanged:
-                  MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? null
-                      : (bool value) {
-                          widget.onSetDarkMode(value);
-                        },
+              onChanged: MediaQuery.of(context).platformBrightness == Brightness.dark
+                  ? null
+                  : (bool value) {
+                      widget.onSetDarkMode(value);
+                    },
               value: DynamicTheme.of(context).brightness == Brightness.dark,
             ),
           Divider(),
@@ -220,8 +219,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                         );
                         if (newValue != null) {
                           widget.onSetSubjectNicks(
-                            Map.of(widget.vm.subjectNicks)
-                              ..[newValue.key] = newValue.value,
+                            Map.of(widget.vm.subjectNicks)..[newValue.key] = newValue.value,
                           );
                         }
                       },
@@ -250,8 +248,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                                     ),
                                     RaisedButton(
                                       child: Text("Ok"),
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
+                                      onPressed: () => Navigator.of(context).pop(true),
                                     ),
                                   ],
                                 );
@@ -274,8 +271,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                           if (newValue != null) {
                             widget.onSetSubjectNicks(
                               Map.fromEntries(
-                                List.of(widget.vm.subjectNicks.entries)
-                                  ..[i - 1] = newValue,
+                                List.of(widget.vm.subjectNicks.entries)..[i - 1] = newValue,
                               ),
                             );
                           }
@@ -289,8 +285,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ),
           SwitchListTile(
             title: Text("Hinweis zum Bearbeiten von Kürzeln"),
-            subtitle: Text(
-                "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
+            subtitle: Text("Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
             onChanged: (bool value) {
               widget.onSetShowCalendarEditNicksBar(value);
             },
@@ -331,12 +326,9 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 width: 100,
               ),
               applicationName: "Digitales Register (Client)",
-              applicationVersion: info.hasData
-                  ? (info.data as PackageInfo).version
-                  : "Unbekannte Version",
-              aboutBoxChildren: <Widget>[
-                Text("Alternativer Client für das Digitale Register.")
-              ],
+              applicationVersion:
+                  info.hasData ? (info.data as PackageInfo).version : "Unbekannte Version",
+              aboutBoxChildren: <Widget>[Text("Alternativer Client für das Digitale Register.")],
             ),
           ),
         ],
@@ -344,8 +336,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
     );
   }
 
-  Future<MapEntry<String, String>> showEditSubjectNick(BuildContext context,
-      String key, String value, List<String> suggestions) async {
+  Future<MapEntry<String, String>> showEditSubjectNick(
+      BuildContext context, String key, String value, List<String> suggestions) async {
     return await showDialog(
       context: context,
       builder: (context) {
@@ -377,16 +369,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                       children: <Widget>[
                         AutoCompleteTextField<String>(
                           key: subjectKey,
-                          itemBuilder:
-                              (BuildContext context, String suggestion) {
+                          itemBuilder: (BuildContext context, String suggestion) {
                             return ListTile(title: Text(suggestion));
                           },
                           textChanged: (_) => setState(() {}),
                           clearOnSubmit: false,
                           itemFilter: (String suggestion, String query) {
-                            return suggestion
-                                .toLowerCase()
-                                .contains(query.toLowerCase());
+                            return suggestion.toLowerCase().contains(query.toLowerCase());
                           },
                           itemSorter: (String a, String b) {
                             return a.compareTo(b);
@@ -414,17 +403,16 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 ),
                 RaisedButton(
                   child: Text("Fertig"),
-                  onPressed:
-                      subjectController.text != "" && nickController.text != ""
-                          ? () {
-                              Navigator.of(context).pop(
-                                MapEntry(
-                                  subjectController.text,
-                                  nickController.text,
-                                ),
-                              );
-                            }
-                          : null,
+                  onPressed: subjectController.text != "" && nickController.text != ""
+                      ? () {
+                          Navigator.of(context).pop(
+                            MapEntry(
+                              subjectController.text,
+                              nickController.text,
+                            ),
+                          );
+                        }
+                      : null,
                 ),
               ],
             );

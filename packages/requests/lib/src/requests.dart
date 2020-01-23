@@ -21,15 +21,8 @@ class Requests {
   static const String HTTP_METHOD_HEAD = "head";
   static const int DEFAULT_TIMEOUT_SECONDS = 10;
 
-  static Set _cookiesKeysToIgnore = Set.from([
-    "SameSite",
-    "Path",
-    "Domain",
-    "Max-Age",
-    "Expires",
-    "Secure",
-    "HttpOnly"
-  ]);
+  static Set _cookiesKeysToIgnore =
+      Set.from(["SameSite", "Path", "Domain", "Max-Age", "Expires", "Secure", "HttpOnly"]);
 
   static Map<String, String> _extractResponseCookies(responseHeaders) {
     Map<String, String> cookies = {};
@@ -52,8 +45,7 @@ class Requests {
   static Future<Map> _constructRequestHeaders(
       String hostname, Map<String, String> customHeaders) async {
     var cookies = await getStoredCookies(hostname);
-    String cookie =
-        cookies.keys.map((key) => "$key=${cookies[key]}").join("; ");
+    String cookie = cookies.keys.map((key) => "$key=${cookies[key]}").join("; ");
     Map<String, String> requestHeaders = Map();
     requestHeaders['cookie'] = cookie;
 
@@ -70,14 +62,12 @@ class Requests {
       var cookies = Common.fromJson(cookiesJson);
       return Map<String, String>.from(cookies);
     } catch (e) {
-      log.shout(
-          "problem reading stored cookies. fallback with empty cookies $e");
+      log.shout("problem reading stored cookies. fallback with empty cookies $e");
       return Map<String, String>();
     }
   }
 
-  static Future setStoredCookies(
-      String hostname, Map<String, String> cookies) async {
+  static Future setStoredCookies(String hostname, Map<String, String> cookies) async {
     String hostnameHash = Common.hashStringSHA256(hostname);
     String cookiesJson = Common.toJson(cookies);
     await Common.storageSet('cookies-$hostnameHash', cookiesJson);
@@ -93,8 +83,8 @@ class Requests {
     return uri.host;
   }
 
-  static Future<dynamic> _handleHttpResponse(String url, String hostname,
-      http.Response response, bool json, bool persistCookies) async {
+  static Future<dynamic> _handleHttpResponse(
+      String url, String hostname, http.Response response, bool json, bool persistCookies) async {
     int statusCode = response.statusCode;
     dynamic responseBody = "";
     dynamic parseException;
@@ -107,11 +97,7 @@ class Requests {
 
     bool hasError = (400 <= statusCode) && (statusCode < 600);
     if (hasError) {
-      var errorEvent = {
-        "statusCode": statusCode,
-        "url": url,
-        "response": responseBody
-      };
+      var errorEvent = {"statusCode": statusCode, "url": url, "response": responseBody};
       onError.publish(errorEvent);
       throw Exception("Invalid HTTP status code $statusCode for url $url");
     }
@@ -137,10 +123,7 @@ class Requests {
   }
 
   static Future<dynamic> head(String url,
-      {headers,
-      timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
-      json = false,
-      persistCookies = true}) {
+      {headers, timeoutSeconds = DEFAULT_TIMEOUT_SECONDS, json = false, persistCookies = true}) {
     return _httpRequest(HTTP_METHOD_HEAD, url,
         headers: headers,
         timeoutSeconds: timeoutSeconds,
@@ -149,10 +132,7 @@ class Requests {
   }
 
   static Future<dynamic> get(String url,
-      {headers,
-      timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
-      json = false,
-      persistCookies = true}) {
+      {headers, timeoutSeconds = DEFAULT_TIMEOUT_SECONDS, json = false, persistCookies = true}) {
     return _httpRequest(HTTP_METHOD_GET, url,
         headers: headers,
         timeoutSeconds: timeoutSeconds,
@@ -161,10 +141,7 @@ class Requests {
   }
 
   static Future<dynamic> patch(String url,
-      {headers,
-      timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
-      json = false,
-      persistCookies = true}) {
+      {headers, timeoutSeconds = DEFAULT_TIMEOUT_SECONDS, json = false, persistCookies = true}) {
     return _httpRequest(HTTP_METHOD_PATCH, url,
         headers: headers,
         timeoutSeconds: timeoutSeconds,
@@ -173,10 +150,7 @@ class Requests {
   }
 
   static Future<dynamic> delete(String url,
-      {headers,
-      timeoutSeconds = DEFAULT_TIMEOUT_SECONDS,
-      json = false,
-      persistCookies = true}) {
+      {headers, timeoutSeconds = DEFAULT_TIMEOUT_SECONDS, json = false, persistCookies = true}) {
     return _httpRequest(HTTP_METHOD_DELETE, url,
         headers: headers,
         timeoutSeconds: timeoutSeconds,
@@ -234,8 +208,7 @@ class Requests {
         contentTypeHeader = "application/json";
       }
 
-      if (contentTypeHeader != null &&
-          !Common.hasKeyIgnoreCase(headers, "content-type")) {
+      if (contentTypeHeader != null && !Common.hasKeyIgnoreCase(headers, "content-type")) {
         headers["content-type"] = contentTypeHeader;
       }
     }
@@ -266,7 +239,6 @@ class Requests {
     }
 
     var response = await future.timeout(Duration(seconds: timeoutSeconds));
-    return await _handleHttpResponse(
-        url, hostname, response, json, persistCookies);
+    return await _handleHttpResponse(url, hostname, response, json, persistCookies);
   }
 }

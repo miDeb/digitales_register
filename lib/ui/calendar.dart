@@ -40,11 +40,9 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   final Duration _animatePageDuration = const Duration(milliseconds: 200);
 
   static final Animatable<double> _chevronOpacityTween =
-      Tween<double>(begin: 1.0, end: 0.0)
-          .chain(CurveTween(curve: Curves.easeInOut));
+      Tween<double>(begin: 1.0, end: 0.0).chain(CurveTween(curve: Curves.easeInOut));
   static final Animatable<double> _dateRangeOpacityTween =
-      Tween<double>(begin: 1.0, end: .25)
-          .chain(CurveTween(curve: Curves.easeInOut));
+      Tween<double>(begin: 1.0, end: .25).chain(CurveTween(curve: Curves.easeInOut));
 
   @override
   void initState() {
@@ -58,15 +56,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
       duration: _animatePageDuration,
       vsync: this,
     );
-    _chevronOpacityAnimation =
-        _chevronOpacityController.drive(_chevronOpacityTween);
+    _chevronOpacityAnimation = _chevronOpacityController.drive(_chevronOpacityTween);
 
     _dateRangeOpacityController = AnimationController(
       duration: _animatePageDuration,
       vsync: this,
     );
-    _dateRangeOpacityAnimation =
-        _dateRangeOpacityController.drive(_dateRangeOpacityTween);
+    _dateRangeOpacityAnimation = _dateRangeOpacityController.drive(_dateRangeOpacityTween);
 
     widget.dayCallback(widget.vm.currentMonday);
 
@@ -158,8 +154,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                         lastDate: DateTime(2050),
                         initialDate: widget.vm.currentMonday,
                         selectableDayPredicate: (final day) {
-                          return day.weekday != DateTime.sunday &&
-                              day.weekday != DateTime.saturday;
+                          return day.weekday != DateTime.sunday && day.weekday != DateTime.saturday;
                         });
                     if (result == null) return;
                     final date = toMonday(result);
@@ -179,8 +174,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                       child: Icon(Icons.chevron_right),
                       onPressed: () {
                         _controller.nextPage(
-                            curve: _animatePageCurve,
-                            duration: _animatePageDuration);
+                            curve: _animatePageCurve, duration: _animatePageDuration);
                       },
                     ),
                   ),
@@ -230,15 +224,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
 int pageOf(DateTime monday) =>
     monday.difference(DateTime.utc(2010, 1, 3, 0, 0, 0, 0, 1)).inDays ~/ 7;
 
-DateTime mondayOf(int page) =>
-    DateTime.utc(2010, 1, 4).add(Duration(days: page * 7));
+DateTime mondayOf(int page) => DateTime.utc(2010, 1, 4).add(Duration(days: page * 7));
 
 class EditNickBar extends StatelessWidget {
   final bool show;
   final VoidCallback onShowEditNicks, onClose;
 
-  const EditNickBar({Key key, this.show, this.onShowEditNicks, this.onClose})
-      : super(key: key);
+  const EditNickBar({Key key, this.show, this.onShowEditNicks, this.onClose}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
@@ -288,8 +280,7 @@ class EditNickBar extends StatelessWidget {
       secondChild: Container(
         height: 8,
       ),
-      crossFadeState:
-          show ? CrossFadeState.showFirst : CrossFadeState.showSecond,
+      crossFadeState: show ? CrossFadeState.showFirst : CrossFadeState.showSecond,
     );
   }
 }

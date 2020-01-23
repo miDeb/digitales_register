@@ -31,9 +31,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
   Future<Null> _readAll() async {
     final all = await _storage.readAll();
     setState(() {
-      return _items = all.keys
-          .map((key) => new _SecItem(key, all[key]))
-          .toList(growable: false);
+      return _items = all.keys.map((key) => new _SecItem(key, all[key])).toList(growable: false);
     });
   }
 
@@ -64,8 +62,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
                       break;
                   }
                 },
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<_Actions>>[
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<_Actions>>[
                       new PopupMenuItem(
                         value: _Actions.deleteAll,
                         child: new Text('Delete all'),
@@ -77,10 +74,8 @@ class _ItemsWidgetState extends State<ItemsWidget> {
           itemCount: _items.length,
           itemBuilder: (BuildContext context, int index) => new ListTile(
             trailing: new PopupMenuButton(
-                onSelected: (_ItemActions action) =>
-                    _performAction(action, _items[index]),
-                itemBuilder: (BuildContext context) =>
-                    <PopupMenuEntry<_ItemActions>>[
+                onSelected: (_ItemActions action) => _performAction(action, _items[index]),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<_ItemActions>>[
                       new PopupMenuItem(
                         value: _ItemActions.delete,
                         child: new Text('Delete'),
@@ -105,8 +100,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
         break;
       case _ItemActions.edit:
         final result = await showDialog<String>(
-            context: context,
-            builder: (context) => new _EditItemWidget(item.value));
+            context: context, builder: (context) => new _EditItemWidget(item.value));
         if (result != null) {
           _storage.write(key: item.key, value: result);
           _readAll();
@@ -126,8 +120,7 @@ class _ItemsWidgetState extends State<ItemsWidget> {
 }
 
 class _EditItemWidget extends StatelessWidget {
-  _EditItemWidget(String text)
-      : _controller = new TextEditingController(text: text);
+  _EditItemWidget(String text) : _controller = new TextEditingController(text: text);
 
   final TextEditingController _controller;
 
@@ -140,12 +133,9 @@ class _EditItemWidget extends StatelessWidget {
         autofocus: true,
       ),
       actions: <Widget>[
+        new FlatButton(onPressed: () => Navigator.of(context).pop(), child: new Text('Cancel')),
         new FlatButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: new Text('Cancel')),
-        new FlatButton(
-            onPressed: () => Navigator.of(context).pop(_controller.text),
-            child: new Text('Save')),
+            onPressed: () => Navigator.of(context).pop(_controller.text), child: new Text('Save')),
       ],
     );
   }

@@ -104,8 +104,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 nonCustomServer = value;
                                 // workaround: selection was not set anymore
                                 if (value == null) {
-                                  _urlController.selection =
-                                      TextSelection.fromPosition(
+                                  _urlController.selection = TextSelection.fromPosition(
                                     TextPosition(offset: 8),
                                   );
                                 }
@@ -120,8 +119,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             children: [
                               if (nonCustomServer == null)
                                 TextField(
-                                  decoration:
-                                      InputDecoration(labelText: 'Adresse'),
+                                  decoration: InputDecoration(labelText: 'Adresse'),
                                   controller: _urlController,
                                   enabled: !widget.vm.loading,
                                   autofocus: true,
@@ -129,14 +127,12 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ),
                               Divider(),
                               TextField(
-                                decoration:
-                                    InputDecoration(labelText: 'Username'),
+                                decoration: InputDecoration(labelText: 'Username'),
                                 controller: _usernameController,
                                 enabled: !widget.vm.loading,
                               ),
                               TextField(
-                                decoration:
-                                    InputDecoration(labelText: 'Passwort'),
+                                decoration: InputDecoration(labelText: 'Passwort'),
                                 controller: _passwordController,
                                 obscureText: true,
                                 enabled: !widget.vm.loading,
@@ -149,8 +145,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                         widget.onLogin(
                                           _usernameController.value.text,
                                           _passwordController.value.text,
-                                          nonCustomServer?.item2 ??
-                                              _urlController.text,
+                                          nonCustomServer?.item2 ?? _urlController.text,
                                         );
                                       },
                                 child: Text('Login'),
@@ -174,10 +169,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           child: widget.vm.error?.isNotEmpty == true
                               ? Text(
                                   widget.vm.error,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .body1
-                                      .copyWith(color: Colors.red),
+                                  style:
+                                      Theme.of(context).textTheme.body1.copyWith(color: Colors.red),
                                 )
                               : SizedBox(),
                         ),

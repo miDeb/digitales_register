@@ -18,11 +18,9 @@ abstract class GradesActions extends ReduxActions {
 }
 
 abstract class LoadSubjectDetailsPayload
-    implements
-        Built<LoadSubjectDetailsPayload, LoadSubjectDetailsPayloadBuilder> {
+    implements Built<LoadSubjectDetailsPayload, LoadSubjectDetailsPayloadBuilder> {
   LoadSubjectDetailsPayload._();
-  factory LoadSubjectDetailsPayload(
-          [void Function(LoadSubjectDetailsPayloadBuilder) updates]) =
+  factory LoadSubjectDetailsPayload([void Function(LoadSubjectDetailsPayloadBuilder) updates]) =
       _$LoadSubjectDetailsPayload;
 
   Semester get semester;
@@ -32,8 +30,7 @@ abstract class LoadSubjectDetailsPayload
 abstract class SubjectsLoadedPayload
     implements Built<SubjectsLoadedPayload, SubjectsLoadedPayloadBuilder> {
   SubjectsLoadedPayload._();
-  factory SubjectsLoadedPayload(
-          [void Function(SubjectsLoadedPayloadBuilder) updates]) =
+  factory SubjectsLoadedPayload([void Function(SubjectsLoadedPayloadBuilder) updates]) =
       _$SubjectsLoadedPayload;
 
   Semester get semester;
@@ -41,11 +38,9 @@ abstract class SubjectsLoadedPayload
 }
 
 abstract class SubjectDetailLoadedPayload
-    implements
-        Built<SubjectDetailLoadedPayload, SubjectDetailLoadedPayloadBuilder> {
+    implements Built<SubjectDetailLoadedPayload, SubjectDetailLoadedPayloadBuilder> {
   SubjectDetailLoadedPayload._();
-  factory SubjectDetailLoadedPayload(
-          [void Function(SubjectDetailLoadedPayloadBuilder) updates]) =
+  factory SubjectDetailLoadedPayload([void Function(SubjectDetailLoadedPayloadBuilder) updates]) =
       _$SubjectDetailLoadedPayload;
 
   Semester get semester;

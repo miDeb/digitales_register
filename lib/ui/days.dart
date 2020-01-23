@@ -144,8 +144,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
     final ctx = controller.tagMap[item]?.context;
     if (ctx != null) {
       final renderBox = ctx.findRenderObject() as RenderBox;
-      final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderBox);
+      final RenderAbstractViewport viewport = RenderAbstractViewport.of(renderBox);
       var offsetToReveal = viewport.getOffsetToReveal(renderBox, 0.5).offset;
       if (offsetToReveal < 0) offsetToReveal = 0;
       final currentOffset = controller.offset;
@@ -310,9 +309,8 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               },
               child: Icon(
                 Icons.arrow_drop_up,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black,
+                color:
+                    Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
               ),
               mini: true,
             ),
@@ -452,8 +450,7 @@ class DayWidget extends StatelessWidget {
                                   onChanged: (msg) {
                                     setState(() => message = msg);
                                   },
-                                  decoration: InputDecoration(
-                                      hintText: 'zB. Hausaufgabe'),
+                                  decoration: InputDecoration(hintText: 'zB. Hausaufgabe'),
                                 ),
                                 actions: <Widget>[
                                   FlatButton(
@@ -562,8 +559,7 @@ class ItemWidget extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if ((!isHistory &&
-                                    (item.isNew || item.isChanged)) ||
+                            if ((!isHistory && (item.isNew || item.isChanged)) ||
                                 (isHistory && isCurrent))
                               Positioned(
                                 right: 0,
@@ -575,9 +571,7 @@ class ItemWidget extends StatelessWidget {
                                         ? "aktuell"
                                         : item.isNew
                                             ? "neu"
-                                            : item.deleted
-                                                ? "gelöscht"
-                                                : "geändert",
+                                            : item.deleted ? "gelöscht" : "geändert",
                                   ),
                                 ),
                               )
@@ -586,9 +580,7 @@ class ItemWidget extends StatelessWidget {
                       ListTile(
                         contentPadding: EdgeInsets.only(),
                         title: Text(item.title),
-                        subtitle: isNullOrEmpty(item.subtitle)
-                            ? null
-                            : Text(item.subtitle),
+                        subtitle: isNullOrEmpty(item.subtitle) ? null : Text(item.subtitle),
                         leading: !isHistory && !isDeletedView && item.deleteable
                             ? IconButton(
                                 icon: Icon(Icons.close),
@@ -602,35 +594,26 @@ class ItemWidget extends StatelessWidget {
                                               builder: (context) {
                                                 return AlertDialog(
                                                   content: StatefulBuilder(
-                                                    builder:
-                                                        (context, setState) =>
-                                                            SwitchListTile(
+                                                    builder: (context, setState) => SwitchListTile(
                                                       title: Text("Nie fragen"),
                                                       onChanged: (bool value) {
-                                                        setState(
-                                                            () => ask = !value);
+                                                        setState(() => ask = !value);
                                                       },
                                                       value: !ask,
                                                     ),
                                                   ),
-                                                  title: Text(
-                                                      "Erinnerung löschen?"),
+                                                  title: Text("Erinnerung löschen?"),
                                                   actions: <Widget>[
                                                     FlatButton(
                                                       child: Text("Abbrechen"),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
+                                                      onPressed: () => Navigator.pop(context),
                                                     ),
                                                     RaisedButton(
-                                                      textTheme: ButtonTextTheme
-                                                          .primary,
+                                                      textTheme: ButtonTextTheme.primary,
                                                       child: Text(
                                                         "Löschen",
                                                       ),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context, true),
+                                                      onPressed: () => Navigator.pop(context, true),
                                                     )
                                                   ],
                                                 );
@@ -675,8 +658,7 @@ class ItemWidget extends StatelessWidget {
                             ),
                       onPressed: () {
                         // if we are in the deleted view, show the history for the previous item
-                        final historyItem =
-                            isDeletedView ? item.previousVersion : item;
+                        final historyItem = isDeletedView ? item.previousVersion : item;
                         showDialog(
                           context: context,
                           builder: (_context) {
@@ -775,14 +757,12 @@ class ItemWidget extends StatelessWidget {
 String formatChanged(Homework hw) {
   String date;
   if (hw.lastNotSeen == null) {
-    date =
-        "Vor ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)} ";
+    date = "Vor ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)} ";
   } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen)) {
     date = "Am ${DateFormat("EEEE, dd.MM,", "de").format(hw.firstSeen)}"
         " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
   } else {
-    date =
-        "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen)} "
+    date = "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen)} "
         "und ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)}";
   }
   if (hw.deleted) {

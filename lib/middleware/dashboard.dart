@@ -1,7 +1,6 @@
 part of 'middleware.dart';
 
-final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
-    AppActions>()
+final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
   ..add(DashboardActionsNames.load, _loadDays)
   ..add(DashboardActionsNames.switchFuture, _switchFuture)
   ..add(DashboardActionsNames.addReminder, _addReminder)
@@ -9,13 +8,13 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.toggleDone, _toggleDone)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNontSeenEntries);
 
-void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<bool> action) async {
   if (api.state.noInternet) return;
 
   next(action);
-  final data = await _wrapper
-      .post("/api/student/dashboard/dashboard", {"viewFuture": action.payload});
+  final data =
+      await _wrapper.post("/api/student/dashboard/dashboard", {"viewFuture": action.payload});
 
   if (data is! List) {
     api.actions.refreshNoInternet();
@@ -27,20 +26,19 @@ void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       (b) => b
         ..data = data
         ..future = action.payload
-        ..markNewOrChangedEntries =
-            api.state.settingsState.dashboardMarkNewOrChangedEntries,
+        ..markNewOrChangedEntries = api.state.settingsState.dashboardMarkNewOrChangedEntries,
     ),
   );
 }
 
-void _switchFuture(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+void _switchFuture(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
   next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
 }
 
-void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<AddReminderPayload> action) async {
+void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<AddReminderPayload> action) async {
   next(action);
   final result = await _wrapper.post("/api/student/dashboard/save_reminder", {
     "date": DateFormat("yyyy-MM-dd").format(action.payload.date),
@@ -60,8 +58,8 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Homework> action) async {
+void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<Homework> action) async {
   final result = await _wrapper.post("/api/student/dashboard/delete_reminder", {
     "id": action.payload.id,
   });
@@ -74,8 +72,8 @@ void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<ToggleDonePayload> action) async {
+void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<ToggleDonePayload> action) async {
   next(action);
   final result = await _wrapper.post("/api/student/dashboard/toggle_reminder", {
     "id": action.payload.hw.id,
@@ -102,10 +100,8 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _markNontSeenEntries(
-    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next,
-    Action<bool> action) {
+void _markNontSeenEntries(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<bool> action) {
   if (!action.payload) {
     api.actions.dashboardActions.markAllAsSeen();
   }

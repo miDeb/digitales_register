@@ -5,17 +5,16 @@ import '../actions/notifications_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final notificationsReducerBuilder = NestedReducerBuilder<AppState,
-    AppStateBuilder, NotificationState, NotificationStateBuilder>(
+final notificationsReducerBuilder =
+    NestedReducerBuilder<AppState, AppStateBuilder, NotificationState, NotificationStateBuilder>(
   (s) => s.notificationState,
   (b) => b.notificationState,
 )
-  ..add(NotificationsActionsNames.loaded, _loaded)
-  ..add(NotificationsActionsNames.delete, _delete)
-  ..add(NotificationsActionsNames.deleteAll, _deleteAll);
+      ..add(NotificationsActionsNames.loaded, _loaded)
+      ..add(NotificationsActionsNames.delete, _delete)
+      ..add(NotificationsActionsNames.deleteAll, _deleteAll);
 
-void _loaded(NotificationState state, Action<Object> action,
-    NotificationStateBuilder builder) {
+void _loaded(NotificationState state, Action<Object> action, NotificationStateBuilder builder) {
   builder.notifications = _parseNotifications(action.payload);
 }
 
@@ -35,12 +34,11 @@ ListBuilder<Notification> _parseNotifications(data) {
   );
 }
 
-void _delete(NotificationState state, Action<Notification> action,
-    NotificationStateBuilder builder) {
+void _delete(
+    NotificationState state, Action<Notification> action, NotificationStateBuilder builder) {
   builder.notifications.remove(action.payload);
 }
 
-void _deleteAll(NotificationState state, Action<void> action,
-    NotificationStateBuilder builder) {
+void _deleteAll(NotificationState state, Action<void> action, NotificationStateBuilder builder) {
   builder.notifications.clear();
 }

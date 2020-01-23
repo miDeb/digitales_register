@@ -62,8 +62,7 @@ final middleware = [
       .build(),
 ];
 
-NextActionHandler _errorMiddleware(
-        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+NextActionHandler _errorMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
           void handleError(e) {
             print(e);
@@ -80,8 +79,8 @@ NextActionHandler _errorMiddleware(
                         children: <Widget>[
                           RaisedButton(
                             child: Text("In die Zwischenablage kopieren"),
-                            onPressed: () => Clipboard.setData(
-                                new ClipboardData(text: e.stackTrace)),
+                            onPressed: () =>
+                                Clipboard.setData(new ClipboardData(text: e.stackTrace)),
                           ),
                           Text(
                               "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
@@ -105,16 +104,14 @@ NextActionHandler _errorMiddleware(
           }
         };
 
-void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
   _wrapper.interaction();
   // do not call next: this action is only to update the logout time
 }
 
-void _refreshNoInternet(
-    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next,
-    Action<bool> action) async {
+void _refreshNoInternet(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<bool> action) async {
   next(action);
   final noInternet = await _wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
@@ -124,8 +121,8 @@ void _refreshNoInternet(
   }
 }
 
-void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) async {
   next(action);
   if (api.state.currentRouteIsLogin) {
     navigatorKey.currentState.pop();
@@ -134,8 +131,7 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
-  final url = login["url"] ??
-      "https://vinzentinum.digitalesregister.it"; // be backwards compatible
+  final url = login["url"] ?? "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
   if (user != null && pass != null) {
     api.actions.loginActions.login(
@@ -154,8 +150,8 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.refreshNoInternet(true);
 }
 
-void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
   next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
@@ -165,20 +161,17 @@ var _saveUnderway = false;
 
 SettingsState _lastSettingsState;
 
-void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoggedInPayload> action) async {
-  if (!api.state.settingsState.noPasswordSaving &&
-      !action.payload.fromStorage) {
+void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<LoggedInPayload> action) async {
+  if (!api.state.settingsState.noPasswordSaving && !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
 
   if (!api.state.loginState.loggedIn) {
     final user = action.payload.username.hashCode;
-    final file = File(
-        "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
+    final file = File("${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     if (await file.exists()) {
-      AppState serializedState =
-          serializers.deserialize(json.decode(await file.readAsString()));
+      AppState serializedState = serializers.deserialize(json.decode(await file.readAsString()));
       api.actions.mountAppState(
         api.state.rebuild((b) => b
           ..dashboardState = (serializedState.dashboardState.toBuilder()
@@ -197,8 +190,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       // next not at the beginning: bug fix (serialization)
       next(action);
 
-      api.actions.settingsActions
-          .saveNoPass(serializedState.settingsState.noPasswordSaving);
+      api.actions.settingsActions.saveNoPass(serializedState.settingsState.noPasswordSaving);
     } else {
       next(action);
     }
@@ -216,8 +208,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 var _lastSave = "";
 
-NextActionHandler _saveStateMiddleware(
-        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
           next(action);
           if (!_saveUnderway &&
@@ -246,8 +237,7 @@ NextActionHandler _saveStateMiddleware(
                       user.toString(),
                       json.encode(
                         {
-                          "settings":
-                              serializers.serialize(api.state.settingsState),
+                          "settings": serializers.serialize(api.state.settingsState),
                         },
                       ),
                     );
@@ -259,8 +249,7 @@ NextActionHandler _saveStateMiddleware(
         };
 
 Future<File> _storageFile(String key) async {
-  return File(
-      "${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
+  return File("${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
 }
 
 void _writeToStorage(String key, String txt) async {
