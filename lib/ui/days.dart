@@ -650,7 +650,10 @@ class ItemWidget extends StatelessWidget {
                   children: <Widget>[
                     if (!isHistory && item.label != null)
                       IconButton(
-                        icon: item.previousVersion != null
+                        icon: (isDeletedView
+                                    ? item.previousVersion.previousVersion
+                                    : item.previousVersion) !=
+                                null
                             ? Badge(
                                 child: Icon(
                                   Icons.info_outline,
@@ -666,21 +669,24 @@ class ItemWidget extends StatelessWidget {
                                 Icons.info_outline,
                               ),
                         onPressed: () {
+                          // if we are in the deleted view, show the history for the previous item
+                          final historyItem =
+                              isDeletedView ? item.previousVersion : item;
                           showDialog(
                             context: context,
                             builder: (_context) {
                               return ListViewCapableAlertDialog(
-                                title: Text(item.title),
+                                title: Text(historyItem.title),
                                 content: ListView(
                                   shrinkWrap: true,
                                   children: <Widget>[
-                                    Text(formatChanged(item)),
-                                    if (item.previousVersion != null)
+                                    Text(formatChanged(historyItem)),
+                                    if (historyItem.previousVersion != null)
                                       ExpansionTile(
                                         title: Text("Versionen"),
                                         children: <Widget>[
                                           ItemWidget(
-                                            item: item,
+                                            item: historyItem,
                                             isHistory: true,
                                           ),
                                         ],
@@ -728,7 +734,7 @@ class ItemWidget extends StatelessWidget {
                 ),
               ],
             ),
-            if (isHistory) ...[
+            if (isHistory || isDeletedView) ...[
               Divider(),
               Text(
                 formatChanged(item),
