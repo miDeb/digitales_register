@@ -728,9 +728,9 @@ class ItemWidget extends StatelessWidget {
             ],
           ),
           if (isHistory || isDeletedView) ...[
-            Divider(),
+            Divider(height: 0),
             Padding(
-              padding: const EdgeInsets.all(8.0).copyWith(top: 0),
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 formatChanged(item),
                 style: Theme.of(context).textTheme.caption,
