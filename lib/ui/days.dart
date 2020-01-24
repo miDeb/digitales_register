@@ -635,6 +635,7 @@ class ItemWidget extends StatelessWidget {
                 ),
               ),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   if (!isHistory && item.label != null)
                     IconButton(
@@ -696,7 +697,9 @@ class ItemWidget extends StatelessWidget {
                     ),
                   if (item.warning)
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      // make this exactly as big as the (i) icon above, so
+                      // [CrossAxisAlignment.end] will not move this to the end
+                      padding: const EdgeInsets.symmetric(horizontal: 19),
                       child: Text(
                         "!",
                         style: TextStyle(
