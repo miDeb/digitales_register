@@ -93,7 +93,10 @@ void _loaded(
         for (var newHw in newHomework) {
           final deletedHw = day.deletedHomework.firstWhere(
             (d) => d.id == newHw.id,
-            orElse: () => null,
+            orElse: () => day.deletedHomework.firstWhere(
+              (d) => d.isSuccessorOf(newHw),
+              orElse: () => null,
+            ),
           );
           if (deletedHw != null) {
             b.deletedHomework.remove(deletedHw);
