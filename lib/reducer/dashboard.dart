@@ -69,9 +69,7 @@ void _loaded(
               b.deletedHomework.add(
                 oldHw.rebuild((b) => b
                   ..deleted = true
-                  ..isChanged = action.payload.markNewOrChangedEntries &&
-                      // there was already a notification in this case (new grade)
-                      !(oldHw.type == HomeworkType.gradeGroup && newHw.type == HomeworkType.grade)
+                  ..isChanged = action.payload.markNewOrChangedEntries
                   ..previousVersion = oldHw.toBuilder()
                   ..lastNotSeen = day.lastRequested
                   ..firstSeen = now),
@@ -83,7 +81,9 @@ void _loaded(
               ..previousVersion = oldHw.toBuilder()
               ..lastNotSeen = day.lastRequested
               ..firstSeen = now
-              ..isChanged = action.payload.markNewOrChangedEntries));
+              ..isChanged = action.payload.markNewOrChangedEntries &&
+                  // there was already a notification in this case (new grade)
+                  !(oldHw.type == HomeworkType.gradeGroup && newHw.type == HomeworkType.grade)));
           } else {
             b.homework[b.homework.build().indexOf(oldHw)] =
                 oldHw.rebuild((b) => b..checked = newHw.checked);
