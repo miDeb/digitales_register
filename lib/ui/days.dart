@@ -695,17 +695,23 @@ class ItemWidget extends StatelessWidget {
                       },
                     ),
                   if (item.warning)
-                    Text(
-                      "!",
-                      style: TextStyle(
-                        color: Colors.red.shade900,
-                        fontSize: 30,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        "!",
+                        style: TextStyle(
+                          color: Colors.red.shade900,
+                          fontSize: 30,
+                        ),
                       ),
                     )
                   else if (item.type == HomeworkType.grade)
-                    Text(
-                      item.gradeFormatted,
-                      style: TextStyle(color: Colors.green, fontSize: 30),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
+                        item.gradeFormatted,
+                        style: TextStyle(color: Colors.green, fontSize: 30),
+                      ),
                     )
                   else if (!isHistory && !isDeletedView && item.checkable)
                     Checkbox(
@@ -723,9 +729,12 @@ class ItemWidget extends StatelessWidget {
           ),
           if (isHistory || isDeletedView) ...[
             Divider(),
-            Text(
-              formatChanged(item),
-              style: Theme.of(context).textTheme.caption,
+            Padding(
+              padding: const EdgeInsets.all(8.0).copyWith(top: 0),
+              child: Text(
+                formatChanged(item),
+                style: Theme.of(context).textTheme.caption,
+              ),
             ),
           ]
         ],
