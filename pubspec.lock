@@ -209,9 +209,9 @@ packages:
   dynamic_theme:
     dependency: "direct main"
     description:
-      name: dynamic_theme
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "packages/dynamic_theme"
+      relative: true
+    source: path
     version: "1.0.1"
   fixnum:
     dependency: transitive

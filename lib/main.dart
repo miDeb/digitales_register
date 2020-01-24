@@ -41,15 +41,21 @@ void run() {
       child: Listener(
         child: DynamicTheme(
           defaultBrightness: Brightness.light,
-          data: (brightness) {
+          data: (brightness, overridePlatform) {
+            TargetPlatform platform;
+            if (overridePlatform && Platform.isAndroid) {
+              platform = TargetPlatform.iOS;
+            }
             return brightness == Brightness.dark
                 ? ThemeData(
                     primarySwatch: Colors.teal,
                     brightness: brightness,
+                    platform: platform,
                   )
                 : ThemeData(
                     primarySwatch: Colors.blue,
                     brightness: brightness,
+                    platform: platform,
                   );
           },
           themedWidgetBuilder: (context, theme) => MaterialApp(
@@ -106,6 +112,7 @@ void run() {
             darkTheme: ThemeData(
               brightness: Brightness.dark,
               primarySwatch: Colors.teal,
+              platform: theme.platform,
             ),
           ),
         ),
