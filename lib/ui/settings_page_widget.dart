@@ -20,6 +20,7 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
   final OnSettingChanged<bool> onSetDashboardMarkNewOrChangedEntries;
   final OnSettingChanged<bool> onSetDarkMode;
+  final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final SettingsViewModel vm;
 
@@ -37,6 +38,7 @@ class SettingsPageWidget extends StatefulWidget {
     this.onSetDarkMode,
     this.onSetSubjectNicks,
     this.vm,
+    this.onSetPlatformOverride,
   }) : super(key: key);
 
   @override
@@ -135,6 +137,15 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                       widget.onSetDarkMode(value);
                     },
               value: DynamicTheme.of(context).brightness == Brightness.dark,
+            ),
+          if (Platform.isAndroid)
+            SwitchListTile(
+              title: Text("iOS Mode"),
+              subtitle: Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              onChanged: (bool value) {
+                widget.onSetPlatformOverride(value);
+              },
+              value: DynamicTheme.of(context).platformOverride,
             ),
           Divider(),
           AutoScrollTag(
