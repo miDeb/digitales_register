@@ -572,6 +572,7 @@ class ItemWidget extends StatelessWidget {
                                         : item.isNew
                                             ? "neu"
                                             : item.deleted ? "gelöscht" : "geändert",
+                                    style: TextStyle(color: Colors.white),
                                   ),
                                 ),
                               )

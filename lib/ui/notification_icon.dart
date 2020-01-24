@@ -12,7 +12,10 @@ class NotificationIcon extends StatelessWidget {
         ? IconButton(
             icon: Badge(
               child: Icon(Icons.notifications),
-              badgeContent: Text(notifications.toString()),
+              badgeContent: Text(
+                notifications.toString(),
+                style: TextStyle(color: Colors.white),
+              ),
               position: BadgePosition.bottomLeft(),
             ),
             onPressed: onTap,
