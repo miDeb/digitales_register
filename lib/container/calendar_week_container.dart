@@ -23,7 +23,7 @@ class CalendarWeekContainer extends StatelessWidget {
   }
 }
 
-typedef void DayCallback(DateTime day);
+typedef DayCallback = void Function(DateTime day);
 
 class CalendarWeekViewModel {
   final List<CalendarDay> days;

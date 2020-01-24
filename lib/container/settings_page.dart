@@ -39,7 +39,7 @@ class SettingsPageContainer extends StatelessWidget {
   }
 }
 
-typedef void OnSettingChanged<T>(T newValue);
+typedef OnSettingChanged<T> = void Function(T newValue);
 
 class SettingsViewModel {
   final Map<String, String> subjectNicks;

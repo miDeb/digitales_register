@@ -4,7 +4,7 @@ part 'calendar_actions.g.dart';
 
 abstract class CalendarActions extends ReduxActions {
   CalendarActions._();
-  factory CalendarActions() => new _$CalendarActions();
+  factory CalendarActions() => _$CalendarActions();
 
   ActionDispatcher<DateTime> load;
   ActionDispatcher<dynamic> loaded;

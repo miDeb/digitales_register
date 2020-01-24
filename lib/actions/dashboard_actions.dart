@@ -8,7 +8,7 @@ part 'dashboard_actions.g.dart';
 
 abstract class DashboardActions extends ReduxActions {
   DashboardActions._();
-  factory DashboardActions() => new _$DashboardActions();
+  factory DashboardActions() => _$DashboardActions();
 
   ActionDispatcher<DaysLoadedPayload> loaded;
   ActionDispatcher<void> notLoaded;

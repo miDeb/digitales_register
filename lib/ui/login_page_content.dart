@@ -6,8 +6,8 @@ import '../container/login_page.dart';
 import '../util.dart';
 import 'no_internet.dart';
 
-typedef void LoginCallback(String user, String pass, String url);
-typedef void SetSafeModeCallback(bool safeMode);
+typedef LoginCallback = void Function(String user, String pass, String url);
+typedef SetSafeModeCallback = void Function(bool safeMode);
 
 class LoginPageContent extends StatefulWidget {
   final LoginPageViewModel vm;

@@ -7,7 +7,7 @@ class FlutterSecureStorage {
   const FlutterSecureStorage();
 
   static const MethodChannel _channel =
-      const MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
+      MethodChannel('plugins.it_nomads.com/flutter_secure_storage');
 
   /// Encrypts and saves the [key] with the given [value].
   ///

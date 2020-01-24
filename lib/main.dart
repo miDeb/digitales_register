@@ -22,7 +22,7 @@ import 'ui/grades_chart_page.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
-typedef void SingleArgumentVoidCallback<T>(T arg);
+typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
 void main() {
   _setTargetPlatformForDesktop();

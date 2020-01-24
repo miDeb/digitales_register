@@ -4,7 +4,7 @@ part 'routing_actions.g.dart';
 
 abstract class RoutingActions extends ReduxActions {
   RoutingActions._();
-  factory RoutingActions() => new _$RoutingActions();
+  factory RoutingActions() => _$RoutingActions();
 
   ActionDispatcher<void> showLogin;
   ActionDispatcher<void> showAbsences;

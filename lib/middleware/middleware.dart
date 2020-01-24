@@ -79,8 +79,7 @@ NextActionHandler _errorMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppA
                         children: <Widget>[
                           RaisedButton(
                             child: Text("In die Zwischenablage kopieren"),
-                            onPressed: () =>
-                                Clipboard.setData(new ClipboardData(text: e.stackTrace)),
+                            onPressed: () => Clipboard.setData(ClipboardData(text: e.stackTrace)),
                           ),
                           Text(
                               "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),

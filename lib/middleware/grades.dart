@@ -86,8 +86,8 @@ void _doForSemester(
   }
 }
 
-typedef Future<void> SemesterChangeCallback(Semester semester);
-typedef Future<void> AsyncVoidCallback();
+typedef SemesterChangeCallback = Future<void> Function(Semester semester);
+typedef AsyncVoidCallback = Future<void> Function();
 
 class SemesterLock {
   Semester current;

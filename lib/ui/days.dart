@@ -12,11 +12,11 @@ import '../util.dart';
 import 'dialog.dart';
 import 'no_internet.dart';
 
-typedef void AddReminderCallback(Day day, String reminder);
-typedef void RemoveReminderCallback(Homework hw, Day day);
-typedef void ToggleDoneCallback(Homework hw, bool done);
-typedef void MarkAsNotNewOrChangedCallback(Homework hw);
-typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
+typedef AddReminderCallback = void Function(Day day, String reminder);
+typedef RemoveReminderCallback = void Function(Homework hw, Day day);
+typedef ToggleDoneCallback = void Function(Homework hw, bool done);
+typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
+typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
 
 class DaysWidget extends StatelessWidget {
   final DaysViewModel vm;

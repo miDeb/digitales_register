@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../container/homework_filter_container.dart';
 import '../data.dart';
 
-typedef void HomeworkBlacklistCallback(List<HomeworkType> blacklist);
+typedef HomeworkBlacklistCallback = void Function(List<HomeworkType> blacklist);
 
 class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;

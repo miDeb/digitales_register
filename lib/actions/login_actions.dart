@@ -5,7 +5,7 @@ part 'login_actions.g.dart';
 
 abstract class LoginActions extends ReduxActions {
   LoginActions._();
-  factory LoginActions() => new _$LoginActions();
+  factory LoginActions() => _$LoginActions();
 
   ActionDispatcher<LoginAction> login;
   ActionDispatcher<LoggedInPayload> loggedIn;

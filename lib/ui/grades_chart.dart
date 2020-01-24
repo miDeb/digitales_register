@@ -118,7 +118,7 @@ class GradesChart extends StatelessWidget {
               ),
             ),
             defaultInteractions: false,
-            domainAxis: new charts.DateTimeAxisSpec(
+            domainAxis: charts.DateTimeAxisSpec(
               tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
                 createDomainAxisTags(
                   Localizations.localeOf(context),

@@ -15,7 +15,7 @@ part 'app_actions.g.dart';
 
 abstract class AppActions extends ReduxActions {
   AppActions._();
-  factory AppActions() => new _$AppActions();
+  factory AppActions() => _$AppActions();
   ActionDispatcher<Error> error;
   ActionDispatcher<void> saveState;
   ActionDispatcher<void> deleteData;

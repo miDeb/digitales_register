@@ -35,8 +35,8 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-typedef void LoginCallback(String user, String pass, String url);
-typedef void SetSafeModeCallback(bool safeMode);
+typedef LoginCallback = void Function(String user, String pass, String url);
+typedef SetSafeModeCallback = void Function(bool safeMode);
 
 class LoginPageViewModel {
   final String error;

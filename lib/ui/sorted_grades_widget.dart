@@ -6,8 +6,8 @@ import '../container/sorted_grades_container.dart';
 import '../data.dart';
 import '../util.dart';
 
-typedef void ViewSubjectDetailCallback(Subject s);
-typedef void SetBoolCallback(bool byType);
+typedef ViewSubjectDetailCallback = void Function(Subject s);
+typedef SetBoolCallback = void Function(bool byType);
 
 class SortedGradesWidget extends StatelessWidget {
   final SortedGradesViewModel vm;
@@ -151,7 +151,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
   }
 }
 
-const lineThrough = const TextStyle(decoration: TextDecoration.lineThrough);
+const lineThrough = TextStyle(decoration: TextDecoration.lineThrough);
 
 class GradeWidget extends StatelessWidget {
   final GradeDetail grade;

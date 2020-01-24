@@ -8,7 +8,7 @@ import 'package:requests/requests.dart';
 
 import 'app_state.dart';
 
-typedef void AddNetworkProtocolItem(NetworkProtocolItem item);
+typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
   String get _loginAdress => "$baseAdress/api/auth/login";
@@ -150,7 +150,7 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
-  var _mutex = new Mutex();
+  var _mutex = Mutex();
   Future<dynamic> post(String url, [Map<String, dynamic> args = const {}, bool json = true]) async {
     await _mutex.acquire();
     if (!_loggedIn) {
