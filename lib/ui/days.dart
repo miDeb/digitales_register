@@ -696,7 +696,7 @@ class ItemWidget extends StatelessWidget {
                     ),
                   if (item.warning)
                     Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         "!",
                         style: TextStyle(
