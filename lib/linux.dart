@@ -73,7 +73,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 /// nothing actually dynamic there
 class DynamicTheme extends StatelessWidget {
   final dynamic_theme.ThemedWidgetBuilder themedWidgetBuilder;
-  final dynamic_theme.ThemeDataBuilder data;
+  final dynamic_theme.ThemeDataWithBrightnessBuilder data;
   final Brightness defaultBrightness;
 
   const DynamicTheme({Key key, this.themedWidgetBuilder, this.data, this.defaultBrightness})

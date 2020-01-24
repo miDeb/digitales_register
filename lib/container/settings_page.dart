@@ -19,9 +19,6 @@ class SettingsPageContainer extends StatelessWidget {
               Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark,
             );
           },
-          onSetPlatformOverride: (o) {
-            DynamicTheme.of(context).setPlatformOverride(o);
-          },
           onSetNoPassSaving: actions.settingsActions.saveNoPass,
           onSetNoDataSaving: actions.settingsActions.saveNoData,
           onSetAskWhenDelete: actions.settingsActions.askWhenDeleteReminder,

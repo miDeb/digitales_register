@@ -24,8 +24,7 @@ dependencies:
   requests:
     path: "packages/requests/"
   built_value: any
-  dynamic_theme:
-    path: "packages/dynamic_theme/"
+  dynamic_theme: any
   fluttertoast: any
   flutter_secure_storage:
     path: "packages/flutter_secure_storage/"
