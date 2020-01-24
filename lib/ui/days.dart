@@ -578,7 +578,7 @@ class ItemWidget extends StatelessWidget {
                           ],
                         ),
                       ListTile(
-                        contentPadding: EdgeInsets.only(),
+                        contentPadding: EdgeInsets.zero,
                         title: Text(item.title),
                         subtitle: isNullOrEmpty(item.subtitle) ? null : Text(item.subtitle),
                         leading: !isHistory && !isDeletedView && item.deleteable
