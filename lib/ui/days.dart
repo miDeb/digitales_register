@@ -388,7 +388,11 @@ class DayWidget extends StatelessWidget {
                 child: IconButton(
                   icon: Badge(
                     child: Icon(Icons.info_outline),
-                    badgeContent: Icon(Icons.delete, size: 15),
+                    badgeContent: Icon(
+                      Icons.delete,
+                      size: 15,
+                      color: day.deletedHomework.any((h) => h.isChanged) ? Colors.white : null,
+                    ),
                     badgeColor: day.deletedHomework.any((h) => h.isChanged)
                         ? Colors.red
                         : Theme.of(context).scaffoldBackgroundColor,
