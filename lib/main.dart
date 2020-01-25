@@ -109,11 +109,6 @@ void run() {
               }
             },
             theme: theme,
-            darkTheme: ThemeData(
-              brightness: Brightness.dark,
-              primarySwatch: Colors.teal,
-              platform: theme.platform,
-            ),
           ),
         ),
         onPointerDown: (_) => store.actions.loginActions.updateLogout(),

@@ -20,6 +20,7 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
   final OnSettingChanged<bool> onSetDashboardMarkNewOrChangedEntries;
   final OnSettingChanged<bool> onSetDarkMode;
+  final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final SettingsViewModel vm;
@@ -39,6 +40,7 @@ class SettingsPageWidget extends StatefulWidget {
     this.onSetSubjectNicks,
     this.vm,
     this.onSetPlatformOverride,
+    this.onSetFollowDeviceDarkMode,
   }) : super(key: key);
 
   @override
@@ -117,36 +119,35 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: widget.vm.deleteDataOnLogout,
           ),
           Divider(),
-          AutoScrollTag(
-            child: ListTile(
-              title: Text(
-                "Erscheinung",
-                style: Theme.of(context).textTheme.headline,
+          if (!Platform.isLinux) ...[
+            AutoScrollTag(
+              child: ListTile(
+                title: Text(
+                  "Theme",
+                  style: Theme.of(context).textTheme.headline,
+                ),
               ),
+              controller: controller,
+              index: 1,
+              key: ObjectKey(1),
             ),
-            controller: controller,
-            index: 1,
-            key: ObjectKey(1),
-          ),
-          if (!Platform.isLinux)
             SwitchListTile(
               title: Text("Dark Mode"),
-              onChanged: MediaQuery.of(context).platformBrightness == Brightness.dark
+              onChanged: DynamicTheme.of(context).followDevice
                   ? null
                   : (bool value) {
                       widget.onSetDarkMode(value);
                     },
-              value: DynamicTheme.of(context).brightness == Brightness.dark,
+              value: DynamicTheme.of(context).customBrightness == Brightness.dark,
             ),
-          if (Platform.isAndroid)
             SwitchListTile(
-              title: Text("iOS Mode"),
-              subtitle: Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              title: Text("Geräte-Theme folgen"),
               onChanged: (bool value) {
-                widget.onSetPlatformOverride(value);
+                widget.onSetFollowDeviceDarkMode(value);
               },
-              value: DynamicTheme.of(context).platformOverride,
+              value: DynamicTheme.of(context).followDevice,
             ),
+          ],
           Divider(),
           AutoScrollTag(
             child: ListTile(
@@ -314,6 +315,15 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 5,
             key: ObjectKey(5),
           ),
+          if (Platform.isAndroid)
+            SwitchListTile(
+              title: Text("iOS Mode"),
+              subtitle: Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              onChanged: (bool value) {
+                widget.onSetPlatformOverride(value);
+              },
+              value: DynamicTheme.of(context).platformOverride,
+            ),
           ListTile(
             title: Text("Netzwerkprotokoll"),
             onTap: () {

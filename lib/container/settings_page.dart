@@ -19,6 +19,9 @@ class SettingsPageContainer extends StatelessWidget {
               Theme.of(context).brightness == Brightness.dark ? Brightness.light : Brightness.dark,
             );
           },
+          onSetFollowDeviceDarkMode: (dm) {
+            DynamicTheme.of(context).setFollowDevice(dm);
+          },
           onSetPlatformOverride: (o) {
             DynamicTheme.of(context).setPlatformOverride(o);
           },
