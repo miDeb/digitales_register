@@ -169,8 +169,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           child: widget.vm.error?.isNotEmpty == true
                               ? Text(
                                   widget.vm.error,
-                                  style:
-                                      Theme.of(context).textTheme.body1.copyWith(color: Colors.red),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(color: Colors.red),
                                 )
                               : SizedBox(),
                         ),

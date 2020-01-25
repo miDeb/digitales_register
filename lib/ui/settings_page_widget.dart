@@ -76,7 +76,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Anmeldung",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,
@@ -121,7 +121,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Erscheinung",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,
@@ -152,7 +152,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Merkheft",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,
@@ -178,7 +178,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Noten",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,
@@ -204,7 +204,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Kalender",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,
@@ -307,7 +307,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Erweitert",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
             controller: controller,

@@ -141,7 +141,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     child: widget.vm.first != null && widget.vm.last != null
                         ? Text(
                             "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
-                            style: Theme.of(context).textTheme.title,
+                            style: Theme.of(context).textTheme.headline6,
                           )
                         : widget.vm.noInternet
                             ? Text("Wähle ein Datum")
