@@ -52,7 +52,7 @@ class ChartLegend extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
                           entry.key.item1,
-                          style: Theme.of(context).textTheme.subtitle1,
+                          style: Theme.of(context).textTheme.subhead,
                         ),
                       ),
                       flex: 3,

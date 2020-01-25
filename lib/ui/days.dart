@@ -76,7 +76,7 @@ class DaysWidget extends StatelessWidget {
             : Center(
                 child: Text(
                   "Keine Einträge vorhanden",
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.display1,
                   textAlign: TextAlign.center,
                 ),
               );
@@ -379,7 +379,7 @@ class DayWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   day.displayName,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.title,
                 ),
               ),
             ),

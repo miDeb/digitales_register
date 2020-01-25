@@ -10,7 +10,7 @@ class NoInternet extends StatelessWidget {
         children: <Widget>[
           Text(
             "Kein Internet",
-            style: Theme.of(context).textTheme.headline6.copyWith(color: Colors.red),
+            style: Theme.of(context).textTheme.title.copyWith(color: Colors.red),
           ),
           SizedBox(
             height: 20,

@@ -37,7 +37,7 @@ class AbsencesBody extends StatelessWidget {
             ? Center(
                 child: Text(
                   "Noch keine Absenzen",
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.display1,
                 ),
               )
             : ListView(children: <Widget>[

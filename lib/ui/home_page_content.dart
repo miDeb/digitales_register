@@ -54,7 +54,7 @@ class HomePageContent extends StatelessWidget {
                     accountName: Text(vm.userName ?? "?",
                         style: (Theme.of(context).appBarTheme.textTheme ??
                                 Theme.of(context).primaryTextTheme)
-                            .headline5),
+                            .headline),
                   ),
                   Expanded(
                     child: Column(
