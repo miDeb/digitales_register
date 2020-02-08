@@ -155,7 +155,7 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   static final all = _$Semester((b) => b..name = "Beide Semester");
   static final values = [first, second, all];
   static Serializer<Semester> get serializer => _$semesterSerializer;
-
+  factory Semester([void Function(SemesterBuilder) updates]) = _$Semester;
   Semester._();
 }
 
