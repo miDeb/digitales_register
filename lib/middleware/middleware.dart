@@ -134,7 +134,7 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandl
   final offlineEnabled = login["offlineEnabled"];
   if (user != null && pass != null) {
     api.actions.loginActions.login(
-      LoginAction(
+      LoginPayload(
         (b) => b
           ..user = user
           ..pass = pass

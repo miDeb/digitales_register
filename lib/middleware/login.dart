@@ -24,7 +24,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHan
 }
 
 void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<LoginAction> action) async {
+    Action<LoginPayload> action) async {
   next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
     api.actions.loginActions.loginFailed(

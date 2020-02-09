@@ -7,7 +7,7 @@ abstract class LoginActions extends ReduxActions {
   LoginActions._();
   factory LoginActions() => _$LoginActions();
 
-  ActionDispatcher<LoginAction> login;
+  ActionDispatcher<LoginPayload> login;
   ActionDispatcher<LoggedInPayload> loggedIn;
   ActionDispatcher<LoginFailedPayload> loginFailed;
   ActionDispatcher<LogoutPayload> logout;
@@ -16,13 +16,13 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<void> automaticallyReloggedIn;
 }
 
-abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
-  LoginAction._();
-  factory LoginAction([void Function(LoginActionBuilder) updates]) = _$LoginAction;
+abstract class LoginPayload implements Built<LoginPayload, LoginPayloadBuilder> {
+  LoginPayload._();
+  factory LoginPayload([void Function(LoginPayloadBuilder) updates]) = _$LoginPayload;
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LoginAction')
+    return (newBuiltValueToStringHelper('LoginPayload')
           ..add('user', user)
           // ..add('pass', pass) // do not include the password
           ..add('url', url)
@@ -31,7 +31,7 @@ abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
         .toString();
   }
 
-  static void _initializeBuilder(LoginActionBuilder b) {
+  static void _initializeBuilder(LoginPayloadBuilder b) {
     b..offlineEnabled = false;
   }
 

@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
           vm: vm,
           onLogin: (user, pass, url) {
             actions.loginActions.login(
-              LoginAction(
+              LoginPayload(
                 (b) => b
                   ..user = user
                   ..pass = pass
