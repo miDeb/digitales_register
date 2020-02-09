@@ -11,8 +11,8 @@ import 'app_state.dart';
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
-  String get _loginAdress => "$baseAdress/api/auth/login";
-  String get baseAdress => "$url/v2";
+  String get _loginAddress => "$baseAddress/api/auth/login";
+  String get baseAddress => "$url/v2";
   String user, pass, url;
 
   bool get loggedIn => _loggedIn;
@@ -22,7 +22,7 @@ class Wrapper {
   bool safeMode;
   Future<bool> get noInternet async {
     try {
-      final result = await http.get(url != null ? baseAdress : "https://digitalesregister.it");
+      final result = await http.get(url != null ? baseAddress : "https://digitalesregister.it");
       if (result.statusCode == 200) {
         return false;
       }
@@ -67,7 +67,7 @@ class Wrapper {
     await _clearCookies();
     try {
       response = await Requests.post(
-        _loginAdress,
+        _loginAddress,
         body: {"username": user, "password": pass},
         json: true,
       );
@@ -100,7 +100,7 @@ class Wrapper {
     await _clearCookies();
     try {
       response = await Requests.post(
-        "$baseAdress/api/auth/setNewPassword",
+        "$baseAddress/api/auth/setNewPassword",
         body: {
           "username": user,
           "password": pass,
@@ -126,9 +126,9 @@ class Wrapper {
   Future<void> _loadConfig() async {
     String source;
     try {
-      source = await Requests.get(baseAdress);
+      source = await Requests.get(baseAddress);
     } on TimeoutException {
-      source = await Requests.get(baseAdress);
+      source = await Requests.get(baseAddress);
     }
     final id = _readUserId(source);
     final fullName = _readFullName(source);
@@ -202,20 +202,20 @@ class Wrapper {
     dynamic response;
     try {
       response = await Requests.post(
-        baseAdress + url,
+        baseAddress + url,
         body: args,
         json: json,
       );
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
-        ..address = baseAdress + url
+        ..address = baseAddress + url
         ..response = e.toString()
         ..parameters = args.toString()));
       return null;
     }
     onAddProtocolItem(NetworkProtocolItem((b) => b
-      ..address = baseAdress + url
+      ..address = baseAddress + url
       ..response = response.toString()
       ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
@@ -268,7 +268,7 @@ class Wrapper {
     }
     _loggedIn = false;
     if (!forceLogout) {
-      Requests.get("$baseAdress/logout");
+      Requests.get("$baseAddress/logout");
     }
     _clearCookies();
   }
