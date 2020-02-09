@@ -94,7 +94,7 @@ class Wrapper {
     return response;
   }
 
-  Future<dynamic> changePass(String url, String user, String oldPass, String pass) async {
+  Future<dynamic> changePass(String url, String user, String oldPass, String newPass) async {
     this.url = url;
     dynamic response;
     await _clearCookies();
@@ -103,7 +103,8 @@ class Wrapper {
         "$baseAddress/api/auth/setNewPassword",
         body: {
           "username": user,
-          "password": pass,
+          "oldPassword": oldPass,
+          "newPassword": newPass,
         },
         json: true,
       );
@@ -117,7 +118,7 @@ class Wrapper {
       error = "[${response["error"]}] ${response["message"]}";
     } else {
       this.user = user;
-      this.pass = pass;
+      this.pass = newPass;
       error = null;
     }
     return response;
