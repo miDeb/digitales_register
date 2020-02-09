@@ -29,7 +29,7 @@
 build/
 
 # Generated files
-#**.g.dart
+**.g.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar
