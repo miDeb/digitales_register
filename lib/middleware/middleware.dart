@@ -206,14 +206,17 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
 }
 
 var _lastSave = "";
+AppState _stateToSave;
 
 NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
           next(action);
-          if (!_saveUnderway &&
-              api.state.loginState.loggedIn &&
-              api.state.loginState.userName != null) {
-            final user = api.state.loginState.userName.hashCode;
+          if (api.state.loginState.loggedIn && api.state.loginState.userName != null) {
+            _stateToSave = api.state;
+            if (_saveUnderway) {
+              return;
+            }
+            final user = _stateToSave.loginState.userName.hashCode;
             final delay = action.name == AppActionsNames.saveState.name
                 ? Duration.zero
                 : Duration(seconds: 5);
@@ -222,8 +225,8 @@ NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, 
               delay,
               () {
                 _saveUnderway = false;
-                if (!api.state.settingsState.noDataSaving) {
-                  final save = json.encode(serializers.serialize(api.state));
+                if (!_stateToSave.settingsState.noDataSaving) {
+                  final save = json.encode(serializers.serialize(_stateToSave));
                   if (_lastSave == save) return;
                   _lastSave = save;
                   _writeToStorage(
@@ -231,16 +234,16 @@ NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, 
                     save,
                   );
                 } else {
-                  if (_lastSettingsState != api.state.settingsState)
+                  if (_lastSettingsState != _stateToSave.settingsState)
                     _writeToStorage(
                       user.toString(),
                       json.encode(
                         {
-                          "settings": serializers.serialize(api.state.settingsState),
+                          "settings": serializers.serialize(_stateToSave.settingsState),
                         },
                       ),
                     );
-                  _lastSettingsState = api.state.settingsState;
+                  _lastSettingsState = _stateToSave.settingsState;
                 }
               },
             );
