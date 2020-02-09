@@ -127,7 +127,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ),
                               Divider(),
                               TextField(
-                                decoration: InputDecoration(labelText: 'Username'),
+                                decoration: InputDecoration(labelText: 'Benutzername'),
                                 controller: _usernameController,
                                 enabled: !widget.vm.loading,
                               ),
