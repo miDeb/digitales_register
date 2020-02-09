@@ -218,40 +218,6 @@ abstract class SettingsState implements Built<SettingsState, SettingsStateBuilde
   }
 }
 
-/* 
-abstract class SettingsStateBuilder
-    implements Builder<SettingsState, SettingsStateBuilder> {
-  SettingsStateBuilder._();
-  factory SettingsStateBuilder() = _$SettingsStateBuilder;
-  bool typeSorted;
-  bool askWhenDelete = true;
-  bool showCancelled;
-  bool deleteDataOnLogout =
-      false; // example for a new setting and backward compatibility
-  bool noPasswordSaving;
-  bool noDataSaving;
-  bool offlineEnabled = true;
-  bool showCalendarNicksBar = true;
-  bool showGradesDiagram = true;
-  bool showAllSubjectsAverage = true;
-  MapBuilder<String, String> subjectNicks = MapBuilder({
-    "Deutsch": "Deu",
-    "Mathematik": "Mat",
-    "Latein": "Lat",
-    "Religion": "Rel",
-    "Englisch": "Eng",
-    "Naturwissenschaften": "Nat",
-    "Geschichte": "Gesch",
-    "Italienisch": "Ita",
-    "Bewegung und Sport": "Sport",
-    "Recht und Wirtschaft": "Rw",
-    "Griechisch": "Gr",
-    "FÜ": "Fü",
-  });
-  bool scrollToSubjectNicks;
-  bool dashboardMarkNewOrChangedEntries = true;
-}
- */
 abstract class AbsencesState implements Built<AbsencesState, AbsencesStateBuilder> {
   AbsencesState._();
   factory AbsencesState([updates(AbsencesStateBuilder b)]) = _$AbsencesState;
