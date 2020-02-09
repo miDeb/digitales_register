@@ -3,7 +3,9 @@ part of 'middleware.dart';
 final _loginMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
   ..add(LoginActionsNames.logout, _logout)
   ..add(LoginActionsNames.login, _login)
-  ..add(LoginActionsNames.loginFailed, _loginFailed);
+  ..add(LoginActionsNames.loginFailed, _loginFailed)
+  ..add(LoginActionsNames.showChangePass, _showChangePass)
+  ..add(LoginActionsNames.changePass, _changePass);
 
 void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
     Action<LogoutPayload> action) {
@@ -39,7 +41,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
     return;
   }
   api.actions.loginActions.loggingIn();
-  await _wrapper.login(
+  final result = await _wrapper.login(
     action.payload.user,
     action.payload.pass,
     action.payload.url,
@@ -54,7 +56,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
     relogin: api.actions.loginActions.automaticallyReloggedIn,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
-  if (_wrapper.loggedIn)
+  if (_wrapper.loggedIn) {
     api.actions.loginActions.loggedIn(
       LoggedInPayload(
         (b) => b
@@ -62,7 +64,9 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
           ..fromStorage = action.payload.fromStorage,
       ),
     );
-  else {
+  } else if (result is Map && result["error"] == "password_expired") {
+    api.actions.loginActions.showChangePass(true);
+  } else {
     final noInternet = await _wrapper.noInternet;
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
@@ -74,6 +78,42 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
           ..fromStorage = action.payload.fromStorage,
       ),
     );
+  }
+}
+
+void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<ChangePassPayload> action) async {
+  next(action);
+  final result = await _wrapper.changePass(
+    action.payload.url,
+    action.payload.user,
+    action.payload.oldPass,
+    action.payload.newPass,
+  );
+  if (result["error"] != null) {
+    api.actions.loginActions.loginFailed(
+      LoginFailedPayload(
+        (b) => b
+          ..cause = result["error"].toString()
+          ..username = action.payload.user
+          ..fromStorage = false
+          ..noInternet = false
+          ..offlineEnabled = false,
+      ),
+    );
+  } else {
+    if (!api.state.settingsState.noPasswordSaving) {
+      api.actions.savePassActions.save();
+    }
+    if (!api.state.loginState.loggedIn) {
+      api.actions.loginActions.login(LoginPayload((b) => b
+        ..user = action.payload.user
+        ..pass = action.payload.newPass
+        ..fromStorage = false));
+    }
+    navigatorKey.currentState.pop();
+    api.actions.isLoginRoute(false);
+    showToast(msg: "Passwort erfolgreich geändert");
   }
 }
 
@@ -93,5 +133,11 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Acti
     }
     api.actions.noInternet(true);
   }
+  api.actions.routingActions.showLogin();
+}
+
+void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
+  next(action);
   api.actions.routingActions.showLogin();
 }

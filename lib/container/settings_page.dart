@@ -36,6 +36,7 @@ class SettingsPageContainer extends StatelessWidget {
           onSetShowAllSubjectsAverage: actions.settingsActions.showAllSubjectsAverage,
           onSetDashboardMarkNewOrChangedEntries:
               actions.settingsActions.markNotSeenDashboardEntries,
+          onChangePass: () => actions.loginActions.showChangePass(false),
         );
       },
       connect: (state) {

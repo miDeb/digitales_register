@@ -23,6 +23,7 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
+  final VoidCallback onChangePass;
   final SettingsViewModel vm;
 
   SettingsPageWidget({
@@ -41,6 +42,7 @@ class SettingsPageWidget extends StatefulWidget {
     this.vm,
     this.onSetPlatformOverride,
     this.onSetFollowDeviceDarkMode,
+    this.onChangePass,
   }) : super(key: key);
 
   @override
@@ -117,6 +119,11 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   }
                 : null,
             value: widget.vm.deleteDataOnLogout,
+          ),
+          ListTile(
+            title: Text("Passwort ändern"),
+            trailing: Icon(Icons.chevron_right),
+            onTap: widget.onChangePass,
           ),
           Divider(),
           if (!Platform.isLinux) ...[

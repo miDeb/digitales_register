@@ -11,7 +11,8 @@ final loginReducerBuilder =
       ..add(LoginActionsNames.loginFailed, _loginFailed)
       ..add(LoginActionsNames.loggedIn, _loggedIn)
       ..add(LoginActionsNames.loggingIn, _loggingIn)
-      ..add(LoginActionsNames.logout, _logout);
+      ..add(LoginActionsNames.logout, _logout)
+      ..add(LoginActionsNames.showChangePass, _changePass);
 
 void _loginFailed(LoginState state, Action<LoginFailedPayload> action, LoginStateBuilder builder) {
   builder
@@ -37,4 +38,10 @@ void _logout(LoginState state, Action<LogoutPayload> action, LoginStateBuilder b
   builder
     ..loggedIn = false
     ..userName = null;
+}
+
+void _changePass(LoginState state, Action<bool> action, LoginStateBuilder builder) {
+  builder
+    ..changePassword = true
+    ..mustChangePassword = action.payload;
 }

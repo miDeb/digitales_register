@@ -14,6 +14,8 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<void> updateLogout;
   ActionDispatcher<void> loggingIn;
   ActionDispatcher<void> automaticallyReloggedIn;
+  ActionDispatcher<bool> showChangePass;
+  ActionDispatcher<ChangePassPayload> changePass;
 }
 
 abstract class LoginPayload implements Built<LoginPayload, LoginPayloadBuilder> {
@@ -40,6 +42,16 @@ abstract class LoginPayload implements Built<LoginPayload, LoginPayloadBuilder> 
   String get url;
   bool get fromStorage;
   bool get offlineEnabled;
+}
+
+abstract class ChangePassPayload implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
+  ChangePassPayload._();
+  factory ChangePassPayload([void Function(ChangePassPayloadBuilder) updates]) =
+      _$ChangePassPayload;
+  String get url;
+  String get user;
+  String get oldPass;
+  String get newPass;
 }
 
 abstract class LoggedInPayload implements Built<LoggedInPayload, LoggedInPayloadBuilder> {

@@ -37,7 +37,7 @@ class Wrapper {
   DateTime lastInteraction = DateTime.now();
   DateTime _serverLogoutTime;
   Config config;
-  Future<void> login(String user, String pass, String url,
+  Future<dynamic> login(String user, String pass, String url,
       {VoidCallback logout,
       VoidCallback configLoaded,
       VoidCallback relogin,
@@ -75,7 +75,7 @@ class Wrapper {
       _loggedIn = false;
       print(e);
       error = "Unknown Error:\n$e";
-      return;
+      return null;
     }
     if (response["loggedIn"] == true) {
       _loggedIn = true;
@@ -91,6 +91,36 @@ class Wrapper {
       _loggedIn = false;
       error = "[${response["error"]}] ${response["message"]}";
     }
+    return response;
+  }
+
+  Future<dynamic> changePass(String url, String user, String oldPass, String pass) async {
+    this.url = url;
+    dynamic response;
+    await _clearCookies();
+    try {
+      response = await Requests.post(
+        "$baseAdress/api/auth/setNewPassword",
+        body: {
+          "username": user,
+          "password": pass,
+        },
+        json: true,
+      );
+    } catch (e) {
+      _loggedIn = false;
+      print(e);
+      error = "Unknown Error:\n$e";
+      return null;
+    }
+    if (response["error"] != null) {
+      error = "[${response["error"]}] ${response["message"]}";
+    } else {
+      this.user = user;
+      this.pass = pass;
+      error = null;
+    }
+    return response;
   }
 
   Future<void> _loadConfig() async {
