@@ -22,7 +22,7 @@ class Wrapper {
   bool safeMode;
   Future<bool> get noInternet async {
     try {
-      final result = await http.get(baseAdress);
+      final result = await http.get(url != null ? baseAdress : "https://digitalesregister.it");
       if (result.statusCode == 200) {
         return false;
       }
