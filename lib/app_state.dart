@@ -261,14 +261,12 @@ abstract class CalendarState implements Built<CalendarState, CalendarStateBuilde
 }
 
 abstract class CertificateState implements Built<CertificateState, CertificateStateBuilder> {
+  @nullable
   String get html;
 
   CertificateState._();
   factory CertificateState([void Function(CertificateStateBuilder) updates]) = _$CertificateState;
   static Serializer<CertificateState> get serializer => _$certificateStateSerializer;
-  static void _initializeBuilder(CertificateStateBuilder builder) {
-    builder..html = "Nichts vorhanden - das ist ein experimentelles Feature";
-  }
 }
 
 abstract class NetworkProtocolState

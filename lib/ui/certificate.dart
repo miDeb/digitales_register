@@ -9,12 +9,16 @@ class Certificate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Zeugnis")),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(8),
-          child: HtmlWidget(vm),
-        ),
-      ),
+      body: vm == null
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(8),
+                child: HtmlWidget(vm),
+              ),
+            ),
     );
   }
 }
