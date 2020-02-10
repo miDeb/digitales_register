@@ -181,9 +181,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     "- mindestens einen Großbuchstaben enthalten\n"
                                     "- mindestens einen Kleinbuchstaben enthalten\n"
                                     "- mindestens eine Zahl enthalten\n"
-                                    "- mindestens ein Sondezeichen enthalten\n"
-                                    "- nicht mit dem alten Passwort übereinstimmen\n"
-                                    "(des hon net i mir ausgedenkt)",
+                                    "- mindestens ein Sonderzeichen enthalten\n"
+                                    "- nicht mit dem alten Passwort übereinstimmen",
                                   ),
                                 ),
                                 TextField(
