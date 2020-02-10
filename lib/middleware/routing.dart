@@ -8,7 +8,8 @@ final _routingMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActio
   ..add(RoutingActionsNames.showCalendar, _showCalendar)
   ..add(RoutingActionsNames.showAbsences, _showAbsences)
   ..add(RoutingActionsNames.showGradesChart, _showGradesChart)
-  ..add(RoutingActionsNames.showGrades, _showGrades);
+  ..add(RoutingActionsNames.showGrades, _showGrades)
+  ..add(RoutingActionsNames.showCertificate, _showCertificate);
 
 void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
     Action<void> action) async {
@@ -55,6 +56,13 @@ void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Act
     Action<void> action) {
   navigatorKey.currentState.pushNamed("/absences");
   api.actions.absencesActions.load();
+  next(action);
+}
+
+void _showCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
+    Action<void> action) {
+  navigatorKey.currentState.pushNamed("/certificate");
+  api.actions.certificateActions.load();
   next(action);
 }
 

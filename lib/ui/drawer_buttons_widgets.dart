@@ -84,3 +84,20 @@ class CalendarButtonWidget extends StatelessWidget {
     );
   }
 }
+
+class CertificateButtonWidget extends StatelessWidget {
+  final VoidCallback onShowCertificate;
+
+  const CertificateButtonWidget({Key key, this.onShowCertificate}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text("Zeugnis"),
+      trailing: Icon(Icons.list),
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowCertificate();
+      },
+    );
+  }
+}

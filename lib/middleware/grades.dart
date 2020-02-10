@@ -26,9 +26,9 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
   _doForSemester(
     action.payload == Semester.all ? [Semester.first, Semester.second] : [action.payload],
     (s) async {
-      var data = await _wrapper.post(
+      var data = await _wrapper.send(
         _subjects,
-        {"studentId": api.state.config.userId},
+        args: {"studentId": api.state.config.userId},
       );
       api.actions.refreshNoInternet();
       api.actions.gradesActions.loaded(
@@ -54,8 +54,10 @@ void _loadGradesDetails(MiddlewareApi<AppState, AppStateBuilder, AppActions> api
         ? [Semester.first, Semester.second]
         : [action.payload.semester],
     (s) async {
-      var data = await _wrapper.post(_subjectsDetail,
-          {"studentId": api.state.config.userId, "subjectId": action.payload.subject.id});
+      var data = await _wrapper.send(
+        _subjectsDetail,
+        args: {"studentId": api.state.config.userId, "subjectId": action.payload.subject.id},
+      );
       if (data == null) {
         api.actions.refreshNoInternet();
         return;

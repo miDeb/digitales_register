@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/certificate_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,6 +37,7 @@ part 'login.dart';
 part 'notifications.dart';
 part 'pass.dart';
 part 'routing.dart';
+part 'certificate.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 final _wrapper = Wrapper();
@@ -58,7 +60,8 @@ final middleware = [
         ..combine(_loginMiddleware)
         ..combine(_notificationsMiddleware)
         ..combine(_passMiddleware)
-        ..combine(_routingMiddleware))
+        ..combine(_routingMiddleware)
+        ..combine(_certificateMiddleware))
       .build(),
 ];
 

@@ -182,7 +182,8 @@ class Wrapper {
   }
 
   var _mutex = Mutex();
-  Future<dynamic> post(String url, [Map<String, dynamic> args = const {}, bool json = true]) async {
+  Future<dynamic> send(String url,
+      {Map<String, dynamic> args = const {}, bool json = true, String method = "POST"}) async {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -202,11 +203,18 @@ class Wrapper {
 
     dynamic response;
     try {
-      response = await Requests.post(
-        baseAddress + url,
-        body: args,
-        json: json,
-      );
+      response = method == "POST"
+          ? await Requests.post(
+              baseAddress + url,
+              body: args,
+              json: json,
+            )
+          : method == "GET"
+              ? await Requests.get(
+                  baseAddress + url,
+                  json: json,
+                )
+              : throw Exception("invalid method: $method; expected POST or GET");
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
@@ -220,8 +228,8 @@ class Wrapper {
       ..response = response.toString()
       ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
-      print(response);
-      throw Error();
+      //print(response);
+      //throw Error();
     }
     return response;
   }
@@ -239,7 +247,7 @@ class Wrapper {
     if (!_loggedIn) return;
     if (DateTime.now().add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = await post("/api/auth/extendSession", {
+      final result = await send("/api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       });
       if (result == null) {

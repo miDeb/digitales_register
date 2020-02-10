@@ -27,6 +27,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @nullable
   SettingsState get settingsState;
   CalendarState get calendarState;
+  CertificateState get certificateState;
   @nullable
   @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
@@ -41,6 +42,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       ..gradesState = GradesStateBuilder()
       ..calendarState = CalendarStateBuilder()
       ..settingsState = SettingsStateBuilder()
+      ..certificateState = CertificateStateBuilder()
       ..currentRouteIsLogin = false
       ..noInternet = false;
   }
@@ -255,6 +257,17 @@ abstract class CalendarState implements Built<CalendarState, CalendarStateBuilde
   static Serializer<CalendarState> get serializer => _$calendarStateSerializer;
   static void _initializeBuilder(CalendarStateBuilder builder) {
     builder..days = MapBuilder<DateTime, CalendarDay>();
+  }
+}
+
+abstract class CertificateState implements Built<CertificateState, CertificateStateBuilder> {
+  String get html;
+
+  CertificateState._();
+  factory CertificateState([void Function(CertificateStateBuilder) updates]) = _$CertificateState;
+  static Serializer<CertificateState> get serializer => _$certificateStateSerializer;
+  static void _initializeBuilder(CertificateStateBuilder builder) {
+    builder..html = "Nichts vorhanden - das ist ein experimentelles Feature";
   }
 }
 

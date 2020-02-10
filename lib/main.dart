@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dr/container/certificate_container.dart';
 import 'package:dr/container/notifications_page_container.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,10 @@ void run() {
                 case "calendar":
                   return MaterialPageRoute(
                     builder: (_) => CalendarContainer(),
+                  );
+                case "certificate":
+                  return MaterialPageRoute(
+                    builder: (_) => CertificateContainer(),
                   );
                 case "gradesChart":
                   return MaterialPageRoute(

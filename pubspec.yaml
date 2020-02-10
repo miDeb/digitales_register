@@ -39,6 +39,7 @@ dependencies:
       ref: master
   flutter_built_redux: any
   badges: any
+  flutter_widget_from_html_core: ^0.3.2+1
 dependency_overrides:
   built_redux: 
     git: 
