@@ -95,7 +95,7 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
         (b) => b
-          ..cause = result["error"].toString()
+          ..cause = _wrapper.error
           ..username = action.payload.user
           ..fromStorage = false
           ..noInternet = false
@@ -103,10 +103,15 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
       ),
     );
   } else {
-    api.actions.loginActions.login(LoginPayload((b) => b
-      ..user = action.payload.user
-      ..pass = action.payload.newPass
-      ..fromStorage = false));
+    api.actions.loginActions.login(
+      LoginPayload(
+        (b) => b
+          ..user = action.payload.user
+          ..pass = action.payload.newPass
+          ..fromStorage = false
+          ..url = action.payload.url,
+      ),
+    );
     navigatorKey.currentState.pop();
     api.actions.isLoginRoute(false);
     showToast(msg: "Passwort erfolgreich geändert");
