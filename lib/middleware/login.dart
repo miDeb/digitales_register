@@ -65,6 +65,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
       ),
     );
   } else if (result is Map && result["error"] == "password_expired") {
+    api.actions.savePassActions.delete();
     api.actions.loginActions.showChangePass(true);
   } else {
     final noInternet = await _wrapper.noInternet;
@@ -127,6 +128,8 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Acti
       return;
     }
     api.actions.noInternet(true);
+  } else {
+    api.actions.savePassActions.delete();
   }
   api.actions.routingActions.showLogin();
 }
