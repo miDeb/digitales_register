@@ -96,56 +96,59 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
-                        ListTile(
-                          title: Text("Schule"),
-                          trailing: DropdownButton(
-                            items: widget.vm.servers.entries
-                                .map(
-                                  (s) => DropdownMenuItem(
-                                    child: Text(s.key),
-                                    value: s.toTuple(),
-                                  ),
-                                )
-                                .toList()
-                                  ..add(
-                                    DropdownMenuItem(
-                                      child: Text("Serveradresse eingeben"),
-                                      value: null,
+                        if (!widget.vm.changePass)
+                          ListTile(
+                            title: Text("Schule"),
+                            trailing: DropdownButton(
+                              items: widget.vm.servers.entries
+                                  .map(
+                                    (s) => DropdownMenuItem(
+                                      child: Text(s.key),
+                                      value: s.toTuple(),
                                     ),
-                                  ),
-                            onChanged: (Tuple2 value) {
-                              setState(() {
-                                nonCustomServer = value;
-                                // workaround: selection was not set anymore
-                                if (value == null) {
-                                  _urlController.selection = TextSelection.fromPosition(
-                                    TextPosition(offset: 8),
-                                  );
-                                }
-                              });
-                            },
-                            value: nonCustomServer,
+                                  )
+                                  .toList()
+                                    ..add(
+                                      DropdownMenuItem(
+                                        child: Text("Serveradresse eingeben"),
+                                        value: null,
+                                      ),
+                                    ),
+                              onChanged: (Tuple2 value) {
+                                setState(() {
+                                  nonCustomServer = value;
+                                  // workaround: selection was not set anymore
+                                  if (value == null) {
+                                    _urlController.selection = TextSelection.fromPosition(
+                                      TextPosition(offset: 8),
+                                    );
+                                  }
+                                });
+                              },
+                              value: nonCustomServer,
+                            ),
                           ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              if (nonCustomServer == null)
+                              if (!widget.vm.changePass) ...[
+                                if (nonCustomServer == null)
+                                  TextField(
+                                    decoration: InputDecoration(labelText: 'Adresse'),
+                                    controller: _urlController,
+                                    enabled: !widget.vm.loading,
+                                    autofocus: true,
+                                    keyboardType: TextInputType.url,
+                                  ),
+                                Divider(),
                                 TextField(
-                                  decoration: InputDecoration(labelText: 'Adresse'),
-                                  controller: _urlController,
+                                  decoration: InputDecoration(labelText: 'Benutzername'),
+                                  controller: _usernameController,
                                   enabled: !widget.vm.loading,
-                                  autofocus: true,
-                                  keyboardType: TextInputType.url,
                                 ),
-                              Divider(),
-                              TextField(
-                                decoration: InputDecoration(labelText: 'Benutzername'),
-                                controller: _usernameController,
-                                enabled: !widget.vm.loading,
-                              ),
+                              ],
                               TextField(
                                 decoration: InputDecoration(
                                     labelText:
@@ -158,14 +161,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 SizedBox(
                                   height: 8,
                                 ),
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: Text(
-                                    widget.vm.mustChangePass
-                                        ? "Du musst dein Passwort ändern:"
-                                        : "Ändere dein Passwort:",
+                                if (widget.vm.mustChangePass)
+                                  ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: Text(
+                                      "Du musst dein Passwort ändern:",
+                                    ),
                                   ),
-                                ),
                                 Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(16),
