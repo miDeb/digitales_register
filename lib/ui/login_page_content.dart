@@ -149,7 +149,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               TextField(
                                 decoration: InputDecoration(
                                     labelText:
-                                        widget.vm.changePass ? 'Passwort' : 'Altes Passwort'),
+                                        widget.vm.changePass ? 'Altes Passwort' : 'Passwort'),
                                 controller: _passwordController,
                                 obscureText: true,
                                 enabled: !widget.vm.loading,
