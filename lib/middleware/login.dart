@@ -102,9 +102,6 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
       ),
     );
   } else {
-    if (!api.state.settingsState.noPasswordSaving) {
-      api.actions.savePassActions.save();
-    }
     api.actions.loginActions.login(LoginPayload((b) => b
       ..user = action.payload.user
       ..pass = action.payload.newPass
