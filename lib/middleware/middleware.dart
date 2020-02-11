@@ -7,6 +7,7 @@ import 'package:dr/actions/certificate_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:requests/requests.dart';
@@ -173,26 +174,31 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
     final user = action.payload.username.hashCode;
     final file = File("${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     if (await file.exists()) {
-      AppState serializedState = serializers.deserialize(json.decode(await file.readAsString()));
-      api.actions.mountAppState(
-        api.state.rebuild((b) => b
-          ..dashboardState = (serializedState.dashboardState.toBuilder()
-            ..future = true
-            ..blacklist ??= ListBuilder([]))
-          ..gradesState = (serializedState.gradesState.toBuilder()
-            ..semester = api.state.gradesState.semester == Semester.all
-                ? serializedState.gradesState.semester.toBuilder()
-                : api.state.gradesState.semester.toBuilder())
-          ..notificationState = serializedState.notificationState.toBuilder()
-          ..absencesState = serializedState.absencesState?.toBuilder()
-          ..calendarState = serializedState.calendarState.toBuilder()
-          ..settingsState = serializedState.settingsState.toBuilder()),
-      );
+      try {
+        AppState serializedState = serializers.deserialize(json.decode(await file.readAsString()));
+        api.actions.mountAppState(
+          api.state.rebuild((b) => b
+            ..dashboardState = (serializedState.dashboardState.toBuilder()
+              ..future = true
+              ..blacklist ??= ListBuilder([]))
+            ..gradesState = (serializedState.gradesState.toBuilder()
+              ..semester = api.state.gradesState.semester == Semester.all
+                  ? serializedState.gradesState.semester.toBuilder()
+                  : api.state.gradesState.semester.toBuilder())
+            ..notificationState = serializedState.notificationState.toBuilder()
+            ..absencesState = serializedState.absencesState?.toBuilder()
+            ..calendarState = serializedState.calendarState.toBuilder()
+            ..settingsState = serializedState.settingsState.toBuilder()),
+        );
 
-      // next not at the beginning: bug fix (serialization)
-      next(action);
+        // next not at the beginning: bug fix (serialization)
+        next(action);
 
-      api.actions.settingsActions.saveNoPass(serializedState.settingsState.noPasswordSaving);
+        api.actions.settingsActions.saveNoPass(serializedState.settingsState.noPasswordSaving);
+      } catch (e) {
+        showToast(msg: "Fehler beim Laden der gespeicherten Daten", toastLength: Toast.LENGTH_LONG);
+        next(action);
+      }
     } else {
       next(action);
     }
