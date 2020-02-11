@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/certificate_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
@@ -176,19 +175,21 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
     if (await file.exists()) {
       try {
         AppState serializedState = serializers.deserialize(json.decode(await file.readAsString()));
+        final currentState = api.state;
         api.actions.mountAppState(
-          api.state.rebuild((b) => b
-            ..dashboardState = (serializedState.dashboardState.toBuilder()
-              ..future = true
-              ..blacklist ??= ListBuilder([]))
-            ..gradesState = (serializedState.gradesState.toBuilder()
-              ..semester = api.state.gradesState.semester == Semester.all
-                  ? serializedState.gradesState.semester.toBuilder()
-                  : api.state.gradesState.semester.toBuilder())
-            ..notificationState = serializedState.notificationState.toBuilder()
-            ..absencesState = serializedState.absencesState?.toBuilder()
-            ..calendarState = serializedState.calendarState.toBuilder()
-            ..settingsState = serializedState.settingsState.toBuilder()),
+          serializedState.rebuild(
+            (b) => b
+              ..loginState.replace(currentState.loginState)
+              ..noInternet = currentState.noInternet
+              ..config.replace(currentState.config)
+              ..currentRouteIsLogin = currentState.currentRouteIsLogin
+              ..dashboardState.future = true
+              ..gradesState.semester.replace(
+                    currentState.gradesState.semester == Semester.all
+                        ? serializedState.gradesState.semester
+                        : currentState.gradesState.semester,
+                  ),
+          ),
         );
 
         // next not at the beginning: bug fix (serialization)
