@@ -197,6 +197,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
         api.actions.settingsActions.saveNoPass(serializedState.settingsState.noPasswordSaving);
       } catch (e) {
         showToast(msg: "Fehler beim Laden der gespeicherten Daten", toastLength: Toast.LENGTH_LONG);
+        print(e);
         next(action);
       }
     } else {
