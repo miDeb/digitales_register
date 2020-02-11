@@ -9,10 +9,13 @@ import '../app_state.dart';
 class CertificateContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnection<AppState, AppActions, String>(connect: (state) {
-      return state.certificateState.html;
-    }, builder: (context, vm, actions) {
-      return Certificate(vm: vm);
-    });
+    return StoreConnection<AppState, AppActions, String>(
+      connect: (state) {
+        return state.certificateState.html;
+      },
+      builder: (context, vm, actions) {
+        return Certificate(vm: vm);
+      },
+    );
   }
 }
