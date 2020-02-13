@@ -27,8 +27,7 @@ dependencies:
   dynamic_theme:
     path: "packages/dynamic_theme/"
   fluttertoast: any
-  flutter_secure_storage:
-    path: "packages/flutter_secure_storage/"
+  flutter_secure_storage: any
   scroll_to_index: any 
   autocomplete_textfield: any
   package_info: any
