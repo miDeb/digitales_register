@@ -23,7 +23,6 @@ abstract class AppActions extends ReduxActions {
   ActionDispatcher<void> load;
   ActionDispatcher<bool> refreshNoInternet;
   ActionDispatcher<bool> noInternet;
-  ActionDispatcher<bool> isLoginRoute;
   ActionDispatcher<Config> setConfig;
   ActionDispatcher<AppState> mountAppState;
   ActionDispatcher<NetworkProtocolItem> addNetworkProtocolItem;

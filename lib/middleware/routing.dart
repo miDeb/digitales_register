@@ -16,9 +16,15 @@ final _routingMiddleware =
 void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  if (api.state.currentRouteIsLogin) return;
-  navigatorKey.currentState.pushNamed("/login");
-  api.actions.isLoginRoute(true);
+  // hack since the current route is not exposed otherwise
+  Route currentRoute;
+  navigatorKey.currentState.popUntil((route) {
+    currentRoute = route;
+    return true;
+  });
+  if (currentRoute.settings.name != "/login") {
+    navigatorKey.currentState.pushNamed("/login");
+  }
 }
 
 void _showNotifications(

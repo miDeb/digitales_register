@@ -37,7 +37,6 @@ class LoginPage extends StatelessWidget {
           },
           setSaveNoPass: actions.settingsActions.saveNoPass,
           onReload: actions.load,
-          onPop: () => actions.isLoginRoute(false),
         );
       },
       connect: (state) {

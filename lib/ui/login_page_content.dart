@@ -17,7 +17,6 @@ class LoginPageContent extends StatefulWidget {
   final ChangePassCallback onChangePass;
   final SetSafeModeCallback setSaveNoPass;
   final VoidCallback onReload;
-  final VoidCallback onPop;
 
   LoginPageContent({
     Key key,
@@ -25,7 +24,6 @@ class LoginPageContent extends StatefulWidget {
     this.onLogin,
     this.setSaveNoPass,
     this.onReload,
-    this.onPop,
     this.onChangePass,
   }) : super(key: key);
 
@@ -70,7 +68,6 @@ class _LoginPageContentState extends State<LoginPageContent> {
     return WillPopScope(
       onWillPop: () async {
         if (widget.vm.changePass && !widget.vm.mustChangePass) {
-          widget.onPop();
           return true;
         }
         SystemNavigator.pop();

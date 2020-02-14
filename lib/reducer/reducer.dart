@@ -15,7 +15,6 @@ import 'certificate.dart';
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.mountAppState, _mountState)
   ..add(AppActionsNames.noInternet, _noInternet)
-  ..add(AppActionsNames.isLoginRoute, _currentRouteIsLogin)
   ..add(AppActionsNames.setConfig, _config)
   ..add(AppActionsNames.setUrl, _setUrl)
   ..combineNested(absencesReducerBuilder)
@@ -30,11 +29,6 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
 
 void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder..noInternet = action.payload;
-}
-
-void _currentRouteIsLogin(
-    AppState state, Action<bool> action, AppStateBuilder builder) {
-  builder..currentRouteIsLogin = action.payload;
 }
 
 void _config(AppState state, Action<Config> action, AppStateBuilder builder) {

@@ -130,10 +130,7 @@ void _refreshNoInternet(
 void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  if (api.state.currentRouteIsLogin) {
-    navigatorKey.currentState.pop();
-    api.actions.isLoginRoute(false);
-  }
+  navigatorKey.currentState.popUntil((route) => route.isFirst);
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
@@ -196,7 +193,6 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
               ..loginState.replace(currentState.loginState)
               ..noInternet = currentState.noInternet
               ..config.replace(currentState.config)
-              ..currentRouteIsLogin = currentState.currentRouteIsLogin
               ..dashboardState.future = true
               ..gradesState.semester.replace(
                     currentState.gradesState.semester == Semester.all
@@ -222,10 +218,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       next(action);
     }
 
-    if (api.state.currentRouteIsLogin) {
-      navigatorKey.currentState.pop();
-      api.actions.isLoginRoute(false);
-    }
+    navigatorKey.currentState.popUntil((route) => route.isFirst);
   } else {
     next(action);
   }

@@ -22,8 +22,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   Config get config;
   @BuiltValueField(serialize: false)
   bool get noInternet;
-  @BuiltValueField(serialize: false)
-  bool get currentRouteIsLogin;
   @nullable
   SettingsState get settingsState;
   CalendarState get calendarState;
@@ -46,7 +44,6 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       ..calendarState = CalendarStateBuilder()
       ..settingsState = SettingsStateBuilder()
       ..certificateState = CertificateStateBuilder()
-      ..currentRouteIsLogin = false
       ..noInternet = false;
   }
 }

@@ -114,7 +114,6 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
     navigatorKey.currentState.pop();
-    api.actions.isLoginRoute(false);
     showToast(msg: "Passwort erfolgreich geändert");
   }
 }
@@ -142,6 +141,6 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  next(action);
   api.actions.routingActions.showLogin();
+  next(action);
 }
