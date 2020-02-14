@@ -61,7 +61,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (!widget.vm.mustChangePass) {
+        if (widget.vm.changePass && !widget.vm.mustChangePass) {
           widget.onPop();
           return true;
         }
@@ -71,7 +71,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.vm.changePass ? 'Passwort ändern' : 'Login'),
-          automaticallyImplyLeading: !widget.vm.mustChangePass,
+          automaticallyImplyLeading: widget.vm.changePass && !widget.vm.mustChangePass,
         ),
         body: widget.vm.noInternet
             ? Center(

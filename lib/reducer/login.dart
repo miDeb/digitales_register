@@ -1,4 +1,5 @@
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/app_actions.dart';
 
 import '../actions/login_actions.dart';
 import '../app_state.dart';
@@ -12,7 +13,8 @@ final loginReducerBuilder =
       ..add(LoginActionsNames.loggedIn, _loggedIn)
       ..add(LoginActionsNames.loggingIn, _loggingIn)
       ..add(LoginActionsNames.logout, _logout)
-      ..add(LoginActionsNames.showChangePass, _changePass);
+      ..add(LoginActionsNames.showChangePass, _changePass)
+      ..add(AppActionsNames.isLoginRoute, _isLoginRoute);
 
 void _loginFailed(LoginState state, Action<LoginFailedPayload> action, LoginStateBuilder builder) {
   builder
@@ -44,4 +46,10 @@ void _changePass(LoginState state, Action<bool> action, LoginStateBuilder builde
   builder
     ..changePassword = true
     ..mustChangePassword = action.payload;
+}
+
+void _isLoginRoute(LoginState state, Action<bool> action, LoginStateBuilder builder) {
+  if (!action.payload) {
+    builder.changePassword = false;
+  }
 }
