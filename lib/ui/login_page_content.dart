@@ -7,7 +7,8 @@ import '../util.dart';
 import 'no_internet.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
-typedef ChangePassCallback = void Function(String user, String oldPass, String newPass, String url);
+typedef ChangePassCallback = void Function(
+    String user, String oldPass, String newPass, String url);
 typedef SetSafeModeCallback = void Function(bool safeMode);
 
 class LoginPageContent extends StatefulWidget {
@@ -78,7 +79,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.vm.changePass ? 'Passwort ändern' : 'Login'),
-          automaticallyImplyLeading: widget.vm.changePass && !widget.vm.mustChangePass,
+          automaticallyImplyLeading:
+              widget.vm.changePass && !widget.vm.mustChangePass,
         ),
         body: widget.vm.noInternet
             ? Center(
@@ -125,7 +127,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   nonCustomServer = value;
                                   // workaround: selection was not set anymore
                                   if (value == null) {
-                                    _urlController.selection = TextSelection.fromPosition(
+                                    _urlController.selection =
+                                        TextSelection.fromPosition(
                                       TextPosition(offset: 8),
                                     );
                                   }
@@ -142,7 +145,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               if (!widget.vm.changePass) ...[
                                 if (nonCustomServer == null)
                                   TextField(
-                                    decoration: InputDecoration(labelText: 'Adresse'),
+                                    decoration:
+                                        InputDecoration(labelText: 'Adresse'),
                                     controller: _urlController,
                                     enabled: !widget.vm.loading,
                                     autofocus: !urlFromVM,
@@ -150,15 +154,17 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   ),
                                 Divider(),
                                 TextField(
-                                  decoration: InputDecoration(labelText: 'Benutzername'),
+                                  decoration: InputDecoration(
+                                      labelText: 'Benutzername'),
                                   controller: _usernameController,
                                   enabled: !widget.vm.loading,
                                 ),
                               ],
                               TextField(
                                 decoration: InputDecoration(
-                                    labelText:
-                                        widget.vm.changePass ? 'Altes Passwort' : 'Passwort'),
+                                    labelText: widget.vm.changePass
+                                        ? 'Altes Passwort'
+                                        : 'Passwort'),
                                 controller: _passwordController,
                                 obscureText: true,
                                 enabled: !widget.vm.loading,
@@ -194,14 +200,16 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   ),
                                 ),
                                 TextField(
-                                  decoration: InputDecoration(labelText: 'Neues Passwort'),
+                                  decoration: InputDecoration(
+                                      labelText: 'Neues Passwort'),
                                   controller: _newPassword1Controller,
                                   obscureText: true,
                                   enabled: !widget.vm.loading,
                                   onChanged: (_) {
                                     setState(() {
-                                      newPasswordsMatch = _newPassword1Controller.text ==
-                                          _newPassword2Controller.text;
+                                      newPasswordsMatch =
+                                          _newPassword1Controller.text ==
+                                              _newPassword2Controller.text;
                                     });
                                   },
                                 ),
@@ -217,35 +225,41 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   enabled: !widget.vm.loading,
                                   onChanged: (_) {
                                     setState(() {
-                                      newPasswordsMatch = _newPassword1Controller.text ==
-                                          _newPassword2Controller.text;
+                                      newPasswordsMatch =
+                                          _newPassword1Controller.text ==
+                                              _newPassword2Controller.text;
                                     });
                                   },
                                 ),
                               ],
                               SizedBox(height: 8),
                               RaisedButton(
-                                onPressed: widget.vm.loading || !newPasswordsMatch
-                                    ? null
-                                    : () {
-                                        widget.setSaveNoPass(safeMode);
-                                        if (widget.vm.changePass) {
-                                          widget.onChangePass(
-                                            _usernameController.text,
-                                            _passwordController.text,
-                                            _newPassword1Controller.text,
-                                            nonCustomServer?.item2 ?? _urlController.text,
-                                          );
-                                        } else {
-                                          widget.onLogin(
-                                            _usernameController.value.text,
-                                            _passwordController.value.text,
-                                            nonCustomServer?.item2 ?? _urlController.text,
-                                          );
-                                        }
-                                      },
+                                onPressed:
+                                    widget.vm.loading || !newPasswordsMatch
+                                        ? null
+                                        : () {
+                                            widget.setSaveNoPass(safeMode);
+                                            if (widget.vm.changePass) {
+                                              widget.onChangePass(
+                                                _usernameController.text,
+                                                _passwordController.text,
+                                                _newPassword1Controller.text,
+                                                nonCustomServer?.item2 ??
+                                                    _urlController.text,
+                                              );
+                                            } else {
+                                              widget.onLogin(
+                                                _usernameController.value.text,
+                                                _passwordController.value.text,
+                                                nonCustomServer?.item2 ??
+                                                    _urlController.text,
+                                              );
+                                            }
+                                          },
                                 child: Text(
-                                  widget.vm.changePass ? 'Passwort ändern' : 'Login',
+                                  widget.vm.changePass
+                                      ? 'Passwort ändern'
+                                      : 'Login',
                                 ),
                               ),
                               Divider(),
@@ -267,8 +281,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           child: widget.vm.error?.isNotEmpty == true
                               ? Text(
                                   widget.vm.error,
-                                  style:
-                                      Theme.of(context).textTheme.body1.copyWith(color: Colors.red),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .body1
+                                      .copyWith(color: Colors.red),
                                 )
                               : SizedBox(),
                         ),

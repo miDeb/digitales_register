@@ -2,32 +2,39 @@ import 'package:flutter_test/flutter_test.dart';
 
 main() {
   int readUserId(String source) {
-    var substringFromId =
-        source.substring(source.indexOf("currentUserId=") + "currentUserId=".length);
-    return int.parse(substringFromId.substring(0, substringFromId.indexOf(";")).trim());
+    var substringFromId = source
+        .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
+    return int.parse(
+        substringFromId.substring(0, substringFromId.indexOf(";")).trim());
   }
 
   String readAfterImgId(String source) {
     return source
-        .substring(source.indexOf("navigationProfilePicture") + "navigationProfilePicture".length)
+        .substring(source.indexOf("navigationProfilePicture") +
+            "navigationProfilePicture".length)
         .trim();
   }
 
   String readFullName(String source) {
     final afterImgId = readAfterImgId(source);
-    return afterImgId.substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<")).trim();
+    return afterImgId
+        .substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<"))
+        .trim();
   }
 
   String readImgSource(String source) {
     final afterImgId = readAfterImgId(source);
-    final afterStart = afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
+    final afterStart =
+        afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
   int readAutoLogoutSeconds(String source) {
-    var substringFromId =
-        source.substring(source.indexOf("auto_logout_seconds: ") + "auto_logout_seconds: ".length);
-    return int.parse(substringFromId.substring(0, substringFromId.indexOf(",")).trim());
+    var substringFromId = source.substring(
+        source.indexOf("auto_logout_seconds: ") +
+            "auto_logout_seconds: ".length);
+    return int.parse(
+        substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
   test('parse webpage', () {

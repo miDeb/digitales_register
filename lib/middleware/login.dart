@@ -1,14 +1,15 @@
 part of 'middleware.dart';
 
-final _loginMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-  ..add(LoginActionsNames.logout, _logout)
-  ..add(LoginActionsNames.login, _login)
-  ..add(LoginActionsNames.loginFailed, _loginFailed)
-  ..add(LoginActionsNames.showChangePass, _showChangePass)
-  ..add(LoginActionsNames.changePass, _changePass);
+final _loginMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(LoginActionsNames.logout, _logout)
+      ..add(LoginActionsNames.login, _login)
+      ..add(LoginActionsNames.loginFailed, _loginFailed)
+      ..add(LoginActionsNames.showChangePass, _showChangePass)
+      ..add(LoginActionsNames.changePass, _changePass);
 
-void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<LogoutPayload> action) {
+void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LogoutPayload> action) {
   next(action);
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
     api.actions.savePassActions.delete();
@@ -25,8 +26,8 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHan
   }
 }
 
-void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<LoginPayload> action) async {
+void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoginPayload> action) async {
   next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
     api.actions.loginActions.loginFailed(
@@ -82,8 +83,8 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHand
   }
 }
 
-void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<ChangePassPayload> action) async {
+void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<ChangePassPayload> action) async {
   next(action);
   final result = await _wrapper.changePass(
     action.payload.url,
@@ -118,8 +119,8 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
   }
 }
 
-void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<LoginFailedPayload> action) {
+void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoginFailedPayload> action) {
   next(action);
   if (action.payload.noInternet) {
     if (action.payload.offlineEnabled) {
@@ -139,8 +140,8 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Acti
   api.actions.routingActions.showLogin();
 }
 
-void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<void> action) {
+void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   next(action);
   api.actions.routingActions.showLogin();
 }

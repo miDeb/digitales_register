@@ -17,11 +17,12 @@ part 'serializers.g.dart';
 final Serializers serializers = (_$serializers.toBuilder()
       ..add(DateTimeSerializer())
       // needed due to https://github.com/google/built_value.dart/issues/124
-      ..addBuilderFactory(FullType(BuiltList, [FullType(GradeAll)]), () => ListBuilder<GradeAll>())
-      ..addBuilderFactory(
-          FullType(BuiltList, [FullType(GradeDetail)]), () => ListBuilder<GradeDetail>())
-      ..addBuilderFactory(
-          FullType(BuiltList, [FullType(Observation)]), () => ListBuilder<Observation>()))
+      ..addBuilderFactory(FullType(BuiltList, [FullType(GradeAll)]),
+          () => ListBuilder<GradeAll>())
+      ..addBuilderFactory(FullType(BuiltList, [FullType(GradeDetail)]),
+          () => ListBuilder<GradeDetail>())
+      ..addBuilderFactory(FullType(BuiltList, [FullType(Observation)]),
+          () => ListBuilder<Observation>()))
     //
     .build();
 

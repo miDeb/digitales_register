@@ -5,13 +5,14 @@ import '../actions/absences_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final absencesReducerBuilder =
-    NestedReducerBuilder<AppState, AppStateBuilder, AbsencesState, AbsencesStateBuilder>(
+final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    AbsencesState, AbsencesStateBuilder>(
   (s) => s.absencesState,
   (b) => b.absencesState,
 )..add(AbsencesActionsNames.loaded, _loaded);
 
-void _loaded(AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
+void _loaded(
+    AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
   return builder.replace(parseAbsences(action.payload));
 }
 
@@ -29,8 +30,9 @@ AbsencesState parseAbsences(json) {
       (b) => b
         ..justified = AbsenceJustified.fromInt(g["justified"])
         ..reasonSignature = g["reason_signature"]
-        ..reasonTimestamp =
-            g["reason_timestamp"] is String ? DateTime.tryParse(g["reason_timestamp"]) : null
+        ..reasonTimestamp = g["reason_timestamp"] is String
+            ? DateTime.tryParse(g["reason_timestamp"])
+            : null
         ..reason = g["reason"]
         ..absences = ListBuilder(
           (g["group"] as List).map(

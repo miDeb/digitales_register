@@ -51,14 +51,16 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   }
 }
 
-abstract class DashboardState implements Built<DashboardState, DashboardStateBuilder> {
+abstract class DashboardState
+    implements Built<DashboardState, DashboardStateBuilder> {
   bool get loading;
   bool get future;
   @nullable
   BuiltList<HomeworkType> get blacklist;
   @nullable
   BuiltList<Day> get allDays;
-  static Serializer<DashboardState> get serializer => _$dashboardStateSerializer;
+  static Serializer<DashboardState> get serializer =>
+      _$dashboardStateSerializer;
 
   DashboardState._();
   factory DashboardState([updates(DashboardStateBuilder b)]) = _$DashboardState;
@@ -92,15 +94,18 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
 }
 
 @immutable
-abstract class NotificationState implements Built<NotificationState, NotificationStateBuilder> {
+abstract class NotificationState
+    implements Built<NotificationState, NotificationStateBuilder> {
   @nullable
   BuiltList<Notification> get notifications;
   bool get loading => notifications == null;
   bool get hasNotifications => !loading && notifications.isNotEmpty;
-  static Serializer<NotificationState> get serializer => _$notificationStateSerializer;
+  static Serializer<NotificationState> get serializer =>
+      _$notificationStateSerializer;
 
   NotificationState._();
-  factory NotificationState([updates(NotificationStateBuilder b)]) = _$NotificationState;
+  factory NotificationState([updates(NotificationStateBuilder b)]) =
+      _$NotificationState;
 }
 
 @immutable
@@ -141,14 +146,17 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   }
 }
 
-abstract class SubjectGraphConfig implements Built<SubjectGraphConfig, SubjectGraphConfigBuilder> {
+abstract class SubjectGraphConfig
+    implements Built<SubjectGraphConfig, SubjectGraphConfigBuilder> {
   int get thick;
   int get color;
 
-  static Serializer<SubjectGraphConfig> get serializer => _$subjectGraphConfigSerializer;
+  static Serializer<SubjectGraphConfig> get serializer =>
+      _$subjectGraphConfigSerializer;
 
   SubjectGraphConfig._();
-  factory SubjectGraphConfig([updates(SubjectGraphConfigBuilder b)]) = _$SubjectGraphConfig;
+  factory SubjectGraphConfig([updates(SubjectGraphConfigBuilder b)]) =
+      _$SubjectGraphConfig;
 }
 
 abstract class Semester implements Built<Semester, SemesterBuilder> {
@@ -168,7 +176,8 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   Semester._();
 }
 
-abstract class SettingsState implements Built<SettingsState, SettingsStateBuilder> {
+abstract class SettingsState
+    implements Built<SettingsState, SettingsStateBuilder> {
   bool get noPasswordSaving;
   bool get noDataSaving;
 
@@ -227,7 +236,8 @@ abstract class SettingsState implements Built<SettingsState, SettingsStateBuilde
   }
 }
 
-abstract class AbsencesState implements Built<AbsencesState, AbsencesStateBuilder> {
+abstract class AbsencesState
+    implements Built<AbsencesState, AbsencesStateBuilder> {
   AbsencesState._();
   factory AbsencesState([updates(AbsencesStateBuilder b)]) = _$AbsencesState;
   static Serializer<AbsencesState> get serializer => _$absencesStateSerializer;
@@ -236,7 +246,8 @@ abstract class AbsencesState implements Built<AbsencesState, AbsencesStateBuilde
   BuiltList<AbsenceGroup> get absences;
 }
 
-abstract class CalendarState implements Built<CalendarState, CalendarStateBuilder> {
+abstract class CalendarState
+    implements Built<CalendarState, CalendarStateBuilder> {
   BuiltMap<DateTime, CalendarDay> get days;
   @nullable
   @BuiltValueField(serialize: false)
@@ -250,7 +261,8 @@ abstract class CalendarState implements Built<CalendarState, CalendarStateBuilde
     return days.values.where(
       (d) {
         final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
-        return !date.isBefore(monday) && date.isBefore(monday.add(Duration(days: 7)));
+        return !date.isBefore(monday) &&
+            date.isBefore(monday.add(Duration(days: 7)));
       },
     ).toList();
   }
@@ -263,13 +275,16 @@ abstract class CalendarState implements Built<CalendarState, CalendarStateBuilde
   }
 }
 
-abstract class CertificateState implements Built<CertificateState, CertificateStateBuilder> {
+abstract class CertificateState
+    implements Built<CertificateState, CertificateStateBuilder> {
   @nullable
   String get html;
 
   CertificateState._();
-  factory CertificateState([void Function(CertificateStateBuilder) updates]) = _$CertificateState;
-  static Serializer<CertificateState> get serializer => _$certificateStateSerializer;
+  factory CertificateState([void Function(CertificateStateBuilder) updates]) =
+      _$CertificateState;
+  static Serializer<CertificateState> get serializer =>
+      _$certificateStateSerializer;
 }
 
 abstract class NetworkProtocolState
@@ -277,7 +292,8 @@ abstract class NetworkProtocolState
   BuiltList<NetworkProtocolItem> get items;
 
   NetworkProtocolState._();
-  factory NetworkProtocolState([updates(NetworkProtocolStateBuilder b)]) = _$NetworkProtocolState;
+  factory NetworkProtocolState([updates(NetworkProtocolStateBuilder b)]) =
+      _$NetworkProtocolState;
 }
 
 abstract class NetworkProtocolItem
@@ -287,5 +303,6 @@ abstract class NetworkProtocolItem
   String get response;
 
   NetworkProtocolItem._();
-  factory NetworkProtocolItem([updates(NetworkProtocolItemBuilder b)]) = _$NetworkProtocolItem;
+  factory NetworkProtocolItem([updates(NetworkProtocolItemBuilder b)]) =
+      _$NetworkProtocolItem;
 }

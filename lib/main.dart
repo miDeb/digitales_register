@@ -88,7 +88,8 @@ void run() {
                     fullscreenDialog: true,
                   );
                 case "settings":
-                  return MaterialPageRoute(builder: (_) => SettingsPageContainer());
+                  return MaterialPageRoute(
+                      builder: (_) => SettingsPageContainer());
                 case "grades":
                   return MaterialPageRoute(
                     builder: (_) => GradesPageContainer(),

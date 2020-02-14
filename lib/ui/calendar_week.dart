@@ -47,7 +47,8 @@ class CalendarDayWidget extends StatelessWidget {
   final CalendarDay calendarDay;
   final Map<String, String> subjectNicks;
 
-  const CalendarDayWidget({Key key, this.max, this.calendarDay, this.subjectNicks})
+  const CalendarDayWidget(
+      {Key key, this.max, this.calendarDay, this.subjectNicks})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -174,8 +175,9 @@ class HourWidget extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(
-                            text: formatList(
-                                hour.teachers.map((t) => "${t.firstName} ${t.lastName}").toList())),
+                            text: formatList(hour.teachers
+                                .map((t) => "${t.firstName} ${t.lastName}")
+                                .toList())),
                       ],
                       style: DefaultTextStyle.of(context).style,
                     ),
@@ -200,7 +202,9 @@ class HourWidget extends StatelessWidget {
               children: [
                 Text(
                   (subjectNicks.entries
-                          .firstWhere((entry) => equalsIgnoreAsciiCase(entry.key, hour.subject),
+                          .firstWhere(
+                              (entry) => equalsIgnoreAsciiCase(
+                                  entry.key, hour.subject),
                               orElse: () => null)
                           ?.value ??
                       hour.subject),
@@ -216,7 +220,9 @@ class HourWidget extends StatelessWidget {
                     teacher.lastName,
                     maxLines: 1,
                     overflow: TextOverflow.clip,
-                    style: DefaultTextStyle.of(context).style.copyWith(fontSize: 11),
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .copyWith(fontSize: 11),
                   ),
                 if (hour.rooms.isNotEmpty)
                   SizedBox(
@@ -227,7 +233,9 @@ class HourWidget extends StatelessWidget {
                     room,
                     maxLines: 1,
                     overflow: TextOverflow.clip,
-                    style: DefaultTextStyle.of(context).style.copyWith(fontSize: 11),
+                    style: DefaultTextStyle.of(context)
+                        .style
+                        .copyWith(fontSize: 11),
                   ),
               ],
             ),
@@ -246,6 +254,8 @@ class HourWidget extends StatelessWidget {
 
   String formatList(List<String> teachers) {
     if (teachers.length <= 2) return teachers.join(" und ");
-    return teachers.sublist(0, teachers.length - 1).join(", ") + " und " + teachers.last;
+    return teachers.sublist(0, teachers.length - 1).join(", ") +
+        " und " +
+        teachers.last;
   }
 }

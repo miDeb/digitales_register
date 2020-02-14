@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BrightnessSwitcherDialog extends StatelessWidget {
-  const BrightnessSwitcherDialog({Key key, this.onSelectedTheme}) : super(key: key);
+  const BrightnessSwitcherDialog({Key key, this.onSelectedTheme})
+      : super(key: key);
 
   final ValueChanged<Brightness> onSelectedTheme;
 

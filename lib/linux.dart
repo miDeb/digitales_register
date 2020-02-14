@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart' as secure_storage;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart'
+    as secure_storage;
 import 'package:dynamic_theme/dynamic_theme.dart' as dynamic_theme;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
@@ -25,7 +26,8 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
     if (!file.existsSync()) {
       _storage = {};
     } else {
-      (_storageFuture = File("linux/appData/secure_storage.lol").readAsString()).then((string) {
+      (_storageFuture = File("linux/appData/secure_storage.lol").readAsString())
+          .then((string) {
         _storage = Map.from(json.decode(string));
       });
     }
@@ -42,7 +44,8 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<void> deleteAll(
-      {secure_storage.iOSOptions iOptions, secure_storage.AndroidOptions aOptions}) async {
+      {secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.clear();
     _syncToFileSystem();
@@ -59,7 +62,8 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<Map<String, String>> readAll(
-      {secure_storage.iOSOptions iOptions, secure_storage.AndroidOptions aOptions}) async {
+      {secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return Map.of(_storage);
   }
@@ -88,13 +92,15 @@ class DynamicTheme extends StatelessWidget {
   final dynamic_theme.ThemeDataBuilder data;
   final Brightness defaultBrightness;
 
-  const DynamicTheme({Key key, this.themedWidgetBuilder, this.data, this.defaultBrightness})
+  const DynamicTheme(
+      {Key key, this.themedWidgetBuilder, this.data, this.defaultBrightness})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (Platform.isLinux) {
-      return themedWidgetBuilder(context, ThemeData.dark()); // Modify here to change theme
+      return themedWidgetBuilder(
+          context, ThemeData.dark()); // Modify here to change theme
     }
     return dynamic_theme.DynamicTheme(
       data: data,
@@ -115,7 +121,8 @@ Future<Directory> getApplicationDocumentsDirectory() async {
 
 void showToast({String msg, Toast toastLength}) {
   if (Platform.isLinux) {
-    print("TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
+    print(
+        "TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
   } else {
     Fluttertoast.showToast(msg: msg, toastLength: toastLength);
   }

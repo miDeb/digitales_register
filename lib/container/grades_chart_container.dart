@@ -13,14 +13,15 @@ class GradesChartContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnection<AppState, AppActions, Map<SubjectGrades, SubjectGraphConfig>>(
+    return StoreConnection<AppState, AppActions,
+        Map<SubjectGrades, SubjectGraphConfig>>(
       connect: (state) {
         return Map.fromIterable(
           state.gradesState.subjects,
           key: (subject) {
             final grades = state.gradesState.semester == Semester.all
-                ? subject.gradesAll.values
-                    .fold<List<GradeAll>>(<GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
+                ? subject.gradesAll.values.fold<List<GradeAll>>(
+                    <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
                 : subject.gradesAll[state.gradesState.semester].toList();
 
             return SubjectGrades(

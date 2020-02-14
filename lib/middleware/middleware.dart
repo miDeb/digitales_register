@@ -65,7 +65,8 @@ final middleware = [
       .build(),
 ];
 
-NextActionHandler _errorMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+NextActionHandler _errorMiddleware(
+        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
           void handleError(e) {
             print(e);
@@ -82,7 +83,8 @@ NextActionHandler _errorMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppA
                         children: <Widget>[
                           RaisedButton(
                             child: Text("In die Zwischenablage kopieren"),
-                            onPressed: () => Clipboard.setData(ClipboardData(text: e.stackTrace)),
+                            onPressed: () => Clipboard.setData(
+                                ClipboardData(text: e.stackTrace)),
                           ),
                           Text(
                               "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
@@ -106,14 +108,16 @@ NextActionHandler _errorMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppA
           }
         };
 
-void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<void> action) {
+void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   _wrapper.interaction();
   // do not call next: this action is only to update the logout time
 }
 
-void _refreshNoInternet(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+void _refreshNoInternet(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<bool> action) async {
   next(action);
   final noInternet = await _wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
@@ -123,8 +127,8 @@ void _refreshNoInternet(MiddlewareApi<AppState, AppStateBuilder, AppActions> api
   }
 }
 
-void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<void> action) async {
+void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
   next(action);
   if (api.state.currentRouteIsLogin) {
     navigatorKey.currentState.pop();
@@ -133,7 +137,8 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandl
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
-  final url = login["url"] ?? "https://vinzentinum.digitalesregister.it"; // be backwards compatible
+  final url = login["url"] ??
+      "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
   if (api.state.url != null && api.state.url != url) {
     api.actions.savePassActions.delete();
@@ -158,8 +163,8 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandl
   api.actions.refreshNoInternet(true);
 }
 
-void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<void> action) {
+void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
   next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
@@ -169,18 +174,21 @@ var _saveUnderway = false;
 
 SettingsState _lastSettingsState;
 
-void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<LoggedInPayload> action) async {
-  if (!api.state.settingsState.noPasswordSaving && !action.payload.fromStorage) {
+void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoggedInPayload> action) async {
+  if (!api.state.settingsState.noPasswordSaving &&
+      !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
 
   if (!api.state.loginState.loggedIn) {
     final user = action.payload.username.hashCode;
-    final file = File("${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
+    final file = File(
+        "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
     if (await file.exists()) {
       try {
-        AppState serializedState = serializers.deserialize(json.decode(await file.readAsString()));
+        AppState serializedState =
+            serializers.deserialize(json.decode(await file.readAsString()));
         final currentState = api.state;
         api.actions.mountAppState(
           serializedState.rebuild(
@@ -201,9 +209,12 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
         // next not at the beginning: bug fix (serialization)
         next(action);
 
-        api.actions.settingsActions.saveNoPass(serializedState.settingsState.noPasswordSaving);
+        api.actions.settingsActions
+            .saveNoPass(serializedState.settingsState.noPasswordSaving);
       } catch (e) {
-        showToast(msg: "Fehler beim Laden der gespeicherten Daten", toastLength: Toast.LENGTH_LONG);
+        showToast(
+            msg: "Fehler beim Laden der gespeicherten Daten",
+            toastLength: Toast.LENGTH_LONG);
         print(e);
         next(action);
       }
@@ -225,10 +236,12 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
 var _lastSave = "";
 AppState _stateToSave;
 
-NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+NextActionHandler _saveStateMiddleware(
+        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
           next(action);
-          if (api.state.loginState.loggedIn && api.state.loginState.userName != null) {
+          if (api.state.loginState.loggedIn &&
+              api.state.loginState.userName != null) {
             _stateToSave = api.state;
             if (_saveUnderway) {
               return;
@@ -256,7 +269,8 @@ NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, 
                       user.toString(),
                       json.encode(
                         {
-                          "settings": serializers.serialize(_stateToSave.settingsState),
+                          "settings":
+                              serializers.serialize(_stateToSave.settingsState),
                         },
                       ),
                     );
@@ -268,7 +282,8 @@ NextActionHandler _saveStateMiddleware(MiddlewareApi<AppState, AppStateBuilder, 
         };
 
 Future<File> _storageFile(String key) async {
-  return File("${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
+  return File(
+      "${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
 }
 
 void _writeToStorage(String key, String txt) async {

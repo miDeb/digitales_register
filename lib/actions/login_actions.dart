@@ -18,9 +18,11 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<ChangePassPayload> changePass;
 }
 
-abstract class LoginPayload implements Built<LoginPayload, LoginPayloadBuilder> {
+abstract class LoginPayload
+    implements Built<LoginPayload, LoginPayloadBuilder> {
   LoginPayload._();
-  factory LoginPayload([void Function(LoginPayloadBuilder) updates]) = _$LoginPayload;
+  factory LoginPayload([void Function(LoginPayloadBuilder) updates]) =
+      _$LoginPayload;
 
   @override
   String toString() {
@@ -44,7 +46,8 @@ abstract class LoginPayload implements Built<LoginPayload, LoginPayloadBuilder> 
   bool get offlineEnabled;
 }
 
-abstract class ChangePassPayload implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
+abstract class ChangePassPayload
+    implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
   ChangePassPayload._();
   factory ChangePassPayload([void Function(ChangePassPayloadBuilder) updates]) =
       _$ChangePassPayload;
@@ -54,17 +57,21 @@ abstract class ChangePassPayload implements Built<ChangePassPayload, ChangePassP
   String get newPass;
 }
 
-abstract class LoggedInPayload implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
+abstract class LoggedInPayload
+    implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
   LoggedInPayload._();
-  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) = _$LoggedInPayload;
+  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) =
+      _$LoggedInPayload;
 
   String get username;
   bool get fromStorage;
 }
 
-abstract class LoginFailedPayload implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
+abstract class LoginFailedPayload
+    implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
   LoginFailedPayload._();
-  factory LoginFailedPayload([void Function(LoginFailedPayloadBuilder) updates]) =
+  factory LoginFailedPayload(
+          [void Function(LoginFailedPayloadBuilder) updates]) =
       _$LoginFailedPayload;
 
   String get cause;
@@ -74,9 +81,11 @@ abstract class LoginFailedPayload implements Built<LoginFailedPayload, LoginFail
   bool get noInternet;
 }
 
-abstract class LogoutPayload implements Built<LogoutPayload, LogoutPayloadBuilder> {
+abstract class LogoutPayload
+    implements Built<LogoutPayload, LogoutPayloadBuilder> {
   LogoutPayload._();
-  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) = _$LogoutPayload;
+  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) =
+      _$LogoutPayload;
 
   bool get hard;
   bool get forced;

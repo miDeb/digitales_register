@@ -5,25 +5,26 @@ import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 
-final dashboardReducerBuilder =
-    NestedReducerBuilder<AppState, AppStateBuilder, DashboardState, DashboardStateBuilder>(
+final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
+    DashboardState, DashboardStateBuilder>(
   (s) => s.dashboardState,
   (b) => b.dashboardState,
 )
-      ..add(DashboardActionsNames.loaded, _loaded)
-      ..add(DashboardActionsNames.load, _loading)
-      ..add(DashboardActionsNames.switchFuture, _switchFuture)
-      ..add(DashboardActionsNames.notLoaded, _notLoaded)
-      ..add(DashboardActionsNames.homeworkAdded, _homeworkAdded)
-      ..add(DashboardActionsNames.deleteHomework, _homeworkRemoved)
-      ..add(DashboardActionsNames.toggleDone, _toggleDone)
-      ..add(DashboardActionsNames.markAsSeen, _markAsSeen)
-      ..add(DashboardActionsNames.markDeletedHomeworkAsSeen, _markDeletedHomeworkAsSeen)
-      ..add(DashboardActionsNames.markAllAsSeen, _markAllAsSeen)
-      ..add(DashboardActionsNames.updateBlacklist, _updateBlacklist);
+  ..add(DashboardActionsNames.loaded, _loaded)
+  ..add(DashboardActionsNames.load, _loading)
+  ..add(DashboardActionsNames.switchFuture, _switchFuture)
+  ..add(DashboardActionsNames.notLoaded, _notLoaded)
+  ..add(DashboardActionsNames.homeworkAdded, _homeworkAdded)
+  ..add(DashboardActionsNames.deleteHomework, _homeworkRemoved)
+  ..add(DashboardActionsNames.toggleDone, _toggleDone)
+  ..add(DashboardActionsNames.markAsSeen, _markAsSeen)
+  ..add(DashboardActionsNames.markDeletedHomeworkAsSeen,
+      _markDeletedHomeworkAsSeen)
+  ..add(DashboardActionsNames.markAllAsSeen, _markAllAsSeen)
+  ..add(DashboardActionsNames.updateBlacklist, _updateBlacklist);
 
-void _loaded(
-    DashboardState state, Action<DaysLoadedPayload> action, DashboardStateBuilder builder) {
+void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
+    DashboardStateBuilder builder) {
   List<Day> loadedDays = List.from(
     (action.payload.data as List).map(
       (d) => _parseDay(d),
@@ -83,7 +84,8 @@ void _loaded(
               ..firstSeen = now
               ..isChanged = action.payload.markNewOrChangedEntries &&
                   // there was already a notification in this case (new grade)
-                  !(oldHw.type == HomeworkType.gradeGroup && newHw.type == HomeworkType.grade)));
+                  !(oldHw.type == HomeworkType.gradeGroup &&
+                      newHw.type == HomeworkType.grade)));
           } else {
             b.homework[b.homework.build().indexOf(oldHw)] =
                 oldHw.rebuild((b) => b..checked = newHw.checked);
@@ -132,8 +134,8 @@ void _loaded(
 Day _parseDay(data) {
   return Day((b) => b
     ..date = DateTime.parse(data["date"])
-    ..homework = ListBuilder(
-        (List<Map<String, dynamic>>.from(data["items"])).map((m) => _parseHomework(m))));
+    ..homework = ListBuilder((List<Map<String, dynamic>>.from(data["items"]))
+        .map((m) => _parseHomework(m))));
 }
 
 Homework _parseHomework(data) {
@@ -145,7 +147,9 @@ Homework _parseHomework(data) {
       ..label = data["label"]
       ..warning = data["warning"] ?? b.warning
       ..checkable = data["checkable"] ?? b.checkable
-      ..checked = data["checked"] is bool ? data["checked"] : (data["checked"] ?? 0) != 0
+      ..checked = data["checked"] is bool
+          ? data["checked"]
+          : (data["checked"] ?? 0) != 0
       ..deleteable = data["deleteable"] ?? b.deleteable;
 
     final typeString = data["type"];
@@ -179,50 +183,59 @@ Homework _parseHomework(data) {
   });
 }
 
-void _notLoaded(DashboardState state, Action<void> action, DashboardStateBuilder builder) {
+void _notLoaded(
+    DashboardState state, Action<void> action, DashboardStateBuilder builder) {
   builder..loading = false;
 }
 
-void _loading(DashboardState state, Action<bool> action, DashboardStateBuilder builder) {
+void _loading(
+    DashboardState state, Action<bool> action, DashboardStateBuilder builder) {
   builder..loading = true;
 }
 
-void _switchFuture(DashboardState state, Action<void> action, DashboardStateBuilder builder) {
+void _switchFuture(
+    DashboardState state, Action<void> action, DashboardStateBuilder builder) {
   builder..future = !state.future;
 }
 
-void _homeworkAdded(
-    DashboardState state, Action<HomeworkAddedPayload> action, DashboardStateBuilder builder) {
+void _homeworkAdded(DashboardState state, Action<HomeworkAddedPayload> action,
+    DashboardStateBuilder builder) {
   builder
     ..allDays.map(
       (day) => day.date == action.payload.date
-          ? day.rebuild((b) => b..homework.add(_parseHomework(action.payload.data)))
+          ? day.rebuild(
+              (b) => b..homework.add(_parseHomework(action.payload.data)))
           : day,
     );
 }
 
-void _homeworkRemoved(
-    DashboardState state, Action<Homework> action, DashboardStateBuilder builder) {
-  builder..allDays.map((day) => day.rebuild((b) => b..homework.remove(action.payload)));
+void _homeworkRemoved(DashboardState state, Action<Homework> action,
+    DashboardStateBuilder builder) {
+  builder
+    ..allDays
+        .map((day) => day.rebuild((b) => b..homework.remove(action.payload)));
 }
 
-void _toggleDone(
-    DashboardState state, Action<ToggleDonePayload> action, DashboardStateBuilder builder) {
+void _toggleDone(DashboardState state, Action<ToggleDonePayload> action,
+    DashboardStateBuilder builder) {
   builder
     ..allDays.map((day) => day.homework.contains(action.payload.hw)
         ? day.rebuild((b) => b
-          ..homework[day.homework.indexOf(action.payload.hw)] =
-              action.payload.hw.rebuild((hb) => hb..checked = action.payload.done))
+          ..homework[day.homework.indexOf(action.payload.hw)] = action
+              .payload.hw
+              .rebuild((hb) => hb..checked = action.payload.done))
         : day);
 }
 
-void _markAsSeen(DashboardState state, Action<Homework> action, DashboardStateBuilder builder) {
+void _markAsSeen(DashboardState state, Action<Homework> action,
+    DashboardStateBuilder builder) {
   builder
     ..allDays.map(
       (day) => day.homework.contains(action.payload)
           ? day.rebuild(
               (b) => b
-                ..homework[day.homework.indexOf(action.payload)] = action.payload.rebuild(
+                ..homework[day.homework.indexOf(action.payload)] =
+                    action.payload.rebuild(
                   (hb) => hb
                     ..isChanged = false
                     ..isNew = false,
@@ -245,7 +258,8 @@ void _markDeletedHomeworkAsSeen(
         : day);
 }
 
-void _markAllAsSeen(DashboardState state, Action<void> action, DashboardStateBuilder builder) {
+void _markAllAsSeen(
+    DashboardState state, Action<void> action, DashboardStateBuilder builder) {
   builder
     ..allDays.map(
       (day) => day.rebuild(
@@ -262,7 +276,7 @@ void _markAllAsSeen(DashboardState state, Action<void> action, DashboardStateBui
     );
 }
 
-void _updateBlacklist(
-    DashboardState state, Action<BuiltList<HomeworkType>> action, DashboardStateBuilder builder) {
+void _updateBlacklist(DashboardState state,
+    Action<BuiltList<HomeworkType>> action, DashboardStateBuilder builder) {
   builder..blacklist.replace(action.payload);
 }

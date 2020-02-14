@@ -9,7 +9,9 @@ void main() {
     });
 
     test('json http get list of objects', () async {
-      dynamic body = await Requests.get("https://jsonplaceholder.typicode.com/posts", json: true);
+      dynamic body = await Requests.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          json: true);
       expect(body, isNotNull);
       expect(body, isList);
     });
@@ -25,7 +27,9 @@ void main() {
     });
 
     test('json http get object', () async {
-      dynamic body = await Requests.get("https://jsonplaceholder.typicode.com/posts/1", json: true);
+      dynamic body = await Requests.get(
+          "https://jsonplaceholder.typicode.com/posts/1",
+          json: true);
       expect(body, isNotNull);
       expect(body, isMap);
     });

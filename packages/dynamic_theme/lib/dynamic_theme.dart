@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
-typedef ThemedWidgetBuilder = Widget Function(BuildContext context, ThemeData data);
+typedef ThemedWidgetBuilder = Widget Function(
+    BuildContext context, ThemeData data);
 
-typedef ThemeDataBuilder = ThemeData Function(Brightness brightness, bool platformOverride);
+typedef ThemeDataBuilder = ThemeData Function(
+    Brightness brightness, bool platformOverride);
 
 class DynamicTheme extends StatefulWidget {
   const DynamicTheme({
@@ -34,7 +36,8 @@ class DynamicTheme extends StatefulWidget {
   }
 }
 
-class DynamicThemeState extends State<DynamicTheme> with WidgetsBindingObserver {
+class DynamicThemeState extends State<DynamicTheme>
+    with WidgetsBindingObserver {
   ThemeData _themeData;
 
   Brightness _brightness;
@@ -165,8 +168,8 @@ class DynamicThemeState extends State<DynamicTheme> with WidgetsBindingObserver 
   Future<void> _saveBrightness() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     // Saves whether or not the provided brightness is dark
-    await prefs.setBool(
-        _sharedPreferencesBrightnessKey, _brightness == Brightness.dark ? true : false);
+    await prefs.setBool(_sharedPreferencesBrightnessKey,
+        _brightness == Brightness.dark ? true : false);
   }
 
   /// Saves the provided followOS value in `SharedPreferences`

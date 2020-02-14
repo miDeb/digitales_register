@@ -10,7 +10,8 @@ class CertificateContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, CertificateViewModel>(
       connect: (state) {
-        return CertificateViewModel(state.certificateState.html, state.noInternet);
+        return CertificateViewModel(
+            state.certificateState.html, state.noInternet);
       },
       builder: (context, vm, actions) {
         return Certificate(vm: vm);

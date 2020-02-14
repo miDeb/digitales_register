@@ -5,7 +5,8 @@ class ListViewCapableAlertDialog extends StatelessWidget {
   final Widget content;
   final List<Widget> actions;
 
-  const ListViewCapableAlertDialog({Key key, this.title, this.content, this.actions})
+  const ListViewCapableAlertDialog(
+      {Key key, this.title, this.content, this.actions})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

@@ -60,7 +60,8 @@ class AbsencesButton extends StatelessWidget {
     return StoreConnection<AppState, AppActions, void>(
       connect: (state) {},
       builder: (context, vm, actions) {
-        return AbsencesButtonWidget(onShowAbsences: actions.routingActions.showAbsences);
+        return AbsencesButtonWidget(
+            onShowAbsences: actions.routingActions.showAbsences);
       },
     );
   }

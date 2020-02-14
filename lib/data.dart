@@ -187,9 +187,11 @@ class HomeworkType extends EnumClass {
   }
 }
 
-abstract class Notification implements Built<Notification, NotificationBuilder> {
+abstract class Notification
+    implements Built<Notification, NotificationBuilder> {
   Notification._();
-  factory Notification([void Function(NotificationBuilder) updates]) = _$Notification;
+  factory Notification([void Function(NotificationBuilder) updates]) =
+      _$Notification;
   static Serializer<Notification> get serializer => _$notificationSerializer;
 
   int get id;
@@ -212,8 +214,9 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
 
   List<DetailEntry> detailEntries(Semester semester) {
     if (semester == Semester.all) {
-      final entries =
-          (List.of(Semester.values)..remove(Semester.all)).map((s) => detailEntries(s)).toList();
+      final entries = (List.of(Semester.values)..remove(Semester.all))
+          .map((s) => detailEntries(s))
+          .toList();
       entries.removeWhere((e) => e == null);
       if (entries.isEmpty) return null;
       return entries.fold([], (a, b) => [...a, ...b]);
@@ -273,9 +276,11 @@ abstract class _Entry {
 
 abstract class DetailEntry implements _Entry {}
 
-abstract class Observation implements _Entry, DetailEntry, Built<Observation, ObservationBuilder> {
+abstract class Observation
+    implements _Entry, DetailEntry, Built<Observation, ObservationBuilder> {
   Observation._();
-  factory Observation([void Function(ObservationBuilder) updates]) = _$Observation;
+  factory Observation([void Function(ObservationBuilder) updates]) =
+      _$Observation;
   static Serializer<Observation> get serializer => _$observationSerializer;
 
   String get typeName;
@@ -290,16 +295,21 @@ abstract class _BasicGrade implements _Entry {
   String get type;
 }
 
-abstract class GradeAll implements _BasicGrade, Built<GradeAll, GradeAllBuilder> {
+abstract class GradeAll
+    implements _BasicGrade, Built<GradeAll, GradeAllBuilder> {
   GradeAll._();
   factory GradeAll([void Function(GradeAllBuilder) updates]) = _$GradeAll;
   static Serializer<GradeAll> get serializer => _$gradeAllSerializer;
 }
 
 abstract class GradeDetail
-    implements _BasicGrade, DetailEntry, Built<GradeDetail, GradeDetailBuilder> {
+    implements
+        _BasicGrade,
+        DetailEntry,
+        Built<GradeDetail, GradeDetailBuilder> {
   GradeDetail._();
-  factory GradeDetail([void Function(GradeDetailBuilder) updates]) = _$GradeDetail;
+  factory GradeDetail([void Function(GradeDetailBuilder) updates]) =
+      _$GradeDetail;
   static Serializer<GradeDetail> get serializer => _$gradeDetailSerializer;
 
   String get gradeFormatted => _formatGrade(grade);
@@ -337,7 +347,8 @@ abstract class Competence implements Built<Competence, CompetenceBuilder> {
   int get grade;
 }
 
-abstract class AbsenceGroup implements Built<AbsenceGroup, AbsenceGroupBuilder> {
+abstract class AbsenceGroup
+    implements Built<AbsenceGroup, AbsenceGroupBuilder> {
   @nullable
   String get reason;
   @nullable
@@ -353,10 +364,13 @@ abstract class AbsenceGroup implements Built<AbsenceGroup, AbsenceGroupBuilder> 
   static Serializer<AbsenceGroup> get serializer => _$absenceGroupSerializer;
 }
 
-abstract class AbsenceStatistic implements Built<AbsenceStatistic, AbsenceStatisticBuilder> {
+abstract class AbsenceStatistic
+    implements Built<AbsenceStatistic, AbsenceStatisticBuilder> {
   AbsenceStatistic._();
-  static Serializer<AbsenceStatistic> get serializer => _$absenceStatisticSerializer;
-  factory AbsenceStatistic([updates(AbsenceStatisticBuilder b)]) = _$AbsenceStatistic;
+  static Serializer<AbsenceStatistic> get serializer =>
+      _$absenceStatisticSerializer;
+  factory AbsenceStatistic([updates(AbsenceStatisticBuilder b)]) =
+      _$AbsenceStatistic;
 
   int get counter;
   int get counterForSchool;
@@ -381,7 +395,8 @@ abstract class Absence implements Built<Absence, AbsenceBuilder> {
 }
 
 class AbsenceJustified extends EnumClass {
-  static Serializer<AbsenceJustified> get serializer => _$absenceJustifiedSerializer;
+  static Serializer<AbsenceJustified> get serializer =>
+      _$absenceJustifiedSerializer;
   static const AbsenceJustified justified = _$justified;
   static const AbsenceJustified notJustified = _$notJustified;
   static const AbsenceJustified forSchool = _$forSchool;
@@ -411,7 +426,8 @@ abstract class CalendarDay implements Built<CalendarDay, CalendarDayBuilder> {
   factory CalendarDay([updates(CalendarDayBuilder b)]) = _$CalendarDay;
 }
 
-abstract class CalendarHour implements Built<CalendarHour, CalendarHourBuilder> {
+abstract class CalendarHour
+    implements Built<CalendarHour, CalendarHourBuilder> {
   int get fromHour;
   int get toHour;
   BuiltList<String> get rooms;
@@ -429,7 +445,8 @@ abstract class CalendarHour implements Built<CalendarHour, CalendarHourBuilder> 
 
   BuiltList<Teacher> get teachers;
 
-  static void _initializeBuilder(CalendarHourBuilder b) => b..teachers = ListBuilder([]);
+  static void _initializeBuilder(CalendarHourBuilder b) =>
+      b..teachers = ListBuilder([]);
 
   static Serializer<CalendarHour> get serializer => _$calendarHourSerializer;
   CalendarHour._();

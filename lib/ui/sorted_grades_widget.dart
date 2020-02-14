@@ -101,7 +101,8 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                   children: <TextSpan>[
                     TextSpan(
                       text: widget.subject.averageFormatted(widget.semester),
-                      style: widget.subject.averageFormatted(widget.semester) == "/"
+                      style: widget.subject.averageFormatted(widget.semester) ==
+                              "/"
                           ? null
                           : TextStyle(
                               decoration: TextDecoration.underline,
@@ -119,8 +120,9 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                     .map(
                       (entry) => GradeTypeWidget(
                         typeName: entry.key,
-                        entries:
-                            entry.value.where((g) => widget.showCancelled || !g.cancelled).toList(),
+                        entries: entry.value
+                            .where((g) => widget.showCancelled || !g.cancelled)
+                            .toList(),
                       ),
                     )
                     .toList()
@@ -214,7 +216,8 @@ class CompetenceWidget extends StatelessWidget {
   final Competence competence;
   final bool cancelled;
 
-  const CompetenceWidget({Key key, this.competence, this.cancelled}) : super(key: key);
+  const CompetenceWidget({Key key, this.competence, this.cancelled})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -253,7 +256,8 @@ class GradeTypeWidget extends StatelessWidget {
   final String typeName;
   final List<DetailEntry> entries;
 
-  const GradeTypeWidget({Key key, this.typeName, this.entries}) : super(key: key);
+  const GradeTypeWidget({Key key, this.typeName, this.entries})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     final displayGrades = entries

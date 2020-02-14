@@ -22,7 +22,8 @@ class Wrapper {
   bool safeMode;
   Future<bool> get noInternet async {
     try {
-      final result = await http.get(url != null ? baseAddress : "https://digitalesregister.it");
+      final result = await http
+          .get(url != null ? baseAddress : "https://digitalesregister.it");
       if (result.statusCode == 200) {
         return false;
       }
@@ -83,7 +84,8 @@ class Wrapper {
       this.pass = pass;
       error = null;
       await _loadConfig().then((_) {
-        _serverLogoutTime = DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
+        _serverLogoutTime =
+            DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
         onConfigLoaded();
       });
@@ -94,7 +96,8 @@ class Wrapper {
     return response;
   }
 
-  Future<dynamic> changePass(String url, String user, String oldPass, String newPass) async {
+  Future<dynamic> changePass(
+      String url, String user, String oldPass, String newPass) async {
     this.url = url;
     dynamic response;
     await _clearCookies();
@@ -153,37 +156,46 @@ class Wrapper {
   }
 
   int _readAutoLogoutSeconds(String source) {
-    var substringFromId =
-        source.substring(source.indexOf("auto_logout_seconds: ") + "auto_logout_seconds: ".length);
-    return int.parse(substringFromId.substring(0, substringFromId.indexOf(",")).trim());
+    var substringFromId = source.substring(
+        source.indexOf("auto_logout_seconds: ") +
+            "auto_logout_seconds: ".length);
+    return int.parse(
+        substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
   int _readUserId(String source) {
-    var substringFromId =
-        source.substring(source.indexOf("currentUserId=") + "currentUserId=".length);
-    return int.parse(substringFromId.substring(0, substringFromId.indexOf(";")).trim());
+    var substringFromId = source
+        .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
+    return int.parse(
+        substringFromId.substring(0, substringFromId.indexOf(";")).trim());
   }
 
   String _readAfterImgId(String source) {
     return source
-        .substring(source.indexOf("navigationProfilePicture") + "navigationProfilePicture".length)
+        .substring(source.indexOf("navigationProfilePicture") +
+            "navigationProfilePicture".length)
         .trim();
   }
 
   String _readFullName(String source) {
     final afterImgId = _readAfterImgId(source);
-    return afterImgId.substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<")).trim();
+    return afterImgId
+        .substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<"))
+        .trim();
   }
 
   String _readImgSource(String source) {
     final afterImgId = _readAfterImgId(source);
-    final afterStart = afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
+    final afterStart =
+        afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
   var _mutex = Mutex();
   Future<dynamic> send(String url,
-      {Map<String, dynamic> args = const {}, bool json = true, String method = "POST"}) async {
+      {Map<String, dynamic> args = const {},
+      bool json = true,
+      String method = "POST"}) async {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -214,7 +226,8 @@ class Wrapper {
                   baseAddress + url,
                   json: json,
                 )
-              : throw Exception("invalid method: $method; expected POST or GET");
+              : throw Exception(
+                  "invalid method: $method; expected POST or GET");
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
@@ -258,7 +271,8 @@ class Wrapper {
         logout(hard: safeMode, forceLogout: true);
         return;
       } else {
-        _serverLogoutTime = DateTime.fromMillisecondsSinceEpoch(result["newExpiration"] * 1000);
+        _serverLogoutTime =
+            DateTime.fromMillisecondsSinceEpoch(result["newExpiration"] * 1000);
       }
     }
     Future.delayed(Duration(seconds: 5), _updateLogout);

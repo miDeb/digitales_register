@@ -1,9 +1,10 @@
 part of 'middleware.dart';
 
-final _gradesMiddleware = MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-  ..add(GradesActionsNames.setSemester, _setSemester)
-  ..add(GradesActionsNames.load, _loadGrades)
-  ..add(GradesActionsNames.loadDetails, _loadGradesDetails);
+final _gradesMiddleware =
+    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+      ..add(GradesActionsNames.setSemester, _setSemester)
+      ..add(GradesActionsNames.load, _loadGrades)
+      ..add(GradesActionsNames.loadDetails, _loadGradesDetails);
 
 final _gradesLock = SemesterLock((s) async {
   await Requests.get("${_wrapper.baseAddress}/?semesterWechsel=${s.n}");
@@ -12,19 +13,21 @@ final _gradesLock = SemesterLock((s) async {
 const String _subjects = "/api/student/all_subjects";
 const String _subjectsDetail = "/api/student/subject_detail";
 
-void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<Semester> action) {
+void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<Semester> action) {
   next(action);
   api.actions.gradesActions.load(action.payload);
 }
 
-void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
-    Action<Semester> action) async {
+void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<Semester> action) async {
   if (api.state.noInternet) return;
 
   next(action);
   _doForSemester(
-    action.payload == Semester.all ? [Semester.first, Semester.second] : [action.payload],
+    action.payload == Semester.all
+        ? [Semester.first, Semester.second]
+        : [action.payload],
     (s) async {
       var data = await _wrapper.send(
         _subjects,
@@ -38,13 +41,16 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, Actio
             ..semester = s.toBuilder(),
         ),
       );
-      api.actions.settingsActions.updateGraphConfig(api.state.gradesState.subjects);
+      api.actions.settingsActions
+          .updateGraphConfig(api.state.gradesState.subjects);
     },
   );
 }
 
-void _loadGradesDetails(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoadSubjectDetailsPayload> action) async {
+void _loadGradesDetails(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<LoadSubjectDetailsPayload> action) async {
   if (api.state.noInternet) return;
 
   next(action);
@@ -56,7 +62,10 @@ void _loadGradesDetails(MiddlewareApi<AppState, AppStateBuilder, AppActions> api
     (s) async {
       var data = await _wrapper.send(
         _subjectsDetail,
-        args: {"studentId": api.state.config.userId, "subjectId": action.payload.subject.id},
+        args: {
+          "studentId": api.state.config.userId,
+          "subjectId": action.payload.subject.id
+        },
       );
       if (data == null) {
         api.actions.refreshNoInternet();
