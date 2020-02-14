@@ -17,6 +17,7 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.noInternet, _noInternet)
   ..add(AppActionsNames.isLoginRoute, _currentRouteIsLogin)
   ..add(AppActionsNames.setConfig, _config)
+  ..add(AppActionsNames.setUrl, _setUrl)
   ..combineNested(absencesReducerBuilder)
   ..combineNested(calendarReducerBuilder)
   ..combineNested(dashboardReducerBuilder)
@@ -41,4 +42,8 @@ void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
 
 void _mountState(AppState state, Action<AppState> action, AppStateBuilder builder) {
   builder.replace(action.payload);
+}
+
+void _setUrl(AppState state, Action<String> action, AppStateBuilder builder) {
+  builder.url = action.payload;
 }

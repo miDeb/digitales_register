@@ -27,6 +27,7 @@ abstract class AppActions extends ReduxActions {
   ActionDispatcher<Config> setConfig;
   ActionDispatcher<AppState> mountAppState;
   ActionDispatcher<NetworkProtocolItem> addNetworkProtocolItem;
+  ActionDispatcher<String> setUrl;
   AbsencesActions absencesActions;
   CalendarActions calendarActions;
   DashboardActions dashboardActions;

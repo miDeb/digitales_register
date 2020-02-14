@@ -53,6 +53,7 @@ typedef SetSafeModeCallback = void Function(bool safeMode);
 class LoginPageViewModel {
   final String error;
   final String username;
+  final String url;
   final bool loading, safeMode, noInternet, changePass, mustChangePass;
   final Map<String, String> servers;
 
@@ -64,7 +65,8 @@ class LoginPageViewModel {
         servers = _servers,
         changePass = state.loginState.changePassword,
         mustChangePass = state.loginState.mustChangePassword,
-        username = state.loginState.userName;
+        username = state.loginState.userName,
+        url = state.url;
 }
 
 const _servers = {

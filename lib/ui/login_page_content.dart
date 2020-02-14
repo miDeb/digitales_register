@@ -47,6 +47,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
   );
   bool safeMode;
   bool customUrl = false;
+  bool urlFromVM = false;
   bool newPasswordsMatch = true;
   Tuple2<String, String> nonCustomServer;
   @override
@@ -54,6 +55,12 @@ class _LoginPageContentState extends State<LoginPageContent> {
     safeMode = widget.vm.safeMode;
     nonCustomServer = widget.vm.servers.entries.first.toTuple();
     _usernameController.text = widget.vm.username;
+    if (widget.vm.url != null && nonCustomServer.item2 != widget.vm.url) {
+      _urlController.text = widget.vm.url;
+      urlFromVM = true;
+      customUrl = true;
+      nonCustomServer = null;
+    }
     super.initState();
   }
 
@@ -95,7 +102,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     child: ListView(
                       shrinkWrap: true,
                       children: <Widget>[
-                        if (!widget.vm.changePass)
+                        if (!widget.vm.changePass && !urlFromVM)
                           ListTile(
                             title: Text("Schule"),
                             trailing: DropdownButton(
@@ -138,7 +145,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     decoration: InputDecoration(labelText: 'Adresse'),
                                     controller: _urlController,
                                     enabled: !widget.vm.loading,
-                                    autofocus: true,
+                                    autofocus: !urlFromVM,
                                     keyboardType: TextInputType.url,
                                   ),
                                 Divider(),

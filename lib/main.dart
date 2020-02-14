@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'actions/app_actions.dart';
 import 'app_state.dart';
@@ -123,7 +124,17 @@ void run() {
   );
   WidgetsBinding.instance
     ..addPostFrameCallback(
-      (_) {
+      (_) async {
+        final uri = await getInitialUri();
+        if (uri != null) {
+          store.actions.setUrl(uri.origin);
+        }
+        getUriLinksStream().listen((event) {
+          if (event != null) {
+            store.actions.setUrl(event.origin);
+            store.actions.load();
+          }
+        });
         store.actions.load();
         WidgetsBinding.instance
           ..addObserver(

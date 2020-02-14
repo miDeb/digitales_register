@@ -58,5 +58,12 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionH
 void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandler next,
     Action<void> action) {
   next(action);
-  _secureStorage.delete(key: "login");
+  _secureStorage.write(
+    key: "login",
+    value: json.encode(
+      {
+        "url": _wrapper.url,
+      },
+    ),
+  );
 }

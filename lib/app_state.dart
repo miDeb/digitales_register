@@ -31,6 +31,9 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @nullable
   @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
+  @nullable
+  @BuiltValueField(serialize: false)
+  String get url;
   static Serializer<AppState> get serializer => _$appStateSerializer;
   AppState._();
   factory AppState([updates(AppStateBuilder b)]) = _$AppState;

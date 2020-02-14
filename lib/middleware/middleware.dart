@@ -135,19 +135,25 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api, ActionHandl
   final pass = login["pass"];
   final url = login["url"] ?? "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
-  if (user != null && pass != null) {
-    api.actions.loginActions.login(
-      LoginPayload(
-        (b) => b
-          ..user = user
-          ..pass = pass
-          ..url = url
-          ..fromStorage = true
-          ..offlineEnabled = offlineEnabled,
-      ),
-    );
-  } else {
+  if (api.state.url != null && api.state.url != url) {
+    api.actions.savePassActions.delete();
     api.actions.routingActions.showLogin();
+  } else {
+    api.actions.setUrl(url);
+    if (user != null && pass != null) {
+      api.actions.loginActions.login(
+        LoginPayload(
+          (b) => b
+            ..user = user
+            ..pass = pass
+            ..url = url
+            ..fromStorage = true
+            ..offlineEnabled = offlineEnabled,
+        ),
+      );
+    } else {
+      api.actions.routingActions.showLogin();
+    }
   }
   api.actions.refreshNoInternet(true);
 }
