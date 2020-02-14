@@ -400,6 +400,7 @@ class DayWidget extends StatelessWidget {
                     badgeColor: day.deletedHomework.any((h) => h.isChanged)
                         ? Colors.red
                         : Theme.of(context).scaffoldBackgroundColor,
+                    toAnimate: day.deletedHomework.any((h) => h.isChanged),
                     padding: EdgeInsets.zero,
                     position: BadgePosition.topRight(),
                     elevation: 0,
@@ -676,6 +677,7 @@ class ItemWidget extends StatelessWidget {
                               badgeColor: isDeletedView
                                   ? Theme.of(context).dialogBackgroundColor
                                   : Theme.of(context).scaffoldBackgroundColor,
+                              toAnimate: false,
                               elevation: 0,
                             )
                           : Icon(
