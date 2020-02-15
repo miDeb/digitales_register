@@ -20,8 +20,9 @@ class GradesChartContainer extends StatelessWidget {
           state.gradesState.subjects,
           key: (subject) {
             final grades = state.gradesState.semester == Semester.all
-                ? subject.gradesAll.values.fold<List<GradeAll>>(
+                ? (subject.gradesAll.values.fold<List<GradeAll>>(
                     <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
+                  ..sort((GradeAll a, GradeAll b) => a.date.compareTo(b.date)))
                 : subject.gradesAll[state.gradesState.semester].toList();
 
             return SubjectGrades(
