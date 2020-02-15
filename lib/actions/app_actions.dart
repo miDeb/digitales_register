@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/certificate_actions.dart';
 
@@ -27,6 +29,7 @@ abstract class AppActions extends ReduxActions {
   ActionDispatcher<AppState> mountAppState;
   ActionDispatcher<NetworkProtocolItem> addNetworkProtocolItem;
   ActionDispatcher<String> setUrl;
+  ActionDispatcher<void> restarted;
   AbsencesActions absencesActions;
   CalendarActions calendarActions;
   DashboardActions dashboardActions;

@@ -141,8 +141,7 @@ void run() {
           ..addObserver(
             LifecycleObserver(
               () {
-                navigatorKey.currentState.popUntil((route) => route.isFirst);
-                store.actions.load();
+                store.actions.restarted();
               },
               // this might not finish in time:
               store.actions.saveState,

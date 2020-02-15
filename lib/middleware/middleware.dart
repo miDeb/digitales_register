@@ -309,3 +309,15 @@ void _deleteData(
     file.delete();
   }
 }
+
+void _restarted(
+  MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+  ActionHandler next,
+  Action<void> action,
+) {
+  next(action);
+  if (DateTime.now().difference(_wrapper.lastInteraction).inMinutes > 3) {
+    navigatorKey.currentState.popUntil((route) => route.isFirst);
+    api.actions.load();
+  }
+}
