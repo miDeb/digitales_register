@@ -78,7 +78,6 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   String get userName;
   bool get changePassword;
   bool get mustChangePassword;
-  static Serializer<LoginState> get serializer => _$loginStateSerializer;
   LoginState._();
   factory LoginState([updates(LoginStateBuilder b)]) = _$LoginState;
   static void _initializeBuilder(LoginStateBuilder builder) {
