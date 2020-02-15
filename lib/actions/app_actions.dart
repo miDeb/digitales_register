@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/certificate_actions.dart';
 
@@ -22,6 +20,7 @@ abstract class AppActions extends ReduxActions {
   ActionDispatcher<Error> error;
   ActionDispatcher<void> saveState;
   ActionDispatcher<void> deleteData;
+  ActionDispatcher<Uri> start;
   ActionDispatcher<void> load;
   ActionDispatcher<bool> refreshNoInternet;
   ActionDispatcher<bool> noInternet;

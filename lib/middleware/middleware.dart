@@ -50,9 +50,11 @@ final middleware = [
         ..add(SettingsActionsNames.saveNoData, _saveNoData)
         ..add(AppActionsNames.deleteData, _deleteData)
         ..add(AppActionsNames.load, _load)
+        ..add(AppActionsNames.start, _start)
         ..add(DashboardActionsNames.refresh, _refresh)
         ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
         ..add(LoginActionsNames.loggedIn, _loggedIn)
+        ..add(AppActionsNames.restarted, _restarted)
         ..combine(_absencesMiddleware)
         ..combine(_calendarMiddleware)
         ..combine(_dashboardMiddleware)
@@ -222,6 +224,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   } else {
     next(action);
   }
+  api.state.loginState.callAfterLogin.forEach((f) => f());
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
 }
@@ -318,6 +321,68 @@ void _restarted(
   next(action);
   if (DateTime.now().difference(_wrapper.lastInteraction).inMinutes > 3) {
     navigatorKey.currentState.popUntil((route) => route.isFirst);
+    api.actions.loginActions.clearAfterLoginCallbacks();
     api.actions.load();
   }
+}
+
+void _start(
+  MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+  ActionHandler next,
+  Action<Uri> action,
+) {
+  api.actions.loginActions.clearAfterLoginCallbacks();
+  if (action.payload != null) {
+    api.actions.setUrl(action.payload.origin);
+    final parameters = action.payload.queryParameters;
+    if (parameters.isNotEmpty) {
+      switch (parameters["semesterWechsel"]) {
+        case "1":
+          api.actions.loginActions.addAfterLoginCallback(
+            () => api.actions.gradesActions.setSemester(Semester.first),
+          );
+          break;
+        case "2":
+          api.actions.loginActions.addAfterLoginCallback(
+            () => api.actions.gradesActions.setSemester(Semester.second),
+          );
+      }
+    }
+    switch (action.payload.path) {
+      case "":
+      case "/v2/":
+      case "/v2/login":
+        break;
+      default:
+        showToast(msg: "Dieser Link konnte nicht geöffnet werden");
+    }
+    switch (action.payload.fragment) {
+      case "":
+      case "dashboard/student":
+        break;
+      case "student/absences":
+        api.actions.loginActions.addAfterLoginCallback(
+          api.actions.routingActions.showAbsences,
+        );
+        break;
+      case "calendar/student":
+        api.actions.loginActions.addAfterLoginCallback(
+          api.actions.routingActions.showCalendar,
+        );
+        break;
+      case "student/subjects":
+        api.actions.loginActions.addAfterLoginCallback(
+          api.actions.routingActions.showGrades,
+        );
+        break;
+      case "student/certificate":
+        api.actions.loginActions.addAfterLoginCallback(
+          api.actions.routingActions.showCertificate,
+        );
+        break;
+      default:
+        showToast(msg: "Dieser Link konnte nicht geöffnet werden");
+    }
+  }
+  api.actions.load();
 }

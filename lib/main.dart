@@ -127,16 +127,10 @@ void run() {
     ..addPostFrameCallback(
       (_) async {
         final uri = await getInitialUri();
-        if (uri != null) {
-          store.actions.setUrl(uri.origin);
-        }
+        store.actions.start(uri);
         getUriLinksStream().listen((event) {
-          if (event != null) {
-            store.actions.setUrl(event.origin);
-            store.actions.load();
-          }
+          store.actions.start(event);
         });
-        store.actions.load();
         WidgetsBinding.instance
           ..addObserver(
             LifecycleObserver(
