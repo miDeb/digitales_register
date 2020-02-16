@@ -9,6 +9,7 @@ final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   (s) => s.loginState,
   (b) => b.loginState,
 )
+  ..add(LoginActionsNames.setUsername, _setUsername)
   ..add(LoginActionsNames.loginFailed, _loginFailed)
   ..add(LoginActionsNames.loggedIn, _loggedIn)
   ..add(LoginActionsNames.loggingIn, _loggingIn)
@@ -68,4 +69,9 @@ void _addAfterLoginCallback(LoginState state, Action<void Function()> action,
 void _clearAfterLoginCallbacks(
     LoginState state, Action<void> action, LoginStateBuilder builder) {
   builder.callAfterLogin.clear();
+}
+
+void _setUsername(
+    LoginState state, Action<String> action, LoginStateBuilder builder) {
+  builder.userName = action.payload;
 }

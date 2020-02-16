@@ -139,7 +139,9 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final url = login["url"] ??
       "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
-  if (api.state.url != null && api.state.url != url) {
+  if ((api.state.url != null && api.state.url != url) ||
+      (api.state.loginState.userName != null &&
+          api.state.loginState.userName != user)) {
     api.actions.savePassActions.delete();
     api.actions.routingActions.showLogin();
   } else {
@@ -335,54 +337,64 @@ void _start(
   if (action.payload != null) {
     api.actions.setUrl(action.payload.origin);
     final parameters = action.payload.queryParameters;
-    if (parameters.isNotEmpty) {
-      switch (parameters["semesterWechsel"]) {
-        case "1":
-          api.actions.loginActions.addAfterLoginCallback(
-            () => api.actions.gradesActions.setSemester(Semester.first),
-          );
-          break;
-        case "2":
-          api.actions.loginActions.addAfterLoginCallback(
-            () => api.actions.gradesActions.setSemester(Semester.second),
-          );
-      }
+    switch (parameters["semesterWechsel"]) {
+      case "1":
+        api.actions.loginActions.addAfterLoginCallback(
+          () => api.actions.gradesActions.setSemester(Semester.first),
+        );
+        break;
+      case "2":
+        api.actions.loginActions.addAfterLoginCallback(
+          () => api.actions.gradesActions.setSemester(Semester.second),
+        );
     }
     switch (action.payload.path) {
       case "":
       case "/v2/":
+        break;
       case "/v2/login":
+        if (parameters["username"] != null) {
+          api.actions.loginActions.setUsername(parameters["username"]);
+        }
+        if (parameters["redirect"] != null) {
+          redirectAfterLogin(parameters["redirect"].replaceFirst("#", ""), api);
+        }
         break;
       default:
         showToast(msg: "Dieser Link konnte nicht geöffnet werden");
     }
-    switch (action.payload.fragment) {
-      case "":
-      case "dashboard/student":
-        break;
-      case "student/absences":
-        api.actions.loginActions.addAfterLoginCallback(
-          api.actions.routingActions.showAbsences,
-        );
-        break;
-      case "calendar/student":
-        api.actions.loginActions.addAfterLoginCallback(
-          api.actions.routingActions.showCalendar,
-        );
-        break;
-      case "student/subjects":
-        api.actions.loginActions.addAfterLoginCallback(
-          api.actions.routingActions.showGrades,
-        );
-        break;
-      case "student/certificate":
-        api.actions.loginActions.addAfterLoginCallback(
-          api.actions.routingActions.showCertificate,
-        );
-        break;
-      default:
-        showToast(msg: "Dieser Link konnte nicht geöffnet werden");
-    }
+    redirectAfterLogin(action.payload.fragment, api);
   }
   api.actions.load();
+}
+
+void redirectAfterLogin(
+    String location, MiddlewareApi<AppState, AppStateBuilder, AppActions> api) {
+  switch (location) {
+    case "":
+    case "dashboard/student":
+      break;
+    case "student/absences":
+      api.actions.loginActions.addAfterLoginCallback(
+        api.actions.routingActions.showAbsences,
+      );
+      break;
+    case "calendar/student":
+      api.actions.loginActions.addAfterLoginCallback(
+        api.actions.routingActions.showCalendar,
+      );
+      break;
+    case "student/subjects":
+      api.actions.loginActions.addAfterLoginCallback(
+        api.actions.routingActions.showGrades,
+      );
+      break;
+    case "student/certificate":
+      api.actions.loginActions.addAfterLoginCallback(
+        api.actions.routingActions.showCertificate,
+      );
+      break;
+    default:
+      showToast(msg: "Dieser Link konnte nicht geöffnet werden");
+  }
 }

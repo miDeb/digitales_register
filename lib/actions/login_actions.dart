@@ -7,6 +7,7 @@ abstract class LoginActions extends ReduxActions {
   LoginActions._();
   factory LoginActions() => _$LoginActions();
 
+  ActionDispatcher<String> setUsername;
   ActionDispatcher<LoginPayload> login;
   ActionDispatcher<LoggedInPayload> loggedIn;
   ActionDispatcher<LoginFailedPayload> loginFailed;
