@@ -239,8 +239,9 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                         );
                         if (newValue != null) {
                           widget.onSetSubjectNicks(
-                            Map.of(widget.vm.subjectNicks)
-                              ..[newValue.key] = newValue.value,
+                            Map.fromEntries(
+                                widget.vm.subjectNicks.entries.toList()
+                                  ..insert(0, newValue)),
                           );
                         }
                       },
