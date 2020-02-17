@@ -378,89 +378,139 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       String key, String value, List<String> suggestions) async {
     return await showDialog(
       context: context,
-      builder: (context) {
-        final subjectController = TextEditingController(text: key);
-        final nickController = TextEditingController(text: value);
-        final subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text("Kürzel bearbeiten"),
-              content: Row(
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("Fach"),
-                      SizedBox(
-                        height: 27,
-                      ),
-                      Text("Kürzel"),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        AutoCompleteTextField<String>(
-                          key: subjectKey,
-                          itemBuilder:
-                              (BuildContext context, String suggestion) {
-                            return ListTile(title: Text(suggestion));
-                          },
-                          textChanged: (_) => setState(() {}),
-                          clearOnSubmit: false,
-                          itemFilter: (String suggestion, String query) {
-                            return suggestion
-                                .toLowerCase()
-                                .contains(query.toLowerCase());
-                          },
-                          itemSorter: (String a, String b) {
-                            return a.compareTo(b);
-                          },
-                          itemSubmitted: (_) {},
-                          suggestions: suggestions,
-                          controller: subjectController,
-                        ),
-                        TextField(
-                          controller: nickController,
-                          textCapitalization: TextCapitalization.sentences,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+      builder: (context) => EditSubjectsNicks(
+        subjectName: key,
+        subjectNick: value,
+        suggestions: suggestions,
+      ),
+    );
+  }
+}
+
+class EditSubjectsNicks extends StatefulWidget {
+  final String subjectName;
+  final String subjectNick;
+  final List<String> suggestions;
+
+  const EditSubjectsNicks(
+      {Key key, this.subjectName, this.subjectNick, this.suggestions})
+      : super(key: key);
+  @override
+  _EditSubjectsNicksState createState() => _EditSubjectsNicksState();
+}
+
+class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
+  TextEditingController subjectController;
+  TextEditingController nickController;
+  GlobalKey<AutoCompleteTextFieldState<String>> subjectKey;
+  FocusNode focusNode;
+  @override
+  void initState() {
+    subjectController = TextEditingController(text: widget.subjectName);
+    nickController = TextEditingController(text: widget.subjectNick);
+    subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
+    focusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subjectController.dispose();
+    nickController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Kürzel bearbeiten"),
+      content: Row(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Fach"),
+              SizedBox(
+                height: 27,
               ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Abbrechen"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+              Text("Kürzel"),
+            ],
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                AutoCompleteTextField<String>(
+                  key: subjectKey,
+                  itemBuilder: (BuildContext context, String suggestion) {
+                    return ListTile(title: Text(suggestion));
+                  },
+                  textChanged: (_) => setState(() {}),
+                  clearOnSubmit: false,
+                  itemFilter: (String suggestion, String query) {
+                    return suggestion
+                        .toLowerCase()
+                        .contains(query.toLowerCase());
+                  },
+                  itemSorter: (String a, String b) {
+                    return a.compareTo(b);
+                  },
+                  itemSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(focusNode);
+                  },
+                  textSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(focusNode);
+                  },
+                  suggestions: widget.suggestions,
+                  controller: subjectController,
+                ),
+                TextField(
+                  controller: nickController,
+                  textCapitalization: TextCapitalization.sentences,
+                  onChanged: (_) => setState(() {}),
+                  focusNode: focusNode,
+                  onSubmitted: (_) {
+                    if (subjectController.text != "" &&
+                        nickController.text != "") {
+                      Navigator.of(context).pop(
+                        MapEntry(
+                          subjectController.text,
+                          nickController.text,
+                        ),
+                      );
+                    }
                   },
                 ),
-                RaisedButton(
-                  child: Text("Fertig"),
-                  onPressed:
-                      subjectController.text != "" && nickController.text != ""
-                          ? () {
-                              Navigator.of(context).pop(
-                                MapEntry(
-                                  subjectController.text,
-                                  nickController.text,
-                                ),
-                              );
-                            }
-                          : null,
-                ),
               ],
-            );
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Abbrechen"),
+          onPressed: () {
+            Navigator.of(context).pop();
           },
-        );
-      },
+        ),
+        RaisedButton(
+          child: Text("Fertig"),
+          onPressed: subjectController.text != "" && nickController.text != ""
+              ? () {
+                  Navigator.of(context).pop(
+                    MapEntry(
+                      subjectController.text,
+                      nickController.text,
+                    ),
+                  );
+                }
+              : null,
+        ),
+      ],
     );
   }
 }
