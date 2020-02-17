@@ -258,7 +258,9 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                       Expanded(
                         child: AbsorbPointer(child: Container()),
                       ),
-                      Spacer(),
+                      SizedBox(
+                        width: 60,
+                      ),
                     ],
                   ),
                 ),

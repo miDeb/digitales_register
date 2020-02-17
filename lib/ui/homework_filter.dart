@@ -22,17 +22,16 @@ class _HomeworkFilterState extends State<HomeworkFilter>
   Widget build(BuildContext context) {
     super.build(context);
     return ExpansionTile(
-      title: Row(
-        children: <Widget>[
-          Spacer(),
-          Badge(
-            child: Icon(Icons.filter_list),
-            badgeContent: Container(
-              color: Colors.red,
-            ),
-            showBadge: widget.vm.currentBlacklist.isNotEmpty,
-          )
-        ],
+      title: SizedBox(),
+      trailing: Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: Badge(
+          child: Icon(Icons.filter_list),
+          badgeContent: Container(
+            color: Colors.red,
+          ),
+          showBadge: widget.vm.currentBlacklist.isNotEmpty,
+        ),
       ),
       children: [
         CheckboxListTile(
