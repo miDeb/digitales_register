@@ -196,7 +196,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             (b) => b
               ..loginState.replace(currentState.loginState)
               ..noInternet = currentState.noInternet
-              ..config.replace(currentState.config)
+              ..config = currentState.config?.toBuilder()
               ..dashboardState.future = true
               ..gradesState.semester.replace(
                     currentState.gradesState.semester == Semester.all
