@@ -64,6 +64,7 @@ class DaysViewModel {
   final bool future;
   final bool askWhenDelete;
   final bool noInternet, loading;
+  final bool showAddReminder;
 
   DaysViewModel.from(AppState state)
       : days = (() {
@@ -92,5 +93,7 @@ class DaysViewModel {
         noInternet = state.noInternet,
         future = state.dashboardState.future,
         loading = state.dashboardState.loading || state.loginState.loading,
-        askWhenDelete = state.settingsState.askWhenDelete;
+        askWhenDelete = state.settingsState.askWhenDelete,
+        showAddReminder =
+            !state.dashboardState.blacklist.contains(HomeworkType.homework);
 }

@@ -375,123 +375,127 @@ class DayWidget extends StatelessWidget {
     var i = index;
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  day.displayName,
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
-            ),
-            if (day.deletedHomework.isNotEmpty)
-              AutoScrollTag(
-                child: IconButton(
-                  icon: Badge(
-                    child: Icon(Icons.info_outline),
-                    badgeContent: Icon(
-                      Icons.delete,
-                      size: 15,
-                      color: day.deletedHomework.any((h) => h.isChanged)
-                          ? Colors.white
-                          : null,
-                    ),
-                    badgeColor: day.deletedHomework.any((h) => h.isChanged)
-                        ? Colors.red
-                        : Theme.of(context).scaffoldBackgroundColor,
-                    toAnimate: day.deletedHomework.any((h) => h.isChanged),
-                    padding: EdgeInsets.zero,
-                    position: BadgePosition.topRight(),
-                    elevation: 0,
+        SizedBox(
+          height: 48,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    day.displayName,
+                    style: Theme.of(context).textTheme.title,
                   ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_context) {
-                        return ListViewCapableAlertDialog(
-                          title: Text("Gelöschte Einträge"),
-                          content: ListView(
-                            shrinkWrap: true,
-                            children: day.deletedHomework
-                                .map(
-                                  (i) => ItemWidget(
-                                    item: i,
-                                    isDeletedView: true,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                          actions: <Widget>[
-                            RaisedButton(
-                              textTheme: ButtonTextTheme.primary,
-                              onPressed: () => Navigator.pop(_context),
-                              child: Text(
-                                "Ok",
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  },
                 ),
-                controller: controller,
-                index: index,
-                key: ValueKey(index),
-                highlightColor: Colors.grey.withOpacity(0.5),
               ),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: vm.noInternet
-                  ? null
-                  : () async {
-                      final message = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            String message = "";
-                            return StatefulBuilder(
-                              builder: (context, setState) => AlertDialog(
-                                title: Text("Erinnerung"),
-                                content: TextField(
-                                  maxLines: null,
-                                  onChanged: (msg) {
-                                    setState(() => message = msg);
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: 'zB. Hausaufgabe'),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text("Abbrechen"),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RaisedButton(
-                                    textTheme: ButtonTextTheme.primary,
-                                    child: Text(
-                                      "Speichern",
+              if (day.deletedHomework.isNotEmpty)
+                AutoScrollTag(
+                  child: IconButton(
+                    icon: Badge(
+                      child: Icon(Icons.info_outline),
+                      badgeContent: Icon(
+                        Icons.delete,
+                        size: 15,
+                        color: day.deletedHomework.any((h) => h.isChanged)
+                            ? Colors.white
+                            : null,
+                      ),
+                      badgeColor: day.deletedHomework.any((h) => h.isChanged)
+                          ? Colors.red
+                          : Theme.of(context).scaffoldBackgroundColor,
+                      toAnimate: day.deletedHomework.any((h) => h.isChanged),
+                      padding: EdgeInsets.zero,
+                      position: BadgePosition.topRight(),
+                      elevation: 0,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_context) {
+                          return ListViewCapableAlertDialog(
+                            title: Text("Gelöschte Einträge"),
+                            content: ListView(
+                              shrinkWrap: true,
+                              children: day.deletedHomework
+                                  .map(
+                                    (i) => ItemWidget(
+                                      item: i,
+                                      isDeletedView: true,
                                     ),
-                                    onPressed: isNullOrEmpty(message)
-                                        ? null
-                                        : () {
-                                            Navigator.pop(context, message);
-                                          },
-                                  ),
-                                ],
-                              ),
-                            );
-                          });
-                      if (message != null) {
-                        addReminderCallback(day, message);
-                      }
+                                  )
+                                  .toList(),
+                            ),
+                            actions: <Widget>[
+                              RaisedButton(
+                                textTheme: ButtonTextTheme.primary,
+                                onPressed: () => Navigator.pop(_context),
+                                child: Text(
+                                  "Ok",
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      );
                     },
-            ),
-          ],
+                  ),
+                  controller: controller,
+                  index: index,
+                  key: ValueKey(index),
+                  highlightColor: Colors.grey.withOpacity(0.5),
+                ),
+              Spacer(),
+              if (vm.showAddReminder)
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: vm.noInternet
+                      ? null
+                      : () async {
+                          final message = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                String message = "";
+                                return StatefulBuilder(
+                                  builder: (context, setState) => AlertDialog(
+                                    title: Text("Erinnerung"),
+                                    content: TextField(
+                                      maxLines: null,
+                                      onChanged: (msg) {
+                                        setState(() => message = msg);
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: 'zB. Hausaufgabe'),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text("Abbrechen"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      RaisedButton(
+                                        textTheme: ButtonTextTheme.primary,
+                                        child: Text(
+                                          "Speichern",
+                                        ),
+                                        onPressed: isNullOrEmpty(message)
+                                            ? null
+                                            : () {
+                                                Navigator.pop(context, message);
+                                              },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                          if (message != null) {
+                            addReminderCallback(day, message);
+                          }
+                        },
+                ),
+            ],
+          ),
         ),
         for (final hw in day.homework)
           ItemWidget(
