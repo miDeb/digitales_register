@@ -17,6 +17,7 @@ class LoginPageContent extends StatefulWidget {
   final ChangePassCallback onChangePass;
   final SetSafeModeCallback setSaveNoPass;
   final VoidCallback onReload;
+  final VoidCallback onRequestPassReset;
 
   LoginPageContent({
     Key key,
@@ -25,6 +26,7 @@ class LoginPageContent extends StatefulWidget {
     this.setSaveNoPass,
     this.onReload,
     this.onChangePass,
+    this.onRequestPassReset,
   }) : super(key: key);
 
   @override
@@ -165,6 +167,16 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 controller: _passwordController,
                                 obscureText: true,
                                 enabled: !widget.vm.loading,
+                              ),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: FlatButton(
+                                  child: Text(
+                                    "Passwort vergessen",
+                                  ),
+                                  textColor: Colors.grey,
+                                  onPressed: widget.onRequestPassReset,
+                                ),
                               ),
                               if (widget.vm.changePass) ...[
                                 SizedBox(

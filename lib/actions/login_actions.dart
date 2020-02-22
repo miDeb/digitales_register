@@ -1,5 +1,5 @@
-import 'package:built_value/built_value.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:built_value/built_value.dart';
 
 part 'login_actions.g.dart';
 
@@ -19,6 +19,10 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<ChangePassPayload> changePass;
   ActionDispatcher<void Function()> addAfterLoginCallback;
   ActionDispatcher<void> clearAfterLoginCallbacks;
+  ActionDispatcher<RequestPassResetPayload> requestPassReset;
+  ActionDispatcher<String> resetPass;
+  ActionDispatcher<String> passResetFailed;
+  ActionDispatcher<String> passResetSucceeded;
 }
 
 abstract class LoginPayload
@@ -58,6 +62,16 @@ abstract class ChangePassPayload
   String get user;
   String get oldPass;
   String get newPass;
+}
+
+abstract class RequestPassResetPayload
+    implements Built<RequestPassResetPayload, RequestPassResetPayloadBuilder> {
+  RequestPassResetPayload._();
+  factory RequestPassResetPayload(
+          [void Function(RequestPassResetPayloadBuilder) updates]) =
+      _$RequestPassResetPayload;
+  String get user;
+  String get email;
 }
 
 abstract class LoggedInPayload

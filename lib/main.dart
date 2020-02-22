@@ -1,21 +1,23 @@
 import 'dart:io';
 
-import 'package:dr/container/certificate_container.dart';
-import 'package:dr/container/notifications_page_container.dart';
+import 'package:built_redux/built_redux.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-import 'package:built_redux/built_redux.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:uni_links/uni_links.dart';
 
 import 'actions/app_actions.dart';
 import 'app_state.dart';
 import 'container/absences_page_container.dart';
 import 'container/calendar_container.dart';
+import 'container/certificate_container.dart';
 import 'container/grades_page_container.dart';
 import 'container/home_page.dart';
 import 'container/login_page.dart';
+import 'container/notifications_page_container.dart';
+import 'container/pass_reset_container.dart';
+import 'container/request_pass_reset_container.dart';
 import 'container/settings_page.dart';
 import 'linux.dart';
 import 'middleware/middleware.dart';
@@ -81,6 +83,14 @@ void run() {
                 case "login":
                   return MaterialPageRoute(
                     builder: (_) => LoginPage(),
+                  );
+                case "request_pass_reset":
+                  return MaterialPageRoute(
+                    builder: (_) => RequestPassResetContainer(),
+                  );
+                case "pass_reset":
+                  return MaterialPageRoute(
+                    builder: (_) => PassResetContainer(),
                   );
                 case "notifications":
                   return MaterialPageRoute(

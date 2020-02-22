@@ -79,6 +79,7 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   bool get changePassword;
   bool get mustChangePassword;
   BuiltList<void Function()> get callAfterLogin;
+  ResetPassState get resetPassState;
   LoginState._();
   factory LoginState([updates(LoginStateBuilder b)]) = _$LoginState;
   static void _initializeBuilder(LoginStateBuilder builder) {
@@ -87,7 +88,26 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
       ..loading = false
       ..changePassword = false
       ..mustChangePassword = true
-      ..callAfterLogin = ListBuilder([]);
+      ..callAfterLogin = ListBuilder([])
+      ..resetPassState = ResetPassStateBuilder();
+  }
+}
+
+abstract class ResetPassState
+    implements Built<ResetPassState, ResetPassStateBuilder> {
+  @nullable
+  String get message;
+  bool get failure;
+  @nullable
+  String get token;
+  @nullable
+  String get email;
+  @nullable
+  String get username;
+  ResetPassState._();
+  factory ResetPassState([updates(ResetPassStateBuilder b)]) = _$ResetPassState;
+  static void _initializeBuilder(ResetPassStateBuilder builder) {
+    builder..failure = false;
   }
 }
 

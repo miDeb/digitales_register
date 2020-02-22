@@ -3,6 +3,7 @@ import 'package:dr/actions/routing_actions.dart';
 
 import '../actions/login_actions.dart';
 import '../app_state.dart';
+import 'pass_reset.dart';
 
 final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     LoginState, LoginStateBuilder>(
@@ -17,7 +18,10 @@ final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(LoginActionsNames.showChangePass, _changePass)
   ..add(LoginActionsNames.addAfterLoginCallback, _addAfterLoginCallback)
   ..add(LoginActionsNames.clearAfterLoginCallbacks, _clearAfterLoginCallbacks)
-  ..add(RoutingActionsNames.showLogin, _showLogin);
+  ..add(RoutingActionsNames.showLogin, _showLogin)
+  ..combineReducerBuilder(
+    ReducerBuilder()..combineNested(resetPassReducerBuilder),
+  );
 
 void _loginFailed(LoginState state, Action<LoginFailedPayload> action,
     LoginStateBuilder builder) {

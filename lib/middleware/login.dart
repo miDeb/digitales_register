@@ -6,7 +6,9 @@ final _loginMiddleware =
       ..add(LoginActionsNames.login, _login)
       ..add(LoginActionsNames.loginFailed, _loginFailed)
       ..add(LoginActionsNames.showChangePass, _showChangePass)
-      ..add(LoginActionsNames.changePass, _changePass);
+      ..add(LoginActionsNames.changePass, _changePass)
+      ..add(LoginActionsNames.requestPassReset, _requestPassReset)
+      ..add(LoginActionsNames.resetPass, _resetPass);
 
 void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) {
@@ -143,4 +145,43 @@ void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   api.actions.routingActions.showLogin();
   next(action);
+}
+
+void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<RequestPassResetPayload> action) async {
+  final result = await Requests.post(
+    "${api.state.url}/api/auth/resetPassword",
+    body: {
+      "email": action.payload.email,
+      "username": action.payload.user,
+    },
+    json: true,
+  );
+  if (result["error"] != null) {
+    api.actions.loginActions
+        .passResetFailed("[${result["error"]}]: ${result["message"]}");
+  } else {
+    api.actions.loginActions.passResetSucceeded(result["message"]);
+  }
+}
+
+void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<String> action) async {
+  final result = await Requests.post(
+    "${api.state.url}/api/auth/setNewPassword",
+    body: {
+      "username": "",
+      "token": api.state.loginState.resetPassState.token,
+      "email": api.state.loginState.resetPassState.email,
+      "oldPassword": "",
+      "newPassword": action.payload,
+    },
+    json: true,
+  );
+  if (result["error"] != null) {
+    api.actions.loginActions
+        .passResetFailed("[${result["error"]}]: ${result["message"]}");
+  } else {
+    api.actions.loginActions.passResetSucceeded(result["message"]);
+  }
 }

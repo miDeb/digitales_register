@@ -3,6 +3,8 @@ part of 'middleware.dart';
 final _routingMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(RoutingActionsNames.showLogin, _showLogin)
+      ..add(RoutingActionsNames.showRequestPassReset, _showRequestPassReset)
+      ..add(RoutingActionsNames.showPassReset, _showPassReset)
       ..add(RoutingActionsNames.showNotifications, _showNotifications)
       ..add(RoutingActionsNames.showSettings, _showSettings)
       ..add(RoutingActionsNames.showEditCalendarSubjectNicks,
@@ -25,6 +27,20 @@ void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (currentRoute.settings.name != "/login") {
     navigatorKey.currentState.pushNamed("/login");
   }
+}
+
+void _showRequestPassReset(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) {
+  navigatorKey.currentState.pushNamed("/request_pass_reset");
+  next(action);
+}
+
+void _showPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  navigatorKey.currentState.pushNamed("/pass_reset");
+  next(action);
 }
 
 void _showNotifications(

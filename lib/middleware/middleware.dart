@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
-import 'package:dr/actions/certificate_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -14,6 +13,7 @@ import 'package:requests/requests.dart';
 import '../actions/absences_actions.dart';
 import '../actions/app_actions.dart';
 import '../actions/calendar_actions.dart';
+import '../actions/certificate_actions.dart';
 import '../actions/dashboard_actions.dart';
 import '../actions/grades_actions.dart';
 import '../actions/login_actions.dart';
@@ -31,13 +31,13 @@ import '../wrapper.dart';
 
 part 'absences.dart';
 part 'calendar.dart';
+part 'certificate.dart';
 part 'dashboard.dart';
 part 'grades.dart';
 part 'login.dart';
 part 'notifications.dart';
 part 'pass.dart';
 part 'routing.dart';
-part 'certificate.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 final _wrapper = Wrapper();
@@ -353,6 +353,18 @@ void _start(
       case "/v2/":
         break;
       case "/v2/login":
+        if (parameters["resetmail"] == "true") {
+          final email = parameters["email"];
+          final token = parameters["token"];
+          api.actions.routingActions.showPassReset(
+            ShowPassResetPayload(
+              (b) => b
+                ..token = token
+                ..email = email,
+            ),
+          );
+          return;
+        }
         if (parameters["username"] != null) {
           api.actions.loginActions.setUsername(parameters["username"]);
         }
