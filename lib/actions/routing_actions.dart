@@ -8,6 +8,8 @@ abstract class RoutingActions extends ReduxActions {
   factory RoutingActions() => _$RoutingActions();
 
   ActionDispatcher<void> showLogin;
+  ActionDispatcher<void> showProfile;
+  ActionDispatcher<void> showChangeEmail;
   ActionDispatcher<void> showRequestPassReset;
   ActionDispatcher<ShowPassResetPayload> showPassReset;
   ActionDispatcher<void> showAbsences;

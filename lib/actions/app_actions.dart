@@ -1,13 +1,14 @@
 import 'package:built_redux/built_redux.dart';
-import 'package:dr/actions/certificate_actions.dart';
 
 import '../app_state.dart';
 import 'absences_actions.dart';
 import 'calendar_actions.dart';
+import 'certificate_actions.dart';
 import 'dashboard_actions.dart';
 import 'grades_actions.dart';
 import 'login_actions.dart';
 import 'notifications_actions.dart';
+import 'profile_actions.dart';
 import 'routing_actions.dart';
 import 'save_pass_actions.dart';
 import 'settings_actions.dart';
@@ -38,5 +39,6 @@ abstract class AppActions extends ReduxActions {
   RoutingActions routingActions;
   SavePassActions savePassActions;
   SettingsActions settingsActions;
+  ProfileActions profileActions;
   CertificateActions certificateActions;
 }

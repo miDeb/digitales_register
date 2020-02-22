@@ -12,11 +12,13 @@ import 'app_state.dart';
 import 'container/absences_page_container.dart';
 import 'container/calendar_container.dart';
 import 'container/certificate_container.dart';
+import 'container/change_email_container.dart';
 import 'container/grades_page_container.dart';
 import 'container/home_page.dart';
 import 'container/login_page.dart';
 import 'container/notifications_page_container.dart';
 import 'container/pass_reset_container.dart';
+import 'container/profile_container.dart';
 import 'container/request_pass_reset_container.dart';
 import 'container/settings_page.dart';
 import 'linux.dart';
@@ -91,6 +93,14 @@ void run() {
                 case "pass_reset":
                   return MaterialPageRoute(
                     builder: (_) => PassResetContainer(),
+                  );
+                case "change_email":
+                  return MaterialPageRoute(
+                    builder: (_) => ChangeEmailContainer(),
+                  );
+                case "profile":
+                  return MaterialPageRoute(
+                    builder: (_) => ProfileContainer(),
                   );
                 case "notifications":
                   return MaterialPageRoute(

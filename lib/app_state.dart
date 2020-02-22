@@ -24,6 +24,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   bool get noInternet;
   @nullable
   SettingsState get settingsState;
+  @nullable
+  ProfileState get profileState;
   CalendarState get calendarState;
   CertificateState get certificateState;
   @nullable
@@ -252,6 +254,19 @@ abstract class SettingsState
       ..dashboardMarkNewOrChangedEntries = true
       ..graphConfigs = MapBuilder<int, SubjectGraphConfig>();
   }
+}
+
+abstract class ProfileState
+    implements Built<ProfileState, ProfileStateBuilder> {
+  ProfileState._();
+  factory ProfileState([updates(ProfileStateBuilder b)]) = _$ProfileState;
+  static Serializer<ProfileState> get serializer => _$profileStateSerializer;
+
+  String get email;
+  String get username;
+  String get roleName;
+  String get name;
+  bool get sendNotificationEmails;
 }
 
 abstract class AbsencesState

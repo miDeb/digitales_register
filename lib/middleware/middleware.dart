@@ -18,6 +18,7 @@ import '../actions/dashboard_actions.dart';
 import '../actions/grades_actions.dart';
 import '../actions/login_actions.dart';
 import '../actions/notifications_actions.dart';
+import '../actions/profile_actions.dart';
 import '../actions/routing_actions.dart';
 import '../actions/save_pass_actions.dart';
 import '../actions/settings_actions.dart';
@@ -37,6 +38,7 @@ part 'grades.dart';
 part 'login.dart';
 part 'notifications.dart';
 part 'pass.dart';
+part 'profile.dart';
 part 'routing.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
@@ -63,7 +65,8 @@ final middleware = [
         ..combine(_notificationsMiddleware)
         ..combine(_passMiddleware)
         ..combine(_routingMiddleware)
-        ..combine(_certificateMiddleware))
+        ..combine(_certificateMiddleware)
+        ..combine(_profileMiddleware))
       .build(),
 ];
 

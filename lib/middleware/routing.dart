@@ -5,6 +5,8 @@ final _routingMiddleware =
       ..add(RoutingActionsNames.showLogin, _showLogin)
       ..add(RoutingActionsNames.showRequestPassReset, _showRequestPassReset)
       ..add(RoutingActionsNames.showPassReset, _showPassReset)
+      ..add(RoutingActionsNames.showChangeEmail, _showChangeEmail)
+      ..add(RoutingActionsNames.showProfile, _showProfile)
       ..add(RoutingActionsNames.showNotifications, _showNotifications)
       ..add(RoutingActionsNames.showSettings, _showSettings)
       ..add(RoutingActionsNames.showEditCalendarSubjectNicks,
@@ -40,6 +42,19 @@ void _showRequestPassReset(
 void _showPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/pass_reset");
+  next(action);
+}
+
+void _showChangeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  navigatorKey.currentState.pushNamed("/change_email");
+  next(action);
+}
+
+void _showProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  navigatorKey.currentState.pushNamed("/profile");
+  api.actions.profileActions.load();
   next(action);
 }
 

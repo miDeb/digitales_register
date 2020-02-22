@@ -4,13 +4,14 @@ import '../actions/app_actions.dart';
 import '../app_state.dart';
 import 'absences.dart';
 import 'calendar.dart';
+import 'certificate.dart';
 import 'dashboard.dart';
 import 'grades.dart';
 import 'login.dart';
 import 'network_protocol.dart';
 import 'notifications.dart';
+import 'profile_reducer.dart';
 import 'settings.dart';
-import 'certificate.dart';
 
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.mountAppState, _mountState)
@@ -25,7 +26,8 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..combineNested(networkProtocolReducerBuilder)
   ..combineNested(notificationsReducerBuilder)
   ..combineNested(settingsReducerBuilder)
-  ..combineNested(certificateReducerBuilder);
+  ..combineNested(certificateReducerBuilder)
+  ..combineNested(profileReducerBuilder);
 
 void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder..noInternet = action.payload;
