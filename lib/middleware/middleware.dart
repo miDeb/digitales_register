@@ -160,6 +160,7 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             ..offlineEnabled = offlineEnabled,
         ),
       );
+      return;
     } else {
       api.actions.routingActions.showLogin();
     }

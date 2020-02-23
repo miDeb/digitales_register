@@ -33,7 +33,10 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         _subjects,
         args: {"studentId": api.state.config.userId},
       );
-      api.actions.refreshNoInternet();
+      if (data == null) {
+        api.actions.refreshNoInternet();
+        return;
+      }
       api.actions.gradesActions.loaded(
         SubjectsLoadedPayload(
           (b) => b

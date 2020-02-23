@@ -94,6 +94,10 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     action.payload.oldPass,
     action.payload.newPass,
   );
+  if (result == null) {
+    api.actions.refreshNoInternet();
+    return;
+  }
   if (result["error"] != null) {
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(

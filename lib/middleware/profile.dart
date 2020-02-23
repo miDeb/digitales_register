@@ -11,21 +11,29 @@ void _loadProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   next(action);
   if (api.state.noInternet) return;
   final result = await _wrapper.send("/api/profile/get");
+  if (result == null) {
+    api.actions.refreshNoInternet();
+    return;
+  }
   api.actions.profileActions.loaded(result);
 }
 
 void _setSendNotificationEmails(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<bool> action) {
+    Action<bool> action) async {
   next(action);
-  _wrapper.send(
+  final result = await _wrapper.send(
     "/api/profile/updateNotificationSettings",
     args: {
       "notificationsEnabled": action.payload,
     },
     json: false,
   );
+  if (result == null) {
+    api.actions.refreshNoInternet();
+    return;
+  }
 }
 
 void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -38,6 +46,10 @@ void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       "password": action.payload.pass,
     },
   );
+  if (result == null) {
+    api.actions.refreshNoInternet();
+    return;
+  }
   if (result["error"] == null) {
     showToast(msg: result["message"]);
     navigatorKey.currentState.pop();
