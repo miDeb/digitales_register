@@ -7,7 +7,7 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.addReminder, _addReminder)
   ..add(DashboardActionsNames.deleteHomework, _deleteHomework)
   ..add(DashboardActionsNames.toggleDone, _toggleDone)
-  ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNontSeenEntries);
+  ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenEntries);
 
 void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
@@ -111,7 +111,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _markNontSeenEntries(
+void _markNotSeenEntries(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) {
