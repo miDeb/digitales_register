@@ -139,7 +139,7 @@ GradeDetail _parseGrade(dynamic data) {
       ..date = DateTime.parse(data["date"])
       ..weightPercentage = data["weight"]
       ..cancelled = data["cancelled"] != 0
-      ..type = data["typeName"] ?? data["type"]
+      ..type = data["typeName"]
       ..created = data["created"]
       ..name = data["name"]
       ..id = data["id"]
