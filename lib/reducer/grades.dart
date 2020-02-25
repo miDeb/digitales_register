@@ -122,9 +122,7 @@ int _parseGradeValue(String grade) {
 GradeAll _parseGradeAll(dynamic data) {
   return GradeAll(
     (b) => b
-      ..grade = _parseGradeValue(
-        data["grade"],
-      )
+      ..grade = _parseGradeValue(data["grade"])
       ..weightPercentage = data["weight"]
       ..date = DateTime.parse(data["date"])
       ..cancelled = data["cancelled"] != 0
