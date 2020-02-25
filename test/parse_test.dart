@@ -60,14 +60,16 @@ main() {
         store.state.gradesState.subjects[0].detailEntries(Semester.first),
         null,
       );
-      store.actions.gradesActions.detailsLoaded(
-        SubjectDetailLoadedPayload(
-          (b) => b
-            ..data = first.pe
-            ..subject = store.state.gradesState.subjects[0].toBuilder()
-            ..semester = Semester.first.toBuilder(),
-        ),
-      );
+      for (var i = 0; i < store.state.gradesState.subjects.length; i++) {
+        store.actions.gradesActions.detailsLoaded(
+          SubjectDetailLoadedPayload(
+            (b) => b
+              ..data = first.detail[i]
+              ..subject = store.state.gradesState.subjects[i].toBuilder()
+              ..semester = Semester.first.toBuilder(),
+          ),
+        );
+      }
       expect(
         store.state.gradesState.subjects[0]
             .detailEntries(Semester.first)
