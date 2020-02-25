@@ -9,6 +9,7 @@ import 'package:dr/requests/absences.dart';
 import 'package:dr/requests/calendar.dart';
 import 'package:dr/requests/dashboard.dart';
 import 'package:dr/requests/grades_first.dart' as first;
+import 'package:dr/requests/grades_second.dart' as second;
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
@@ -67,6 +68,16 @@ main() {
               ..data = first.detail[i]
               ..subject = store.state.gradesState.subjects[i].toBuilder()
               ..semester = Semester.first.toBuilder(),
+          ),
+        );
+      }
+      for (var i = 0; i < store.state.gradesState.subjects.length; i++) {
+        store.actions.gradesActions.detailsLoaded(
+          SubjectDetailLoadedPayload(
+            (b) => b
+              ..data = second.detail[i]
+              ..subject = store.state.gradesState.subjects[i].toBuilder()
+              ..semester = Semester.second.toBuilder(),
           ),
         );
       }
