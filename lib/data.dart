@@ -290,6 +290,7 @@ abstract class Observation
 }
 
 abstract class _BasicGrade implements _Entry {
+  @nullable
   int get grade;
   int get weightPercentage;
   DateTime get date;
