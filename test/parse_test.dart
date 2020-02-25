@@ -10,6 +10,7 @@ import 'package:dr/requests/calendar.dart';
 import 'package:dr/requests/dashboard.dart';
 import 'package:dr/requests/grades_first.dart' as first;
 import 'package:dr/requests/grades_second.dart' as second;
+import 'package:dr/requests/profil.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 main() {
@@ -86,6 +87,20 @@ main() {
             .detailEntries(Semester.first)
             .length,
         6,
+      );
+    });
+    test('parse profile', () {
+      store.actions.profileActions.loaded(profile);
+      expect(
+        store.state.profileState,
+        ProfileState(
+          (b) => b
+            ..name = "Debertol Michael"
+            ..email = "st-debmic-03@vinzentinum.it"
+            ..username = "st-debmic-03"
+            ..roleName = "Schüler/in"
+            ..sendNotificationEmails = false,
+        ),
       );
     });
   });
