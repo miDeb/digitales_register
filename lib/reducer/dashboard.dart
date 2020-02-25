@@ -55,9 +55,14 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
         loadedDays.remove(newDay);
         final newHomework = newDay.homework.toList();
         for (var oldHw in day.homework.toList()) {
+          // look if there is any matching id first
           final newHw = newHomework.firstWhere(
             (d) => d.id == oldHw.id,
-            orElse: () => null,
+            // then look for other similarities
+            orElse: () => newHomework.firstWhere(
+              (d) => d.isSuccessorOf(oldHw),
+              orElse: () => null,
+            ),
           );
           if (newHw == null) {
             b.homework.remove(oldHw);
@@ -77,7 +82,10 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
               ..previousVersion = oldHw.toBuilder()
               ..lastNotSeen = day.lastRequested
               ..firstSeen = now
-              ..isChanged = action.payload.markNewOrChangedEntries));
+              ..isChanged = action.payload.markNewOrChangedEntries &&
+                  // there was already a notification in this case (new grade)
+                  !(oldHw.type == HomeworkType.gradeGroup &&
+                      newHw.type == HomeworkType.grade)));
           } else {
             b.homework[b.homework.build().indexOf(oldHw)] =
                 oldHw.rebuild((b) => b..checked = newHw.checked);
@@ -87,7 +95,10 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
         for (var newHw in newHomework) {
           final deletedHw = day.deletedHomework.firstWhere(
             (d) => d.id == newHw.id,
-            orElse: () => null,
+            orElse: () => day.deletedHomework.firstWhere(
+              (d) => d.isSuccessorOf(newHw),
+              orElse: () => null,
+            ),
           );
           if (deletedHw != null) {
             b.deletedHomework.remove(deletedHw);

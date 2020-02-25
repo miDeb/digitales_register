@@ -22,14 +22,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   Config get config;
   @BuiltValueField(serialize: false)
   bool get noInternet;
-  @BuiltValueField(serialize: false)
-  bool get currentRouteIsLogin;
   @nullable
   SettingsState get settingsState;
+  @nullable
+  ProfileState get profileState;
   CalendarState get calendarState;
+  CertificateState get certificateState;
   @nullable
   @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
+  @nullable
+  @BuiltValueField(serialize: false)
+  String get url;
   static Serializer<AppState> get serializer => _$appStateSerializer;
   AppState._();
   factory AppState([updates(AppStateBuilder b)]) = _$AppState;
@@ -41,7 +45,7 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       ..gradesState = GradesStateBuilder()
       ..calendarState = CalendarStateBuilder()
       ..settingsState = SettingsStateBuilder()
-      ..currentRouteIsLogin = false
+      ..certificateState = CertificateStateBuilder()
       ..noInternet = false;
   }
 }
@@ -74,13 +78,38 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   String get errorMsg;
   @nullable
   String get userName;
-  static Serializer<LoginState> get serializer => _$loginStateSerializer;
+  bool get changePassword;
+  bool get mustChangePassword;
+  BuiltList<void Function()> get callAfterLogin;
+  ResetPassState get resetPassState;
   LoginState._();
   factory LoginState([updates(LoginStateBuilder b)]) = _$LoginState;
   static void _initializeBuilder(LoginStateBuilder builder) {
     builder
       ..loggedIn = false
-      ..loading = false;
+      ..loading = false
+      ..changePassword = false
+      ..mustChangePassword = true
+      ..callAfterLogin = ListBuilder([])
+      ..resetPassState = ResetPassStateBuilder();
+  }
+}
+
+abstract class ResetPassState
+    implements Built<ResetPassState, ResetPassStateBuilder> {
+  @nullable
+  String get message;
+  bool get failure;
+  @nullable
+  String get token;
+  @nullable
+  String get email;
+  @nullable
+  String get username;
+  ResetPassState._();
+  factory ResetPassState([updates(ResetPassStateBuilder b)]) = _$ResetPassState;
+  static void _initializeBuilder(ResetPassStateBuilder builder) {
+    builder..failure = false;
   }
 }
 
@@ -163,9 +192,8 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   static final all = _$Semester((b) => b..name = "Beide Semester");
   static final values = [first, second, all];
   static Serializer<Semester> get serializer => _$semesterSerializer;
-
+  factory Semester([void Function(SemesterBuilder) updates]) = _$Semester;
   Semester._();
-  factory Semester._i([updates(SemesterBuilder b)]) = _$Semester;
 }
 
 abstract class SettingsState
@@ -228,40 +256,19 @@ abstract class SettingsState
   }
 }
 
-/* 
-abstract class SettingsStateBuilder
-    implements Builder<SettingsState, SettingsStateBuilder> {
-  SettingsStateBuilder._();
-  factory SettingsStateBuilder() = _$SettingsStateBuilder;
-  bool typeSorted;
-  bool askWhenDelete = true;
-  bool showCancelled;
-  bool deleteDataOnLogout =
-      false; // example for a new setting and backward compatibility
-  bool noPasswordSaving;
-  bool noDataSaving;
-  bool offlineEnabled = true;
-  bool showCalendarNicksBar = true;
-  bool showGradesDiagram = true;
-  bool showAllSubjectsAverage = true;
-  MapBuilder<String, String> subjectNicks = MapBuilder({
-    "Deutsch": "Deu",
-    "Mathematik": "Mat",
-    "Latein": "Lat",
-    "Religion": "Rel",
-    "Englisch": "Eng",
-    "Naturwissenschaften": "Nat",
-    "Geschichte": "Gesch",
-    "Italienisch": "Ita",
-    "Bewegung und Sport": "Sport",
-    "Recht und Wirtschaft": "Rw",
-    "Griechisch": "Gr",
-    "FÜ": "Fü",
-  });
-  bool scrollToSubjectNicks;
-  bool dashboardMarkNewOrChangedEntries = true;
+abstract class ProfileState
+    implements Built<ProfileState, ProfileStateBuilder> {
+  ProfileState._();
+  factory ProfileState([updates(ProfileStateBuilder b)]) = _$ProfileState;
+  static Serializer<ProfileState> get serializer => _$profileStateSerializer;
+
+  String get email;
+  String get username;
+  String get roleName;
+  String get name;
+  bool get sendNotificationEmails;
 }
- */
+
 abstract class AbsencesState
     implements Built<AbsencesState, AbsencesStateBuilder> {
   AbsencesState._();
@@ -299,6 +306,18 @@ abstract class CalendarState
   static void _initializeBuilder(CalendarStateBuilder builder) {
     builder..days = MapBuilder<DateTime, CalendarDay>();
   }
+}
+
+abstract class CertificateState
+    implements Built<CertificateState, CertificateStateBuilder> {
+  @nullable
+  String get html;
+
+  CertificateState._();
+  factory CertificateState([void Function(CertificateStateBuilder) updates]) =
+      _$CertificateState;
+  static Serializer<CertificateState> get serializer =>
+      _$certificateStateSerializer;
 }
 
 abstract class NetworkProtocolState

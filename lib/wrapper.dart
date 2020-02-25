@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui' show VoidCallback;
+import 'package:http/http.dart' as http;
 
 import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
@@ -9,7 +9,7 @@ import 'package:requests/requests.dart';
 
 import 'app_state.dart';
 
-typedef void AddNetworkProtocolItem(NetworkProtocolItem item);
+typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
   String get _loginAddress => "$baseAddress/api/auth/login";
@@ -21,12 +21,15 @@ class Wrapper {
   VoidCallback onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem onAddProtocolItem;
   bool safeMode;
-  static final httpClient = HttpClient();
   Future<bool> get noInternet async {
     try {
-      await httpClient.getUrl(Uri.parse("https://example.com"));
-      return false;
-    } on SocketException {
+      final result = await http
+          .get(url != null ? baseAddress : "https://digitalesregister.it");
+      if (result.statusCode == 200) {
+        return false;
+      }
+      return true;
+    } catch (e) {
       return true;
     }
   }
@@ -36,7 +39,7 @@ class Wrapper {
   DateTime lastInteraction = now;
   DateTime _serverLogoutTime;
   Config config;
-  Future<void> login(String user, String pass, String url,
+  Future<dynamic> login(String user, String pass, String url,
       {VoidCallback logout,
       VoidCallback configLoaded,
       VoidCallback relogin,
@@ -74,9 +77,10 @@ class Wrapper {
       _loggedIn = false;
       print(e);
       error = "Unknown Error:\n$e";
-      return;
+      return null;
     }
     if (response["loggedIn"] == true) {
+      lastInteraction = DateTime.now();
       _loggedIn = true;
       this.user = user;
       this.pass = pass;
@@ -91,6 +95,38 @@ class Wrapper {
       _loggedIn = false;
       error = "[${response["error"]}] ${response["message"]}";
     }
+    return response;
+  }
+
+  Future<dynamic> changePass(
+      String url, String user, String oldPass, String newPass) async {
+    this.url = url;
+    dynamic response;
+    await _clearCookies();
+    try {
+      response = await Requests.post(
+        "$baseAddress/api/auth/setNewPassword",
+        body: {
+          "username": user,
+          "oldPassword": oldPass,
+          "newPassword": newPass,
+        },
+        json: true,
+      );
+    } catch (e) {
+      _loggedIn = false;
+      print(e);
+      error = "Unknown Error:\n$e";
+      return null;
+    }
+    if (response["error"] != null) {
+      error = "[${response["error"]}] ${response["message"]}";
+    } else {
+      this.user = user;
+      this.pass = newPass;
+      error = null;
+    }
+    return response;
   }
 
   Future<void> _loadConfig() async {
@@ -161,9 +197,11 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
-  var _mutex = new Mutex();
-  Future<dynamic> post(String url,
-      [Map<String, dynamic> args = const {}, bool json = true]) async {
+  var _mutex = Mutex();
+  Future<dynamic> send(String url,
+      {Map<String, dynamic> args = const {},
+      bool json = true,
+      String method = "POST"}) async {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -183,11 +221,19 @@ class Wrapper {
 
     dynamic response;
     try {
-      response = await Requests.post(
-        baseAddress + url,
-        body: args,
-        json: json,
-      );
+      response = method == "POST"
+          ? await Requests.post(
+              baseAddress + url,
+              body: args,
+              json: json,
+            )
+          : method == "GET"
+              ? await Requests.get(
+                  baseAddress + url,
+                  json: json,
+                )
+              : throw Exception(
+                  "invalid method: $method; expected POST or GET");
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
@@ -201,8 +247,8 @@ class Wrapper {
       ..response = response.toString()
       ..parameters = args.toString()));
     if (response is String && response.trim() != "") {
-      print(response);
-      throw Error();
+      //print(response);
+      //throw Error();
     }
     return response;
   }
@@ -220,7 +266,7 @@ class Wrapper {
     if (!_loggedIn) return;
     if (now.add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = await post("/api/auth/extendSession", {
+      final result = await send("/api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       });
       if (result == null) {

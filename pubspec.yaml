@@ -7,10 +7,10 @@ description: A new Flutter project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 1.0.0-alpha1
+version: 1.0.0-rc.1
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,10 +24,10 @@ dependencies:
   requests:
     path: "packages/requests/"
   built_value: any
-  dynamic_theme: any
+  dynamic_theme:
+    path: "packages/dynamic_theme/"
   fluttertoast: any
-  flutter_secure_storage:
-    path: "packages/flutter_secure_storage/"
+  flutter_secure_storage: any
   scroll_to_index: any 
   autocomplete_textfield: any
   package_info: any
@@ -37,6 +37,9 @@ dependencies:
       url: https://github.com/miDeb/built_redux.git
       ref: master
   flutter_built_redux: any
+  badges: any
+  flutter_widget_from_html_core: ^0.3.2+1
+  uni_links: any
 dependency_overrides:
   built_redux: 
     git: 

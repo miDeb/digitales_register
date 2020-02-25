@@ -1,29 +1,39 @@
-import 'package:built_value/built_value.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:built_value/built_value.dart';
 
 part 'login_actions.g.dart';
 
 abstract class LoginActions extends ReduxActions {
   LoginActions._();
-  factory LoginActions() => new _$LoginActions();
+  factory LoginActions() => _$LoginActions();
 
-  ActionDispatcher<LoginAction> login;
+  ActionDispatcher<String> setUsername;
+  ActionDispatcher<LoginPayload> login;
   ActionDispatcher<LoggedInPayload> loggedIn;
   ActionDispatcher<LoginFailedPayload> loginFailed;
   ActionDispatcher<LogoutPayload> logout;
   ActionDispatcher<void> updateLogout;
   ActionDispatcher<void> loggingIn;
   ActionDispatcher<void> automaticallyReloggedIn;
+  ActionDispatcher<bool> showChangePass;
+  ActionDispatcher<ChangePassPayload> changePass;
+  ActionDispatcher<void Function()> addAfterLoginCallback;
+  ActionDispatcher<void> clearAfterLoginCallbacks;
+  ActionDispatcher<RequestPassResetPayload> requestPassReset;
+  ActionDispatcher<String> resetPass;
+  ActionDispatcher<String> passResetFailed;
+  ActionDispatcher<String> passResetSucceeded;
 }
 
-abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
-  LoginAction._();
-  factory LoginAction([void Function(LoginActionBuilder) updates]) =
-      _$LoginAction;
+abstract class LoginPayload
+    implements Built<LoginPayload, LoginPayloadBuilder> {
+  LoginPayload._();
+  factory LoginPayload([void Function(LoginPayloadBuilder) updates]) =
+      _$LoginPayload;
 
   @override
   String toString() {
-    return (newBuiltValueToStringHelper('LoginAction')
+    return (newBuiltValueToStringHelper('LoginPayload')
           ..add('user', user)
           // ..add('pass', pass) // do not include the password
           ..add('url', url)
@@ -32,7 +42,7 @@ abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
         .toString();
   }
 
-  static void _initializeBuilder(LoginActionBuilder b) {
+  static void _initializeBuilder(LoginPayloadBuilder b) {
     b..offlineEnabled = false;
   }
 
@@ -41,6 +51,27 @@ abstract class LoginAction implements Built<LoginAction, LoginActionBuilder> {
   String get url;
   bool get fromStorage;
   bool get offlineEnabled;
+}
+
+abstract class ChangePassPayload
+    implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
+  ChangePassPayload._();
+  factory ChangePassPayload([void Function(ChangePassPayloadBuilder) updates]) =
+      _$ChangePassPayload;
+  String get url;
+  String get user;
+  String get oldPass;
+  String get newPass;
+}
+
+abstract class RequestPassResetPayload
+    implements Built<RequestPassResetPayload, RequestPassResetPayloadBuilder> {
+  RequestPassResetPayload._();
+  factory RequestPassResetPayload(
+          [void Function(RequestPassResetPayloadBuilder) updates]) =
+      _$RequestPassResetPayload;
+  String get user;
+  String get email;
 }
 
 abstract class LoggedInPayload

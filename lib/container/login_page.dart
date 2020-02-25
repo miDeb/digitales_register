@@ -15,7 +15,7 @@ class LoginPage extends StatelessWidget {
           vm: vm,
           onLogin: (user, pass, url) {
             actions.loginActions.login(
-              LoginAction(
+              LoginPayload(
                 (b) => b
                   ..user = user
                   ..pass = pass
@@ -24,8 +24,20 @@ class LoginPage extends StatelessWidget {
               ),
             );
           },
+          onChangePass: (user, oldPass, newPass, url) {
+            actions.loginActions.changePass(
+              ChangePassPayload(
+                (b) => b
+                  ..user = user
+                  ..url = url
+                  ..oldPass = oldPass
+                  ..newPass = newPass,
+              ),
+            );
+          },
           setSaveNoPass: actions.settingsActions.saveNoPass,
           onReload: actions.load,
+          onRequestPassReset: actions.routingActions.showRequestPassReset,
         );
       },
       connect: (state) {
@@ -35,16 +47,28 @@ class LoginPage extends StatelessWidget {
   }
 }
 
-typedef void LoginCallback(String user, String pass, String url);
-typedef void SetSafeModeCallback(bool safeMode);
+typedef LoginCallback = void Function(String user, String pass, String url);
+typedef SetSafeModeCallback = void Function(bool safeMode);
 
 class LoginPageViewModel {
   final String error;
-  final bool loading, safeMode, noInternet;
+  final String username;
+  final String url;
+  final bool loading, safeMode, noInternet, changePass, mustChangePass;
+  final Map<String, String> servers;
 
   LoginPageViewModel.from(AppState state)
       : error = state.loginState.errorMsg,
         loading = state.loginState.loading,
         safeMode = state.settingsState.noPasswordSaving,
-        noInternet = state.noInternet;
+        noInternet = state.noInternet,
+        servers = _servers,
+        changePass = state.loginState.changePassword,
+        mustChangePass = state.loginState.mustChangePassword,
+        username = state.loginState.userName,
+        url = state.url;
 }
+
+const _servers = {
+  "Vinzentinum": "https://vinzentinum.digitalesregister.it",
+};

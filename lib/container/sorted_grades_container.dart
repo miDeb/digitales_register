@@ -32,8 +32,8 @@ class SortedGradesContainer extends StatelessWidget {
   }
 }
 
-typedef void ViewSubjectDetailCallback(Subject s);
-typedef void SetBoolCallback(bool byType);
+typedef ViewSubjectDetailCallback = void Function(Subject s);
+typedef SetBoolCallback = void Function(bool byType);
 
 class SortedGradesViewModel {
   final List<Subject> subjects;

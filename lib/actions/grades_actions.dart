@@ -8,7 +8,7 @@ part 'grades_actions.g.dart';
 
 abstract class GradesActions extends ReduxActions {
   GradesActions._();
-  factory GradesActions() => new _$GradesActions();
+  factory GradesActions() => _$GradesActions();
 
   ActionDispatcher<Semester> setSemester;
   ActionDispatcher<Semester> load;

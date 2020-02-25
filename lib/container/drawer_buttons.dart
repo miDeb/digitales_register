@@ -80,3 +80,17 @@ class CalendarButton extends StatelessWidget {
     );
   }
 }
+
+class CertificateButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnection<AppState, AppActions, void>(
+      connect: (state) {},
+      builder: (context, vm, actions) {
+        return CertificateButtonWidget(
+          onShowCertificate: actions.routingActions.showCertificate,
+        );
+      },
+    );
+  }
+}

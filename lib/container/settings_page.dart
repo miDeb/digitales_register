@@ -21,6 +21,12 @@ class SettingsPageContainer extends StatelessWidget {
                   : Brightness.dark,
             );
           },
+          onSetFollowDeviceDarkMode: (dm) {
+            DynamicTheme.of(context).setFollowDevice(dm);
+          },
+          onSetPlatformOverride: (o) {
+            DynamicTheme.of(context).setPlatformOverride(o);
+          },
           onSetNoPassSaving: actions.settingsActions.saveNoPass,
           onSetNoDataSaving: actions.settingsActions.saveNoData,
           onSetAskWhenDelete: actions.settingsActions.askWhenDeleteReminder,
@@ -35,6 +41,7 @@ class SettingsPageContainer extends StatelessWidget {
               actions.settingsActions.showAllSubjectsAverage,
           onSetDashboardMarkNewOrChangedEntries:
               actions.settingsActions.markNotSeenDashboardEntries,
+          onShowProfile: actions.routingActions.showProfile,
         );
       },
       connect: (state) {
@@ -44,7 +51,7 @@ class SettingsPageContainer extends StatelessWidget {
   }
 }
 
-typedef void OnSettingChanged<T>(T newValue);
+typedef OnSettingChanged<T> = void Function(T newValue);
 
 class SettingsViewModel {
   final Map<String, String> subjectNicks;

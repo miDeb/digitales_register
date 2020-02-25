@@ -83,9 +83,9 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   DateTime get lastNotSeen;
   DateTime get firstSeen;
 
+  /// Ignores client side fields like [isNew]
   bool serverEquals(Homework other) {
     return deleted == other.deleted &&
-        id == other.id &&
         title == other.title &&
         subtitle == other.subtitle &&
         label == other.label &&
@@ -93,6 +93,49 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         grade == other.grade &&
         warning == other.warning &&
         type == other.type;
+  }
+
+  /// Guess whether this can be a successor of a previous [Homework]
+  ///
+  /// Based on:
+  ///  * everything is identical (maybe except [id])
+  /// or
+  ///  * This is a possible replacement, bc a grade was assigned
+  bool isSuccessorOf(Homework other) {
+    return _isGradeReplacementOf(other) ||
+        serverEquals(other) ||
+        _isIdenticalButSubtitleAmended(other);
+  }
+
+  /// Check if this is a possible replacement of a [gradeGroup] entry
+  ///
+  /// if the previous entry was a [gradeGroup] and this is a [grade], it is possible that a grade
+  /// was assigned, so that previous entry was replaced. In this case [id] changes, so we check for
+  /// [subtitle] and [label]. No check against [title], since that will also change to a generic one.
+  bool _isGradeReplacementOf(Homework other) {
+    return this.type == HomeworkType.grade &&
+        other.type == HomeworkType.gradeGroup &&
+        _subtitlesAreAmended(this.subtitle, other.subtitle) &&
+        this.label == other.label;
+  }
+
+  /// Check if everything is the same, but the subtitles are similar (shortened or amended)
+  ///
+  /// copy of [serverEquals] modulo the subtitles comparison
+  bool _isIdenticalButSubtitleAmended(Homework other) {
+    return deleted == other.deleted &&
+        title == other.title &&
+        _subtitlesAreAmended(this.subtitle, other.subtitle) &&
+        label == other.label &&
+        gradeFormatted == other.gradeFormatted &&
+        grade == other.grade &&
+        warning == other.warning &&
+        type == other.type;
+  }
+
+  /// If either subtitle [a] contains subtitle [b] or vice versa
+  static bool _subtitlesAreAmended(String a, String b) {
+    return a.contains(b) || b.contains(a);
   }
 
   static void _initializeBuilder(HomeworkBuilder b) => b
@@ -175,7 +218,8 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
           .toList();
       entries.removeWhere((e) => e == null);
       if (entries.isEmpty) return null;
-      return entries.fold([], (a, b) => [...a, ...b]);
+      return entries.fold([], (a, b) => [...a, ...b])
+        ..sort((a, b) => -a.date.compareTo(b.date));
     }
     if (grades[semester] == null || observations[semester] == null) return null;
     return <DetailEntry>[
@@ -202,7 +246,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   String averageFormatted(Semester semester) {
     final avg = average(semester);
     if (avg != null) {
-      return "${avg ~/ 100},${avg % 100}";
+      return gradeAverageFormat.format(avg / 100);
     } else
       return "/";
   }
@@ -283,7 +327,7 @@ abstract class GradeDetail
       case 75:
         return "${mainGrade + 1}-";
       default:
-        return grade.toString();
+        return gradeAverageFormat.format(grade / 100);
     }
   }
 

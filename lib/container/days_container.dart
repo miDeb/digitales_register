@@ -53,38 +53,47 @@ class DaysContainer extends StatelessWidget {
   }
 }
 
-typedef void AddReminderCallback(Day day, String reminder);
-typedef void RemoveReminderCallback(Homework hw, Day day);
-typedef void ToggleDoneCallback(Homework hw, bool done);
-typedef void MarkAsNotNewOrChangedCallback(Homework hw);
-typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
+typedef AddReminderCallback = void Function(Day day, String reminder);
+typedef RemoveReminderCallback = void Function(Homework hw, Day day);
+typedef ToggleDoneCallback = void Function(Homework hw, bool done);
+typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
+typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
 
 class DaysViewModel {
   final List<Day> days;
   final bool future;
   final bool askWhenDelete;
   final bool noInternet, loading;
+  final bool showAddReminder;
 
   DaysViewModel.from(AppState state)
-      : days = state.dashboardState.allDays
-                ?.where((day) => day.future == state.dashboardState.future)
-                ?.map(
-                  (day) => day.rebuild(
-                    (b) => b
-                      ..deletedHomework.where(
-                        (hw) =>
-                            !state.dashboardState.blacklist.contains(hw.type),
-                      )
-                      ..homework.where(
-                        (hw) =>
-                            !state.dashboardState.blacklist.contains(hw.type),
-                      ),
-                  ),
-                )
-                ?.toList() ??
-            [],
+      : days = (() {
+          final unorderedDays = state.dashboardState.allDays
+                  ?.where((day) => day.future == state.dashboardState.future)
+                  ?.map(
+                    (day) => day.rebuild(
+                      (b) => b
+                        ..deletedHomework.where(
+                          (hw) =>
+                              !state.dashboardState.blacklist.contains(hw.type),
+                        )
+                        ..homework.where(
+                          (hw) =>
+                              !state.dashboardState.blacklist.contains(hw.type),
+                        ),
+                    ),
+                  )
+                  ?.toList() ??
+              [];
+          if (!state.dashboardState.future)
+            return unorderedDays?.reversed?.toList();
+          else
+            return unorderedDays;
+        })(),
         noInternet = state.noInternet,
         future = state.dashboardState.future,
-        loading = state.dashboardState.loading,
-        askWhenDelete = state.settingsState.askWhenDelete;
+        loading = state.dashboardState.loading || state.loginState.loading,
+        askWhenDelete = state.settingsState.askWhenDelete,
+        showAddReminder =
+            !state.dashboardState.blacklist.contains(HomeworkType.homework);
 }

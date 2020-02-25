@@ -7,15 +7,15 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.addReminder, _addReminder)
   ..add(DashboardActionsNames.deleteHomework, _deleteHomework)
   ..add(DashboardActionsNames.toggleDone, _toggleDone)
-  ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNontSeenEntries);
+  ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenEntries);
 
 void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
   if (api.state.noInternet) return;
 
   next(action);
-  final data = await _wrapper
-      .post("/api/student/dashboard/dashboard", {"viewFuture": action.payload});
+  final data = await _wrapper.send("/api/student/dashboard/dashboard",
+      args: {"viewFuture": action.payload});
 
   if (data is! List) {
     api.actions.refreshNoInternet();
@@ -42,10 +42,13 @@ void _switchFuture(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<AddReminderPayload> action) async {
   next(action);
-  final result = await _wrapper.post("/api/student/dashboard/save_reminder", {
-    "date": DateFormat("yyyy-MM-dd").format(action.payload.date),
-    "text": action.payload.msg,
-  });
+  final result = await _wrapper.send(
+    "/api/student/dashboard/save_reminder",
+    args: {
+      "date": DateFormat("yyyy-MM-dd").format(action.payload.date),
+      "text": action.payload.msg,
+    },
+  );
   if (result == null) {
     showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
@@ -62,9 +65,12 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Homework> action) async {
-  final result = await _wrapper.post("/api/student/dashboard/delete_reminder", {
-    "id": action.payload.id,
-  });
+  final result = await _wrapper.send(
+    "/api/student/dashboard/delete_reminder",
+    args: {
+      "id": action.payload.id,
+    },
+  );
   if (result != null && result["success"]) {
     next(action);
   } else {
@@ -77,11 +83,14 @@ void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<ToggleDonePayload> action) async {
   next(action);
-  final result = await _wrapper.post("/api/student/dashboard/toggle_reminder", {
-    "id": action.payload.hw.id,
-    "type": action.payload.hw.type.name,
-    "value": action.payload.done,
-  });
+  final result = await _wrapper.send(
+    "/api/student/dashboard/toggle_reminder",
+    args: {
+      "id": action.payload.hw.id,
+      "type": action.payload.hw.type.name,
+      "value": action.payload.done,
+    },
+  );
   if (result != null && result["success"]) {
     // duplicate - protection from multiple, failing and not failing requests
     next(action);
@@ -102,7 +111,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _markNontSeenEntries(
+void _markNotSeenEntries(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) {

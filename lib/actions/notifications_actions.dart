@@ -6,7 +6,7 @@ part 'notifications_actions.g.dart';
 
 abstract class NotificationsActions extends ReduxActions {
   NotificationsActions._();
-  factory NotificationsActions() => new _$NotificationsActions();
+  factory NotificationsActions() => _$NotificationsActions();
 
   ActionDispatcher<void> load;
   ActionDispatcher<dynamic> loaded;

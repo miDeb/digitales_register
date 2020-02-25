@@ -1,3 +1,4 @@
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -59,7 +60,7 @@ class GradesPageViewModel {
     if (n == 0) {
       return "/";
     } else {
-      return ((sum / n) / 100).toStringAsFixed(2);
+      return gradeAverageFormat.format(sum / n / 100);
     }
   }
 }

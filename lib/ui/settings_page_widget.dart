@@ -20,7 +20,10 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
   final OnSettingChanged<bool> onSetDashboardMarkNewOrChangedEntries;
   final OnSettingChanged<bool> onSetDarkMode;
+  final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
+  final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
+  final VoidCallback onShowProfile;
   final SettingsViewModel vm;
 
   SettingsPageWidget({
@@ -37,6 +40,9 @@ class SettingsPageWidget extends StatefulWidget {
     this.onSetDarkMode,
     this.onSetSubjectNicks,
     this.vm,
+    this.onSetPlatformOverride,
+    this.onSetFollowDeviceDarkMode,
+    this.onShowProfile,
   }) : super(key: key);
 
   @override
@@ -70,6 +76,16 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       body: ListView(
         controller: controller,
         children: <Widget>[
+          SizedBox(height: 8),
+          ListTile(
+            title: Text(
+              "Profil",
+              style: Theme.of(context).textTheme.headline,
+            ),
+            trailing: Icon(Icons.chevron_right),
+            onTap: widget.onShowProfile,
+          ),
+          Divider(),
           AutoScrollTag(
             child: ListTile(
               title: Text(
@@ -115,28 +131,36 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: widget.vm.deleteDataOnLogout,
           ),
           Divider(),
-          AutoScrollTag(
-            child: ListTile(
-              title: Text(
-                "Erscheinung",
-                style: Theme.of(context).textTheme.headline,
+          if (!Platform.isLinux) ...[
+            AutoScrollTag(
+              child: ListTile(
+                title: Text(
+                  "Theme",
+                  style: Theme.of(context).textTheme.headline,
+                ),
               ),
+              controller: controller,
+              index: 1,
+              key: ObjectKey(1),
             ),
-            controller: controller,
-            index: 1,
-            key: ObjectKey(1),
-          ),
-          if (!Platform.isLinux)
             SwitchListTile(
               title: Text("Dark Mode"),
-              onChanged:
-                  MediaQuery.of(context).platformBrightness == Brightness.dark
-                      ? null
-                      : (bool value) {
-                          widget.onSetDarkMode(value);
-                        },
-              value: DynamicTheme.of(context).brightness == Brightness.dark,
+              onChanged: DynamicTheme.of(context).followDevice
+                  ? null
+                  : (bool value) {
+                      widget.onSetDarkMode(value);
+                    },
+              value:
+                  DynamicTheme.of(context).customBrightness == Brightness.dark,
             ),
+            SwitchListTile(
+              title: Text("Geräte-Theme folgen"),
+              onChanged: (bool value) {
+                widget.onSetFollowDeviceDarkMode(value);
+              },
+              value: DynamicTheme.of(context).followDevice,
+            ),
+          ],
           Divider(),
           AutoScrollTag(
             child: ListTile(
@@ -220,8 +244,9 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                         );
                         if (newValue != null) {
                           widget.onSetSubjectNicks(
-                            Map.of(widget.vm.subjectNicks)
-                              ..[newValue.key] = newValue.value,
+                            Map.fromEntries(
+                                widget.vm.subjectNicks.entries.toList()
+                                  ..insert(0, newValue)),
                           );
                         }
                       },
@@ -308,6 +333,16 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 5,
             key: ObjectKey(5),
           ),
+          if (Platform.isAndroid)
+            SwitchListTile(
+              title: Text("iOS Mode"),
+              subtitle:
+                  Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              onChanged: (bool value) {
+                widget.onSetPlatformOverride(value);
+              },
+              value: DynamicTheme.of(context).platformOverride,
+            ),
           ListTile(
             title: Text("Netzwerkprotokoll"),
             onTap: () {
@@ -335,7 +370,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
-                Text("Alternativer Client für das Digitale Register. ")
+                Text("Alternativer Client für das Digitale Register.")
               ],
             ),
           ),
@@ -348,89 +383,139 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       String key, String value, List<String> suggestions) async {
     return await showDialog(
       context: context,
-      builder: (context) {
-        final subjectController = TextEditingController(text: key);
-        final nickController = TextEditingController(text: value);
-        final subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: Text("Kürzel bearbeiten"),
-              content: Row(
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text("Fach"),
-                      SizedBox(
-                        height: 27,
-                      ),
-                      Text("Kürzel"),
-                    ],
-                  ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        AutoCompleteTextField<String>(
-                          key: subjectKey,
-                          itemBuilder:
-                              (BuildContext context, String suggestion) {
-                            return ListTile(title: Text(suggestion));
-                          },
-                          textChanged: (_) => setState(() {}),
-                          clearOnSubmit: false,
-                          itemFilter: (String suggestion, String query) {
-                            return suggestion
-                                .toLowerCase()
-                                .contains(query.toLowerCase());
-                          },
-                          itemSorter: (String a, String b) {
-                            return a.compareTo(b);
-                          },
-                          itemSubmitted: (_) {},
-                          suggestions: suggestions,
-                          controller: subjectController,
-                        ),
-                        TextField(
-                          controller: nickController,
-                          textCapitalization: TextCapitalization.sentences,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+      builder: (context) => EditSubjectsNicks(
+        subjectName: key,
+        subjectNick: value,
+        suggestions: suggestions,
+      ),
+    );
+  }
+}
+
+class EditSubjectsNicks extends StatefulWidget {
+  final String subjectName;
+  final String subjectNick;
+  final List<String> suggestions;
+
+  const EditSubjectsNicks(
+      {Key key, this.subjectName, this.subjectNick, this.suggestions})
+      : super(key: key);
+  @override
+  _EditSubjectsNicksState createState() => _EditSubjectsNicksState();
+}
+
+class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
+  TextEditingController subjectController;
+  TextEditingController nickController;
+  GlobalKey<AutoCompleteTextFieldState<String>> subjectKey;
+  FocusNode focusNode;
+  @override
+  void initState() {
+    subjectController = TextEditingController(text: widget.subjectName);
+    nickController = TextEditingController(text: widget.subjectNick);
+    subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
+    focusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subjectController.dispose();
+    nickController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Kürzel bearbeiten"),
+      content: Row(
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Fach"),
+              SizedBox(
+                height: 27,
               ),
-              actions: <Widget>[
-                FlatButton(
-                  child: Text("Abbrechen"),
-                  onPressed: () {
-                    Navigator.of(context).pop();
+              Text("Kürzel"),
+            ],
+          ),
+          SizedBox(
+            width: 16,
+          ),
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                AutoCompleteTextField<String>(
+                  key: subjectKey,
+                  itemBuilder: (BuildContext context, String suggestion) {
+                    return ListTile(title: Text(suggestion));
+                  },
+                  textChanged: (_) => setState(() {}),
+                  clearOnSubmit: false,
+                  itemFilter: (String suggestion, String query) {
+                    return suggestion
+                        .toLowerCase()
+                        .contains(query.toLowerCase());
+                  },
+                  itemSorter: (String a, String b) {
+                    return a.compareTo(b);
+                  },
+                  itemSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(focusNode);
+                  },
+                  textSubmitted: (_) {
+                    FocusScope.of(context).requestFocus(focusNode);
+                  },
+                  suggestions: widget.suggestions,
+                  controller: subjectController,
+                ),
+                TextField(
+                  controller: nickController,
+                  textCapitalization: TextCapitalization.sentences,
+                  onChanged: (_) => setState(() {}),
+                  focusNode: focusNode,
+                  onSubmitted: (_) {
+                    if (subjectController.text != "" &&
+                        nickController.text != "") {
+                      Navigator.of(context).pop(
+                        MapEntry(
+                          subjectController.text,
+                          nickController.text,
+                        ),
+                      );
+                    }
                   },
                 ),
-                RaisedButton(
-                  child: Text("Fertig"),
-                  onPressed:
-                      subjectController.text != "" && nickController.text != ""
-                          ? () {
-                              Navigator.of(context).pop(
-                                MapEntry(
-                                  subjectController.text,
-                                  nickController.text,
-                                ),
-                              );
-                            }
-                          : null,
-                ),
               ],
-            );
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        FlatButton(
+          child: Text("Abbrechen"),
+          onPressed: () {
+            Navigator.of(context).pop();
           },
-        );
-      },
+        ),
+        RaisedButton(
+          child: Text("Fertig"),
+          onPressed: subjectController.text != "" && nickController.text != ""
+              ? () {
+                  Navigator.of(context).pop(
+                    MapEntry(
+                      subjectController.text,
+                      nickController.text,
+                    ),
+                  );
+                }
+              : null,
+        ),
+      ],
     );
   }
 }

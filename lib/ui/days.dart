@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,15 +10,13 @@ import '../container/homework_filter_container.dart';
 import '../data.dart';
 import '../util.dart';
 import 'dialog.dart';
-import 'news_sticker.dart';
 import 'no_internet.dart';
-import 'sub_icon.dart';
 
-typedef void AddReminderCallback(Day day, String reminder);
-typedef void RemoveReminderCallback(Homework hw, Day day);
-typedef void ToggleDoneCallback(Homework hw, bool done);
-typedef void MarkAsNotNewOrChangedCallback(Homework hw);
-typedef void MarkDeletedHomeworkAsSeenCallback(Day day);
+typedef AddReminderCallback = void Function(Day day, String reminder);
+typedef RemoveReminderCallback = void Function(Homework hw, Day day);
+typedef ToggleDoneCallback = void Function(Homework hw, bool done);
+typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
+typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
 
 class DaysWidget extends StatelessWidget {
   final DaysViewModel vm;
@@ -243,7 +242,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
       body: ListView.builder(
         physics: AlwaysScrollableScrollPhysics(),
         controller: controller,
-        itemCount: widget.vm.days.length + 1,
+        itemCount: widget.vm.days.length + 2,
         itemBuilder: (context, n) {
           if (n == 0) {
             return Stack(
@@ -259,7 +258,9 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                       Expanded(
                         child: AbsorbPointer(child: Container()),
                       ),
-                      Spacer(),
+                      SizedBox(
+                        width: 60,
+                      ),
                     ],
                   ),
                 ),
@@ -277,13 +278,10 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               ],
             );
           }
-          if (n == widget.vm.days.length) {
+          if (n == widget.vm.days.length + 1) {
             return SizedBox(
               height: 160,
             );
-          }
-          if (!widget.vm.future) {
-            n = widget.vm.days.length + 1 - n;
           }
           return DayWidget(
             day: widget.vm.days[n - 1],
@@ -377,114 +375,127 @@ class DayWidget extends StatelessWidget {
     var i = index;
     return Column(
       children: <Widget>[
-        Row(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  day.displayName,
-                  style: Theme.of(context).textTheme.title,
-                ),
-              ),
-            ),
-            if (day.deletedHomework.isNotEmpty)
-              AutoScrollTag(
-                child: IconButton(
-                  icon: SubIcon(
-                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                    icon: Icons.info_outline,
-                    subIcon: Icons.delete,
-                    subIconColor: day.deletedHomework.any((h) => h.isChanged)
-                        ? Colors.red
-                        : null,
+        SizedBox(
+          height: 48,
+          child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    day.displayName,
+                    style: Theme.of(context).textTheme.title,
                   ),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_context) {
-                        return ListViewCapableAlertDialog(
-                          title: Text("Gelöschte Einträge"),
-                          content: ListView(
-                            shrinkWrap: true,
-                            children: day.deletedHomework
-                                .map(
-                                  (i) => ItemWidget(
-                                    item: i,
-                                    isDeletedView: true,
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                          actions: <Widget>[
-                            RaisedButton(
-                              textTheme: ButtonTextTheme.primary,
-                              onPressed: () => Navigator.pop(_context),
-                              child: Text(
-                                "Ok",
-                              ),
-                            )
-                          ],
-                        );
-                      },
-                    );
-                  },
                 ),
-                controller: controller,
-                index: index,
-                key: ValueKey(index),
-                highlightColor: Colors.grey.withOpacity(0.5),
               ),
-            Spacer(),
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: vm.noInternet
-                  ? null
-                  : () async {
-                      final message = await showDialog(
-                          context: context,
-                          builder: (context) {
-                            String message = "";
-                            return StatefulBuilder(
-                              builder: (context, setState) => AlertDialog(
-                                title: Text("Erinnerung"),
-                                content: TextField(
-                                  maxLines: null,
-                                  onChanged: (msg) {
-                                    setState(() => message = msg);
-                                  },
-                                  decoration: InputDecoration(
-                                      hintText: 'zB. Hausaufgabe'),
-                                ),
-                                actions: <Widget>[
-                                  FlatButton(
-                                    child: Text("Abbrechen"),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  RaisedButton(
-                                    textTheme: ButtonTextTheme.primary,
-                                    child: Text(
-                                      "Speichern",
+              if (day.deletedHomework.isNotEmpty)
+                AutoScrollTag(
+                  child: IconButton(
+                    icon: Badge(
+                      child: Icon(Icons.info_outline),
+                      badgeContent: Icon(
+                        Icons.delete,
+                        size: 15,
+                        color: day.deletedHomework.any((h) => h.isChanged)
+                            ? Colors.white
+                            : null,
+                      ),
+                      badgeColor: day.deletedHomework.any((h) => h.isChanged)
+                          ? Colors.red
+                          : Theme.of(context).scaffoldBackgroundColor,
+                      toAnimate: day.deletedHomework.any((h) => h.isChanged),
+                      padding: EdgeInsets.zero,
+                      position: BadgePosition.topRight(),
+                      elevation: 0,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (_context) {
+                          return ListViewCapableAlertDialog(
+                            title: Text("Gelöschte Einträge"),
+                            content: ListView(
+                              shrinkWrap: true,
+                              children: day.deletedHomework
+                                  .map(
+                                    (i) => ItemWidget(
+                                      item: i,
+                                      isDeletedView: true,
                                     ),
-                                    onPressed: isNullOrEmpty(message)
-                                        ? null
-                                        : () {
-                                            Navigator.pop(context, message);
-                                          },
-                                  ),
-                                ],
-                              ),
-                            );
-                          });
-                      if (message != null) {
-                        addReminderCallback(day, message);
-                      }
+                                  )
+                                  .toList(),
+                            ),
+                            actions: <Widget>[
+                              RaisedButton(
+                                textTheme: ButtonTextTheme.primary,
+                                onPressed: () => Navigator.pop(_context),
+                                child: Text(
+                                  "Ok",
+                                ),
+                              )
+                            ],
+                          );
+                        },
+                      );
                     },
-            ),
-          ],
+                  ),
+                  controller: controller,
+                  index: index,
+                  key: ValueKey(index),
+                  highlightColor: Colors.grey.withOpacity(0.5),
+                ),
+              Spacer(),
+              if (vm.showAddReminder)
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: vm.noInternet
+                      ? null
+                      : () async {
+                          final message = await showDialog(
+                              context: context,
+                              builder: (context) {
+                                String message = "";
+                                return StatefulBuilder(
+                                  builder: (context, setState) => AlertDialog(
+                                    title: Text("Erinnerung"),
+                                    content: TextField(
+                                      maxLines: null,
+                                      onChanged: (msg) {
+                                        setState(() => message = msg);
+                                      },
+                                      decoration: InputDecoration(
+                                          hintText: 'zB. Hausaufgabe'),
+                                    ),
+                                    actions: <Widget>[
+                                      FlatButton(
+                                        child: Text("Abbrechen"),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                      RaisedButton(
+                                        textTheme: ButtonTextTheme.primary,
+                                        child: Text(
+                                          "Speichern",
+                                        ),
+                                        onPressed: isNullOrEmpty(message)
+                                            ? null
+                                            : () {
+                                                Navigator.pop(context, message);
+                                              },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              });
+                          if (message != null) {
+                            addReminderCallback(day, message);
+                          }
+                        },
+                ),
+            ],
+          ),
         ),
         for (final hw in day.homework)
           ItemWidget(
@@ -508,7 +519,7 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, isHistory, isDeletedView, noInternet;
+  final bool askWhenDelete, isHistory, isDeletedView, noInternet, isCurrent;
 
   final AutoScrollController controller;
   final int index;
@@ -525,6 +536,7 @@ class ItemWidget extends StatelessWidget {
     this.index,
     this.isDeletedView = false,
     this.noInternet,
+    this.isCurrent = true,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -539,13 +551,17 @@ class ItemWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    left: 8,
+                    top: 8,
+                    bottom: 6,
+                  ),
                   child: Column(
                     children: <Widget>[
                       if (item.label != null)
@@ -559,25 +575,30 @@ class ItemWidget extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if (item.isNew || item.isChanged)
+                            if ((!isHistory &&
+                                    (item.isNew || item.isChanged)) ||
+                                (isHistory && isCurrent))
                               Positioned(
                                 right: 0,
-                                child: item.isNew
-                                    ? NewsSticker(
-                                        text: "neu",
-                                      )
-                                    : item.deleted
-                                        ? NewsSticker(
-                                            text: "gelöscht",
-                                          )
-                                        : NewsSticker(
-                                            text: "geändert",
-                                          ),
+                                child: Badge(
+                                  shape: BadgeShape.square,
+                                  borderRadius: 20,
+                                  badgeContent: Text(
+                                    isHistory && isCurrent
+                                        ? "aktuell"
+                                        : item.isNew
+                                            ? "neu"
+                                            : item.deleted
+                                                ? "gelöscht"
+                                                : "geändert",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
                               )
                           ],
                         ),
                       ListTile(
-                        contentPadding: EdgeInsets.only(),
+                        contentPadding: EdgeInsets.zero,
                         title: Text(item.title),
                         subtitle: isNullOrEmpty(item.subtitle)
                             ? null
@@ -643,93 +664,116 @@ class ItemWidget extends StatelessWidget {
                     ],
                   ),
                 ),
-                Column(
-                  children: <Widget>[
-                    if (!isHistory && item.label != null)
-                      IconButton(
-                        icon: item.previousVersion != null
-                            ? SubIcon(
-                                backgroundColor: isDeletedView
-                                    ? Theme.of(context).dialogBackgroundColor
-                                    : Theme.of(context).scaffoldBackgroundColor,
-                                icon: Icons.info_outline,
-                                subIcon: Icons.edit,
-                              )
-                            : Icon(
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  if (!isHistory && item.label != null)
+                    IconButton(
+                      icon: (isDeletedView
+                                  ? item.previousVersion.previousVersion
+                                  : item.previousVersion) !=
+                              null
+                          ? Badge(
+                              child: Icon(
                                 Icons.info_outline,
                               ),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (_context) {
-                              return ListViewCapableAlertDialog(
-                                title: Text(item.title),
-                                content: ListView(
-                                  shrinkWrap: true,
-                                  children: <Widget>[
-                                    Text(formatChanged(item)),
-                                    if (item.previousVersion != null)
-                                      ExpansionTile(
-                                        title: Text("Versionen"),
-                                        children: <Widget>[
-                                          ItemWidget(
-                                            item: item,
-                                            isHistory: true,
-                                          ),
-                                        ],
-                                      ),
-                                  ],
-                                ),
-                                actions: <Widget>[
-                                  RaisedButton(
-                                    textTheme: ButtonTextTheme.primary,
-                                    onPressed: () => Navigator.pop(_context),
-                                    child: Text(
-                                      "Ok",
+                              badgeContent: Icon(Icons.edit, size: 15),
+                              padding: EdgeInsets.zero,
+                              badgeColor: isDeletedView
+                                  ? Theme.of(context).dialogBackgroundColor
+                                  : Theme.of(context).scaffoldBackgroundColor,
+                              toAnimate: false,
+                              elevation: 0,
+                            )
+                          : Icon(
+                              Icons.info_outline,
+                            ),
+                      onPressed: () {
+                        // if we are in the deleted view, show the history for the previous item
+                        final historyItem =
+                            isDeletedView ? item.previousVersion : item;
+                        showDialog(
+                          context: context,
+                          builder: (_context) {
+                            return ListViewCapableAlertDialog(
+                              title: Text(historyItem.title),
+                              content: ListView(
+                                shrinkWrap: true,
+                                children: <Widget>[
+                                  Text(formatChanged(historyItem)),
+                                  if (historyItem.previousVersion != null)
+                                    ExpansionTile(
+                                      title: Text("Versionen"),
+                                      children: <Widget>[
+                                        ItemWidget(
+                                          item: historyItem,
+                                          isHistory: true,
+                                        ),
+                                      ],
                                     ),
-                                  )
                                 ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    if (item.warning)
-                      Text(
+                              ),
+                              actions: <Widget>[
+                                RaisedButton(
+                                  textTheme: ButtonTextTheme.primary,
+                                  onPressed: () => Navigator.pop(_context),
+                                  child: Text(
+                                    "Ok",
+                                  ),
+                                )
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  if (item.warning)
+                    Padding(
+                      // make this exactly as big as the (i) icon above, so
+                      // [CrossAxisAlignment.end] will not move this to the end
+                      padding: const EdgeInsets.symmetric(horizontal: 19),
+                      child: Text(
                         "!",
                         style: TextStyle(
                           color: Colors.red.shade900,
                           fontSize: 30,
                         ),
-                      )
-                    else if (item.type == HomeworkType.grade)
-                      Text(
+                      ),
+                    )
+                  else if (item.type == HomeworkType.grade)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Text(
                         item.gradeFormatted,
                         style: TextStyle(color: Colors.green, fontSize: 30),
-                      )
-                    else if (!isHistory && !isDeletedView && item.checkable)
-                      Checkbox(
-                        activeColor: Colors.green,
-                        value: item.checked,
-                        onChanged: noInternet
-                            ? null
-                            : (done) {
-                                toggleDone();
-                              },
                       ),
-                  ],
-                ),
-              ],
-            ),
-            if (isHistory) ...[
-              Divider(),
-              Text(
+                    )
+                  else if (!isHistory && !isDeletedView && item.checkable)
+                    Checkbox(
+                      activeColor: Colors.green,
+                      value: item.checked,
+                      onChanged: noInternet
+                          ? null
+                          : (done) {
+                              toggleDone();
+                            },
+                    ),
+                ],
+              ),
+            ],
+          ),
+          if (isHistory || isDeletedView) ...[
+            Divider(height: 0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
                 formatChanged(item),
                 style: Theme.of(context).textTheme.caption,
               ),
-            ]
-          ],
-        ),
+            ),
+          ]
+        ],
       ),
     );
     if (!isHistory && !isDeletedView) {
@@ -747,6 +791,7 @@ class ItemWidget extends StatelessWidget {
         if (isHistory && item.previousVersion != null)
           ItemWidget(
             isHistory: true,
+            isCurrent: false,
             item: item.previousVersion,
           ),
       ],

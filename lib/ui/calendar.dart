@@ -6,7 +6,7 @@ import '../container/calendar_container.dart';
 import '../container/calendar_week_container.dart';
 import '../util.dart';
 
-typedef void DayCallback(DateTime day);
+typedef DayCallback = void Function(DateTime day);
 
 class Calendar extends StatefulWidget {
   final CalendarViewModel vm;

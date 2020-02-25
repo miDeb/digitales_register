@@ -6,12 +6,6 @@ import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../util.dart';
 
-// TODO: What's the purpose of this?
-final colors = List.of(Colors.primaries)
-  ..remove(Colors.pink)
-  ..remove(Colors.lightBlue)
-  ..remove(Colors.lightGreen);
-
 class GradesChart extends StatelessWidget {
   final VoidCallback goFullscreen;
   final bool isFullscreen;
@@ -27,13 +21,12 @@ class GradesChart extends StatelessWidget {
 
   static List<charts.Series<MapEntry<DateTime, int>, DateTime>> convert(
       Map<SubjectGrades, SubjectGraphConfig> data) {
-    int count = 0;
     return data.entries
         .map(
           (entry) {
             final s = entry.key;
             final strokeWidth = entry.value.thick;
-            final color = Color(entry.value.color) ?? colors[count++];
+            final color = Color(entry.value.color);
             return strokeWidth == 0
                 ? null
                 : charts.Series<MapEntry<DateTime, int>, DateTime>(
@@ -126,7 +119,7 @@ class GradesChart extends StatelessWidget {
               ),
             ),
             defaultInteractions: false,
-            domainAxis: new charts.DateTimeAxisSpec(
+            domainAxis: charts.DateTimeAxisSpec(
               tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
                 createDomainAxisTags(
                   Localizations.localeOf(context),

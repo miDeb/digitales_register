@@ -29,7 +29,7 @@ class HomeworkFilterContainer extends StatelessWidget {
   }
 }
 
-typedef void HomeworkBlacklistCallback(List<HomeworkType> blacklist);
+typedef HomeworkBlacklistCallback = void Function(List<HomeworkType> blacklist);
 
 class HomeworkFilterVM {
   final List<HomeworkType> currentBlacklist;

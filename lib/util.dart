@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tuple/tuple.dart';
 
 Widget maybeWrap(Widget widget, bool wrap, Widget wrapWidget(Widget w)) {
   if (wrap)
@@ -25,3 +27,10 @@ DateTime toMonday(DateTime date) {
 
 DateTime get now => mockNow ?? DateTime.now();
 DateTime mockNow;
+extension MapEntryToTuple<K, V> on MapEntry<K, V> {
+  Tuple2<K, V> toTuple() {
+    return Tuple2(this.key, this.value);
+  }
+}
+
+NumberFormat gradeAverageFormat = NumberFormat("#0.##", "de");

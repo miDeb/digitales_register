@@ -91,12 +91,16 @@ class NotificationWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       notification.title,
+                      style: Theme.of(context).textTheme.subhead,
                     ),
                   ),
                   if (!isNullOrEmpty(notification.subTitle))
-                    Text(
-                      notification.subTitle,
-                      style: TextStyle(fontStyle: FontStyle.italic),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        notification.subTitle,
+                        style: Theme.of(context).textTheme.body1,
+                      ),
                     ),
                   Padding(
                     padding: const EdgeInsets.only(left: 2.0),

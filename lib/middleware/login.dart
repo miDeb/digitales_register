@@ -4,7 +4,11 @@ final _loginMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(LoginActionsNames.logout, _logout)
       ..add(LoginActionsNames.login, _login)
-      ..add(LoginActionsNames.loginFailed, _loginFailed);
+      ..add(LoginActionsNames.loginFailed, _loginFailed)
+      ..add(LoginActionsNames.showChangePass, _showChangePass)
+      ..add(LoginActionsNames.changePass, _changePass)
+      ..add(LoginActionsNames.requestPassReset, _requestPassReset)
+      ..add(LoginActionsNames.resetPass, _resetPass);
 
 void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) {
@@ -25,7 +29,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 }
 
 void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoginAction> action) async {
+    ActionHandler next, Action<LoginPayload> action) async {
   next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
     api.actions.loginActions.loginFailed(
@@ -40,7 +44,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     return;
   }
   api.actions.loginActions.loggingIn();
-  await _wrapper.login(
+  final result = await _wrapper.login(
     action.payload.user,
     action.payload.pass,
     action.payload.url,
@@ -55,7 +59,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     relogin: api.actions.loginActions.automaticallyReloggedIn,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
-  if (_wrapper.loggedIn)
+  if (_wrapper.loggedIn) {
     api.actions.loginActions.loggedIn(
       LoggedInPayload(
         (b) => b
@@ -63,7 +67,10 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..fromStorage = action.payload.fromStorage,
       ),
     );
-  else {
+  } else if (result is Map && result["error"] == "password_expired") {
+    api.actions.savePassActions.delete();
+    api.actions.loginActions.showChangePass(true);
+  } else {
     final noInternet = await _wrapper.noInternet;
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
@@ -75,6 +82,45 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..fromStorage = action.payload.fromStorage,
       ),
     );
+  }
+}
+
+void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<ChangePassPayload> action) async {
+  next(action);
+  final result = await _wrapper.changePass(
+    action.payload.url,
+    action.payload.user,
+    action.payload.oldPass,
+    action.payload.newPass,
+  );
+  if (result == null) {
+    api.actions.refreshNoInternet();
+    return;
+  }
+  if (result["error"] != null) {
+    api.actions.loginActions.loginFailed(
+      LoginFailedPayload(
+        (b) => b
+          ..cause = _wrapper.error
+          ..username = action.payload.user
+          ..fromStorage = false
+          ..noInternet = false
+          ..offlineEnabled = false,
+      ),
+    );
+  } else {
+    api.actions.loginActions.login(
+      LoginPayload(
+        (b) => b
+          ..user = action.payload.user
+          ..pass = action.payload.newPass
+          ..fromStorage = false
+          ..url = action.payload.url,
+      ),
+    );
+    navigatorKey.currentState.pop();
+    showToast(msg: "Passwort erfolgreich geändert");
   }
 }
 
@@ -93,6 +139,53 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       return;
     }
     api.actions.noInternet(true);
+  } else {
+    api.actions.savePassActions.delete();
   }
   api.actions.routingActions.showLogin();
+}
+
+void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) {
+  api.actions.routingActions.showLogin();
+  next(action);
+}
+
+void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<RequestPassResetPayload> action) async {
+  final result = await Requests.post(
+    "${api.state.url}/api/auth/resetPassword",
+    body: {
+      "email": action.payload.email,
+      "username": action.payload.user,
+    },
+    json: true,
+  );
+  if (result["error"] != null) {
+    api.actions.loginActions
+        .passResetFailed("[${result["error"]}]: ${result["message"]}");
+  } else {
+    api.actions.loginActions.passResetSucceeded(result["message"]);
+  }
+}
+
+void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<String> action) async {
+  final result = await Requests.post(
+    "${api.state.url}/api/auth/setNewPassword",
+    body: {
+      "username": "",
+      "token": api.state.loginState.resetPassState.token,
+      "email": api.state.loginState.resetPassState.email,
+      "oldPassword": "",
+      "newPassword": action.payload,
+    },
+    json: true,
+  );
+  if (result["error"] != null) {
+    api.actions.loginActions
+        .passResetFailed("[${result["error"]}]: ${result["message"]}");
+  } else {
+    api.actions.loginActions.passResetSucceeded(result["message"]);
+  }
 }

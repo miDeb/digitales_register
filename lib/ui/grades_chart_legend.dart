@@ -3,7 +3,7 @@ import 'package:tuple/tuple.dart';
 
 import '../app_state.dart';
 
-typedef void SetConfig(int id, SubjectGraphConfig config);
+typedef SetConfig = void Function(int id, SubjectGraphConfig config);
 
 class ChartLegend extends StatelessWidget {
   final Map<Tuple2<String, int>, SubjectGraphConfig> vm;

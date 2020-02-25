@@ -33,33 +33,47 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
     }
   }
   @override
-  Future<void> delete({String key}) async {
+  Future<void> delete(
+      {String key,
+      secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.remove(key);
     _syncToFileSystem();
   }
 
   @override
-  Future<void> deleteAll() async {
+  Future<void> deleteAll(
+      {secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.clear();
     _syncToFileSystem();
   }
 
   @override
-  Future<String> read({String key}) async {
+  Future<String> read(
+      {String key,
+      secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return _storage[key];
   }
 
   @override
-  Future<Map<String, String>> readAll() async {
+  Future<Map<String, String>> readAll(
+      {secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return Map.of(_storage);
   }
 
   @override
-  Future<void> write({String key, String value}) async {
+  Future<void> write(
+      {String key,
+      String value,
+      secure_storage.iOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage[key] = value;
     _syncToFileSystem();
@@ -75,7 +89,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 /// nothing actually dynamic there
 class DynamicTheme extends StatelessWidget {
   final dynamic_theme.ThemedWidgetBuilder themedWidgetBuilder;
-  final dynamic_theme.ThemeDataWithBrightnessBuilder data;
+  final dynamic_theme.ThemeDataBuilder data;
   final Brightness defaultBrightness;
 
   const DynamicTheme(

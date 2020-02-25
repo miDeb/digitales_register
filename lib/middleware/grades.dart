@@ -29,11 +29,14 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         ? [Semester.first, Semester.second]
         : [action.payload],
     (s) async {
-      var data = await _wrapper.post(
+      var data = await _wrapper.send(
         _subjects,
-        {"studentId": api.state.config.userId},
+        args: {"studentId": api.state.config.userId},
       );
-      api.actions.refreshNoInternet();
+      if (data == null) {
+        api.actions.refreshNoInternet();
+        return;
+      }
       api.actions.gradesActions.loaded(
         SubjectsLoadedPayload(
           (b) => b
@@ -60,10 +63,13 @@ void _loadGradesDetails(
         ? [Semester.first, Semester.second]
         : [action.payload.semester],
     (s) async {
-      var data = await _wrapper.post(_subjectsDetail, {
-        "studentId": api.state.config.userId,
-        "subjectId": action.payload.subject.id
-      });
+      var data = await _wrapper.send(
+        _subjectsDetail,
+        args: {
+          "studentId": api.state.config.userId,
+          "subjectId": action.payload.subject.id
+        },
+      );
       if (data == null) {
         api.actions.refreshNoInternet();
         return;
@@ -94,8 +100,8 @@ void _doForSemester(
   }
 }
 
-typedef Future<void> SemesterChangeCallback(Semester semester);
-typedef Future<void> AsyncVoidCallback();
+typedef SemesterChangeCallback = Future<void> Function(Semester semester);
+typedef AsyncVoidCallback = Future<void> Function();
 
 class SemesterLock {
   Semester current;

@@ -154,7 +154,7 @@ GradeDetail _parseGrade(dynamic data) {
 Competence _parseCompetence(dynamic data) {
   return Competence((b) => b
     ..typeName = data["typeName"]
-    ..grade = data["grade"]);
+    ..grade = double.parse(data["grade"]).toInt());
 }
 
 void _setSemester(

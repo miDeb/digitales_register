@@ -1,17 +1,27 @@
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/routing_actions.dart';
 
 import '../actions/login_actions.dart';
 import '../app_state.dart';
+import 'pass_reset.dart';
 
 final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     LoginState, LoginStateBuilder>(
   (s) => s.loginState,
   (b) => b.loginState,
 )
+  ..add(LoginActionsNames.setUsername, _setUsername)
   ..add(LoginActionsNames.loginFailed, _loginFailed)
   ..add(LoginActionsNames.loggedIn, _loggedIn)
   ..add(LoginActionsNames.loggingIn, _loggingIn)
-  ..add(LoginActionsNames.logout, _logout);
+  ..add(LoginActionsNames.logout, _logout)
+  ..add(LoginActionsNames.showChangePass, _changePass)
+  ..add(LoginActionsNames.addAfterLoginCallback, _addAfterLoginCallback)
+  ..add(LoginActionsNames.clearAfterLoginCallbacks, _clearAfterLoginCallbacks)
+  ..add(RoutingActionsNames.showLogin, _showLogin)
+  ..combineReducerBuilder(
+    ReducerBuilder()..combineNested(resetPassReducerBuilder),
+  );
 
 void _loginFailed(LoginState state, Action<LoginFailedPayload> action,
     LoginStateBuilder builder) {
@@ -41,4 +51,31 @@ void _logout(
   builder
     ..loggedIn = false
     ..userName = null;
+}
+
+void _changePass(
+    LoginState state, Action<bool> action, LoginStateBuilder builder) {
+  builder
+    ..changePassword = true
+    ..mustChangePassword = action.payload;
+}
+
+void _showLogin(
+    LoginState state, Action<void> action, LoginStateBuilder builder) {
+  builder..changePassword = false;
+}
+
+void _addAfterLoginCallback(LoginState state, Action<void Function()> action,
+    LoginStateBuilder builder) {
+  builder.callAfterLogin.add(action.payload);
+}
+
+void _clearAfterLoginCallbacks(
+    LoginState state, Action<void> action, LoginStateBuilder builder) {
+  builder.callAfterLogin.clear();
+}
+
+void _setUsername(
+    LoginState state, Action<String> action, LoginStateBuilder builder) {
+  builder.userName = action.payload;
 }

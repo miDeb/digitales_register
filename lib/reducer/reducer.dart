@@ -4,18 +4,20 @@ import '../actions/app_actions.dart';
 import '../app_state.dart';
 import 'absences.dart';
 import 'calendar.dart';
+import 'certificate.dart';
 import 'dashboard.dart';
 import 'grades.dart';
 import 'login.dart';
 import 'network_protocol.dart';
 import 'notifications.dart';
+import 'profile_reducer.dart';
 import 'settings.dart';
 
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.mountAppState, _mountState)
   ..add(AppActionsNames.noInternet, _noInternet)
-  ..add(AppActionsNames.isLoginRoute, _currentRouteIsLogin)
   ..add(AppActionsNames.setConfig, _config)
+  ..add(AppActionsNames.setUrl, _setUrl)
   ..combineNested(absencesReducerBuilder)
   ..combineNested(calendarReducerBuilder)
   ..combineNested(dashboardReducerBuilder)
@@ -23,15 +25,12 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..combineNested(loginReducerBuilder)
   ..combineNested(networkProtocolReducerBuilder)
   ..combineNested(notificationsReducerBuilder)
-  ..combineNested(settingsReducerBuilder);
+  ..combineNested(settingsReducerBuilder)
+  ..combineNested(certificateReducerBuilder)
+  ..combineNested(profileReducerBuilder);
 
 void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder..noInternet = action.payload;
-}
-
-void _currentRouteIsLogin(
-    AppState state, Action<bool> action, AppStateBuilder builder) {
-  builder..currentRouteIsLogin = action.payload;
 }
 
 void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
@@ -41,4 +40,8 @@ void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
 void _mountState(
     AppState state, Action<AppState> action, AppStateBuilder builder) {
   builder.replace(action.payload);
+}
+
+void _setUrl(AppState state, Action<String> action, AppStateBuilder builder) {
+  builder.url = action.payload;
 }

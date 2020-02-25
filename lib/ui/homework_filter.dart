@@ -1,9 +1,10 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
 import '../container/homework_filter_container.dart';
 import '../data.dart';
 
-typedef void HomeworkBlacklistCallback(List<HomeworkType> blacklist);
+typedef HomeworkBlacklistCallback = void Function(List<HomeworkType> blacklist);
 
 class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;
@@ -21,11 +22,16 @@ class _HomeworkFilterState extends State<HomeworkFilter>
   Widget build(BuildContext context) {
     super.build(context);
     return ExpansionTile(
-      title: Row(
-        children: <Widget>[
-          Spacer(),
-          Icon(Icons.filter_list),
-        ],
+      title: SizedBox(),
+      trailing: Padding(
+        padding: const EdgeInsets.only(right: 8),
+        child: Badge(
+          child: Icon(Icons.filter_list),
+          badgeContent: Container(
+            color: Colors.red,
+          ),
+          showBadge: widget.vm.currentBlacklist.isNotEmpty,
+        ),
       ),
       children: [
         CheckboxListTile(

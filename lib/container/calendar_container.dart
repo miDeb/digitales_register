@@ -28,7 +28,7 @@ class CalendarContainer extends StatelessWidget {
   }
 }
 
-typedef void DayCallback(DateTime day);
+typedef DayCallback = void Function(DateTime day);
 
 class CalendarViewModel {
   final bool showEditNicksBar, noInternet;

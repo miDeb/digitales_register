@@ -13,10 +13,12 @@ void _loadNotifications(
   if (api.state.noInternet) return;
 
   next(action);
-  final data = await _wrapper.post("/api/notification/unread");
+  final data = await _wrapper.send("/api/notification/unread");
 
   if (data != null) {
     api.actions.notificationsActions.loaded(data);
+  } else {
+    api.actions.refreshNoInternet();
   }
 }
 
@@ -25,10 +27,9 @@ void _deleteNotification(
     ActionHandler next,
     Action<Notification> action) async {
   next(action);
-
-  _wrapper.post(
-      "/api/notification/markAsRead", {"id": action.payload.id}, false);
-  api.actions.refreshNoInternet();
+  final result = await _wrapper.send("/api/notification/markAsRead",
+      args: {"id": action.payload.id}, json: false);
+  if (result == null) api.actions.refreshNoInternet();
 }
 
 void _deleteAllNotifications(
@@ -36,8 +37,7 @@ void _deleteAllNotifications(
     ActionHandler next,
     Action<void> action) async {
   next(action);
-
-  _wrapper.post("/api/notification/markAsRead", {}, false);
-
-  api.actions.refreshNoInternet();
+  final result = await _wrapper.send("/api/notification/markAsRead",
+      args: {}, json: false);
+  if (result == null) api.actions.refreshNoInternet();
 }
