@@ -85,7 +85,12 @@ void _detailsLoaded(GradesState state,
             (b) => b
               ..grades[action.payload.semester] = BuiltList(
                 data["grades"].map(
-                  (g) => _parseGrade(g),
+                  (g) => _parseGrade(g).rebuild(
+                    (d) => d
+                      ..cancelledDescription = b.grades[action.payload.semester]
+                          ?.firstWhere((gd) => gd.id == d.id)
+                          ?.cancelledDescription,
+                  ),
                 ),
               )
               ..observations[action.payload.semester] = BuiltList(
