@@ -101,12 +101,6 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                   children: <TextSpan>[
                     TextSpan(
                       text: widget.subject.averageFormatted(widget.semester),
-                      style: widget.subject.averageFormatted(widget.semester) ==
-                              "/"
-                          ? null
-                          : TextStyle(
-                              decoration: TextDecoration.underline,
-                            ),
                     ),
                   ],
                 ),
