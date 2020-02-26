@@ -7,7 +7,7 @@ final _gradesMiddleware =
       ..add(GradesActionsNames.loadDetails, _loadGradesDetails);
 
 final _gradesLock = SemesterLock((s) async {
-  await Requests.get("${_wrapper.baseAddress}/?semesterWechsel=${s.n}");
+  await _wrapper.send("/?semesterWechsel=${s.n}", json: false);
 });
 
 const String _subjects = "/api/student/all_subjects";
