@@ -13,8 +13,12 @@ abstract class GradesActions extends ReduxActions {
   ActionDispatcher<Semester> setSemester;
   ActionDispatcher<Semester> load;
   ActionDispatcher<LoadSubjectDetailsPayload> loadDetails;
+  ActionDispatcher<LoadGradeCancelledDescriptionPayload>
+      loadCancelledDescription;
   ActionDispatcher<SubjectsLoadedPayload> loaded;
   ActionDispatcher<SubjectDetailLoadedPayload> detailsLoaded;
+  ActionDispatcher<GradeCancelledDescriptionLoadedPayload>
+      cancelledDescriptionLoaded;
 }
 
 abstract class LoadSubjectDetailsPayload
@@ -27,6 +31,19 @@ abstract class LoadSubjectDetailsPayload
 
   Semester get semester;
   Subject get subject;
+}
+
+abstract class LoadGradeCancelledDescriptionPayload
+    implements
+        Built<LoadGradeCancelledDescriptionPayload,
+            LoadGradeCancelledDescriptionPayloadBuilder> {
+  LoadGradeCancelledDescriptionPayload._();
+  factory LoadGradeCancelledDescriptionPayload(
+      [void Function(LoadGradeCancelledDescriptionPayloadBuilder)
+          updates]) = _$LoadGradeCancelledDescriptionPayload;
+
+  Semester get semester;
+  GradeDetail get grade;
 }
 
 abstract class SubjectsLoadedPayload
@@ -50,5 +67,19 @@ abstract class SubjectDetailLoadedPayload
 
   Semester get semester;
   Subject get subject;
+  Object get data;
+}
+
+abstract class GradeCancelledDescriptionLoadedPayload
+    implements
+        Built<GradeCancelledDescriptionLoadedPayload,
+            GradeCancelledDescriptionLoadedPayloadBuilder> {
+  GradeCancelledDescriptionLoadedPayload._();
+  factory GradeCancelledDescriptionLoadedPayload(
+      [void Function(GradeCancelledDescriptionLoadedPayloadBuilder)
+          updates]) = _$GradeCancelledDescriptionLoadedPayload;
+
+  Semester get semester;
+  GradeDetail get grade;
   Object get data;
 }

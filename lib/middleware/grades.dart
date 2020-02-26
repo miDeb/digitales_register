@@ -1,10 +1,11 @@
 part of 'middleware.dart';
 
-final _gradesMiddleware =
-    MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-      ..add(GradesActionsNames.setSemester, _setSemester)
-      ..add(GradesActionsNames.load, _loadGrades)
-      ..add(GradesActionsNames.loadDetails, _loadGradesDetails);
+final _gradesMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
+    AppActions>()
+  ..add(GradesActionsNames.setSemester, _setSemester)
+  ..add(GradesActionsNames.load, _loadGrades)
+  ..add(GradesActionsNames.loadDetails, _loadGradesDetails)
+  ..add(GradesActionsNames.loadCancelledDescription, _loadCancelledDescription);
 
 final _gradesLock = SemesterLock((s) async {
   await _wrapper.send("/?semesterWechsel=${s.n}", json: false);
@@ -12,6 +13,7 @@ final _gradesLock = SemesterLock((s) async {
 
 const String _subjects = "/api/student/all_subjects";
 const String _subjectsDetail = "/api/student/subject_detail";
+const String _grade = "/api/student/entry/getGrade";
 
 void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Semester> action) {
@@ -80,6 +82,50 @@ void _loadGradesDetails(
             ..data = data
             ..semester = s.toBuilder()
             ..subject = action.payload.subject.toBuilder(),
+        ),
+      );
+      for (final grade in api.state.gradesState.subjects
+          .firstWhere((s) => s.id == action.payload.subject.id)
+          .grades[s]
+          .where((g) => g.cancelled)) {
+        api.actions.gradesActions.loadCancelledDescription(
+          LoadGradeCancelledDescriptionPayload(
+            (b) => b
+              ..semester = s.toBuilder()
+              ..grade = grade.toBuilder(),
+          ),
+        );
+      }
+    },
+  );
+}
+
+void _loadCancelledDescription(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<LoadGradeCancelledDescriptionPayload> action) async {
+  if (api.state.noInternet) return;
+
+  next(action);
+  _doForSemester(
+    [action.payload.semester],
+    (s) async {
+      var data = await _wrapper.send(
+        _grade,
+        args: {
+          "gradeId": action.payload.grade.id,
+        },
+      );
+      if (data == null) {
+        api.actions.refreshNoInternet();
+        return;
+      }
+      api.actions.gradesActions.cancelledDescriptionLoaded(
+        GradeCancelledDescriptionLoadedPayload(
+          (b) => b
+            ..grade = action.payload.grade.toBuilder()
+            ..semester = action.payload.semester.toBuilder()
+            ..data = data,
         ),
       );
     },

@@ -14,6 +14,8 @@ final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 )
   ..add(GradesActionsNames.load, _loading)
   ..add(GradesActionsNames.loaded, _loaded)
+  ..add(GradesActionsNames.cancelledDescriptionLoaded,
+      _cancelledDescriptionLoaded)
   ..add(GradesActionsNames.setSemester, _setSemester)
   ..add(LoginActionsNames.automaticallyReloggedIn, _afterAutoRelogin)
   ..add(GradesActionsNames.detailsLoaded, _detailsLoaded)
@@ -96,6 +98,29 @@ void _detailsLoaded(GradesState state,
   );
 }
 
+void _cancelledDescriptionLoaded(
+    GradesState state,
+    Action<GradeCancelledDescriptionLoadedPayload> action,
+    GradesStateBuilder builder) {
+  builder.subjects.map(
+    (s) => s.grades[action.payload.semester]?.contains(action.payload.grade) ==
+            true
+        ? s.rebuild(
+            (b) => b
+              ..grades[action.payload.semester] =
+                  b.grades[action.payload.semester].rebuild(
+                (b) => b
+                  ..map(
+                    (g) => g == action.payload.grade
+                        ? _addCancelledDescription(g, action.payload.data)
+                        : g,
+                  ),
+              ),
+          )
+        : s,
+  );
+}
+
 Observation _parseObservation(dynamic data) {
   return Observation(
     (b) => b
@@ -146,6 +171,12 @@ GradeDetail _parseGrade(dynamic data) {
           (c) => _parseCompetence(c),
         ),
       ),
+  );
+}
+
+GradeDetail _addCancelledDescription(GradeDetail grade, dynamic data) {
+  return grade.rebuild(
+    (b) => b..cancelledDescription = data["cancelledDescription"],
   );
 }
 

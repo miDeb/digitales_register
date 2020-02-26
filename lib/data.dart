@@ -337,6 +337,8 @@ abstract class GradeDetail
   BuiltList<Competence> get competences;
   String get name;
   String get created;
+  @nullable
+  String get cancelledDescription;
 }
 
 abstract class Competence implements Built<Competence, CompetenceBuilder> {

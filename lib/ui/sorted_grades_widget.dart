@@ -163,32 +163,42 @@ class GradeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-                ListTile(
-                  title: Text(
-                    grade.name,
-                    style: grade.cancelled ? lineThrough : null,
-                  ),
-                  subtitle: Text(
-                    "${DateFormat("dd/MM/yy").format(grade.date)}:\n${grade.type} - ${grade.weightPercentage} %",
-                    style: grade.cancelled ? lineThrough : null,
-                  ),
-                  trailing: Text(
-                    grade.gradeFormatted,
-                    style: grade.cancelled ? lineThrough : null,
-                  ),
-                  isThreeLine: true,
+        ListTile(
+          title: Text(
+            grade.name,
+            style: grade.cancelled ? lineThrough : null,
+          ),
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "${DateFormat("dd/MM/yy").format(grade.date)}:\n${grade.type} - ${grade.weightPercentage}%",
+                style: grade.cancelled ? lineThrough : null,
+              ),
+              Text(
+                grade.created,
+                style: Theme.of(context).textTheme.caption,
+              ),
+              if (grade.cancelledDescription != null)
+                Text(
+                  grade.cancelledDescription,
+                  style: Theme.of(context).textTheme.caption,
                 ),
-                Wrap(
-                  children: <Widget>[],
-                )
-              ] +
-              grade.competences
-                  ?.map((c) => CompetenceWidget(
-                        competence: c,
-                        cancelled: grade.cancelled,
-                      ))
-                  ?.toList() ??
-          [],
+            ],
+          ),
+          trailing: Text(
+            grade.gradeFormatted,
+            style: grade.cancelled ? lineThrough : null,
+          ),
+          isThreeLine: true,
+        ),
+        if (grade.competences?.isNotEmpty == true)
+          for (final c in grade.competences)
+            CompetenceWidget(
+              competence: c,
+              cancelled: grade.cancelled,
+            ),
+      ],
     );
   }
 }
