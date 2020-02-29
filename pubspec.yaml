@@ -40,6 +40,8 @@ dependencies:
   badges: any
   flutter_widget_from_html_core: ^0.3.2+1
   uni_links: any
+  flutter_ping:
+    path: "packages/flutter_ping/"
 dependency_overrides:
   built_redux: 
     git: 

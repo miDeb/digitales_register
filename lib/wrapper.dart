@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui' show VoidCallback;
+import 'package:flutter_ping/flutter_ping.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:meta/meta.dart';
@@ -21,15 +23,32 @@ class Wrapper {
   AddNetworkProtocolItem onAddProtocolItem;
   bool safeMode;
   Future<bool> get noInternet async {
-    try {
-      final result = await http
-          .get(url != null ? baseAddress : "https://digitalesregister.it");
-      if (result.statusCode == 200) {
-        return false;
+    final address = url != null ? baseAddress : "https://digitalesregister.it";
+    if (Platform.isAndroid) {
+      final result = await ping(
+        Uri.parse(address)
+            .host
+            // Get the last two components,
+            // as pings against subdomains are not answered
+            .split(".")
+            .reversed
+            .take(2)
+            .toList()
+            .reversed
+            .join("."),
+      );
+      // If there is no internet, the implementation will return an error
+      return result.contains("java.lang.NullPointerException");
+    } else {
+      try {
+        final result = await http.get(address);
+        if (result.statusCode == 200) {
+          return false;
+        }
+        return true;
+      } catch (e) {
+        return true;
       }
-      return true;
-    } catch (e) {
-      return true;
     }
   }
 

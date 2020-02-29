@@ -244,6 +244,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_ping:
+    dependency: "direct main"
+    description:
+      path: "packages/flutter_ping"
+      relative: true
+    source: path
+    version: "0.0.3"
   flutter_secure_storage:
     dependency: "direct main"
     description:
