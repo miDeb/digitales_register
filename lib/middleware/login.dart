@@ -20,6 +20,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.deleteData();
   }
   if (!action.payload.forced) {
+    // sidenote: action.payload.hard is _always_ true here
     _wrapper.logout(hard: action.payload.hard);
   }
   if (action.payload.hard) {

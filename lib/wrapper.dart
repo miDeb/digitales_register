@@ -284,11 +284,11 @@ class Wrapper {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       });
       if (result == null) {
-        logout(hard: safeMode, forceLogout: true);
+        logout(hard: safeMode, logoutForcedByServer: true);
         return;
       }
       if (result["forceLogout"] == true) {
-        logout(hard: safeMode, forceLogout: true);
+        logout(hard: safeMode, logoutForcedByServer: true);
         return;
       } else {
         _serverLogoutTime =
@@ -302,15 +302,15 @@ class Wrapper {
     lastInteraction = DateTime.now();
   }
 
-  void logout({@required bool hard, bool forceLogout = false}) {
+  void logout({@required bool hard, bool logoutForcedByServer = false}) {
     if (hard) {
       user = pass = null;
-      if (forceLogout) {
+      if (logoutForcedByServer) {
         onLogout();
       }
     }
     _loggedIn = false;
-    if (!forceLogout) {
+    if (!logoutForcedByServer) {
       Requests.get("$baseAddress/logout");
     }
     _clearCookies();
