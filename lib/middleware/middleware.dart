@@ -175,46 +175,52 @@ void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.notificationsActions.load();
 }
 
-var _saveUnderway = false;
-
-SettingsState _lastSettingsState;
-
 void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoggedInPayload> action) async {
   if (!api.state.settingsState.noPasswordSaving &&
       !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
-
+  _deletedData = false;
+  final userKey = action.payload.username.hashCode.toString();
   if (!api.state.loginState.loggedIn) {
-    final user = action.payload.username.hashCode;
-    final file = File(
-        "${(await getApplicationDocumentsDirectory()).path}/app_state_$user.json");
+    final file = await _storageFile(userKey);
     if (await file.exists()) {
       try {
-        AppState serializedState =
+        final serializedState =
             serializers.deserialize(json.decode(await file.readAsString()));
-        final currentState = api.state;
-        api.actions.mountAppState(
-          serializedState.rebuild(
-            (b) => b
-              ..loginState.replace(currentState.loginState)
-              ..noInternet = currentState.noInternet
-              ..config = currentState.config?.toBuilder()
-              ..dashboardState.future = true
-              ..gradesState.semester.replace(
-                    currentState.gradesState.semester == Semester.all
-                        ? serializedState.gradesState.semester
-                        : currentState.gradesState.semester,
-                  ),
-          ),
-        );
+        if (serializedState is SettingsState) {
+          api.actions.mountAppState(
+            api.state.rebuild(
+              (b) => b
+                ..settingsState.replace(
+                  serializedState,
+                ),
+            ),
+          );
+        } else if (serializedState is AppState) {
+          final currentState = api.state;
+          api.actions.mountAppState(
+            serializedState.rebuild(
+              (b) => b
+                ..loginState.replace(currentState.loginState)
+                ..noInternet = currentState.noInternet
+                ..config = currentState.config?.toBuilder()
+                ..dashboardState.future = true
+                ..gradesState.semester.replace(
+                      currentState.gradesState.semester == Semester.all
+                          ? serializedState.gradesState.semester
+                          : currentState.gradesState.semester,
+                    ),
+            ),
+          );
+        }
 
         // next not at the beginning: bug fix (serialization)
         next(action);
 
         api.actions.settingsActions
-            .saveNoPass(serializedState.settingsState.noPasswordSaving);
+            .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showToast(
             msg: "Fehler beim Laden der gespeicherten Daten",
@@ -235,8 +241,12 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.notificationsActions.load();
 }
 
+var _saveUnderway = false;
+
+SettingsState _lastSettingsState;
 var _lastSave = "";
 AppState _stateToSave;
+bool _deletedData = false;
 
 NextActionHandler _saveStateMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
@@ -257,7 +267,7 @@ NextActionHandler _saveStateMiddleware(
               delay,
               () {
                 _saveUnderway = false;
-                if (!_stateToSave.settingsState.noDataSaving) {
+                if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
                   final save = json.encode(serializers.serialize(_stateToSave));
                   if (_lastSave == save) return;
                   _lastSave = save;
@@ -270,10 +280,7 @@ NextActionHandler _saveStateMiddleware(
                     _writeToStorage(
                       user.toString(),
                       json.encode(
-                        {
-                          "settings":
-                              serializers.serialize(_stateToSave.settingsState),
-                        },
+                        serializers.serialize(_stateToSave.settingsState),
                       ),
                     );
                   _lastSettingsState = _stateToSave.settingsState;
@@ -311,12 +318,8 @@ void _deleteData(
   Action<void> action,
 ) async {
   next(action);
-  final file = await _storageFile(
-    api.state.loginState.userName.hashCode.toString(),
-  );
-  if (await file.exists()) {
-    file.delete();
-  }
+  _deletedData = true;
+  api.actions.saveState();
 }
 
 void _restarted(
