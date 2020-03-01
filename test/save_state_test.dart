@@ -165,4 +165,71 @@ main() {
         true);
     saveFile.deleteSync();
   });
+  test('state is deleted/saved when the setting is switched', () async {
+    final username = "test_username4";
+    final store = Store<AppState, AppStateBuilder, AppActions>(
+      appReducerBuilder.build(),
+      AppState(),
+      AppActions(),
+      middleware: middleware,
+    );
+    Directory("linux/appData").createSync(recursive: true);
+    final saveFile = File(
+        "${(await getApplicationDocumentsDirectory()).path}/app_state_${username.hashCode}.json");
+    // make sure the file does not already exist
+    if (saveFile.existsSync()) saveFile.deleteSync();
+    store.actions.loginActions.loggedIn(LoggedInPayload((b) => b
+      ..fromStorage = false
+      ..username = username));
+
+    await Future.delayed(Duration(milliseconds: 100));
+
+    store.actions.saveState();
+
+    // the state should be saved immediately
+    await Future.delayed(Duration(milliseconds: 100));
+    expect(
+      await saveFile.exists(),
+      true,
+    );
+
+    expect(
+        serializers.deserialize(json.decode(saveFile.readAsStringSync()))
+            is AppState,
+        true);
+
+    store.actions.settingsActions.saveNoData(true);
+    await Future.delayed(Duration(milliseconds: 100));
+
+    expect(
+        serializers.deserialize(json.decode(saveFile.readAsStringSync()))
+            is SettingsState,
+        true);
+
+    store.actions.settingsActions.saveNoData(false);
+    await Future.delayed(Duration(milliseconds: 100));
+
+    expect(
+        serializers.deserialize(json.decode(saveFile.readAsStringSync()))
+            is AppState,
+        true);
+
+    store.actions.settingsActions.saveNoData(true);
+    await Future.delayed(Duration(milliseconds: 100));
+
+    expect(
+        serializers.deserialize(json.decode(saveFile.readAsStringSync()))
+            is SettingsState,
+        true);
+
+    store.actions.settingsActions.saveNoData(false);
+    await Future.delayed(Duration(milliseconds: 100));
+
+    expect(
+        serializers.deserialize(json.decode(saveFile.readAsStringSync()))
+            is AppState,
+        true);
+
+    saveFile.deleteSync();
+  });
 }
