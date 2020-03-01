@@ -135,7 +135,7 @@ void _refreshNoInternet(
 void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  navigatorKey.currentState.popUntil((route) => route.isFirst);
+  navigatorKey.currentState?.popUntil((route) => route.isFirst);
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];

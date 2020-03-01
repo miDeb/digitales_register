@@ -22,12 +22,12 @@ void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   next(action);
   // hack since the current route is not exposed otherwise
   Route currentRoute;
-  navigatorKey.currentState.popUntil((route) {
+  navigatorKey.currentState?.popUntil((route) {
     currentRoute = route;
     return true;
   });
-  if (currentRoute.settings.name != "/login") {
-    navigatorKey.currentState.pushNamed("/login");
+  if (currentRoute?.settings?.name != "/login") {
+    navigatorKey.currentState?.pushNamed("/login");
   }
 }
 
