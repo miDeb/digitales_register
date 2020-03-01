@@ -243,7 +243,6 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 var _saveUnderway = false;
 
-SettingsState _lastSettingsState;
 var _lastSave = "";
 var _lastUsernameSaved = "".hashCode;
 AppState _stateToSave;
@@ -266,27 +265,23 @@ NextActionHandler _saveStateMiddleware(
 
             void save() {
               _saveUnderway = false;
+              String toSave;
               if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
-                final save = json.encode(serializers.serialize(_stateToSave));
-                if (_lastSave == save && _lastUsernameSaved == user) return;
-                _lastSave = save;
-                _lastUsernameSaved = user;
-                _writeToStorage(
-                  user.toString(),
-                  save,
+                toSave = json.encode(
+                  serializers.serialize(_stateToSave),
                 );
               } else {
-                if (_lastSettingsState != _stateToSave.settingsState ||
-                    _lastUsernameSaved != user)
-                  _writeToStorage(
-                    user.toString(),
-                    json.encode(
-                      serializers.serialize(_stateToSave.settingsState),
-                    ),
-                  );
-                _lastSettingsState = _stateToSave.settingsState;
-                _lastUsernameSaved = user;
+                toSave = json.encode(
+                  serializers.serialize(_stateToSave.settingsState),
+                );
               }
+              if (_lastSave == toSave && _lastUsernameSaved == user) return;
+              _lastSave = toSave;
+              _lastUsernameSaved = user;
+              _writeToStorage(
+                user.toString(),
+                toSave,
+              );
             }
 
             if (immediately)
