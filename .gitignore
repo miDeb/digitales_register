@@ -31,6 +31,9 @@ build/
 # Generated files
 **.g.dart
 
+# Temporary test files
+**/test/linux
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
