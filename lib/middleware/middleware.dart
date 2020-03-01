@@ -256,41 +256,43 @@ NextActionHandler _saveStateMiddleware(
           if (api.state.loginState.loggedIn &&
               api.state.loginState.username != null) {
             _stateToSave = api.state;
-            if (_saveUnderway) {
+            final bool immediately =
+                action.name == AppActionsNames.saveState.name;
+            if (_saveUnderway && !immediately) {
               return;
             }
             final user = _stateToSave.loginState.username.hashCode;
-            final delay = action.name == AppActionsNames.saveState.name
-                ? Duration.zero
-                : Duration(seconds: 5);
             _saveUnderway = true;
-            Future.delayed(
-              delay,
-              () {
-                _saveUnderway = false;
-                if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
-                  final save = json.encode(serializers.serialize(_stateToSave));
-                  if (_lastSave == save && _lastUsernameSaved == user) return;
-                  _lastSave = save;
-                  _lastUsernameSaved = user;
+
+            void save() {
+              _saveUnderway = false;
+              if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
+                final save = json.encode(serializers.serialize(_stateToSave));
+                if (_lastSave == save && _lastUsernameSaved == user) return;
+                _lastSave = save;
+                _lastUsernameSaved = user;
+                _writeToStorage(
+                  user.toString(),
+                  save,
+                );
+              } else {
+                if (_lastSettingsState != _stateToSave.settingsState ||
+                    _lastUsernameSaved != user)
                   _writeToStorage(
                     user.toString(),
-                    save,
+                    json.encode(
+                      serializers.serialize(_stateToSave.settingsState),
+                    ),
                   );
-                } else {
-                  if (_lastSettingsState != _stateToSave.settingsState ||
-                      _lastUsernameSaved != user)
-                    _writeToStorage(
-                      user.toString(),
-                      json.encode(
-                        serializers.serialize(_stateToSave.settingsState),
-                      ),
-                    );
-                  _lastSettingsState = _stateToSave.settingsState;
-                  _lastUsernameSaved = user;
-                }
-              },
-            );
+                _lastSettingsState = _stateToSave.settingsState;
+                _lastUsernameSaved = user;
+              }
+            }
+
+            if (immediately)
+              save();
+            else
+              Future.delayed(Duration(seconds: 5), save);
           }
         };
 
