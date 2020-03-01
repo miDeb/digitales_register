@@ -245,6 +245,7 @@ var _saveUnderway = false;
 
 SettingsState _lastSettingsState;
 var _lastSave = "";
+var _lastUsernameSaved = "".hashCode;
 AppState _stateToSave;
 bool _deletedData = false;
 
@@ -269,14 +270,16 @@ NextActionHandler _saveStateMiddleware(
                 _saveUnderway = false;
                 if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
                   final save = json.encode(serializers.serialize(_stateToSave));
-                  if (_lastSave == save) return;
+                  if (_lastSave == save && _lastUsernameSaved == user) return;
                   _lastSave = save;
+                  _lastUsernameSaved = user;
                   _writeToStorage(
                     user.toString(),
                     save,
                   );
                 } else {
-                  if (_lastSettingsState != _stateToSave.settingsState)
+                  if (_lastSettingsState != _stateToSave.settingsState ||
+                      _lastUsernameSaved != user)
                     _writeToStorage(
                       user.toString(),
                       json.encode(
@@ -284,6 +287,7 @@ NextActionHandler _saveStateMiddleware(
                       ),
                     );
                   _lastSettingsState = _stateToSave.settingsState;
+                  _lastUsernameSaved = user;
                 }
               },
             );
