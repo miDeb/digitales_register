@@ -19,7 +19,7 @@ class Wrapper {
   String user, pass, url;
 
   bool get loggedIn => _loggedIn;
-  bool _loggedIn;
+  bool _loggedIn = false;
   VoidCallback onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem onAddProtocolItem;
   bool safeMode;
