@@ -27,7 +27,7 @@ void _loginFailed(LoginState state, Action<LoginFailedPayload> action,
     LoginStateBuilder builder) {
   builder
     ..errorMsg = action.payload.cause
-    ..userName = action.payload.username
+    ..username = action.payload.username
     ..loading = false
     ..loggedIn = false;
 }
@@ -36,7 +36,7 @@ void _loggedIn(LoginState state, Action<LoggedInPayload> action,
     LoginStateBuilder builder) {
   builder
     ..errorMsg = null
-    ..userName = action.payload.username
+    ..username = action.payload.username
     ..loading = false
     ..loggedIn = true;
 }
@@ -50,7 +50,7 @@ void _logout(
     LoginState state, Action<LogoutPayload> action, LoginStateBuilder builder) {
   builder
     ..loggedIn = false
-    ..userName = null;
+    ..username = null;
 }
 
 void _changePass(
@@ -77,5 +77,5 @@ void _clearAfterLoginCallbacks(
 
 void _setUsername(
     LoginState state, Action<String> action, LoginStateBuilder builder) {
-  builder.userName = action.payload;
+  builder.username = action.payload;
 }

@@ -143,8 +143,8 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
   if ((api.state.url != null && api.state.url != url) ||
-      (api.state.loginState.userName != null &&
-          api.state.loginState.userName != user)) {
+      (api.state.loginState.username != null &&
+          api.state.loginState.username != user)) {
     api.actions.savePassActions.delete();
     api.actions.routingActions.showLogin();
   } else {
@@ -232,7 +232,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       next(action);
     }
 
-    navigatorKey.currentState.popUntil((route) => route.isFirst);
+    navigatorKey.currentState?.popUntil((route) => route.isFirst);
   } else {
     next(action);
   }
@@ -253,12 +253,12 @@ NextActionHandler _saveStateMiddleware(
     (ActionHandler next) => (Action action) {
           next(action);
           if (api.state.loginState.loggedIn &&
-              api.state.loginState.userName != null) {
+              api.state.loginState.username != null) {
             _stateToSave = api.state;
             if (_saveUnderway) {
               return;
             }
-            final user = _stateToSave.loginState.userName.hashCode;
+            final user = _stateToSave.loginState.username.hashCode;
             final delay = action.name == AppActionsNames.saveState.name
                 ? Duration.zero
                 : Duration(seconds: 5);

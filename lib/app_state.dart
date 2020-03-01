@@ -77,7 +77,7 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   @nullable
   String get errorMsg;
   @nullable
-  String get userName;
+  String get username;
   bool get changePassword;
   bool get mustChangePassword;
   BuiltList<void Function()> get callAfterLogin;

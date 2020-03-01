@@ -65,7 +65,7 @@ class LoginPageViewModel {
         servers = _servers,
         changePass = state.loginState.changePassword,
         mustChangePass = state.loginState.mustChangePassword,
-        username = state.loginState.userName,
+        username = state.loginState.username,
         url = state.url;
 }
 

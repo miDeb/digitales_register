@@ -51,7 +51,7 @@ class HomePageContent extends StatelessWidget {
                         color: (Theme.of(context).appBarTheme.color ??
                             Theme.of(context).primaryColor)),
                     accountEmail: Text("Digitales Register"),
-                    accountName: Text(vm.userName ?? "?",
+                    accountName: Text(vm.username ?? "?",
                         style: (Theme.of(context).appBarTheme.textTheme ??
                                 Theme.of(context).primaryTextTheme)
                             .headline),

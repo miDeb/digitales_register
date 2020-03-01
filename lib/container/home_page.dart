@@ -24,11 +24,11 @@ class HomePage extends StatelessWidget {
 
 class HomePageContentViewModel {
   final bool noInternet, loading, splash;
-  final String userName, userIcon;
+  final String username, userIcon;
   HomePageContentViewModel.from(AppState state)
       : noInternet = state.noInternet,
         loading = state.dashboardState.loading,
-        userName = state.config?.fullName ?? state.loginState.userName,
+        username = state.config?.fullName ?? state.loginState.username,
         userIcon = state.config?.imgSource,
         splash = !state.loginState.loggedIn;
   @override
