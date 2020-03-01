@@ -25,6 +25,9 @@ DateTime toMonday(DateTime date) {
   return DateTime.utc(s.year, s.month, s.day);
 }
 
+DateTime get now => mockNow ?? DateTime.now();
+DateTime mockNow;
+
 extension MapEntryToTuple<K, V> on MapEntry<K, V> {
   Tuple2<K, V> toTuple() {
     return Tuple2(this.key, this.value);

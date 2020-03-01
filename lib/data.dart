@@ -20,12 +20,11 @@ abstract class Day implements Built<Day, DayBuilder> {
 
   static void _initializeBuilder(DayBuilder builder) {
     builder
-      ..lastRequested = DateTime.now()
+      ..lastRequested = now
       ..deletedHomework = ListBuilder([]);
   }
 
   static DateTime dateToday() {
-    DateTime now = DateTime.now();
     return DateTime(now.year, now.month, now.day);
   }
 
@@ -147,7 +146,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
     ..checkable = false
     ..deleteable = false
     ..deleted = false
-    ..firstSeen = DateTime.now();
+    ..firstSeen = now;
 }
 
 String formatGrade(String grade) {

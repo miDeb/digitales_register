@@ -4,6 +4,7 @@ import 'dart:ui' show VoidCallback;
 import 'package:flutter_ping/flutter_ping.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 import 'package:requests/requests.dart';
@@ -54,7 +55,7 @@ class Wrapper {
 
   String error;
 
-  DateTime lastInteraction = DateTime.now();
+  DateTime lastInteraction = now;
   DateTime _serverLogoutTime;
   Config config;
   Future<dynamic> login(String user, String pass, String url,
@@ -105,7 +106,7 @@ class Wrapper {
       error = null;
       await _loadConfig().then((_) {
         _serverLogoutTime =
-            DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
+            now.add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
         onConfigLoaded();
       });
@@ -154,12 +155,16 @@ class Wrapper {
     } on TimeoutException {
       source = await Requests.get(baseAddress);
     }
+    config = parseConfig(source);
+  }
+
+  static Config parseConfig(String source) {
     final id = _readUserId(source);
     final fullName = _readFullName(source);
     final imgSource = _readImgSource(source);
     final autoLogout = _readAutoLogoutSeconds(source);
     final currentSemesterMaybe = _readCurrentSemester(source);
-    config = Config((b) => b
+    return Config((b) => b
       ..userId = id
       ..autoLogoutSeconds = autoLogout
       ..fullName = fullName
@@ -167,7 +172,7 @@ class Wrapper {
       ..currentSemesterMaybe = currentSemesterMaybe);
   }
 
-  int _readCurrentSemester(String source) {
+  static int _readCurrentSemester(String source) {
     if (source.contains("semesterWechsel=1")) return 2;
     if (source.contains("semesterWechsel=2"))
       return 1;
@@ -175,7 +180,7 @@ class Wrapper {
       return null;
   }
 
-  int _readAutoLogoutSeconds(String source) {
+  static int _readAutoLogoutSeconds(String source) {
     var substringFromId = source.substring(
         source.indexOf("auto_logout_seconds: ") +
             "auto_logout_seconds: ".length);
@@ -183,28 +188,28 @@ class Wrapper {
         substringFromId.substring(0, substringFromId.indexOf(",")).trim());
   }
 
-  int _readUserId(String source) {
+  static int _readUserId(String source) {
     var substringFromId = source
         .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
     return int.parse(
         substringFromId.substring(0, substringFromId.indexOf(";")).trim());
   }
 
-  String _readAfterImgId(String source) {
+  static String _readAfterImgId(String source) {
     return source
         .substring(source.indexOf("navigationProfilePicture") +
             "navigationProfilePicture".length)
         .trim();
   }
 
-  String _readFullName(String source) {
+  static String _readFullName(String source) {
     final afterImgId = _readAfterImgId(source);
     return afterImgId
         .substring(afterImgId.indexOf(">") + 1, afterImgId.indexOf("<"))
         .trim();
   }
 
-  String _readImgSource(String source) {
+  static String _readImgSource(String source) {
     final afterImgId = _readAfterImgId(source);
     final afterStart =
         afterImgId.substring(afterImgId.indexOf('src="') + "src='".length);
@@ -278,7 +283,7 @@ class Wrapper {
 
   void _updateLogout() async {
     if (!_loggedIn) return;
-    if (DateTime.now().add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
+    if (now.add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
       final result = await send("/api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
@@ -299,7 +304,7 @@ class Wrapper {
   }
 
   void interaction() {
-    lastInteraction = DateTime.now();
+    lastInteraction = now;
   }
 
   void logout({@required bool hard, bool logoutForcedByServer = false}) {

@@ -83,7 +83,7 @@ void _showEditCalendarSubjectNicks(
 void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   navigatorKey.currentState.pushNamed("/calendar");
-  api.actions.calendarActions.setCurrentMonday(toMonday(DateTime.now()));
+  api.actions.calendarActions.setCurrentMonday(toMonday(now));
 
   next(action);
 }
