@@ -12,7 +12,6 @@ final _loginMiddleware =
 
 void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) {
-  next(action);
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
     api.actions.savePassActions.delete();
   }
@@ -23,6 +22,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     // sidenote: action.payload.hard is _always_ true here
     _wrapper.logout(hard: action.payload.hard);
   }
+  next(action);
   if (action.payload.hard) {
     api.actions.mountAppState(AppState());
     api.actions.load();
