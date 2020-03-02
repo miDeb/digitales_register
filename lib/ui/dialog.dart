@@ -4,9 +4,9 @@ class ListViewCapableAlertDialog extends StatelessWidget {
   final Widget title;
   final Widget content;
   final List<Widget> actions;
-
+  final EdgeInsetsGeometry titlePadding;
   const ListViewCapableAlertDialog(
-      {Key key, this.title, this.content, this.actions})
+      {Key key, this.title, this.content, this.actions, this.titlePadding})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -17,6 +17,7 @@ class ListViewCapableAlertDialog extends StatelessWidget {
         child: content,
       ),
       actions: actions,
+      titlePadding: titlePadding,
     );
   }
 }

@@ -184,7 +184,30 @@ class HourWidget extends StatelessWidget {
                   ),
               ];
               return ListViewCapableAlertDialog(
-                title: Text(hour.subject),
+                titlePadding: EdgeInsets.zero,
+                title: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 24,
+                          right: 24,
+                          top: 24,
+                        ),
+                        child: Text(hour.subject),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4, right: 4),
+                      child: IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ],
+                ),
                 content: ListView.separated(
                   itemCount: items.length,
                   shrinkWrap: true,
@@ -209,7 +232,7 @@ class HourWidget extends StatelessWidget {
                           ?.value ??
                       hour.subject),
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
                 ),
                 if (hour.teachers.isNotEmpty)
                   SizedBox(
@@ -219,7 +242,7 @@ class HourWidget extends StatelessWidget {
                   Text(
                     teacher.lastName,
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    softWrap: false,
                     style: DefaultTextStyle.of(context)
                         .style
                         .copyWith(fontSize: 11),
@@ -232,7 +255,7 @@ class HourWidget extends StatelessWidget {
                   Text(
                     room,
                     maxLines: 1,
-                    overflow: TextOverflow.clip,
+                    softWrap: false,
                     style: DefaultTextStyle.of(context)
                         .style
                         .copyWith(fontSize: 11),
