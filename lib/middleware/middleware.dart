@@ -88,8 +88,21 @@ NextActionHandler _errorMiddleware(
                         children: <Widget>[
                           RaisedButton(
                             child: Text("In die Zwischenablage kopieren"),
-                            onPressed: () => Clipboard.setData(
-                                ClipboardData(text: e.stackTrace)),
+                            onPressed: () async {
+                              var stackTrace = "";
+                              try {
+                                stackTrace = e.stackTrace.toString();
+                              } catch (e) {}
+                              await Clipboard.setData(
+                                ClipboardData(
+                                  text: "$e\n$stackTrace",
+                                ),
+                              );
+                              showToast(
+                                msg: "In die Zwischenablage kopiert",
+                                toastLength: Toast.LENGTH_LONG,
+                              );
+                            },
                           ),
                           Text(
                               "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
