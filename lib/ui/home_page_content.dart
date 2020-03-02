@@ -21,6 +21,7 @@ class HomePageContent extends StatelessWidget {
               actions: <Widget>[
                 vm.noInternet && !vm.loading
                     ? FlatButton(
+                        textColor: Theme.of(context).primaryIconTheme.color,
                         child: Row(
                           children: <Widget>[
                             Text("Kein Internet"),
