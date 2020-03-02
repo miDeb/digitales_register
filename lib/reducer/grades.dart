@@ -88,7 +88,10 @@ void _detailsLoaded(GradesState state,
                   (g) => _parseGrade(g).rebuild(
                     (d) => d
                       ..cancelledDescription = b.grades[action.payload.semester]
-                          ?.firstWhere((gd) => gd.id == d.id)
+                          ?.firstWhere(
+                            (gd) => gd.id == d.id,
+                            orElse: () => null,
+                          )
                           ?.cancelledDescription,
                   ),
                 ),
