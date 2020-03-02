@@ -78,7 +78,7 @@ class GradesChart extends StatelessWidget {
       return [firstMonth, lastMonth].map((date) {
         return charts.TickSpec(
           date,
-          label: DateFormat.MMMMd(
+          label: DateFormat.MMMd(
             locale.toLanguageTag(),
           ).format(date),
         );
