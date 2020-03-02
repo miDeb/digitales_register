@@ -31,25 +31,22 @@ class ChartLegend extends StatelessWidget {
                       height: 12,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 7,
+                          horizontal: 5,
                         ),
                         child: Center(
                           child: Container(
                             height: thickness,
                             decoration: BoxDecoration(
-                                color: Color(entry.value.color),
-                                borderRadius: BorderRadius.circular(10)),
+                              color: Color(entry.value.color),
+                              borderRadius: BorderRadius.circular(1.5),
+                            ),
                           ),
                         ),
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(7),
                       ),
                     ),
                     Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
+                        padding: const EdgeInsets.only(left: 8),
                         child: Text(
                           entry.key.item1,
                           style: Theme.of(context).textTheme.subhead,
