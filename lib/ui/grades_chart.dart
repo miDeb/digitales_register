@@ -105,6 +105,13 @@ class GradesChart extends StatelessWidget {
           child: charts.TimeSeriesChart(
             grades,
             animate: false,
+            behaviors: isFullscreen
+                ? [
+                    charts.SelectNearest(
+                      eventTrigger: charts.SelectionTrigger.tapAndDrag,
+                    ),
+                  ]
+                : null,
             primaryMeasureAxis: charts.NumericAxisSpec(
               tickProviderSpec: charts.StaticNumericTickProviderSpec(
                 [
@@ -129,8 +136,9 @@ class GradesChart extends StatelessWidget {
                   thickness: 0,
                   color: charts.MaterialPalette.gray.shadeDefault,
                 ),
+              ),
             ),
-            defaultInteractions: false,
+            defaultInteractions: isFullscreen,
             domainAxis: charts.DateTimeAxisSpec(
               tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
                 createDomainAxisTags(
