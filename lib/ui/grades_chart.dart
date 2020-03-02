@@ -97,6 +97,7 @@ class GradesChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
     return Hero(
       tag: 1337,
       child: maybeWrap(
@@ -117,12 +118,35 @@ class GradesChart extends StatelessWidget {
                   charts.TickSpec(10),
                 ],
               ),
+              renderSpec: charts.GridlineRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 10,
+                  color: darkMode
+                      ? charts.MaterialPalette.white
+                      : charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 0,
+                  color: charts.MaterialPalette.gray.shadeDefault,
+                ),
             ),
             defaultInteractions: false,
             domainAxis: charts.DateTimeAxisSpec(
               tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
                 createDomainAxisTags(
                   Localizations.localeOf(context),
+                ),
+              ),
+              renderSpec: charts.SmallTickRendererSpec(
+                labelStyle: charts.TextStyleSpec(
+                  fontSize: 10,
+                  color: darkMode
+                      ? charts.MaterialPalette.white
+                      : charts.MaterialPalette.black,
+                ),
+                lineStyle: charts.LineStyleSpec(
+                  thickness: 0,
+                  color: charts.MaterialPalette.gray.shadeDefault,
                 ),
               ),
             ),
