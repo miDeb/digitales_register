@@ -413,7 +413,7 @@ class DayWidget extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (_context) {
-                          return ListViewCapableAlertDialog(
+                          return InfoDialog(
                             title: Text("Gelöschte Einträge"),
                             content: ListView(
                               shrinkWrap: true,
@@ -426,15 +426,6 @@ class DayWidget extends StatelessWidget {
                                   )
                                   .toList(),
                             ),
-                            actions: <Widget>[
-                              RaisedButton(
-                                textTheme: ButtonTextTheme.primary,
-                                onPressed: () => Navigator.pop(_context),
-                                child: Text(
-                                  "Ok",
-                                ),
-                              )
-                            ],
                           );
                         },
                       );
@@ -457,7 +448,7 @@ class DayWidget extends StatelessWidget {
                               builder: (context) {
                                 String message = "";
                                 return StatefulBuilder(
-                                  builder: (context, setState) => AlertDialog(
+                                  builder: (context, setState) => InfoDialog(
                                     title: Text("Erinnerung"),
                                     content: TextField(
                                       maxLines: null,
@@ -614,7 +605,7 @@ class ItemWidget extends StatelessWidget {
                                           final delete = await showDialog(
                                               context: context,
                                               builder: (context) {
-                                                return AlertDialog(
+                                                return InfoDialog(
                                                   content: StatefulBuilder(
                                                     builder:
                                                         (context, setState) =>
@@ -696,7 +687,7 @@ class ItemWidget extends StatelessWidget {
                         showDialog(
                           context: context,
                           builder: (_context) {
-                            return ListViewCapableAlertDialog(
+                            return InfoDialog(
                               title: Text(historyItem.title),
                               content: ListView(
                                 shrinkWrap: true,
@@ -714,15 +705,6 @@ class ItemWidget extends StatelessWidget {
                                     ),
                                 ],
                               ),
-                              actions: <Widget>[
-                                RaisedButton(
-                                  textTheme: ButtonTextTheme.primary,
-                                  onPressed: () => Navigator.pop(_context),
-                                  child: Text(
-                                    "Ok",
-                                  ),
-                                )
-                              ],
                             );
                           },
                         );

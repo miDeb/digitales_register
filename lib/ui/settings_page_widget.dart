@@ -7,6 +7,7 @@ import 'package:package_info/package_info.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 
 import '../container/settings_page.dart';
+import 'dialog.dart';
 import 'network_protocol_page.dart';
 
 class SettingsPageWidget extends StatefulWidget {
@@ -266,7 +267,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                           final delete = await showDialog(
                               context: context,
                               builder: (context) {
-                                return AlertDialog(
+                                return InfoDialog(
                                   title: Text("Kürzel entfernen?"),
                                   actions: <Widget>[
                                     FlatButton(
@@ -428,7 +429,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return InfoDialog(
       title: Text("Kürzel bearbeiten"),
       content: Row(
         children: [

@@ -183,31 +183,8 @@ class HourWidget extends StatelessWidget {
                     ),
                   ),
               ];
-              return ListViewCapableAlertDialog(
-                titlePadding: EdgeInsets.zero,
-                title: Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                          left: 24,
-                          right: 24,
-                          top: 24,
-                        ),
-                        child: Text(hour.subject),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 4, right: 4),
-                      child: IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+              return InfoDialog(
+                title: Text(hour.subject),
                 content: ListView.separated(
                   itemCount: items.length,
                   shrinkWrap: true,
