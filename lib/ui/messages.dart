@@ -119,13 +119,9 @@ TextSpan renderMessage(String msg, BuildContext context) {
         text = text.substring(0, text.length - 1);
       }
     }
-    if (addBullet) {
-      if (text.contains("\n")) {
-        final index = text.lastIndexOf("\n");
-        text = text.substring(0, index) + "\n• " + text.substring(index + 1);
-      } else {
-        text = "• " + text;
-      }
+    if (addBullet && text.contains("\n")) {
+      final index = text.lastIndexOf("\n");
+      text = text.substring(0, index) + "\n• " + text.substring(index + 1);
       addBullet = false;
     }
     bool isLink = attributes["link"] != null;
