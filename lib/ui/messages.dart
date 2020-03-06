@@ -32,7 +32,7 @@ class MessagesPage extends StatelessWidget {
                   message: state.messages[i],
                 );
               },
-              separatorBuilder: (_, __) => Divider(),
+              separatorBuilder: (_, __) => Divider(height: 0),
             ),
     );
   }
