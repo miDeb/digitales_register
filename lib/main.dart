@@ -146,11 +146,14 @@ void run() {
   WidgetsBinding.instance
     ..addPostFrameCallback(
       (_) async {
-        final uri = await getInitialUri();
+        Uri uri;
+        if (Platform.isAndroid) {
+          uri = await getInitialUri();
+          getUriLinksStream().listen((event) {
+            store.actions.start(event);
+          });
+        }
         store.actions.start(uri);
-        getUriLinksStream().listen((event) {
-          store.actions.start(event);
-        });
         WidgetsBinding.instance
           ..addObserver(
             LifecycleObserver(
