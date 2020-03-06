@@ -108,10 +108,17 @@ class _MessageWidgetState extends State<MessageWidget> {
 TextSpan renderMessage(String msg, BuildContext context) {
   final json = jsonDecode(msg)["ops"];
   final rawStrings = <TextSpan>[];
+  bool isLast = true;
   bool addBullet = false;
   for (final t in json.reversed) {
     final attributes = t["attributes"] ?? {};
     String text = t["insert"];
+    if (isLast) {
+      isLast = false;
+      if (text[text.length - 1] == "\n") {
+        text = text.substring(0, text.length - 1);
+      }
+    }
     if (addBullet) {
       if (text.contains("\n")) {
         final index = text.lastIndexOf("\n");
