@@ -94,3 +94,17 @@ class CertificateButton extends StatelessWidget {
     );
   }
 }
+
+class MessagesButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnection<AppState, AppActions, void>(
+      connect: (state) {},
+      builder: (context, vm, actions) {
+        return MessagesButtonWidget(
+          onShowMessages: actions.routingActions.showMessages,
+        );
+      },
+    );
+  }
+}

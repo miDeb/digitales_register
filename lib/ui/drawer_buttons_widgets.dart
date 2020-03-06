@@ -102,3 +102,20 @@ class CertificateButtonWidget extends StatelessWidget {
     );
   }
 }
+
+class MessagesButtonWidget extends StatelessWidget {
+  final VoidCallback onShowMessages;
+
+  const MessagesButtonWidget({Key key, this.onShowMessages}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text("Mitteilungen"),
+      trailing: Icon(Icons.message),
+      onTap: () {
+        Navigator.of(context).pop();
+        onShowMessages();
+      },
+    );
+  }
+}

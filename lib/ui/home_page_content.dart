@@ -64,6 +64,7 @@ class HomePageContent extends StatelessWidget {
                         Center(child: AbsencesButton()),
                         Center(child: CalendarButton()),
                         Center(child: CertificateButton()),
+                        Center(child: MessagesButton()),
                         Spacer(),
                         Center(child: SettingsButton()),
                         Center(child: LogoutButton()),

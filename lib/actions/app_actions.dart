@@ -7,6 +7,7 @@ import 'certificate_actions.dart';
 import 'dashboard_actions.dart';
 import 'grades_actions.dart';
 import 'login_actions.dart';
+import 'messages_actions.dart';
 import 'notifications_actions.dart';
 import 'profile_actions.dart';
 import 'routing_actions.dart';
@@ -41,4 +42,5 @@ abstract class AppActions extends ReduxActions {
   SettingsActions settingsActions;
   ProfileActions profileActions;
   CertificateActions certificateActions;
+  MessagesActions messagesActions;
 }

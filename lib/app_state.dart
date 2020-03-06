@@ -29,6 +29,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   CalendarState get calendarState;
   CertificateState get certificateState;
   @nullable
+  MessagesState get messagesState;
+  @nullable
   @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
   @nullable
@@ -48,6 +50,16 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       ..certificateState = CertificateStateBuilder()
       ..noInternet = false;
   }
+}
+
+abstract class MessagesState
+    implements Built<MessagesState, MessagesStateBuilder> {
+  BuiltList<Message> get messages;
+
+  static Serializer<MessagesState> get serializer => _$messagesStateSerializer;
+
+  MessagesState._();
+  factory MessagesState([updates(MessagesStateBuilder b)]) = _$MessagesState;
 }
 
 abstract class DashboardState

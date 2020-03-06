@@ -19,6 +19,7 @@ abstract class RoutingActions extends ReduxActions {
   ActionDispatcher<void> showGradesChart;
   ActionDispatcher<void> showCalendar;
   ActionDispatcher<void> showCertificate;
+  ActionDispatcher<void> showMessages;
   ActionDispatcher<void> showEditCalendarSubjectNicks;
 }
 

@@ -463,3 +463,17 @@ abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   Teacher._();
   factory Teacher([updates(TeacherBuilder b)]) = _$Teacher;
 }
+
+abstract class Message implements Built<Message, MessageBuilder> {
+  String get subject;
+  String get text;
+  DateTime get timeSent;
+  @nullable
+  DateTime get timeRead;
+  String get recipientString;
+  String get fromName;
+
+  static Serializer<Message> get serializer => _$messageSerializer;
+  Message._();
+  factory Message([updates(MessageBuilder b)]) = _$Message;
+}

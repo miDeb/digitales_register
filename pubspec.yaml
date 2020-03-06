@@ -42,6 +42,7 @@ dependencies:
   uni_links: any
   flutter_ping:
     path: "packages/flutter_ping/"
+  url_launcher: any
 dependency_overrides:
   built_redux: 
     git: 

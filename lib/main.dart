@@ -16,6 +16,7 @@ import 'container/change_email_container.dart';
 import 'container/grades_page_container.dart';
 import 'container/home_page.dart';
 import 'container/login_page.dart';
+import 'container/messages_container.dart';
 import 'container/notifications_page_container.dart';
 import 'container/pass_reset_container.dart';
 import 'container/profile_container.dart';
@@ -117,6 +118,10 @@ void run() {
                 case "absences":
                   return MaterialPageRoute(
                     builder: (_) => AbsencesPageContainer(),
+                  );
+                case "messages":
+                  return MaterialPageRoute(
+                    builder: (_) => MessagesPageContainer(),
                   );
                 case "calendar":
                   return MaterialPageRoute(

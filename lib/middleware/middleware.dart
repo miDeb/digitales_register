@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/messages_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -40,6 +41,7 @@ part 'notifications.dart';
 part 'pass.dart';
 part 'profile.dart';
 part 'routing.dart';
+part 'messages.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 final _wrapper = Wrapper();
@@ -66,6 +68,7 @@ final middleware = [
         ..combine(_passMiddleware)
         ..combine(_routingMiddleware)
         ..combine(_certificateMiddleware)
+        ..combine(_messagesMiddleware)
         ..combine(_profileMiddleware))
       .build(),
 ];
@@ -425,6 +428,11 @@ void redirectAfterLogin(
     case "student/certificate":
       api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showCertificate,
+      );
+      break;
+    case "message/list":
+      api.actions.loginActions.addAfterLoginCallback(
+        api.actions.routingActions.showMessages,
       );
       break;
     default:
