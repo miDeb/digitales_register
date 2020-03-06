@@ -98,14 +98,14 @@ class _MessageWidgetState extends State<MessageWidget> {
           SizedBox(
             height: 8,
           ),
-          Text.rich(renderMessage(widget.message.text, context))
+          renderMessage(widget.message.text, context)
         ],
       ),
     );
   }
 }
 
-TextSpan renderMessage(String msg, BuildContext context) {
+Widget renderMessage(String msg, BuildContext context) {
   final json = jsonDecode(msg)["ops"];
   final rawStrings = <TextSpan>[];
   bool isLast = true;
@@ -143,7 +143,9 @@ TextSpan renderMessage(String msg, BuildContext context) {
       addBullet = true;
     }
   }
-  return TextSpan(children: rawStrings.reversed.toList());
+  return Text.rich(
+    TextSpan(
+      children: rawStrings.reversed.toList(),
+    ),
+  );
 }
-
-// •
