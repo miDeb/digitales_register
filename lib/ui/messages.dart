@@ -123,7 +123,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               Divider(),
               Text(
                 "Anhang:",
-                style: textTheme.subtitle,
+                style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Row(
                 children: <Widget>[
