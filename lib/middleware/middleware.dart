@@ -141,12 +141,12 @@ void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _refreshNoInternet(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<bool> action) async {
+    Action<void> action) async {
   next(action);
   final noInternet = await _wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
   api.actions.noInternet(noInternet);
-  if (prevNoInternet != noInternet && action.payload != true) {
+  if (prevNoInternet != noInternet) {
     api.actions.load();
   }
 }
@@ -184,7 +184,6 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       api.actions.routingActions.showLogin();
     }
   }
-  api.actions.refreshNoInternet(true);
 }
 
 void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
