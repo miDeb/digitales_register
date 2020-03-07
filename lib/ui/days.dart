@@ -60,26 +60,14 @@ class DaysWidget extends StatelessWidget {
       toggleDoneCallback: toggleDoneCallback,
       setDoNotAskWhenDeleteCallback: setDoNotAskWhenDeleteCallback,
     );
-    final content = vm.days.isNotEmpty
-        ? vm.noInternet
-            ? list
-            : RefreshIndicator(
-                child: list,
-                onRefresh: () async {
-                  refresh();
-                },
-              )
-        : vm.noInternet
-            ? Center(
-                child: NoInternet(),
-              )
-            : Center(
-                child: Text(
-                  "Keine Einträge vorhanden",
-                  style: Theme.of(context).textTheme.display1,
-                  textAlign: TextAlign.center,
-                ),
-              );
+    final content = vm.noInternet
+        ? list
+        : RefreshIndicator(
+            child: list,
+            onRefresh: () async {
+              refresh();
+            },
+          );
     return vm.loading
         ? Stack(
             children: <Widget>[
@@ -238,6 +226,8 @@ class _DaysListWidgetState extends State<DaysListWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final noInternet = widget.vm.noInternet;
+    final noEntries = widget.vm.days.isEmpty;
     return Scaffold(
       body: ListView.builder(
         physics: AlwaysScrollableScrollPhysics(),
@@ -278,10 +268,32 @@ class _DaysListWidgetState extends State<DaysListWidget> {
               ],
             );
           }
+
           if (n == widget.vm.days.length + 1) {
-            return SizedBox(
-              height: 160,
-            );
+            if (noEntries) {
+              if (noInternet) {
+                return Column(
+                  children: <Widget>[
+                    SizedBox(
+                      height: 120,
+                    ),
+                    NoInternet(),
+                  ],
+                );
+              } else {
+                return Center(
+                  child: Text(
+                    "Keine Einträge vorhanden",
+                    style: Theme.of(context).textTheme.display1,
+                    textAlign: TextAlign.center,
+                  ),
+                );
+              }
+            } else {
+              return SizedBox(
+                height: 160,
+              );
+            }
           }
           return DayWidget(
             day: widget.vm.days[n - 1],
