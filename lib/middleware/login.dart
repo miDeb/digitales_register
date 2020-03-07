@@ -129,6 +129,7 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoginFailedPayload> action) {
   next(action);
   if (action.payload.noInternet) {
+    api.actions.noInternet(true);
     if (action.payload.offlineEnabled) {
       api.actions.loginActions.loggedIn(
         LoggedInPayload(
@@ -139,7 +140,6 @@ void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       );
       return;
     }
-    api.actions.noInternet(true);
   } else {
     api.actions.savePassActions.delete();
   }
