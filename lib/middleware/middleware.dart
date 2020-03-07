@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:dr/actions/messages_actions.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
@@ -9,7 +11,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
-import 'package:requests/requests.dart';
+import 'package:open_file/open_file.dart';
+import 'package:permissions_plugin/permissions_plugin.dart';
 
 import '../actions/absences_actions.dart';
 import '../actions/app_actions.dart';

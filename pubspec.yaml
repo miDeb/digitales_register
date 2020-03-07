@@ -21,8 +21,6 @@ dependencies:
   charts_flutter: any
   tuple: any
   path_provider: any
-  requests:
-    path: "packages/requests/"
   built_value: any
   dynamic_theme:
     path: "packages/dynamic_theme/"
@@ -43,6 +41,12 @@ dependencies:
   flutter_ping:
     path: "packages/flutter_ping/"
   url_launcher: any
+  downloads_path_provider_28: ^0.1.0
+  permissions_plugin: ^1.1.4
+  dio: ^3.0.9
+  dio_cookie_manager: ^1.0.0
+  cookie_jar: ^1.0.1
+  open_file: any
 dependency_overrides:
   built_redux: 
     git: 

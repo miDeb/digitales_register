@@ -154,14 +154,14 @@ void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<RequestPassResetPayload> action) async {
-  final result = await Requests.post(
+  final result = (await Dio().post(
     "${api.state.url}/api/auth/resetPassword",
-    body: {
+    data: {
       "email": action.payload.email,
       "username": action.payload.user,
     },
-    json: true,
-  );
+  ))
+      .data;
   if (result["error"] != null) {
     api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
@@ -172,17 +172,17 @@ void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<String> action) async {
-  final result = await Requests.post(
+  final result = (await Dio().post(
     "${api.state.url}/api/auth/setNewPassword",
-    body: {
+    data: {
       "username": "",
       "token": api.state.loginState.resetPassState.token,
       "email": api.state.loginState.resetPassState.email,
       "oldPassword": "",
       "newPassword": action.payload,
     },
-    json: true,
-  );
+  ))
+      .data;
   if (result["error"] != null) {
     api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");

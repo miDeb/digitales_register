@@ -472,8 +472,22 @@ abstract class Message implements Built<Message, MessageBuilder> {
   DateTime get timeRead;
   String get recipientString;
   String get fromName;
+  @nullable
+  String get fileName;
+  @nullable
+  String get fileOriginalName;
+  @nullable
+  int get id;
+  bool get fileAvailable;
+  @BuiltValueField(serialize: false)
+  bool get downloading;
 
   static Serializer<Message> get serializer => _$messageSerializer;
   Message._();
   factory Message([updates(MessageBuilder b)]) = _$Message;
+  static void _initializeBuilder(MessageBuilder b) {
+    b
+      ..downloading = false
+      ..fileAvailable = false;
+  }
 }

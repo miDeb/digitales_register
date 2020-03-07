@@ -1,19 +1,21 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:ui' show VoidCallback;
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/dio.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter_ping/flutter_ping.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:dr/util.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
-import 'package:requests/requests.dart';
 
 import 'app_state.dart';
 
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
+  final dio = Dio()..interceptors.add(CookieManager(CookieJar()));
   String get _loginAddress => "$baseAddress/api/auth/login";
   String get baseAddress => "$url/v2";
   String user, pass, url;
@@ -87,11 +89,11 @@ class Wrapper {
     dynamic response;
     await _clearCookies();
     try {
-      response = await Requests.post(
+      response = (await dio.post(
         _loginAddress,
-        body: {"username": user, "password": pass},
-        json: true,
-      );
+        data: {"username": user, "password": pass},
+      ))
+          .data;
     } catch (e) {
       _loggedIn = false;
       print(e);
@@ -123,15 +125,15 @@ class Wrapper {
     dynamic response;
     await _clearCookies();
     try {
-      response = await Requests.post(
+      response = (await dio.post(
         "$baseAddress/api/auth/setNewPassword",
-        body: {
+        data: {
           "username": user,
           "oldPassword": oldPass,
           "newPassword": newPass,
         },
-        json: true,
-      );
+      ))
+          .data;
     } catch (e) {
       _loggedIn = false;
       print(e);
@@ -151,9 +153,10 @@ class Wrapper {
   Future<void> _loadConfig() async {
     String source;
     try {
-      source = await Requests.get(baseAddress);
+      source = (await dio.get(baseAddress)).data;
     } on TimeoutException {
-      source = await Requests.get(baseAddress);
+      // retry
+      source = (await dio.get(baseAddress)).data;
     }
     config = parseConfig(source);
   }
@@ -241,18 +244,17 @@ class Wrapper {
     dynamic response;
     try {
       response = method == "POST"
-          ? await Requests.post(
+          ? await dio.post(
               baseAddress + url,
-              body: args,
-              json: json,
+              data: args,
             )
           : method == "GET"
-              ? await Requests.get(
+              ? await dio.get(
                   baseAddress + url,
-                  json: json,
                 )
               : throw Exception(
                   "invalid method: $method; expected POST or GET");
+      response = response.data;
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
@@ -316,12 +318,14 @@ class Wrapper {
     }
     _loggedIn = false;
     if (!logoutForcedByServer) {
-      Requests.get("$baseAddress/logout");
+      dio.get("$baseAddress/logout");
     }
     _clearCookies();
   }
 
   Future<void> _clearCookies() async {
-    await Requests.clearStoredCookies(Uri.parse(url).host);
+    dio.interceptors
+      ..clear()
+      ..add(CookieManager(CookieJar()));
   }
 }
