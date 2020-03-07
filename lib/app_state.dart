@@ -64,6 +64,7 @@ abstract class MessagesState
 
 abstract class DashboardState
     implements Built<DashboardState, DashboardStateBuilder> {
+  @BuiltValueField(serialize: false)
   bool get loading;
   bool get future;
   @nullable
