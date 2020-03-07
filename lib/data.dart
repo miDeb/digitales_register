@@ -476,7 +476,6 @@ abstract class Message implements Built<Message, MessageBuilder> {
   String get fileName;
   @nullable
   String get fileOriginalName;
-  @nullable
   int get id;
   bool get fileAvailable;
   @BuiltValueField(serialize: false)
