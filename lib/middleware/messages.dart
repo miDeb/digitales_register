@@ -3,6 +3,8 @@ part of 'middleware.dart';
 final _messagesMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(MessagesActionsNames.load, _loadMessages)
+      ..add(MessagesActionsNames.loaded, _loaded)
+      ..add(MessagesActionsNames.markAsRead, _markAsRead)
       ..add(MessagesActionsNames.downloadFile, _downloadFile)
       ..add(MessagesActionsNames.openFile, _openFile);
 
@@ -16,6 +18,15 @@ void _loadMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.messagesActions.loaded(response);
   } else {
     api.actions.refreshNoInternet();
+  }
+}
+
+void _loaded(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action action) {
+  for (final message in api.state.messagesState.messages) {
+    if (message.timeRead == null) {
+      api.actions.messagesActions.markAsRead(message.id);
+    }
   }
 }
 
@@ -60,4 +71,14 @@ void _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         action.payload.fileOriginalName,
   );
   await OpenFile.open(saveFile.path);
+}
+
+void _markAsRead(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<int> action) async {
+  next(action);
+  final result = await _wrapper.send(
+    "/api/message/markAsRead",
+    args: {"messageId": action.payload},
+  );
+  if (result == null) api.actions.refreshNoInternet();
 }

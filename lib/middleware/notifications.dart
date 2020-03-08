@@ -37,7 +37,13 @@ void _deleteAllNotifications(
     ActionHandler next,
     Action<void> action) async {
   next(action);
-  final result = await _wrapper.send("/api/notification/markAsRead",
-      args: {}, json: false);
-  if (result == null) api.actions.refreshNoInternet();
+  final result = _wrapper.send(
+    "/api/notification/markAsRead",
+    args: {},
+  );
+  for (var n in api.state.notificationState.notifications
+      .where((n) => n.type == "message" && n.objectId != null)) {
+    api.actions.messagesActions.markAsRead(n.objectId);
+  }
+  if (await result == null) api.actions.refreshNoInternet();
 }

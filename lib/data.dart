@@ -196,10 +196,12 @@ abstract class Notification
   int get id;
   String get title;
   @nullable
-  String get type;
-  @nullable
   String get subTitle;
   DateTime get timeSent;
+  @nullable
+  String get type;
+  @nullable
+  int get objectId;
 }
 
 abstract class Subject implements Built<Subject, SubjectBuilder> {

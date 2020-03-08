@@ -13,4 +13,5 @@ abstract class MessagesActions extends ReduxActions {
   ActionDispatcher<Message> downloadFile;
   ActionDispatcher<Message> fileAvailable;
   ActionDispatcher<Message> openFile;
+  ActionDispatcher<int> markAsRead;
 }

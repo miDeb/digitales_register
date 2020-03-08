@@ -12,7 +12,8 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 )
   ..add(MessagesActionsNames.loaded, _loaded)
   ..add(MessagesActionsNames.fileAvailable, _fileAvailable)
-  ..add(MessagesActionsNames.downloadFile, _downloadFile);
+  ..add(MessagesActionsNames.downloadFile, _downloadFile)
+  ..add(MessagesActionsNames.markAsRead, _markAsRead);
 
 void _loaded(
     MessagesState state, Action<Object> action, MessagesStateBuilder builder) {
@@ -28,11 +29,24 @@ void _downloadFile(
 
 void _fileAvailable(
     MessagesState state, Action<Message> action, MessagesStateBuilder builder) {
-  builder.messages[
-          state.messages.indexWhere((m) => m.id == action.payload.id)] =
-      action.payload.rebuild((b) => b
-        ..fileAvailable = true
-        ..downloading = false);
+  builder.messages[state.messages
+      .indexWhere((m) => m.id == action.payload.id)] = action.payload.rebuild(
+    (b) => b
+      ..fileAvailable = true
+      ..downloading = false,
+  );
+}
+
+void _markAsRead(
+    MessagesState state, Action<int> action, MessagesStateBuilder builder) {
+  builder.messages[state.messages.indexWhere((m) => m.id == action.payload)] =
+      state.messages
+          .firstWhere(
+            (m) => m.id == action.payload,
+          )
+          .rebuild(
+            (b) => b..timeRead = DateTime.now(),
+          );
 }
 
 MessagesState _parseMessages(json, MessagesState state) {
