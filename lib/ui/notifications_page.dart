@@ -9,6 +9,7 @@ class NotificationPage extends StatelessWidget {
   final List<Notification> notifications;
   final SingleArgumentVoidCallback<Notification> deleteNotification;
   final VoidCallback deleteAllNotifications;
+  final VoidCallback goToMessages;
   final bool noInternet;
 
   const NotificationPage({
@@ -17,6 +18,7 @@ class NotificationPage extends StatelessWidget {
     this.deleteNotification,
     this.deleteAllNotifications,
     this.noInternet,
+    this.goToMessages,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class NotificationPage extends StatelessWidget {
                   notification: notifications[n - 1],
                   onDelete: deleteNotification,
                   noInternet: noInternet,
+                  goToMessages: goToMessages,
                 );
               },
             )
@@ -64,12 +67,14 @@ class NotificationWidget extends StatelessWidget {
   final Notification notification;
   final bool noInternet;
   final SingleArgumentVoidCallback<Notification> onDelete;
+  final VoidCallback goToMessages;
 
   const NotificationWidget(
       {Key key,
       @required this.notification,
       @required this.onDelete,
-      this.noInternet})
+      this.noInternet,
+      this.goToMessages})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -115,13 +120,22 @@ class NotificationWidget extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              icon: Icon(
-                Icons.done,
-              ),
-              tooltip: "Gelesen",
-              onPressed: noInternet ? null : () => onDelete(notification),
-            ),
+            if (notification.type != "message")
+              IconButton(
+                icon: Icon(
+                  Icons.done,
+                ),
+                tooltip: "Gelesen",
+                onPressed: noInternet ? null : () => onDelete(notification),
+              )
+            else
+              IconButton(
+                icon: Icon(
+                  Icons.exit_to_app,
+                ),
+                tooltip: "Zu Mitteilungen wechseln",
+                onPressed: goToMessages,
+              )
           ],
         ),
       ),

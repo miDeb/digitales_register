@@ -18,11 +18,14 @@ class NotificationPageContainer extends StatelessWidget {
           noInternet: vm.item2,
           deleteNotification: actions.notificationsActions.delete,
           deleteAllNotifications: actions.notificationsActions.deleteAll,
+          goToMessages: actions.routingActions.showMessages,
         );
       },
       connect: (state) {
         return Tuple2(
-            state.notificationState.notifications.toList(), state.noInternet);
+          state.notificationState.notifications.toList(),
+          state.noInternet,
+        );
       },
     );
   }

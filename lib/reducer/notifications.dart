@@ -26,6 +26,7 @@ ListBuilder<Notification> _parseNotifications(data) {
         (b) => b
           ..id = n["id"]
           ..title = n["title"]
+          ..type = n["type"]
           ..subTitle = n["subTitle"]
           ..timeSent = DateTime.parse(
             n["timeSent"],
