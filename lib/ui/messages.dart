@@ -41,6 +41,7 @@ class MessagesPage extends StatelessWidget {
                   message: state.messages[i],
                   onDownloadFile: onDownloadFile,
                   onOpenFile: onOpenFile,
+                  noInternet: noInternet,
                 );
               },
             ),
@@ -52,10 +53,15 @@ class MessageWidget extends StatefulWidget {
   final Message message;
   final MessageCallback onDownloadFile;
   final MessageCallback onOpenFile;
+  final bool noInternet;
 
-  const MessageWidget(
-      {Key key, this.message, this.onDownloadFile, this.onOpenFile})
-      : super(key: key);
+  const MessageWidget({
+    Key key,
+    this.message,
+    this.onDownloadFile,
+    this.onOpenFile,
+    this.noInternet,
+  }) : super(key: key);
 
   @override
   _MessageWidgetState createState() => _MessageWidgetState();
@@ -135,7 +141,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                 ],
               ),
               if (widget.message.downloading) LinearProgressIndicator(),
-              if (!widget.message.fileAvailable)
+              if (!widget.message.fileAvailable && !widget.noInternet)
                 FlatButton(
                   child: Text("Herunterladen"),
                   onPressed: () {
@@ -146,18 +152,20 @@ class _MessageWidgetState extends State<MessageWidget> {
                 IntrinsicHeight(
                   child: Row(
                     children: <Widget>[
-                      Expanded(
-                        child: FlatButton(
-                          child: Text("Erneut herunterladen"),
-                          onPressed: () {
-                            widget.onDownloadFile(widget.message);
-                          },
+                      if (!widget.noInternet) ...[
+                        Expanded(
+                          child: FlatButton(
+                            child: Text("Erneut herunterladen"),
+                            onPressed: () {
+                              widget.onDownloadFile(widget.message);
+                            },
+                          ),
                         ),
-                      ),
-                      VerticalDivider(
-                        indent: 8,
-                        endIndent: 8,
-                      ),
+                        VerticalDivider(
+                          indent: 8,
+                          endIndent: 8,
+                        ),
+                      ],
                       Expanded(
                         child: FlatButton(
                           child: Text("Öffnen"),
