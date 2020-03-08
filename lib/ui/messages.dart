@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:quill_delta/quill_delta.dart';
+import 'package:quill_delta_viewer/quill_delta_viewer.dart';
 
 import '../app_state.dart';
 import '../data.dart';
@@ -178,46 +178,5 @@ class _MessageWidgetState extends State<MessageWidget> {
 }
 
 Widget renderMessage(String msg, BuildContext context) {
-  final json = jsonDecode(msg)["ops"];
-  final rawStrings = <TextSpan>[];
-  bool isLast = true;
-  bool addBullet = false;
-  for (final t in json.reversed) {
-    final attributes = t["attributes"] ?? {};
-    String text = t["insert"];
-    if (isLast) {
-      isLast = false;
-      if (text[text.length - 1] == "\n") {
-        text = text.substring(0, text.length - 1);
-      }
-    }
-    if (addBullet && text.contains("\n")) {
-      final index = text.lastIndexOf("\n");
-      text = text.substring(0, index) + "\n• " + text.substring(index + 1);
-      addBullet = false;
-    }
-    bool isLink = attributes["link"] != null;
-    rawStrings.add(
-      TextSpan(
-          text: text,
-          style: TextStyle(
-            fontWeight: attributes.containsKey("bold") ? FontWeight.bold : null,
-            color: isLink ? Theme.of(context).accentColor : null,
-          ),
-          recognizer: isLink
-              ? (TapGestureRecognizer()
-                ..onTap = () {
-                  launch(attributes["link"]);
-                })
-              : null),
-    );
-    if (attributes["list"] == "ordered") {
-      addBullet = true;
-    }
-  }
-  return Text.rich(
-    TextSpan(
-      children: rawStrings.reversed.toList(),
-    ),
-  );
+  return QuillDeltaViewer(delta: Delta.fromJson(jsonDecode(msg)["ops"]));
 }

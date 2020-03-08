@@ -47,6 +47,9 @@ dependencies:
   dio_cookie_manager: ^1.0.0
   cookie_jar: ^1.0.1
   open_file: any
+  quill_delta_viewer:
+    path: packages/quill_delta_viewer
+  quill_delta: ^1.0.1
 dependency_overrides:
   built_redux: 
     git: 

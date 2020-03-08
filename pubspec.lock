@@ -583,6 +583,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
+  quill_delta:
+    dependency: "direct main"
+    description:
+      name: quill_delta
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
+  quill_delta_viewer:
+    dependency: "direct main"
+    description:
+      path: "packages/quill_delta_viewer"
+      relative: true
+    source: path
+    version: "0.0.1"
   quiver:
     dependency: transitive
     description:
@@ -590,6 +604,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.5"
+  quiver_hashcode:
+    dependency: transitive
+    description:
+      name: quiver_hashcode
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   scroll_to_index:
     dependency: "direct main"
     description:
