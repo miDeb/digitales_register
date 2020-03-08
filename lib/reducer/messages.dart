@@ -53,8 +53,11 @@ MessagesState _parseMessages(json, MessagesState state) {
       ..fileName = m["fileName"]
       ..fileOriginalName = m["fileOriginalName"]
       ..id = m["id"];
-    final oldMessage = state.messages.firstWhere((m) => m.id == message.id);
-    if (oldMessage.fileName == message.fileName) {
+    final oldMessage = state.messages.firstWhere(
+        (m) => m.id == message.id,
+        orElse: () => null,
+    );
+    if (oldMessage != null && oldMessage.fileName == message.fileName) {
       message.fileAvailable = oldMessage.fileAvailable;
     }
     return message.build();
