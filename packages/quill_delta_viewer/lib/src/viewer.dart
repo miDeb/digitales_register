@@ -9,13 +9,7 @@ class QuillDeltaViewer extends StatelessWidget {
   /// The document delta to be rendered
   final Delta delta;
 
-  QuillDeltaViewer({Key key, this.delta}) : super(key: key) {
-    final iterator = DeltaIterator(delta);
-    while (iterator.hasNext) {
-      assert(iterator.next().isInsert,
-          "The delta should only contain inserts. Call compose first?");
-    }
-  }
+  QuillDeltaViewer({Key key, this.delta}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return render(removeLastNewline(isolateLines(delta)), context);
