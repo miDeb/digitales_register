@@ -37,8 +37,6 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       LoginFailedPayload(
         (b) async => b
           ..cause = "Bitte gib etwas ein"
-          ..offlineEnabled = action.payload.offlineEnabled
-          ..noInternet = false
           ..username = action.payload.user,
       ),
     );
@@ -73,15 +71,23 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.loginActions.showChangePass(true);
   } else {
     final noInternet = await _wrapper.noInternet;
+    if (noInternet) {
+      api.actions.noInternet(true);
+      if (action.payload.offlineEnabled) {
+        api.actions.loginActions.loggedIn(
+          LoggedInPayload(
+            (b) => b
+              ..username = action.payload.user
+              ..fromStorage = true,
+          ),
+        );
+        return;
+      }
+    }
     api.actions.loginActions.loginFailed(
-      LoginFailedPayload(
-        (b) => b
-          ..cause = _wrapper.error
-          ..offlineEnabled = action.payload.offlineEnabled
-          ..noInternet = noInternet
-          ..username = action.payload.user
-          ..fromStorage = action.payload.fromStorage,
-      ),
+      LoginFailedPayload((b) => b
+        ..cause = _wrapper.error
+        ..username = action.payload.user),
     );
   }
 }
@@ -101,14 +107,9 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
   if (result["error"] != null) {
     api.actions.loginActions.loginFailed(
-      LoginFailedPayload(
-        (b) => b
-          ..cause = _wrapper.error
-          ..username = action.payload.user
-          ..fromStorage = false
-          ..noInternet = false
-          ..offlineEnabled = false,
-      ),
+      LoginFailedPayload((b) => b
+        ..cause = _wrapper.error
+        ..username = action.payload.user),
     );
   } else {
     api.actions.loginActions.login(
@@ -128,21 +129,8 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoginFailedPayload> action) {
   next(action);
-  if (action.payload.noInternet) {
-    api.actions.noInternet(true);
-    if (action.payload.offlineEnabled) {
-      api.actions.loginActions.loggedIn(
-        LoggedInPayload(
-          (b) => b
-            ..username = action.payload.username
-            ..fromStorage = true,
-        ),
-      );
-      return;
-    }
-  } else {
-    api.actions.savePassActions.delete();
-  }
+
+  api.actions.savePassActions.delete();
   api.actions.routingActions.showLogin();
 }
 

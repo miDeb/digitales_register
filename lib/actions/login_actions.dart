@@ -93,9 +93,6 @@ abstract class LoginFailedPayload
 
   String get cause;
   String get username;
-  bool get fromStorage;
-  bool get offlineEnabled;
-  bool get noInternet;
 }
 
 abstract class LogoutPayload
