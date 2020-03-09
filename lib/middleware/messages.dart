@@ -10,7 +10,6 @@ final _messagesMiddleware =
 
 void _loadMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
-  // check for existing files
   if (api.state.noInternet) return;
   next(action);
   final response = await _wrapper.send("/api/message/getMyMessages");
@@ -23,6 +22,7 @@ void _loadMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _loaded(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action action) {
+  next(action);
   for (final message in api.state.messagesState.messages) {
     if (message.timeRead == null) {
       api.actions.messagesActions.markAsRead(message.id);
