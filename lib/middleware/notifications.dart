@@ -27,8 +27,8 @@ void _deleteNotification(
     ActionHandler next,
     Action<Notification> action) async {
   next(action);
-  final result = await _wrapper.send("/api/notification/markAsRead",
-      args: {"id": action.payload.id}, json: false);
+  final result = await _wrapper
+      .send("/api/notification/markAsRead", args: {"id": action.payload.id});
   if (result == null) api.actions.refreshNoInternet();
 }
 

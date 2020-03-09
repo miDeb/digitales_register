@@ -28,7 +28,6 @@ void _setSendNotificationEmails(
     args: {
       "notificationsEnabled": action.payload,
     },
-    json: false,
   );
   if (result == null) {
     api.actions.refreshNoInternet();

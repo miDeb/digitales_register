@@ -8,7 +8,7 @@ final _gradesMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(GradesActionsNames.loadCancelledDescription, _loadCancelledDescription);
 
 final _gradesLock = SemesterLock((s) async {
-  await _wrapper.send("/?semesterWechsel=${s.n}", json: false);
+  await _wrapper.send("/?semesterWechsel=${s.n}");
 });
 
 const String _subjects = "/api/student/all_subjects";

@@ -87,7 +87,7 @@ class Wrapper {
     }
     this.url = url;
     dynamic response;
-    await _clearCookies();
+    _clearCookies();
     try {
       response = (await dio.post(
         _loginAddress,
@@ -123,7 +123,7 @@ class Wrapper {
       String url, String user, String oldPass, String newPass) async {
     this.url = url;
     dynamic response;
-    await _clearCookies();
+    _clearCookies();
     try {
       response = (await dio.post(
         "$baseAddress/api/auth/setNewPassword",
@@ -221,9 +221,7 @@ class Wrapper {
 
   var _mutex = Mutex();
   Future<dynamic> send(String url,
-      {Map<String, dynamic> args = const {},
-      bool json = true,
-      String method = "POST"}) async {
+      {Map<String, dynamic> args = const {}, String method = "POST"}) async {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -323,7 +321,7 @@ class Wrapper {
     _clearCookies();
   }
 
-  Future<void> _clearCookies() async {
+  void _clearCookies() {
     dio.interceptors
       ..clear()
       ..add(CookieManager(CookieJar()));
