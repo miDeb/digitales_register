@@ -71,118 +71,117 @@ class _MessageWidgetState extends State<MessageWidget> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey, width: 0),
-        borderRadius: BorderRadius.circular(16),
+    return ExpansionTile(
+      title: Text(
+        widget.message.subject,
+        style: textTheme.subhead,
       ),
-      color: Colors.transparent,
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.message.subject,
-              style: textTheme.subhead,
-            ),
-            Divider(),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Gesendet: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(
-                      text: DateFormat("d.M.yy H:mm")
-                          .format(widget.message.timeSent))
-                ],
-              ),
-            ),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "Von: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: widget.message.fromName)
-                ],
-              ),
-            ),
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "An: ",
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  TextSpan(text: widget.message.recipientString)
-                ],
-              ),
-            ),
-            Divider(),
-            renderMessage(widget.message.text, context),
-            if (widget.message.fileName != null) ...[
-              Divider(),
-              Text(
-                "Anhang:",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      widget.message.fileOriginalName,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+          ).copyWith(
+            bottom: 8,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Gesendet: ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                  ),
-                ],
-              ),
-              if (widget.message.downloading) LinearProgressIndicator(),
-              if (!widget.message.fileAvailable)
-                FlatButton(
-                  child: Text("Herunterladen"),
-                  onPressed: widget.noInternet
-                      ? null
-                      : () {
-                          widget.onDownloadFile(widget.message);
-                        },
+                    TextSpan(
+                        text: DateFormat("d.M.yy H:mm")
+                            .format(widget.message.timeSent))
+                  ],
                 ),
-              if (widget.message.fileAvailable)
-                IntrinsicHeight(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: FlatButton(
-                          child: Text("Erneut herunterladen"),
-                          onPressed: widget.noInternet
-                              ? null
-                              : () {
-                                  widget.onDownloadFile(widget.message);
-                                },
-                        ),
+              ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "Von: ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: widget.message.fromName)
+                  ],
+                ),
+              ),
+              Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "An: ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: widget.message.recipientString)
+                  ],
+                ),
+              ),
+              Divider(),
+              renderMessage(widget.message.text, context),
+              if (widget.message.fileName != null) ...[
+                Divider(),
+                Text(
+                  "Anhang:",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Text(
+                        widget.message.fileOriginalName,
                       ),
-                      VerticalDivider(
-                        indent: 8,
-                        endIndent: 8,
-                      ),
-                      Expanded(
-                        child: FlatButton(
-                          child: Text("Öffnen"),
-                          onPressed: () {
-                            widget.onOpenFile(widget.message);
+                    ),
+                  ],
+                ),
+                if (widget.message.downloading) LinearProgressIndicator(),
+                if (!widget.message.fileAvailable)
+                  FlatButton(
+                    child: Text("Herunterladen"),
+                    onPressed: widget.noInternet
+                        ? null
+                        : () {
+                            widget.onDownloadFile(widget.message);
                           },
-                        ),
-                      ),
-                    ],
                   ),
-                )
-            ]
-          ],
+                if (widget.message.fileAvailable)
+                  IntrinsicHeight(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: FlatButton(
+                            child: Text("Erneut herunterladen"),
+                            onPressed: widget.noInternet
+                                ? null
+                                : () {
+                                    widget.onDownloadFile(widget.message);
+                                  },
+                          ),
+                        ),
+                        VerticalDivider(
+                          indent: 8,
+                          endIndent: 8,
+                        ),
+                        Expanded(
+                          child: FlatButton(
+                            child: Text("Öffnen"),
+                            onPressed: () {
+                              widget.onOpenFile(widget.message);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ],
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
