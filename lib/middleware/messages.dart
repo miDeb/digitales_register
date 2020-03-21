@@ -23,18 +23,18 @@ void _downloadFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Message> action) async {
   if (api.state.noInternet) return;
   next(action);
-  final permissions = await PermissionsPlugin.requestPermissions([
-    Permission.WRITE_EXTERNAL_STORAGE,
-  ]);
-  if (permissions[Permission.WRITE_EXTERNAL_STORAGE] !=
-      PermissionState.GRANTED) {
-    showToast(msg: "Abbruch");
-    return;
+  if (!Platform.isLinux) {
+    final permissions = await PermissionsPlugin.requestPermissions([
+      Permission.WRITE_EXTERNAL_STORAGE,
+    ]);
+    if (permissions[Permission.WRITE_EXTERNAL_STORAGE] !=
+        PermissionState.GRANTED) {
+      showToast(msg: "Abbruch");
+      return;
+    }
   }
   final saveFile = File(
-    (await DownloadsPathProvider.downloadsDirectory).path +
-        "/" +
-        action.payload.fileOriginalName,
+    (await downloadsDirectory).path + "/" + action.payload.fileOriginalName,
   );
 
   final result = await _wrapper.dio.download(
