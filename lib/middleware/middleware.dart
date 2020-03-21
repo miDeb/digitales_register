@@ -145,8 +145,15 @@ void _refreshNoInternet(
   next(action);
   final noInternet = await _wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
-  api.actions.noInternet(noInternet);
   if (prevNoInternet != noInternet) {
+    if (noInternet) {
+      showToast(msg: "Kein Internet");
+      _wrapper.logout(
+        hard: false,
+        logoutForcedByServer: true,
+      );
+    }
+    api.actions.noInternet(noInternet);
     api.actions.load();
   }
 }
@@ -180,7 +187,6 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             ..offlineEnabled = offlineEnabled,
         ),
       );
-      return;
     } else {
       api.actions.routingActions.showLogin();
     }
