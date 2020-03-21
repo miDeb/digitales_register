@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
@@ -16,13 +17,15 @@ class MessagesPage extends StatelessWidget {
   final bool noInternet;
   final MessageCallback onDownloadFile;
   final MessageCallback onOpenFile;
+  final MessageCallback onMarkAsRead;
 
   const MessagesPage(
       {Key key,
       @required this.state,
       this.noInternet,
       this.onDownloadFile,
-      this.onOpenFile})
+      this.onOpenFile,
+      this.onMarkAsRead})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -34,16 +37,25 @@ class MessagesPage extends StatelessWidget {
           ? noInternet
               ? NoInternet()
               : Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: state.messages.length,
-              itemBuilder: (context, i) {
-                return MessageWidget(
-                  message: state.messages[i],
-                  onDownloadFile: onDownloadFile,
-                  onOpenFile: onOpenFile,
-                  noInternet: noInternet,
-                );
-              },
+          : Stack(
+              children: <Widget>[
+                if (state.showMessage != null &&
+                    !state.messages.any((m) => m.id == state.showMessage))
+                  LinearProgressIndicator(),
+                ListView.builder(
+                  itemCount: state.messages.length,
+                  itemBuilder: (context, i) {
+                    return MessageWidget(
+                      message: state.messages[i],
+                      onDownloadFile: onDownloadFile,
+                      onOpenFile: onOpenFile,
+                      onMarkAsRead: onMarkAsRead,
+                      noInternet: noInternet,
+                      expand: state.messages[i].id == state.showMessage,
+                    );
+                  },
+                ),
+              ],
             ),
     );
   }
@@ -53,7 +65,9 @@ class MessageWidget extends StatefulWidget {
   final Message message;
   final MessageCallback onDownloadFile;
   final MessageCallback onOpenFile;
+  final MessageCallback onMarkAsRead;
   final bool noInternet;
+  final bool expand;
 
   const MessageWidget({
     Key key,
@@ -61,6 +75,8 @@ class MessageWidget extends StatefulWidget {
     this.onDownloadFile,
     this.onOpenFile,
     this.noInternet,
+    this.onMarkAsRead,
+    this.expand,
   }) : super(key: key);
 
   @override
@@ -68,13 +84,40 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
+  bool initiallyExpanded;
+  @override
+  void initState() {
+    initiallyExpanded = widget.expand;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
+    if (initiallyExpanded) {
+      widget.onMarkAsRead(widget.message);
+    }
     final textTheme = Theme.of(context).textTheme;
     return ExpansionTile(
-      title: Text(
-        widget.message.subject,
-        style: textTheme.subhead,
+      initiallyExpanded: initiallyExpanded,
+      onExpansionChanged: (expanded) {
+        if (expanded && widget.message.isNew) {
+          widget.onMarkAsRead(widget.message);
+        }
+      },
+      title: Row(
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              widget.message.subject,
+              style: textTheme.subhead,
+            ),
+          ),
+          if (widget.message.isNew || initiallyExpanded)
+            Badge(
+              shape: BadgeShape.square,
+              borderRadius: 20,
+              badgeContent: Text("neu"),
+            )
+        ],
       ),
       children: [
         Padding(

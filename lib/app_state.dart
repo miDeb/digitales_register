@@ -55,6 +55,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 abstract class MessagesState
     implements Built<MessagesState, MessagesStateBuilder> {
   BuiltList<Message> get messages;
+  @nullable
+  int get showMessage;
 
   static Serializer<MessagesState> get serializer => _$messagesStateSerializer;
 

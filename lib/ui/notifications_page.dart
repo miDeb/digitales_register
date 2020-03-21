@@ -8,8 +8,8 @@ import '../util.dart';
 class NotificationPage extends StatelessWidget {
   final List<Notification> notifications;
   final SingleArgumentVoidCallback<Notification> deleteNotification;
+  final SingleArgumentVoidCallback<int> goToMessage;
   final VoidCallback deleteAllNotifications;
-  final VoidCallback goToMessages;
   final bool noInternet;
 
   const NotificationPage({
@@ -18,7 +18,7 @@ class NotificationPage extends StatelessWidget {
     this.deleteNotification,
     this.deleteAllNotifications,
     this.noInternet,
-    this.goToMessages,
+    this.goToMessage,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class NotificationPage extends StatelessWidget {
                   notification: notifications[n - 1],
                   onDelete: deleteNotification,
                   noInternet: noInternet,
-                  goToMessages: goToMessages,
+                  goToMessage: goToMessage,
                 );
               },
             )
@@ -67,14 +67,14 @@ class NotificationWidget extends StatelessWidget {
   final Notification notification;
   final bool noInternet;
   final SingleArgumentVoidCallback<Notification> onDelete;
-  final VoidCallback goToMessages;
+  final SingleArgumentVoidCallback<int> goToMessage;
 
   const NotificationWidget(
       {Key key,
       @required this.notification,
       @required this.onDelete,
       this.noInternet,
-      this.goToMessages})
+      this.goToMessage})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -134,7 +134,7 @@ class NotificationWidget extends StatelessWidget {
                   Icons.exit_to_app,
                 ),
                 tooltip: "Zu Mitteilungen wechseln",
-                onPressed: goToMessages,
+                onPressed: () => goToMessage(notification.objectId),
               )
           ],
         ),

@@ -485,6 +485,8 @@ abstract class Message implements Built<Message, MessageBuilder> {
   @BuiltValueField(serialize: false)
   bool get downloading;
 
+  bool get isNew => timeRead == null;
+
   static Serializer<Message> get serializer => _$messageSerializer;
   Message._();
   factory Message([updates(MessageBuilder b)]) = _$Message;

@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/routing_actions.dart';
 
 import '../actions/messages_actions.dart';
 import '../app_state.dart';
@@ -11,6 +12,7 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   (b) => b.messagesState,
 )
   ..add(MessagesActionsNames.loaded, _loaded)
+  ..add(RoutingActionsNames.showMessage, _showMessage)
   ..add(MessagesActionsNames.fileAvailable, _fileAvailable)
   ..add(MessagesActionsNames.downloadFile, _downloadFile)
   ..add(MessagesActionsNames.markAsRead, _markAsRead);
@@ -18,6 +20,11 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 void _loaded(
     MessagesState state, Action<Object> action, MessagesStateBuilder builder) {
   return builder.replace(_parseMessages(action.payload, state));
+}
+
+void _showMessage(
+    MessagesState state, Action<int> action, MessagesStateBuilder builder) {
+  builder..showMessage = action.payload;
 }
 
 void _downloadFile(
@@ -39,6 +46,9 @@ void _fileAvailable(
 
 void _markAsRead(
     MessagesState state, Action<int> action, MessagesStateBuilder builder) {
+  if (action.payload == state.showMessage) {
+    builder.showMessage = null;
+  }
   builder.messages[state.messages.indexWhere((m) => m.id == action.payload)] =
       state.messages
           .firstWhere(
