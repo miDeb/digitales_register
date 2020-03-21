@@ -45,15 +45,28 @@ class QuillDeltaViewer extends StatelessWidget {
   }
 
   List<Operation> removeLastNewline(List<Operation> operations) {
-    operations.removeLast();
-    final last = operations.removeLast();
+    while (operations.last.data.isEmpty) {
+      operations.removeLast();
+    }
     return operations
       ..add(
-        Operation.insert(
-          last.data.substring(0, last.data.length - 1),
-          last.attributes,
+        removeTrailingNewline(
+          operations.removeLast(),
         ),
       );
+  }
+
+  Operation removeTrailingNewline(Operation operation) {
+    if (operation.data.lastIndexOf("\n") == operation.data.length - 1) {
+      return Operation.insert(
+        operation.data.substring(
+          0,
+          operation.data.length - 1,
+        ),
+      );
+    } else {
+      return operation;
+    }
   }
 
   Widget render(List<Operation> ops, BuildContext context) {
