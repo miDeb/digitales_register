@@ -67,6 +67,7 @@ void run() {
           },
           themedWidgetBuilder: (context, theme) => MaterialApp(
             localizationsDelegates: [
+              GlobalCupertinoLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
