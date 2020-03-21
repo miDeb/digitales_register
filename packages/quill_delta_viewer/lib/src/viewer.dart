@@ -71,10 +71,27 @@ class QuillDeltaViewer extends StatelessWidget {
 
   Widget render(List<Operation> ops, BuildContext context) {
     var reversed = ops.reversed.toList();
-    final widgets = <InlineSpan>[];
+    final widgets = <Widget>[];
+    var spans = <InlineSpan>[];
+
+    /// Whether we previously rendered a block.
+    /// blocks always go to a new line automatically, so _one_
+    /// newline in front should be removed
+    var renderedBlock = false;
+
     for (var i = 0; i < reversed.length; i++) {
-      final op = reversed[i];
+      var op = reversed[i];
       if (op.data == "\n") {
+        if (spans.isNotEmpty) {
+          widgets.add(
+            Text.rich(
+              TextSpan(
+                children: spans.reversed.toList(),
+              ),
+            ),
+          );
+          spans = [];
+        }
         var use = <Operation>[];
         while (
             reversed.length > i + 1 && !reversed[i + 1].data.endsWith("\n")) {
@@ -83,35 +100,58 @@ class QuillDeltaViewer extends StatelessWidget {
         }
         use = use.reversed.toList();
         widgets.add(renderBlock(use..add(op), context));
+        renderedBlock = true;
       } else {
-        widgets.add(renderText(op, context));
+        if (renderedBlock) {
+          op = removeTrailingNewline(op);
+        }
+        spans.add(renderText(op, context));
+        renderedBlock = false;
       }
     }
-    return Text.rich(
-      TextSpan(
-        children: widgets.reversed.toList(),
-      ),
+    if (spans.isNotEmpty) {
+      widgets.add(
+        Text.rich(
+          TextSpan(
+            children: spans.reversed.toList(),
+          ),
+        ),
+      );
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: widgets.reversed.toList(),
     );
   }
 
-  InlineSpan renderBlock(List<Operation> ops, BuildContext context) {
+  Widget renderBlock(List<Operation> ops, BuildContext context) {
     final blockOperation = ops.last;
 
     bool list = false;
     if (blockOperation.attributes != null) {
       list = blockOperation.attributes["list"] != null;
     }
-    final text = ops.map((e) => renderText(e, context)).toList();
+    final text = Text.rich(
+      TextSpan(
+        children: removeLastNewline(ops)
+            .map(
+              (e) => renderText(e, context),
+            )
+            .toList(),
+      ),
+    );
 
     if (list) {
-      return TextSpan(
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextSpan(text: "• "),
-          ...text,
+          Text("•"),
+          SizedBox(width: 2.5),
+          Expanded(child: text),
         ],
       );
     }
-    return TextSpan(children: text);
+    return text;
   }
 
   TextSpan renderText(Operation op, BuildContext context) {
