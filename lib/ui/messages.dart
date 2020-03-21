@@ -90,6 +90,7 @@ class _MessageWidgetState extends State<MessageWidget> {
     initiallyExpanded = widget.expand;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     if (initiallyExpanded) {
