@@ -153,14 +153,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   ),
                   onPressed: () async {
                     final result = await showDatePicker(
-                        context: context,
-                        firstDate: DateTime(2018),
-                        lastDate: DateTime(2050),
-                        initialDate: widget.vm.currentMonday,
-                        selectableDayPredicate: (final day) {
-                          return day.weekday != DateTime.sunday &&
-                              day.weekday != DateTime.saturday;
-                        });
+                      context: context,
+                      firstDate: DateTime(2018),
+                      lastDate: DateTime(2050),
+                      initialDate: widget.vm.currentMonday,
+                      selectableDayPredicate: (final day) {
+                        return day.weekday != DateTime.sunday &&
+                            day.weekday != DateTime.saturday;
+                      },
+                    );
                     if (result == null) return;
                     final date = toMonday(result);
                     if (date != widget.vm.currentMonday) {
