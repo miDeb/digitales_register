@@ -1,4 +1,4 @@
-package com.example.dr
+package it.digitalesregisterapp
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
