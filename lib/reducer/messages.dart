@@ -77,7 +77,7 @@ MessagesState _parseMessages(json, MessagesState state) {
       ..fileName = m["fileName"]
       ..fileOriginalName = m["fileOriginalName"]
       ..id = m["id"];
-    final oldMessage = state.messages.firstWhere(
+    final oldMessage = state?.messages?.firstWhere(
       (m) => m.id == message.id,
       orElse: () => null,
     );
