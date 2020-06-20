@@ -138,141 +138,147 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              if (!widget.vm.changePass) ...[
-                                if (nonCustomServer == null)
-                                  TextField(
-                                    decoration:
-                                        InputDecoration(labelText: 'Adresse'),
-                                    controller: _urlController,
-                                    enabled: !widget.vm.loading,
-                                    autofocus: !urlFromVM,
-                                    keyboardType: TextInputType.url,
+                          child: AutofillGroup(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                if (!widget.vm.changePass) ...[
+                                  if (nonCustomServer == null)
+                                    TextField(
+                                      decoration:
+                                          InputDecoration(labelText: 'Adresse'),
+                                      controller: _urlController,
+                                      enabled: !widget.vm.loading,
+                                      autofocus: !urlFromVM,
+                                      keyboardType: TextInputType.url,
+                                    ),
+                                  Divider(),
+                                ],
+                                TextField(
+                                  autofillHints: [AutofillHints.username],
+                                  decoration: InputDecoration(
+                                      labelText: 'Benutzername'),
+                                  controller: _usernameController,
+                                  enabled: !widget.vm.loading,
+                                ),
+                                TextField(
+                                  autofillHints: [AutofillHints.password],
+                                  decoration: InputDecoration(
+                                      labelText: widget.vm.changePass
+                                          ? 'Altes Passwort'
+                                          : 'Passwort'),
+                                  controller: _passwordController,
+                                  obscureText: true,
+                                  enabled: !widget.vm.loading,
+                                ),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: FlatButton(
+                                    child: Text(
+                                      "Passwort vergessen",
+                                    ),
+                                    textColor: Colors.grey,
+                                    onPressed: widget.onRequestPassReset,
                                   ),
+                                ),
+                                if (widget.vm.changePass) ...[
+                                  SizedBox(
+                                    height: 8,
+                                  ),
+                                  if (widget.vm.mustChangePass)
+                                    ListTile(
+                                      contentPadding: EdgeInsets.zero,
+                                      title: Text(
+                                        "Du musst dein Passwort ändern:",
+                                      ),
+                                    ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      border: Border.all(
+                                        color: Colors.grey,
+                                        width: 0,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(8),
+                                    child: Text(
+                                      "Das neue Passwort muss:\n"
+                                      "- mindestens 10 Zeichen lang sein\n"
+                                      "- mindestens einen Großbuchstaben enthalten\n"
+                                      "- mindestens einen Kleinbuchstaben enthalten\n"
+                                      "- mindestens eine Zahl enthalten\n"
+                                      "- mindestens ein Sonderzeichen enthalten\n"
+                                      "- nicht mit dem alten Passwort übereinstimmen",
+                                    ),
+                                  ),
+                                  TextField(
+                                    autofillHints: [AutofillHints.newPassword],
+                                    decoration: InputDecoration(
+                                        labelText: 'Neues Passwort'),
+                                    controller: _newPassword1Controller,
+                                    obscureText: true,
+                                    enabled: !widget.vm.loading,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        newPasswordsMatch =
+                                            _newPassword1Controller.text ==
+                                                _newPassword2Controller.text;
+                                      });
+                                    },
+                                  ),
+                                  TextField(
+                                    autofillHints: [AutofillHints.newPassword],
+                                    decoration: InputDecoration(
+                                      labelText: 'Neues Passwort wiederholen',
+                                      errorText: newPasswordsMatch
+                                          ? null
+                                          : "Die neuen Passwörter stimmen nicht überein",
+                                    ),
+                                    controller: _newPassword2Controller,
+                                    obscureText: true,
+                                    enabled: !widget.vm.loading,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        newPasswordsMatch =
+                                            _newPassword1Controller.text ==
+                                                _newPassword2Controller.text;
+                                      });
+                                    },
+                                  ),
+                                ],
+                                SizedBox(height: 8),
+                                RaisedButton(
+                                  onPressed: widget.vm.loading ||
+                                          !newPasswordsMatch
+                                      ? null
+                                      : () {
+                                          widget.setSaveNoPass(safeMode);
+                                          if (widget.vm.changePass) {
+                                            widget.onChangePass(
+                                              _usernameController.text,
+                                              _passwordController.text,
+                                              _newPassword1Controller.text,
+                                              nonCustomServer?.item2 ??
+                                                  _urlController.text,
+                                            );
+                                          } else {
+                                            widget.onLogin(
+                                              _usernameController.value.text,
+                                              _passwordController.value.text,
+                                              nonCustomServer?.item2 ??
+                                                  _urlController.text,
+                                            );
+                                          }
+                                        },
+                                  child: Text(
+                                    widget.vm.changePass
+                                        ? 'Passwort ändern'
+                                        : 'Login',
+                                  ),
+                                ),
                                 Divider(),
                               ],
-                              TextField(
-                                decoration:
-                                    InputDecoration(labelText: 'Benutzername'),
-                                controller: _usernameController,
-                                enabled: !widget.vm.loading,
-                              ),
-                              TextField(
-                                decoration: InputDecoration(
-                                    labelText: widget.vm.changePass
-                                        ? 'Altes Passwort'
-                                        : 'Passwort'),
-                                controller: _passwordController,
-                                obscureText: true,
-                                enabled: !widget.vm.loading,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: FlatButton(
-                                  child: Text(
-                                    "Passwort vergessen",
-                                  ),
-                                  textColor: Colors.grey,
-                                  onPressed: widget.onRequestPassReset,
-                                ),
-                              ),
-                              if (widget.vm.changePass) ...[
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                if (widget.vm.mustChangePass)
-                                  ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    title: Text(
-                                      "Du musst dein Passwort ändern:",
-                                    ),
-                                  ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 0,
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.all(8),
-                                  child: Text(
-                                    "Das neue Passwort muss:\n"
-                                    "- mindestens 10 Zeichen lang sein\n"
-                                    "- mindestens einen Großbuchstaben enthalten\n"
-                                    "- mindestens einen Kleinbuchstaben enthalten\n"
-                                    "- mindestens eine Zahl enthalten\n"
-                                    "- mindestens ein Sonderzeichen enthalten\n"
-                                    "- nicht mit dem alten Passwort übereinstimmen",
-                                  ),
-                                ),
-                                TextField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Neues Passwort'),
-                                  controller: _newPassword1Controller,
-                                  obscureText: true,
-                                  enabled: !widget.vm.loading,
-                                  onChanged: (_) {
-                                    setState(() {
-                                      newPasswordsMatch =
-                                          _newPassword1Controller.text ==
-                                              _newPassword2Controller.text;
-                                    });
-                                  },
-                                ),
-                                TextField(
-                                  decoration: InputDecoration(
-                                    labelText: 'Neues Passwort wiederholen',
-                                    errorText: newPasswordsMatch
-                                        ? null
-                                        : "Die neuen Passwörter stimmen nicht überein",
-                                  ),
-                                  controller: _newPassword2Controller,
-                                  obscureText: true,
-                                  enabled: !widget.vm.loading,
-                                  onChanged: (_) {
-                                    setState(() {
-                                      newPasswordsMatch =
-                                          _newPassword1Controller.text ==
-                                              _newPassword2Controller.text;
-                                    });
-                                  },
-                                ),
-                              ],
-                              SizedBox(height: 8),
-                              RaisedButton(
-                                onPressed:
-                                    widget.vm.loading || !newPasswordsMatch
-                                        ? null
-                                        : () {
-                                            widget.setSaveNoPass(safeMode);
-                                            if (widget.vm.changePass) {
-                                              widget.onChangePass(
-                                                _usernameController.text,
-                                                _passwordController.text,
-                                                _newPassword1Controller.text,
-                                                nonCustomServer?.item2 ??
-                                                    _urlController.text,
-                                              );
-                                            } else {
-                                              widget.onLogin(
-                                                _usernameController.value.text,
-                                                _passwordController.value.text,
-                                                nonCustomServer?.item2 ??
-                                                    _urlController.text,
-                                              );
-                                            }
-                                          },
-                                child: Text(
-                                  widget.vm.changePass
-                                      ? 'Passwort ändern'
-                                      : 'Login',
-                                ),
-                              ),
-                              Divider(),
-                            ],
+                            ),
                           ),
                         ),
                         SwitchListTile(

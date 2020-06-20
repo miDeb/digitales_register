@@ -25,36 +25,40 @@ class _RequestPassResetState extends State<RequestPassReset> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              TextField(
-                controller: _usernameController,
-                decoration: InputDecoration(labelText: 'Benutzername'),
-              ),
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email-Adresse'),
-              ),
-              SizedBox(height: 16),
-              RaisedButton(
-                child: Text("Anfrage zum Zurücksetzen senden"),
-                onPressed: () => widget.resetPass(
-                  _usernameController.text,
-                  _emailController.text,
+          child: AutofillGroup(
+            child: ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                TextField(
+                  autofillHints: [AutofillHints.username],
+                  controller: _usernameController,
+                  decoration: InputDecoration(labelText: 'Benutzername'),
                 ),
-              ),
-              SizedBox(height: 16),
-              if (widget.message != null)
-                Center(
-                  child: Text(
-                    widget.message,
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                        color: widget.failure ? Colors.red : Colors.green),
+                TextField(
+                  autofillHints: [AutofillHints.email],
+                  keyboardType: TextInputType.emailAddress,
+                  controller: _emailController,
+                  decoration: InputDecoration(labelText: 'Email-Adresse'),
+                ),
+                SizedBox(height: 16),
+                RaisedButton(
+                  child: Text("Anfrage zum Zurücksetzen senden"),
+                  onPressed: () => widget.resetPass(
+                    _usernameController.text,
+                    _emailController.text,
                   ),
-                )
-            ],
+                ),
+                SizedBox(height: 16),
+                if (widget.message != null)
+                  Center(
+                    child: Text(
+                      widget.message,
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          color: widget.failure ? Colors.red : Colors.green),
+                    ),
+                  )
+              ],
+            ),
           ),
         ),
       ),
