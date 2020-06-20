@@ -56,7 +56,7 @@ class NotificationPage extends StatelessWidget {
           : Center(
               child: Text(
                 "Keine Benachrichtigungen",
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
             ),
     );
@@ -96,7 +96,7 @@ class NotificationWidget extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       notification.title,
-                      style: Theme.of(context).textTheme.subhead,
+                      style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
                   if (!isNullOrEmpty(notification.subTitle))
@@ -104,7 +104,7 @@ class NotificationWidget extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         notification.subTitle,
-                        style: Theme.of(context).textTheme.body1,
+                        style: Theme.of(context).textTheme.bodyText2,
                       ),
                     ),
                   Padding(

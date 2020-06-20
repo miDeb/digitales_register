@@ -50,7 +50,7 @@ class _RequestPassResetState extends State<RequestPassReset> {
                 Center(
                   child: Text(
                     widget.message,
-                    style: Theme.of(context).textTheme.body1.copyWith(
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
                         color: widget.failure ? Colors.red : Colors.green),
                   ),
                 )

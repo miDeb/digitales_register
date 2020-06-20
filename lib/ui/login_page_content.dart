@@ -292,7 +292,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   widget.vm.error,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .body1
+                                      .bodyText2
                                       .copyWith(color: Colors.red),
                                 )
                               : SizedBox(),

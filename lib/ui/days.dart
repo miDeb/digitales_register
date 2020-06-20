@@ -284,7 +284,7 @@ class _DaysListWidgetState extends State<DaysListWidget> {
                 return Center(
                   child: Text(
                     "Keine Einträge vorhanden",
-                    style: Theme.of(context).textTheme.display1,
+                    style: Theme.of(context).textTheme.headline4,
                     textAlign: TextAlign.center,
                   ),
                 );
@@ -397,7 +397,7 @@ class DayWidget extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     day.displayName,
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
               ),

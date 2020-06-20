@@ -109,7 +109,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           Expanded(
             child: Text(
               widget.message.subject,
-              style: textTheme.subhead,
+              style: textTheme.subtitle1,
             ),
           ),
           if (widget.message.isNew || initiallyExpanded)

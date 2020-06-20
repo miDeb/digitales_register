@@ -40,11 +40,11 @@ class AbsenceGroupWidget extends StatelessWidget {
             ],
             Text(
               vm.fromTo,
-              style: Theme.of(context).textTheme.subhead,
+              style: Theme.of(context).textTheme.subtitle1,
             ),
             Text(
               vm.duration,
-              style: Theme.of(context).textTheme.body1,
+              style: Theme.of(context).textTheme.bodyText2,
             ),
             Row(
               children: <Widget>[
