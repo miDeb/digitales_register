@@ -152,13 +152,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     keyboardType: TextInputType.url,
                                   ),
                                 Divider(),
-                                TextField(
-                                  decoration: InputDecoration(
-                                      labelText: 'Benutzername'),
-                                  controller: _usernameController,
-                                  enabled: !widget.vm.loading,
-                                ),
                               ],
+                              TextField(
+                                decoration:
+                                    InputDecoration(labelText: 'Benutzername'),
+                                controller: _usernameController,
+                                enabled: !widget.vm.loading,
+                              ),
                               TextField(
                                 decoration: InputDecoration(
                                     labelText: widget.vm.changePass

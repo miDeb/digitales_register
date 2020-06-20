@@ -56,6 +56,7 @@ void _logout(
 void _changePass(
     LoginState state, Action<bool> action, LoginStateBuilder builder) {
   builder
+    ..loading = false
     ..changePassword = true
     ..mustChangePassword = action.payload;
 }
