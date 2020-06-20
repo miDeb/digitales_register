@@ -76,7 +76,7 @@ void _loadGradesDetails(
         api.actions.refreshNoInternet();
         return;
       }
-      if (data is String){
+      if (data is String) {
         data = json.decode(data);
       }
       api.actions.gradesActions.detailsLoaded(

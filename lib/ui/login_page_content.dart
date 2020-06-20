@@ -39,13 +39,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
       _newPassword1Controller = TextEditingController(),
       _newPassword2Controller = TextEditingController(),
       _urlController = TextEditingController.fromValue(
-    TextEditingValue(
-      text: "https://.digitalesregister.it",
-      selection: TextSelection.fromPosition(
-        TextPosition(offset: 8),
-      ),
-    ),
-  );
+        TextEditingValue(
+          text: "https://.digitalesregister.it",
+          selection: TextSelection.fromPosition(
+            TextPosition(offset: 8),
+          ),
+        ),
+      );
   bool safeMode;
   bool customUrl = false;
   bool urlFromVM = false;
