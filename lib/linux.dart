@@ -36,7 +36,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
   @override
   Future<void> delete(
       {String key,
-      secure_storage.iOSOptions iOptions,
+      dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.remove(key);
@@ -45,7 +45,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<void> deleteAll(
-      {secure_storage.iOSOptions iOptions,
+      {dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.clear();
@@ -55,7 +55,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
   @override
   Future<String> read(
       {String key,
-      secure_storage.iOSOptions iOptions,
+      dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return _storage[key];
@@ -63,7 +63,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<Map<String, String>> readAll(
-      {secure_storage.iOSOptions iOptions,
+      {dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return Map.of(_storage);
@@ -73,7 +73,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<void> write(
       {String key,
       String value,
-      secure_storage.iOSOptions iOptions,
+      dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage[key] = value;
