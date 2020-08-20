@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../container/settings_page.dart';
 import 'dialog.dart';
@@ -366,12 +368,24 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 child: Image.asset("assets/transparent.png"),
                 width: 100,
               ),
+              applicationLegalese:
+                  "Michael Debertol 2019-2020\nReleased under GNU GPLv3",
               applicationName: "Digitales Register (Client)",
               applicationVersion: info.hasData
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
-                Text("Alternativer Client für das Digitale Register.")
+                Text("Alternativer Client für das Digitale Register."),
+                RichText(
+                  text: new TextSpan(
+                    text: "Source Code: https://gitlab.com/michael.debertol/dr",
+                    style: new TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () => launch(
+                            "https://gitlab.com/michael.debertol/dr",
+                          ),
+                  ),
+                ),
               ],
             ),
           ),
