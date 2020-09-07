@@ -53,10 +53,8 @@ CalendarHourBuilder _parseHour(hour) {
   final lesson = hour["lesson"];
   return CalendarHourBuilder()
     ..description = lesson["description"]
-    ..exam = lesson["exam"]["name"]
     ..fromHour = lesson["hour"]
     ..toHour = lesson["toHour"]
-    ..homework = lesson["homework"]["name"] ?? ""
     ..rooms = ListBuilder((lesson["rooms"] as List).map((r) => r["name"]))
     ..subject = lesson["subject"]["name"]
     ..teachers = ListBuilder(
@@ -67,5 +65,21 @@ CalendarHourBuilder _parseHour(hour) {
             ..lastName = r["lastName"],
         ),
       ),
+    )
+    ..homeworkExams = ListBuilder(
+      (lesson["homeworkExams"] as List).map(_parseHomeworkExam),
     );
+}
+
+HomeworkExam _parseHomeworkExam(homeworkExam) {
+  return HomeworkExam((b) => b
+    ..deadline = DateTime.parse(homeworkExam["deadline"])
+    ..hasGradeGroupSubmissions = homeworkExam["hasGradeGroupSubmissions"]
+    ..hasGrades = homeworkExam["hasGrades"]
+    ..homework = homeworkExam["homework"] != 0
+    ..id = homeworkExam["id"]
+    ..name = homeworkExam["name"]
+    ..online = homeworkExam["online"] != 0
+    ..typeId = homeworkExam["typeId"]
+    ..typeName = homeworkExam["typeName"]);
 }

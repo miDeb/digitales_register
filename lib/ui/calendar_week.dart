@@ -127,28 +127,15 @@ class HourWidget extends StatelessWidget {
             builder: (_) {
               final items = [
                 if (hour.hasDescription) Text(hour.description),
-                if (hour.hasHomework)
+                for (HomeworkExam homeworkExam in hour.homeworkExams)
                   RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: "Hausaufgabe: ",
+                          text: homeworkExam.typeName + ": ",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        TextSpan(text: hour.homework),
-                      ],
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-                if (hour.hasExam)
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Test: ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: hour.exam),
+                        TextSpan(text: homeworkExam.name),
                       ],
                       style: DefaultTextStyle.of(context).style,
                     ),
@@ -240,13 +227,14 @@ class HourWidget extends StatelessWidget {
               ],
             ),
           ),
-          decoration: hour.hasExam
+          // TODO: Figure out how to detect exams
+          /*decoration: hour.hasExam
               ? BoxDecoration(
                   border: Border(
                     left: BorderSide(color: Colors.red, width: 5),
                   ),
                 )
-              : null,
+              : null,*/
         ),
       ),
     );

@@ -441,13 +441,8 @@ abstract class CalendarHour
   @nullable
   String get description;
   String get subject;
-  @nullable
-  String get exam;
+  BuiltList<HomeworkExam> get homeworkExams;
   int get lenght => toHour - fromHour + 1;
-  @nullable
-  String get homework;
-  bool get hasExam => !isNullOrEmpty(exam);
-  bool get hasHomework => !isNullOrEmpty(homework);
   bool get hasDescription => !isNullOrEmpty(description);
 
   BuiltList<Teacher> get teachers;
@@ -466,6 +461,22 @@ abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   static Serializer<Teacher> get serializer => _$teacherSerializer;
   Teacher._();
   factory Teacher([updates(TeacherBuilder b)]) = _$Teacher;
+}
+
+abstract class HomeworkExam
+    implements Built<HomeworkExam, HomeworkExamBuilder> {
+  int get id;
+  String get name;
+  bool get homework;
+  bool get online;
+  DateTime get deadline;
+  bool get hasGrades;
+  bool get hasGradeGroupSubmissions;
+  int get typeId;
+  String get typeName;
+  static Serializer<HomeworkExam> get serializer => _$homeworkExamSerializer;
+  HomeworkExam._();
+  factory HomeworkExam([updates(HomeworkExamBuilder b)]) = _$HomeworkExam;
 }
 
 abstract class Message implements Built<Message, MessageBuilder> {
