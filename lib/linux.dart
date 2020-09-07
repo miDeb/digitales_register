@@ -45,8 +45,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<void> deleteAll(
-      {dynamic iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.clear();
     _syncToFileSystem();
@@ -63,8 +62,7 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<Map<String, String>> readAll(
-      {dynamic iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     return Map.of(_storage);
   }
