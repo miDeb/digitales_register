@@ -207,13 +207,12 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.savePassActions.save();
   }
   _deletedData = false;
-  final userKey = action.payload.username.hashCode.toString();
+  final key = _getStorageKey(action.payload.username, _wrapper.loginAddress);
   if (!api.state.loginState.loggedIn) {
-    final file = await _storageFile(userKey);
-    if (await file.exists()) {
+    final state = await _readFromStorage(key);
+    if (state != null) {
       try {
-        final serializedState =
-            serializers.deserialize(json.decode(await file.readAsString()));
+        final serializedState = serializers.deserialize(json.decode(state));
         if (serializedState is SettingsState) {
           api.actions.mountAppState(
             api.state.rebuild(
@@ -269,8 +268,10 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 var _saveUnderway = false;
 
 var _lastSave = "";
-var _lastUsernameSaved = "".hashCode;
+String _lastUsernameSaved;
 AppState _stateToSave;
+// This is to avoid saving data in an action right after deleting data,
+// which would restore it.
 bool _deletedData = false;
 
 NextActionHandler _saveStateMiddleware(
@@ -285,7 +286,8 @@ NextActionHandler _saveStateMiddleware(
             if (_saveUnderway && !immediately) {
               return;
             }
-            final user = _stateToSave.loginState.username.hashCode;
+            final user = _getStorageKey(
+                _stateToSave.loginState.username, _wrapper.loginAddress);
             _saveUnderway = true;
 
             void save() {
@@ -304,7 +306,7 @@ NextActionHandler _saveStateMiddleware(
               _lastSave = toSave;
               _lastUsernameSaved = user;
               _writeToStorage(
-                user.toString(),
+                user,
                 toSave,
               );
             }
@@ -316,17 +318,16 @@ NextActionHandler _saveStateMiddleware(
           }
         };
 
-Future<File> _storageFile(String key) async {
-  return File(
-      "${(await getApplicationDocumentsDirectory()).path}/app_state_$key.json");
+String _getStorageKey(String user, String server) {
+  return json.encode({"username": user, "server_url": server});
 }
 
 void _writeToStorage(String key, String txt) async {
-  final file = await _storageFile(key);
-  if (!await file.exists()) {
-    await file.create();
-  }
-  (await _storageFile(key)).writeAsString(txt);
+  await _secureStorage.write(key: key, value: txt);
+}
+
+Future<String> _readFromStorage(String key) async {
+  return await _secureStorage.read(key: key);
 }
 
 void _saveNoData(

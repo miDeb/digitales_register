@@ -16,7 +16,7 @@ typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
   final dio = Dio()..interceptors.add(CookieManager(CookieJar()));
-  String get _loginAddress => "$baseAddress/api/auth/login";
+  String get loginAddress => "$baseAddress/api/auth/login";
   String get baseAddress => "$url/v2";
   String user, pass, url;
 
@@ -90,7 +90,7 @@ class Wrapper {
     _clearCookies();
     try {
       response = (await dio.post(
-        _loginAddress,
+        loginAddress,
         data: {"username": user, "password": pass},
       ))
           .data;
