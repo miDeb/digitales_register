@@ -143,6 +143,7 @@ class Wrapper {
     if (response["error"] != null) {
       error = "[${response["error"]}] ${response["message"]}";
     } else {
+      _loggedIn = false;
       this.user = user;
       this.pass = newPass;
       error = null;

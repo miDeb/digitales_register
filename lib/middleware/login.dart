@@ -101,6 +101,7 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     action.payload.oldPass,
     action.payload.newPass,
   );
+  api.actions.savePassActions.save();
   if (result == null) {
     api.actions.refreshNoInternet();
     return;

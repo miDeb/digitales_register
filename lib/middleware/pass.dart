@@ -42,7 +42,8 @@ void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   next(action);
-  if (_wrapper.user == null || _wrapper.pass == null) return;
+  if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode)
+    return;
   _secureStorage.write(
     key: "login",
     value: json.encode(
