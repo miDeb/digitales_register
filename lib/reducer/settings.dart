@@ -28,6 +28,8 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(SettingsActionsNames.showAllSubjectsAverage, _allSubjectsAverage)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries,
       _markNotSeenDashboardEntries)
+  ..add(SettingsActionsNames.deduplicateDashboardEntries,
+      _deduplicateDashboardEntries)
   ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
   ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig);
 
@@ -106,6 +108,11 @@ void _setGradeGraphConfig(
 void _markNotSeenDashboardEntries(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.dashboardMarkNewOrChangedEntries = action.payload;
+}
+
+void _deduplicateDashboardEntries(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.dashboardDeduplicateEntries = action.payload;
 }
 
 void _updateGradeGraphConfigs(SettingsState state,

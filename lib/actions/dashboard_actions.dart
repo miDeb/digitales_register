@@ -34,6 +34,7 @@ abstract class DaysLoadedPayload
   Object get data;
   bool get future;
   bool get markNewOrChangedEntries;
+  bool get deduplicateEntries;
 }
 
 abstract class HomeworkAddedPayload

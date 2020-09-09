@@ -41,6 +41,8 @@ class SettingsPageContainer extends StatelessWidget {
               actions.settingsActions.showAllSubjectsAverage,
           onSetDashboardMarkNewOrChangedEntries:
               actions.settingsActions.markNotSeenDashboardEntries,
+          onSetDashboardDeduplicateEntries:
+              actions.settingsActions.deduplicateDashboardEntries,
           onShowProfile: actions.routingActions.showProfile,
         );
       },
@@ -64,6 +66,7 @@ class SettingsViewModel {
   final bool showGradesDiagram;
   final bool showAllSubjectsAverage;
   final bool dashboardMarkNewOrChangedEntries;
+  final bool dashboardDeduplicateEntries;
   final bool showSubjectNicks;
   final List<String> allSubjects;
   SettingsViewModel(AppState state)
@@ -79,6 +82,8 @@ class SettingsViewModel {
         showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
         dashboardMarkNewOrChangedEntries =
             state.settingsState.dashboardMarkNewOrChangedEntries,
+        dashboardDeduplicateEntries =
+            state.settingsState.dashboardDeduplicateEntries,
         allSubjects = extractAllSubjects(state);
 
   static List<String> extractAllSubjects(AppState appState) {

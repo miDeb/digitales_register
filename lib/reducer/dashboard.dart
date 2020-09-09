@@ -28,7 +28,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
   List<Day> loadedDays = List.from(
     (action.payload.data as List).map(
-      (d) => _parseDay(d),
+      (d) => _parseDay(d, action.payload.deduplicateEntries),
     ),
   );
 
@@ -131,11 +131,25 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
   builder..loading = false;
 }
 
-Day _parseDay(data) {
+Day _parseDay(data, bool deduplicate) {
+  final ListBuilder<Homework> items =
+      ListBuilder(data["items"].map((m) => _parseHomework(m)));
+  if (deduplicate) {
+    for (var i = 0; i < items.length; i++) {
+      final item = items[i];
+      for (var ii = i + 1; ii < items.length;) {
+        if (items[ii].serverEquals(item)) {
+          items.removeAt(ii);
+        } else {
+          ii++;
+        }
+      }
+    }
+  }
+
   return Day((b) => b
     ..date = DateTime.parse(data["date"])
-    ..homework = ListBuilder((List<Map<String, dynamic>>.from(data["items"]))
-        .map((m) => _parseHomework(m))));
+    ..homework = items);
 }
 
 Homework _parseHomework(data) {

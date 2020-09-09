@@ -23,5 +23,6 @@ abstract class SettingsActions extends ReduxActions {
   ActionDispatcher<bool> showGradesDiagram;
   ActionDispatcher<bool> showAllSubjectsAverage;
   ActionDispatcher<bool> markNotSeenDashboardEntries;
+  ActionDispatcher<bool> deduplicateDashboardEntries;
   ActionDispatcher<bool> showCalendarSubjectNicksBar;
 }

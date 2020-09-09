@@ -22,6 +22,7 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetShowGradesDiagram;
   final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
   final OnSettingChanged<bool> onSetDashboardMarkNewOrChangedEntries;
+  final OnSettingChanged<bool> onSetDashboardDeduplicateEntries;
   final OnSettingChanged<bool> onSetDarkMode;
   final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
@@ -40,6 +41,7 @@ class SettingsPageWidget extends StatefulWidget {
     this.onSetShowGradesDiagram,
     this.onSetShowAllSubjectsAverage,
     this.onSetDashboardMarkNewOrChangedEntries,
+    this.onSetDashboardDeduplicateEntries,
     this.onSetDarkMode,
     this.onSetSubjectNicks,
     this.vm,
@@ -182,6 +184,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               widget.onSetDashboardMarkNewOrChangedEntries(value);
             },
             value: widget.vm.dashboardMarkNewOrChangedEntries,
+          ),
+          SwitchListTile(
+            title: Text("Doppelte Einträge ignorieren"),
+            onChanged: (bool value) {
+              widget.onSetDashboardDeduplicateEntries(value);
+            },
+            value: widget.vm.dashboardDeduplicateEntries,
           ),
           SwitchListTile(
             title: Text("Beim Löschen von Erinnerungen fragen"),

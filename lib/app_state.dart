@@ -235,6 +235,7 @@ abstract class SettingsState
   bool get showGradesDiagram;
   bool get showAllSubjectsAverage;
   bool get dashboardMarkNewOrChangedEntries;
+  bool get dashboardDeduplicateEntries;
   BuiltMap<int, SubjectGraphConfig> get graphConfigs;
 
   SettingsState._();
@@ -267,6 +268,7 @@ abstract class SettingsState
       ..showGradesDiagram = true
       ..showAllSubjectsAverage = true
       ..dashboardMarkNewOrChangedEntries = true
+      ..dashboardDeduplicateEntries = true
       ..graphConfigs = MapBuilder<int, SubjectGraphConfig>();
   }
 }
