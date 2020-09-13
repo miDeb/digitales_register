@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -258,14 +259,14 @@ class Wrapper {
       await _handleError(e);
       onAddProtocolItem(NetworkProtocolItem((b) => b
         ..address = baseAddress + url
-        ..response = e.toString()
-        ..parameters = args.toString()));
+        ..response = stringifyMaybeJson(response)
+        ..parameters = stringifyMaybeJson(args)));
       return null;
     }
     onAddProtocolItem(NetworkProtocolItem((b) => b
       ..address = baseAddress + url
-      ..response = response.toString()
-      ..parameters = args.toString()));
+      ..response = stringifyMaybeJson(response)
+      ..parameters = stringifyMaybeJson(args)));
     if (response is String && response.trim() != "") {
       //print(response);
       //throw Error();
@@ -327,4 +328,9 @@ class Wrapper {
       ..clear()
       ..add(CookieManager(CookieJar()));
   }
+}
+
+String stringifyMaybeJson(dynamic param) {
+  final encoder = JsonEncoder.withIndent("  ", (object) => object.toString());
+  return encoder.convert(param);
 }

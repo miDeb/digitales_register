@@ -53,21 +53,25 @@ class _Detail extends StatelessWidget {
   const _Detail({Key key, this.type, this.content}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            Text(type),
-            IconButton(
-              icon: Icon(Icons.assignment),
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: content));
-              },
-            )
-          ],
-        ),
-        Text(content ?? "Keine $type"),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(left: 24, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Text(type),
+              IconButton(
+                icon: Icon(Icons.assignment),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: content));
+                },
+              )
+            ],
+          ),
+          Text(content ?? "Keine $type"),
+        ],
+      ),
     );
   }
 }
