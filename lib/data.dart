@@ -98,12 +98,13 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   /// Guess whether this can be a successor of a previous [Homework]
   ///
   /// Based on:
-  ///  * everything is identical (maybe except [id])
+  ///  * everything is identical, except that the [id] can be different and the
+  ///    subtitles can be edited
+  ///
   /// or
   ///  * This is a possible replacement, bc a grade was assigned
   bool isSuccessorOf(Homework other) {
     return _isGradeReplacementOf(other) ||
-        serverEquals(other) ||
         _isIdenticalButSubtitleAmended(other);
   }
 
@@ -115,7 +116,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   bool _isGradeReplacementOf(Homework other) {
     return this.type == HomeworkType.grade &&
         other.type == HomeworkType.gradeGroup &&
-        _subtitlesAreAmended(this.subtitle, other.subtitle) &&
+        _stringsAreAmended(this.subtitle, other.subtitle) &&
         this.label == other.label;
   }
 
@@ -125,7 +126,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   bool _isIdenticalButSubtitleAmended(Homework other) {
     return deleted == other.deleted &&
         title == other.title &&
-        _subtitlesAreAmended(this.subtitle, other.subtitle) &&
+        _stringsAreAmended(this.subtitle, other.subtitle) &&
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
@@ -133,8 +134,8 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         type == other.type;
   }
 
-  /// If either subtitle [a] contains subtitle [b] or vice versa
-  static bool _subtitlesAreAmended(String a, String b) {
+  /// If either string [a] contains subtitle [b] or vice versa
+  static bool _stringsAreAmended(String a, String b) {
     return a.contains(b) || b.contains(a);
   }
 
