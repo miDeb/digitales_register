@@ -87,6 +87,8 @@ void _detailsLoaded(GradesState state,
                 data["grades"].map(
                   (g) => _parseGrade(g).rebuild(
                     (d) => d
+                      // we will also try to load the [cancelledDescription]
+                      // again, but for now keep the old one
                       ..cancelledDescription = b.grades[action.payload.semester]
                           ?.firstWhere(
                             (gd) => gd.id == d.id,
@@ -173,6 +175,7 @@ GradeDetail _parseGrade(dynamic data) {
       ..type = data["typeName"]
       ..created = data["created"]
       ..name = data["name"]
+      ..description = data["description"]
       ..id = data["id"]
       ..competences = ListBuilder(
         data["competences"]?.map(
