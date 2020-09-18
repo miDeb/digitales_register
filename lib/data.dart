@@ -342,6 +342,11 @@ abstract class GradeDetail
   String get created;
   @nullable
   String get cancelledDescription;
+
+  /// This is presented as "comment" in the ui, however I wanted to be conistent
+  /// with the api naming here.
+  @nullable
+  String get description;
 }
 
 abstract class Competence implements Built<Competence, CompetenceBuilder> {

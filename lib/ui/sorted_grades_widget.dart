@@ -165,8 +165,13 @@ class GradeWidget extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+              if (grade.description != null)
+                Text(
+                  grade.description,
+                  style: Theme.of(context).textTheme.bodyText2,
+                ),
               Text(
-                "${DateFormat("dd/MM/yy").format(grade.date)}:\n${grade.type} - ${grade.weightPercentage}%",
+                "${DateFormat("dd.MM.yy").format(grade.date)}: ${grade.type} - ${grade.weightPercentage}%",
                 style: grade.cancelled ? lineThrough : null,
               ),
               Text(
