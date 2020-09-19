@@ -19,7 +19,16 @@ class Wrapper {
   final dio = Dio()..interceptors.add(CookieManager(CookieJar()));
   String get loginAddress => "$baseAddress/api/auth/login";
   String get baseAddress => "$url/v2";
-  String user, pass, url;
+  String user, pass, _url;
+
+  String get url => _url;
+  set url(String value) {
+    if (value != _url) {
+      // we should already be logged out, but why not double check
+      logout(hard: true);
+    }
+    _url = value;
+  }
 
   bool get loggedIn => _loggedIn;
   bool _loggedIn = false;
@@ -310,16 +319,16 @@ class Wrapper {
   }
 
   void logout({@required bool hard, bool logoutForcedByServer = false}) {
+    if (!logoutForcedByServer && _url != null) {
+      dio.get("$baseAddress/logout");
+    }
     if (hard) {
-      user = pass = null;
       if (logoutForcedByServer) {
         onLogout();
       }
+      _url = user = pass = null;
     }
     _loggedIn = false;
-    if (!logoutForcedByServer) {
-      dio.get("$baseAddress/logout");
-    }
     _clearCookies();
   }
 
