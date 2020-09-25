@@ -50,6 +50,7 @@ main() {
         (b) => b
           ..future = false
           ..markNewOrChangedEntries = true
+          ..deduplicateEntries = false
           ..data = [
             {
               "items": [

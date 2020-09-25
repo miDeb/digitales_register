@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:collection';
 import 'dart:io';
 
 import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
@@ -20,18 +20,16 @@ secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
 /// Dummy implementation to run development builds on linux;
 /// not actually secure
 class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
-  Map<String, String> _storage;
+  Map<String, String> _storage = {};
+
+  /// Will complete when loading finishes
   Future _storageFuture;
+  final directory = Directory("linux/appData/secure_storage");
   LinuxSecureStorage() {
-    final file = File("linux/appData/secure_storage.lol");
-    if (!file.existsSync()) {
-      _storage = {};
-    } else {
-      (_storageFuture = File("linux/appData/secure_storage.lol").readAsString())
-          .then((string) {
-        _storage = Map.from(json.decode(string));
-      });
-    }
+    _storageFuture = directory.list().forEach((element) {
+      _storage[element.path.split("/").last.replaceAll(".json", "")] =
+          (element as File).readAsStringSync();
+    });
   }
   @override
   Future<void> delete(
@@ -40,15 +38,21 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage.remove(key);
-    _syncToFileSystem();
+
+    final file = File("linux/appData/secure_storage/${_sanitize(key)}.json");
+    if (file.existsSync()) {
+      file.deleteSync();
+    }
   }
 
   @override
   Future<void> deleteAll(
       {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
+    for (final key in _storage.keys) {
+      delete(key: key);
+    }
     _storage.clear();
-    _syncToFileSystem();
   }
 
   @override
@@ -57,14 +61,14 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
       dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
-    return _storage[key];
+    return _storage[_sanitize(key)];
   }
 
   @override
   Future<Map<String, String>> readAll(
       {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
-    return Map.of(_storage);
+    return UnmodifiableMapView(_storage);
   }
 
   @override
@@ -75,12 +79,16 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
       secure_storage.AndroidOptions aOptions}) async {
     await _storageFuture;
     _storage[key] = value;
-    _syncToFileSystem();
+
+    final file = File("linux/appData/secure_storage/${_sanitize(key)}.json");
+    if (!file.existsSync()) {
+      file.createSync();
+    }
+    file.writeAsString(value);
   }
 
-  void _syncToFileSystem() {
-    final file = File("linux/appData/secure_storage.lol");
-    file.writeAsString(json.encode(_storage));
+  String _sanitize(String key) {
+    return key.replaceAll("/", "").replaceAll('"', "");
   }
 }
 

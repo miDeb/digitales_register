@@ -207,7 +207,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.savePassActions.save();
   }
   _deletedData = false;
-  final key = _getStorageKey(action.payload.username, _wrapper.loginAddress);
+  final key = getStorageKey(action.payload.username, _wrapper.loginAddress);
   if (!api.state.loginState.loggedIn) {
     final state = await _readFromStorage(key);
     if (state != null) {
@@ -286,7 +286,7 @@ NextActionHandler _saveStateMiddleware(
             if (_saveUnderway && !immediately) {
               return;
             }
-            final user = _getStorageKey(
+            final user = getStorageKey(
                 _stateToSave.loginState.username, _wrapper.loginAddress);
             _saveUnderway = true;
 
@@ -318,7 +318,7 @@ NextActionHandler _saveStateMiddleware(
           }
         };
 
-String _getStorageKey(String user, String server) {
+String getStorageKey(String user, String server) {
   return json.encode({"username": user, "server_url": server});
 }
 
