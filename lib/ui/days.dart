@@ -482,7 +482,7 @@ class DayWidget extends StatelessWidget {
                                         child: Text(
                                           "Speichern",
                                         ),
-                                        onPressed: isNullOrEmpty(message)
+                                        onPressed: message.isNullOrEmpty
                                             ? null
                                             : () {
                                                 Navigator.pop(context, message);
@@ -603,7 +603,7 @@ class ItemWidget extends StatelessWidget {
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Text(item.title),
-                        subtitle: isNullOrEmpty(item.subtitle)
+                        subtitle: item.subtitle.isNullOrEmpty
                             ? null
                             : Text(item.subtitle),
                         leading: !isHistory && !isDeletedView && item.deleteable

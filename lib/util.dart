@@ -9,11 +9,11 @@ Widget maybeWrap(Widget widget, bool wrap, Widget wrapWidget(Widget w)) {
     return widget;
 }
 
-bool isNullOrEmpty(String s) {
-  if (s == null) return true;
-  s = s.trim();
-  if (s == "") return true;
-  return false;
+extension StringUtils on String {
+  bool get isNullOrEmpty {
+    if (this == null) return true;
+    return isEmpty;
+  }
 }
 
 DateTime toMonday(DateTime date) {

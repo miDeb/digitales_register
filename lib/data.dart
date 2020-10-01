@@ -321,6 +321,9 @@ abstract class GradeDetail
   String get gradeFormatted => _formatGrade(grade);
 
   static String _formatGrade(int grade) {
+    if (grade == null) {
+      return "";
+    }
     final mainGrade = grade ~/ 100;
     final decimals = grade % 100;
     switch (decimals) {
@@ -449,7 +452,7 @@ abstract class CalendarHour
   String get subject;
   BuiltList<HomeworkExam> get homeworkExams;
   int get lenght => toHour - fromHour + 1;
-  bool get hasDescription => !isNullOrEmpty(description);
+  bool get hasDescription => !description.isNullOrEmpty;
 
   BuiltList<Teacher> get teachers;
 

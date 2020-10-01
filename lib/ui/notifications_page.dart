@@ -99,7 +99,7 @@ class NotificationWidget extends StatelessWidget {
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
-                  if (!isNullOrEmpty(notification.subTitle))
+                  if (!notification.subTitle.isNullOrEmpty)
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(

@@ -165,7 +165,7 @@ class GradeWidget extends StatelessWidget {
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (grade.description != null)
+              if (!grade.description.isNullOrEmpty)
                 Text(
                   grade.description,
                   style: Theme.of(context).textTheme.bodyText2,
@@ -178,7 +178,7 @@ class GradeWidget extends StatelessWidget {
                 grade.created,
                 style: Theme.of(context).textTheme.caption,
               ),
-              if (grade.cancelledDescription != null)
+              if (!grade.cancelledDescription.isNullOrEmpty)
                 Text(
                   grade.cancelledDescription,
                   style: Theme.of(context).textTheme.caption,
@@ -214,7 +214,7 @@ class ObservationWidget extends StatelessWidget {
         style: observation.cancelled ? lineThrough : null,
       ),
       subtitle: Text(
-        "${DateFormat("dd/MM/yy").format(observation.date)}${isNullOrEmpty(observation.note) ? "" : ":\n${observation.note}"}",
+        "${DateFormat("dd/MM/yy").format(observation.date)}${observation.note.isNullOrEmpty ? "" : ":\n${observation.note}"}",
         style: observation.cancelled ? lineThrough : null,
       ),
     );
