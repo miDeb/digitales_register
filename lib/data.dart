@@ -72,10 +72,17 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   String get gradeFormatted;
   @nullable
   String get grade;
-  bool get warning;
+  // It's always false for tests :(. I only saw a warning for a grade entry with
+  // a 'null' grade.
+  @BuiltValueField(wireName: "warning")
+  bool get warningServerSaid;
+  // Heuristics to still show a warning when it would make sense
+  bool get warning =>
+      warningServerSaid || title == "Testarbeit" || title == "Schularbeit";
   bool get checkable;
   bool get checked;
   bool get deleteable;
+  // This seems to always be 'gradeGroup' as of 20/21
   HomeworkType get type;
   @nullable
   Homework get previousVersion;
@@ -91,7 +98,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
-        warning == other.warning &&
+        warningServerSaid == other.warningServerSaid &&
         type == other.type;
   }
 
@@ -130,7 +137,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
-        warning == other.warning &&
+        warningServerSaid == other.warningServerSaid &&
         type == other.type;
   }
 
@@ -143,7 +150,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
     ..isNew = false
     ..isChanged = false
     ..deleted = false
-    ..warning = false
+    ..warningServerSaid = false
     ..checkable = false
     ..deleteable = false
     ..deleted = false
@@ -453,6 +460,7 @@ abstract class CalendarHour
   BuiltList<HomeworkExam> get homeworkExams;
   int get lenght => toHour - fromHour + 1;
   bool get hasDescription => !description.isNullOrEmpty;
+  bool get warning => homeworkExams.any((it) => it.warning);
 
   BuiltList<Teacher> get teachers;
 
@@ -483,6 +491,7 @@ abstract class HomeworkExam
   bool get hasGradeGroupSubmissions;
   int get typeId;
   String get typeName;
+  bool get warning => typeName == "Testarbeit" || typeName == "Schularbeit";
   static Serializer<HomeworkExam> get serializer => _$homeworkExamSerializer;
   HomeworkExam._();
   factory HomeworkExam([updates(HomeworkExamBuilder b)]) = _$HomeworkExam;

@@ -159,7 +159,7 @@ Homework _parseHomework(data) {
       ..title = data["title"]
       ..subtitle = data["subtitle"]
       ..label = data["label"]
-      ..warning = data["warning"] ?? b.warning
+      ..warningServerSaid = data["warning"] ?? b.warningServerSaid
       ..checkable = data["checkable"] ?? b.checkable
       ..checked = data["checked"] is bool
           ? data["checked"]

@@ -36,7 +36,7 @@ main() {
                           ..subtitle = "Untertitel"
                           ..title = "Titel"
                           ..type = HomeworkType.lessonHomework
-                          ..warning = false,
+                          ..warningServerSaid = false,
                       ),
                     ),
                 ),
@@ -88,7 +88,7 @@ main() {
           ..subtitle = "Neuer Untertitel"
           ..title = "Neuer Titel"
           ..type = HomeworkType.lessonHomework
-          ..warning = false
+          ..warningServerSaid = false
           ..previousVersion = (HomeworkBuilder()
             ..checkable = true
             ..checked = false
@@ -103,7 +103,7 @@ main() {
             ..subtitle = "Untertitel"
             ..title = "Titel"
             ..type = HomeworkType.lessonHomework
-            ..warning = false),
+            ..warningServerSaid = false),
       ),
     );
   });

@@ -227,14 +227,13 @@ class HourWidget extends StatelessWidget {
               ],
             ),
           ),
-          // TODO: Figure out how to detect exams
-          /*decoration: hour.hasExam
+          decoration: hour.warning
               ? BoxDecoration(
                   border: Border(
                     left: BorderSide(color: Colors.red, width: 5),
                   ),
                 )
-              : null,*/
+              : null,
         ),
       ),
     );
