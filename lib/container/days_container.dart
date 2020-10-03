@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:built_collection/built_collection.dart';
 
 import '../actions/app_actions.dart';
 import '../actions/dashboard_actions.dart';
@@ -74,12 +75,12 @@ class DaysViewModel {
                     (day) => day.rebuild(
                       (b) => b
                         ..deletedHomework.where(
-                          (hw) =>
-                              !state.dashboardState.blacklist.contains(hw.type),
+                          (hw) => !isBlacklisted(
+                              hw, state.dashboardState.blacklist),
                         )
                         ..homework.where(
-                          (hw) =>
-                              !state.dashboardState.blacklist.contains(hw.type),
+                          (hw) => !isBlacklisted(
+                              hw, state.dashboardState.blacklist),
                         ),
                     ),
                   )
@@ -96,4 +97,21 @@ class DaysViewModel {
         askWhenDelete = state.settingsState.askWhenDelete,
         showAddReminder =
             !state.dashboardState.blacklist.contains(HomeworkType.homework);
+}
+
+// Map all (previously by the server used) homework types to the titles they
+// would have been used with. Probably incomplete.
+const typesToTitles = {
+  HomeworkType.grade: ["Bewertung"],
+  // TODO: What about "Prüfung" etc?
+  HomeworkType.gradeGroup: ["Testarbeit", "Schularbeit"],
+  HomeworkType.homework: ["Erinnerung"],
+  HomeworkType.lessonHomework: ["Hausaufgabe"],
+  HomeworkType.observation: ["Beobachtung"],
+};
+
+bool isBlacklisted(Homework homework, BuiltList<HomeworkType> blacklist) {
+  return blacklist.any((blacklisted) {
+    return typesToTitles[blacklisted].contains(homework.title);
+  });
 }
