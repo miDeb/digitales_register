@@ -17,7 +17,7 @@ class NotificationIcon extends StatelessWidget {
                 notifications.toString(),
                 style: TextStyle(color: Colors.white),
               ),
-              position: BadgePosition.bottomLeft(),
+              position: BadgePosition.bottomEnd(),
             ),
             onPressed: onTap,
           )

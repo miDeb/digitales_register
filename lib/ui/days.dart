@@ -418,7 +418,7 @@ class DayWidget extends StatelessWidget {
                           : Theme.of(context).scaffoldBackgroundColor,
                       toAnimate: day.deletedHomework.any((h) => h.isChanged),
                       padding: EdgeInsets.zero,
-                      position: BadgePosition.topRight(),
+                      position: BadgePosition.topStart(),
                       elevation: 0,
                     ),
                     onPressed: () {

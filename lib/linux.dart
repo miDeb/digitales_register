@@ -90,6 +90,14 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
   String _sanitize(String key) {
     return key.replaceAll("/", "").replaceAll('"', "");
   }
+
+  @override
+  Future<bool> containsKey(
+      {String key,
+      secure_storage.IOSOptions iOptions,
+      secure_storage.AndroidOptions aOptions}) {
+    throw UnimplementedError();
+  }
 }
 
 /// Dummy implementation if on linux to run development builds on it;
