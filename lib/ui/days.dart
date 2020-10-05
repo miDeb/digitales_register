@@ -569,7 +569,7 @@ class ItemWidget extends StatelessWidget {
                     children: <Widget>[
                       if (item.label != null)
                         Stack(
-                          overflow: Overflow.visible,
+                          clipBehavior: Clip.none,
                           children: <Widget>[
                             Center(
                               child: Text(
