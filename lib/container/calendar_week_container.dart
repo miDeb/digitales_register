@@ -1,10 +1,15 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/calendar_week.dart';
+
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+
+part 'calendar_week_container.g.dart';
 
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
@@ -17,7 +22,7 @@ class CalendarWeekContainer extends StatelessWidget {
         return CalendarWeek(vm: vm, key: key);
       },
       connect: (state) {
-        return CalendarWeekViewModel(state, monday);
+        return CalendarWeekViewModel.fromStateAndWeek(state, monday);
       },
     );
   }
@@ -25,13 +30,24 @@ class CalendarWeekContainer extends StatelessWidget {
 
 typedef DayCallback = void Function(DateTime day);
 
-class CalendarWeekViewModel {
-  final List<CalendarDay> days;
-  final Map<String, String> subjectNicks;
-  final bool noInternet;
+abstract class CalendarWeekViewModel
+    implements Built<CalendarWeekViewModel, CalendarWeekViewModelBuilder> {
+  BuiltList<CalendarDay> get days;
+  BuiltMap<String, String> get subjectNicks;
+  bool get noInternet;
 
-  CalendarWeekViewModel(AppState state, DateTime monday)
-      : days = state.calendarState.daysForWeek(monday),
-        subjectNicks = state.settingsState.subjectNicks.toMap(),
-        noInternet = state.noInternet;
+  CalendarWeekViewModel._();
+  factory CalendarWeekViewModel(
+          [void Function(CalendarWeekViewModelBuilder) updates]) =
+      _$CalendarWeekViewModel;
+
+  factory CalendarWeekViewModel.fromStateAndWeek(
+      AppState state, DateTime monday) {
+    return CalendarWeekViewModel(
+      (b) => b
+        ..days = ListBuilder(state.calendarState.daysForWeek(monday))
+        ..subjectNicks = state.settingsState.subjectNicks.toBuilder()
+        ..noInternet = state.noInternet,
+    );
+  }
 }

@@ -303,18 +303,16 @@ abstract class CalendarState
   @BuiltValueField(serialize: false)
   DateTime get currentMonday;
 
-  List<CalendarDay> get currentDays {
+  Iterable<CalendarDay> get currentDays {
     return daysForWeek(currentMonday);
   }
 
-  List<CalendarDay> daysForWeek(DateTime monday) {
-    return days.values.where(
-      (d) {
-        final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
-        return !date.isBefore(monday) &&
-            date.isBefore(monday.add(Duration(days: 7)));
-      },
-    ).toList();
+  Iterable<CalendarDay> daysForWeek(DateTime monday) {
+    return days.values.where((d) {
+      final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
+      return !date.isBefore(monday) &&
+          date.isBefore(monday.add(Duration(days: 7)));
+    });
   }
 
   CalendarState._();

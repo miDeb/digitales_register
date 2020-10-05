@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:collection/collection.dart';
+import 'package:built_collection/built_collection.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
@@ -45,7 +46,7 @@ class CalendarWeek extends StatelessWidget {
 class CalendarDayWidget extends StatelessWidget {
   final int max;
   final CalendarDay calendarDay;
-  final Map<String, String> subjectNicks;
+  final BuiltMap<String, String> subjectNicks;
 
   const CalendarDayWidget(
       {Key key, this.max, this.calendarDay, this.subjectNicks})
@@ -114,7 +115,7 @@ class CalendarDayWidget extends StatelessWidget {
 
 class HourWidget extends StatelessWidget {
   final CalendarHour hour;
-  final Map<String, String> subjectNicks;
+  final BuiltMap<String, String> subjectNicks;
   HourWidget({Key key, this.hour, this.subjectNicks}) : super(key: key);
   @override
   Widget build(BuildContext context) {

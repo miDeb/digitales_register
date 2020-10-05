@@ -1,12 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
+import 'package:flutter/material.dart' hide Builder;
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../actions/app_actions.dart';
 import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/days.dart';
+
+part 'days_container.g.dart';
 
 class DaysContainer extends StatelessWidget {
   @override
@@ -60,43 +63,47 @@ typedef ToggleDoneCallback = void Function(Homework hw, bool done);
 typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
 typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
 
-class DaysViewModel {
-  final List<Day> days;
-  final bool future;
-  final bool askWhenDelete;
-  final bool noInternet, loading;
-  final bool showAddReminder;
+abstract class DaysViewModel
+    implements Built<DaysViewModel, DaysViewModelBuilder> {
+  bool get future;
+  bool get askWhenDelete;
+  bool get noInternet;
+  bool get loading;
+  bool get showAddReminder;
+  BuiltList<Day> get days;
 
-  DaysViewModel.from(AppState state)
-      : days = (() {
-          final unorderedDays = state.dashboardState.allDays
-                  ?.where((day) => day.future == state.dashboardState.future)
-                  ?.map(
-                    (day) => day.rebuild(
-                      (b) => b
-                        ..deletedHomework.where(
-                          (hw) => !isBlacklisted(
-                              hw, state.dashboardState.blacklist),
-                        )
-                        ..homework.where(
-                          (hw) => !isBlacklisted(
-                              hw, state.dashboardState.blacklist),
-                        ),
-                    ),
+  DaysViewModel._();
+  factory DaysViewModel([void Function(DaysViewModelBuilder) updates]) =
+      _$DaysViewModel;
+
+  factory DaysViewModel.from(AppState state) {
+    final unorderedDays = state.dashboardState.allDays
+            ?.where((day) => day.future == state.dashboardState.future)
+            ?.map(
+              (day) => day.rebuild(
+                (b) => b
+                  ..deletedHomework.where(
+                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist),
                   )
-                  ?.toList() ??
-              [];
-          if (!state.dashboardState.future)
-            return unorderedDays?.reversed?.toList();
-          else
-            return unorderedDays;
-        })(),
-        noInternet = state.noInternet,
-        future = state.dashboardState.future,
-        loading = state.dashboardState.loading || state.loginState.loading,
-        askWhenDelete = state.settingsState.askWhenDelete,
-        showAddReminder =
-            !state.dashboardState.blacklist.contains(HomeworkType.homework);
+                  ..homework.where(
+                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist),
+                  ),
+              ),
+            )
+            ?.toList() ??
+        [];
+
+    return DaysViewModel((b) => b
+      ..days = ListBuilder(
+        !state.dashboardState.future ? unorderedDays?.reversed : unorderedDays,
+      )
+      ..noInternet = state.noInternet
+      ..future = state.dashboardState.future
+      ..loading = state.dashboardState.loading || state.loginState.loading
+      ..askWhenDelete = state.settingsState.askWhenDelete
+      ..showAddReminder =
+          !state.dashboardState.blacklist.contains(HomeworkType.homework));
+  }
 }
 
 // Map all (previously by the server used) homework types to the titles they
