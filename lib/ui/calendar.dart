@@ -39,6 +39,12 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   final Curve _animatePageCurve = Curves.ease;
   final Duration _animatePageDuration = const Duration(milliseconds: 200);
 
+  // This page view is created in initState and reused in the build method.
+  // While this might not be best practice otherwise, it prevents rebuilds of
+  // every currently shown page when the calendar rebuilds. Such rebuilds happen
+  // when changing the current page, and would lead to animation janks.
+  PageView _pageView;
+
   static final Animatable<double> _chevronOpacityTween =
       Tween<double>(begin: 1.0, end: 0.0)
           .chain(CurveTween(curve: Curves.easeInOut));
@@ -69,6 +75,16 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
         _dateRangeOpacityController.drive(_dateRangeOpacityTween);
 
     widget.dayCallback(widget.vm.currentMonday);
+
+    _pageView = PageView.builder(
+      itemBuilder: (BuildContext context, int index) {
+        return CalendarWeekContainer(
+          monday: mondayOf(index),
+        );
+      },
+      controller: _controller,
+      onPageChanged: _handlePageChanged,
+    );
 
     super.initState();
   }
@@ -205,15 +221,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   _dateRangeOpacityController.reverse();
                   return false;
                 },
-                child: PageView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return CalendarWeekContainer(
-                      monday: mondayOf(index),
-                    );
-                  },
-                  controller: _controller,
-                  onPageChanged: _handlePageChanged,
-                ),
+                child: _pageView,
               ),
             ),
           ),
