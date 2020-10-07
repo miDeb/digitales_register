@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Material dark background -->
+ <color name="darkBackground">#303030</color>
+<!-- Material light background -->
+ <color name="lightBackground">#FAFAFA</color>
+</resources>
