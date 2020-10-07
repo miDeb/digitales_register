@@ -1,10 +1,12 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:built_collection/built_collection.dart';
 
 import '../container/homework_filter_container.dart';
 import '../data.dart';
 
-typedef HomeworkBlacklistCallback = void Function(List<HomeworkType> blacklist);
+typedef HomeworkBlacklistCallback = void Function(
+    ListBuilder<HomeworkType> blacklist);
 
 class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;
@@ -37,10 +39,10 @@ class _HomeworkFilterState extends State<HomeworkFilter>
         CheckboxListTile(
           onChanged: (v) => widget.callback(
             v
-                ? (widget.vm.currentBlacklist
+                ? (widget.vm.currentBlacklist.toBuilder()
                   ..remove(HomeworkType.grade)
                   ..remove(HomeworkType.gradeGroup))
-                : (widget.vm.currentBlacklist
+                : (widget.vm.currentBlacklist.toBuilder()
                   ..add(HomeworkType.grade)
                   ..add(HomeworkType.gradeGroup)),
           ),
@@ -50,10 +52,10 @@ class _HomeworkFilterState extends State<HomeworkFilter>
         CheckboxListTile(
             onChanged: (v) => widget.callback(
                   v
-                      ? (widget.vm.currentBlacklist
+                      ? (widget.vm.currentBlacklist.toBuilder()
                         ..remove(HomeworkType.homework)
                         ..remove(HomeworkType.lessonHomework))
-                      : (widget.vm.currentBlacklist
+                      : (widget.vm.currentBlacklist.toBuilder()
                         ..add(HomeworkType.homework)
                         ..add(HomeworkType.lessonHomework)),
                 ),
@@ -62,8 +64,10 @@ class _HomeworkFilterState extends State<HomeworkFilter>
         CheckboxListTile(
           onChanged: (v) => widget.callback(
             v
-                ? (widget.vm.currentBlacklist..remove(HomeworkType.observation))
-                : (widget.vm.currentBlacklist..add(HomeworkType.observation)),
+                ? (widget.vm.currentBlacklist.toBuilder()
+                  ..remove(HomeworkType.observation))
+                : (widget.vm.currentBlacklist.toBuilder()
+                  ..add(HomeworkType.observation)),
           ),
           title: Text("Beobachtungen"),
           value: !widget.vm.currentBlacklist.contains(HomeworkType.observation),
