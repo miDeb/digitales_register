@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:collection/collection.dart';
 import 'package:built_collection/built_collection.dart';
 
 import '../container/calendar_week_container.dart';
@@ -189,13 +188,7 @@ class HourWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (subjectNicks.entries
-                          .firstWhere(
-                              (entry) => equalsIgnoreAsciiCase(
-                                  entry.key, hour.subject),
-                              orElse: () => null)
-                          ?.value ??
-                      hour.subject),
+                  (subjectNicks[hour.subject.toLowerCase()] ?? hour.subject),
                   maxLines: 1,
                   softWrap: false,
                 ),

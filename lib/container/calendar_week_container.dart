@@ -46,7 +46,15 @@ abstract class CalendarWeekViewModel
     return CalendarWeekViewModel(
       (b) => b
         ..days = ListBuilder(state.calendarState.daysForWeek(monday))
-        ..subjectNicks = state.settingsState.subjectNicks.toBuilder()
+        // converting all keys (subject names) to lower case to make accessing cheaper
+        ..subjectNicks = MapBuilder(
+          state.settingsState.subjectNicks.toMap().map(
+                (key, value) => MapEntry(
+                  key.toLowerCase(),
+                  value,
+                ),
+              ),
+        )
         ..noInternet = state.noInternet,
     );
   }
