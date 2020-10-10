@@ -39,10 +39,12 @@ class InfoDialog extends StatelessWidget {
           ),
         ],
       ),
-      content: Container(
-        width: double.maxFinite,
-        child: content,
-      ),
+      content: content == null
+          ? null
+          : Container(
+              width: double.maxFinite,
+              child: content,
+            ),
       actions: actions,
     );
   }
