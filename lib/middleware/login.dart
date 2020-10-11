@@ -24,6 +24,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
   next(action);
   if (action.payload.hard) {
+    _wrapper = Wrapper();
     api.actions.mountAppState(AppState());
     api.actions.load();
   }

@@ -47,7 +47,7 @@ part 'routing.dart';
 part 'messages.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
-final _wrapper = Wrapper();
+var _wrapper = Wrapper();
 
 final middleware = [
   _errorMiddleware,
