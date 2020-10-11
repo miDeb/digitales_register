@@ -8,7 +8,7 @@ class GradesChartLegendEntry extends StatelessWidget {
   final String name;
   final SetThickness setThickness;
 
-  // calls to setThickness are delayed by 50 ms to reduce jankiness. This leads
+  // calls to setThickness are delayed by 100 ms to reduce jankiness. This leads
   // to some weird code.
   const GradesChartLegendEntry(
       {Key key, this.config, this.name, this.setThickness})
@@ -59,7 +59,7 @@ class GradesChartLegendEntry extends StatelessWidget {
                   setState(() {
                     thickness = val;
                   });
-                  Future.delayed(Duration(milliseconds: 50), () {
+                  Future.delayed(Duration(milliseconds: 100), () {
                     if (call != thisCall || value == config.thick) {
                       return;
                     }
