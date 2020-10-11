@@ -12,14 +12,40 @@ import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
+/*
+// Debug all requests
+// IMPORTANT Don't include in release, contains sensitive info
+class DebugInterceptor extends Interceptor {
+  @override
+  Future onRequest(RequestOptions options) async {
+    print(
+        "Request, uri: ${options.uri},\ndata: ${options.data},\nheaders: ${options.headers}");
+    return super.onRequest(options);
+  }
+
+  @override
+  Future onResponse(Response response) async {
+    print(
+        "Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
+    return response;
+  }
+
+  @override
+  Future onError(DioError err) async => err;
+}*/
 
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class Wrapper {
-  final dio = Dio()..interceptors.add(CookieManager(CookieJar()));
+  final cookieJar = DefaultCookieJar();
+  final dio = Dio();
   String get loginAddress => "$baseAddress/api/auth/login";
   String get baseAddress => "$url/v2";
   String user, pass, _url;
+
+  Wrapper() {
+    dio.interceptors.add(CookieManager(cookieJar));
+  }
 
   String get url => _url;
   set url(String value) {
@@ -333,9 +359,7 @@ class Wrapper {
   }
 
   void _clearCookies() {
-    dio.interceptors
-      ..clear()
-      ..add(CookieManager(CookieJar()));
+    cookieJar.deleteAll();
   }
 }
 
