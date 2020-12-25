@@ -9,6 +9,8 @@ description: A new Flutter project.
 # Read more about versioning at semver.org.
 version: 2.0.0-beta.2
 
+publish_to: none
+
 environment:
   sdk: ">=2.6.0 <3.0.0"
 
@@ -17,50 +19,52 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  intl: any
-  charts_flutter: any
-  tuple: any
-  path_provider: any
-  built_value: any
   dynamic_theme:
-    path: "packages/dynamic_theme/"
-  fluttertoast: any
-  flutter_secure_storage: any
-  scroll_to_index: any
-  autocomplete_textfield: any
-  package_info: any
-  mutex: any
+    path: packages/dynamic_theme/
+  flutter_ping:
+    path: packages/flutter_ping/
+  quill_delta_viewer:
+    path: packages/quill_delta_viewer
   built_redux:
     git:
       url: https://github.com/miDeb/built_redux.git
       ref: master
-  flutter_built_redux: any
+  autocomplete_textfield: any
   badges: any
-  flutter_widget_from_html_core: ^0.3.2+1
-  uni_links: any
-  flutter_ping:
-    path: "packages/flutter_ping/"
-  url_launcher: any
-  downloads_path_provider_28: ^0.1.0
-  permissions_plugin: ^1.1.4
+  built_value: any
+  charts_flutter: any
+  cookie_jar: ^1.0.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
-  cookie_jar: ^1.0.1
+  downloads_path_provider_28: ^0.1.0
+  flutter_built_redux: any
+  flutter_secure_storage: any
+  flutter_widget_from_html_core: ^0.3.2+1
+  fluttertoast: any
+  http: ^0.12.2
+  intl: any
+  mutex: any
   open_file: any
-  quill_delta_viewer:
-    path: packages/quill_delta_viewer
+  package_info: any
+  path_provider: any
+  permissions_plugin: ^1.1.4
   quill_delta: ^1.0.1
+  scroll_to_index: any
+  tuple: any
+  uni_links: any
+  url_launcher: any
 dependency_overrides:
+  intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'
   built_redux:
     git:
       url: https://github.com/miDeb/built_redux.git
       ref: master
 dev_dependencies:
-  flutter_launcher_icons: any
   flutter_test:
     sdk: flutter
   build_runner: any
   built_value_generator: any
+  flutter_launcher_icons: any
 
 flutter_icons:
   android: "launcher_icon"
@@ -69,7 +73,6 @@ flutter_icons:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
-
 # The following section is specific to Flutter.
 flutter:
   # The following line ensures that the Material Icons font is
