@@ -155,14 +155,19 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   Divider(),
                                 ],
                                 TextField(
-                                  autofillHints: [AutofillHints.username],
+                                  // Remove this check when (if?) https://github.com/flutter/flutter/issues/67136 is resolved
+                                  autofillHints: widget.vm.loading
+                                      ? null
+                                      : [AutofillHints.username],
                                   decoration: InputDecoration(
                                       labelText: 'Benutzername'),
                                   controller: _usernameController,
                                   enabled: !widget.vm.loading,
                                 ),
                                 TextField(
-                                  autofillHints: [AutofillHints.password],
+                                  autofillHints: widget.vm.loading
+                                      ? null
+                                      : [AutofillHints.password],
                                   decoration: InputDecoration(
                                       labelText: widget.vm.changePass
                                           ? 'Altes Passwort'
@@ -212,7 +217,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     ),
                                   ),
                                   TextField(
-                                    autofillHints: [AutofillHints.newPassword],
+                                    autofillHints: widget.vm.loading
+                                        ? null
+                                        : [AutofillHints.newPassword],
                                     decoration: InputDecoration(
                                         labelText: 'Neues Passwort'),
                                     controller: _newPassword1Controller,
@@ -227,7 +234,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     },
                                   ),
                                   TextField(
-                                    autofillHints: [AutofillHints.newPassword],
+                                    autofillHints: widget.vm.loading
+                                        ? null
+                                        : [AutofillHints.newPassword],
                                     decoration: InputDecoration(
                                       labelText: 'Neues Passwort wiederholen',
                                       errorText: newPasswordsMatch
