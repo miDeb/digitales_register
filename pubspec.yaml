@@ -7,7 +7,7 @@ description: A new Flutter project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 2.0.0-beta.2
+version: 2.0.1
 
 publish_to: none
 
@@ -21,8 +21,6 @@ dependencies:
     sdk: flutter
   dynamic_theme:
     path: packages/dynamic_theme/
-  flutter_ping:
-    path: packages/flutter_ping/
   quill_delta_viewer:
     path: packages/quill_delta_viewer
   built_redux:
@@ -36,7 +34,6 @@ dependencies:
   cookie_jar: ^1.0.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
-  downloads_path_provider_28: ^0.1.0
   flutter_built_redux: any
   flutter_secure_storage: any
   flutter_widget_from_html_core: ^0.3.2+1
@@ -47,7 +44,6 @@ dependencies:
   open_file: any
   package_info: any
   path_provider: any
-  permissions_plugin: ^1.1.4
   quill_delta: ^1.0.1
   scroll_to_index: any
   tuple: any

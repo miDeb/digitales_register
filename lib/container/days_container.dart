@@ -110,8 +110,7 @@ abstract class DaysViewModel
 // would have been used with. Probably incomplete.
 const typesToTitles = {
   HomeworkType.grade: ["Bewertung"],
-  // TODO: What about "Prüfung" etc?
-  HomeworkType.gradeGroup: ["Testarbeit", "Schularbeit"],
+  HomeworkType.gradeGroup: ["Testarbeit", "Schularbeit", "Prüfung"],
   HomeworkType.homework: ["Erinnerung"],
   HomeworkType.lessonHomework: ["Hausaufgabe"],
   HomeworkType.observation: ["Beobachtung"],
@@ -119,6 +118,7 @@ const typesToTitles = {
 
 bool isBlacklisted(Homework homework, BuiltList<HomeworkType> blacklist) {
   return blacklist.any((blacklisted) {
-    return typesToTitles[blacklisted].contains(homework.title);
+    return typesToTitles[blacklisted]
+        .any((blacklistedTitle) => homework.title.contains(blacklistedTitle));
   });
 }

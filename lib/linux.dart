@@ -1,7 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     as secure_storage;
@@ -144,9 +143,5 @@ void showToast({String msg, Toast toastLength}) {
 }
 
 Future<Directory> get downloadsDirectory async {
-  if (Platform.isLinux) {
-    return Directory.current;
-  } else {
-    return DownloadsPathProvider.downloadsDirectory;
-  }
+  return Directory.current;
 }

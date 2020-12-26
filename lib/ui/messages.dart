@@ -182,45 +182,6 @@ class _MessageWidgetState extends State<MessageWidget> {
                     ),
                   ],
                 ),
-                if (widget.message.downloading) LinearProgressIndicator(),
-                if (!widget.message.fileAvailable)
-                  FlatButton(
-                    child: Text("Herunterladen"),
-                    onPressed: widget.noInternet
-                        ? null
-                        : () {
-                            widget.onDownloadFile(widget.message);
-                          },
-                  ),
-                if (widget.message.fileAvailable)
-                  IntrinsicHeight(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: FlatButton(
-                            child: Text("Erneut herunterladen"),
-                            onPressed: widget.noInternet
-                                ? null
-                                : () {
-                                    widget.onDownloadFile(widget.message);
-                                  },
-                          ),
-                        ),
-                        VerticalDivider(
-                          indent: 8,
-                          endIndent: 8,
-                        ),
-                        Expanded(
-                          child: FlatButton(
-                            child: Text("Öffnen"),
-                            onPressed: () {
-                              widget.onOpenFile(widget.message);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
               ],
             ],
           ),
