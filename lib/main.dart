@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 import 'package:uni_links/uni_links.dart';
 
 import 'actions/app_actions.dart';
@@ -28,6 +29,7 @@ import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+GlobalKey<ResponsiveScaffoldState<Pages>> scaffoldKey = GlobalKey();
 
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
@@ -109,29 +111,6 @@ void run() {
                   return MaterialPageRoute(
                     builder: (_) => NotificationPageContainer(),
                     fullscreenDialog: true,
-                  );
-                case "settings":
-                  return MaterialPageRoute(
-                      builder: (_) => SettingsPageContainer());
-                case "grades":
-                  return MaterialPageRoute(
-                    builder: (_) => GradesPageContainer(),
-                  );
-                case "absences":
-                  return MaterialPageRoute(
-                    builder: (_) => AbsencesPageContainer(),
-                  );
-                case "messages":
-                  return MaterialPageRoute(
-                    builder: (_) => MessagesPageContainer(),
-                  );
-                case "calendar":
-                  return MaterialPageRoute(
-                    builder: (_) => CalendarContainer(),
-                  );
-                case "certificate":
-                  return MaterialPageRoute(
-                    builder: (_) => CertificateContainer(),
                   );
                 case "gradesChart":
                   return MaterialPageRoute(

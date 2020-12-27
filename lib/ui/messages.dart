@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:quill_delta_viewer/quill_delta_viewer.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 
 import '../app_state.dart';
 import '../data.dart';
@@ -30,7 +31,7 @@ class MessagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: ResponsiveAppBar(
         title: Text("Mitteilungen"),
       ),
       body: state == null

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 
 import '../app_state.dart';
 import '../container/grades_chart_container.dart';
@@ -15,7 +16,7 @@ class GradesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: ResponsiveAppBar(
         title: Text("Noten"),
         actions: <Widget>[
           Theme(

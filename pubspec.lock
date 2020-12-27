@@ -618,6 +618,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  responsive_scaffold:
+    dependency: "direct main"
+    description:
+      path: "packages/responsive_scaffold"
+      relative: true
+    source: path
+    version: "0.0.1"
   scroll_to_index:
     dependency: "direct main"
     description:

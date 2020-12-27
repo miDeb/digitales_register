@@ -4,6 +4,12 @@ import 'dart:io';
 import 'package:built_redux/built_redux.dart';
 import 'package:dio/dio.dart';
 import 'package:dr/actions/messages_actions.dart';
+import 'package:dr/container/absences_page_container.dart';
+import 'package:dr/container/calendar_container.dart';
+import 'package:dr/container/certificate_container.dart';
+import 'package:dr/container/grades_page_container.dart';
+import 'package:dr/container/messages_container.dart';
+import 'package:dr/container/settings_page.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -81,6 +87,7 @@ NextActionHandler _errorMiddleware(
             print(e);
             navigatorKey.currentState.push(
               MaterialPageRoute(
+                fullscreenDialog: true,
                 builder: (context) {
                   return Scaffold(
                     appBar: AppBar(

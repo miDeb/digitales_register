@@ -22,7 +22,9 @@ dependencies:
   dynamic_theme:
     path: packages/dynamic_theme/
   quill_delta_viewer:
-    path: packages/quill_delta_viewer
+    path: packages/quill_delta_viewer/
+  responsive_scaffold:
+    path: packages/responsive_scaffold/
   built_redux:
     git:
       url: https://github.com/miDeb/built_redux.git

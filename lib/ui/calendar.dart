@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 
 import '../container/calendar_container.dart';
 import '../container/calendar_week_container.dart';
@@ -119,7 +120,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: ResponsiveAppBar(
         title: Text("Kalender"),
         actions: <Widget>[
           if (toMonday(now) != widget.vm.currentMonday)

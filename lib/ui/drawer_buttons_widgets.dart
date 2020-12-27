@@ -10,7 +10,6 @@ class LogoutButtonWidget extends StatelessWidget {
       title: Text("Logout"),
       trailing: Icon(Icons.exit_to_app),
       onTap: () {
-        Navigator.of(context).pop();
         onLogout();
       },
     );
@@ -18,16 +17,18 @@ class LogoutButtonWidget extends StatelessWidget {
 }
 
 class SettingsButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowSettings;
 
-  const SettingsButtonWidget({Key key, this.onShowSettings}) : super(key: key);
+  const SettingsButtonWidget({Key key, this.onShowSettings, this.selected})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Einstellungen"),
       trailing: Icon(Icons.settings),
       onTap: () {
-        Navigator.of(context).pop();
         onShowSettings();
       },
     );
@@ -35,16 +36,18 @@ class SettingsButtonWidget extends StatelessWidget {
 }
 
 class GradesButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowGrades;
 
-  const GradesButtonWidget({Key key, this.onShowGrades}) : super(key: key);
+  const GradesButtonWidget({Key key, this.onShowGrades, this.selected})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Noten"),
       trailing: Icon(Icons.grade),
       onTap: () {
-        Navigator.of(context).pop();
         onShowGrades();
       },
     );
@@ -52,16 +55,18 @@ class GradesButtonWidget extends StatelessWidget {
 }
 
 class AbsencesButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowAbsences;
 
-  const AbsencesButtonWidget({Key key, this.onShowAbsences}) : super(key: key);
+  const AbsencesButtonWidget({Key key, this.onShowAbsences, this.selected})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Absenzen"),
       trailing: Icon(Icons.hotel),
       onTap: () {
-        Navigator.of(context).pop();
         onShowAbsences();
       },
     );
@@ -69,16 +74,18 @@ class AbsencesButtonWidget extends StatelessWidget {
 }
 
 class CalendarButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowCalendar;
 
-  const CalendarButtonWidget({Key key, this.onShowCalendar}) : super(key: key);
+  const CalendarButtonWidget({Key key, this.onShowCalendar, this.selected})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Kalender"),
       trailing: Icon(Icons.calendar_today),
       onTap: () {
-        Navigator.of(context).pop();
         onShowCalendar();
       },
     );
@@ -86,17 +93,19 @@ class CalendarButtonWidget extends StatelessWidget {
 }
 
 class CertificateButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowCertificate;
 
-  const CertificateButtonWidget({Key key, this.onShowCertificate})
+  const CertificateButtonWidget(
+      {Key key, this.onShowCertificate, this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Zeugnis"),
       trailing: Icon(Icons.list),
       onTap: () {
-        Navigator.of(context).pop();
         onShowCertificate();
       },
     );
@@ -104,16 +113,19 @@ class CertificateButtonWidget extends StatelessWidget {
 }
 
 class MessagesButtonWidget extends StatelessWidget {
+  final bool selected;
   final VoidCallback onShowMessages;
 
-  const MessagesButtonWidget({Key key, this.onShowMessages}) : super(key: key);
+  const MessagesButtonWidget({Key key, this.onShowMessages, this.selected})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      selected: selected,
       title: Text("Mitteilungen"),
       trailing: Icon(Icons.message),
       onTap: () {
-        Navigator.of(context).pop();
         onShowMessages();
       },
     );

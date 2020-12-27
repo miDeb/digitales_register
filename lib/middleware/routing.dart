@@ -1,5 +1,15 @@
 part of 'middleware.dart';
 
+enum Pages {
+  Homework,
+  Grades,
+  Absences,
+  Calendar,
+  Certificate,
+  Messages,
+  Settings,
+}
+
 final _routingMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(RoutingActionsNames.showLogin, _showLogin)
@@ -70,7 +80,8 @@ void _showNotifications(
 
 void _showSettings(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/settings");
+  scaffoldKey.currentState
+      .selectContentWidget(SettingsPageContainer(), Pages.Settings);
   next(action);
 }
 
@@ -84,7 +95,8 @@ void _showEditCalendarSubjectNicks(
 
 void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/calendar");
+  scaffoldKey.currentState
+      .selectContentWidget(CalendarContainer(), Pages.Calendar);
   api.actions.calendarActions.setCurrentMonday(toMonday(now));
 
   next(action);
@@ -92,28 +104,32 @@ void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _showGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/grades");
+  scaffoldKey.currentState
+      .selectContentWidget(GradesPageContainer(), Pages.Grades);
   api.actions.gradesActions.load(api.state.gradesState.semester);
   next(action);
 }
 
 void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/absences");
+  scaffoldKey.currentState
+      .selectContentWidget(AbsencesPageContainer(), Pages.Absences);
   api.actions.absencesActions.load();
   next(action);
 }
 
 void _showCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/certificate");
+  scaffoldKey.currentState
+      .selectContentWidget(CertificateContainer(), Pages.Certificate);
   api.actions.certificateActions.load();
   next(action);
 }
 
 void _showMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  navigatorKey.currentState.pushNamed("/messages");
+  scaffoldKey.currentState
+      .selectContentWidget(MessagesPageContainer(), Pages.Messages);
   api.actions.messagesActions.load();
   next(action);
 }

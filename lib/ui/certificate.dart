@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 
 import '../container/certificate_container.dart';
 import 'no_internet.dart';
@@ -11,7 +12,7 @@ class Certificate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Zeugnis")),
+      appBar: ResponsiveAppBar(title: Text("Zeugnis")),
       body: vm.html == null
           ? Center(
               child: vm.noInternet ? NoInternet() : CircularProgressIndicator(),
