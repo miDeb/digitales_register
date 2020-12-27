@@ -19,12 +19,14 @@ class ResponsiveScaffold<T> extends StatefulWidget {
   final Widget home;
   final DrawerBuilder<T> drawerBuilder;
   final T homeId;
+  final GlobalKey<NavigatorState>? navKey;
 
   ResponsiveScaffold({
     Key? key,
     required this.home,
     required this.drawerBuilder,
     required this.homeId,
+    this.navKey,
   }) : super(key: key);
 
   @override
@@ -32,7 +34,7 @@ class ResponsiveScaffold<T> extends StatefulWidget {
 }
 
 class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
-  final GlobalKey<NavigatorState> navKey = GlobalKey();
+  late final GlobalKey<NavigatorState> navKey;
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   late bool tabletMode;
@@ -41,6 +43,7 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
   @override
   void initState() {
     currentSelected = widget.homeId;
+    navKey = widget.navKey ?? GlobalKey();
     super.initState();
   }
 

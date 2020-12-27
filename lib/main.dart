@@ -23,6 +23,7 @@ import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
+GlobalKey<NavigatorState> nestedNavKey = GlobalKey();
 GlobalKey<ResponsiveScaffoldState<Pages>> scaffoldKey = GlobalKey();
 
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
