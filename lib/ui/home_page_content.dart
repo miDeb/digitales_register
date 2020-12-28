@@ -90,7 +90,7 @@ class HomePageContent extends StatelessWidget {
                                       child: ListTile(
                                         selected:
                                             currentSelected == Pages.Homework,
-                                        trailing: Icon(Icons.list),
+                                        trailing: Icon(Icons.assignment),
                                         title: Text("Hausaufgabe"),
                                         onTap: goHome,
                                       ),
