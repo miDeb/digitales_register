@@ -39,12 +39,52 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   late bool tabletMode;
   late T currentSelected;
+  OverlayEntry? _shadowOverlay;
 
   @override
   void initState() {
     currentSelected = widget.homeId;
     navKey = widget.navKey ?? GlobalKey();
     super.initState();
+  }
+
+  void addShadowOverlay() {
+    if (_shadowOverlay != null) return;
+    // this is just a hacky way to construct a single "shadow-line"
+    // that acts as a divider
+    final overlay = OverlayEntry(
+      builder: (ctx) => Positioned(
+        left: drawerWidth,
+        top: -4,
+        bottom: -4,
+        child: ClipRect(
+          child: Container(
+            width: 5,
+            decoration: BoxDecoration(
+              color: Colors.transparent,
+              boxShadow: [
+                BoxShadow(
+                  offset: Offset(-7, 0),
+                  spreadRadius: 0,
+                  blurRadius: 4,
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      Overlay.of(context)!.insert(
+        overlay,
+      );
+      _shadowOverlay = overlay;
+    });
+  }
+
+  void removeShadowOverlay() {
+    _shadowOverlay?.remove();
+    _shadowOverlay = null;
   }
 
   void selectContentWidget(Widget content, T data) {
@@ -82,6 +122,11 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
     return LayoutBuilder(
       builder: (context, constraints) {
         tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
+        if (tabletMode) {
+          addShadowOverlay();
+        } else {
+          removeShadowOverlay();
+        }
         final drawer = widget.drawerBuilder(
             selectContentWidget, goHome, currentSelected, tabletMode);
         return TabletMode(
@@ -147,19 +192,21 @@ class _Body extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      observers: [navObserver],
-      key: navKey,
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case "/":
-            return MaterialPageRoute(
-              builder: (context) {
-                return child;
-              },
-            );
-        }
-      },
+    return ClipRect(
+      child: Navigator(
+        observers: [navObserver],
+        key: navKey,
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case "/":
+              return MaterialPageRoute(
+                builder: (context) {
+                  return child;
+                },
+              );
+          }
+        },
+      ),
     );
   }
 }

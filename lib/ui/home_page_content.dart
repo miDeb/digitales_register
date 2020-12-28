@@ -31,125 +31,112 @@ class HomePageContent extends StatelessWidget {
         body: SplashScreen(
           splash: vm.splash,
           child: ResponsiveScaffold<Pages>(
-            navKey: nestedNavKey,
-            homeId: Pages.Homework,
-            key: scaffoldKey,
-            home: Scaffold(
-              appBar: ResponsiveAppBar(
-                isHomePage: true,
-                title: Text("Register"),
-                actions: <Widget>[
-                  vm.noInternet && !vm.loading
-                      ? FlatButton(
-                          textColor: Theme.of(context).primaryIconTheme.color,
-                          child: Row(
-                            children: <Widget>[
-                              Text("Kein Internet"),
-                              SizedBox(width: 8),
-                              Icon(Icons.refresh),
-                            ],
-                          ),
-                          onPressed: refreshNoInternet,
-                        )
-                      : SizedBox(),
-                  NotificationIconContainer(),
-                ],
-              ),
-              body: DaysContainer(),
-            ),
-            drawerBuilder:
-                (selectWidget, goHome, currentSelected, tabletMode) => vm.splash
-                    ? null
-                    : Row(
-                        children: [
-                          Expanded(
-                            child: Column(
+              navKey: nestedNavKey,
+              homeId: Pages.Homework,
+              key: scaffoldKey,
+              home: Scaffold(
+                appBar: ResponsiveAppBar(
+                  isHomePage: true,
+                  title: Text("Register"),
+                  actions: <Widget>[
+                    vm.noInternet && !vm.loading
+                        ? FlatButton(
+                            textColor: Theme.of(context).primaryIconTheme.color,
+                            child: Row(
                               children: <Widget>[
-                                UserAccountsDrawerHeader(
-                                  margin: EdgeInsets.zero,
-                                  currentAccountPicture: vm?.userIcon != null
-                                      ? CircleAvatar(
-                                          child: Image.network(vm.userIcon),
-                                          backgroundColor: Colors.white70,
-                                        )
-                                      : null,
-                                  decoration: BoxDecoration(
-                                      color: (Theme.of(context)
-                                              .appBarTheme
-                                              .color ??
-                                          Theme.of(context).primaryColor)),
-                                  accountEmail: Text("Digitales Register"),
-                                  accountName: Text(vm.username ?? "?",
-                                      style: (Theme.of(context)
-                                                  .appBarTheme
-                                                  .textTheme ??
-                                              Theme.of(context)
-                                                  .primaryTextTheme)
-                                          .headline5),
-                                ),
-                                Expanded(
-                                  child: Column(
-                                    children: <Widget>[
-                                      if (tabletMode)
-                                        Center(
-                                          child: ListTile(
-                                            selected: currentSelected ==
-                                                Pages.Homework,
-                                            trailing: Icon(Icons.list),
-                                            title: Text("Hausaufgabe"),
-                                            onTap: goHome,
-                                          ),
-                                        ),
-                                      Center(
-                                        child: GradesButton(
-                                          selected:
-                                              currentSelected == Pages.Grades,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: AbsencesButton(
-                                          selected:
-                                              currentSelected == Pages.Absences,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: CalendarButton(
-                                          selected:
-                                              currentSelected == Pages.Calendar,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: CertificateButton(
-                                          selected: currentSelected ==
-                                              Pages.Certificate,
-                                        ),
-                                      ),
-                                      Center(
-                                        child: MessagesButton(
-                                          selected:
-                                              currentSelected == Pages.Messages,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Center(
-                                        child: SettingsButton(
-                                          selected:
-                                              currentSelected == Pages.Settings,
-                                        ),
-                                      ),
-                                      Center(child: LogoutButton()),
-                                    ],
-                                  ),
-                                )
+                                Text("Kein Internet"),
+                                SizedBox(width: 8),
+                                Icon(Icons.refresh),
                               ],
                             ),
-                          ),
-                          VerticalDivider(
-                            width: 0,
+                            onPressed: refreshNoInternet,
                           )
-                        ],
-                      ),
-          ),
+                        : SizedBox(),
+                    NotificationIconContainer(),
+                  ],
+                ),
+                body: DaysContainer(),
+              ),
+              drawerBuilder: (selectWidget, goHome, currentSelected,
+                      tabletMode) =>
+                  vm.splash
+                      ? null
+                      : Column(
+                          children: <Widget>[
+                            UserAccountsDrawerHeader(
+                              margin: EdgeInsets.zero,
+                              currentAccountPicture: vm?.userIcon != null
+                                  ? CircleAvatar(
+                                      child: Image.network(vm.userIcon),
+                                      backgroundColor: Colors.white70,
+                                    )
+                                  : null,
+                              decoration: BoxDecoration(
+                                  color: (Theme.of(context).appBarTheme.color ??
+                                      Theme.of(context).primaryColor)),
+                              accountEmail: Text("Digitales Register"),
+                              accountName: Text(vm.username ?? "?",
+                                  style: (Theme.of(context)
+                                              .appBarTheme
+                                              .textTheme ??
+                                          Theme.of(context).primaryTextTheme)
+                                      .headline5),
+                            ),
+                            Expanded(
+                              child: Column(
+                                children: <Widget>[
+                                  if (tabletMode)
+                                    Center(
+                                      child: ListTile(
+                                        selected:
+                                            currentSelected == Pages.Homework,
+                                        trailing: Icon(Icons.list),
+                                        title: Text("Hausaufgabe"),
+                                        onTap: goHome,
+                                      ),
+                                    ),
+                                  Center(
+                                    child: GradesButton(
+                                      selected: currentSelected == Pages.Grades,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: AbsencesButton(
+                                      selected:
+                                          currentSelected == Pages.Absences,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: CalendarButton(
+                                      selected:
+                                          currentSelected == Pages.Calendar,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: CertificateButton(
+                                      selected:
+                                          currentSelected == Pages.Certificate,
+                                    ),
+                                  ),
+                                  Center(
+                                    child: MessagesButton(
+                                      selected:
+                                          currentSelected == Pages.Messages,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Center(
+                                    child: SettingsButton(
+                                      selected:
+                                          currentSelected == Pages.Settings,
+                                    ),
+                                  ),
+                                  Center(child: LogoutButton()),
+                                ],
+                              ),
+                            )
+                          ],
+                        )),
         ),
       ),
     );
