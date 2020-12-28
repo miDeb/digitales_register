@@ -42,7 +42,14 @@ class MessagesPage extends StatelessWidget {
               children: <Widget>[
                 if (state.showMessage != null &&
                     !state.messages.any((m) => m.id == state.showMessage))
-                  LinearProgressIndicator(),
+                  LinearProgressIndicator()
+                else if (state.messages.length == 0)
+                  Center(
+                    child: Text(
+                      "Noch keine Mitteilungen",
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ),
                 ListView.builder(
                   itemCount: state.messages.length,
                   itemBuilder: (context, i) {
