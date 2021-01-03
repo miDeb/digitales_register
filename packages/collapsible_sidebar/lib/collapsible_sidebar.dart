@@ -206,10 +206,12 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                 height: widget.topPadding,
               ),
               Expanded(
-                child: SingleChildScrollView(
-                  reverse: widget.fitItemsToBottom,
-                  child: Column(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: ListView(
+                    shrinkWrap: true,
                     children: _items,
+                    physics: BouncingScrollPhysics(),
                   ),
                 ),
               ),
