@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 const tabletLayoutBreakpoint = 720.0;
 const drawerWidth = 304.0;
@@ -33,48 +34,64 @@ class ResponsiveScaffold<T> extends StatefulWidget {
   ResponsiveScaffoldState<T> createState() => ResponsiveScaffoldState<T>();
 }
 
-class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
-  late final GlobalKey<NavigatorState> navKey;
+class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
+    with SingleTickerProviderStateMixin {
+  late final GlobalKey<NavigatorState> navigatorKey;
+  final LayerLink _shadowDividerOverlayLink = LayerLink();
+
+  late final AnimationController _drawerAnimationController;
 
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   late bool tabletMode;
+  // This is required in order not to show an opening animation
+  // right when the app is opened
+  bool isInitialized = false;
   late T currentSelected;
   OverlayEntry? _shadowOverlay;
 
   @override
   void initState() {
     currentSelected = widget.homeId;
-    navKey = widget.navKey ?? GlobalKey();
+    navigatorKey = widget.navKey ?? GlobalKey();
+    _drawerAnimationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     super.initState();
   }
 
   void addShadowOverlay() {
     if (_shadowOverlay != null) return;
-    // this is just a hacky way to construct a single "shadow-line"
-    // that acts as a divider
-    final overlay = OverlayEntry(
-      builder: (ctx) => Positioned(
-        left: drawerWidth,
-        top: -4,
-        bottom: -4,
-        child: ClipRect(
-          child: Container(
-            width: 5,
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  offset: Offset(-7, 0),
-                  spreadRadius: 0,
-                  blurRadius: 4,
-                )
-              ],
-            ),
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      // this is just a hacky way to construct a single "shadow-line"
+      // that acts as a divider
+      final overlay = OverlayEntry(
+        builder: (ctx) => CompositedTransformFollower(
+          link: _shadowDividerOverlayLink,
+          child: Stack(
+            children: [
+              Positioned(
+                left: 0,
+                top: -4,
+                bottom: -4,
+                child: ClipRect(
+                  child: Container(
+                    width: 5,
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(-7, 0),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-    );
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      );
       Overlay.of(context)!.insert(
         overlay,
       );
@@ -91,23 +108,30 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
     if (scaffoldKey.currentState?.isDrawerOpen == true) {
       Navigator.pop(context);
     }
-    goHome();
     final route = tabletMode
         ? PageRouteBuilder(
-            pageBuilder: (_, __, ___) => content,
-            transitionDuration: const Duration(),
-            reverseTransitionDuration: const Duration())
+            pageBuilder: (_, animation, secondaryAnimation) => FadeTransition(
+              opacity: animation,
+              child: content,
+            ),
+            transitionDuration: Duration(milliseconds: 250),
+            reverseTransitionDuration: Duration(milliseconds: 250),
+          )
         : MaterialPageRoute(
             builder: (context) => content,
           );
-    navKey.currentState!.push(route);
+    if (currentSelected == widget.homeId) {
+      navigatorKey.currentState!.push(route);
+    } else {
+      navigatorKey.currentState!.pushReplacement(route);
+    }
     setState(() {
       currentSelected = data;
     });
   }
 
   void goHome() {
-    navKey.currentState!.popUntil((route) => route.isFirst);
+    navigatorKey.currentState!.popUntil((route) => route.isFirst);
     wentHome();
   }
 
@@ -124,71 +148,96 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>> {
         tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
         if (tabletMode) {
           addShadowOverlay();
+          if (isInitialized) {
+            _drawerAnimationController.fling(velocity: 1);
+          } else {
+            _drawerAnimationController.value = 1;
+          }
         } else {
-          removeShadowOverlay();
+          _drawerAnimationController
+              .fling(velocity: -1)
+              .whenComplete(() => removeShadowOverlay());
         }
-        final drawer = widget.drawerBuilder(
-            selectContentWidget, goHome, currentSelected, tabletMode);
-        return TabletMode(
+        isInitialized = true;
+        return InheritedTabletMode(
           tabletMode,
-          tabletMode
-              ? Material(
-                  child: Row(
-                    children: [
-                      IntrinsicWidth(
-                        child: drawer != null ? Drawer(child: drawer) : null,
-                      ),
-                      Expanded(
-                        child: _Body(
-                          navKey: navKey,
-                          child: widget.home,
+          InheritedWidgetWidget(
+            widget.home,
+            Material(
+              child: Row(
+                children: [
+                  SizeTransition(
+                    axis: Axis.horizontal,
+                    sizeFactor: _drawerAnimationController,
+                    axisAlignment: 1,
+                    child: widget.drawerBuilder(
+                        selectContentWidget, goHome, currentSelected, true),
+                  ),
+                  Expanded(
+                    child: CompositedTransformTarget(
+                      link: _shadowDividerOverlayLink,
+                      child: Scaffold(
+                        key: scaffoldKey,
+                        drawer: !tabletMode
+                            ? widget.drawerBuilder(selectContentWidget, goHome,
+                                currentSelected, false)
+                            : null,
+                        body: _Body(
+                          navKey: navigatorKey,
                           navObserver: PopObserver(wentHome),
                         ),
+                        drawerEnableOpenDragGesture:
+                            currentSelected == widget.homeId,
                       ),
-                    ],
+                    ),
                   ),
-                )
-              : Scaffold(
-                  key: scaffoldKey,
-                  drawer: drawer != null ? Drawer(child: drawer) : null,
-                  body: _Body(
-                    navKey: navKey,
-                    child: widget.home,
-                    navObserver: PopObserver(wentHome),
-                  ),
-                ),
+                ],
+              ),
+            ),
+          ),
         );
       },
     );
   }
 }
 
-class TabletMode extends InheritedWidget {
+class InheritedTabletMode extends InheritedWidget {
   final bool tabletMode;
   final Widget child;
 
-  TabletMode(this.tabletMode, this.child) : super(child: child);
+  InheritedTabletMode(this.tabletMode, this.child) : super(child: child);
 
-  static TabletMode? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<TabletMode>();
+  static InheritedTabletMode? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedTabletMode>();
   }
 
   @override
-  bool updateShouldNotify(TabletMode oldWidget) {
+  bool updateShouldNotify(InheritedTabletMode oldWidget) {
     return oldWidget.tabletMode != tabletMode;
+  }
+}
+
+class InheritedWidgetWidget extends InheritedWidget {
+  final Widget widget;
+  final Widget child;
+
+  InheritedWidgetWidget(this.widget, this.child) : super(child: child);
+
+  static InheritedWidgetWidget? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedWidgetWidget>();
+  }
+
+  @override
+  bool updateShouldNotify(InheritedWidgetWidget oldWidget) {
+    return oldWidget.widget != widget;
   }
 }
 
 class _Body extends StatelessWidget {
   final GlobalKey<NavigatorState> navKey;
-  final Widget child;
   final NavigatorObserver navObserver;
 
-  const _Body(
-      {Key? key,
-      required this.navKey,
-      required this.child,
-      required this.navObserver})
+  const _Body({Key? key, required this.navKey, required this.navObserver})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -201,7 +250,7 @@ class _Body extends StatelessWidget {
             case "/":
               return MaterialPageRoute(
                 builder: (context) {
-                  return child;
+                  return _HomePage();
                 },
               );
           }
@@ -213,7 +262,7 @@ class _Body extends StatelessWidget {
 
 typedef WidgetSelectedCallback<T> = void Function(Widget, T);
 typedef GoHomeCallback<T> = void Function(T);
-typedef DrawerBuilder<T> = Widget? Function(WidgetSelectedCallback<T>,
+typedef DrawerBuilder<T> = Widget Function(WidgetSelectedCallback<T>,
     VoidCallback goHome, T currentSelected, bool tabletMode);
 
 class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -226,7 +275,7 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final tabletMode = TabletMode.of(context)?.tabletMode ?? false;
+    final tabletMode = InheritedTabletMode.of(context)?.tabletMode ?? false;
     return AppBar(
       actions: actions,
       title: title,
@@ -245,4 +294,11 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => const Size.fromHeight(56);
+}
+
+class _HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return InheritedWidgetWidget.of(context)!.widget;
+  }
 }

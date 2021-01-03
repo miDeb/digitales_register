@@ -5,8 +5,14 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  int count = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -28,31 +34,43 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           body: FlutterLogo(),
           appBar: ResponsiveAppBar(
-            title: Text("Home"),
+            title: Text("Home $count"),
             isHomePage: true,
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              setState(() {
+                count++;
+              });
+            },
           ),
         ),
         drawerBuilder: (onSelected, onGoHome, currentSelected, tabletMode) {
-          return Column(
-            children: [
-              if (tabletMode)
-                ListTile(
-                  title: Text("Home"),
-                  onTap: onGoHome,
-                ),
-              ListTile(
-                title: Text("foo"),
-                onTap: () => onSelected(
-                  Scaffold(
-                    appBar: ResponsiveAppBar(
-                      title: Text("foo"),
-                    ),
-                    body: Placeholder(),
+          return Drawer(
+            child: Column(
+              children: [
+                if (tabletMode)
+                  ListTile(
+                    title: Text("Homeaaaaaaaaaaaaaaaaaaaaaaaaa"),
+                    onTap: onGoHome,
+                    trailing: Icon(Icons.home),
                   ),
-                  1,
+                ListTile(
+                  title: Text("foo"),
+                  trailing: Icon(Icons.home),
+                  onTap: () => onSelected(
+                    Scaffold(
+                      appBar: ResponsiveAppBar(
+                        title: Text("foo"),
+                      ),
+                      body: Placeholder(),
+                    ),
+                    1,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
