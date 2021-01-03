@@ -137,36 +137,33 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: widget.vm.deleteDataOnLogout,
           ),
           Divider(),
-          if (!Platform.isLinux) ...[
-            AutoScrollTag(
-              child: ListTile(
-                title: Text(
-                  "Theme",
-                  style: Theme.of(context).textTheme.headline5,
-                ),
+          AutoScrollTag(
+            child: ListTile(
+              title: Text(
+                "Theme",
+                style: Theme.of(context).textTheme.headline5,
               ),
-              controller: controller,
-              index: 1,
-              key: ObjectKey(1),
             ),
-            SwitchListTile(
-              title: Text("Dark Mode"),
-              onChanged: DynamicTheme.of(context).followDevice
-                  ? null
-                  : (bool value) {
-                      widget.onSetDarkMode(value);
-                    },
-              value:
-                  DynamicTheme.of(context).customBrightness == Brightness.dark,
-            ),
-            SwitchListTile(
-              title: Text("Geräte-Theme folgen"),
-              onChanged: (bool value) {
-                widget.onSetFollowDeviceDarkMode(value);
-              },
-              value: DynamicTheme.of(context).followDevice,
-            ),
-          ],
+            controller: controller,
+            index: 1,
+            key: ObjectKey(1),
+          ),
+          SwitchListTile(
+            title: Text("Dark Mode"),
+            onChanged: DynamicTheme.of(context).followDevice
+                ? null
+                : (bool value) {
+                    widget.onSetDarkMode(value);
+                  },
+            value: DynamicTheme.of(context).customBrightness == Brightness.dark,
+          ),
+          SwitchListTile(
+            title: Text("Geräte-Theme folgen"),
+            onChanged: (bool value) {
+              widget.onSetFollowDeviceDarkMode(value);
+            },
+            value: DynamicTheme.of(context).followDevice,
+          ),
           Divider(),
           AutoScrollTag(
             child: ListTile(

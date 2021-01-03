@@ -112,10 +112,6 @@ class DynamicTheme extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isLinux) {
-      return themedWidgetBuilder(
-          context, ThemeData.dark()); // Modify here to change theme
-    }
     return dynamic_theme.DynamicTheme(
       data: data,
       themedWidgetBuilder: themedWidgetBuilder,
