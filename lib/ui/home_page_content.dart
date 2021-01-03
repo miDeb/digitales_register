@@ -62,19 +62,18 @@ class HomePageContent extends StatelessWidget {
                 isHomePage: true,
                 title: Text("Register"),
                 actions: <Widget>[
-                  vm.noInternet && !vm.loading
-                      ? FlatButton(
-                          textColor: Theme.of(context).primaryIconTheme.color,
-                          child: Row(
-                            children: <Widget>[
-                              Text("Kein Internet"),
-                              SizedBox(width: 8),
-                              Icon(Icons.refresh),
-                            ],
-                          ),
-                          onPressed: refreshNoInternet,
-                        )
-                      : SizedBox(),
+                  if (vm.noInternet && !vm.loading)
+                    FlatButton(
+                      textColor: Theme.of(context).primaryIconTheme.color,
+                      child: Row(
+                        children: <Widget>[
+                          Text("Kein Internet"),
+                          SizedBox(width: 8),
+                          Icon(Icons.refresh),
+                        ],
+                      ),
+                      onPressed: refreshNoInternet,
+                    ),
                   NotificationIconContainer(),
                 ],
               ),
