@@ -123,7 +123,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           if (widget.message.isNew || initiallyExpanded)
             Badge(
               shape: BadgeShape.square,
-              borderRadius: 20,
+              borderRadius: BorderRadius.circular(20),
               badgeContent: Text("neu"),
             )
         ],

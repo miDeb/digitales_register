@@ -585,7 +585,7 @@ class ItemWidget extends StatelessWidget {
                                 right: 0,
                                 child: Badge(
                                   shape: BadgeShape.square,
-                                  borderRadius: 20,
+                                  borderRadius: BorderRadius.circular(20),
                                   badgeContent: Text(
                                     isHistory && isCurrent
                                         ? "aktuell"
