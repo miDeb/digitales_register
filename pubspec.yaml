@@ -66,11 +66,19 @@ dev_dependencies:
   build_runner: any
   built_value_generator: any
   flutter_launcher_icons: any
+  flutter_native_splash:
+    git:
+      url: https://github.com/jonbhanson/flutter_native_splash/
+      ref: dark-mode
 
 flutter_icons:
   android: "launcher_icon"
   ios: true
   image_path: "assets/index.png"
+
+flutter_native_splash:
+  color: "fafafa"
+  color_dark: "303030"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

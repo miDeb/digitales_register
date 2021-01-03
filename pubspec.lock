@@ -199,6 +199,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0-nullsafety.5"
+  color:
+    dependency: transitive
+    description:
+      name: color
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.1.1"
   convert:
     dependency: transitive
     description:
@@ -314,6 +321,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_native_splash:
+    dependency: "direct dev"
+    description:
+      path: "."
+      ref: dark-mode
+      resolved-ref: b5c56cec50f6ff442a9976df30fe56907af8ff5d
+      url: "https://github.com/jonbhanson/flutter_native_splash/"
+    source: git
+    version: "0.1.9"
   flutter_secure_storage:
     dependency: "direct main"
     description:
