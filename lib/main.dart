@@ -57,7 +57,7 @@ void run() {
                     platform: platform,
                   )
                 : ThemeData(
-                    primarySwatch: Colors.indigo,
+                    primarySwatch: Colors.deepOrange,
                     brightness: brightness,
                     platform: platform,
                   );
