@@ -31,7 +31,8 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(SettingsActionsNames.deduplicateDashboardEntries,
       _deduplicateDashboardEntries)
   ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
-  ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig);
+  ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig)
+  ..add(SettingsActionsNames.drawerExpandedChange, _drawerFullyExpanded);
 
 void _askWhenDeleteReminder(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
@@ -113,6 +114,11 @@ void _markNotSeenDashboardEntries(
 void _deduplicateDashboardEntries(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.dashboardDeduplicateEntries = action.payload;
+}
+
+void _drawerFullyExpanded(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.drawerFullyExpanded = action.payload;
 }
 
 void _updateGradeGraphConfigs(SettingsState state,

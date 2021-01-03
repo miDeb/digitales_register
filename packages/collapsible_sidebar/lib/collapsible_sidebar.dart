@@ -208,8 +208,8 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
               Expanded(
                 child: SingleChildScrollView(
                   reverse: widget.fitItemsToBottom,
-                    child: Column(
-                      children: _items,
+                  child: Column(
+                    children: _items,
                   ),
                 ),
               ),

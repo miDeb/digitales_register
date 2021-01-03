@@ -25,4 +25,5 @@ abstract class SettingsActions extends ReduxActions {
   ActionDispatcher<bool> markNotSeenDashboardEntries;
   ActionDispatcher<bool> deduplicateDashboardEntries;
   ActionDispatcher<bool> showCalendarSubjectNicksBar;
+  ActionDispatcher<bool> drawerExpandedChange;
 }

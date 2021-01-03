@@ -238,6 +238,10 @@ abstract class SettingsState
   bool get dashboardDeduplicateEntries;
   BuiltMap<int, SubjectGraphConfig> get graphConfigs;
 
+  // Whether to fully expand the drawer if in tablet mode
+  // if not, only the icons are shown
+  bool get drawerFullyExpanded;
+
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
   factory SettingsState([updates(SettingsStateBuilder b)]) = _$SettingsState;
@@ -269,7 +273,8 @@ abstract class SettingsState
       ..showAllSubjectsAverage = true
       ..dashboardMarkNewOrChangedEntries = true
       ..dashboardDeduplicateEntries = true
-      ..graphConfigs = MapBuilder<int, SubjectGraphConfig>();
+      ..graphConfigs = MapBuilder<int, SubjectGraphConfig>()
+      ..drawerFullyExpanded = true;
   }
 }
 
