@@ -153,14 +153,18 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             onChanged: DynamicTheme.of(context).followDevice
                 ? null
                 : (bool value) {
-                    widget.onSetDarkMode(value);
+                    setState(() {
+                      widget.onSetDarkMode(value);
+                    });
                   },
             value: DynamicTheme.of(context).customBrightness == Brightness.dark,
           ),
           SwitchListTile(
             title: Text("Geräte-Theme folgen"),
             onChanged: (bool value) {
-              widget.onSetFollowDeviceDarkMode(value);
+              setState(() {
+                widget.onSetFollowDeviceDarkMode(value);
+              });
             },
             value: DynamicTheme.of(context).followDevice,
           ),
