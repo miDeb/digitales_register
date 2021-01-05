@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';

@@ -7,9 +7,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'
 import 'package:dynamic_theme/dynamic_theme.dart' as dynamic_theme;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path_provider/path_provider.dart';
+import 'package:biometric_storage/biometric_storage.dart';
 
 secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
-  if (Platform.isLinux) {
+  if (Platform.isLinux || Platform.isMacOS) {
     return LinuxSecureStorage();
   } else {
     return secure_storage.FlutterSecureStorage();
@@ -19,39 +21,21 @@ secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
 /// Dummy implementation to run development builds on linux;
 /// not actually secure
 class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
-  Map<String, String> _storage = {};
-
-  /// Will complete when loading finishes
-  Future _storageFuture;
-  final directory = Directory("linux/appData/secure_storage");
-  LinuxSecureStorage() {
-    _storageFuture = directory.list().forEach((element) {
-      _storage[element.path.split("/").last.replaceAll(".json", "")] =
-          (element as File).readAsStringSync();
-    });
-  }
+  BiometricStorage storage = BiometricStorage(); 
+  LinuxSecureStorage();
   @override
   Future<void> delete(
       {String key,
       dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
-    await _storageFuture;
-    _storage.remove(key);
+   // storage.delete(key);
 
-    final file = File("linux/appData/secure_storage/${_sanitize(key)}.json");
-    if (file.existsSync()) {
-      file.deleteSync();
-    }
   }
 
   @override
   Future<void> deleteAll(
       {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
-    await _storageFuture;
-    for (final key in _storage.keys) {
-      delete(key: key);
-    }
-    _storage.clear();
+     
   }
 
   @override
@@ -59,15 +43,13 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
       {String key,
       dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
-    await _storageFuture;
-    return _storage[_sanitize(key)];
+    return await (await storage.getStorage(key,forceInit: true, options: StorageFileInitOptions(authenticationRequired: false))).read();
   }
 
   @override
   Future<Map<String, String>> readAll(
       {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
-    await _storageFuture;
-    return UnmodifiableMapView(_storage);
+     
   }
 
   @override
@@ -76,20 +58,10 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
       String value,
       dynamic iOptions,
       secure_storage.AndroidOptions aOptions}) async {
-    await _storageFuture;
-    _storage[key] = value;
-
-    final file = File("linux/appData/secure_storage/${_sanitize(key)}.json");
-    if (!file.existsSync()) {
-      file.createSync();
-    }
-    file.writeAsString(value);
+   (await storage.getStorage(key, options: StorageFileInitOptions(authenticationRequired: false))).write(value);
   }
 
-  String _sanitize(String key) {
-    return key.replaceAll("/", "").replaceAll('"', "");
-  }
-
+ 
   @override
   Future<bool> containsKey(
       {String key,
@@ -98,46 +70,15 @@ class LinuxSecureStorage implements secure_storage.FlutterSecureStorage {
     throw UnimplementedError();
   }
 }
-
-/// Dummy implementation if on linux to run development builds on it;
-/// nothing actually dynamic there
-class DynamicTheme extends StatelessWidget {
-  final dynamic_theme.ThemedWidgetBuilder themedWidgetBuilder;
-  final dynamic_theme.ThemeDataBuilder data;
-  final Brightness defaultBrightness;
-
-  const DynamicTheme(
-      {Key key, this.themedWidgetBuilder, this.data, this.defaultBrightness})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return dynamic_theme.DynamicTheme(
-      data: data,
-      themedWidgetBuilder: themedWidgetBuilder,
-      defaultBrightness: defaultBrightness,
-    );
-  }
-}
-
-/// Dummy implementation if on linux to run development builds on it;
-/// only based on the local directory there
-Future<Directory> getApplicationDocumentsDirectory() async {
-  if (Platform.isLinux) {
-    return Directory("linux/appData");
-  }
-  return await path_provider.getApplicationDocumentsDirectory();
-}
+ 
+ 
 
 void showToast({String msg, Toast toastLength}) {
-  if (Platform.isLinux) {
+  if (Platform.isLinux || Platform.isMacOS) {
     print(
         "TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
   } else {
     Fluttertoast.showToast(msg: msg, toastLength: toastLength);
   }
 }
-
-Future<Directory> get downloadsDirectory async {
-  return Directory.current;
-}
+ 
