@@ -32,7 +32,7 @@ import '../actions/save_pass_actions.dart';
 import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
-import '../linux.dart';
+import '../desktop.dart';
 import '../main.dart';
 import '../serializers.dart';
 import '../util.dart';

@@ -5,7 +5,7 @@ import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/app_actions.dart';
 import 'package:dr/actions/login_actions.dart';
 import 'package:dr/app_state.dart';
-import 'package:dr/linux.dart';
+import 'package:dr/desktop.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/serializers.dart';

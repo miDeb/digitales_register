@@ -19,6 +19,8 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  collapsible_sidebar:
+    path: packages/collapsible_sidebar/
   dynamic_theme:
     path: packages/dynamic_theme/
   quill_delta_viewer:
@@ -34,8 +36,6 @@ dependencies:
   biometric_storage: ^1.1.0+1
   built_value: any
   charts_flutter: any
-  collapsible_sidebar:
-    path: packages/collapsible_sidebar/
   cookie_jar: ^1.0.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
@@ -43,6 +43,7 @@ dependencies:
   flutter_secure_storage: any
   flutter_widget_from_html_core: ^0.3.2+1
   fluttertoast: any
+  hive: ^1.4.4+1
   http: ^0.12.2
   intl: any
   mutex: any
@@ -55,7 +56,7 @@ dependencies:
   uni_links: any
   url_launcher: any
 dependency_overrides:
-  intl: '>=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2'
+  intl: ">=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2"
   analyzer: ^0.40.6
   built_redux:
     git:
@@ -64,13 +65,13 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner: any
-  built_value_generator: any
-  flutter_launcher_icons: any
   flutter_native_splash:
     git:
       url: https://github.com/jonbhanson/flutter_native_splash/
       ref: dark-mode
+  build_runner: any
+  built_value_generator: any
+  flutter_launcher_icons: any
 
 flutter_icons:
   android: "launcher_icon"
