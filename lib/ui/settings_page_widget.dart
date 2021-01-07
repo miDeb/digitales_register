@@ -370,6 +370,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               );
             },
           ),
+          ListTile(
+            title: Text("Feedback geben"),
+            trailing: Icon(Icons.open_in_new),
+            onTap: () {
+              launch("https://form.jotform.com/210060844853351");
+            },
+          ),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (context, info) => AboutListTile(
@@ -386,7 +393,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
-                Text("Alternativer Client für das Digitale Register."),
+                Text("Ein Client für das Digitale Register."),
                 RichText(
                   text: new TextSpan(
                     text: "Source Code: https://gitlab.com/michael.debertol/dr",
