@@ -166,8 +166,7 @@ void _refreshNoInternet(
 void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  if (!api.state.noInternet)
-    navigatorKey.currentState?.popUntil((route) => route.isFirst);
+  if (!api.state.noInternet) _popAll();
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
@@ -261,7 +260,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       next(action);
     }
 
-    navigatorKey.currentState?.popUntil((route) => route.isFirst);
+    _popAll();
   } else {
     next(action);
   }
@@ -361,7 +360,7 @@ void _restarted(
 ) {
   next(action);
   if (DateTime.now().difference(_wrapper.lastInteraction).inMinutes > 3) {
-    navigatorKey.currentState.popUntil((route) => route.isFirst);
+    _popAll();
     api.actions.loginActions.clearAfterLoginCallbacks();
     api.actions.load();
   }
@@ -453,4 +452,9 @@ void redirectAfterLogin(
     default:
       showToast(msg: "Dieser Link konnte nicht geöffnet werden");
   }
+}
+
+void _popAll() {
+  navigatorKey.currentState.popUntil((route) => route.isFirst);
+  nestedNavKey.currentState.popUntil((route) => route.isFirst);
 }

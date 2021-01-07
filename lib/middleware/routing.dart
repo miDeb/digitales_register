@@ -36,6 +36,7 @@ void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   Route currentRoute;
   navigatorKey.currentState?.popUntil((route) {
     currentRoute = route;
+    // by returning true here no route is actually popped.
     return true;
   });
   if (currentRoute?.settings?.name != "/login") {
