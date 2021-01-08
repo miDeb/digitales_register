@@ -42,7 +42,6 @@ dependencies:
   flutter_built_redux: any
   flutter_secure_storage: any
   flutter_widget_from_html_core: ^0.3.2+1
-  fluttertoast: any
   hive: ^1.4.4+1
   http: ^0.12.2
   intl: any

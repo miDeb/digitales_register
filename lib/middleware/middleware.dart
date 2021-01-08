@@ -13,7 +13,6 @@ import 'package:dr/container/settings_page.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
@@ -85,10 +84,14 @@ NextActionHandler _errorMiddleware(
     (ActionHandler next) => (Action action) {
           void handleError(e) {
             print(e);
+            var stackTrace = "";
+            try {
+              stackTrace = e.stackTrace.toString();
+            } catch (e) {}
             navigatorKey.currentState.push(
               MaterialPageRoute(
                 fullscreenDialog: true,
-                builder: (context) {
+                builder: (_) {
                   return Scaffold(
                     appBar: AppBar(
                       backgroundColor: Colors.red,
@@ -100,23 +103,18 @@ NextActionHandler _errorMiddleware(
                           RaisedButton(
                             child: Text("In die Zwischenablage kopieren"),
                             onPressed: () async {
-                              var stackTrace = "";
-                              try {
-                                stackTrace = e.stackTrace.toString();
-                              } catch (e) {}
                               await Clipboard.setData(
                                 ClipboardData(
-                                  text: "$e\n$stackTrace",
+                                  text: "$e\n\n$stackTrace",
                                 ),
                               );
-                              showToast(
-                                msg: "In die Zwischenablage kopiert",
-                                toastLength: Toast.LENGTH_LONG,
+                              showSnackBar(
+                                "In die Zwischenablage kopiert",
                               );
                             },
                           ),
                           Text(
-                              "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n${e.stackTrace}"),
+                              "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n\n$stackTrace"),
                         ],
                       ),
                     ),
@@ -152,7 +150,7 @@ void _refreshNoInternet(
   final prevNoInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
     if (noInternet) {
-      showToast(msg: "Kein Internet");
+      showSnackBar("Kein Internet");
       _wrapper.logout(
         hard: false,
         logoutForcedByServer: true,
@@ -250,9 +248,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         api.actions.settingsActions
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
-        showToast(
-            msg: "Fehler beim Laden der gespeicherten Daten",
-            toastLength: Toast.LENGTH_LONG);
+        showSnackBar("Fehler beim Laden der gespeicherten Daten");
         print(e);
         next(action);
       }
@@ -411,7 +407,7 @@ void _start(
         }
         break;
       default:
-        showToast(msg: "Dieser Link konnte nicht geöffnet werden");
+        showSnackBar("Dieser Link konnte nicht geöffnet werden");
     }
     redirectAfterLogin(action.payload.fragment, api);
   }
@@ -450,7 +446,7 @@ void redirectAfterLogin(
       );
       break;
     default:
-      showToast(msg: "Dieser Link konnte nicht geöffnet werden");
+      showSnackBar("Dieser Link konnte nicht geöffnet werden");
   }
 }
 

@@ -25,6 +25,7 @@ import 'ui/grades_chart_page.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 GlobalKey<NavigatorState> nestedNavKey = GlobalKey();
 GlobalKey<ResponsiveScaffoldState<Pages>> scaffoldKey = GlobalKey();
+GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey();
 
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
@@ -68,6 +69,7 @@ void main() {
               const Locale("de"),
             ],
             navigatorKey: navigatorKey,
+            scaffoldMessengerKey: scaffoldMessengerKey,
             initialRoute: "/",
             onGenerateRoute: (RouteSettings settings) {
               List<String> pathElements = settings.name.split("/");
@@ -158,4 +160,13 @@ class LifecycleObserver with WidgetsBindingObserver {
       onLogout();
     }
   }
+}
+
+/// Utility to show a global Snack Bar
+void showSnackBar(String message) {
+  scaffoldMessengerKey.currentState.showSnackBar(
+    SnackBar(
+      content: Text(message),
+    ),
+  );
 }

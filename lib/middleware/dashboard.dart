@@ -52,7 +52,7 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     },
   );
   if (result == null) {
-    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
     return;
   }
@@ -76,7 +76,7 @@ void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (result != null && result["success"]) {
     next(action);
   } else {
-    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
     return;
   }
@@ -107,7 +107,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         ),
       ),
     );
-    showToast(msg: "Beim Speichern ist ein Fehler aufgetreten");
+    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
     return;
   }
