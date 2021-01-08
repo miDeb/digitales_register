@@ -455,6 +455,6 @@ void redirectAfterLogin(
 }
 
 void _popAll() {
-  navigatorKey.currentState.popUntil((route) => route.isFirst);
-  nestedNavKey.currentState.popUntil((route) => route.isFirst);
+  navigatorKey.currentState?.popUntil((route) => route.isFirst);
+  nestedNavKey.currentState?.popUntil((route) => route.isFirst);
 }
