@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/container/settings_page.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -107,8 +108,13 @@ void main() {
                     builder: (_) => GradesChartPage(),
                     fullscreenDialog: true,
                   );
+                case "settings":
+                  return MaterialPageRoute(
+                    builder: (_) => SettingsPageContainer(),
+                    fullscreenDialog: true,
+                  );
                 default:
-                  throw Exception("Unknown Route");
+                  throw Exception("Unknown Route ${pathElements[1]}");
               }
             },
             theme: theme,
