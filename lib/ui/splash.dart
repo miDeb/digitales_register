@@ -7,7 +7,21 @@ class SplashScreen extends StatelessWidget {
   const SplashScreen({Key key, this.child, this.splash}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return splash ? _SplashWidget() : child;
+    // We are using a stack here instead of an AnimatedCrossFade because the
+    // latter results in errors, presumably because it does not size its hidden
+    // children properly for this use-case.
+    return Stack(
+      children: [
+        child,
+        IgnorePointer(
+          child: AnimatedOpacity(
+            opacity: splash ? 1 : 0,
+            duration: Duration(milliseconds: 500),
+            child: _SplashWidget(),
+          ),
+        ),
+      ],
+    );
   }
 }
 
