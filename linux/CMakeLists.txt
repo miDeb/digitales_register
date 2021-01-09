@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
 set(BINARY_NAME "dr")
-set(APPLICATION_ID "it.dr")
+set(APPLICATION_ID "it.digitalesregisterapp.dr")
 
 cmake_policy(SET CMP0063 NEW)
 
