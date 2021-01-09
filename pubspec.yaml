@@ -65,10 +65,7 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash:
-    git:
-      url: https://github.com/jonbhanson/flutter_native_splash/
-      ref: dark-mode
+  flutter_native_splash: ^0.2.2
   build_runner: any
   built_value_generator: any
   flutter_launcher_icons: 
