@@ -1,5 +1,5 @@
+import 'package:dr/ui/calendar.dart';
 import 'package:flutter_test/flutter_test.dart';
-import '../lib/ui/calendar.dart';
 
 main() {
   test('to monday; page of', () {
