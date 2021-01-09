@@ -1,9 +1,16 @@
 import 'package:badges/badges.dart';
+import 'package:dr/container/notification_icon_container.dart';
+import 'package:dr/container/sidebar_container.dart';
+import 'package:dr/main.dart';
+import 'package:dr/middleware/middleware.dart';
+
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_scaffold/scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:tuple/tuple.dart';
 
 import '../container/days_container.dart';
 import '../container/homework_filter_container.dart';
@@ -18,96 +25,37 @@ typedef ToggleDoneCallback = void Function(Homework hw, bool done);
 typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
 typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
 
-class DaysWidget extends StatelessWidget {
+class DaysWidget extends StatefulWidget {
   final DaysViewModel vm;
 
-  final VoidCallback onSwitchFuture;
-  final AddReminderCallback addReminderCallback;
-  final RemoveReminderCallback removeReminderCallback;
-  final ToggleDoneCallback toggleDoneCallback;
-  final VoidCallback setDoNotAskWhenDeleteCallback;
   final MarkAsNotNewOrChangedCallback markAsSeenCallback;
   final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
   final VoidCallback markAllAsSeenCallback;
+  final AddReminderCallback addReminderCallback;
+  final RemoveReminderCallback removeReminderCallback;
+  final VoidCallback onSwitchFuture;
+  final ToggleDoneCallback toggleDoneCallback;
+  final VoidCallback setDoNotAskWhenDeleteCallback;
   final VoidCallback refresh;
 
   const DaysWidget({
     Key key,
     this.vm,
-    this.onSwitchFuture,
-    this.addReminderCallback,
-    this.removeReminderCallback,
-    this.toggleDoneCallback,
-    this.setDoNotAskWhenDeleteCallback,
     this.markAsSeenCallback,
     this.markDeletedHomeworkAsSeenCallback,
+    this.addReminderCallback,
+    this.removeReminderCallback,
     this.markAllAsSeenCallback,
+    this.onSwitchFuture,
+    this.toggleDoneCallback,
+    this.setDoNotAskWhenDeleteCallback,
     this.refresh,
   }) : super(key: key);
-
-  Widget build(BuildContext context) {
-    if (vm.days.isEmpty && vm.loading && !vm.noInternet) {
-      return Center(child: CircularProgressIndicator());
-    }
-    final list = DaysListWidget(
-      vm: vm,
-      markAsSeenCallback: markAsSeenCallback,
-      markAllAsSeenCallback: markAllAsSeenCallback,
-      markDeletedHomeworkAsSeenCallback: markDeletedHomeworkAsSeenCallback,
-      addReminderCallback: addReminderCallback,
-      removeReminderCallback: removeReminderCallback,
-      onSwitchFuture: onSwitchFuture,
-      toggleDoneCallback: toggleDoneCallback,
-      setDoNotAskWhenDeleteCallback: setDoNotAskWhenDeleteCallback,
-    );
-    final content = vm.noInternet
-        ? list
-        : RefreshIndicator(
-            child: list,
-            onRefresh: () async {
-              refresh();
-            },
-          );
-    return vm.loading
-        ? Stack(
-            children: <Widget>[
-              content,
-              LinearProgressIndicator(),
-            ],
-          )
-        : content;
-  }
-}
-
-class DaysListWidget extends StatefulWidget {
-  final DaysViewModel vm;
-
-  final MarkAsNotNewOrChangedCallback markAsSeenCallback;
-  final MarkDeletedHomeworkAsSeenCallback markDeletedHomeworkAsSeenCallback;
-  final VoidCallback markAllAsSeenCallback;
-  final AddReminderCallback addReminderCallback;
-  final RemoveReminderCallback removeReminderCallback;
-  final VoidCallback onSwitchFuture;
-  final ToggleDoneCallback toggleDoneCallback;
-  final VoidCallback setDoNotAskWhenDeleteCallback;
-
-  const DaysListWidget({
-    Key key,
-    this.vm,
-    this.markAsSeenCallback,
-    this.markDeletedHomeworkAsSeenCallback,
-    this.addReminderCallback,
-    this.removeReminderCallback,
-    this.markAllAsSeenCallback,
-    this.onSwitchFuture,
-    this.toggleDoneCallback,
-    this.setDoNotAskWhenDeleteCallback,
-  }) : super(key: key);
   @override
-  _DaysListWidgetState createState() => _DaysListWidgetState();
+  _DaysWidgetState createState() => _DaysWidgetState();
 }
 
-class _DaysListWidgetState extends State<DaysListWidget> {
+class _DaysWidgetState extends State<DaysWidget> {
   final controller = AutoScrollController();
 
   bool _showScrollUp = false;
@@ -217,97 +165,117 @@ class _DaysListWidgetState extends State<DaysListWidget> {
   }
 
   @override
-  void didUpdateWidget(DaysListWidget oldWidget) {
+  void didUpdateWidget(DaysWidget oldWidget) {
     updateValues();
     update();
 
     super.didUpdateWidget(oldWidget);
   }
 
+  Widget getItem(int n, bool noEntries, bool noInternet) {
+    if (n == 0) {
+      return Stack(
+        children: [
+          HomeworkFilterContainer(),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Row(
+              children: [
+                Expanded(
+                  child: AbsorbPointer(child: Container()),
+                ),
+                SizedBox(
+                  width: 60,
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: Center(
+              child: RaisedButton(
+                child: Text(
+                  widget.vm.future ? "Vergangenheit" : "Zukunft",
+                ),
+                onPressed: widget.onSwitchFuture,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    if (n == widget.vm.days.length + 1) {
+      if (noEntries) {
+        if (noInternet) {
+          return Column(
+            children: <Widget>[
+              SizedBox(
+                height: 120,
+              ),
+              NoInternet(),
+            ],
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.all(16),
+            child: Center(
+              child: Text(
+                "Keine Einträge vorhanden",
+                style: Theme.of(context).textTheme.headline4,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+      } else {
+        return SizedBox(
+          height: 160,
+        );
+      }
+    }
+    return DayWidget(
+      day: widget.vm.days[n - 1],
+      vm: widget.vm,
+      controller: controller,
+      index: _dayStartIndices[n - 1],
+      addReminderCallback: widget.addReminderCallback,
+      removeReminderCallback: widget.removeReminderCallback,
+      toggleDoneCallback: widget.toggleDoneCallback,
+      setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final noInternet = widget.vm.noInternet;
     final noEntries = widget.vm.days.isEmpty;
-    return Scaffold(
-      body: ListView.builder(
-        physics: AlwaysScrollableScrollPhysics(),
-        controller: controller,
-        itemCount: widget.vm.days.length + 2,
-        itemBuilder: (context, n) {
-          if (n == 0) {
-            return Stack(
-              children: [
-                HomeworkFilterContainer(),
-                Positioned(
-                  top: 0,
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: AbsorbPointer(child: Container()),
-                      ),
-                      SizedBox(
-                        width: 60,
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: Center(
-                    child: RaisedButton(
-                      child: Text(
-                        widget.vm.future ? "Vergangenheit" : "Zukunft",
-                      ),
-                      onPressed: widget.onSwitchFuture,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-
-          if (n == widget.vm.days.length + 1) {
-            if (noEntries) {
-              if (noInternet) {
-                return Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 120,
-                    ),
-                    NoInternet(),
-                  ],
-                );
-              } else {
-                return Center(
-                  child: Text(
-                    "Keine Einträge vorhanden",
-                    style: Theme.of(context).textTheme.headline4,
-                    textAlign: TextAlign.center,
-                  ),
-                );
-              }
-            } else {
-              return SizedBox(
-                height: 160,
-              );
-            }
-          }
-          return DayWidget(
-            day: widget.vm.days[n - 1],
-            vm: widget.vm,
-            controller: controller,
-            index: _dayStartIndices[n - 1],
-            addReminderCallback: widget.addReminderCallback,
-            removeReminderCallback: widget.removeReminderCallback,
-            toggleDoneCallback: widget.toggleDoneCallback,
-            setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
-          );
-        },
-      ),
-      floatingActionButton: Column(
+    Widget body = ListView.builder(
+      physics: AlwaysScrollableScrollPhysics(),
+      controller: controller,
+      itemCount: widget.vm.days.length + 2,
+      itemBuilder: (context, n) {
+        return getItem(n, noEntries, noInternet);
+      },
+    );
+    if (!noInternet) {
+      body = RefreshIndicator(
+          child: body, onRefresh: () async => widget.refresh());
+    }
+    if (widget.vm.loading) {
+      body = Stack(
+        children: [
+          body,
+          LinearProgressIndicator(),
+        ],
+      );
+    }
+    return ResponsiveScaffold<Pages>(
+      key: scaffoldKey,
+      homeBody: body,
+      homeFloatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
@@ -354,6 +322,24 @@ class _DaysListWidgetState extends State<DaysListWidget> {
             ),
         ],
       ),
+      homeAppBar: ResponsiveAppBar(
+        title: Text("Register"),
+        actions: <Widget>[
+          NotificationIconContainer(),
+        ],
+      ),
+      drawerBuilder: (_widgetSelected, goHome, currentSelected, tabletMode) {
+        // _widgetSelected is not passed down because routing is done by
+        // accessing the ResponsiveScaffoldState via the GlobalKey and calling
+        // selectContentWidget on it.
+        return SidebarContainer(
+          currentSelected: currentSelected,
+          goHome: goHome,
+          tabletMode: tabletMode,
+        );
+      },
+      homeId: Pages.Homework,
+      navKey: nestedNavKey,
     );
   }
 }
@@ -382,6 +368,47 @@ class DayWidget extends StatelessWidget {
     this.toggleDoneCallback,
     this.setDoNotAskWhenDeleteCallback,
   }) : super(key: key);
+
+  Future<String> showEnterReminderDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        String message = "";
+        return StatefulBuilder(
+          builder: (context, setState) => InfoDialog(
+            title: Text("Erinnerung"),
+            content: TextField(
+              maxLines: null,
+              onChanged: (msg) {
+                setState(() => message = msg);
+              },
+              decoration: InputDecoration(hintText: 'zB. Hausaufgabe'),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text("Abbrechen"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              RaisedButton(
+                textTheme: ButtonTextTheme.primary,
+                child: Text(
+                  "Speichern",
+                ),
+                onPressed: message.isNullOrEmpty
+                    ? null
+                    : () {
+                        Navigator.pop(context, message);
+                      },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     var i = index;
@@ -455,43 +482,8 @@ class DayWidget extends StatelessWidget {
                   onPressed: vm.noInternet
                       ? null
                       : () async {
-                          final message = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                String message = "";
-                                return StatefulBuilder(
-                                  builder: (context, setState) => InfoDialog(
-                                    title: Text("Erinnerung"),
-                                    content: TextField(
-                                      maxLines: null,
-                                      onChanged: (msg) {
-                                        setState(() => message = msg);
-                                      },
-                                      decoration: InputDecoration(
-                                          hintText: 'zB. Hausaufgabe'),
-                                    ),
-                                    actions: <Widget>[
-                                      FlatButton(
-                                        child: Text("Abbrechen"),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                      RaisedButton(
-                                        textTheme: ButtonTextTheme.primary,
-                                        child: Text(
-                                          "Speichern",
-                                        ),
-                                        onPressed: message.isNullOrEmpty
-                                            ? null
-                                            : () {
-                                                Navigator.pop(context, message);
-                                              },
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              });
+                          final message =
+                              await showEnterReminderDialog(context);
                           if (message != null) {
                             addReminderCallback(day, message);
                           }
@@ -541,6 +533,71 @@ class ItemWidget extends StatelessWidget {
     this.noInternet,
     this.isCurrent = true,
   }) : super(key: key);
+
+  Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
+    var ask = true;
+    final delete = await showDialog(
+      context: context,
+      builder: (context) {
+        return InfoDialog(
+          content: StatefulBuilder(
+            builder: (context, setState) => SwitchListTile(
+              title: Text("Nie fragen"),
+              onChanged: (bool value) {
+                setState(() => ask = !value);
+              },
+              value: !ask,
+            ),
+          ),
+          title: Text("Erinnerung löschen?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Abbrechen"),
+              onPressed: () => Navigator.pop(context),
+            ),
+            RaisedButton(
+              textTheme: ButtonTextTheme.primary,
+              child: Text(
+                "Löschen",
+              ),
+              onPressed: () => Navigator.pop(context, true),
+            )
+          ],
+        );
+      },
+    );
+    return Tuple2(delete, ask);
+  }
+
+  void _showHistory(BuildContext context) {
+    // if we are in the deleted view, show the history for the previous item
+    final historyItem = isDeletedView ? item.previousVersion : item;
+    showDialog(
+      context: context,
+      builder: (_context) {
+        return InfoDialog(
+          title: Text(historyItem.title),
+          content: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Text(formatChanged(historyItem)),
+              if (historyItem.previousVersion != null)
+                ExpansionTile(
+                  title: Text("Versionen"),
+                  children: <Widget>[
+                    ItemWidget(
+                      item: historyItem,
+                      isHistory: true,
+                    ),
+                  ],
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget child = Card(
@@ -613,45 +670,11 @@ class ItemWidget extends StatelessWidget {
                                     ? null
                                     : () async {
                                         if (askWhenDelete) {
-                                          var ask = true;
-                                          final delete = await showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return InfoDialog(
-                                                  content: StatefulBuilder(
-                                                    builder:
-                                                        (context, setState) =>
-                                                            SwitchListTile(
-                                                      title: Text("Nie fragen"),
-                                                      onChanged: (bool value) {
-                                                        setState(
-                                                            () => ask = !value);
-                                                      },
-                                                      value: !ask,
-                                                    ),
-                                                  ),
-                                                  title: Text(
-                                                      "Erinnerung löschen?"),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                      child: Text("Abbrechen"),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context),
-                                                    ),
-                                                    RaisedButton(
-                                                      textTheme: ButtonTextTheme
-                                                          .primary,
-                                                      child: Text(
-                                                        "Löschen",
-                                                      ),
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                              context, true),
-                                                    )
-                                                  ],
-                                                );
-                                              });
+                                          final confirmationResult =
+                                              await _showConfirmDelete(context);
+                                          final delete =
+                                              confirmationResult.item1;
+                                          final ask = confirmationResult.item2;
                                           if (delete == true) {
                                             if (!ask) setDoNotAskWhenDelete();
                                             removeThis();
@@ -693,33 +716,7 @@ class ItemWidget extends StatelessWidget {
                               Icons.info_outline,
                             ),
                       onPressed: () {
-                        // if we are in the deleted view, show the history for the previous item
-                        final historyItem =
-                            isDeletedView ? item.previousVersion : item;
-                        showDialog(
-                          context: context,
-                          builder: (_context) {
-                            return InfoDialog(
-                              title: Text(historyItem.title),
-                              content: ListView(
-                                shrinkWrap: true,
-                                children: <Widget>[
-                                  Text(formatChanged(historyItem)),
-                                  if (historyItem.previousVersion != null)
-                                    ExpansionTile(
-                                      title: Text("Versionen"),
-                                      children: <Widget>[
-                                        ItemWidget(
-                                          item: historyItem,
-                                          isHistory: true,
-                                        ),
-                                      ],
-                                    ),
-                                ],
-                              ),
-                            );
-                          },
-                        );
+                        _showHistory(context);
                       },
                     ),
                   if (item.warning)

@@ -17,17 +17,21 @@ class PopObserver extends NavigatorObserver {
 }
 
 class ResponsiveScaffold<T> extends StatefulWidget {
-  final Widget home;
-  final DrawerBuilder<T> drawerBuilder;
+  final Widget homeBody;
+  final PreferredSizeWidget homeAppBar;
+  final Widget? homeFloatingActionButton;
   final T homeId;
+  final DrawerBuilder<T> drawerBuilder;
   final GlobalKey<NavigatorState>? navKey;
 
   ResponsiveScaffold({
     Key? key,
-    required this.home,
+    required this.homeBody,
     required this.drawerBuilder,
     required this.homeId,
     this.navKey,
+    required this.homeAppBar,
+    this.homeFloatingActionButton,
   }) : super(key: key);
 
   @override
@@ -106,7 +110,7 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
 
   void selectContentWidget(Widget content, T data) {
     if (scaffoldKey.currentState?.isDrawerOpen == true) {
-      Navigator.pop(context);
+      Navigator.of(scaffoldKey.currentContext!).pop();
     }
     final route = tabletMode
         ? PageRouteBuilder(
@@ -161,9 +165,15 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
         isInitialized = true;
         return InheritedTabletMode(
           tabletMode,
-          InheritedWidgetWidget(
-            widget.home,
-            Material(
+          InheritedHomePage(
+            scaffoldKey: scaffoldKey,
+            body: widget.homeBody,
+            appBar: widget.homeAppBar,
+            drawer: !tabletMode
+                ? widget.drawerBuilder(
+                    selectContentWidget, goHome, currentSelected, false)
+                : null,
+            child: Material(
               child: Row(
                 children: [
                   SizeTransition(
@@ -176,18 +186,9 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
                   Expanded(
                     child: CompositedTransformTarget(
                       link: _shadowDividerOverlayLink,
-                      child: Scaffold(
-                        key: scaffoldKey,
-                        drawer: !tabletMode
-                            ? widget.drawerBuilder(selectContentWidget, goHome,
-                                currentSelected, false)
-                            : null,
-                        body: _Body(
-                          navKey: navigatorKey,
-                          navObserver: PopObserver(wentHome),
-                        ),
-                        drawerEnableOpenDragGesture:
-                            currentSelected == widget.homeId,
+                      child: _Body(
+                        navKey: navigatorKey,
+                        navObserver: PopObserver(wentHome),
                       ),
                     ),
                   ),
@@ -217,19 +218,32 @@ class InheritedTabletMode extends InheritedWidget {
   }
 }
 
-class InheritedWidgetWidget extends InheritedWidget {
-  final Widget widget;
+class InheritedHomePage extends InheritedWidget {
+  final Widget body;
+  final Widget? drawer;
+  final PreferredSizeWidget appBar;
+  final Widget? fab;
   final Widget child;
+  final Key scaffoldKey;
 
-  InheritedWidgetWidget(this.widget, this.child) : super(child: child);
+  InheritedHomePage({
+    required this.body,
+    required this.child,
+    required this.appBar,
+    required this.drawer,
+    required this.scaffoldKey,
+    this.fab,
+  }) : super(child: child);
 
-  static InheritedWidgetWidget? of(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<InheritedWidgetWidget>();
+  static InheritedHomePage? of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<InheritedHomePage>();
   }
 
   @override
-  bool updateShouldNotify(InheritedWidgetWidget oldWidget) {
-    return oldWidget.widget != widget;
+  bool updateShouldNotify(InheritedHomePage oldWidget) {
+    // Comparing the widgets this class holds is not meaningful because they'd
+    // have to be the exact same objects to compare equal.
+    return true;
   }
 }
 
@@ -280,15 +294,6 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       title: title,
       automaticallyImplyLeading: !tabletMode,
-      leading: isHomePage && !tabletMode
-          ? IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () => context
-                  .findAncestorStateOfType<ResponsiveScaffoldState>()
-                  ?.scaffoldKey
-                  .currentState
-                  ?.openDrawer())
-          : null,
     );
   }
 
@@ -299,6 +304,13 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
 class _HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return InheritedWidgetWidget.of(context)!.widget;
+    final widgets = InheritedHomePage.of(context)!;
+    return Scaffold(
+      appBar: widgets.appBar,
+      drawer: widgets.drawer,
+      body: widgets.body,
+      key: widgets.scaffoldKey,
+      floatingActionButton: widgets.fab,
+    );
   }
 }

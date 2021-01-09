@@ -31,20 +31,19 @@ class _MyAppState extends State<MyApp> {
       ),
       home: ResponsiveScaffold<int>(
         homeId: 0,
-        home: Scaffold(
+        homeAppBar: AppBar(
+          title: Text("Home $count"),
+        ),
+        homeFloatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              count++;
+            });
+          },
+        ),
+        homeBody: Scaffold(
           body: FlutterLogo(),
-          appBar: ResponsiveAppBar(
-            title: Text("Home $count"),
-            isHomePage: true,
-          ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () {
-              setState(() {
-                count++;
-              });
-            },
-          ),
         ),
         drawerBuilder: (onSelected, onGoHome, currentSelected, tabletMode) {
           return Drawer(
