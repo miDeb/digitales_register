@@ -1,0 +1,25 @@
+name: dr
+version: 0.1.0
+summary: Super Cool App
+description: Super Cool App that does everything!
+
+confinement: strict
+base: core18
+grade: stable
+
+apps:
+  dr:
+    command: dr
+    extensions: [flutter-master] # Where "master" defines which Flutter channel to use for the build
+    plugs:
+      - network
+
+parts:
+  dr:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart # The main entry-point file of the application
+    build-packages:
+    - libsecret-1-dev
+    stage-packages:
+    - libsecret-1-dev
