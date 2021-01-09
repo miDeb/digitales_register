@@ -48,5 +48,5 @@ app.*.map.json
 # Temporary test files
 **/test/linux
 
-#Private requests & answers
+# Private requests & answers
 **/lib/requests/
