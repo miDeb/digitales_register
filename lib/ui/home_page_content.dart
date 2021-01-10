@@ -10,10 +10,10 @@ typedef DrawerCallback = void Function(bool isOpened);
 class HomePageContent extends StatelessWidget {
   final HomePageContentViewModel vm;
 
-  HomePageContent(
-      {Key key,
-      this.vm,})
-      : super(key: key);
+  HomePageContent({
+    Key key,
+    this.vm,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

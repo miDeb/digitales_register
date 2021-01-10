@@ -16,10 +16,7 @@ class SidebarContainer extends StatelessWidget {
   final Pages currentSelected;
 
   const SidebarContainer(
-      {Key key,
-      this.tabletMode,
-      this.goHome,
-      this.currentSelected})
+      {Key key, this.tabletMode, this.goHome, this.currentSelected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

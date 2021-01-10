@@ -3,7 +3,6 @@ import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:flutter/material.dart';
 
-
 class Sidebar extends StatelessWidget {
   const Sidebar({
     Key key,
