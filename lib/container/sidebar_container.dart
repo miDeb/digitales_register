@@ -65,6 +65,7 @@ abstract class SidebarViewModel
     implements Built<SidebarViewModel, SidebarViewModelBuilder> {
   @nullable
   String get username;
+  @nullable
   String get userIcon;
   bool get drawerInitiallyFullyExpanded;
   SidebarViewModel._();
