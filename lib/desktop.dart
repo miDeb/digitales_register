@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     as secure_storage;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:biometric_storage/biometric_storage.dart';
 import 'package:path_provider/path_provider.dart';
@@ -28,13 +27,12 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<Box<String>> hiveBox = getEncryptedBox();
   DesktopSecureStorage();
   static Future<Box<String>> getEncryptedBox() async {
-    final applicationDocumentDirectory =
-        await getApplicationSupportDirectory() ;
+    final applicationDocumentDirectory = await getApplicationSupportDirectory();
     final homeDirectory =
         Directory(applicationDocumentDirectory.path + "/RegisterDB");
     if (!await homeDirectory.exists()) {
       await homeDirectory.create();
-    } 
+    }
     Hive.init(homeDirectory.path);
     final biometricStorage = await BiometricStorage().getStorage(
       "",
@@ -94,15 +92,5 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
       secure_storage.IOSOptions iOptions,
       secure_storage.AndroidOptions aOptions}) async {
     return (await hiveBox).containsKey(key);
-  }
-}
-
-void showToast({String msg, Toast toastLength}) {
-  if (!Platform.isAndroid) {
-    // We need to fix this anyways; I believe bottom sheets are the way to go.
-    print(
-        "TOAST: - - - - - - - - - - - - ... $msg ... - - - - - - - - - - - -");
-  } else {
-    Fluttertoast.showToast(msg: msg, toastLength: toastLength);
   }
 }

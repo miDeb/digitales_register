@@ -124,7 +124,7 @@ void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
     navigatorKey.currentState.pop();
-    showToast(msg: "Passwort erfolgreich geändert");
+    showSnackBar("Passwort erfolgreich geändert");
   }
 }
 

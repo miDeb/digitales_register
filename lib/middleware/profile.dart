@@ -50,10 +50,10 @@ void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     return;
   }
   if (result["error"] == null) {
-    showToast(msg: result["message"]);
+    showSnackBar(result["message"]);
     navigatorKey.currentState.pop();
   } else {
-    showToast(msg: "[${result["error"]}]: ${result["message"]}");
+    showSnackBar("[${result["error"]}]: ${result["message"]}");
   }
   api.actions.profileActions.load();
 }
