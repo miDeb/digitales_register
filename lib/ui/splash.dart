@@ -12,7 +12,7 @@ class SplashScreen extends StatelessWidget {
     // children properly for this use-case.
     return Stack(
       children: [
-        child,
+        if (!splash) child,
         IgnorePointer(
           child: AnimatedOpacity(
             opacity: splash ? 1 : 0,
