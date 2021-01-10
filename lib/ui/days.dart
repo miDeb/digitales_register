@@ -37,6 +37,7 @@ class DaysWidget extends StatefulWidget {
   final ToggleDoneCallback toggleDoneCallback;
   final VoidCallback setDoNotAskWhenDeleteCallback;
   final VoidCallback refresh;
+  final VoidCallback refreshNoInternet;
 
   const DaysWidget({
     Key key,
@@ -50,6 +51,7 @@ class DaysWidget extends StatefulWidget {
     this.toggleDoneCallback,
     this.setDoNotAskWhenDeleteCallback,
     this.refresh,
+    this.refreshNoInternet,
   }) : super(key: key);
   @override
   _DaysWidgetState createState() => _DaysWidgetState();
@@ -325,7 +327,19 @@ class _DaysWidgetState extends State<DaysWidget> {
       homeAppBar: ResponsiveAppBar(
         title: Text("Register"),
         actions: <Widget>[
-          NotificationIconContainer(),
+          if (widget.vm.noInternet && !widget.vm.loading)
+            FlatButton(
+              textColor: Theme.of(context).primaryIconTheme.color,
+              child: Row(
+                children: <Widget>[
+                  Text("Kein Internet"),
+                  SizedBox(width: 8),
+                  Icon(Icons.refresh),
+                ],
+              ),
+              onPressed: widget.refreshNoInternet,
+            ),
+          if (widget.vm.showNotifications) NotificationIconContainer(),
         ],
       ),
       drawerBuilder: (_widgetSelected, goHome, currentSelected, tabletMode) {

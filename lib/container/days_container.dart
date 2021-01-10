@@ -48,6 +48,7 @@ class DaysContainer extends StatelessWidget {
           markDeletedHomeworkAsSeenCallback:
               actions.dashboardActions.markDeletedHomeworkAsSeen,
           markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
+          refreshNoInternet: actions.refreshNoInternet,
         );
       },
       connect: (state) {
@@ -70,6 +71,8 @@ abstract class DaysViewModel
   bool get noInternet;
   bool get loading;
   bool get showAddReminder;
+
+  bool get showNotifications;
   BuiltList<Day> get days;
 
   DaysViewModel._();
@@ -102,7 +105,9 @@ abstract class DaysViewModel
       ..loading = state.dashboardState.loading || state.loginState.loading
       ..askWhenDelete = state.settingsState.askWhenDelete
       ..showAddReminder =
-          !state.dashboardState.blacklist.contains(HomeworkType.homework));
+          !state.dashboardState.blacklist.contains(HomeworkType.homework)
+      ..showNotifications =
+          (state.notificationState.notifications?.length ?? 0) > 0);
   }
 }
 
