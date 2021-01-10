@@ -283,11 +283,11 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                                 return InfoDialog(
                                   title: Text("Kürzel entfernen?"),
                                   actions: <Widget>[
-                                    FlatButton(
+                                    TextButton(
                                       child: Text("Abbrechen"),
                                       onPressed: Navigator.of(context).pop,
                                     ),
-                                    RaisedButton(
+                                    ElevatedButton(
                                       child: Text("Ok"),
                                       onPressed: () =>
                                           Navigator.of(context).pop(true),
@@ -529,13 +529,13 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
         ],
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text("Abbrechen"),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        RaisedButton(
+        ElevatedButton(
           child: Text("Fertig"),
           onPressed: subjectController.text != "" && nickController.text != ""
               ? () {

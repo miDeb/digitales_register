@@ -36,7 +36,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                 decoration: InputDecoration(labelText: 'Neue Email-Adresse'),
               ),
               SizedBox(height: 16),
-              RaisedButton(
+              ElevatedButton(
                 child: Text("Speichern"),
                 onPressed: () => widget.changeEmail(
                   _passController.text,

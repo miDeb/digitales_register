@@ -198,7 +198,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                 child: Text(
                   widget.vm.future ? "Vergangenheit" : "Zukunft",
                 ),
@@ -328,8 +328,11 @@ class _DaysWidgetState extends State<DaysWidget> {
         title: Text("Register"),
         actions: <Widget>[
           if (widget.vm.noInternet)
-            FlatButton(
-              textColor: Theme.of(context).primaryIconTheme.color,
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Theme.of(context).colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
               child: Row(
                 children: <Widget>[
                   Text("Kein Internet"),
@@ -399,14 +402,13 @@ class DayWidget extends StatelessWidget {
               decoration: InputDecoration(hintText: 'zB. Hausaufgabe'),
             ),
             actions: <Widget>[
-              FlatButton(
+              TextButton(
                 child: Text("Abbrechen"),
                 onPressed: () {
                   Navigator.pop(context);
                 },
               ),
-              RaisedButton(
-                textTheme: ButtonTextTheme.primary,
+              ElevatedButton(
                 child: Text(
                   "Speichern",
                 ),
@@ -565,12 +567,11 @@ class ItemWidget extends StatelessWidget {
           ),
           title: Text("Erinnerung löschen?"),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text("Abbrechen"),
               onPressed: () => Navigator.pop(context),
             ),
-            RaisedButton(
-              textTheme: ButtonTextTheme.primary,
+            ElevatedButton(
               child: Text(
                 "Löschen",
               ),

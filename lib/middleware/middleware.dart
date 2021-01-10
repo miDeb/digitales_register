@@ -100,7 +100,7 @@ NextActionHandler _errorMiddleware(
                     body: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
-                          RaisedButton(
+                          ElevatedButton(
                             child: Text("In die Zwischenablage kopieren"),
                             onPressed: () async {
                               await Clipboard.setData(

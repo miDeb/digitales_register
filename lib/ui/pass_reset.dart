@@ -84,7 +84,7 @@ class _PassResetState extends State<PassReset> {
                     height: 16,
                   ),
                   if (widget.message == null || widget.failure)
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text("Passwort zurücksetzen"),
                       onPressed: _newPass1Controller.text !=
                               _newPass2Controller.text
@@ -101,7 +101,7 @@ class _PassResetState extends State<PassReset> {
                       ),
                     ),
                   if (widget.message != null && !widget.failure)
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text("Ok"),
                       onPressed: widget.onClose,
                     )

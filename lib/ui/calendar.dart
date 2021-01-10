@@ -124,9 +124,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
         title: Text("Kalender"),
         actions: <Widget>[
           if (toMonday(now) != widget.vm.currentMonday)
-            FlatButton(
-              textColor: Colors.white,
-              child: Text("Aktuelle Woche"),
+            TextButton(
+              style: TextButton.styleFrom(
+                primary: Theme.of(context).colorScheme.onPrimary,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+              ),
+              child: Text(
+                "Aktuelle Woche",
+              ),
               onPressed: () {
                 final date = toMonday(now);
                 _controller.animateToPage(pageOf(date),
@@ -145,7 +150,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 Expanded(
                   child: FadeTransition(
                     opacity: _chevronOpacityAnimation,
-                    child: FlatButton(
+                    child: TextButton(
                       child: Icon(Icons.chevron_left),
                       onPressed: () {
                         _controller.previousPage(
@@ -156,7 +161,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                FlatButton(
+                TextButton(
                   child: FadeTransition(
                     opacity: _dateRangeOpacityAnimation,
                     child: widget.vm.first != null && widget.vm.last != null
@@ -193,7 +198,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 Expanded(
                   child: FadeTransition(
                     opacity: _chevronOpacityAnimation,
-                    child: FlatButton(
+                    child: TextButton(
                       child: Icon(Icons.chevron_right),
                       onPressed: () {
                         _controller.nextPage(
@@ -275,7 +280,7 @@ class EditNickBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
-                    child: FlatButton(
+                    child: TextButton(
                       child: Row(
                         children: <Widget>[
                           Text("Kürzel bearbeiten"),

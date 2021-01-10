@@ -41,7 +41,7 @@ class _RequestPassResetState extends State<RequestPassReset> {
                   decoration: InputDecoration(labelText: 'Email-Adresse'),
                 ),
                 SizedBox(height: 16),
-                RaisedButton(
+                ElevatedButton(
                   child: Text("Anfrage zum Zurücksetzen senden"),
                   onPressed: () => widget.resetPass(
                     _usernameController.text,

@@ -90,7 +90,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     SizedBox(
                       height: 25,
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text("Nochmal versuchen"),
                       onPressed: () => widget.onReload(),
                     ),
@@ -178,11 +178,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ),
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: FlatButton(
+                                  child: TextButton(
                                     child: Text(
                                       "Passwort vergessen",
                                     ),
-                                    textColor: Colors.grey,
+                                    style: TextButton.styleFrom(
+                                      primary: Colors.grey,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16),
+                                    ),
                                     onPressed: widget.onRequestPassReset,
                                   ),
                                 ),
@@ -256,7 +260,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   ),
                                 ],
                                 SizedBox(height: 8),
-                                RaisedButton(
+                                ElevatedButton(
                                   onPressed: widget.vm.loading ||
                                           !newPasswordsMatch
                                       ? null

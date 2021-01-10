@@ -33,7 +33,7 @@ class NotificationPage extends StatelessWidget {
                 if (n == 0)
                   return Align(
                     alignment: Alignment.centerRight,
-                    child: FlatButton(
+                    child: TextButton(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
