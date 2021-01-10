@@ -312,9 +312,11 @@ packages:
   flutter_built_redux:
     dependency: "direct main"
     description:
-      name: flutter_built_redux
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: master
+      resolved-ref: b8ce4f34cffacd29797cfd78f9e632014ab6c4f4
+      url: "https://github.com/miDeb/flutter_built_redux.git"
+    source: git
     version: "0.6.0"
   flutter_launcher_icons:
     dependency: "direct dev"
