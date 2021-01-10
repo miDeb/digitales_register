@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_portal/flutter_portal.dart';
 
 const tabletLayoutBreakpoint = 720.0;
 const drawerWidth = 304.0;
@@ -41,7 +42,6 @@ class ResponsiveScaffold<T> extends StatefulWidget {
 class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
     with SingleTickerProviderStateMixin {
   late final GlobalKey<NavigatorState> navigatorKey;
-  final LayerLink _shadowDividerOverlayLink = LayerLink();
 
   late final AnimationController _drawerAnimationController;
 
@@ -51,7 +51,6 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
   // right when the app is opened
   bool isInitialized = false;
   late T currentSelected;
-  OverlayEntry? _shadowOverlay;
 
   @override
   void initState() {
@@ -60,52 +59,6 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
     _drawerAnimationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
     super.initState();
-  }
-
-  void addShadowOverlay() {
-    if (_shadowOverlay != null) return;
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      // this is just a hacky way to construct a single "shadow-line"
-      // that acts as a divider
-      final overlay = OverlayEntry(
-        builder: (ctx) => CompositedTransformFollower(
-          link: _shadowDividerOverlayLink,
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                top: -4,
-                bottom: -4,
-                child: ClipRect(
-                  child: Container(
-                    width: 5,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(-7, 0),
-                          spreadRadius: 0,
-                          blurRadius: 4,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-      Overlay.of(context)!.insert(
-        overlay,
-      );
-      _shadowOverlay = overlay;
-    });
-  }
-
-  void removeShadowOverlay() {
-    _shadowOverlay?.remove();
-    _shadowOverlay = null;
   }
 
   void selectContentWidget(Widget content, T data) {
@@ -147,58 +100,125 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
-        if (tabletMode) {
-          addShadowOverlay();
-          if (isInitialized) {
-            _drawerAnimationController.fling(velocity: 1);
+    return Portal(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
+          if (tabletMode) {
+            if (isInitialized) {
+              _drawerAnimationController.fling(velocity: 1);
+            } else {
+              _drawerAnimationController.value = 1;
+            }
           } else {
-            _drawerAnimationController.value = 1;
+            _drawerAnimationController.fling(velocity: -1);
           }
-        } else {
-          _drawerAnimationController
-              .fling(velocity: -1)
-              .whenComplete(() => removeShadowOverlay());
-        }
-        isInitialized = true;
-        return InheritedTabletMode(
-          tabletMode,
-          InheritedHomePage(
-            fab: widget.homeFloatingActionButton,
-            scaffoldKey: scaffoldKey,
-            body: widget.homeBody,
-            appBar: widget.homeAppBar,
-            drawer: !tabletMode
-                ? widget.drawerBuilder(
-                    selectContentWidget, goHome, currentSelected, false)
-                : null,
-            child: Material(
-              child: Row(
-                children: [
-                  SizeTransition(
-                    axis: Axis.horizontal,
-                    sizeFactor: _drawerAnimationController,
-                    axisAlignment: 1,
-                    child: widget.drawerBuilder(
-                        selectContentWidget, goHome, currentSelected, true),
-                  ),
-                  Expanded(
-                    child: CompositedTransformTarget(
-                      link: _shadowDividerOverlayLink,
+          isInitialized = true;
+          return InheritedTabletMode(
+            tabletMode,
+            InheritedHomePage(
+              fab: widget.homeFloatingActionButton,
+              scaffoldKey: scaffoldKey,
+              body: widget.homeBody,
+              appBar: widget.homeAppBar,
+              drawer: !tabletMode
+                  ? widget.drawerBuilder(
+                      selectContentWidget, goHome, currentSelected, false)
+                  : null,
+              child: Material(
+                child: Row(
+                  children: [
+                    SizeTransition(
+                      axis: Axis.horizontal,
+                      sizeFactor: _drawerAnimationController,
+                      axisAlignment: 1,
+                      child: _Drawer(
+                        child: widget.drawerBuilder(
+                            selectContentWidget, goHome, currentSelected, true),
+                        drawerAnimationController: _drawerAnimationController,
+                      ),
+                    ),
+                    Expanded(
                       child: _Body(
                         navKey: navigatorKey,
                         navObserver: PopObserver(wentHome),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _Drawer extends StatefulWidget {
+  const _Drawer({
+    Key? key,
+    required AnimationController drawerAnimationController,
+    required this.child,
+  })   : _drawerAnimationController = drawerAnimationController,
+        super(key: key);
+
+  final AnimationController _drawerAnimationController;
+  final Widget child;
+
+  @override
+  __DrawerState createState() => __DrawerState();
+}
+
+class __DrawerState extends State<_Drawer> {
+  late bool visible;
+  @override
+  void initState() {
+    widget._drawerAnimationController.addStatusListener((status) {
+      final shouldBeVisible = status != AnimationStatus.dismissed;
+      if (shouldBeVisible != visible) {
+        setState(() {
+          visible = shouldBeVisible;
+        });
+      }
+    });
+    visible =
+        widget._drawerAnimationController.status != AnimationStatus.dismissed;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PortalEntry(
+      visible: visible,
+      portalAnchor: Alignment.topLeft,
+      childAnchor: Alignment.topRight,
+      // The following is a hacky way to draw a shadow divider
+      portal: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            top: -4,
+            bottom: -4,
+            child: ClipRect(
+              child: Container(
+                width: 5,
+                decoration: const BoxDecoration(
+                  color: Colors.transparent,
+                  boxShadow: [
+                    BoxShadow(
+                      offset: Offset(-7, 0),
+                      spreadRadius: 0,
+                      blurRadius: 4,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
-        );
-      },
+        ],
+      ),
+      child: widget.child,
     );
   }
 }

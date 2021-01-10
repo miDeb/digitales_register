@@ -337,6 +337,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.2"
+  flutter_portal:
+    dependency: transitive
+    description:
+      name: flutter_portal
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   flutter_secure_storage:
     dependency: "direct main"
     description:

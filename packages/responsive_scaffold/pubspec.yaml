@@ -9,6 +9,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  flutter_portal: ^0.3.0
   flutter:
     sdk: flutter
 
