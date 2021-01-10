@@ -31,6 +31,10 @@ dependencies:
     git:
       url: https://github.com/miDeb/built_redux.git
       ref: master
+  flutter_built_redux:
+    git:
+      url: https://github.com/miDeb/flutter_built_redux.git
+      ref: master
   autocomplete_textfield: any
   badges: any
   biometric_storage: ^1.1.0+1
@@ -39,10 +43,6 @@ dependencies:
   cookie_jar: ^1.0.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
-  flutter_built_redux:
-    git:
-      url: https://github.com/miDeb/flutter_built_redux.git
-      ref: master
   flutter_secure_storage: any
   flutter_widget_from_html_core: ^0.3.2+1
   hive: ^1.4.4+1
@@ -67,13 +67,13 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_native_splash: ^0.2.2
-  build_runner: any
-  built_value_generator: any
   flutter_launcher_icons:
     git:
       url: https://github.com/dirkbo/flutter_launcher_icons
       ref: master
+  build_runner: any
+  built_value_generator: any
+  flutter_native_splash: ^0.2.2
 
 flutter_icons:
   android: "launcher_icon"
