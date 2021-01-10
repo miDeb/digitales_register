@@ -166,6 +166,7 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
         return InheritedTabletMode(
           tabletMode,
           InheritedHomePage(
+            fab: widget.homeFloatingActionButton,
             scaffoldKey: scaffoldKey,
             body: widget.homeBody,
             appBar: widget.homeAppBar,
