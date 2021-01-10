@@ -327,7 +327,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       homeAppBar: ResponsiveAppBar(
         title: Text("Register"),
         actions: <Widget>[
-          if (widget.vm.noInternet && !widget.vm.loading)
+          if (widget.vm.noInternet)
             FlatButton(
               textColor: Theme.of(context).primaryIconTheme.color,
               child: Row(
