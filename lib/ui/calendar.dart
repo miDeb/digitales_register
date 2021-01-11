@@ -283,14 +283,21 @@ class EditNickBar extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Expanded(
-                    child: TextButton(
-                      child: Row(
-                        children: <Widget>[
-                          Text("Kürzel bearbeiten"),
-                          Spacer(),
-                        ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: TextButton(
+                        child: Row(
+                          children: <Widget>[
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text("Kürzel bearbeiten"),
+                            ),
+                            const Spacer(),
+                          ],
+                        ),
+                        onPressed: onShowEditNicks,
                       ),
-                      onPressed: onShowEditNicks,
                     ),
                   ),
                   IconButton(
