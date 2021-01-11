@@ -161,39 +161,42 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                TextButton(
-                  child: FadeTransition(
-                    opacity: _dateRangeOpacityAnimation,
+                FadeTransition(
+                  opacity: _dateRangeOpacityAnimation,
+                  child: TextButton(
+                    style: ButtonStyle(
+                      textStyle: MaterialStateProperty.all(
+                          Theme.of(context).textTheme.headline6),
+                    ),
+                    onPressed: () async {
+                      final result = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2018),
+                        lastDate: DateTime(2050),
+                        initialDate: widget.vm.currentMonday,
+                        selectableDayPredicate: (final day) {
+                          return day.weekday != DateTime.sunday &&
+                              day.weekday != DateTime.saturday;
+                        },
+                      );
+                      if (result == null) return;
+                      final date = toMonday(result);
+                      if (date != widget.vm.currentMonday) {
+                        _controller.animateToPage(
+                          pageOf(date),
+                          curve: _animatePageCurve,
+                          duration: _animatePageDuration,
+                        );
+                      }
+                    },
                     child: widget.vm.first != null && widget.vm.last != null
                         ? Text(
                             "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
-                            style: Theme.of(context).textTheme.headline6,
                           )
                         : widget.vm.noInternet
                             ? Text("Wähle ein Datum")
                             : CircularProgressIndicator(),
                   ),
-                  onPressed: () async {
-                    final result = await showDatePicker(
-                      context: context,
-                      firstDate: DateTime(2018),
-                      lastDate: DateTime(2050),
-                      initialDate: widget.vm.currentMonday,
-                      selectableDayPredicate: (final day) {
-                        return day.weekday != DateTime.sunday &&
-                            day.weekday != DateTime.saturday;
-                      },
-                    );
-                    if (result == null) return;
-                    final date = toMonday(result);
-                    if (date != widget.vm.currentMonday) {
-                      _controller.animateToPage(
-                        pageOf(date),
-                        curve: _animatePageCurve,
-                        duration: _animatePageDuration,
-                      );
-                    }
-                  },
                 ),
                 Expanded(
                   child: FadeTransition(
