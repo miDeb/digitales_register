@@ -25,12 +25,12 @@ class SortedGradesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        SwitchListTile(
+        SwitchListTile.adaptive(
           title: Text("Noten nach Art sortieren"),
           onChanged: sortByTypeCallback,
           value: vm.sortByType,
         ),
-        SwitchListTile(
+        SwitchListTile.adaptive(
           title: Text("Gelöschte Noten anzeigen"),
           onChanged: showCancelledCallback,
           value: vm.showCancelled,

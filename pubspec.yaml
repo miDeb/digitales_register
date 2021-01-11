@@ -35,7 +35,6 @@ dependencies:
     git:
       url: https://github.com/miDeb/flutter_built_redux.git
       ref: master
-  autocomplete_textfield: any
   badges: any
   biometric_storage: ^1.1.0+1
   built_value: any
@@ -44,6 +43,7 @@ dependencies:
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
   flutter_secure_storage: any
+  flutter_typeahead: ^1.9.3
   flutter_widget_from_html_core: ^0.3.2+1
   hive: ^1.4.4+1
   http: ^0.12.2

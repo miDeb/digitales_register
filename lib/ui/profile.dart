@@ -37,7 +37,7 @@ class Profile extends StatelessWidget {
                   username: profileState.username,
                   role: profileState.roleName,
                 ),
-                SwitchListTile(
+                SwitchListTile.adaptive(
                   title: Text("Emails für Benachrichtigungen senden"),
                   value: profileState.sendNotificationEmails,
                   onChanged: noInternet ? null : setSendNotificationEmails,

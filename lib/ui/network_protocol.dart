@@ -1,3 +1,4 @@
+import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -65,6 +66,7 @@ class _Detail extends StatelessWidget {
                 icon: Icon(Icons.assignment),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: content));
+                  showSnackBar("In die Zwischenablage kopiert");
                 },
               )
             ],

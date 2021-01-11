@@ -105,14 +105,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 0,
             key: ObjectKey(0),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Angemeldet bleiben"),
             onChanged: (bool value) {
               widget.onSetNoPassSaving(!value);
             },
             value: !widget.vm.noPassSaving,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Daten lokal speichern"),
             subtitle: Text('Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
@@ -120,7 +120,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
             value: !widget.vm.noDataSaving,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Offline-Login"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
@@ -129,7 +129,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 : null,
             value: widget.vm.offlineEnabled,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Daten beim Ausloggen löschen"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
@@ -150,7 +150,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 1,
             key: ObjectKey(1),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Dark Mode"),
             onChanged: DynamicTheme.of(context).followDevice
                 ? null
@@ -161,7 +161,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   },
             value: DynamicTheme.of(context).customBrightness == Brightness.dark,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Geräte-Theme folgen"),
             onChanged: (bool value) {
               setState(() {
@@ -182,21 +182,21 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 2,
             key: ObjectKey(2),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Neue oder geänderte Einträge markieren"),
             onChanged: (bool value) {
               widget.onSetDashboardMarkNewOrChangedEntries(value);
             },
             value: widget.vm.dashboardMarkNewOrChangedEntries,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Doppelte Einträge ignorieren"),
             onChanged: (bool value) {
               widget.onSetDashboardDeduplicateEntries(value);
             },
             value: widget.vm.dashboardDeduplicateEntries,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
               widget.onSetAskWhenDelete(value);
@@ -215,14 +215,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             index: 3,
             key: ObjectKey(3),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Noten in einem Diagramm darstellen"),
             onChanged: (bool value) {
               widget.onSetShowGradesDiagram(value);
             },
             value: widget.vm.showGradesDiagram,
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text('Durchschnitt aller Fächer anzeigen'),
             onChanged: (bool value) {
               widget.onSetShowAllSubjectsAverage(value);
@@ -328,7 +328,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               },
             ),
           ),
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: Text("Hinweis zum Bearbeiten von Kürzeln"),
             subtitle: Text(
                 "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
@@ -350,7 +350,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: ObjectKey(5),
           ),
           if (Platform.isAndroid)
-            SwitchListTile(
+            SwitchListTile.adaptive(
               title: Text("iOS Mode"),
               subtitle:
                   Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),

@@ -294,7 +294,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             ),
                           ),
                         ),
-                        SwitchListTile(
+                        SwitchListTile.adaptive(
                           title: Text("Angemeldet bleiben"),
                           value: !safeMode,
                           onChanged: widget.vm.loading

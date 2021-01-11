@@ -557,7 +557,7 @@ class ItemWidget extends StatelessWidget {
       builder: (context) {
         return InfoDialog(
           content: StatefulBuilder(
-            builder: (context, setState) => SwitchListTile(
+            builder: (context, setState) => SwitchListTile.adaptive(
               title: Text("Nie fragen"),
               onChanged: (bool value) {
                 setState(() => ask = !value);
