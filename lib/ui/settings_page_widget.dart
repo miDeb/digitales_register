@@ -440,13 +440,13 @@ class EditSubjectsNicks extends StatefulWidget {
 class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
   TextEditingController subjectController;
   TextEditingController nickController;
-  GlobalKey<AutoCompleteTextFieldState<String>> subjectKey;
   FocusNode focusNode;
+  bool forNewNick;
   @override
   void initState() {
+    forNewNick = widget.subjectName.isEmpty;
     subjectController = TextEditingController(text: widget.subjectName);
     nickController = TextEditingController(text: widget.subjectNick);
-    subjectKey = GlobalKey<AutoCompleteTextFieldState<String>>();
     focusNode = FocusNode();
     super.initState();
   }
@@ -462,7 +462,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: Text("Kürzel bearbeiten"),
+      title: Text("Kürzel " + (forNewNick ? "hinzufügen" : "bearbeiten")),
       content: Row(
         children: [
           Column(
