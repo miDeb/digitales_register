@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:autocomplete_textfield/autocomplete_textfield.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:package_info/package_info.dart';
 import 'package:responsive_scaffold/scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -482,29 +482,22 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                AutoCompleteTextField<String>(
-                  key: subjectKey,
+                TypeAheadField(
+                  suggestionsCallback: (pattern) {
+                    return widget.suggestions
+                        .where((suggestion) => suggestion.contains(pattern));
+                  },
                   itemBuilder: (BuildContext context, String suggestion) {
                     return ListTile(title: Text(suggestion));
                   },
-                  textChanged: (_) => setState(() {}),
-                  clearOnSubmit: false,
-                  itemFilter: (String suggestion, String query) {
-                    return suggestion
-                        .toLowerCase()
-                        .contains(query.toLowerCase());
+                  onSuggestionSelected: (suggestion) {
+                    subjectController.text = suggestion;
                   },
-                  itemSorter: (String a, String b) {
-                    return a.compareTo(b);
-                  },
-                  itemSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(focusNode);
-                  },
-                  textSubmitted: (_) {
-                    FocusScope.of(context).requestFocus(focusNode);
-                  },
-                  suggestions: widget.suggestions,
-                  controller: subjectController,
+                  textFieldConfiguration: TextFieldConfiguration(
+                    controller: subjectController,
+                    autofocus: subjectController.text.isEmpty,
+                  ),
+                  hideOnEmpty: true,
                 ),
                 TextField(
                   controller: nickController,
