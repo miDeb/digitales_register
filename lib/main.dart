@@ -60,7 +60,6 @@ void main() {
                   );
           },
           themedWidgetBuilder: (context, theme) => MaterialApp(
-            debugShowCheckedModeBanner: false,
             localizationsDelegates: [
               GlobalCupertinoLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
