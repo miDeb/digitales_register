@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
         IgnorePointer(
           child: AnimatedOpacity(
             opacity: splash ? 1 : 0,
-            duration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 250),
             child: _SplashWidget(),
           ),
         ),
