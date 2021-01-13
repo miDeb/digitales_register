@@ -8,7 +8,7 @@ import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_scaffold/scaffold.dart';
+import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
 
@@ -324,7 +324,7 @@ class _DaysWidgetState extends State<DaysWidget> {
             ),
         ],
       ),
-      homeAppBar: ResponsiveAppBar(
+      homeAppBar: AppBar(
         title: Text("Register"),
         actions: <Widget>[
           if (widget.vm.noInternet)

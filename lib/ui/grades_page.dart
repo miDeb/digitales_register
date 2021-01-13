@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_scaffold/scaffold.dart';
+import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 import '../app_state.dart';
 import '../container/grades_chart_container.dart';

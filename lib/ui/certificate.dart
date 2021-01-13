@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
-import 'package:responsive_scaffold/scaffold.dart';
+import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 import '../container/certificate_container.dart';
 import 'no_internet.dart';

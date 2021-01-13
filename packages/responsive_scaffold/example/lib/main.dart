@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_scaffold/scaffold.dart';
+import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,66 +12,74 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> nestedNavKey = GlobalKey();
+  final GlobalKey<NavigatorState> rootNavKey = GlobalKey();
   int count = 0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      navigatorKey: rootNavKey,
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: ResponsiveScaffold<int>(
-        homeId: 0,
-        homeAppBar: AppBar(
-          title: Text("Home $count"),
-        ),
-        homeFloatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            setState(() {
-              count++;
-            });
+      home: WillPopScope(
+        onWillPop: () {
+          // We have to manually handle the back press.
+          // If the nested navigator can handle it, let it handle it.
+          // If not, check if the root navigator could.
+          // Otherwise don't handle it.
+          if (nestedNavKey.currentState!.canPop()) {
+            nestedNavKey.currentState!.pop();
+            return Future.value(false);
+          } else if (rootNavKey.currentState!.canPop()) {
+            rootNavKey.currentState!.pop();
+            return Future.value(false);
+          }
+          return Future.value(true);
+        },
+        child: ResponsiveScaffold<int>(
+          navKey: nestedNavKey,
+          homeId: 0,
+          homeAppBar: AppBar(
+            title: Text("Home $count"),
+          ),
+          homeFloatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () {
+              setState(() {
+                count++;
+              });
+            },
+          ),
+          homeBody: Scaffold(
+            body: FlutterLogo(),
+          ),
+          drawerBuilder: (onSelected, onGoHome, currentSelected, tabletMode) {
+            return Drawer(
+              child: Column(
+                children: [
+                  if (tabletMode)
+                    ListTile(
+                      title: Text("Homeaaaaaaaaaaaaaaaaaaaaaaaaa"),
+                      onTap: onGoHome,
+                      trailing: Icon(Icons.home),
+                    ),
+                  ListTile(
+                    title: Text("foo"),
+                    trailing: Icon(Icons.home),
+                    onTap: () => onSelected(
+                      Scaffold(
+                        appBar: ResponsiveAppBar(
+                          title: Text("foo"),
+                        ),
+                        body: Placeholder(),
+                      ),
+                      1,
+                    ),
+                  ),
+                ],
+              ),
+            );
           },
         ),
-        homeBody: Scaffold(
-          body: FlutterLogo(),
-        ),
-        drawerBuilder: (onSelected, onGoHome, currentSelected, tabletMode) {
-          return Drawer(
-            child: Column(
-              children: [
-                if (tabletMode)
-                  ListTile(
-                    title: Text("Homeaaaaaaaaaaaaaaaaaaaaaaaaa"),
-                    onTap: onGoHome,
-                    trailing: Icon(Icons.home),
-                  ),
-                ListTile(
-                  title: Text("foo"),
-                  trailing: Icon(Icons.home),
-                  onTap: () => onSelected(
-                    Scaffold(
-                      appBar: ResponsiveAppBar(
-                        title: Text("foo"),
-                      ),
-                      body: Placeholder(),
-                    ),
-                    1,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
       ),
     );
   }
