@@ -389,23 +389,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 width: 100,
               ),
               applicationLegalese:
-                  "Michael Debertol 2019-2020\nReleased under GNU GPLv3",
+                  "Michael Debertol und Simon Wachtler 2019-2021",
               applicationName: "Digitales Register (Client)",
               applicationVersion: info.hasData
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
                 Text("Ein Client für das Digitale Register."),
-                RichText(
-                  text: new TextSpan(
-                    text: "Source Code: https://gitlab.com/michael.debertol/dr",
-                    style: new TextStyle(color: Colors.blue),
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () => launch(
-                            "https://gitlab.com/michael.debertol/dr",
-                          ),
-                  ),
-                ),
               ],
             ),
           ),
