@@ -1,4 +1,6 @@
+import 'package:collapsible_sidebar/collapsible_sidebar/unconstrained_overflow_widget.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 
 class CollapsibleItemWidget extends StatelessWidget {
   const CollapsibleItemWidget({
@@ -7,7 +9,6 @@ class CollapsibleItemWidget extends StatelessWidget {
     @required this.textStyle,
     @required this.padding,
     @required this.offsetX,
-    @required this.scale,
     this.onTap,
     @required this.selected,
     this.selectedBoxColor,
@@ -19,7 +20,7 @@ class CollapsibleItemWidget extends StatelessWidget {
   final Widget leading;
   final String title;
   final TextStyle textStyle;
-  final double offsetX, scale, padding;
+  final double offsetX, padding;
   final Function onTap;
   final bool selected, hasDivider;
   final Color selectedBoxColor;
@@ -62,42 +63,38 @@ class CollapsibleItemWidget extends StatelessWidget {
               InkWell(
                 borderRadius: BorderRadius.circular(10),
                 onTap: onTap,
-                child: Container(
-                  color: Colors.transparent,
-                  padding: EdgeInsets.all(padding),
-                  child: Stack(
-                    alignment: Alignment.centerLeft,
-                    children: [
-                      leading,
-                      _title,
-                    ],
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return ui.Gradient.linear(
+                      Offset(bounds.right - 10, 0),
+                      Offset(bounds.right, 0),
+                      [Colors.white, Colors.transparent],
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.all(padding),
+                    child: UnconstrainedOverflowBox(
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          leading,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            width: 210,
+                            child: Text(
+                              title,
+                              style: textStyle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-
-  Widget get _title {
-    return Opacity(
-      opacity: scale,
-      child: Transform.translate(
-        offset: Offset(offsetX, 0),
-        child: Transform.scale(
-          scale: scale,
-          child: SizedBox(
-            width: double.infinity,
-            child: Text(
-              title,
-              style: textStyle,
-              softWrap: false,
-              overflow: TextOverflow.fade,
-            ),
-          ),
-        ),
       ),
     );
   }
