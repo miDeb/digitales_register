@@ -234,7 +234,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       selected: false,
       padding: widget.itemPadding,
       offsetX: _offsetX,
-      scale: _fraction,
       leading: CollapsibleAvatar(
         avatarSize: widget.iconSize,
         name: widget.title,
@@ -263,7 +262,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         selected: item.isSelected,
         padding: widget.itemPadding,
         offsetX: _offsetX,
-        scale: _fraction,
         leading: Icon(
           item.icon,
           size: widget.iconSize,
@@ -287,7 +285,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       selected: false,
       padding: widget.itemPadding,
       offsetX: _offsetX,
-      scale: _fraction,
       leading: Transform.rotate(
         angle: _currAngle,
         child: Icon(
