@@ -25,7 +25,7 @@ class CollapsibleContainer extends StatelessWidget {
         color: color,
       ),
       child: Material(
-        child: SafeArea(child: child),
+        child:   child ,
       ),
     );
   }

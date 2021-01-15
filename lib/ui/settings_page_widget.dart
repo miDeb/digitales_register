@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:package_info/package_info.dart';

@@ -324,7 +324,7 @@ class _DaysWidgetState extends State<DaysWidget> {
             ),
         ],
       ),
-      homeAppBar: AppBar(
+      homeAppBar: ResponsiveAppBar(
         title: Text("Register"),
         actions: <Widget>[
           if (widget.vm.noInternet)

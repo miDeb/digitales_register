@@ -79,7 +79,7 @@ class CollapsibleItemWidget extends StatelessWidget {
                         children: [
                           leading,
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
                             width: 210,
                             child: Text(
                               title,
