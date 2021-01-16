@@ -136,7 +136,6 @@ void _downloadAttachment(
         "/" +
         action.payload.originalName,
   );
-  print(saveFile.path);
 
   final result = await _wrapper.dio.get(
     "${_wrapper.baseAddress}/api/gradeGroup/gradeGroupSubmissionDownloadEntry",
