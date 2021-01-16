@@ -38,6 +38,7 @@ class DaysWidget extends StatefulWidget {
   final VoidCallback setDoNotAskWhenDeleteCallback;
   final VoidCallback refresh;
   final VoidCallback refreshNoInternet;
+  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
 
   const DaysWidget({
     Key key,
@@ -52,6 +53,8 @@ class DaysWidget extends StatefulWidget {
     this.setDoNotAskWhenDeleteCallback,
     this.refresh,
     this.refreshNoInternet,
+    this.onDownloadAttachment,
+    this.onOpenAttachment,
   }) : super(key: key);
   @override
   _DaysWidgetState createState() => _DaysWidgetState();
@@ -247,6 +250,8 @@ class _DaysWidgetState extends State<DaysWidget> {
       removeReminderCallback: widget.removeReminderCallback,
       toggleDoneCallback: widget.toggleDoneCallback,
       setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
+      onDownloadAttachment: widget.onDownloadAttachment,
+      onOpenAttachment: widget.onOpenAttachment,
     );
   }
 
@@ -368,6 +373,7 @@ class DayWidget extends StatelessWidget {
   final RemoveReminderCallback removeReminderCallback;
   final ToggleDoneCallback toggleDoneCallback;
   final VoidCallback setDoNotAskWhenDeleteCallback;
+  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
 
   final Day day;
 
@@ -384,6 +390,8 @@ class DayWidget extends StatelessWidget {
     this.removeReminderCallback,
     this.toggleDoneCallback,
     this.setDoNotAskWhenDeleteCallback,
+    this.onDownloadAttachment,
+    this.onOpenAttachment,
   }) : super(key: key);
 
   Future<String> showEnterReminderDialog(BuildContext context) async {
@@ -518,6 +526,8 @@ class DayWidget extends StatelessWidget {
             noInternet: vm.noInternet,
             controller: controller,
             index: ++i,
+            onDownloadAttachment: onDownloadAttachment,
+            onOpenAttachment: onOpenAttachment,
           ),
         Divider(),
       ],
@@ -531,6 +541,7 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
   final bool askWhenDelete, isHistory, isDeletedView, noInternet, isCurrent;
+  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
 
   final AutoScrollController controller;
   final int index;
@@ -548,6 +559,8 @@ class ItemWidget extends StatelessWidget {
     this.isDeletedView = false,
     this.noInternet,
     this.isCurrent = true,
+    this.onDownloadAttachment,
+    this.onOpenAttachment,
   }) : super(key: key);
 
   Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
@@ -778,6 +791,24 @@ class ItemWidget extends StatelessWidget {
                 style: Theme.of(context).textTheme.caption,
               ),
             ),
+          ],
+          if (item.gradeGroupSubmissions?.isNotEmpty == true) ...[
+            Divider(),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Anhang",
+                    style: Theme.of(context).textTheme.subtitle1),
+              ),
+            ),
+            for (final attachment in item.gradeGroupSubmissions)
+              AttachmentWidget(
+                ggs: attachment,
+                noInternet: noInternet,
+                downloadCallback: onDownloadAttachment,
+                openCallback: onOpenAttachment,
+              )
           ]
         ],
       ),
@@ -831,4 +862,73 @@ String formatChanged(Homework hw) {
 
 DateTime toDate(DateTime dateTime) {
   return DateTime(dateTime.year, dateTime.month, dateTime.day);
+}
+
+class AttachmentWidget extends StatelessWidget {
+  final GradeGroupSubmission ggs;
+  final AttachmentCallback downloadCallback;
+  final AttachmentCallback openCallback;
+  final bool noInternet;
+
+  const AttachmentWidget(
+      {Key key,
+      this.ggs,
+      this.downloadCallback,
+      this.noInternet,
+      this.openCallback})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Divider(
+            indent: 16,
+            height: 0,
+          ),
+          ListTile(title: Text(ggs.originalName)),
+          if (ggs.downloading) LinearProgressIndicator(),
+          if (!ggs.fileAvailable)
+            TextButton(
+              child: Text("Herunterladen"),
+              onPressed: noInternet
+                  ? null
+                  : () {
+                      downloadCallback(ggs);
+                    },
+            )
+          else
+            IntrinsicHeight(
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextButton(
+                      child: Text("Erneut herunterladen"),
+                      onPressed: noInternet
+                          ? null
+                          : () {
+                              downloadCallback(ggs);
+                            },
+                    ),
+                  ),
+                  VerticalDivider(
+                    indent: 8,
+                    endIndent: 8,
+                  ),
+                  Expanded(
+                    child: TextButton(
+                      child: Text("Öffnen"),
+                      onPressed: () {
+                        openCallback(ggs);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ),
+    );
+  }
 }

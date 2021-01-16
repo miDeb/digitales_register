@@ -90,6 +90,9 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   DateTime get lastNotSeen;
   DateTime get firstSeen;
 
+  @nullable
+  BuiltList<GradeGroupSubmission> get gradeGroupSubmissions;
+
   /// Ignores client side fields like [isNew]
   bool serverEquals(Homework other) {
     return deleted == other.deleted &&
@@ -192,6 +195,31 @@ class HomeworkType extends EnumClass {
   String toString() {
     return this.name;
   }
+}
+
+abstract class GradeGroupSubmission
+    implements Built<GradeGroupSubmission, GradeGroupSubmissionBuilder> {
+  GradeGroupSubmission._();
+  factory GradeGroupSubmission(
+          [void Function(GradeGroupSubmissionBuilder) updates]) =
+      _$GradeGroupSubmission;
+  static Serializer<GradeGroupSubmission> get serializer =>
+      _$gradeGroupSubmissionSerializer;
+
+  DateTime get timestamp;
+  String get file;
+  String get originalName;
+  String get typeName;
+  @BuiltValueField(serialize: false)
+  bool get downloading;
+  bool get fileAvailable;
+  int get id;
+  int get gradeGroupId;
+  int get userId;
+
+  static void _initializeBuilder(GradeGroupSubmissionBuilder b) => b
+    ..downloading = false
+    ..fileAvailable = false;
 }
 
 abstract class Notification

@@ -144,7 +144,7 @@ void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<RequestPassResetPayload> action) async {
-  final result = (await Dio().post(
+  final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/resetPassword",
     data: {
       "email": action.payload.email,
@@ -162,7 +162,7 @@ void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<String> action) async {
-  final result = (await Dio().post(
+  final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/setNewPassword",
     data: {
       "username": "",

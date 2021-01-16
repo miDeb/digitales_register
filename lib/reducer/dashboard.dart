@@ -22,7 +22,9 @@ final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.markDeletedHomeworkAsSeen,
       _markDeletedHomeworkAsSeen)
   ..add(DashboardActionsNames.markAllAsSeen, _markAllAsSeen)
-  ..add(DashboardActionsNames.updateBlacklist, _updateBlacklist);
+  ..add(DashboardActionsNames.updateBlacklist, _updateBlacklist)
+  ..add(DashboardActionsNames.downloadAttachment, _downloadAttachment)
+  ..add(DashboardActionsNames.attachmentReady, _attachmentReady);
 
 void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
@@ -87,8 +89,19 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
                   !(oldHw.type == HomeworkType.gradeGroup &&
                       newHw.type == HomeworkType.grade)));
           } else {
-            b.homework[b.homework.build().indexOf(oldHw)] =
-                oldHw.rebuild((b) => b..checked = newHw.checked);
+            // preserve client-custom data, but update everything else
+            final mergedHw = newHw.toBuilder()
+              ..firstSeen = oldHw.firstSeen
+              ..lastNotSeen = oldHw.lastNotSeen
+              ..previousVersion = oldHw.previousVersion?.toBuilder();
+            mergedHw.gradeGroupSubmissions?.map(
+              (ggs) => ggs.rebuild(
+                (ggs) => ggs.fileAvailable = oldHw.gradeGroupSubmissions.any(
+                  (oldGgs) => oldGgs.file == ggs.file,
+                ),
+              ),
+            );
+            b.homework[b.homework.build().indexOf(oldHw)] = mergedHw.build();
           }
           newHomework.remove(newHw);
         }
@@ -164,7 +177,11 @@ Homework _parseHomework(data) {
       ..checked = data["checked"] is bool
           ? data["checked"]
           : (data["checked"] ?? 0) != 0
-      ..deleteable = data["deleteable"] ?? b.deleteable;
+      ..deleteable = data["deleteable"] ?? b.deleteable
+      ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
+          ? null
+          : ListBuilder(data["gradeGroupSubmissions"]
+              .map((s) => _parseGradeGroupSubmission(s)));
 
     final typeString = data["type"];
     HomeworkType type;
@@ -195,6 +212,19 @@ Homework _parseHomework(data) {
       b..grade = data["grade"];
     }
   });
+}
+
+GradeGroupSubmission _parseGradeGroupSubmission(data) {
+  return GradeGroupSubmission(
+    (b) => b
+      ..file = data["file"]
+      ..originalName = data["originalName"]
+      ..timestamp = DateTime.parse(data["timestamp"])
+      ..typeName = data["typeName"]
+      ..id = data["id"]
+      ..gradeGroupId = data["gradeGroupId"]
+      ..userId = data["userId"],
+  );
 }
 
 void _notLoaded(
@@ -293,4 +323,42 @@ void _markAllAsSeen(
 void _updateBlacklist(DashboardState state,
     Action<BuiltList<HomeworkType>> action, DashboardStateBuilder builder) {
   builder..blacklist.replace(action.payload);
+}
+
+void _downloadAttachment(DashboardState state,
+    Action<GradeGroupSubmission> action, DashboardStateBuilder builder) {
+  builder.allDays.map(
+    (day) => day.rebuild(
+      (b) => b.homework.map(
+        (hw) => hw.rebuild(
+          (b) => b.gradeGroupSubmissions.map(
+            (s) => s == action.payload
+                ? s.rebuild((b) => b..downloading = true)
+                : s,
+          ),
+        ),
+      ),
+    ),
+  );
+}
+
+void _attachmentReady(DashboardState state, Action<GradeGroupSubmission> action,
+    DashboardStateBuilder builder) {
+  builder.allDays.map(
+    (day) => day.rebuild(
+      (b) => b.homework.map(
+        (hw) => hw.rebuild(
+          (b) => b.gradeGroupSubmissions.map(
+            (s) => s.file == action.payload.file
+                ? s.rebuild(
+                    (b) => b
+                      ..fileAvailable = true
+                      ..downloading = false,
+                  )
+                : s,
+          ),
+        ),
+      ),
+    ),
+  );
 }

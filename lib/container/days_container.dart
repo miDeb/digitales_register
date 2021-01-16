@@ -49,6 +49,8 @@ class DaysContainer extends StatelessWidget {
               actions.dashboardActions.markDeletedHomeworkAsSeen,
           markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
           refreshNoInternet: actions.refreshNoInternet,
+          onDownloadAttachment: actions.dashboardActions.downloadAttachment,
+          onOpenAttachment: actions.dashboardActions.openAttachment,
         );
       },
       connect: (state) {
@@ -63,6 +65,7 @@ typedef RemoveReminderCallback = void Function(Homework hw, Day day);
 typedef ToggleDoneCallback = void Function(Homework hw, bool done);
 typedef MarkAsNotNewOrChangedCallback = void Function(Homework hw);
 typedef MarkDeletedHomeworkAsSeenCallback = void Function(Day day);
+typedef AttachmentCallback = void Function(GradeGroupSubmission ggs);
 
 abstract class DaysViewModel
     implements Built<DaysViewModel, DaysViewModelBuilder> {

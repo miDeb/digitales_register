@@ -7,6 +7,8 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.addReminder, _addReminder)
   ..add(DashboardActionsNames.deleteHomework, _deleteHomework)
   ..add(DashboardActionsNames.toggleDone, _toggleDone)
+  ..add(DashboardActionsNames.downloadAttachment, _downloadAttachment)
+  ..add(DashboardActionsNames.openAttachment, _openAttachment)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenEntries);
 
 void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -121,4 +123,53 @@ void _markNotSeenEntries(
     api.actions.dashboardActions.markAllAsSeen();
   }
   next(action);
+}
+
+void _downloadAttachment(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<GradeGroupSubmission> action) async {
+  if (api.state.noInternet) return;
+  next(action);
+  final saveFile = File(
+    (await getApplicationDocumentsDirectory()).path +
+        "/" +
+        action.payload.originalName,
+  );
+  print(saveFile.path);
+
+  final result = await _wrapper.dio.get(
+    "${_wrapper.baseAddress}/api/gradeGroup/gradeGroupSubmissionDownloadEntry",
+    queryParameters: {
+      "submissionId": action.payload.id,
+      "parentId": action.payload.gradeGroupId,
+    },
+    options: dio.Options(responseType: dio.ResponseType.stream),
+  );
+  final sink = saveFile.openWrite();
+  await sink.addStream((result.data as dio.ResponseBody).stream);
+  await sink.flush();
+  await sink.close();
+  if (result.statusCode == 200) {
+    showSnackBar("Heruntergeladen");
+    api.actions.dashboardActions.attachmentReady(action.payload);
+  }
+}
+
+void _openAttachment(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<GradeGroupSubmission> action) async {
+  next(action);
+  final saveFile = File((await getApplicationDocumentsDirectory()).path +
+      "/" +
+      action.payload.originalName);
+  final path = saveFile.path;
+  var escaped = "";
+  if (Platform.isLinux || Platform.isMacOS) {
+    for (final char in path.characters) {
+      escaped += "\\$char";
+    }
+  } else {
+    escaped = path;
+  }
+  await OpenFile.open(escaped);
 }
