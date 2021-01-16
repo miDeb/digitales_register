@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:dr/actions/messages_actions.dart';
 import 'package:dr/container/absences_page_container.dart';
 import 'package:dr/container/calendar_container.dart';
@@ -16,6 +16,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../actions/absences_actions.dart';
 import '../actions/app_actions.dart';

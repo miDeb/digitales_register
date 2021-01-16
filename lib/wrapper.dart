@@ -10,7 +10,7 @@ import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
-/*
+
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
 class DebugInterceptor extends Interceptor {
@@ -25,12 +25,17 @@ class DebugInterceptor extends Interceptor {
   Future onResponse(Response response) async {
     print(
         "Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
+    if (response.data.toString().length <= 100) {
+      print(response.data);
+    } else {
+      print(response.data.toString().substring(0, 100));
+    }
     return response;
   }
 
   @override
   Future onError(DioError err) async => err;
-}*/
+}
 
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
@@ -43,6 +48,7 @@ class Wrapper {
 
   Wrapper() {
     dio.interceptors.add(CookieManager(cookieJar));
+    //dio.interceptors.add(DebugInterceptor());
   }
 
   String get url => _url;

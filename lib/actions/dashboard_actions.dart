@@ -23,6 +23,9 @@ abstract class DashboardActions extends ReduxActions {
   ActionDispatcher<void> markAllAsSeen;
   ActionDispatcher<BuiltList<HomeworkType>> updateBlacklist;
   ActionDispatcher<void> refresh;
+  ActionDispatcher<GradeGroupSubmission> downloadAttachment;
+  ActionDispatcher<GradeGroupSubmission> attachmentReady;
+  ActionDispatcher<GradeGroupSubmission> openAttachment;
 }
 
 abstract class DaysLoadedPayload
