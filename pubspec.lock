@@ -191,7 +191,7 @@ packages:
       path: "packages/collapsible_sidebar"
       relative: true
     source: path
-    version: "1.0.7+2"
+    version: "1.0.0"
   collection:
     dependency: transitive
     description:
@@ -601,20 +601,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.10.0-nullsafety.3"
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.1+1"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   petitparser:
     dependency: transitive
     description:
@@ -1000,4 +986,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.12.0-0.0 <3.0.0"
-  flutter: ">=1.22.0"
+  flutter: ">=1.22.0 <2.0.0"

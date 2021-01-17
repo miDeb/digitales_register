@@ -8,7 +8,7 @@
 PRODUCT_NAME = dr
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = it.digitalesregisterapp.dr
+PRODUCT_BUNDLE_IDENTIFIER = com.digitalesregister.dr
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2021 it.digitalesregisterapp. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2021 com.digitalesregister. All rights reserved.
