@@ -30,6 +30,7 @@ class GradesPageContainer extends StatelessWidget {
 abstract class GradesPageViewModel
     implements Built<GradesPageViewModel, GradesPageViewModelBuilder> {
   Semester get showSemester;
+  @nullable
   String get allSubjectsAverage;
   bool get loading;
   bool get showGradesDiagram;
