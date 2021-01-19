@@ -43,9 +43,17 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     );
     return;
   }
-  Uri url = Uri.parse(action.payload.url);
-  if (url.scheme.isEmpty) {
-    url = Uri.parse("https://" + action.payload.url);
+
+  String url = action.payload.url;
+  if (Uri.parse(action.payload.url).scheme.isEmpty) {
+    // add https:// if there is no uri scheme
+    url = "https://" + action.payload.url;
+  }
+  final defaultUrlPath = "v2/login";
+  if (url.endsWith(defaultUrlPath)) {
+    // /v2/login is the default path the browser is redirected to when loading
+    // the web app. Users might just copy-paste that url, so let's strip it.
+    url = url.substring(0, url.length - defaultUrlPath.length);
   }
   api.actions.loginActions.loggingIn();
   final result = await _wrapper.login(
