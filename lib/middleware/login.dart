@@ -43,11 +43,15 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     );
     return;
   }
+  Uri url = Uri.parse(action.payload.url);
+  if (url.scheme.isEmpty) {
+    url = Uri.parse("https://" + action.payload.url);
+  }
   api.actions.loginActions.loggingIn();
   final result = await _wrapper.login(
     action.payload.user,
     action.payload.pass,
-    action.payload.url,
+    url.toString(),
     logout: () => api.actions.loginActions.logout(
       LogoutPayload(
         (b) => b
