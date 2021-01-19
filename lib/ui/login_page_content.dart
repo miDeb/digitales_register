@@ -42,6 +42,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
         TextEditingValue(
           text: "https://.digitalesregister.it",
           selection: TextSelection.fromPosition(
+            // insert the caret at the subdomain position
             TextPosition(offset: 8),
           ),
         ),
@@ -81,23 +82,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
           automaticallyImplyLeading:
               widget.vm.changePass && !widget.vm.mustChangePass,
         ),
-        body: widget.vm.noInternet
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    NoInternet(),
-                    SizedBox(
-                      height: 25,
-                    ),
-                    ElevatedButton(
-                      child: Text("Nochmal versuchen"),
-                      onPressed: () => widget.onReload(),
-                    ),
-                  ],
-                ),
-              )
-            : Stack(
+        body:  Stack(
                 children: [
                   Center(
                     child: ListView(
