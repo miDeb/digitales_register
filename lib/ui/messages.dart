@@ -48,6 +48,7 @@ class MessagesPage extends StatelessWidget {
                     child: Text(
                       "Noch keine Mitteilungen",
                       style: Theme.of(context).textTheme.headline4,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ListView.builder(

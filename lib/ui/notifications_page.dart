@@ -57,6 +57,7 @@ class NotificationPage extends StatelessWidget {
               child: Text(
                 "Keine Benachrichtigungen",
                 style: Theme.of(context).textTheme.headline4,
+                textAlign: TextAlign.center,
               ),
             ),
     );
