@@ -9,7 +9,7 @@ class NoInternet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
-            "Kein Internet",
+            "Keine Verbindung",
             style: Theme.of(context)
                 .textTheme
                 .headline6

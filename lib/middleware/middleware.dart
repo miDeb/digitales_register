@@ -151,7 +151,7 @@ void _refreshNoInternet(
   final prevNoInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
     if (noInternet) {
-      showSnackBar("Kein Internet");
+      showSnackBar("Keine Verbindung");
       _wrapper.logout(
         hard: false,
         logoutForcedByServer: true,

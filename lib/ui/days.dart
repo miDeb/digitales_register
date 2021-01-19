@@ -340,7 +340,7 @@ class _DaysWidgetState extends State<DaysWidget> {
               ),
               child: Row(
                 children: <Widget>[
-                  Text("Kein Internet"),
+                  Text("Keine Verbindung"),
                   SizedBox(width: 8),
                   Icon(Icons.refresh),
                 ],
