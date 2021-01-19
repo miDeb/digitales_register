@@ -4,7 +4,6 @@ import 'package:tuple/tuple.dart';
 
 import '../container/login_page.dart';
 import '../util.dart';
-import 'no_internet.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
 typedef ChangePassCallback = void Function(
