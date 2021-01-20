@@ -279,6 +279,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   ),
                   SwitchListTile.adaptive(
                     title: Text("Angemeldet bleiben"),
+                    subtitle: Text("Deine Zugangsdaten werden lokal gespeichert"),
                     value: !safeMode,
                     onChanged: widget.vm.loading
                         ? null

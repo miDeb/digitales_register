@@ -106,6 +106,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ),
           SwitchListTile.adaptive(
             title: Text("Angemeldet bleiben"),
+            subtitle: Text("Deine Zugangsdaten werden lokal gespeichert"),
             onChanged: (bool value) {
               widget.onSetNoPassSaving(!value);
             },
