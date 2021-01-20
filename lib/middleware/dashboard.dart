@@ -100,7 +100,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     next(action);
   } else {
     next(
-      Action(
+      Action<ToggleDonePayload>(
         DashboardActionsNames.toggleDone.name,
         ToggleDonePayload(
           (b) => b
