@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:built_value/built_value.dart';
 
 import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
@@ -96,9 +97,10 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
               ..previousVersion = oldHw.previousVersion?.toBuilder();
             mergedHw.gradeGroupSubmissions?.map(
               (ggs) => ggs.rebuild(
-                (ggs) => ggs.fileAvailable = oldHw.gradeGroupSubmissions.any(
-                  (oldGgs) => oldGgs.file == ggs.file,
-                ),
+                (ggs) => ggs.fileAvailable = oldHw.gradeGroupSubmissions?.any(
+                      (oldGgs) => oldGgs.file == ggs.file,
+                    ) ??
+                    false,
               ),
             );
             b.homework[b.homework.build().indexOf(oldHw)] = mergedHw.build();
@@ -181,7 +183,8 @@ Homework _parseHomework(data) {
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
           : ListBuilder(data["gradeGroupSubmissions"]
-              .map((s) => _parseGradeGroupSubmission(s)));
+              .map((s) => _parseGradeGroupSubmission(s))
+              .where((s) => s != null));
 
     final typeString = data["type"];
     HomeworkType type;
@@ -215,16 +218,22 @@ Homework _parseHomework(data) {
 }
 
 GradeGroupSubmission _parseGradeGroupSubmission(data) {
-  return GradeGroupSubmission(
-    (b) => b
-      ..file = data["file"]
-      ..originalName = data["originalName"]
-      ..timestamp = DateTime.parse(data["timestamp"])
-      ..typeName = data["typeName"]
-      ..id = data["id"]
-      ..gradeGroupId = data["gradeGroupId"]
-      ..userId = data["userId"],
-  );
+  try {
+    return GradeGroupSubmission(
+      (b) => b
+        ..file = data["file"]
+        ..originalName = data["originalName"]
+        ..timestamp = DateTime.parse(data["timestamp"])
+        ..typeName = data["typeName"]
+        ..id = data["id"]
+        ..gradeGroupId = data["gradeGroupId"]
+        ..userId = data["userId"],
+    );
+  } catch (e, s) {
+    print("Failed to parse GradeGroupSubmission,\n$e\n\n$s");
+    // TODO: figure out a way to notify the user about this failure.
+    return null;
+  }
 }
 
 void _notLoaded(
