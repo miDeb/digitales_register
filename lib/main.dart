@@ -119,6 +119,7 @@ void main() {
               }
             },
             theme: theme,
+         debugShowCheckedModeBanner: false,
           ),
         ),
         onPointerDown: (_) => store.actions.loginActions.updateLogout(),
