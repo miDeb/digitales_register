@@ -59,6 +59,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final result = await _wrapper.login(
     action.payload.user,
     action.payload.pass,
+    null,
     url.toString(),
     logout: () => api.actions.loginActions.logout(
       LogoutPayload(

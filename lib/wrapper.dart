@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:dr/util.dart';
@@ -10,6 +11,7 @@ import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
+import 'main.dart';
 
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
@@ -83,7 +85,7 @@ class Wrapper {
   DateTime lastInteraction = now;
   DateTime _serverLogoutTime;
   Config config;
-  Future<dynamic> login(String user, String pass, String url,
+  Future<dynamic> login(String user, String pass, String tfaCode, String url,
       {VoidCallback logout,
       VoidCallback configLoaded,
       VoidCallback relogin,
@@ -114,7 +116,11 @@ class Wrapper {
     try {
       response = (await dio.post(
         loginAddress,
-        data: {"username": user, "password": pass},
+        data: {
+          "username": user,
+          "password": pass,
+          if (tfaCode != null) "two_factor": tfaCode,
+        },
       ))
           .data;
     } catch (e) {
@@ -138,8 +144,55 @@ class Wrapper {
     } else {
       _loggedIn = false;
       error = "[${response["error"]}] ${response["message"]}";
+      switch (response["error"]) {
+        case "two_factor_needed":
+          final tfaCode = await _request2FA();
+          if (tfaCode != null) {
+            return login(user, pass, tfaCode, url);
+          }
+          return;
+        case "two_factor_wrong":
+          final tfaCode = await _request2FA(wasWrong: true);
+          if (tfaCode != null) {
+            return login(user, pass, tfaCode, url);
+          }
+          return;
+      }
     }
     return response;
+  }
+
+  Future<String> _request2FA({bool wasWrong = false}) {
+    return showDialog(
+      context: navigatorKey.currentContext,
+      builder: (context) {
+        final textInputController = TextEditingController();
+        return StatefulBuilder(
+          builder: (context, setState) => AlertDialog(
+            title: Text(
+                wasWrong ? "Ungültiger Code" : "Zweiter Faktor wird benötigt"),
+            content: TextField(
+              controller: textInputController,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(
+                  context,
+                ),
+                child: Text("Abbrechen"),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(
+                  context,
+                  textInputController.value.text,
+                ),
+                child: Text("Bestätigen"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<dynamic> changePass(
@@ -249,7 +302,7 @@ class Wrapper {
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
-        await login(user, pass, this.url);
+        await login(user, pass, null, this.url);
         if (!_loggedIn) {
           _mutex.release();
           return null;
