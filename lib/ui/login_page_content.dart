@@ -103,8 +103,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                       child: TypeAheadField(
                         textFieldConfiguration: TextFieldConfiguration(
                           focusNode: _schoolFocusNode,
-                          autofocus: widget.vm.error == null &&
-                              nonCustomServer == null,
+                          autofocus: _schoolController.text.isEmpty,
                           controller: _schoolController,
                           onChanged: (v) {
                             if (widget.vm.servers[v] == null) {
@@ -117,6 +116,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             labelText: "Schule",
                             errorText: !_schoolFocusNode.hasFocus &&
                                     _schoolController.text != "Andere Schule" &&
+                                    _schoolController.text.isNotEmpty &&
                                     nonCustomServer == null
                                 ? "Schule nicht gefunden"
                                 : null,
