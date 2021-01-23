@@ -90,7 +90,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
-                  if (!widget.vm.changePass && !urlFromVM)
+                  if (!widget.vm.changePass)
                     ListTile(
                       title: Text("Schule"),
                       trailing: DropdownButton(
