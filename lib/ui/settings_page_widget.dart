@@ -403,7 +403,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
-                Text("Ein Client für das Digitale Register."),
+                Text(
+                    "Ein Client für das Digitale Register.\nGroßzügig unterstützt durch das Bischöfliche Institut Vinzentinum."),
               ],
             ),
           ),
@@ -484,8 +485,9 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
               children: <Widget>[
                 TypeAheadField(
                   suggestionsCallback: (pattern) {
-                    return widget.suggestions
-                        .where((suggestion) => suggestion.toLowerCase().contains(pattern.toLowerCase()));
+                    return widget.suggestions.where((suggestion) => suggestion
+                        .toLowerCase()
+                        .contains(pattern.toLowerCase()));
                   },
                   itemBuilder: (BuildContext context, String suggestion) {
                     return ListTile(title: Text(suggestion));
