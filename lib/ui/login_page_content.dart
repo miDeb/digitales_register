@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tuple/tuple.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../container/login_page.dart';
 
@@ -97,7 +98,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
               child: ListView(
                 shrinkWrap: true,
                 children: <Widget>[
-                  if (!widget.vm.changePass)
+                  if (!widget.vm.changePass) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: TypeAheadField(
@@ -139,6 +140,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   TextSelection.fromPosition(
                                 TextPosition(offset: 0),
                               );
+                            } else {
+                              _urlController.text = nonCustomServer.item2;
                             }
                           });
                         },
@@ -155,6 +158,20 @@ class _LoginPageContentState extends State<LoginPageContent> {
                         },
                       ),
                     ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton(
+                        child: Text("Feedback?"),
+                        style: TextButton.styleFrom(
+                          primary: Colors.grey,
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                        ),
+                        onPressed: () {
+                          launch("https://form.jotform.com/210192917027351");
+                        },
+                      ),
+                    ),
+                  ],
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: AutofillGroup(
@@ -162,14 +179,12 @@ class _LoginPageContentState extends State<LoginPageContent> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           if (!widget.vm.changePass) ...[
-                            if (nonCustomServer == null)
-                              TextField(
-                                decoration:
-                                    InputDecoration(labelText: 'Adresse'),
-                                controller: _urlController,
-                                enabled: !widget.vm.loading,
-                                keyboardType: TextInputType.url,
-                              ),
+                            TextField(
+                              decoration: InputDecoration(labelText: 'Adresse'),
+                              controller: _urlController,
+                              enabled: !widget.vm.loading,
+                              keyboardType: TextInputType.url,
+                            ),
                             Divider(),
                           ],
                           TextField(
