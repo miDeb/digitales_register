@@ -80,7 +80,32 @@ const _servers = {
   "Ursulinen": "https://ursulinen.digitalesregister.it/v2/login",
   "Gymme": "https://gymme.digitalesregister.it/v2/login",
   "OFL Auer": "https://oflauer.digitalesregister.it/v2/login",
-  "Walther von der Vogelweide": "https://vogelweide.digitalesregister.it/v2/login",
+  "Walther von der Vogelweide":
+      "https://vogelweide.digitalesregister.it/v2/login",
   "Sterzing I": "https://sterzing1.digitalesregister.it/v2/login",
   "TFO Bozen ": "https://tfobz.digitalesregister.it/v2/login",
+  "Mariengarten": "https://mariengarten.digitalesregister.it/v2/login",
+  "GS Oswald v. Wolkenstein Meran":
+      "https://gsoswaldvonwolkenstein.digitalesregister.it/v2/login",
+  "GS Burgstall": "https://gsburgstall.digitalesregister.it/v2/login",
+  "GS Albert Schweizer":
+      "https://gsalbertschweitzer.digitalesregister.it/v2/login",
+  "BBZ Bruneck": "https://bbz.digitalesregister.it/v2/login",
+  "WFO Auer": "https://wfoauer.digitalesregister.it/v2/login",
+  "LBS Zuegg": "https://lbszuegg.digitalesregister.it/v2/login",
+  "MS Meusburger Bruneck": "https://meusburger.digitalesregister.it/v2/login",
+  "WFO Kafka Meran": "https://wfokafka.digitalesregister.it/v2/login",
+  "Scores altes La Ila": "https://scoresaltes.digitalesregister.it/v2/login",
+  "FS Tisens": "https://fstisens.digitalesregister.it/v2/login",
+  "SOWI Brixen": "https://gymnasiumbrixen.digitalesregister.it/v2/login",
+  "Maria Hueber Gymnasium": "https://mhg.digitalesregister.it/v2/login",
+  "Fachschule Laimburg": "https://fslaimburg.digitalesregister.it/v2/login",
+  "GS Franz Tappeiner":
+      "https://gsfranztappeiner.digitalesregister.it/v2/login",
+  "LHFS Bruneck": "https://lhfsbruneck.digitalesregister.it/v2/login",
+  "Kaiserhof Meran": "https://kaiserhof.digitalesregister.it/v2/login",
+  "Cademia": "https://cademia.digitalesregister.it/v2/login",
+  "Franziskaner Bozen":
+      "https://franziskanergymnasium.digitalesregister.it/v2/login",
+  "MS Carl Wolf": "https://mscarlwolf.digitalesregister.it/v2/login",
 };
