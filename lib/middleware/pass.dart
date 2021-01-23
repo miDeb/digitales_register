@@ -55,7 +55,7 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "url": _wrapper.url,
         "offlineEnabled": api.state.settingsState.offlineEnabled,
         "otherAccounts": json
-            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
+            .decode(await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );
