@@ -19,7 +19,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.titleStyle,
     this.textStyle,
     this.toggleTitleStyle,
-    this.toggleTitle = 'Collapse',
+    this.toggleTitle,
     this.avatar,
     this.height = double.infinity,
     this.minWidth = 80,
@@ -46,7 +46,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.onExpansionChange,
   });
 
-  final String title, toggleTitle;
+  final Widget title, toggleTitle;
   final TextStyle titleStyle, textStyle, toggleTitleStyle;
   final Widget body;
   final Widget avatar;
@@ -236,7 +236,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       offsetX: _offsetX,
       leading: CollapsibleAvatar(
         avatarSize: widget.iconSize,
-        name: widget.title,
         avatar: widget.avatar,
         textStyle: _textStyle(widget.backgroundColor, widget.titleStyle),
       ),
@@ -267,7 +266,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
           size: widget.iconSize,
           color: iconColor,
         ),
-        title: item.text,
+        title: Text(item.text),
         textStyle: _textStyle(textColor, widget.textStyle),
         onTap: () {
           if (item.isSelected) return;

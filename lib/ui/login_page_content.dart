@@ -9,6 +9,7 @@ typedef LoginCallback = void Function(String user, String pass, String url);
 typedef ChangePassCallback = void Function(
     String user, String oldPass, String newPass, String url);
 typedef SetSafeModeCallback = void Function(bool safeMode);
+typedef SelectAccountCallback = void Function(int index);
 
 class LoginPageContent extends StatefulWidget {
   final LoginPageViewModel vm;
@@ -17,6 +18,7 @@ class LoginPageContent extends StatefulWidget {
   final SetSafeModeCallback setSaveNoPass;
   final VoidCallback onReload;
   final VoidCallback onRequestPassReset;
+  final SelectAccountCallback onSelectAccount;
 
   LoginPageContent({
     Key key,
@@ -26,6 +28,7 @@ class LoginPageContent extends StatefulWidget {
     this.onReload,
     this.onChangePass,
     this.onRequestPassReset,
+    this.onSelectAccount,
   }) : super(key: key);
 
   @override
@@ -279,7 +282,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   ),
                   SwitchListTile.adaptive(
                     title: Text("Angemeldet bleiben"),
-                    subtitle: Text("Deine Zugangsdaten werden lokal gespeichert"),
+                    subtitle:
+                        Text("Deine Zugangsdaten werden lokal gespeichert"),
                     value: !safeMode,
                     onChanged: widget.vm.loading
                         ? null
@@ -289,6 +293,26 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             });
                           },
                   ),
+                  if (!widget.vm.changePass &&
+                      widget.vm.otherAccounts.isNotEmpty) ...[
+                    Divider(
+                      height: 16,
+                    ),
+                    ListTile(
+                      title: Text("Andere Accounts"),
+                    ),
+                    Column(
+                      children: [
+                        for (var index = 0;
+                            index < widget.vm.otherAccounts.length;
+                            index++)
+                          ListTile(
+                            title: Text(widget.vm.otherAccounts[index]),
+                            onTap: () => widget.onSelectAccount(index),
+                          ),
+                      ],
+                    ),
+                  ],
                   Center(
                     child: widget.vm.error?.isNotEmpty == true
                         ? Text(

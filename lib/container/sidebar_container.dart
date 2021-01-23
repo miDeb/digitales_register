@@ -1,3 +1,4 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:dr/actions/app_actions.dart';
 import 'package:dr/actions/login_actions.dart';
@@ -36,6 +37,9 @@ class SidebarContainer extends StatelessWidget {
           showGrades: actions.routingActions.showGrades,
           showMessages: actions.routingActions.showMessages,
           showSettings: actions.routingActions.showSettings,
+          otherAccounts: state.otherAccounts.toList(),
+          selectAccount: actions.loginActions.selectAccount,
+          addAccount: actions.loginActions.addAccount,
           logout: () => actions.loginActions.logout(
             LogoutPayload(
               (b) => b
@@ -51,7 +55,8 @@ class SidebarContainer extends StatelessWidget {
             ..username = state.config?.fullName ?? state.loginState.username
             ..userIcon = state.config?.imgSource
             ..drawerInitiallyFullyExpanded =
-                state.settingsState.drawerFullyExpanded,
+                state.settingsState.drawerFullyExpanded
+            ..otherAccounts = state.loginState.otherAccounts.toBuilder(),
         );
       },
     );
@@ -65,6 +70,7 @@ abstract class SidebarViewModel
   @nullable
   String get userIcon;
   bool get drawerInitiallyFullyExpanded;
+  BuiltList<String> get otherAccounts;
   SidebarViewModel._();
 
   factory SidebarViewModel([void Function(SidebarViewModelBuilder) updates]) =

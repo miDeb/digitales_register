@@ -18,7 +18,7 @@ class CollapsibleItemWidget extends StatelessWidget {
   });
 
   final Widget leading;
-  final String title;
+  final Widget title;
   final TextStyle textStyle;
   final double offsetX, padding;
   final Function onTap;
@@ -79,13 +79,13 @@ class CollapsibleItemWidget extends StatelessWidget {
                         children: [
                           leading,
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            width: 210,
-                            child: Text(
-                              title,
-                              style: textStyle,
-                            ),
-                          ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              width: 210,
+                              child: DefaultTextStyle(
+                                child: title,
+                                style: textStyle,
+                              )),
                         ],
                       ),
                     ),

@@ -38,6 +38,7 @@ class LoginPage extends StatelessWidget {
           setSaveNoPass: actions.settingsActions.saveNoPass,
           onReload: actions.load,
           onRequestPassReset: actions.routingActions.showRequestPassReset,
+          onSelectAccount: actions.loginActions.selectAccount,
         );
       },
       connect: (state) {
@@ -56,6 +57,7 @@ class LoginPageViewModel {
   final String url;
   final bool loading, safeMode, noInternet, changePass, mustChangePass;
   final Map<String, String> servers;
+  final List<String> otherAccounts;
 
   LoginPageViewModel.from(AppState state)
       : error = state.loginState.errorMsg,
@@ -66,7 +68,8 @@ class LoginPageViewModel {
         changePass = state.loginState.changePassword,
         mustChangePass = state.loginState.mustChangePassword,
         username = state.loginState.username,
-        url = state.url;
+        url = state.url,
+        otherAccounts = state.loginState.otherAccounts?.toList();
 }
 
 const _servers = {

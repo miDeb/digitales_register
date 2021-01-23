@@ -3,6 +3,8 @@ import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:flutter/material.dart';
 
+typedef SelectAccountCallback = void Function(int index);
+
 class Sidebar extends StatelessWidget {
   const Sidebar({
     Key key,
@@ -20,6 +22,9 @@ class Sidebar extends StatelessWidget {
     @required this.showMessages,
     @required this.showSettings,
     @required this.logout,
+    @required this.otherAccounts,
+    @required this.selectAccount,
+    @required this.addAccount,
   }) : super(key: key);
 
   final DrawerCallback onDrawerExpansionChange;
@@ -30,10 +35,13 @@ class Sidebar extends StatelessWidget {
       showCertificate,
       showMessages,
       showSettings,
-      logout;
+      logout,
+      addAccount;
   final bool tabletMode, drawerInitiallyFullyExpanded;
   final Pages currentSelected;
   final String username, userIcon;
+  final List<String> otherAccounts;
+  final SelectAccountCallback selectAccount;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +55,31 @@ class Sidebar extends StatelessWidget {
       borderRadius: 0,
       minWidth: 70,
       screenPadding: 0,
-      title: username ?? "?",
-      toggleTitle: "",
+      title: DropdownButton(
+        underline: SizedBox(),
+        value: 0,
+        items: [
+          for (var index = 0; index < otherAccounts.length + 2; index++)
+            DropdownMenuItem(
+              child: Text(
+                index == 0
+                    ? (username ?? "?")
+                    : index == otherAccounts.length + 1
+                        ? "Account hinzufügen"
+                        : otherAccounts[index - 1],
+              ),
+              value: index,
+            ),
+        ],
+        onChanged: (value) {
+          if (value == otherAccounts.length + 1) {
+            addAccount();
+          } else {
+            selectAccount(value - 1);
+          }
+        },
+      ),
+      toggleTitle: SizedBox(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:
           //"https://vinzentinum.digitalesregister.it/v2/theme/icons/profile_empty.png" is the (ugly) default

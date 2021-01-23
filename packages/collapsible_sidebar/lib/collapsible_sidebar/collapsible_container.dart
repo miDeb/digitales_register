@@ -24,9 +24,7 @@ class CollapsibleContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
         color: color,
       ),
-      child: Material(
-        child: SafeArea(child: child ,left: false, right: false)
-      ),
+      child: Material(child: SafeArea(child: child, left: false, right: false)),
     );
   }
 }

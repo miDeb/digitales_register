@@ -8,12 +8,23 @@ final _loginMiddleware =
       ..add(LoginActionsNames.showChangePass, _showChangePass)
       ..add(LoginActionsNames.changePass, _changePass)
       ..add(LoginActionsNames.requestPassReset, _requestPassReset)
-      ..add(LoginActionsNames.resetPass, _resetPass);
+      ..add(LoginActionsNames.resetPass, _resetPass)
+      ..add(LoginActionsNames.addAccount, _addAccount)
+      ..add(LoginActionsNames.selectAccount, _selectAccount);
 
 void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LogoutPayload> action) {
+    ActionHandler next, Action<LogoutPayload> action) async {
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
-    api.actions.savePassActions.delete();
+    await _secureStorage.write(
+      key: "login",
+      value: json.encode(
+        {
+          "url": _wrapper.url,
+          "otherAccounts": json
+              .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
+        },
+      ),
+    );
   }
   if (api.state.settingsState.deleteDataOnLogout && action.payload.hard) {
     api.actions.deleteData();
@@ -192,4 +203,62 @@ void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   } else {
     api.actions.loginActions.passResetSucceeded(result["message"]);
   }
+}
+
+void _addAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
+  next(action);
+  // Move the current default user credentials into `otherAccounts`
+  final login = json.decode(await _secureStorage.read(key: "login"));
+  final List otherAccounts = login["otherAccounts"] ?? [];
+  if (login["user"] != null &&
+      login["pass"] != null &&
+      login["url"] != null &&
+      login["offlineEnabled"] != null) {
+    otherAccounts.insert(0, {
+      "user": login["user"],
+      "pass": login["pass"],
+      "url": login["url"],
+      "offlineEnabled": login["offlineEnabled"],
+    });
+  }
+  await _secureStorage.write(
+    key: "login",
+    value: json.encode(
+      {
+        "url": login["url"],
+        "otherAccounts": otherAccounts,
+      },
+    ),
+  );
+  api.actions.mountAppState(AppState());
+  api.actions.load();
+}
+
+void _selectAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<int> action) async {
+  next(action);
+  final login = json.decode(await _secureStorage.read(key: "login"));
+  final otherAccounts = login["otherAccounts"] as List;
+  var selectedIndex = action.payload;
+  if (login["user"] != null &&
+      login["pass"] != null &&
+      login["url"] != null &&
+      login["offlineEnabled"] != null) {
+    otherAccounts.insert(0, {
+      "user": login["user"],
+      "pass": login["pass"],
+      "url": login["url"],
+      "offlineEnabled": login["offlineEnabled"],
+    });
+    selectedIndex += 1;
+  }
+  final selected = otherAccounts.removeAt(selectedIndex);
+  login["user"] = selected["user"];
+  login["pass"] = selected["pass"];
+  login["url"] = selected["url"];
+  login["offlineEnabled"] = selected["offlineEnabled"];
+  await _secureStorage.write(key: "login", value: json.encode(login));
+  api.actions.mountAppState(AppState());
+  api.actions.load();
 }

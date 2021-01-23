@@ -57,8 +57,14 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            resValue "string", "app_name", "Register"
-
+            // this is my (michael) release key. Used for dev purposes only.
+            if (signingConfigs.release.keyAlias != "myandroidkey") {
+                applicationIdSuffix ".irelease"
+                resValue "string", "app_name", "dr Irelease"
+            } else {
+                // This is the normal release build type
+                resValue "string", "app_name", "Register"
+            }
         }
         debug {
             applicationIdSuffix ".debug"

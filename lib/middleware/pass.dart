@@ -22,6 +22,8 @@ void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "pass": pass,
         "url": url,
         "offlineEnabled": action.payload,
+        "otherAccounts": json
+            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
       },
     ),
   );
@@ -40,7 +42,7 @@ void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 }
 
 void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+    ActionHandler next, Action<void> action) async {
   next(action);
   if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode)
     return;
@@ -51,20 +53,24 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "user": _wrapper.user,
         "pass": _wrapper.pass,
         "url": _wrapper.url,
-        "offlineEnabled": api.state.settingsState.offlineEnabled
+        "offlineEnabled": api.state.settingsState.offlineEnabled,
+        "otherAccounts": json
+            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
       },
     ),
   );
 }
 
 void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+    ActionHandler next, Action<void> action) async {
   next(action);
   _secureStorage.write(
     key: "login",
     value: json.encode(
       {
         "url": _wrapper.url,
+        "otherAccounts": json
+            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
       },
     ),
   );

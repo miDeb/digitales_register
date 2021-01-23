@@ -105,7 +105,7 @@ class _SidebarPageState extends State<SidebarPage> {
       child: CollapsibleSidebar(
         items: _items,
         avatar: _avatarImg,
-        title: 'John Smith',
+        title: Text('John Smith'),
         body: _body(size, context),
         backgroundColor: Colors.black,
         selectedTextColor: Colors.limeAccent,

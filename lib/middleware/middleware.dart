@@ -172,9 +172,13 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final url = login["url"] ??
       "https://vinzentinum.digitalesregister.it"; // be backwards compatible
   final offlineEnabled = login["offlineEnabled"];
+  final List<String> otherAccounts =
+      List.from(login["otherAccounts"]?.map((login) => login["user"]) ?? []);
+  api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||
       (api.state.loginState.username != null &&
           api.state.loginState.username != user)) {
+    // TODO: Figure out when exactly we'd hit this code path and how to handle it better.
     api.actions.savePassActions.delete();
     api.actions.routingActions.showLogin();
   } else {

@@ -23,6 +23,10 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<String> resetPass;
   ActionDispatcher<String> passResetFailed;
   ActionDispatcher<String> passResetSucceeded;
+  ActionDispatcher<List<String>> setAvailableAccounts;
+  ActionDispatcher<void> addAccount;
+  // payload: the index of the selected account
+  ActionDispatcher<int> selectAccount;
 }
 
 abstract class LoginPayload
