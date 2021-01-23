@@ -56,6 +56,7 @@ class Sidebar extends StatelessWidget {
       minWidth: 70,
       screenPadding: 0,
       title: DropdownButton(
+        isExpanded: true,
         underline: SizedBox(),
         value: 0,
         items: [
