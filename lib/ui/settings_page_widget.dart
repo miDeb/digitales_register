@@ -485,7 +485,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                 TypeAheadField(
                   suggestionsCallback: (pattern) {
                     return widget.suggestions
-                        .where((suggestion) => suggestion.contains(pattern));
+                        .where((suggestion) => suggestion.toLowerCase().contains(pattern.toLowerCase()));
                   },
                   itemBuilder: (BuildContext context, String suggestion) {
                     return ListTile(title: Text(suggestion));
