@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../container/settings_page.dart';
 import 'dialog.dart';
+import 'donations.dart';
 import 'network_protocol_page.dart';
 
 class SettingsPageWidget extends StatefulWidget {
@@ -377,6 +378,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             trailing: Icon(Icons.open_in_new),
             onTap: () {
               launch("https://form.jotform.com/210060844853351");
+            },
+          ),
+          ListTile(
+            title: Text("Unterstütze uns!"),
+            onTap: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => Donate()));
             },
           ),
           FutureBuilder(
