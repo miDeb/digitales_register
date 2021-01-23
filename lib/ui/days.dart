@@ -629,188 +629,184 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Card(
+      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: item.warning
-            ? BorderSide(color: Colors.red, width: 1)
+            ? BorderSide(color: Colors.red, width: 1.5)
             : item.type == HomeworkType.grade || item.checked
                 ? BorderSide(color: Colors.green, width: 0)
                 : BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
-      child: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                    left: 8,
-                    top: 8,
-                    bottom: 6,
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      if (item.label != null)
-                        Stack(
-                          clipBehavior: Clip.none,
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                item.label,
-                                textAlign: TextAlign.center,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if ((!isHistory &&
-                                    (item.isNew || item.isChanged)) ||
-                                (isHistory && isCurrent))
-                              Positioned(
-                                right: 0,
-                                child: Badge(
-                                  shape: BadgeShape.square,
-                                  borderRadius: BorderRadius.circular(20),
-                                  badgeContent: Text(
-                                    isHistory && isCurrent
-                                        ? "aktuell"
-                                        : item.isNew
-                                            ? "neu"
-                                            : item.deleted
-                                                ? "gelöscht"
-                                                : "geändert",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: Column(
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                      left: 8,
+                      top: 8,
+                      bottom: 6,
+                    ),
+                    child: Column(
+                      children: <Widget>[
+                        if (item.label != null)
+                          Stack(
+                            clipBehavior: Clip.none,
+                            children: <Widget>[
+                              Center(
+                                child: Text(
+                                  item.label,
+                                  textAlign: TextAlign.center,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              )
-                          ],
-                        ),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        title: Text(item.title),
-                        subtitle: item.subtitle.isNullOrEmpty
-                            ? null
-                            : Text(item.subtitle),
-                        leading: !isHistory && !isDeletedView && item.deleteable
-                            ? IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: noInternet
-                                    ? null
-                                    : () async {
-                                        if (askWhenDelete) {
-                                          final confirmationResult =
-                                              await _showConfirmDelete(context);
-                                          final delete =
-                                              confirmationResult.item1;
-                                          final ask = confirmationResult.item2;
-                                          if (delete == true) {
-                                            if (!ask) setDoNotAskWhenDelete();
+                              ),
+                              if ((!isHistory &&
+                                      (item.isNew || item.isChanged)) ||
+                                  (isHistory && isCurrent))
+                                Positioned(
+                                  right: 0,
+                                  child: Badge(
+                                    shape: BadgeShape.square,
+                                    borderRadius: BorderRadius.circular(20),
+                                    badgeContent: Text(
+                                      isHistory && isCurrent
+                                          ? "aktuell"
+                                          : item.isNew
+                                              ? "neu"
+                                              : item.deleted
+                                                  ? "gelöscht"
+                                                  : "geändert",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                            ],
+                          ),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          title: Text(item.title),
+                          subtitle: item.subtitle.isNullOrEmpty
+                              ? null
+                              : Text(item.subtitle),
+                          leading: !isHistory &&
+                                  !isDeletedView &&
+                                  item.deleteable
+                              ? IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: noInternet
+                                      ? null
+                                      : () async {
+                                          if (askWhenDelete) {
+                                            final confirmationResult =
+                                                await _showConfirmDelete(
+                                                    context);
+                                            final delete =
+                                                confirmationResult.item1;
+                                            final ask =
+                                                confirmationResult.item2;
+                                            if (delete == true) {
+                                              if (!ask) setDoNotAskWhenDelete();
+                                              removeThis();
+                                            }
+                                          } else {
                                             removeThis();
                                           }
-                                        } else {
-                                          removeThis();
-                                        }
-                                      },
-                                padding: EdgeInsets.all(0),
-                              )
-                            : null,
-                      ),
-                    ],
+                                        },
+                                  padding: EdgeInsets.all(0),
+                                )
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  if (!isHistory && item.label != null)
-                    IconButton(
-                      icon: (isDeletedView
-                                  ? item.previousVersion.previousVersion
-                                  : item.previousVersion) !=
-                              null
-                          ? Badge(
-                              child: Icon(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    if (!isHistory && item.label != null)
+                      IconButton(
+                        icon: (isDeletedView
+                                    ? item.previousVersion.previousVersion
+                                    : item.previousVersion) !=
+                                null
+                            ? Badge(
+                                child: Icon(
+                                  Icons.info_outline,
+                                ),
+                                badgeContent: Icon(Icons.edit, size: 15),
+                                padding: EdgeInsets.zero,
+                                badgeColor: isDeletedView
+                                    ? Theme.of(context).dialogBackgroundColor
+                                    : Theme.of(context).scaffoldBackgroundColor,
+                                toAnimate: false,
+                                elevation: 0,
+                              )
+                            : Icon(
                                 Icons.info_outline,
                               ),
-                              badgeContent: Icon(Icons.edit, size: 15),
-                              padding: EdgeInsets.zero,
-                              badgeColor: isDeletedView
-                                  ? Theme.of(context).dialogBackgroundColor
-                                  : Theme.of(context).scaffoldBackgroundColor,
-                              toAnimate: false,
-                              elevation: 0,
-                            )
-                          : Icon(
-                              Icons.info_outline,
-                            ),
-                      onPressed: () {
-                        _showHistory(context);
-                      },
-                    ),
-                  if (item.warning)
-                    Padding(
-                      // make this exactly as big as the (i) icon above, so
-                      // [CrossAxisAlignment.end] will not move this to the end
-                      padding: const EdgeInsets.symmetric(horizontal: 19),
-                      child: Text(
-                        "!",
-                        style: TextStyle(
-                          color: Colors.red.shade900,
-                          fontSize: 30,
+                        onPressed: () {
+                          _showHistory(context);
+                        },
+                      ),
+                    if (item.type == HomeworkType.grade)
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Text(
+                          item.gradeFormatted,
+                          style: TextStyle(color: Colors.green, fontSize: 30),
                         ),
+                      )
+                    else if (!isHistory && !isDeletedView && item.checkable)
+                      Checkbox(
+                        visualDensity: VisualDensity.standard,
+                        activeColor: Colors.green,
+                        value: item.checked,
+                        onChanged: noInternet
+                            ? null
+                            : (done) {
+                                toggleDone();
+                              },
                       ),
-                    )
-                  else if (item.type == HomeworkType.grade)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(
-                        item.gradeFormatted,
-                        style: TextStyle(color: Colors.green, fontSize: 30),
-                      ),
-                    )
-                  else if (!isHistory && !isDeletedView && item.checkable)
-                    Checkbox(
-                      activeColor: Colors.green,
-                      value: item.checked,
-                      onChanged: noInternet
-                          ? null
-                          : (done) {
-                              toggleDone();
-                            },
-                    ),
-                ],
+                  ],
+                ),
+              ],
+            ),
+            if (isHistory || isDeletedView) ...[
+              Divider(height: 0),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  formatChanged(item),
+                  style: Theme.of(context).textTheme.caption,
+                ),
               ),
             ],
-          ),
-          if (isHistory || isDeletedView) ...[
-            Divider(height: 0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                formatChanged(item),
-                style: Theme.of(context).textTheme.caption,
+            if (item.gradeGroupSubmissions?.isNotEmpty == true) ...[
+              Divider(),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("Anhang",
+                      style: Theme.of(context).textTheme.subtitle1),
+                ),
               ),
-            ),
+              for (final attachment in item.gradeGroupSubmissions)
+                AttachmentWidget(
+                  ggs: attachment,
+                  noInternet: noInternet,
+                  downloadCallback: onDownloadAttachment,
+                  openCallback: onOpenAttachment,
+                )
+            ]
           ],
-          if (item.gradeGroupSubmissions?.isNotEmpty == true) ...[
-            Divider(),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("Anhang",
-                    style: Theme.of(context).textTheme.subtitle1),
-              ),
-            ),
-            for (final attachment in item.gradeGroupSubmissions)
-              AttachmentWidget(
-                ggs: attachment,
-                noInternet: noInternet,
-                downloadCallback: onDownloadAttachment,
-                openCallback: onOpenAttachment,
-              )
-          ]
-        ],
+        ),
       ),
     );
     if (!isHistory && !isDeletedView) {
