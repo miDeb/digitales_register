@@ -32,10 +32,13 @@ class Profile extends StatelessWidget {
             )
           : ListView(
               children: <Widget>[
-                UserProfile(
-                  name: profileState.name,
-                  username: profileState.username,
-                  role: profileState.roleName,
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: UserProfile(
+                    name: profileState.name,
+                    username: profileState.username,
+                    role: profileState.roleName,
+                  ),
                 ),
                 SwitchListTile.adaptive(
                   title: Text("Emails für Benachrichtigungen senden"),
