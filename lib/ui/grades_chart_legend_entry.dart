@@ -21,24 +21,6 @@ class GradesChartLegendEntry extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       child: Row(
         children: [
-          Container(
-            width: 30,
-            height: 12,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 5,
-              ),
-              child: Center(
-                child: Container(
-                  height: thickness,
-                  decoration: BoxDecoration(
-                    color: Color(config.color),
-                    borderRadius: BorderRadius.circular(1.5),
-                  ),
-                ),
-              ),
-            ),
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
@@ -70,7 +52,8 @@ class GradesChartLegendEntry extends StatelessWidget {
                 min: 0,
                 max: 5,
                 divisions: 5,
-                activeColor: Theme.of(context).accentColor,
+                activeColor: Color(config.color),
+                inactiveColor: Color(config.color).withOpacity(0.2),
               );
             }),
             flex: 2,
