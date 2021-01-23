@@ -169,8 +169,7 @@ void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"];
   final pass = login["pass"];
-  final url = login["url"] ??
-      "https://vinzentinum.digitalesregister.it"; // be backwards compatible
+  final url = login["url"];
   final offlineEnabled = login["offlineEnabled"];
   final List<String> otherAccounts =
       List.from(login["otherAccounts"]?.map((login) => login["user"]) ?? []);

@@ -22,8 +22,8 @@ void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "pass": pass,
         "url": url,
         "offlineEnabled": action.payload,
-        "otherAccounts": json
-            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
+        "otherAccounts": json.decode(
+            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );
@@ -54,8 +54,8 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "pass": _wrapper.pass,
         "url": _wrapper.url,
         "offlineEnabled": api.state.settingsState.offlineEnabled,
-        "otherAccounts": json
-            .decode(await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
+        "otherAccounts": json.decode(
+            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );
@@ -69,8 +69,8 @@ void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     value: json.encode(
       {
         "url": _wrapper.url,
-        "otherAccounts": json
-            .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
+        "otherAccounts": json.decode(
+            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );

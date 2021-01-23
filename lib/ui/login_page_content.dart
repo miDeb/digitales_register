@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:tuple/tuple.dart';
 
 import '../container/login_page.dart';
-import '../util.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
 typedef ChangePassCallback = void Function(
@@ -40,31 +40,38 @@ class _LoginPageContentState extends State<LoginPageContent> {
       _passwordController = TextEditingController(),
       _newPassword1Controller = TextEditingController(),
       _newPassword2Controller = TextEditingController(),
+      _schoolController = TextEditingController(),
       _urlController = TextEditingController.fromValue(
         TextEditingValue(
-          text: "https://.digitalesregister.it",
+          text: ".digitalesregister.it",
           selection: TextSelection.fromPosition(
-            // insert the caret at the subdomain position
-            TextPosition(offset: 8),
+            TextPosition(offset: 0),
           ),
         ),
       );
+  final _schoolFocusNode = FocusNode();
   bool safeMode;
-  bool customUrl = false;
-  bool urlFromVM = false;
   bool newPasswordsMatch = true;
   Tuple2<String, String> nonCustomServer;
   @override
   void initState() {
     safeMode = widget.vm.safeMode;
-    nonCustomServer = widget.vm.servers.entries.first.toTuple();
     _usernameController.text = widget.vm.username;
-    if (widget.vm.url != null && nonCustomServer.item2 != widget.vm.url) {
+    if (widget.vm.url != null) {
       _urlController.text = widget.vm.url;
-      urlFromVM = true;
-      customUrl = true;
-      nonCustomServer = null;
+      for (final entry in widget.vm.servers.entries) {
+        if (entry.value == widget.vm.url) {
+          nonCustomServer = Tuple2(entry.key, entry.value);
+          _schoolController.text = entry.key;
+          break;
+        }
+      }
     }
+    _schoolFocusNode.addListener(() {
+      setState(() {
+        // We manually check hasFocus
+      });
+    });
     super.initState();
   }
 
@@ -91,36 +98,61 @@ class _LoginPageContentState extends State<LoginPageContent> {
                 shrinkWrap: true,
                 children: <Widget>[
                   if (!widget.vm.changePass)
-                    ListTile(
-                      title: Text("Schule"),
-                      trailing: DropdownButton(
-                        items: widget.vm.servers.entries
-                            .map(
-                              (s) => DropdownMenuItem(
-                                child: Text(s.key),
-                                value: s.toTuple(),
-                              ),
-                            )
-                            .toList()
-                              ..add(
-                                DropdownMenuItem(
-                                  child: Text("Andere Schule"),
-                                  value: null,
-                                ),
-                              ),
-                        onChanged: (Tuple2 value) {
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TypeAheadField(
+                        textFieldConfiguration: TextFieldConfiguration(
+                          focusNode: _schoolFocusNode,
+                          autofocus: widget.vm.error == null &&
+                              nonCustomServer == null,
+                          controller: _schoolController,
+                          onChanged: (v) {
+                            if (widget.vm.servers[v] == null) {
+                              setState(() {
+                                nonCustomServer = null;
+                              });
+                            }
+                          },
+                          decoration: InputDecoration(
+                            labelText: "Schule",
+                            errorText: !_schoolFocusNode.hasFocus &&
+                                    _schoolController.text != "Andere Schule" &&
+                                    nonCustomServer == null
+                                ? "Schule nicht gefunden"
+                                : null,
+                          ),
+                        ),
+                        itemBuilder: (context, itemData) => ListTile(
+                          title: Text(itemData),
+                        ),
+                        onSuggestionSelected: (suggestion) {
                           setState(() {
-                            nonCustomServer = value;
-                            // workaround: selection was not set anymore
-                            if (value == null) {
+                            _schoolController.text = suggestion;
+                            nonCustomServer = Tuple2(
+                              suggestion,
+                              widget.vm.servers[suggestion],
+                            );
+                            if (suggestion == "Andere Schule") {
+                              nonCustomServer = null;
+                              _urlController.text = ".digitalesregister.it";
                               _urlController.selection =
                                   TextSelection.fromPosition(
-                                TextPosition(offset: 8),
+                                TextPosition(offset: 0),
                               );
                             }
                           });
                         },
-                        value: nonCustomServer,
+                        suggestionsCallback: (String pattern) {
+                          return [
+                            "Andere Schule",
+                            ...widget.vm.servers.keys
+                                .where((element) => element
+                                    .toLowerCase()
+                                    .contains(pattern.toLowerCase()))
+                                .toList()
+                                  ..sort()
+                          ];
+                        },
                       ),
                     ),
                   Padding(
@@ -136,7 +168,6 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     InputDecoration(labelText: 'Adresse'),
                                 controller: _urlController,
                                 enabled: !widget.vm.loading,
-                                autofocus: !urlFromVM,
                                 keyboardType: TextInputType.url,
                               ),
                             Divider(),
