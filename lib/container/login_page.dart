@@ -74,4 +74,13 @@ class LoginPageViewModel {
 
 const _servers = {
   "Vinzentinum": "https://vinzentinum.digitalesregister.it",
+  "Fallmerayer": "https://fallmerayer.digitalesregister.it/v2/login",
+  "WFO Bozen": "https://wfobz.digitalesregister.it/v2/login",
+  "Bruneck 1": "https://bruneck1.digitalesregister.it/v2/login",
+  "Ursulinen": "https://ursulinen.digitalesregister.it/v2/login",
+  "Gymme": "https://gymme.digitalesregister.it/v2/login",
+  "OFL Auer": "https://oflauer.digitalesregister.it/v2/login",
+  "Walther von der Vogelweide": "https://vogelweide.digitalesregister.it/v2/login",
+  "Sterzing I": "https://sterzing1.digitalesregister.it/v2/login",
+  "TFO Bozen ": "https://tfobz.digitalesregister.it/v2/login",
 };
