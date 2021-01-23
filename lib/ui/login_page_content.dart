@@ -104,7 +104,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             .toList()
                               ..add(
                                 DropdownMenuItem(
-                                  child: Text("Serveradresse eingeben"),
+                                  child: Text("Andere Schule"),
                                   value: null,
                                 ),
                               ),
