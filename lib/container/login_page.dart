@@ -104,4 +104,7 @@ const _servers = {
   "Cademia": "https://cademia.digitalesregister.it",
   "Franziskaner Bozen": "https://franziskanergymnasium.digitalesregister.it",
   "MS Carl Wolf": "https://mscarlwolf.digitalesregister.it",
+  "MS Neumarkt": "https://ms-neumarkt.digitalesregister.it/v2/login",
+  "SOWI Bruneck": "https://sowikunstgym-bruneck.digitalesregister.it/v2/login",
+
 };
