@@ -97,6 +97,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
   if (result != null && result["success"]) {
     // duplicate - protection from multiple, failing and not failing requests
+    // TODO: Does this even work??
     next(action);
   } else {
     next(
