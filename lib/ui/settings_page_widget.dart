@@ -376,8 +376,19 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ListTile(
             title: Text("Feedback geben"),
             trailing: Icon(Icons.open_in_new),
-            onTap: () {
-              launch("https://form.jotform.com/210060844853351");
+            onTap: () async {
+              PackageInfo info;
+              try {
+                info = await PackageInfo.fromPlatform();
+              } catch (e) {
+                print("failed to get app version for feedback (settings)");
+              }
+              launch(
+                "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
+                    (info?.version != null
+                        ? "&entry.1362624919=${Uri.encodeQueryComponent(info.version)}"
+                        : ""),
+              );
             },
           ),
           ListTile(

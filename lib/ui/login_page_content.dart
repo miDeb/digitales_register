@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:package_info/package_info.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -166,8 +167,19 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           primary: Colors.grey,
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
-                        onPressed: () {
-                          launch("https://form.jotform.com/210192917027351");
+                        onPressed: () async {
+                          PackageInfo info;
+                          try {
+                            info = await PackageInfo.fromPlatform();
+                          } catch (e) {
+                            print("failed to get app version for feedback (login)");
+                          }
+                          launch(
+                            "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
+                                (info?.version != null
+                                    ? "&entry.1581750442=${Uri.encodeQueryComponent(info.version)}"
+                                    : ""),
+                          );
                         },
                       ),
                     ),
