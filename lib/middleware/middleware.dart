@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../actions/absences_actions.dart';
 import '../actions/app_actions.dart';
@@ -83,11 +84,10 @@ final middleware = [
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
-          void handleError(e) {
+          void handleError(e, StackTrace stackTrace) {
             print(e);
-            var stackTrace = "";
             try {
-              stackTrace = e.stackTrace.toString();
+              stackTrace ??= e.stackTrace;
             } catch (e) {}
             navigatorKey.currentState.push(
               MaterialPageRoute(
@@ -102,20 +102,22 @@ NextActionHandler _errorMiddleware(
                       child: Column(
                         children: <Widget>[
                           ElevatedButton(
-                            child: Text("In die Zwischenablage kopieren"),
+                            child: Text("Entwickler benachrichtigen"),
                             onPressed: () async {
-                              await Clipboard.setData(
-                                ClipboardData(
-                                  text: "$e\n\n$stackTrace",
-                                ),
-                              );
-                              showSnackBar(
-                                "In die Zwischenablage kopiert",
-                              );
+                              final error = "$e\n\n$stackTrace";
+                              launch(
+                                  "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
                             },
                           ),
                           Text(
-                              "Ein unvorhergesehener Fehler ist aufgetreten:\n\n$e\n\n$stackTrace"),
+                            """Ein Fehler ist aufgetreten.
+Eine Funktion wird eventuell noch nicht unterstützt.
+Bitte benachrichtige uns, damit wir diesen Fehler beheben können:
+
+$e
+
+$stackTrace""",
+                          ),
                         ],
                       ),
                     ),
@@ -126,12 +128,12 @@ NextActionHandler _errorMiddleware(
           }
 
           if (action.name == AppActionsNames.error.name) {
-            handleError(action.payload);
+            handleError(action.payload, null);
           } else {
             try {
               next(action);
-            } catch (e) {
-              handleError(e);
+            } catch (e, stackTrace) {
+              handleError(e, stackTrace);
             }
           }
         };
