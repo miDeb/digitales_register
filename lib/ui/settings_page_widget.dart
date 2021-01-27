@@ -64,7 +64,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
         await controller.scrollToIndex(4,
             preferPosition: AutoScrollPosition.begin);
-        showEditSubjectNick(context, "", "", widget.vm.allSubjects);
+        final newValue =
+            await showEditSubjectNick(context, "", "", widget.vm.allSubjects);
+        if (newValue != null) {
+          widget.onSetSubjectNicks(
+            Map.fromEntries(
+                widget.vm.subjectNicks.entries.toList()..insert(0, newValue)),
+          );
+        }
       });
     }
     super.initState();
