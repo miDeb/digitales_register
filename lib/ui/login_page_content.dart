@@ -147,15 +147,35 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           });
                         },
                         suggestionsCallback: (String pattern) {
-                          return [
-                            "Andere Schule",
+                          // This prevents being able to query all available
+                          // schools easily, as well as initially showing a huge
+                          // list of unrelated results.
+                          if (pattern.trim().length < 3) {
+                            return [];
+                          }
+                          final candidates = [
                             ...widget.vm.servers.keys
                                 .where((element) => element
                                     .toLowerCase()
                                     .contains(pattern.toLowerCase()))
                                 .toList()
-                                  ..sort()
+                                  ..sort(),
+                            "Andere Schule",
                           ];
+                          // Only too general querys (e.g. "Grundschule") have
+                          // that many candidates. Demand more letters from the user.
+                          if (candidates.length > 15) {
+                            return [];
+                          }
+                          return candidates;
+                        },
+                        noItemsFoundBuilder: (context) {
+                          return ListTile(
+                            title: Text(
+                              "Bitte gib den Namen der Schule ein",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          );
                         },
                       ),
                     ),
@@ -172,7 +192,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           try {
                             info = await PackageInfo.fromPlatform();
                           } catch (e) {
-                            print("failed to get app version for feedback (login)");
+                            print(
+                                "failed to get app version for feedback (login)");
                           }
                           launch(
                             "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
