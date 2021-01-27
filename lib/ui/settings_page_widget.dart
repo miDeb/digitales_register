@@ -399,7 +399,12 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
-            title: Text("Unterstütze uns!"),
+            title: Text("Unterstütze uns jetzt!",
+            style: 
+            TextStyle(
+              fontWeight: FontWeight.bold
+            ),
+            ),
             onTap: () {
               Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => Donate()));
@@ -422,7 +427,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   : "Unbekannte Version",
               aboutBoxChildren: <Widget>[
                 Text(
-                    "Ein Client für das Digitale Register.\nGroßzügig unterstützt durch das Bischöfliche Institut Vinzentinum."),
+                    "Ein Client für das Digitale Register.\nGroßes Dankeschön an das Vinzentinum für die freundliche Unterstützung."),
               ],
             ),
           ),
