@@ -73,11 +73,9 @@ class LoginPageViewModel {
 }
 
 const _servers = {
-  "LHFS Bruneck":
-      "https://lhfsbruneck.digitalesregister.it/v2/login",
+  "LHFS Bruneck": "https://lhfsbruneck.digitalesregister.it/v2/login",
   "BBZ Bruneck": "https://bbz.digitalesregister.it/v2/login",
-  "LBS Zuegg":
-      "https://lbszuegg.digitalesregister.it/v2/login",
+  "LBS Zuegg": "https://lbszuegg.digitalesregister.it/v2/login",
   "SSP Bruneck 1": "https://bruneck1.digitalesregister.it/v2/login",
   "Cusanus Gymnasium Bruneck":
       "https://cusanus-gymnasium.digitalesregister.it/v2/login",
@@ -139,8 +137,7 @@ const _servers = {
   "Oberschulen J. Ph. Fallmerayer":
       "https://fallmerayer.digitalesregister.it/v2/login",
   "OFL Auer": "https://oflauer.digitalesregister.it/v2/login",
-  "OSZ Sand in Taufers":
-      "https://sz-sand.digitalesregister.it/v2/login",
+  "OSZ Sand in Taufers": "https://sz-sand.digitalesregister.it/v2/login",
   "Mittelschule Sand in Taufers":
       "https://ms-sand.digitalesregister.it/v2/login",
   "GS Lappach": "https://gs-lappach.digitalesregister.it/v2/login",
@@ -150,8 +147,7 @@ const _servers = {
       "https://gs-reinintaufers.digitalesregister.it/v2/login",
   "GS Ahornach": "https://gs-ahornach.digitalesregister.it/v2/login",
   "RG/TFO Meran": "https://rgtfo-me.digitalesregister.it/v2/login",
-  "- sogym - fotour":
-      "https://sogym-fotour.digitalesregister.it/v2/login",
+  "- sogym - fotour": "https://sogym-fotour.digitalesregister.it/v2/login",
   "Sozialwissenschaftliches Gymnasium JOSEF GASSER Brixen":
       "https://gymnasiumbrixen.digitalesregister.it/v2/login",
   "Sozialwissenschaftliches Gymnasium Bruneck":
@@ -245,11 +241,9 @@ const _servers = {
       "https://gs-ulten.digitalesregister.it/v2/login",
   "Schulsprengel Vintl": "https://ssp-vintl.digitalesregister.it/v2/login",
   "TFO Bozen": "https://tfobz.digitalesregister.it/v2/login",
-  "TFO Bruneck":
-      "https://tfo-bruneck.digitalesregister.it/v2/login",
+  "TFO Bruneck": "https://tfo-bruneck.digitalesregister.it/v2/login",
   "Ursulinen": "https://ursulinen.digitalesregister.it/v2/login",
-  "Vinzentinum":
-      "https://vinzentinum.digitalesregister.it/v2/login",
+  "Vinzentinum": "https://vinzentinum.digitalesregister.it/v2/login",
   "WFO Auer": "https://wfoauer.digitalesregister.it/v2/login",
   "WFO Bruneck": "https://wfo-bruneck.digitalesregister.it/v2/login",
   "WFO Bozen": "https://wfobz.digitalesregister.it/v2/login",

@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 class Donate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final darkMode = Theme.of(context).brightness == Brightness.dark; 
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
         appBar: AppBar(title: Text("Unterstütze uns jetzt!")),
         body: ListView(
@@ -23,7 +23,9 @@ class Donate extends StatelessWidget {
                         : "assets/coffee-black.png"),
                     onTap: () {
                       launch(
-                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YBGW9QXH8UM3Q&source=url", forceSafariVC: false,);
+                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YBGW9QXH8UM3Q&source=url",
+                        forceSafariVC: false,
+                      );
                     }),
               ),
             ),
@@ -40,7 +42,7 @@ class Donate extends StatelessWidget {
                         : "assets/goenner-black.png"),
                     onTap: () {
                       launch(
-                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DFBK2QCD7EF6C&source=url",
+                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DFBK2QCD7EF6C&source=url",
                         forceSafariVC: false,
                       );
                     }),
@@ -59,7 +61,7 @@ class Donate extends StatelessWidget {
                         : "assets/herz-black.png"),
                     onTap: () {
                       launch(
-                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5ZCCEN697H3W4&source=url",
+                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5ZCCEN697H3W4&source=url",
                         forceSafariVC: false,
                       );
                     }),
@@ -78,7 +80,7 @@ class Donate extends StatelessWidget {
                         : "assets/Sparschwein-black.png"),
                     onTap: () {
                       launch(
-                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6Z2Q5BDH9GLWS&source=url",
+                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6Z2Q5BDH9GLWS&source=url",
                         forceSafariVC: false,
                       );
                     }),
@@ -121,7 +123,7 @@ class Donate extends StatelessWidget {
                         : "assets/herz-black.png"),
                     onTap: () {
                       launch(
-                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url",
+                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url",
                         forceSafariVC: false,
                       );
                     }),

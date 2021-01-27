@@ -399,11 +399,9 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
-            title: Text("Unterstütze uns jetzt!",
-            style: 
-            TextStyle(
-              fontWeight: FontWeight.bold
-            ),
+            title: Text(
+              "Unterstütze uns jetzt!",
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
             onTap: () {
               Navigator.of(context)
