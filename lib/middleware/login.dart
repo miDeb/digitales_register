@@ -85,6 +85,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
   if (_wrapper.loggedIn) {
     if (!_wrapper.config.isStudentOrParent) {
+      _wrapper.logout(hard: true);
       api.actions.loginActions.loginFailed(
         LoginFailedPayload(
           (b) => b..cause = "Dieser Benutzertyp wird nicht unterstützt.",
