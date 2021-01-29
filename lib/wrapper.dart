@@ -228,13 +228,7 @@ class Wrapper {
   }
 
   Future<void> _loadConfig() async {
-    String source;
-    try {
-      source = (await dio.get(baseAddress)).data;
-    } on TimeoutException {
-      // retry
-      source = (await dio.get(baseAddress)).data;
-    }
+    final source = (await dio.get(baseAddress)).data;
     config = parseConfig(source);
   }
 
