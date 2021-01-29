@@ -153,6 +153,7 @@ abstract class Config implements Built<Config, ConfigBuilder> {
   String get imgSource;
   @nullable
   int get currentSemesterMaybe;
+  bool get isStudentOrParent;
   static Serializer<Config> get serializer => _$configSerializer;
 
   Config._();

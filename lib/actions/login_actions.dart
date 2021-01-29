@@ -96,6 +96,7 @@ abstract class LoginFailedPayload
       _$LoginFailedPayload;
 
   String get cause;
+  @nullable
   String get username;
 }
 

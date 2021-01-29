@@ -244,12 +244,20 @@ class Wrapper {
     final imgSource = _readImgSource(source);
     final autoLogout = _readAutoLogoutSeconds(source);
     final currentSemesterMaybe = _readCurrentSemester(source);
-    return Config((b) => b
-      ..userId = id
-      ..autoLogoutSeconds = autoLogout
-      ..fullName = fullName
-      ..imgSource = imgSource
-      ..currentSemesterMaybe = currentSemesterMaybe);
+    final isStudentOrParent = _readIsStudentOrParent(source);
+    return Config(
+      (b) => b
+        ..userId = id
+        ..autoLogoutSeconds = autoLogout
+        ..fullName = fullName
+        ..imgSource = imgSource
+        ..currentSemesterMaybe = currentSemesterMaybe
+        ..isStudentOrParent = isStudentOrParent,
+    );
+  }
+
+  static bool _readIsStudentOrParent(String source) {
+    return !source.contains("var isStudentOrParent=0;");
   }
 
   static int _readCurrentSemester(String source) {

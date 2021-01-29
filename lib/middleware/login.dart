@@ -71,7 +71,7 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     action.payload.user,
     action.payload.pass,
     null,
-    url.toString(),
+    url,
     logout: () => api.actions.loginActions.logout(
       LogoutPayload(
         (b) => b
@@ -84,6 +84,15 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
   if (_wrapper.loggedIn) {
+    if (!_wrapper.config.isStudentOrParent) {
+      api.actions.loginActions.loginFailed(
+        LoginFailedPayload(
+          (b) => b..cause = "Dieser Benutzertyp wird nicht unterstützt.",
+        ),
+      );
+      _showUserTypeNotSupported(url);
+      return;
+    }
     api.actions.loginActions.loggedIn(
       LoggedInPayload(
         (b) => b
@@ -261,4 +270,54 @@ void _selectAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   await _secureStorage.write(key: "login", value: json.encode(login));
   api.actions.mountAppState(AppState());
   api.actions.load();
+}
+
+void _showUserTypeNotSupported(String url) {
+  navigatorKey.currentState.push(
+    MaterialPageRoute(
+      builder: (context) => Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "Tut uns leid!",
+                  style: Theme.of(context).textTheme.headline4,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Text(
+                  "Diese App ist ausschließlich für Schüler und Eltern geeignet",
+                  style: Theme.of(context).textTheme.headline5,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text(
+                      "Zurück",
+                    ),
+                  ),
+                  SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () => launch(url),
+                    child: Text(
+                      "Hier geht's zur Website",
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }
