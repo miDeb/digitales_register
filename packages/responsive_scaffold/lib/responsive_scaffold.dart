@@ -182,16 +182,16 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
               child: Material(
                 child: Row(
                   children: [
-                      SizeTransition(
-                        axis: Axis.horizontal,
-                        sizeFactor: _drawerAnimationController,
-                        axisAlignment: 1,
-                        child: _Drawer(
-                          child: widget.drawerBuilder(selectContentWidget,
-                              goHome, currentSelected, true),
-                          drawerAnimationController: _drawerAnimationController,
-                        ),
+                    SizeTransition(
+                      axis: Axis.horizontal,
+                      sizeFactor: _drawerAnimationController,
+                      axisAlignment: 1,
+                      child: _Drawer(
+                        child: widget.drawerBuilder(
+                            selectContentWidget, goHome, currentSelected, true),
+                        drawerAnimationController: _drawerAnimationController,
                       ),
+                    ),
                     Expanded(
                       child: _Body<T>(
                         navKey: navigatorKey,

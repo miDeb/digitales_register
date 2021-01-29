@@ -149,8 +149,7 @@ const _servers = {
   "Scola elementera Urtijei / Runcadic":
       "https://se-urtijei.digitalesregister.it",
   "Scola mesana Urtijëi": "https://sm-urtijei.digitalesregister.it",
-  "sogym - fotour":
-      "https://sogym-fotour.digitalesregister.it",
+  "sogym - fotour": "https://sogym-fotour.digitalesregister.it",
   "SSP Abtei Scora elementara": "https://gs-abtei.digitalesregister.it",
   "SSP Abtei Scuola media \"Tita Alton\"":
       "https://ms-stern.digitalesregister.it",
@@ -267,8 +266,7 @@ const _servers = {
   "GS Rein in Taufers": "https://gs-reinintaufers.digitalesregister.it",
   "GS Sand in Taufers": "https://gs-sandintaufers.digitalesregister.it",
   "Mittelschule Sand in Taufers": "https://ms-sand.digitalesregister.it",
-  "OSZ Sand in Taufers":
-      "https://sz-sand.digitalesregister.it",
+  "OSZ Sand in Taufers": "https://sz-sand.digitalesregister.it",
   "TFO Bruneck": "https://tfo-bruneck.digitalesregister.it",
   "TFO Bozen": "https://tfobz.digitalesregister.it",
   "Ursulinen": "https://ursulinen.digitalesregister.it",
