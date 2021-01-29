@@ -62,7 +62,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
     if (widget.vm.url != null) {
       _urlController.text = widget.vm.url;
       for (final entry in widget.vm.servers.entries) {
-        if (entry.value == widget.vm.url) {
+        if (Uri.parse(entry.value).host == Uri.parse(widget.vm.url).host) {
           nonCustomServer = Tuple2(entry.key, entry.value);
           _schoolController.text = entry.key;
           break;
