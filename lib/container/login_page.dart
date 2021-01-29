@@ -90,7 +90,7 @@ const _servers = {
   "FOS Meran": "https://fos-meran.digitalesregister.it",
   "Franziskanergymnasium Bozen":
       "https://franziskanergymnasium.digitalesregister.it",
-  "Digitales Register Sozialwissenschaftliches Gymnasium Bruneck":
+  "Sozialwissenschaftliches Gymnasium Bruneck":
       "https://sowikunstgym-bruneck.digitalesregister.it",
   "Gymnasien Meran": "https://gymme.digitalesregister.it",
   "Gymnasium Walther von der Vogelweide Bozen":
@@ -110,8 +110,8 @@ const _servers = {
       "https://villanders.digitalesregister.it",
   "GS Waidbruck": "https://waidbruck.digitalesregister.it",
   "LBS Schlanders": "https://lbs-schlanders.digitalesregister.it",
-  "Digitales Register LBS Zuegg": "https://lbszuegg.digitalesregister.it",
-  "Digitales Register LHFS Bruneck": "https://lhfsbruneck.digitalesregister.it",
+  "LBS Zuegg": "https://lbszuegg.digitalesregister.it",
+  "LHFS Bruneck": "https://lhfsbruneck.digitalesregister.it",
   "Scores altes La Ila": "https://scoresaltes.digitalesregister.it",
   "Mariengarten Zisterzienserinnen-KlosterInternatsschule":
       "https://mariengarten.digitalesregister.it",
@@ -149,7 +149,7 @@ const _servers = {
   "Scola elementera Urtijei / Runcadic":
       "https://se-urtijei.digitalesregister.it",
   "Scola mesana Urtijëi": "https://sm-urtijei.digitalesregister.it",
-  "digitales Register - sogym - fotour":
+  "sogym - fotour":
       "https://sogym-fotour.digitalesregister.it",
   "SSP Abtei Scora elementara": "https://gs-abtei.digitalesregister.it",
   "SSP Abtei Scuola media \"Tita Alton\"":
@@ -267,9 +267,9 @@ const _servers = {
   "GS Rein in Taufers": "https://gs-reinintaufers.digitalesregister.it",
   "GS Sand in Taufers": "https://gs-sandintaufers.digitalesregister.it",
   "Mittelschule Sand in Taufers": "https://ms-sand.digitalesregister.it",
-  "Digitales Register OSZ Sand in Taufers":
+  "OSZ Sand in Taufers":
       "https://sz-sand.digitalesregister.it",
-  "Digitales Register TFO Bruneck": "https://tfo-bruneck.digitalesregister.it",
+  "TFO Bruneck": "https://tfo-bruneck.digitalesregister.it",
   "TFO Bozen": "https://tfobz.digitalesregister.it",
   "Ursulinen": "https://ursulinen.digitalesregister.it",
   "Vinzentinum": "https://vinzentinum.digitalesregister.it",
