@@ -38,41 +38,50 @@ class SortedGradesWidget extends StatelessWidget {
         Divider(
           height: 0,
         ),
-        Column(
-          mainAxisSize: MainAxisSize.min,
-          children: vm.subjects
-              .map(
-                (s) => SubjectWidget(
-                  subject: s,
-                  sortByType: vm.sortByType,
-                  viewSubjectDetail: () => viewSubjectDetail(s),
-                  showCancelled: vm.showCancelled,
-                  semester: vm.semester,
-                  noInternet: vm.noInternet,
-                ),
-              )
-              .toList(),
-        ),
+        for (final s in vm.subjects)
+          SubjectWidget(
+            subject: s,
+            sortByType: vm.sortByType,
+            viewSubjectDetail: () => viewSubjectDetail(s),
+            showCancelled: vm.showCancelled,
+            semester: vm.semester,
+            noInternet: vm.noInternet,
+            ignoredForAverage: vm.ignoredSubjectsForAverage.any(
+                (element) => element.toLowerCase() == s.name.toLowerCase()),
+          ),
+        if (vm.subjects.any(
+          (s) => vm.ignoredSubjectsForAverage.any(
+            (element) => element.toLowerCase() == s.name.toLowerCase(),
+          ),
+        ))
+          Padding(
+            padding: const EdgeInsets.only(top: 16),
+            child: ListTile(
+              title: Text(
+                  "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen"),
+            ),
+          ),
       ],
     );
   }
 }
 
 class SubjectWidget extends StatefulWidget {
-  final bool sortByType, showCancelled, noInternet;
+  final bool sortByType, showCancelled, noInternet, ignoredForAverage;
   final Subject subject;
   final Semester semester;
   final VoidCallback viewSubjectDetail;
 
-  const SubjectWidget({
-    Key key,
-    this.sortByType,
-    this.subject,
-    this.viewSubjectDetail,
-    this.showCancelled,
-    this.semester,
-    this.noInternet,
-  }) : super(key: key);
+  const SubjectWidget(
+      {Key key,
+      @required this.sortByType,
+      @required this.subject,
+      @required this.viewSubjectDetail,
+      @required this.showCancelled,
+      @required this.semester,
+      @required this.noInternet,
+      @required this.ignoredForAverage})
+      : super(key: key);
 
   @override
   _SubjectWidgetState createState() => _SubjectWidgetState();
@@ -93,7 +102,8 @@ class _SubjectWidgetState extends State<SubjectWidget> {
       absorbing: widget.noInternet && entries == null,
       child: ExpansionTile(
         key: ObjectKey(widget.subject),
-        title: Text(widget.subject.name),
+        title:
+            Text(widget.subject.name + (widget.ignoredForAverage ? " *" : "")),
         leading: widget.semester != Semester.all
             ? Text.rich(
                 TextSpan(

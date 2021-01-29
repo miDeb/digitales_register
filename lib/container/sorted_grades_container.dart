@@ -43,18 +43,23 @@ typedef SetBoolCallback = void Function(bool byType);
 abstract class SortedGradesViewModel
     implements Built<SortedGradesViewModel, SortedGradesViewModelBuilder> {
   BuiltList<Subject> get subjects;
+  BuiltList<String> get ignoredSubjectsForAverage;
   Semester get semester;
   bool get sortByType;
   bool get showCancelled;
   bool get noInternet;
 
   factory SortedGradesViewModel.from(AppState state) {
-    return SortedGradesViewModel((b) => b
-      ..subjects = state.gradesState.subjects.toBuilder()
-      ..sortByType = state.settingsState.typeSorted
-      ..semester = state.gradesState.semester.toBuilder()
-      ..showCancelled = state.settingsState.showCancelled
-      ..noInternet = state.noInternet);
+    return SortedGradesViewModel(
+      (b) => b
+        ..subjects = state.gradesState.subjects.toBuilder()
+        ..sortByType = state.settingsState.typeSorted
+        ..semester = state.gradesState.semester.toBuilder()
+        ..showCancelled = state.settingsState.showCancelled
+        ..noInternet = state.noInternet
+        ..ignoredSubjectsForAverage =
+            state.settingsState.ignoreForGradesAverage.toBuilder(),
+    );
   }
 
   SortedGradesViewModel._();
