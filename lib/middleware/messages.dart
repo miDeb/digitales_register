@@ -11,7 +11,7 @@ void _loadMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   if (api.state.noInternet) return;
   next(action);
-  final response = await _wrapper.send("/api/message/getMyMessages");
+  final response = await _wrapper.send("api/message/getMyMessages");
   if (response != null) {
     api.actions.messagesActions.loaded(response);
   } else {
@@ -38,7 +38,7 @@ void _markAsRead(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<int> action) async {
   next(action);
   final result = await _wrapper.send(
-    "/api/message/markAsRead",
+    "api/message/markAsRead",
     args: {"messageId": action.payload},
   );
   if (result == null) api.actions.refreshNoInternet();

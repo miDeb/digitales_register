@@ -44,8 +44,8 @@ typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 class Wrapper {
   final cookieJar = DefaultCookieJar();
   final dio = Dio();
-  String get loginAddress => "$baseAddress/api/auth/login";
-  String get baseAddress => "$url/v2";
+  String get loginAddress => baseAddress + "api/auth/login";
+  String get baseAddress => "$url/v2/";
   String user, pass, _url;
 
   Wrapper() {
@@ -202,7 +202,7 @@ class Wrapper {
     _clearCookies();
     try {
       response = (await dio.post(
-        "$baseAddress/api/auth/setNewPassword",
+        baseAddress + "api/auth/setNewPassword",
         data: {
           "username": user,
           "oldPassword": oldPass,
@@ -301,6 +301,7 @@ class Wrapper {
   var _mutex = Mutex();
   Future<dynamic> send(String url,
       {Map<String, dynamic> args = const {}, String method = "POST"}) async {
+    assert(!url.startsWith("/"));
     await _mutex.acquire();
     if (!_loggedIn) {
       if (user != null && pass != null) {
@@ -364,7 +365,7 @@ class Wrapper {
     if (!_loggedIn) return;
     if (now.add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = await send("/api/auth/extendSession", args: {
+      final result = await send("api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       });
       if (result == null) {
@@ -388,7 +389,7 @@ class Wrapper {
 
   void logout({@required bool hard, bool logoutForcedByServer = false}) {
     if (!logoutForcedByServer && _url != null) {
-      dio.get("$baseAddress/logout");
+      dio.get(baseAddress + "logout");
     }
     if (hard) {
       if (logoutForcedByServer) {

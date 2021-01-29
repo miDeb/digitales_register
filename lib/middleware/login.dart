@@ -178,6 +178,7 @@ void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<RequestPassResetPayload> action) async {
+  // the api url DOES NOT contain /v2/ in the path. This is intentional.
   final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/resetPassword",
     data: {
@@ -196,6 +197,7 @@ void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<String> action) async {
+  // the api url DOES NOT contain /v2/ in the path. This is intentional.
   final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/setNewPassword",
     data: {

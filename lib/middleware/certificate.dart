@@ -8,7 +8,7 @@ void _loadCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   if (api.state.noInternet) return;
   next(action);
-  final response = await _wrapper.send("/student/certificate", method: "GET");
+  final response = await _wrapper.send("student/certificate", method: "GET");
   if (response != null) {
     api.actions.certificateActions.loaded(response);
   } else {

@@ -16,7 +16,7 @@ void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (api.state.noInternet) return;
 
   next(action);
-  final data = await _wrapper.send("/api/student/dashboard/dashboard",
+  final data = await _wrapper.send("api/student/dashboard/dashboard",
       args: {"viewFuture": action.payload});
 
   if (data is! List) {
@@ -47,7 +47,7 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<AddReminderPayload> action) async {
   next(action);
   final result = await _wrapper.send(
-    "/api/student/dashboard/save_reminder",
+    "api/student/dashboard/save_reminder",
     args: {
       "date": DateFormat("yyyy-MM-dd").format(action.payload.date),
       "text": action.payload.msg,
@@ -70,7 +70,7 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Homework> action) async {
   final result = await _wrapper.send(
-    "/api/student/dashboard/delete_reminder",
+    "api/student/dashboard/delete_reminder",
     args: {
       "id": action.payload.id,
     },
@@ -88,7 +88,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<ToggleDonePayload> action) async {
   next(action);
   final result = await _wrapper.send(
-    "/api/student/dashboard/toggle_reminder",
+    "api/student/dashboard/toggle_reminder",
     args: {
       "id": action.payload.hw.id,
       "type": action.payload.hw.type.name,
@@ -139,7 +139,7 @@ void _downloadAttachment(
   );
 
   final result = await _wrapper.dio.get(
-    "${_wrapper.baseAddress}/api/gradeGroup/gradeGroupSubmissionDownloadEntry",
+    _wrapper.baseAddress + "api/gradeGroup/gradeGroupSubmissionDownloadEntry",
     queryParameters: {
       "submissionId": action.payload.id,
       "parentId": action.payload.gradeGroupId,

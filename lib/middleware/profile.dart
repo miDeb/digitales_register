@@ -10,7 +10,7 @@ void _loadProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
   if (api.state.noInternet) return;
-  final result = await _wrapper.send("/api/profile/get");
+  final result = await _wrapper.send("api/profile/get");
   if (result == null) {
     api.actions.refreshNoInternet();
     return;
@@ -24,7 +24,7 @@ void _setSendNotificationEmails(
     Action<bool> action) async {
   next(action);
   final result = await _wrapper.send(
-    "/api/profile/updateNotificationSettings",
+    "api/profile/updateNotificationSettings",
     args: {
       "notificationsEnabled": action.payload,
     },
@@ -39,7 +39,7 @@ void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<ChangeEmailPayload> action) async {
   next(action);
   final result = await _wrapper.send(
-    "/api/profile/updateProfile",
+    "api/profile/updateProfile",
     args: {
       "email": action.payload.email,
       "password": action.payload.pass,

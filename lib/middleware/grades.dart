@@ -8,12 +8,12 @@ final _gradesMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(GradesActionsNames.loadCancelledDescription, _loadCancelledDescription);
 
 final _gradesLock = SemesterLock((s) async {
-  await _wrapper.send("/?semesterWechsel=${s.n}");
+  await _wrapper.send("?semesterWechsel=${s.n}");
 });
 
-const String _subjects = "/api/student/all_subjects";
-const String _subjectsDetail = "/api/student/subject_detail";
-const String _grade = "/api/student/entry/getGrade";
+const String _subjects = "api/student/all_subjects";
+const String _subjectsDetail = "api/student/subject_detail";
+const String _grade = "api/student/entry/getGrade";
 
 void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Semester> action) {

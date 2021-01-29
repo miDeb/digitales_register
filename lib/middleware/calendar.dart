@@ -9,7 +9,7 @@ void _loadCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (api.state.noInternet) return;
 
   next(action);
-  final data = await _wrapper.send("/api/calendar/student",
+  final data = await _wrapper.send("api/calendar/student",
       args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 
   if (data != null) {
