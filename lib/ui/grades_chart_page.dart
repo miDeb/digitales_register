@@ -11,6 +11,7 @@ class GradesChartPage extends StatelessWidget {
         title: Text("Notendiagramm"),
       ),
       body: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Expanded(
             child: GradesChartContainer(

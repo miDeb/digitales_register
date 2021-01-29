@@ -12,16 +12,22 @@ class ChartLegend extends StatelessWidget {
     return ExpansionTile(
       title: Text("Legende"),
       children: <Widget>[
-        Container(
-            height: height / 2 - 90,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return ChartLegendEntryContainer(
-                  id: vm[index],
-                );
-              },
-              itemCount: vm.length,
-            ))
+        // supports the case when there are not enough subjects to fill the available vertical space.
+        // this is, however, quite unlikely.
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: height / 2 - 90,
+          ),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ChartLegendEntryContainer(
+                id: vm[index],
+              );
+            },
+            itemCount: vm.length,
+          ),
+        )
       ],
     );
   }
