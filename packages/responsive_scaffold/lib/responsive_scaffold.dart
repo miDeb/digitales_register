@@ -1,8 +1,9 @@
 library responsive_scaffold;
 
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide SizeTransition;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_portal/flutter_portal.dart';
+import 'package:responsive_scaffold/size_transition.dart';
 
 const tabletLayoutBreakpoint = 720.0;
 const drawerWidth = 304.0;
@@ -158,12 +159,12 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
         builder: (context, constraints) {
           tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
           if (tabletMode) {
-            if (isInitialized) {
+            if (isInitialized && _drawerAnimationController.value == 0) {
               _drawerAnimationController.fling(velocity: 1);
             } else {
               _drawerAnimationController.value = 1;
             }
-          } else {
+          } else if (_drawerAnimationController.value != 0) {
             _drawerAnimationController.fling(velocity: -1);
           }
           isInitialized = true;
@@ -181,7 +182,6 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
               child: Material(
                 child: Row(
                   children: [
-                    if (tabletMode)
                       SizeTransition(
                         axis: Axis.horizontal,
                         sizeFactor: _drawerAnimationController,
