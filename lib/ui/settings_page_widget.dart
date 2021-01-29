@@ -28,27 +28,29 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
+  final OnSettingChanged<List<String>> onSetIgnoreForGradesAverage;
   final VoidCallback onShowProfile;
   final SettingsViewModel vm;
 
   SettingsPageWidget({
     Key key,
-    this.onSetNoPassSaving,
-    this.onSetNoDataSaving,
-    this.onSetAskWhenDelete,
-    this.onSetDeleteDataOnLogout,
-    this.onSetOfflineEnabled,
-    this.onSetShowCalendarEditNicksBar,
-    this.onSetShowGradesDiagram,
-    this.onSetShowAllSubjectsAverage,
-    this.onSetDashboardMarkNewOrChangedEntries,
-    this.onSetDashboardDeduplicateEntries,
-    this.onSetDarkMode,
-    this.onSetSubjectNicks,
-    this.vm,
-    this.onSetPlatformOverride,
-    this.onSetFollowDeviceDarkMode,
-    this.onShowProfile,
+    @required this.onSetNoPassSaving,
+    @required this.onSetNoDataSaving,
+    @required this.onSetAskWhenDelete,
+    @required this.onSetDeleteDataOnLogout,
+    @required this.onSetOfflineEnabled,
+    @required this.onSetShowCalendarEditNicksBar,
+    @required this.onSetShowGradesDiagram,
+    @required this.onSetShowAllSubjectsAverage,
+    @required this.onSetDashboardMarkNewOrChangedEntries,
+    @required this.onSetDashboardDeduplicateEntries,
+    @required this.onSetDarkMode,
+    @required this.onSetSubjectNicks,
+    @required this.vm,
+    @required this.onSetPlatformOverride,
+    @required this.onSetFollowDeviceDarkMode,
+    @required this.onShowProfile,
+    @required this.onSetIgnoreForGradesAverage,
   }) : super(key: key);
 
   @override
@@ -58,6 +60,13 @@ class SettingsPageWidget extends StatefulWidget {
 class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   final controller = AutoScrollController();
 
+  List<String> get subjectsWithoutNick => widget.vm.allSubjects
+      .where((element) => !widget.vm.subjectNicks.keys.contains(element))
+      .toList();
+  List<String> get notYetIgnoredForAverageSubjects => widget.vm.allSubjects
+      .where((element) => !widget.vm.ignoreForGradesAverage.contains(element))
+      .toList();
+
   @override
   void initState() {
     if (widget.vm.showSubjectNicks) {
@@ -65,13 +74,18 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
         await controller.scrollToIndex(4,
             preferPosition: AutoScrollPosition.begin);
         final newValue =
-            await showEditSubjectNick(context, "", "", widget.vm.allSubjects);
+            await showEditSubjectNick(context, "", "", subjectsWithoutNick);
         if (newValue != null) {
           widget.onSetSubjectNicks(
             Map.fromEntries(
                 widget.vm.subjectNicks.entries.toList()..insert(0, newValue)),
           );
         }
+      });
+    }
+    if (widget.vm.showGradesSettings) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        controller.scrollToIndex(3, preferPosition: AutoScrollPosition.begin);
       });
     }
     super.initState();
@@ -237,6 +251,51 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
             value: widget.vm.showAllSubjectsAverage,
           ),
+          ListTile(
+            title: Text("Fächer für den Notendurchchnitt ignorieren"),
+            trailing: IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () async {
+                final newSubject = await showDialog(
+                  context: context,
+                  builder: (context) => AddSubject(
+                    availableSubjects: notYetIgnoredForAverageSubjects,
+                  ),
+                );
+                if (newSubject != null) {
+                  widget.onSetIgnoreForGradesAverage(
+                      widget.vm.ignoreForGradesAverage..add(newSubject));
+                }
+              },
+            ),
+          ),
+          if (widget.vm.ignoreForGradesAverage.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: ListTile(
+                  title: Text(
+                "Kein Fach wird ignoriert",
+                style: TextStyle(color: Colors.grey),
+              )),
+            )
+          else
+            for (final subject in widget.vm.ignoreForGradesAverage)
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: ListTile(
+                  title: Text(subject),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.close,
+                    ),
+                    onPressed: () {
+                      widget.onSetIgnoreForGradesAverage(
+                        widget.vm.ignoreForGradesAverage..remove(subject),
+                      );
+                    },
+                  ),
+                ),
+              ),
           Divider(),
           AutoScrollTag(
             child: ListTile(
@@ -264,7 +323,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                           context,
                           "",
                           "",
-                          widget.vm.allSubjects,
+                          subjectsWithoutNick,
                         );
                         if (newValue != null) {
                           widget.onSetSubjectNicks(
@@ -276,7 +335,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                       },
                     ),
                   );
-                final key = widget.vm.subjectNicks.entries.toList()[i - 1].key;
+                i -= 1;
+                final key = widget.vm.subjectNicks.entries.toList()[i].key;
                 final value = widget.vm.subjectNicks[key];
                 return ListTile(
                   title: Text(key),
@@ -318,13 +378,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                             context,
                             key,
                             value,
-                            List.of(widget.vm.allSubjects)..add(key),
+                            subjectsWithoutNick..add(key),
                           );
                           if (newValue != null) {
                             widget.onSetSubjectNicks(
                               Map.fromEntries(
                                 List.of(widget.vm.subjectNicks.entries)
-                                  ..[i - 1] = newValue,
+                                  ..[i] = newValue,
                               ),
                             );
                           }
@@ -561,6 +621,74 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                       nickController.text,
                     ),
                   );
+                }
+              : null,
+        ),
+      ],
+    );
+  }
+}
+
+class AddSubject extends StatefulWidget {
+  final List<String> availableSubjects;
+
+  const AddSubject({Key key, this.availableSubjects}) : super(key: key);
+  @override
+  _AddSubjectState createState() => _AddSubjectState();
+}
+
+class _AddSubjectState extends State<AddSubject> {
+  TextEditingController subjectController;
+  @override
+  void initState() {
+    subjectController = TextEditingController();
+    subjectController.addListener(() {
+      setState(() {
+        // if the subjectController's text changed, we might update the buttons
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    subjectController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InfoDialog(
+      title: Text("Fach hinzufügen"),
+      content: TypeAheadField(
+        suggestionsCallback: (pattern) {
+          return widget.availableSubjects.where((suggestion) =>
+              suggestion.toLowerCase().contains(pattern.toLowerCase()));
+        },
+        itemBuilder: (BuildContext context, String suggestion) {
+          return ListTile(title: Text(suggestion));
+        },
+        onSuggestionSelected: (suggestion) {
+          subjectController.text = suggestion;
+        },
+        textFieldConfiguration: TextFieldConfiguration(
+          controller: subjectController,
+          autofocus: subjectController.text.isEmpty,
+        ),
+        hideOnEmpty: true,
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: Text("Abbrechen"),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        ElevatedButton(
+          child: Text("Fertig"),
+          onPressed: subjectController.text != ""
+              ? () {
+                  Navigator.of(context).pop(subjectController.text);
                 }
               : null,
         ),

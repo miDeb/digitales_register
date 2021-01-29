@@ -18,6 +18,7 @@ class GradesPageContainer extends StatelessWidget {
         return GradesPage(
           vm: vm,
           changeSemester: actions.gradesActions.setSemester,
+          showGradesSettings: actions.routingActions.showEditGradesAverageSettings,
         );
       },
       connect: (state) {
@@ -66,7 +67,10 @@ String calculateAllSubjectsAverage(AppState state) {
   var n = 0;
   for (final subject in state.gradesState.subjects) {
     final average = subject.average(state.gradesState.semester);
-    if (average != null) {
+    if (average != null &&
+        !state.settingsState.ignoreForGradesAverage.any(
+          (element) => element.toLowerCase() == subject.name.toLowerCase(),
+        )) {
       sum += average;
       n++;
     }

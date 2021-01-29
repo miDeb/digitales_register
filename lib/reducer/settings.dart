@@ -22,10 +22,14 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(SettingsActionsNames.subjectNicks, _subjectNicks)
   ..add(
       RoutingActionsNames.showEditCalendarSubjectNicks, _showEditCalendarNicks)
+  ..add(RoutingActionsNames.showEditGradesAverageSettings,
+      _showEditGradesAverageSettings)
   ..add(RoutingActionsNames.showSettings, _showSettings)
   ..add(SettingsActionsNames.showCalendarSubjectNicksBar, _calendarNicksBar)
   ..add(SettingsActionsNames.showGradesDiagram, _gradesChart)
   ..add(SettingsActionsNames.showAllSubjectsAverage, _allSubjectsAverage)
+  ..add(
+      SettingsActionsNames.ignoreSubjectsForAverage, _ignoreSubjectsForAverage)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries,
       _markNotSeenDashboardEntries)
   ..add(SettingsActionsNames.deduplicateDashboardEntries,
@@ -76,12 +80,23 @@ void _subjectNicks(SettingsState state, Action<BuiltMap<String, String>> action,
 
 void _showEditCalendarNicks(
     SettingsState state, Action<void> action, SettingsStateBuilder builder) {
-  builder.scrollToSubjectNicks = true;
+  builder
+    ..scrollToSubjectNicks = true
+    ..scrollToGrades = false;
+}
+
+void _showEditGradesAverageSettings(
+    SettingsState state, Action<void> action, SettingsStateBuilder builder) {
+  builder
+    ..scrollToGrades = true
+    ..scrollToSubjectNicks = false;
 }
 
 void _showSettings(
     SettingsState state, Action<void> action, SettingsStateBuilder builder) {
-  builder.scrollToSubjectNicks = false;
+  builder
+    ..scrollToSubjectNicks = false
+    ..scrollToGrades = false;
 }
 
 void _calendarNicksBar(
@@ -97,6 +112,11 @@ void _gradesChart(
 void _allSubjectsAverage(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.showAllSubjectsAverage = action.payload;
+}
+
+void _ignoreSubjectsForAverage(SettingsState state,
+    Action<BuiltList<String>> action, SettingsStateBuilder builder) {
+  builder.ignoreForGradesAverage.replace(action.payload);
 }
 
 void _setGradeGraphConfig(

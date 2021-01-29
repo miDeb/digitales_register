@@ -11,8 +11,14 @@ import 'no_internet.dart';
 class GradesPage extends StatelessWidget {
   final GradesPageViewModel vm;
   final ValueChanged<Semester> changeSemester;
+  final VoidCallback showGradesSettings;
 
-  const GradesPage({Key key, this.vm, this.changeSemester}) : super(key: key);
+  const GradesPage({
+    Key key,
+    @required this.vm,
+    @required this.changeSemester,
+    @required this.showGradesSettings,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +68,15 @@ class GradesPage extends StatelessWidget {
                         ),
                       if (vm.showAllSubjectsAverage) ...[
                         ListTile(
-                          title: Text("Ø aller Fächer"),
+                          title: Row(
+                            children: [
+                              Text("Ø aller Fächer"),
+                              IconButton(
+                                icon: Icon(Icons.settings),
+                                onPressed: showGradesSettings,
+                              ),
+                            ],
+                          ),
                           trailing: Text(vm.allSubjectsAverage),
                         ),
                         Divider(

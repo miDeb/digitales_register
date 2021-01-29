@@ -15,6 +15,7 @@ abstract class SettingsActions extends ReduxActions {
   ActionDispatcher<bool> saveNoData;
   ActionDispatcher<bool> deleteDataOnLogout;
   ActionDispatcher<BuiltMap<String, String>> subjectNicks;
+  ActionDispatcher<BuiltList<String>> ignoreSubjectsForAverage;
   ActionDispatcher<MapEntry<int, SubjectGraphConfig>> setGraphConfig;
   ActionDispatcher<BuiltList<Subject>> updateGraphConfig;
   ActionDispatcher<bool> askWhenDeleteReminder;

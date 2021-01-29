@@ -44,6 +44,8 @@ class SettingsPageContainer extends StatelessWidget {
           onSetDashboardDeduplicateEntries:
               actions.settingsActions.deduplicateDashboardEntries,
           onShowProfile: actions.routingActions.showProfile,
+          onSetIgnoreForGradesAverage: (list) =>
+              actions.settingsActions.ignoreSubjectsForAverage(BuiltList(list)),
         );
       },
       connect: (state) {
@@ -68,7 +70,9 @@ class SettingsViewModel {
   final bool dashboardMarkNewOrChangedEntries;
   final bool dashboardDeduplicateEntries;
   final bool showSubjectNicks;
+  final bool showGradesSettings;
   final List<String> allSubjects;
+  final List<String> ignoreForGradesAverage;
   SettingsViewModel(AppState state)
       : noPassSaving = state.settingsState.noPasswordSaving,
         noDataSaving = state.settingsState.noDataSaving,
@@ -77,6 +81,7 @@ class SettingsViewModel {
         offlineEnabled = state.settingsState.offlineEnabled,
         subjectNicks = state.settingsState.subjectNicks.toMap(),
         showSubjectNicks = state.settingsState.scrollToSubjectNicks,
+        showGradesSettings = state.settingsState.scrollToGrades,
         showCalendarEditNicksBar = state.settingsState.showCalendarNicksBar,
         showGradesDiagram = state.settingsState.showGradesDiagram,
         showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
@@ -84,27 +89,25 @@ class SettingsViewModel {
             state.settingsState.dashboardMarkNewOrChangedEntries,
         dashboardDeduplicateEntries =
             state.settingsState.dashboardDeduplicateEntries,
-        allSubjects = extractAllSubjects(state);
+        allSubjects = extractAllSubjects(state),
+        ignoreForGradesAverage =
+            state.settingsState.ignoreForGradesAverage.toList();
 
   static List<String> extractAllSubjects(AppState appState) {
-    final subjects = <String>[];
+    final subjects = <String>{};
     for (final day in appState.calendarState.days.values) {
       for (final hour in day.hours) {
-        if (!subjects.contains(hour.subject)) subjects.add(hour.subject);
+        subjects.add(hour.subject);
       }
     }
     for (final subject in appState.gradesState.subjects) {
-      if (!subjects.contains(subject.name)) subjects.add(subject.name);
+      subjects.add(subject.name);
     }
     for (final day in appState.dashboardState.allDays) {
       for (final homework in day.homework) {
-        if (homework.label != null && !subjects.contains(homework.label))
-          subjects.add(homework.label);
+        if (homework.label != null) subjects.add(homework.label);
       }
     }
-    subjects.removeWhere(
-      (subject) => appState.settingsState.subjectNicks.containsKey(subject),
-    );
-    return subjects;
+    return subjects.toList();
   }
 }

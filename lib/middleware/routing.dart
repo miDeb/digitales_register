@@ -21,6 +21,8 @@ final _routingMiddleware =
       ..add(RoutingActionsNames.showSettings, _showSettings)
       ..add(RoutingActionsNames.showEditCalendarSubjectNicks,
           _showEditCalendarSubjectNicks)
+      ..add(RoutingActionsNames.showEditGradesAverageSettings,
+          _showEditGradesAverageSettings)
       ..add(RoutingActionsNames.showCalendar, _showCalendar)
       ..add(RoutingActionsNames.showAbsences, _showAbsences)
       ..add(RoutingActionsNames.showGradesChart, _showGradesChart)
@@ -87,6 +89,14 @@ void _showSettings(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 }
 
 void _showEditCalendarSubjectNicks(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) {
+  navigatorKey.currentState.pushNamed("/settings");
+  next(action);
+}
+
+void _showEditGradesAverageSettings(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) {

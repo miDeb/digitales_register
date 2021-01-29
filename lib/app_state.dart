@@ -234,12 +234,16 @@ abstract class SettingsState
   @nullable
   @BuiltValueField(serialize: false)
   bool get scrollToSubjectNicks;
+  @nullable
+  @BuiltValueField(serialize: false)
+  bool get scrollToGrades;
   bool get showCalendarNicksBar;
   bool get showGradesDiagram;
   bool get showAllSubjectsAverage;
   bool get dashboardMarkNewOrChangedEntries;
   bool get dashboardDeduplicateEntries;
   BuiltMap<int, SubjectGraphConfig> get graphConfigs;
+  BuiltList<String> get ignoreForGradesAverage;
 
   // Whether to fully expand the drawer if in tablet mode
   // if not, only the icons are shown
@@ -277,7 +281,8 @@ abstract class SettingsState
       ..dashboardMarkNewOrChangedEntries = true
       ..dashboardDeduplicateEntries = true
       ..graphConfigs = MapBuilder<int, SubjectGraphConfig>()
-      ..drawerFullyExpanded = true;
+      ..drawerFullyExpanded = true
+      ..ignoreForGradesAverage = ListBuilder();
   }
 }
 
