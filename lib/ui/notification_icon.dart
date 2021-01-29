@@ -11,6 +11,7 @@ class NotificationIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return notifications != 0
         ? IconButton(
+          visualDensity: VisualDensity.standard,
             icon: Badge(
               child: Icon(Icons.notifications),
               badgeContent: Text(
