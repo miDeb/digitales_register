@@ -71,7 +71,7 @@ class CalendarDayWidget extends StatelessWidget {
                   ),
                   color: Colors.transparent,
                   elevation: 0,
-                  child: const SizedBox(),
+                  child: Container(),
                 ),
                 Card(
                   color: Colors.transparent,
