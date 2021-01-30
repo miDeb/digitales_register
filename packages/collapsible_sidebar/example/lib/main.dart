@@ -25,8 +25,8 @@ class SidebarPage extends StatefulWidget {
 }
 
 class _SidebarPageState extends State<SidebarPage> {
-  List<CollapsibleItem> _items;
-  String _headline;
+  late List<CollapsibleItem> _items;
+  late String _headline;
   Widget _avatarImg =
       Image.network('https://www.w3schools.com/howto/img_avatar.png');
 

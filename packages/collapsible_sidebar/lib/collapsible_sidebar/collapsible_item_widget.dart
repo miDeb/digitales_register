@@ -4,28 +4,26 @@ import 'dart:ui' as ui;
 
 class CollapsibleItemWidget extends StatelessWidget {
   const CollapsibleItemWidget({
-    @required this.leading,
-    @required this.title,
-    @required this.textStyle,
-    @required this.padding,
-    @required this.offsetX,
+    required this.leading,
+    required this.title,
+    required this.textStyle,
+    required this.padding,
+    required this.offsetX,
+    required this.selected,
     this.onTap,
-    @required this.selected,
     this.selectedBoxColor,
     this.hasDivider = false,
-    this.duration,
     this.curve,
   });
 
   final Widget leading;
-  final Widget title;
+  final Widget? title;
   final TextStyle textStyle;
   final double offsetX, padding;
-  final Function onTap;
+  final VoidCallback? onTap;
   final bool selected, hasDivider;
-  final Color selectedBoxColor;
-  final Duration duration;
-  final Curve curve;
+  final Color? selectedBoxColor;
+  final Curve? curve;
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +76,16 @@ class CollapsibleItemWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           leading,
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            width: 210,
-                            child: DefaultTextStyle(
-                              child: title,
-                              style: textStyle,
+                          if (title != null)
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              width: 210,
+                              child: DefaultTextStyle(
+                                child: title!,
+                                style: textStyle,
+                              ),
                             ),
-                          ),
                         ],
                       ),
                     ),

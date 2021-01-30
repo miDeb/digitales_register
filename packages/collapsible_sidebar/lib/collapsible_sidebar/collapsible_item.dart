@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class CollapsibleItem {
   CollapsibleItem({
     this.hasDivider = false,
-    @required this.text,
-    @required this.icon,
-    @required this.onPressed,
+    required this.text,
+    required this.icon,
+    required this.onPressed,
     this.isSelected = false,
   });
 

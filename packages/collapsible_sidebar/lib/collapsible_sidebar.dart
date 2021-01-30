@@ -5,7 +5,6 @@ import 'dart:math' as math show pi;
 import 'package:flutter/material.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_container.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
-import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_avatar.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item_widget.dart';
 
 export 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
@@ -14,7 +13,7 @@ typedef ExpansionChangeCallback = void Function(bool isExpanded);
 
 class CollapsibleSidebar extends StatefulWidget {
   const CollapsibleSidebar({
-    @required this.items,
+    required this.items,
     this.title,
     this.titleStyle,
     this.textStyle,
@@ -41,15 +40,14 @@ class CollapsibleSidebar extends StatefulWidget {
     this.fitItemsToBottom = false,
     this.alwaysExpanded = false,
     this.initiallyExpanded = false,
-    @required this.body,
-    this.avatarSize,
+    required this.body,
     this.onExpansionChange,
   });
 
-  final Widget title, toggleTitle;
-  final TextStyle titleStyle, textStyle, toggleTitleStyle;
+  final Widget? title, toggleTitle;
+  final TextStyle? titleStyle, textStyle, toggleTitleStyle;
   final Widget body;
-  final Widget avatar;
+  final Widget? avatar;
   final bool showToggleButton, fitItemsToBottom;
   final bool alwaysExpanded, initiallyExpanded;
   final List<CollapsibleItem> items;
@@ -58,7 +56,6 @@ class CollapsibleSidebar extends StatefulWidget {
       maxWidth,
       borderRadius,
       iconSize,
-      avatarSize,
       padding = 10,
       itemPadding = 10,
       topPadding,
@@ -72,37 +69,37 @@ class CollapsibleSidebar extends StatefulWidget {
       unselectedTextColor;
   final Duration duration;
   final Curve curve;
-  final ExpansionChangeCallback onExpansionChange;
+  final ExpansionChangeCallback? onExpansionChange;
   @override
   _CollapsibleSidebarState createState() => _CollapsibleSidebarState();
 }
 
 class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _widthAnimation;
-  CurvedAnimation _curvedAnimation;
-  double tempWidth;
+  late AnimationController _controller;
+  late Animation<double> _widthAnimation;
+  late CurvedAnimation _curvedAnimation;
+  late double tempWidth;
 
-  bool __isCollapsed;
+  bool? __isCollapsed;
 
   set _isCollapsed(bool value) {
     if (value != __isCollapsed &&
         __isCollapsed != null &&
         widget.onExpansionChange != null) {
-      widget.onExpansionChange(!value);
+      widget.onExpansionChange!(!value);
     }
     __isCollapsed = value;
   }
 
   bool get _isCollapsed {
-    return __isCollapsed;
+    return __isCollapsed!;
   }
 
-  double _currWidth, _delta, _delta1By4, _delta3by4, _maxOffsetX;
-  int _selectedItemIndex;
+  late double _currWidth, _delta, _delta1By4, _delta3by4, _maxOffsetX;
+  int? _selectedItemIndex;
 
-  CollapsibleItem getItemAt(int index) {
+  CollapsibleItem? getItemAt(int? index) {
     if (index == null) {
       return null;
     }
@@ -160,7 +157,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   }
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
-    _currWidth += details.primaryDelta;
+    _currWidth += details.primaryDelta!;
     if (_currWidth > tempWidth)
       _currWidth = tempWidth;
     else if (_currWidth < widget.minWidth)
@@ -234,10 +231,10 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       selected: false,
       padding: widget.itemPadding,
       offsetX: _offsetX,
-      leading: CollapsibleAvatar(
-        avatarSize: widget.iconSize,
-        avatar: widget.avatar,
-        textStyle: _textStyle(widget.backgroundColor, widget.titleStyle),
+      leading: Container(
+        child: widget.avatar!,
+        height: widget.iconSize,
+        width: widget.iconSize,
       ),
       title: widget.title,
       textStyle: _textStyle(widget.unselectedTextColor, widget.titleStyle),
@@ -246,7 +243,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
 
   List<Widget> get _items {
     return List.generate(widget.items.length, (index) {
-      var item = getItemAt(index);
+      var item = getItemAt(index)!;
       var iconColor = widget.unselectedIconColor;
       var textColor = widget.unselectedTextColor;
       if (item.isSelected) {
@@ -254,7 +251,6 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         textColor = widget.selectedTextColor;
       }
       return CollapsibleItemWidget(
-        duration: widget.duration,
         curve: widget.curve,
         hasDivider: item.hasDivider,
         selectedBoxColor: widget.selectedIconBox,
@@ -292,7 +288,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
           color: widget.unselectedIconColor,
         ),
       ),
-      title: widget.toggleTitle,
+      title: widget.toggleTitle ?? SizedBox(),
       textStyle:
           _textStyle(widget.unselectedTextColor, widget.toggleTitleStyle),
       onTap: () {
@@ -307,7 +303,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   double get _currAngle => -math.pi * _fraction;
   double get _offsetX => _maxOffsetX * _fraction;
 
-  TextStyle _textStyle(Color color, TextStyle style) {
+  TextStyle _textStyle(Color color, TextStyle? style) {
     return style == null
         ? TextStyle(
             fontSize: 20,

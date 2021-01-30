@@ -32,19 +32,18 @@ class UnconstrainedOverflowBox extends SingleChildRenderObjectWidget {
   /// render at its "natural" size. If the child overflows the parents
   /// constraints, a warning will be given in debug mode.
   const UnconstrainedOverflowBox({
-    Key key,
-    Widget child,
+    Key? key,
+    Widget? child,
     this.textDirection,
     this.alignment = Alignment.center,
     this.constrainedAxis,
     this.clipBehavior = Clip.none,
-  })  : assert(alignment != null),
-        assert(clipBehavior != null),
+  })  :
         super(key: key, child: child);
 
   /// The text direction to use when interpreting the [alignment] if it is an
   /// [AlignmentDirectional].
-  final TextDirection textDirection;
+  final TextDirection? textDirection;
 
   /// The alignment to use when laying out the child.
   ///
@@ -63,7 +62,7 @@ class UnconstrainedOverflowBox extends SingleChildRenderObjectWidget {
   /// constraints. If set to [Axis.vertical], then vertical constraints will
   /// be retained, and if set to [Axis.horizontal], then horizontal constraints
   /// will be retained.
-  final Axis constrainedAxis;
+  final Axis? constrainedAxis;
 
   /// {@macro flutter.material.Material.clipBehavior}
   ///
@@ -131,14 +130,12 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
   ///
   /// The [alignment] must not be null.
   RenderUnconstrainedOverflowBox({
-    @required AlignmentGeometry alignment,
-    @required TextDirection textDirection,
-    Axis constrainedAxis,
-    RenderBox child,
+    required AlignmentGeometry alignment,
+    required TextDirection? textDirection,
+    Axis? constrainedAxis,
+    RenderBox? child,
     Clip clipBehavior = Clip.none,
-  })  : assert(alignment != null),
-        assert(clipBehavior != null),
-        _constrainedAxis = constrainedAxis,
+  })  : _constrainedAxis = constrainedAxis,
         _clipBehavior = clipBehavior,
         super.mixin(alignment, textDirection, child);
 
@@ -148,9 +145,9 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
   /// constraints. If set to [Axis.vertical], then vertical constraints will
   /// be retained, and if set to [Axis.horizontal], then horizontal constraints
   /// will be retained.
-  Axis get constrainedAxis => _constrainedAxis;
-  Axis _constrainedAxis;
-  set constrainedAxis(Axis value) {
+  Axis? get constrainedAxis => _constrainedAxis;
+  Axis? _constrainedAxis;
+  set constrainedAxis(Axis? value) {
     if (_constrainedAxis == value) return;
     _constrainedAxis = value;
     markNeedsLayout();
@@ -166,7 +163,6 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
   Clip get clipBehavior => _clipBehavior;
   Clip _clipBehavior = Clip.none;
   set clipBehavior(Clip value) {
-    assert(value != null);
     if (value != _clipBehavior) {
       _clipBehavior = value;
       markNeedsPaint();
@@ -175,28 +171,26 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
   }
 
   Size _calculateSizeWithChild(
-      {@required BoxConstraints constraints,
-      @required ChildLayouter layoutChild}) {
+      {required BoxConstraints constraints,
+      required ChildLayouter layoutChild}) {
     assert(child != null);
     // Let the child lay itself out at it's "natural" size, but if
     // constrainedAxis is non-null, keep any constraints on that axis.
-    BoxConstraints childConstraints;
-    if (constrainedAxis != null) {
-      switch (constrainedAxis) {
-        case Axis.horizontal:
-          childConstraints = BoxConstraints(
-              maxWidth: constraints.maxWidth, minWidth: constraints.minWidth);
-          break;
-        case Axis.vertical:
-          childConstraints = BoxConstraints(
-              maxHeight: constraints.maxHeight,
-              minHeight: constraints.minHeight);
-          break;
-      }
-    } else {
-      childConstraints = const BoxConstraints();
+    late BoxConstraints childConstraints;
+    switch (constrainedAxis) {
+      case Axis.horizontal:
+        childConstraints = BoxConstraints(
+            maxWidth: constraints.maxWidth, minWidth: constraints.minWidth);
+        break;
+      case Axis.vertical:
+        childConstraints = BoxConstraints(
+            maxHeight: constraints.maxHeight, minHeight: constraints.minHeight);
+        break;
+      case null:
+        childConstraints = const BoxConstraints();
+        break;
     }
-    return constraints.constrain(layoutChild(child, childConstraints));
+    return constraints.constrain(layoutChild(child!, childConstraints));
   }
 
   @override
@@ -219,9 +213,9 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
         layoutChild: ChildLayoutHelper.layoutChild,
       );
       alignChild();
-      final BoxParentData childParentData = child.parentData as BoxParentData;
+      final BoxParentData childParentData = child!.parentData as BoxParentData;
       _overflowContainerRect = Offset.zero & size;
-      _overflowChildRect = childParentData.offset & child.size;
+      _overflowChildRect = childParentData.offset & child!.size;
     } else {
       size = constraints.smallest;
       _overflowContainerRect = Rect.zero;
@@ -254,10 +248,10 @@ class RenderUnconstrainedOverflowBox extends RenderAligningShiftedBox {
     }
   }
 
-  ClipRectLayer _clipRectLayer;
+  ClipRectLayer? _clipRectLayer;
 
   @override
-  Rect describeApproximatePaintClip(RenderObject child) {
+  Rect? describeApproximatePaintClip(RenderObject child) {
     return _isOverflowing ? Offset.zero & size : null;
   }
 
