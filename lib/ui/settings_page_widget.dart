@@ -14,6 +14,12 @@ import 'dialog.dart';
 import 'donations.dart';
 import 'network_protocol_page.dart';
 
+enum _Theme {
+  light,
+  dark,
+  followDevice,
+}
+
 class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetNoPassSaving;
   final OnSettingChanged<bool> onSetNoDataSaving;
@@ -92,6 +98,24 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
     super.initState();
   }
 
+  void _selectTheme(_Theme theme) {
+    setState(() {
+      switch (theme) {
+        case _Theme.light:
+          widget.onSetFollowDeviceDarkMode(false);
+          widget.onSetDarkMode(false);
+          break;
+        case _Theme.dark:
+          widget.onSetFollowDeviceDarkMode(false);
+          widget.onSetDarkMode(true);
+          break;
+        case _Theme.followDevice:
+          widget.onSetFollowDeviceDarkMode(true);
+          break;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.vm.showSubjectNicks) {
@@ -99,6 +123,11 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
         controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
       });
     }
+    final currentTheme = DynamicTheme.of(context).followDevice
+        ? _Theme.followDevice
+        : DynamicTheme.of(context).customBrightness == Brightness.dark
+            ? _Theme.dark
+            : _Theme.light;
     return Scaffold(
       appBar: const ResponsiveAppBar(
         title: Text("Einstellungen"),
@@ -173,25 +202,23 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               ),
             ),
           ),
-          SwitchListTile.adaptive(
-            title: const Text("Dark Mode"),
-            onChanged: DynamicTheme.of(context).followDevice
-                ? null
-                : (bool value) {
-                    setState(() {
-                      widget.onSetDarkMode(value);
-                    });
-                  },
-            value: DynamicTheme.of(context).customBrightness == Brightness.dark,
-          ),
-          SwitchListTile.adaptive(
+          RadioListTile(
+            value: _Theme.followDevice,
+            groupValue: currentTheme,
+            onChanged: _selectTheme,
             title: const Text("Geräte-Theme folgen"),
-            onChanged: (bool value) {
-              setState(() {
-                widget.onSetFollowDeviceDarkMode(value);
-              });
-            },
-            value: DynamicTheme.of(context).followDevice,
+          ),
+          RadioListTile(
+            value: _Theme.light,
+            groupValue: currentTheme,
+            onChanged: _selectTheme,
+            title: const Text("Hell"),
+          ),
+          RadioListTile(
+            value: _Theme.dark,
+            groupValue: currentTheme,
+            onChanged: _selectTheme,
+            title: const Text("Dunkel"),
           ),
           const Divider(),
           AutoScrollTag(

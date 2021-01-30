@@ -16,9 +16,7 @@ class SettingsPageContainer extends StatelessWidget {
           vm: vm,
           onSetDarkMode: (dm) {
             DynamicTheme.of(context).setBrightness(
-              Theme.of(context).brightness == Brightness.dark
-                  ? Brightness.light
-                  : Brightness.dark,
+              dm ? Brightness.dark : Brightness.light,
             );
           },
           onSetFollowDeviceDarkMode: (dm) {
