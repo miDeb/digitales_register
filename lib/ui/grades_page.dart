@@ -70,7 +70,7 @@ class GradesPage extends StatelessWidget {
                         ListTile(
                           title: Row(
                             children: [
-                              const Text("Ø aller Fächer"),
+                              const Text("Notendurchschnitt"),
                               IconButton(
                                 icon: const Icon(Icons.settings),
                                 onPressed: showGradesSettings,
