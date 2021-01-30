@@ -101,82 +101,79 @@ class GradesChart extends StatelessWidget {
     return Hero(
       tag: 1337,
       child: maybeWrap(
-        Center(
-          child: charts.TimeSeriesChart(
-            grades,
-            animate: false,
-            behaviors: isFullscreen
-                ? [
-                    charts.SelectNearest(
-                      eventTrigger: charts.SelectionTrigger.tapAndDrag,
-                    ),
-                  ]
-                : null,
-            primaryMeasureAxis: charts.NumericAxisSpec(
-              tickProviderSpec: charts.StaticNumericTickProviderSpec(
-                [
-                  charts.TickSpec(3),
-                  charts.TickSpec(4),
-                  charts.TickSpec(5),
-                  charts.TickSpec(6),
-                  charts.TickSpec(7),
-                  charts.TickSpec(8),
-                  charts.TickSpec(9),
-                  charts.TickSpec(10),
-                ],
-              ),
-              renderSpec: charts.GridlineRendererSpec(
-                labelStyle: charts.TextStyleSpec(
-                  fontSize: 10,
-                  color: darkMode
-                      ? charts.MaterialPalette.white
-                      : charts.MaterialPalette.black,
+          Center(
+            child: charts.TimeSeriesChart(
+              grades,
+              animate: false,
+              behaviors: isFullscreen
+                  ? [
+                      charts.SelectNearest(
+                        eventTrigger: charts.SelectionTrigger.tapAndDrag,
+                      ),
+                    ]
+                  : null,
+              primaryMeasureAxis: charts.NumericAxisSpec(
+                tickProviderSpec: const charts.StaticNumericTickProviderSpec(
+                  [
+                    charts.TickSpec(3),
+                    charts.TickSpec(4),
+                    charts.TickSpec(5),
+                    charts.TickSpec(6),
+                    charts.TickSpec(7),
+                    charts.TickSpec(8),
+                    charts.TickSpec(9),
+                    charts.TickSpec(10),
+                  ],
                 ),
-                lineStyle: charts.LineStyleSpec(
-                  thickness: 0,
-                  color: charts.MaterialPalette.gray.shadeDefault,
+                renderSpec: charts.GridlineRendererSpec(
+                  labelStyle: charts.TextStyleSpec(
+                    fontSize: 10,
+                    color: darkMode
+                        ? charts.MaterialPalette.white
+                        : charts.MaterialPalette.black,
+                  ),
+                  lineStyle: charts.LineStyleSpec(
+                    thickness: 0,
+                    color: charts.MaterialPalette.gray.shadeDefault,
+                  ),
+                ),
+              ),
+              defaultInteractions: isFullscreen,
+              domainAxis: charts.DateTimeAxisSpec(
+                tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
+                  createDomainAxisTags(
+                    Localizations.localeOf(context),
+                  ),
+                ),
+                renderSpec: charts.SmallTickRendererSpec(
+                  labelStyle: charts.TextStyleSpec(
+                    fontSize: 10,
+                    color: darkMode
+                        ? charts.MaterialPalette.white
+                        : charts.MaterialPalette.black,
+                  ),
+                  lineStyle: charts.LineStyleSpec(
+                    thickness: 0,
+                    color: charts.MaterialPalette.gray.shadeDefault,
+                  ),
                 ),
               ),
             ),
-            defaultInteractions: isFullscreen,
-            domainAxis: charts.DateTimeAxisSpec(
-              tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
-                createDomainAxisTags(
-                  Localizations.localeOf(context),
-                ),
+          ), (widget) {
+        return GestureDetector(
+          onTap: goFullscreen,
+          child: Stack(
+            children: <Widget>[
+              widget,
+              const Positioned(
+                right: 20,
+                bottom: 20,
+                child: Icon(Icons.fullscreen),
               ),
-              renderSpec: charts.SmallTickRendererSpec(
-                labelStyle: charts.TextStyleSpec(
-                  fontSize: 10,
-                  color: darkMode
-                      ? charts.MaterialPalette.white
-                      : charts.MaterialPalette.black,
-                ),
-                lineStyle: charts.LineStyleSpec(
-                  thickness: 0,
-                  color: charts.MaterialPalette.gray.shadeDefault,
-                ),
-              ),
-            ),
+            ],
           ),
-        ),
-        !isFullscreen,
-        (widget) {
-          return GestureDetector(
-            child: Stack(
-              children: <Widget>[
-                widget,
-                Positioned(
-                  child: Icon(Icons.fullscreen),
-                  right: 20,
-                  bottom: 20,
-                ),
-              ],
-            ),
-            onTap: goFullscreen,
-          );
-        },
-      ),
+        );
+      }, wrap: !isFullscreen),
     );
   }
 }

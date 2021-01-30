@@ -30,7 +30,7 @@ void _succeeded(ResetPassState state, Action<String> action,
 
 void _showRequest(
     ResetPassState state, Action<void> action, ResetPassStateBuilder builder) {
-  builder..replace(ResetPassState());
+  builder.replace(ResetPassState());
 }
 
 void _showReset(ResetPassState state, Action<ShowPassResetPayload> action,

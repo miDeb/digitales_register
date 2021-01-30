@@ -78,9 +78,9 @@ abstract class DaysViewModel
   bool get showNotifications;
   BuiltList<Day> get days;
 
-  DaysViewModel._();
   factory DaysViewModel([void Function(DaysViewModelBuilder) updates]) =
       _$DaysViewModel;
+  DaysViewModel._();
 
   factory DaysViewModel.from(AppState state) {
     final unorderedDays = state.dashboardState.allDays

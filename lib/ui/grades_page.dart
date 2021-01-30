@@ -23,22 +23,23 @@ class GradesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ResponsiveAppBar(
-        title: Text("Noten"),
+        title: const Text("Noten"),
         actions: <Widget>[
           Theme(
+            data: ThemeData.dark(),
             child: DropdownButtonHideUnderline(
               child: DropdownButton<Semester>(
                 value: vm.showSemester,
                 items: Semester.values
                     .map(
                       (s) => DropdownMenuItem(
+                        value: s,
                         child: Text(
                           s.name,
                           style: (Theme.of(context).appBarTheme.textTheme ??
                                   Theme.of(context).primaryTextTheme)
                               .bodyText2,
                         ),
-                        value: s,
                       ),
                     )
                     .toList(),
@@ -47,49 +48,48 @@ class GradesPage extends StatelessWidget {
                 },
               ),
             ),
-            data: ThemeData.dark(),
           ),
         ],
       ),
       body: !vm.hasData && vm.noInternet
-          ? NoInternet()
+          ? const NoInternet()
           : vm.loading && !vm.hasData
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : maybeWrap(
                   ListView(
                     children: <Widget>[
                       if (vm.showGradesDiagram)
-                        SizedBox(
-                          child: GradesChartContainer(isFullscreen: false),
+                        const SizedBox(
                           height: 150,
                           width: 250,
+                          child: GradesChartContainer(isFullscreen: false),
                         ),
                       if (vm.showAllSubjectsAverage) ...[
                         ListTile(
                           title: Row(
                             children: [
-                              Text("Ø aller Fächer"),
+                              const Text("Ø aller Fächer"),
                               IconButton(
-                                icon: Icon(Icons.settings),
+                                icon: const Icon(Icons.settings),
                                 onPressed: showGradesSettings,
                               ),
                             ],
                           ),
                           trailing: Text(vm.allSubjectsAverage),
                         ),
-                        Divider(
+                        const Divider(
                           height: 0,
                         ),
                       ],
                       SortedGradesContainer(),
                     ],
                   ),
-                  vm.loading,
                   (widget) => Stack(
-                    children: <Widget>[LinearProgressIndicator(), widget],
+                    children: [const LinearProgressIndicator(), widget],
                   ),
+                  wrap: vm.loading,
                 ),
     );
   }

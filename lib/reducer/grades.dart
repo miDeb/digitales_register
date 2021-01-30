@@ -35,9 +35,10 @@ void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
     ..loading = false;
 }
 
-_updateSubjects(BuiltList<Subject> subjects,
+void _updateSubjects(BuiltList<Subject> subjects,
     ListBuilder<Subject> subjectsBuilder, dynamic data, Semester semester) {
-  for (final subject in List.of(data["subjects"])) {
+  for (final Map<String, dynamic> subject
+      in List.from(data["subjects"] as List)) {
     final newId = subject["subject"]["id"];
     final oldSubject =
         subjects.singleWhere((s) => s.id == newId, orElse: () => null);
@@ -46,7 +47,7 @@ _updateSubjects(BuiltList<Subject> subjects,
       subjectsBuilder[subjects.indexOf(oldSubject)] = oldSubject.rebuild(
         (b) => b
           ..gradesAll[semester] = BuiltList(
-            subject["grades"].map(
+            (subject["grades"] as List).map(
               (g) => _parseGradeAll(g),
             ),
           ),
@@ -55,12 +56,12 @@ _updateSubjects(BuiltList<Subject> subjects,
       subjectsBuilder.add(
         Subject(
           (b) => b
-            ..id = subject["subject"]["id"]
-            ..name = subject["subject"]["name"]
+            ..id = subject["subject"]["id"] as int
+            ..name = subject["subject"]["name"] as String
             ..gradesAll = MapBuilder(
               {
                 semester: BuiltList<GradeAll>(
-                  subject["grades"].map(
+                  (subject["grades"] as List).map(
                     (g) => _parseGradeAll(g),
                   ),
                 ),
@@ -84,7 +85,7 @@ void _detailsLoaded(GradesState state,
         ? s.rebuild(
             (b) => b
               ..grades[action.payload.semester] = BuiltList(
-                data["grades"].map(
+                (data["grades"] as List).map(
                   (g) => _parseGrade(g).rebuild(
                     (d) => d
                       // we will also try to load the [cancelledDescription]
@@ -99,7 +100,7 @@ void _detailsLoaded(GradesState state,
                 ),
               )
               ..observations[action.payload.semester] = BuiltList(
-                data["observations"].map(
+                (data["observations"] as List).map(
                   (o) => _parseObservation(o),
                 ),
               ),
@@ -134,11 +135,11 @@ void _cancelledDescriptionLoaded(
 Observation _parseObservation(dynamic data) {
   return Observation(
     (b) => b
-      ..typeName = data["typeName"]
+      ..typeName = data["typeName"] as String
       ..cancelled = data["cancelled"] != 0
-      ..created = data["created"]
-      ..note = data["note"]
-      ..date = DateTime.parse(data["date"]),
+      ..created = data["created"] as String
+      ..note = data["note"] as String
+      ..date = DateTime.parse(data["date"] as String),
   );
 }
 
@@ -157,28 +158,28 @@ int _parseGradeValue(String grade) {
 GradeAll _parseGradeAll(dynamic data) {
   return GradeAll(
     (b) => b
-      ..grade = _parseGradeValue(data["grade"])
-      ..weightPercentage = data["weight"]
-      ..date = DateTime.parse(data["date"])
+      ..grade = _parseGradeValue(data["grade"] as String)
+      ..weightPercentage = data["weight"] as int
+      ..date = DateTime.parse(data["date"] as String)
       ..cancelled = data["cancelled"] != 0
-      ..type = data["type"],
+      ..type = data["type"] as String,
   );
 }
 
 GradeDetail _parseGrade(dynamic data) {
   return GradeDetail(
     (b) => b
-      ..grade = _parseGradeValue(data["grade"])
-      ..date = DateTime.parse(data["date"])
-      ..weightPercentage = data["weight"]
+      ..grade = _parseGradeValue(data["grade"] as String)
+      ..date = DateTime.parse(data["date"] as String)
+      ..weightPercentage = data["weight"] as int
       ..cancelled = data["cancelled"] != 0
-      ..type = data["typeName"]
-      ..created = data["created"]
-      ..name = data["name"]
-      ..description = data["description"]
-      ..id = data["id"]
+      ..type = data["typeName"] as String
+      ..created = data["created"] as String
+      ..name = data["name"] as String
+      ..description = data["description"] as String
+      ..id = data["id"] as int
       ..competences = ListBuilder(
-        data["competences"]?.map(
+        (data["competences"] as List)?.map(
           (c) => _parseCompetence(c),
         ),
       ),
@@ -187,14 +188,14 @@ GradeDetail _parseGrade(dynamic data) {
 
 GradeDetail _addCancelledDescription(GradeDetail grade, dynamic data) {
   return grade.rebuild(
-    (b) => b..cancelledDescription = data["cancelledDescription"],
+    (b) => b..cancelledDescription = data["cancelledDescription"] as String,
   );
 }
 
 Competence _parseCompetence(dynamic data) {
   return Competence((b) => b
-    ..typeName = data["typeName"]
-    ..grade = double.parse(data["grade"]).toInt());
+    ..typeName = data["typeName"] as String
+    ..grade = double.parse(data["grade"] as String).toInt());
 }
 
 void _setSemester(

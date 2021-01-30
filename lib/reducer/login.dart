@@ -45,7 +45,7 @@ void _loggedIn(LoginState state, Action<LoggedInPayload> action,
 
 void _loggingIn(
     LoginState state, Action<void> action, LoginStateBuilder builder) {
-  builder..loading = true;
+  builder.loading = true;
 }
 
 void _logout(
@@ -65,7 +65,7 @@ void _changePass(
 
 void _showLogin(
     LoginState state, Action<void> action, LoginStateBuilder builder) {
-  builder..changePassword = false;
+  builder.changePassword = false;
 }
 
 void _addAfterLoginCallback(LoginState state, Action<void Function()> action,

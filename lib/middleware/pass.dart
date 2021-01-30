@@ -7,8 +7,10 @@ final _passMiddleware =
       ..add(SavePassActionsNames.save, _savePass)
       ..add(SavePassActionsNames.delete, _deletePass);
 
-void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+Future<void> _enableOffline(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<bool> action) async {
   next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
   final user = login["user"];
@@ -29,8 +31,10 @@ void _enableOffline(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<bool> action) async {
+Future<void> _setSavePass(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<bool> action) async {
   next(action);
   _wrapper.safeMode = action.payload;
   if (!api.state.loginState.loggedIn) return;
@@ -41,11 +45,12 @@ void _setSavePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
-  if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode)
+  if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode) {
     return;
+  }
   _secureStorage.write(
     key: "login",
     value: json.encode(
@@ -61,8 +66,10 @@ void _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _deletePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _deletePass(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   next(action);
   _secureStorage.write(
     key: "login",

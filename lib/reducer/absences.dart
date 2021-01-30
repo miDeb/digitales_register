@@ -19,31 +19,31 @@ void _loaded(
 AbsencesState _parseAbsences(json) {
   final rawStats = json["statistics"];
   final stats = AbsenceStatisticBuilder()
-    ..counter = rawStats["counter"]
-    ..counterForSchool = rawStats["counterForSchool"]
-    ..delayed = rawStats["delayed"]
-    ..justified = rawStats["justified"]
-    ..notJustified = rawStats["notJustified"]
+    ..counter = rawStats["counter"] as int
+    ..counterForSchool = rawStats["counterForSchool"] as int
+    ..delayed = rawStats["delayed"] as int
+    ..justified = rawStats["justified"] as int
+    ..notJustified = rawStats["notJustified"] as int
     ..percentage = rawStats["percentage"].toString();
   final absences = (json["absences"] as List).map((g) {
     return AbsenceGroup(
       (b) => b
-        ..justified = AbsenceJustified.fromInt(g["justified"])
-        ..reasonSignature = g["reason_signature"]
+        ..justified = AbsenceJustified.fromInt(g["justified"] as int)
+        ..reasonSignature = g["reason_signature"] as String
         ..reasonTimestamp = g["reason_timestamp"] is String
-            ? DateTime.tryParse(g["reason_timestamp"])
+            ? DateTime.tryParse(g["reason_timestamp"] as String)
             : null
-        ..reason = g["reason"]
+        ..reason = g["reason"] as String
         ..absences = ListBuilder(
           (g["group"] as List).map(
             (a) {
               return Absence(
                 (b) => b
-                  ..minutes = a["minutes"]
-                  ..date = DateTime.parse(a["date"])
-                  ..hour = a["hour"]
-                  ..minutesCameTooLate = a["minutes_begin"]
-                  ..minutesLeftTooEarly = a["minutes_end"],
+                  ..minutes = a["minutes"] as int
+                  ..date = DateTime.parse(a["date"] as String)
+                  ..hour = a["hour"] as int
+                  ..minutesCameTooLate = a["minutes_begin"] as int
+                  ..minutesLeftTooEarly = a["minutes_end"] as int,
               );
             },
           ),

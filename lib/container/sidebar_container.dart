@@ -71,8 +71,8 @@ abstract class SidebarViewModel
   String get userIcon;
   bool get drawerInitiallyFullyExpanded;
   BuiltList<String> get otherAccounts;
-  SidebarViewModel._();
 
   factory SidebarViewModel([void Function(SidebarViewModelBuilder) updates]) =
       _$SidebarViewModel;
+  SidebarViewModel._();
 }

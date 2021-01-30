@@ -7,8 +7,8 @@ import '../data.dart';
 part 'dashboard_actions.g.dart';
 
 abstract class DashboardActions extends ReduxActions {
-  DashboardActions._();
   factory DashboardActions() => _$DashboardActions();
+  DashboardActions._();
 
   ActionDispatcher<DaysLoadedPayload> loaded;
   ActionDispatcher<void> notLoaded;
@@ -30,9 +30,9 @@ abstract class DashboardActions extends ReduxActions {
 
 abstract class DaysLoadedPayload
     implements Built<DaysLoadedPayload, DaysLoadedPayloadBuilder> {
-  DaysLoadedPayload._();
   factory DaysLoadedPayload([void Function(DaysLoadedPayloadBuilder) updates]) =
       _$DaysLoadedPayload;
+  DaysLoadedPayload._();
 
   Object get data;
   bool get future;
@@ -42,10 +42,10 @@ abstract class DaysLoadedPayload
 
 abstract class HomeworkAddedPayload
     implements Built<HomeworkAddedPayload, HomeworkAddedPayloadBuilder> {
-  HomeworkAddedPayload._();
   factory HomeworkAddedPayload(
           [void Function(HomeworkAddedPayloadBuilder) updates]) =
       _$HomeworkAddedPayload;
+  HomeworkAddedPayload._();
 
   Object get data;
   DateTime get date;
@@ -53,10 +53,10 @@ abstract class HomeworkAddedPayload
 
 abstract class AddReminderPayload
     implements Built<AddReminderPayload, AddReminderPayloadBuilder> {
-  AddReminderPayload._();
   factory AddReminderPayload(
           [void Function(AddReminderPayloadBuilder) updates]) =
       _$AddReminderPayload;
+  AddReminderPayload._();
 
   String get msg;
   DateTime get date;
@@ -64,9 +64,9 @@ abstract class AddReminderPayload
 
 abstract class ToggleDonePayload
     implements Built<ToggleDonePayload, ToggleDonePayloadBuilder> {
-  ToggleDonePayload._();
   factory ToggleDonePayload([void Function(ToggleDonePayloadBuilder) updates]) =
       _$ToggleDonePayload;
+  ToggleDonePayload._();
 
   Homework get hw;
   bool get done;

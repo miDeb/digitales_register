@@ -11,7 +11,9 @@ class CertificateContainer extends StatelessWidget {
     return StoreConnection<AppState, AppActions, CertificateViewModel>(
       connect: (state) {
         return CertificateViewModel(
-            state.certificateState.html, state.noInternet);
+          html: state.certificateState.html,
+          noInternet: state.noInternet,
+        );
       },
       builder: (context, vm, actions) {
         return Certificate(vm: vm);
@@ -24,5 +26,8 @@ class CertificateViewModel {
   final String html;
   final bool noInternet;
 
-  CertificateViewModel(this.html, this.noInternet);
+  CertificateViewModel({
+    @required this.html,
+    @required this.noInternet,
+  });
 }

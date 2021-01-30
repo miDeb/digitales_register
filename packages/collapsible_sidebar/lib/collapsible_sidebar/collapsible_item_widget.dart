@@ -1,9 +1,10 @@
+import 'dart:ui' as ui;
 import 'package:collapsible_sidebar/collapsible_sidebar/unconstrained_overflow_widget.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui' as ui;
 
 class CollapsibleItemWidget extends StatelessWidget {
   const CollapsibleItemWidget({
+    Key? key,
     required this.leading,
     required this.title,
     required this.textStyle,
@@ -14,7 +15,7 @@ class CollapsibleItemWidget extends StatelessWidget {
     this.selectedBoxColor,
     this.hasDivider = false,
     this.curve,
-  });
+  }) : super(key: key);
 
   final Widget leading;
   final Widget? title;
@@ -35,7 +36,7 @@ class CollapsibleItemWidget extends StatelessWidget {
       child: Column(
         children: [
           if (hasDivider)
-            Divider(
+            const Divider(
               endIndent: 5,
               indent: 5,
             ),
@@ -48,7 +49,7 @@ class CollapsibleItemWidget extends StatelessWidget {
                 right: 0,
                 child: AnimatedOpacity(
                   opacity: selected ? 1 : 0,
-                  duration: Duration(milliseconds: 1000),
+                  duration: const Duration(milliseconds: 1000),
                   curve: curve ?? Curves.linear,
                   child: Container(
                     decoration: BoxDecoration(
@@ -82,8 +83,8 @@ class CollapsibleItemWidget extends StatelessWidget {
                                   const EdgeInsets.symmetric(horizontal: 10),
                               width: 210,
                               child: DefaultTextStyle(
-                                child: title!,
                                 style: textStyle,
+                                child: title!,
                               ),
                             ),
                         ],

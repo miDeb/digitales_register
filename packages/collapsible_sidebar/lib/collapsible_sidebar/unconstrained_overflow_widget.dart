@@ -38,8 +38,7 @@ class UnconstrainedOverflowBox extends SingleChildRenderObjectWidget {
     this.alignment = Alignment.center,
     this.constrainedAxis,
     this.clipBehavior = Clip.none,
-  })  :
-        super(key: key, child: child);
+  }) : super(key: key, child: child);
 
   /// The text direction to use when interpreting the [alignment] if it is an
   /// [AlignmentDirectional].

@@ -11,7 +11,7 @@ class NetworkProtocol extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
-        ? Center(
+        ? const Center(
             child: Text("Nichts vorhanden"),
           )
         : ListView.builder(
@@ -63,7 +63,7 @@ class _Detail extends StatelessWidget {
             children: <Widget>[
               Text(type),
               IconButton(
-                icon: Icon(Icons.assignment),
+                icon: const Icon(Icons.assignment),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: content));
                   showSnackBar("In die Zwischenablage kopiert");

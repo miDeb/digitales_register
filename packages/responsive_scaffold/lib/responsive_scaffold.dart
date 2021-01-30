@@ -67,7 +67,7 @@ class ResponsiveScaffold<T> extends StatefulWidget {
   /// them and pass them to this navigator manually.
   final GlobalKey<NavigatorState> navKey;
 
-  ResponsiveScaffold({
+  const ResponsiveScaffold({
     Key? key,
     required this.homeBody,
     required this.drawerBuilder,
@@ -102,8 +102,8 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
   void initState() {
     currentSelected = widget.homeId;
     navigatorKey = widget.navKey;
-    _drawerAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 250));
+    _drawerAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 250));
     super.initState();
   }
 
@@ -119,8 +119,8 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
               opacity: animation,
               child: content,
             ),
-            transitionDuration: Duration(milliseconds: 250),
-            reverseTransitionDuration: Duration(milliseconds: 250),
+            transitionDuration: const Duration(milliseconds: 250),
+            reverseTransitionDuration: const Duration(milliseconds: 250),
           )
         : MaterialPageRoute(
             settings: RouteSettings(arguments: data),
@@ -160,7 +160,7 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
           tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
           if (tabletMode) {
             if (isInitialized && _drawerAnimationController.value == 0) {
-              _drawerAnimationController.fling(velocity: 1);
+              _drawerAnimationController.fling();
             } else {
               _drawerAnimationController.value = 1;
             }
@@ -169,8 +169,8 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
           }
           isInitialized = true;
           return _InheritedTabletMode(
-            tabletMode,
-            _InheritedHomePage(
+            tabletMode: tabletMode,
+            child: _InheritedHomePage(
               fab: widget.homeFloatingActionButton,
               scaffoldKey: scaffoldKey,
               body: widget.homeBody,
@@ -187,9 +187,9 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
                       sizeFactor: _drawerAnimationController,
                       axisAlignment: 1,
                       child: _Drawer(
+                        drawerAnimationController: _drawerAnimationController,
                         child: widget.drawerBuilder(
                             selectContentWidget, goHome, currentSelected, true),
-                        drawerAnimationController: _drawerAnimationController,
                       ),
                     ),
                     Expanded(
@@ -263,7 +263,6 @@ class __DrawerState extends State<_Drawer> {
                   boxShadow: [
                     BoxShadow(
                       offset: Offset(-7, 0),
-                      spreadRadius: 0,
                       blurRadius: 4,
                     )
                   ],
@@ -280,9 +279,9 @@ class __DrawerState extends State<_Drawer> {
 
 class _InheritedTabletMode extends InheritedWidget {
   final bool tabletMode;
-  final Widget child;
 
-  _InheritedTabletMode(this.tabletMode, this.child) : super(child: child);
+  const _InheritedTabletMode({required this.tabletMode, required Widget child})
+      : super(child: child);
 
   static _InheritedTabletMode? of(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<_InheritedTabletMode>();
@@ -299,12 +298,11 @@ class _InheritedHomePage extends InheritedWidget {
   final Widget? drawer;
   final PreferredSizeWidget appBar;
   final Widget? fab;
-  final Widget child;
   final Key scaffoldKey;
 
-  _InheritedHomePage({
+  const _InheritedHomePage({
     required this.body,
-    required this.child,
+    required Widget child,
     required this.appBar,
     required this.drawer,
     required this.scaffoldKey,
@@ -371,7 +369,7 @@ class ResponsiveAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;
   final List<Widget>? actions;
 
-  ResponsiveAppBar({Key? key, required this.title, this.actions})
+  const ResponsiveAppBar({Key? key, required this.title, this.actions})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

@@ -11,7 +11,7 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.openAttachment, _openAttachment)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenEntries);
 
-void _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
   if (api.state.noInternet) return;
 
@@ -43,8 +43,10 @@ void _switchFuture(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.dashboardActions.load(api.state.dashboardState.future);
 }
 
-void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<AddReminderPayload> action) async {
+Future<void> _addReminder(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<AddReminderPayload> action) async {
   next(action);
   final result = await _wrapper.send(
     "api/student/dashboard/save_reminder",
@@ -67,15 +69,17 @@ void _addReminder(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Homework> action) async {
+Future<void> _deleteHomework(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<Homework> action) async {
   final result = await _wrapper.send(
     "api/student/dashboard/delete_reminder",
     args: {
       "id": action.payload.id,
     },
   );
-  if (result != null && result["success"]) {
+  if (result != null && result["success"] == true) {
     next(action);
   } else {
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
@@ -84,8 +88,10 @@ void _deleteHomework(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<ToggleDonePayload> action) async {
+Future<void> _toggleDone(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<ToggleDonePayload> action) async {
   next(action);
   final result = await _wrapper.send(
     "api/student/dashboard/toggle_reminder",
@@ -95,7 +101,7 @@ void _toggleDone(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       "value": action.payload.done,
     },
   );
-  if (result != null && result["success"]) {
+  if (result != null && result["success"] == true) {
     // duplicate - protection from multiple, failing and not failing requests
     // TODO: Does this even work??
     next(action);
@@ -126,20 +132,18 @@ void _markNotSeenEntries(
   next(action);
 }
 
-void _downloadAttachment(
+Future<void> _downloadAttachment(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<GradeGroupSubmission> action) async {
   if (api.state.noInternet) return;
   next(action);
   final saveFile = File(
-    (await getApplicationDocumentsDirectory()).path +
-        "/" +
-        action.payload.originalName,
+    "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}",
   );
 
   final result = await _wrapper.dio.get(
-    _wrapper.baseAddress + "api/gradeGroup/gradeGroupSubmissionDownloadEntry",
+    "${_wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
     queryParameters: {
       "submissionId": action.payload.id,
       "parentId": action.payload.gradeGroupId,
@@ -156,20 +160,20 @@ void _downloadAttachment(
   }
 }
 
-void _openAttachment(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<GradeGroupSubmission> action) async {
+Future<void> _openAttachment(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<GradeGroupSubmission> action) async {
   next(action);
-  final saveFile = File((await getApplicationDocumentsDirectory()).path +
-      "/" +
-      action.payload.originalName);
-  final path = saveFile.path;
-  var escaped = "";
+  final saveFile = File(
+      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
+  var path = saveFile.path;
   if (Platform.isLinux || Platform.isMacOS) {
+    final buffer = StringBuffer();
     for (final char in path.characters) {
-      escaped += "\\$char";
+      buffer.write("\\$char");
     }
-  } else {
-    escaped = path;
+    path = buffer.toString();
   }
-  await OpenFile.open(escaped);
+  await OpenFile.open(path);
 }

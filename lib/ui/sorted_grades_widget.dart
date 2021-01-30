@@ -26,16 +26,16 @@ class SortedGradesWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         SwitchListTile.adaptive(
-          title: Text("Noten nach Art sortieren"),
+          title: const Text("Noten nach Art sortieren"),
           onChanged: sortByTypeCallback,
           value: vm.sortByType,
         ),
         SwitchListTile.adaptive(
-          title: Text("Gelöschte Noten anzeigen"),
+          title: const Text("Gelöschte Noten anzeigen"),
           onChanged: showCancelledCallback,
           value: vm.showCancelled,
         ),
-        Divider(
+        const Divider(
           height: 0,
         ),
         for (final s in vm.subjects)
@@ -54,8 +54,8 @@ class SortedGradesWidget extends StatelessWidget {
             (element) => element.toLowerCase() == s.name.toLowerCase(),
           ),
         ))
-          Padding(
-            padding: const EdgeInsets.only(top: 16),
+          const Padding(
+            padding: EdgeInsets.only(top: 16),
             child: ListTile(
               title: Text(
                   "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen"),
@@ -116,7 +116,15 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                 ),
               )
             : null,
-        trailing: widget.noInternet && entries == null ? SizedBox() : null,
+        trailing:
+            widget.noInternet && entries == null ? const SizedBox() : null,
+        onExpansionChanged: (expansion) {
+          closed = !expansion;
+          if (expansion) {
+            widget.viewSubjectDetail();
+          }
+        },
+        initiallyExpanded: !closed,
         children: entries != null
             ? widget.sortByType
                 ? Subject.sortByType(entries)
@@ -136,22 +144,13 @@ class _SubjectWidgetState extends State<SubjectWidget> {
                       (g) => g is GradeDetail
                           ? GradeWidget(grade: g)
                           : ObservationWidget(
-                              observation: g,
+                              observation: g as Observation,
                             ),
                     )
                     .toList()
-            : widget.noInternet
-                ? []
-                : [
-                    LinearProgressIndicator(),
-                  ],
-        onExpansionChanged: (expansion) {
-          closed = !expansion;
-          if (expansion) {
-            widget.viewSubjectDetail();
-          }
-        },
-        initiallyExpanded: !closed,
+            : [
+                if (!widget.noInternet) const LinearProgressIndicator(),
+              ],
       ),
     );
   }
@@ -240,7 +239,7 @@ class CompetenceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 32, bottom: 16, right: 8),
+      padding: const EdgeInsets.only(left: 32, bottom: 16, right: 8),
       child: Wrap(
         children: <Widget>[
           Text(
@@ -284,16 +283,16 @@ class GradeTypeWidget extends StatelessWidget {
           (g) => g is GradeDetail
               ? GradeWidget(grade: g)
               : ObservationWidget(
-                  observation: g,
+                  observation: g as Observation,
                 ),
         )
         .toList();
     return displayGrades.isEmpty
-        ? SizedBox()
+        ? const SizedBox()
         : ExpansionTile(
             title: Text(typeName),
-            children: displayGrades,
             initiallyExpanded: true,
+            children: displayGrades,
           );
   }
 }

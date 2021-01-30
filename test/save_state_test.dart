@@ -11,7 +11,7 @@ import 'package:dr/reducer/reducer.dart';
 import 'package:dr/serializers.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-final serverUrl = "null/v2/api/auth/login";
+const serverUrl = "null/v2/api/auth/login";
 
 class StorageHelper {
   StorageHelper() {
@@ -23,8 +23,7 @@ class StorageHelper {
   }
 
   Future<String> read(String user) async {
-    return await getFlutterSecureStorage()
-        .read(key: getStorageKey(user, serverUrl));
+    return getFlutterSecureStorage().read(key: getStorageKey(user, serverUrl));
   }
 
   Future<void> cleanup() async {
@@ -32,11 +31,11 @@ class StorageHelper {
   }
 }
 
-main() {
+void main() {
   final storageHelper = StorageHelper();
   storageHelper.cleanup();
   test('save state occurs after five seconds', () async {
-    final username = "test_username";
+    const username = "test_username";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState((b) => b.loginState
@@ -48,14 +47,14 @@ main() {
     // dispatch any action to trigger a state save
     store.actions.setUrl("abc");
     // saving the state is throttled by five seconds
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     expect(
       await storageHelper.exists(username),
       false,
     );
     // after over 5 seconds, the state should be saved
-    await Future.delayed(Duration(seconds: 6), () async {
+    await Future.delayed(const Duration(seconds: 6), () async {
       expect(
         await storageHelper.exists(username),
         true,
@@ -63,7 +62,7 @@ main() {
     });
   });
   test('save state occurs immediately', () async {
-    final username = "test_username2";
+    const username = "test_username2";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState((b) => b.loginState
@@ -76,7 +75,7 @@ main() {
     store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
@@ -87,7 +86,7 @@ main() {
         true);
   });
   test('state is not saved when it is disabled', () async {
-    final username = "test_username2";
+    const username = "test_username2";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState(
@@ -105,7 +104,7 @@ main() {
     store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
@@ -117,7 +116,7 @@ main() {
         true);
   });
   test('state is deleted on logout when it is disabled', () async {
-    final username = "test_username3";
+    const username = "test_username3";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState(
@@ -135,7 +134,7 @@ main() {
     store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
@@ -152,7 +151,7 @@ main() {
           ..forced = true,
       ),
     );
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(json.decode(await storageHelper.read(username)))
@@ -160,7 +159,7 @@ main() {
         true);
   });
   test('state is deleted/saved when the setting is switched', () async {
-    final username = "test_username4";
+    const username = "test_username4";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState(),
@@ -171,12 +170,12 @@ main() {
       ..fromStorage = false
       ..username = username));
 
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
@@ -188,7 +187,7 @@ main() {
         true);
 
     store.actions.settingsActions.saveNoData(true);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(json.decode(await storageHelper.read(username)))
@@ -196,7 +195,7 @@ main() {
         true);
 
     store.actions.settingsActions.saveNoData(false);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(json.decode(await storageHelper.read(username)))
@@ -204,7 +203,7 @@ main() {
         true);
 
     store.actions.settingsActions.saveNoData(true);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(json.decode(await storageHelper.read(username)))
@@ -212,7 +211,7 @@ main() {
         true);
 
     store.actions.settingsActions.saveNoData(false);
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(json.decode(await storageHelper.read(username)))

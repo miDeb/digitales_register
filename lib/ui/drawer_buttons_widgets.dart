@@ -7,8 +7,8 @@ class LogoutButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Logout"),
-      trailing: Icon(Icons.exit_to_app),
+      title: const Text("Logout"),
+      trailing: const Icon(Icons.exit_to_app),
       onTap: () {
         onLogout();
       },
@@ -26,8 +26,8 @@ class SettingsButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Einstellungen"),
-      trailing: Icon(Icons.settings),
+      title: const Text("Einstellungen"),
+      trailing: const Icon(Icons.settings),
       onTap: () {
         onShowSettings();
       },
@@ -45,8 +45,8 @@ class GradesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Noten"),
-      trailing: Icon(Icons.grade),
+      title: const Text("Noten"),
+      trailing: const Icon(Icons.grade),
       onTap: () {
         onShowGrades();
       },
@@ -64,8 +64,8 @@ class AbsencesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Absenzen"),
-      trailing: Icon(Icons.hotel),
+      title: const Text("Absenzen"),
+      trailing: const Icon(Icons.hotel),
       onTap: () {
         onShowAbsences();
       },
@@ -83,8 +83,8 @@ class CalendarButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Kalender"),
-      trailing: Icon(Icons.calendar_today),
+      title: const Text("Kalender"),
+      trailing: const Icon(Icons.calendar_today),
       onTap: () {
         onShowCalendar();
       },
@@ -103,8 +103,8 @@ class CertificateButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Zeugnis"),
-      trailing: Icon(Icons.list),
+      title: const Text("Zeugnis"),
+      trailing: const Icon(Icons.list),
       onTap: () {
         onShowCertificate();
       },
@@ -123,8 +123,8 @@ class MessagesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: Text("Mitteilungen"),
-      trailing: Icon(Icons.message),
+      title: const Text("Mitteilungen"),
+      trailing: const Icon(Icons.message),
       onTap: () {
         onShowMessages();
       },

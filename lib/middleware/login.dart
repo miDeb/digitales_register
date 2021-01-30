@@ -12,7 +12,7 @@ final _loginMiddleware =
       ..add(LoginActionsNames.addAccount, _addAccount)
       ..add(LoginActionsNames.selectAccount, _selectAccount);
 
-void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) async {
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
     await _secureStorage.write(
@@ -41,7 +41,7 @@ void _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoginPayload> action) async {
   next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
@@ -58,9 +58,9 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   String url = action.payload.url;
   if (Uri.parse(action.payload.url).scheme.isEmpty) {
     // add https:// if there is no uri scheme
-    url = "https://" + action.payload.url;
+    url = "https://${action.payload.url}";
   }
-  final defaultUrlPath = "v2/login";
+  const defaultUrlPath = "v2/login";
   if (url.endsWith(defaultUrlPath)) {
     // /v2/login is the default path the browser is redirected to when loading
     // the web app. Users might just copy-paste that url, so let's strip it.
@@ -127,8 +127,10 @@ void _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _changePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<ChangePassPayload> action) async {
+Future<void> _changePass(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<ChangePassPayload> action) async {
   next(action);
   final result = await _wrapper.changePass(
     action.payload.url,
@@ -176,8 +178,10 @@ void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   next(action);
 }
 
-void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<RequestPassResetPayload> action) async {
+Future<void> _requestPassReset(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<RequestPassResetPayload> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
   final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/resetPassword",
@@ -191,12 +195,14 @@ void _requestPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
   } else {
-    api.actions.loginActions.passResetSucceeded(result["message"]);
+    api.actions.loginActions.passResetSucceeded(result["message"] as String);
   }
 }
 
-void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<String> action) async {
+Future<void> _resetPass(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<String> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
   final result = (await dio.Dio().post(
     "${api.state.url}/api/auth/setNewPassword",
@@ -213,16 +219,18 @@ void _resetPass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
   } else {
-    api.actions.loginActions.passResetSucceeded(result["message"]);
+    api.actions.loginActions.passResetSucceeded(result["message"] as String);
   }
 }
 
-void _addAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _addAccount(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   next(action);
   // Move the current default user credentials into `otherAccounts`
   final login = json.decode(await _secureStorage.read(key: "login"));
-  final List otherAccounts = login["otherAccounts"] ?? [];
+  final otherAccounts = login["otherAccounts"] as List ?? [];
   if (login["user"] != null &&
       login["pass"] != null &&
       login["url"] != null &&
@@ -247,8 +255,10 @@ void _addAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.load();
 }
 
-void _selectAccount(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<int> action) async {
+Future<void> _selectAccount(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<int> action) async {
   next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
   final otherAccounts = login["otherAccounts"] as List;
@@ -304,14 +314,14 @@ void _showUserTypeNotSupported(String url) {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: Text(
+                    child: const Text(
                       "Zurück",
                     ),
                   ),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: () => launch(url),
-                    child: Text(
+                    child: const Text(
                       "Hier geht's zur Website",
                     ),
                   ),

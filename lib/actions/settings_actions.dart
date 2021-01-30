@@ -7,8 +7,8 @@ import '../data.dart';
 part 'settings_actions.g.dart';
 
 abstract class SettingsActions extends ReduxActions {
-  SettingsActions._();
   factory SettingsActions() => _$SettingsActions();
+  SettingsActions._();
 
   ActionDispatcher<bool> saveNoPass;
   ActionDispatcher<bool> offlineEnabled;

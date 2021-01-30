@@ -1,3 +1,4 @@
+import 'package:built_value/built_value.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
@@ -5,8 +6,6 @@ import 'package:flutter_built_redux/flutter_built_redux.dart';
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_page.dart';
-
-import 'package:built_value/built_value.dart';
 
 part 'grades_page_container.g.dart';
 
@@ -40,6 +39,11 @@ abstract class GradesPageViewModel
   bool get hasData;
   bool get noInternet;
 
+  factory GradesPageViewModel(
+          [void Function(GradesPageViewModelBuilder) updates]) =
+      _$GradesPageViewModel;
+  GradesPageViewModel._();
+
   factory GradesPageViewModel.from(AppState state) {
     return GradesPageViewModel((b) => b
       ..showSemester = state.gradesState.semester.toBuilder()
@@ -55,11 +59,6 @@ abstract class GradesPageViewModel
       ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage &&
           state.gradesState.semester.n != null);
   }
-
-  GradesPageViewModel._();
-  factory GradesPageViewModel(
-          [void Function(GradesPageViewModelBuilder) updates]) =
-      _$GradesPageViewModel;
 }
 
 String calculateAllSubjectsAverage(AppState state) {

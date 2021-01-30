@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -18,19 +19,17 @@ import 'main.dart';
 class DebugInterceptor extends Interceptor {
   @override
   Future onRequest(RequestOptions options) async {
-    print(
-        "Request, uri: ${options.uri},\ndata: ${options.data},\nheaders: ${options.headers}");
+    log("Request, uri: ${options.uri},\ndata: ${options.data},\nheaders: ${options.headers}");
     return super.onRequest(options);
   }
 
   @override
   Future onResponse(Response response) async {
-    print(
-        "Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
+    log("Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
     if (response.data.toString().length <= 100) {
-      print(response.data);
+      log(response.data.toString());
     } else {
-      print(response.data.toString().substring(0, 100));
+      log(response.data.toString().substring(0, 100));
     }
     return response;
   }
@@ -44,7 +43,7 @@ typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 class Wrapper {
   final cookieJar = DefaultCookieJar();
   final dio = Dio();
-  String get loginAddress => baseAddress + "api/auth/login";
+  String get loginAddress => "${baseAddress}api/auth/login";
   String get baseAddress => "$url/v2/";
   String user, pass, _url;
 
@@ -91,24 +90,24 @@ class Wrapper {
       VoidCallback relogin,
       AddNetworkProtocolItem addProtocolItem}) async {
     if (logout != null) {
-      this.onLogout = logout;
+      onLogout = logout;
     } else {
-      assert(this.onLogout != null);
+      assert(onLogout != null);
     }
     if (configLoaded != null) {
-      this.onConfigLoaded = configLoaded;
+      onConfigLoaded = configLoaded;
     } else {
-      assert(this.onConfigLoaded != null);
+      assert(onConfigLoaded != null);
     }
     if (relogin != null) {
-      this.onRelogin = relogin;
+      onRelogin = relogin;
     } else {
-      assert(this.onRelogin != null);
+      assert(onRelogin != null);
     }
     if (addProtocolItem != null) {
-      this.onAddProtocolItem = addProtocolItem;
+      onAddProtocolItem = addProtocolItem;
     } else {
-      assert(this.onAddProtocolItem != null);
+      assert(onAddProtocolItem != null);
     }
     this.url = url;
     dynamic response;
@@ -125,7 +124,7 @@ class Wrapper {
           .data;
     } catch (e) {
       _loggedIn = false;
-      print(e);
+      log("Error while logging in", error: e);
       error = "Unknown Error:\n$e";
       return null;
     }
@@ -144,7 +143,7 @@ class Wrapper {
     } else {
       _loggedIn = false;
       error = "[${response["error"]}] ${response["message"]}";
-      switch (response["error"]) {
+      switch (response["error"] as String) {
         case "two_factor_needed":
           final tfaCode = await _request2FA();
           if (tfaCode != null) {
@@ -179,14 +178,14 @@ class Wrapper {
                 onPressed: () => Navigator.pop(
                   context,
                 ),
-                child: Text("Abbrechen"),
+                child: const Text("Abbrechen"),
               ),
               ElevatedButton(
                 onPressed: () => Navigator.pop(
                   context,
                   textInputController.value.text,
                 ),
-                child: Text("Bestätigen"),
+                child: const Text("Bestätigen"),
               ),
             ],
           ),
@@ -202,7 +201,7 @@ class Wrapper {
     _clearCookies();
     try {
       response = (await dio.post(
-        baseAddress + "api/auth/setNewPassword",
+        "${baseAddress}api/auth/setNewPassword",
         data: {
           "username": user,
           "oldPassword": oldPass,
@@ -212,7 +211,7 @@ class Wrapper {
           .data;
     } catch (e) {
       _loggedIn = false;
-      print(e);
+      log("Failed to change pass", error: e);
       error = "Unknown Error:\n$e";
       return null;
     }
@@ -221,7 +220,7 @@ class Wrapper {
     } else {
       _loggedIn = false;
       this.user = user;
-      this.pass = newPass;
+      pass = newPass;
       error = null;
     }
     return response;
@@ -229,7 +228,7 @@ class Wrapper {
 
   Future<void> _loadConfig() async {
     final source = (await dio.get(baseAddress)).data;
-    config = parseConfig(source);
+    config = parseConfig(source as String);
   }
 
   static Config parseConfig(String source) {
@@ -256,14 +255,15 @@ class Wrapper {
 
   static int _readCurrentSemester(String source) {
     if (source.contains("semesterWechsel=1")) return 2;
-    if (source.contains("semesterWechsel=2"))
+    if (source.contains("semesterWechsel=2")) {
       return 1;
-    else
+    } else {
       return null;
+    }
   }
 
   static int _readAutoLogoutSeconds(String source) {
-    var substringFromId = source.substring(
+    final substringFromId = source.substring(
         source.indexOf("auto_logout_seconds: ") +
             "auto_logout_seconds: ".length);
     return int.parse(
@@ -271,7 +271,7 @@ class Wrapper {
   }
 
   static int _readUserId(String source) {
-    var substringFromId = source
+    final substringFromId = source
         .substring(source.indexOf("currentUserId=") + "currentUserId=".length);
     return int.parse(
         substringFromId.substring(0, substringFromId.indexOf(";")).trim());
@@ -298,7 +298,7 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
-  var _mutex = Mutex();
+  final _mutex = Mutex();
   Future<dynamic> send(String url,
       {Map<String, dynamic> args = const {}, String method = "POST"}) async {
     assert(!url.startsWith("/"));
@@ -353,7 +353,7 @@ class Wrapper {
   }
 
   Future<void> _handleError(Exception e) async {
-    print(e);
+    log("Error while sending request", error: e);
     if (await noInternet) {
       error = "Keine Internetverbindung";
     } else {
@@ -361,9 +361,9 @@ class Wrapper {
     }
   }
 
-  void _updateLogout() async {
+  Future<void> _updateLogout() async {
     if (!_loggedIn) return;
-    if (now.add(Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
+    if (now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
       final result = await send("api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
@@ -376,11 +376,11 @@ class Wrapper {
         logout(hard: safeMode, logoutForcedByServer: true);
         return;
       } else {
-        _serverLogoutTime =
-            DateTime.fromMillisecondsSinceEpoch(result["newExpiration"] * 1000);
+        _serverLogoutTime = DateTime.fromMillisecondsSinceEpoch(
+            (result["newExpiration"] as int) * 1000);
       }
     }
-    Future.delayed(Duration(seconds: 5), _updateLogout);
+    Future.delayed(const Duration(seconds: 5), _updateLogout);
   }
 
   void interaction() {
@@ -389,7 +389,7 @@ class Wrapper {
 
   void logout({@required bool hard, bool logoutForcedByServer = false}) {
     if (!logoutForcedByServer && _url != null) {
-      dio.get(baseAddress + "logout");
+      dio.get("${baseAddress}logout");
     }
     if (hard) {
       if (logoutForcedByServer) {

@@ -13,6 +13,7 @@ typedef ExpansionChangeCallback = void Function(bool isExpanded);
 
 class CollapsibleSidebar extends StatefulWidget {
   const CollapsibleSidebar({
+    Key? key,
     required this.items,
     this.title,
     this.titleStyle,
@@ -42,7 +43,7 @@ class CollapsibleSidebar extends StatefulWidget {
     this.initiallyExpanded = false,
     required this.body,
     this.onExpansionChange,
-  });
+  }) : super(key: key);
 
   final Widget? title, toggleTitle;
   final TextStyle? titleStyle, textStyle, toggleTitleStyle;
@@ -56,8 +57,6 @@ class CollapsibleSidebar extends StatefulWidget {
       maxWidth,
       borderRadius,
       iconSize,
-      padding = 10,
-      itemPadding = 10,
       topPadding,
       screenPadding;
   final IconData toggleButtonIcon;
@@ -116,7 +115,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
     _delta = tempWidth - widget.minWidth;
     _delta1By4 = _delta * 0.25;
     _delta3by4 = _delta * 0.75;
-    _maxOffsetX = widget.padding * 2 + widget.iconSize;
+    _maxOffsetX = 20 + widget.iconSize;
     for (var i = 0; i < widget.items.length; i++) {
       if (!widget.items[i].isSelected) continue;
       _selectedItemIndex = i;
@@ -158,22 +157,23 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
 
   void _onHorizontalDragUpdate(DragUpdateDetails details) {
     _currWidth += details.primaryDelta!;
-    if (_currWidth > tempWidth)
+    if (_currWidth > tempWidth) {
       _currWidth = tempWidth;
-    else if (_currWidth < widget.minWidth)
+    } else if (_currWidth < widget.minWidth) {
       _currWidth = widget.minWidth;
-    else
+    } else {
       setState(() {});
+    }
   }
 
   void _onHorizontalDragEnd(DragEndDetails _) {
-    if (_currWidth == tempWidth)
+    if (_currWidth == tempWidth) {
       setState(() => _isCollapsed = false);
-    else if (_currWidth == widget.minWidth)
+    } else if (_currWidth == widget.minWidth) {
       setState(() => _isCollapsed = true);
-    else {
-      var threshold = _isCollapsed ? _delta1By4 : _delta3by4;
-      var endWidth = _currWidth - widget.minWidth > threshold
+    } else {
+      final threshold = _isCollapsed ? _delta1By4 : _delta3by4;
+      final endWidth = _currWidth - widget.minWidth > threshold
           ? tempWidth
           : widget.minWidth;
       _animateTo(endWidth);
@@ -192,7 +192,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         child: CollapsibleContainer(
           height: widget.height,
           width: _currWidth,
-          padding: widget.padding,
+          padding: 10,
           borderRadius: widget.borderRadius,
           color: widget.backgroundColor,
           child: Column(
@@ -207,13 +207,13 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
                   alignment: Alignment.bottomCenter,
                   child: ListView(
                     shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
                     children: _items,
-                    physics: BouncingScrollPhysics(),
                   ),
                 ),
               ),
               if (widget.showToggleButton && !widget.alwaysExpanded) ...[
-                Divider(
+                const Divider(
                   indent: 5,
                   endIndent: 5,
                 ),
@@ -229,12 +229,12 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   Widget get _avatar {
     return CollapsibleItemWidget(
       selected: false,
-      padding: widget.itemPadding,
+      padding: 10,
       offsetX: _offsetX,
-      leading: Container(
-        child: widget.avatar!,
+      leading: SizedBox(
         height: widget.iconSize,
         width: widget.iconSize,
+        child: widget.avatar!,
       ),
       title: widget.title,
       textStyle: _textStyle(widget.unselectedTextColor, widget.titleStyle),
@@ -243,7 +243,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
 
   List<Widget> get _items {
     return List.generate(widget.items.length, (index) {
-      var item = getItemAt(index)!;
+      final item = getItemAt(index)!;
       var iconColor = widget.unselectedIconColor;
       var textColor = widget.unselectedTextColor;
       if (item.isSelected) {
@@ -255,7 +255,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         hasDivider: item.hasDivider,
         selectedBoxColor: widget.selectedIconBox,
         selected: item.isSelected,
-        padding: widget.itemPadding,
+        padding: 10,
         offsetX: _offsetX,
         leading: Icon(
           item.icon,
@@ -278,7 +278,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
   Widget get _toggleButton {
     return CollapsibleItemWidget(
       selected: false,
-      padding: widget.itemPadding,
+      padding: 10,
       offsetX: _offsetX,
       leading: Transform.rotate(
         angle: _currAngle,
@@ -288,12 +288,12 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
           color: widget.unselectedIconColor,
         ),
       ),
-      title: widget.toggleTitle ?? SizedBox(),
+      title: widget.toggleTitle ?? const SizedBox(),
       textStyle:
           _textStyle(widget.unselectedTextColor, widget.toggleTitleStyle),
       onTap: () {
         _isCollapsed = !_isCollapsed;
-        var endWidth = _isCollapsed ? widget.minWidth : tempWidth;
+        final endWidth = _isCollapsed ? widget.minWidth : tempWidth;
         _animateTo(endWidth);
       },
     );

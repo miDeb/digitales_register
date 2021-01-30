@@ -17,7 +17,7 @@ secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
   if (isDesktop()) {
     return DesktopSecureStorage();
   } else {
-    return secure_storage.FlutterSecureStorage();
+    return const secure_storage.FlutterSecureStorage();
   }
 }
 
@@ -29,7 +29,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   static Future<Box<String>> getEncryptedBox() async {
     final applicationDocumentDirectory = await getApplicationSupportDirectory();
     final homeDirectory =
-        Directory(applicationDocumentDirectory.path + "/RegisterDB");
+        Directory("${applicationDocumentDirectory.path}/RegisterDB");
     if (!await homeDirectory.exists()) {
       await homeDirectory.create();
     }
@@ -45,7 +45,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
       key = base64UrlEncode(Hive.generateSecureKey());
       await biometricStorage.write(key);
     }
-    return await Hive.openBox('database',
+    return Hive.openBox('database',
         encryptionCipher: HiveAesCipher(base64Decode(key)));
   }
 
@@ -74,7 +74,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   @override
   Future<Map<String, String>> readAll(
       {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
-    return (await hiveBox).toMap();
+    return (await hiveBox).toMap() as Map<String, String>;
   }
 
   @override

@@ -5,11 +5,11 @@ import '../data.dart';
 part 'notifications_actions.g.dart';
 
 abstract class NotificationsActions extends ReduxActions {
-  NotificationsActions._();
   factory NotificationsActions() => _$NotificationsActions();
+  NotificationsActions._();
 
   ActionDispatcher<void> load;
-  ActionDispatcher<dynamic> loaded;
+  ActionDispatcher<List> loaded;
   ActionDispatcher<Notification> delete;
   ActionDispatcher<void> deleteAll;
 }

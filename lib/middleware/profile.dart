@@ -6,8 +6,10 @@ final _profileMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(ProfileActionsNames.sendNotificationEmails, _setSendNotificationEmails)
   ..add(ProfileActionsNames.changeEmail, _changeEmail);
 
-void _loadProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _loadProfile(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   next(action);
   if (api.state.noInternet) return;
   final result = await _wrapper.send("api/profile/get");
@@ -18,7 +20,7 @@ void _loadProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.profileActions.loaded(result);
 }
 
-void _setSendNotificationEmails(
+Future<void> _setSendNotificationEmails(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) async {
@@ -35,8 +37,10 @@ void _setSendNotificationEmails(
   }
 }
 
-void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<ChangeEmailPayload> action) async {
+Future<void> _changeEmail(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<ChangeEmailPayload> action) async {
   next(action);
   final result = await _wrapper.send(
     "api/profile/updateProfile",
@@ -50,7 +54,7 @@ void _changeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     return;
   }
   if (result["error"] == null) {
-    showSnackBar(result["message"]);
+    showSnackBar(result["message"] as String);
     navigatorKey.currentState.pop();
   } else {
     showSnackBar("[${result["error"]}]: ${result["message"]}");

@@ -24,15 +24,15 @@ class _HomeworkFilterState extends State<HomeworkFilter>
   Widget build(BuildContext context) {
     super.build(context);
     return ExpansionTile(
-      title: SizedBox(),
+      title: const SizedBox(),
       trailing: Padding(
         padding: const EdgeInsets.only(right: 8),
         child: Badge(
-          child: Icon(Icons.filter_list),
           badgeContent: Container(
             color: Colors.red,
           ),
           showBadge: widget.vm.currentBlacklist.isNotEmpty,
+          child: const Icon(Icons.filter_list),
         ),
       ),
       children: [
@@ -46,7 +46,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
                   ..add(HomeworkType.grade)
                   ..add(HomeworkType.gradeGroup)),
           ),
-          title: Text("Noten & Tests"),
+          title: const Text("Noten & Tests"),
           value: !widget.vm.currentBlacklist.contains(HomeworkType.grade),
         ),
         CheckboxListTile(
@@ -59,7 +59,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
                         ..add(HomeworkType.homework)
                         ..add(HomeworkType.lessonHomework)),
                 ),
-            title: Text("Hausaufgaben & Erinnerungen"),
+            title: const Text("Hausaufgaben & Erinnerungen"),
             value: !widget.vm.currentBlacklist.contains(HomeworkType.homework)),
         CheckboxListTile(
           onChanged: (v) => widget.callback(
@@ -69,7 +69,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
                 : (widget.vm.currentBlacklist.toBuilder()
                   ..add(HomeworkType.observation)),
           ),
-          title: Text("Beobachtungen"),
+          title: const Text("Beobachtungen"),
           value: !widget.vm.currentBlacklist.contains(HomeworkType.observation),
         ),
       ],

@@ -9,7 +9,7 @@ class QuillDeltaViewer extends StatelessWidget {
   /// The document delta to be rendered
   final Delta delta;
 
-  QuillDeltaViewer({Key key, this.delta}) : super(key: key);
+  const QuillDeltaViewer({Key key, this.delta}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return render(removeLastNewline(isolateLines(delta)), context);
@@ -18,13 +18,13 @@ class QuillDeltaViewer extends StatelessWidget {
   /// Splits all operations at newlines
   /// Newlines will be at the end of operations
   List<Operation> isolateLines(Delta delta) {
-    List<Operation> operations = [];
+    final List<Operation> operations = [];
     for (var i = 0; i < delta.length; i++) {
       final op = delta.elementAt(i);
       var string = op.data;
       final split = <String>[];
-      while (true) {
-        var index = string.indexOf("\n");
+      for (;;) {
+        final index = string.indexOf("\n");
         if (index == -1) {
           split.add(string);
           break;
@@ -70,7 +70,7 @@ class QuillDeltaViewer extends StatelessWidget {
   }
 
   Widget render(List<Operation> ops, BuildContext context) {
-    var reversed = ops.reversed.toList();
+    final reversed = ops.reversed.toList();
     final widgets = <Widget>[];
     var spans = <InlineSpan>[];
 
@@ -145,8 +145,8 @@ class QuillDeltaViewer extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("•"),
-          SizedBox(width: 2.5),
+          const Text("•"),
+          const SizedBox(width: 2.5),
           Expanded(child: text),
         ],
       );
@@ -163,11 +163,11 @@ class QuillDeltaViewer extends StatelessWidget {
     if (op.attributes != null) {
       bold = op.attributes["bold"] == true;
       italics = op.attributes["italics"] == true;
-      link = op.attributes["link"];
+      link = op.attributes["link"] as String;
       strike = op.attributes["strike"] == true;
       underline = op.attributes["underline"] == true;
     }
-    bool isLink = link != null;
+    final isLink = link != null;
 
     final text = op.data;
 

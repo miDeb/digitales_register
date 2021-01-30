@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Sidebar ui',
       home: Scaffold(
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
 }
 
 class SidebarPage extends StatefulWidget {
+  const SidebarPage({Key? key}) : super(key: key);
   @override
   _SidebarPageState createState() => _SidebarPageState();
 }
@@ -27,7 +29,7 @@ class SidebarPage extends StatefulWidget {
 class _SidebarPageState extends State<SidebarPage> {
   late List<CollapsibleItem> _items;
   late String _headline;
-  Widget _avatarImg =
+  final Widget _avatarImg =
       Image.network('https://www.w3schools.com/howto/img_avatar.png');
 
   @override
@@ -100,21 +102,22 @@ class _SidebarPageState extends State<SidebarPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return SafeArea(
       child: CollapsibleSidebar(
         items: _items,
         avatar: _avatarImg,
-        title: Text('John Smith'),
+        title: const Text('John Smith'),
         body: _body(size, context),
         backgroundColor: Colors.black,
         selectedTextColor: Colors.limeAccent,
-        textStyle: TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
-        titleStyle: TextStyle(
+        textStyle: const TextStyle(fontSize: 15, fontStyle: FontStyle.italic),
+        titleStyle: const TextStyle(
             fontSize: 20,
             fontStyle: FontStyle.italic,
             fontWeight: FontWeight.bold),
-        toggleTitleStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        toggleTitleStyle:
+            const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       ),
     );
   }

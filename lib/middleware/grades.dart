@@ -21,8 +21,10 @@ void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.gradesActions.load(action.payload);
 }
 
-void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Semester> action) async {
+Future<void> _loadGrades(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<Semester> action) async {
   if (api.state.noInternet) return;
 
   next(action);
@@ -31,7 +33,7 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         ? [Semester.first, Semester.second]
         : [action.payload],
     (s) async {
-      var data = await _wrapper.send(
+      final data = await _wrapper.send(
         _subjects,
         args: {"studentId": api.state.config.userId},
       );
@@ -52,7 +54,7 @@ void _loadGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _loadGradesDetails(
+Future<void> _loadGradesDetails(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<LoadSubjectDetailsPayload> action) async {
@@ -77,7 +79,7 @@ void _loadGradesDetails(
         return;
       }
       if (data is String) {
-        data = json.decode(data);
+        data = json.decode(data as String);
       }
       api.actions.gradesActions.detailsLoaded(
         SubjectDetailLoadedPayload(
@@ -103,7 +105,7 @@ void _loadGradesDetails(
   );
 }
 
-void _loadCancelledDescription(
+Future<void> _loadCancelledDescription(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<LoadGradeCancelledDescriptionPayload> action) async {
@@ -113,7 +115,7 @@ void _loadCancelledDescription(
   _doForSemester(
     [action.payload.semester],
     (s) async {
-      var data = await _wrapper.send(
+      final data = await _wrapper.send(
         _grade,
         args: {
           "gradeId": action.payload.grade.id,
@@ -137,7 +139,7 @@ void _loadCancelledDescription(
 
 void _doForSemester(
   List<Semester> semester,
-  Future<void> f(Semester s),
+  Future<void> Function(Semester s) f,
 ) {
   final currentSemester = _gradesLock.current;
   if (semester.contains(currentSemester)) {
@@ -159,7 +161,9 @@ class SemesterLock {
   SemesterLock(this.semesterChangeCallback);
   final _mutex = Mutex();
   Map<Semester, List<AsyncVoidCallback>> waitlist = {};
-  void synchronized(Semester semester, Future<void> f()) async {
+
+  Future<void> synchronized(
+      Semester semester, Future<void> Function() f) async {
     await _mutex.acquire();
     bool mutexAquired = true;
     if (usersOfCurrent == 0 || semester == current) {

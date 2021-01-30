@@ -1,0 +1,6 @@
+include: package:lint/analysis_options.yaml
+analyzer:
+  exclude:
+    - "**.g.dart"
+  errors:
+    sort_pub_dependencies: ignore

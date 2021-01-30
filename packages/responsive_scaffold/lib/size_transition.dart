@@ -1,9 +1,9 @@
 // Like the SizeTransition widget from the flutter framework, except that it
 // does not build its child if it is invisible.
 
-import 'package:flutter/material.dart';
-
 import 'dart:math' as math;
+
+import 'package:flutter/material.dart';
 
 /// Animates its own size and clips and aligns its child.
 ///
@@ -119,10 +119,11 @@ class SizeTransition extends AnimatedWidget {
   @override
   Widget build(BuildContext context) {
     final AlignmentDirectional alignment;
-    if (axis == Axis.vertical)
+    if (axis == Axis.vertical) {
       alignment = AlignmentDirectional(-1.0, axisAlignment);
-    else
+    } else {
       alignment = AlignmentDirectional(axisAlignment, -1.0);
+    }
     return ClipRect(
       child: Align(
         alignment: alignment,

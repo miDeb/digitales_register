@@ -121,7 +121,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ResponsiveAppBar(
-        title: Text("Kalender"),
+        title: const Text("Kalender"),
         actions: <Widget>[
           if (toMonday(now) != widget.vm.currentMonday)
             TextButton(
@@ -129,14 +129,14 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                 primary: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
-              child: Text(
-                "Aktuelle Woche",
-              ),
               onPressed: () {
                 final date = toMonday(now);
                 _controller.animateToPage(pageOf(date),
                     curve: _animatePageCurve, duration: _animatePageDuration);
               },
+              child: const Text(
+                "Aktuelle Woche",
+              ),
             ),
         ],
       ),
@@ -151,13 +151,13 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                   child: FadeTransition(
                     opacity: _chevronOpacityAnimation,
                     child: TextButton(
-                      child: Icon(Icons.chevron_left),
                       onPressed: () {
                         _controller.previousPage(
                           curve: _animatePageCurve,
                           duration: _animatePageDuration,
                         );
                       },
+                      child: const Icon(Icons.chevron_left),
                     ),
                   ),
                 ),
@@ -194,27 +194,27 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                             "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
                           )
                         : widget.vm.noInternet
-                            ? Text("Wähle ein Datum")
-                            : CircularProgressIndicator(),
+                            ? const Text("Wähle ein Datum")
+                            : const CircularProgressIndicator(),
                   ),
                 ),
                 Expanded(
                   child: FadeTransition(
                     opacity: _chevronOpacityAnimation,
                     child: TextButton(
-                      child: Icon(Icons.chevron_right),
                       onPressed: () {
                         _controller.nextPage(
                             curve: _animatePageCurve,
                             duration: _animatePageDuration);
                       },
+                      child: const Icon(Icons.chevron_right),
                     ),
                   ),
                 ),
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Expanded(
@@ -260,15 +260,15 @@ class EditNickBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(
-      duration: Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 250),
       firstChild: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
           Container(
             decoration: BoxDecoration(
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   offset: Offset(0, -1.5),
@@ -284,24 +284,23 @@ class EditNickBar extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextButton(
+                        onPressed: onShowEditNicks,
                         child: Row(
-                          children: <Widget>[
+                          children: const [
                             Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8),
+                              padding: EdgeInsets.symmetric(horizontal: 8),
                               child: Text("Kürzel bearbeiten"),
                             ),
-                            const Spacer(),
+                            Spacer(),
                           ],
                         ),
-                        onPressed: onShowEditNicks,
                       ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.close),
+                    icon: const Icon(Icons.close),
                     onPressed: onClose,
                   ),
                 ],

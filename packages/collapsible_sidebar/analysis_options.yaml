@@ -1,0 +1,4 @@
+include: package:lint/analysis_options_package.yaml
+analyzer:
+  errors:
+    sort_pub_dependencies: ignore

@@ -11,7 +11,7 @@ import '../app_state.dart';
 import '../data.dart';
 import 'no_internet.dart';
 
-typedef void MessageCallback(Message message);
+typedef MessageCallback = void Function(Message message);
 
 class MessagesPage extends StatelessWidget {
   final MessagesState state;
@@ -31,19 +31,19 @@ class MessagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveAppBar(
+      appBar: const ResponsiveAppBar(
         title: Text("Mitteilungen"),
       ),
       body: state == null
           ? noInternet
-              ? NoInternet()
-              : Center(child: CircularProgressIndicator())
+              ? const NoInternet()
+              : const Center(child: CircularProgressIndicator())
           : Stack(
               children: <Widget>[
                 if (state.showMessage != null &&
                     !state.messages.any((m) => m.id == state.showMessage))
-                  LinearProgressIndicator()
-                else if (state.messages.length == 0)
+                  const LinearProgressIndicator()
+                else if (state.messages.isEmpty)
                   Center(
                     child: Text(
                       "Noch keine Mitteilungen",
@@ -125,7 +125,7 @@ class _MessageWidgetState extends State<MessageWidget> {
             Badge(
               shape: BadgeShape.square,
               borderRadius: BorderRadius.circular(20),
-              badgeContent: Text("neu"),
+              badgeContent: const Text("neu"),
             )
         ],
       ),
@@ -142,7 +142,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: "Gesendet: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -155,7 +155,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: "Von: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -166,7 +166,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(
+                    const TextSpan(
                       text: "An: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -174,11 +174,11 @@ class _MessageWidgetState extends State<MessageWidget> {
                   ],
                 ),
               ),
-              Divider(),
+              const Divider(),
               renderMessage(widget.message.text, context),
               if (widget.message.fileName != null) ...[
-                Divider(),
-                Text(
+                const Divider(),
+                const Text(
                   "Anhang:",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
@@ -201,5 +201,6 @@ class _MessageWidgetState extends State<MessageWidget> {
 }
 
 Widget renderMessage(String msg, BuildContext context) {
-  return QuillDeltaViewer(delta: Delta.fromJson(jsonDecode(msg)["ops"]));
+  return QuillDeltaViewer(
+      delta: Delta.fromJson(jsonDecode(msg)["ops"] as List));
 }

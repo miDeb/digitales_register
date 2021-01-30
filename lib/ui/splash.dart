@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
         IgnorePointer(
           child: AnimatedOpacity(
             opacity: splash ? 1 : 0,
-            duration: Duration(milliseconds: 250),
+            duration: const Duration(milliseconds: 250),
             child: _SplashWidget(),
           ),
         ),
@@ -30,9 +30,9 @@ class _SplashWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Container(
-          child: Image.asset("assets/transparent.png"),
+        child: SizedBox(
           width: 200,
+          child: Image.asset("assets/transparent.png"),
         ),
       ),
     );

@@ -11,5 +11,5 @@ final certificateReducerBuilder = NestedReducerBuilder<AppState,
 
 void _loaded(CertificateState state, Action<String> action,
     CertificateStateBuilder builder) {
-  builder..html = action.payload;
+  builder.html = action.payload;
 }

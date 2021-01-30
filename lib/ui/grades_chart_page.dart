@@ -8,12 +8,12 @@ class GradesChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Notendiagramm"),
+        title: const Text("Notendiagramm"),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Expanded(
+          const Expanded(
             child: GradesChartContainer(
               isFullscreen: true,
             ),

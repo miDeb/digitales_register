@@ -10,7 +10,7 @@ class ChartLegend extends StatelessWidget {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return ExpansionTile(
-      title: Text("Legende"),
+      title: const Text("Legende"),
       children: <Widget>[
         // supports the case when there are not enough subjects to fill the available vertical space.
         // this is, however, quite unlikely.

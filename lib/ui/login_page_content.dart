@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -22,7 +24,7 @@ class LoginPageContent extends StatefulWidget {
   final VoidCallback onRequestPassReset;
   final SelectAccountCallback onSelectAccount;
 
-  LoginPageContent({
+  const LoginPageContent({
     Key key,
     @required this.vm,
     this.onLogin,
@@ -47,7 +49,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
         TextEditingValue(
           text: ".digitalesregister.it",
           selection: TextSelection.fromPosition(
-            TextPosition(offset: 0),
+            const TextPosition(offset: 0),
           ),
         ),
       );
@@ -102,7 +104,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   if (!widget.vm.changePass) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TypeAheadField(
+                      child: TypeAheadField<String>(
                         textFieldConfiguration: TextFieldConfiguration(
                           focusNode: _schoolFocusNode,
                           autofocus: _schoolController.text.isEmpty,
@@ -139,7 +141,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               _urlController.text = ".digitalesregister.it";
                               _urlController.selection =
                                   TextSelection.fromPosition(
-                                TextPosition(offset: 0),
+                                const TextPosition(offset: 0),
                               );
                             } else {
                               _urlController.text = nonCustomServer.item2;
@@ -170,7 +172,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           return candidates;
                         },
                         noItemsFoundBuilder: (context) {
-                          return ListTile(
+                          return const ListTile(
                             title: Text(
                               "Bitte gib den Namen der Schule ein",
                               style: TextStyle(color: Colors.grey),
@@ -182,7 +184,6 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     Align(
                       alignment: Alignment.centerLeft,
                       child: TextButton(
-                        child: Text("Feedback?"),
                         style: TextButton.styleFrom(
                           primary: Colors.grey,
                           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -192,16 +193,17 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           try {
                             info = await PackageInfo.fromPlatform();
                           } catch (e) {
-                            print(
-                                "failed to get app version for feedback (login)");
+                            log("failed to get app version for feedback (login)");
                           }
                           launch(
+                            // ignore: prefer_interpolation_to_compose_strings
                             "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
                                 (info?.version != null
                                     ? "&entry.1581750442=${Uri.encodeQueryComponent(info.version)}"
                                     : ""),
                           );
                         },
+                        child: const Text("Feedback?"),
                       ),
                     ),
                   ],
@@ -213,20 +215,21 @@ class _LoginPageContentState extends State<LoginPageContent> {
                         children: [
                           if (!widget.vm.changePass) ...[
                             TextField(
-                              decoration: InputDecoration(labelText: 'Adresse'),
+                              decoration:
+                                  const InputDecoration(labelText: 'Adresse'),
                               controller: _urlController,
                               enabled: !widget.vm.loading,
                               keyboardType: TextInputType.url,
                             ),
-                            Divider(),
+                            const Divider(),
                           ],
                           TextField(
                             // Remove this check when (if?) https://github.com/flutter/flutter/issues/67136 is resolved
                             autofillHints: widget.vm.loading
                                 ? null
                                 : [AutofillHints.username],
-                            decoration:
-                                InputDecoration(labelText: 'Benutzername'),
+                            decoration: const InputDecoration(
+                                labelText: 'Benutzername'),
                             controller: _usernameController,
                             enabled: !widget.vm.loading,
                           ),
@@ -245,23 +248,23 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: TextButton(
-                              child: Text(
-                                "Passwort vergessen",
-                              ),
                               style: TextButton.styleFrom(
                                 primary: Colors.grey,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ),
                               onPressed: widget.onRequestPassReset,
+                              child: const Text(
+                                "Passwort vergessen",
+                              ),
                             ),
                           ),
                           if (widget.vm.changePass) ...[
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             if (widget.vm.mustChangePass)
-                              ListTile(
+                              const ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 title: Text(
                                   "Du musst dein Passwort ändern:",
@@ -276,7 +279,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(8),
-                              child: Text(
+                              child: const Text(
                                 "Das neue Passwort muss:\n"
                                 "- mindestens 10 Zeichen lang sein\n"
                                 "- mindestens einen Großbuchstaben enthalten\n"
@@ -290,8 +293,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               autofillHints: widget.vm.loading
                                   ? null
                                   : [AutofillHints.newPassword],
-                              decoration:
-                                  InputDecoration(labelText: 'Neues Passwort'),
+                              decoration: const InputDecoration(
+                                  labelText: 'Neues Passwort'),
                               controller: _newPassword1Controller,
                               obscureText: true,
                               enabled: !widget.vm.loading,
@@ -325,7 +328,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               },
                             ),
                           ],
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           ElevatedButton(
                             onPressed: widget.vm.loading || !newPasswordsMatch
                                 ? null
@@ -354,15 +357,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   : 'Login',
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                         ],
                       ),
                     ),
                   ),
                   SwitchListTile.adaptive(
-                    title: Text("Angemeldet bleiben"),
-                    subtitle:
-                        Text("Deine Zugangsdaten werden lokal gespeichert"),
+                    title: const Text("Angemeldet bleiben"),
+                    subtitle: const Text(
+                        "Deine Zugangsdaten werden lokal gespeichert"),
                     value: !safeMode,
                     onChanged: widget.vm.loading
                         ? null
@@ -374,10 +377,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   ),
                   if (!widget.vm.changePass &&
                       widget.vm.otherAccounts.isNotEmpty) ...[
-                    Divider(
+                    const Divider(
                       height: 16,
                     ),
-                    ListTile(
+                    const ListTile(
                       title: Text("Andere Accounts"),
                     ),
                     Column(
@@ -403,12 +406,12 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 .bodyText2
                                 .copyWith(color: Colors.red),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
                   ),
                 ],
               ),
             ),
-            if (widget.vm.loading) LinearProgressIndicator(),
+            if (widget.vm.loading) const LinearProgressIndicator(),
           ],
         ),
       ),

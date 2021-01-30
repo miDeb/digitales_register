@@ -3,8 +3,8 @@ import 'package:dr/ui/grades_chart_legend_entry.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
-import '../app_state.dart';
 import '../actions/app_actions.dart';
+import '../app_state.dart';
 
 part 'chart_legend_entry_container.g.dart';
 
@@ -43,6 +43,11 @@ abstract class ChartLegendEntryVM
   String get name;
   SubjectGraphConfig get config;
 
+  factory ChartLegendEntryVM(
+          [void Function(ChartLegendEntryVMBuilder) updates]) =
+      _$ChartLegendEntryVM;
+  ChartLegendEntryVM._();
+
   factory ChartLegendEntryVM.from(AppState state, int id) {
     return ChartLegendEntryVM(
       (b) => b
@@ -50,9 +55,4 @@ abstract class ChartLegendEntryVM
         ..config = state.settingsState.graphConfigs[id].toBuilder(),
     );
   }
-
-  ChartLegendEntryVM._();
-  factory ChartLegendEntryVM(
-          [void Function(ChartLegendEntryVMBuilder) updates]) =
-      _$ChartLegendEntryVM;
 }

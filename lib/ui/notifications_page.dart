@@ -24,27 +24,28 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Benachrichtigungen"),
+        title: const Text("Benachrichtigungen"),
       ),
-      body: notifications.length != 0
+      body: notifications.isNotEmpty
           ? ListView.builder(
               itemCount: notifications.length + 1,
               itemBuilder: (_, n) {
-                if (n == 0)
+                if (n == 0) {
                   return Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
+                      onPressed: noInternet ? null : deleteAllNotifications,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
+                        children: const [
                           Text("Alle gelesen"),
                           SizedBox(width: 8),
                           Icon(Icons.done_all),
                         ],
                       ),
-                      onPressed: noInternet ? null : deleteAllNotifications,
                     ),
                   );
+                }
                 return NotificationWidget(
                   notification: notifications[n - 1],
                   onDelete: deleteNotification,
@@ -81,7 +82,7 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey, width: 0),
+        side: const BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
@@ -123,7 +124,7 @@ class NotificationWidget extends StatelessWidget {
             ),
             if (notification.type != "message")
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.done,
                 ),
                 tooltip: "Gelesen",
@@ -131,7 +132,7 @@ class NotificationWidget extends StatelessWidget {
               )
             else
               IconButton(
-                icon: Icon(
+                icon: const Icon(
                   Icons.exit_to_app,
                 ),
                 tooltip: "Zu Mitteilungen wechseln",

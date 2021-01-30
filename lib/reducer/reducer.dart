@@ -32,11 +32,11 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..combineNested(messagesReducerBuilder);
 
 void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
-  builder..noInternet = action.payload;
+  builder.noInternet = action.payload;
 }
 
 void _config(AppState state, Action<Config> action, AppStateBuilder builder) {
-  builder..config.replace(action.payload);
+  builder.config.replace(action.payload);
 }
 
 void _mountState(

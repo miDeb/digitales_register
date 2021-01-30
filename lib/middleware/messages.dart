@@ -7,25 +7,29 @@ final _messagesMiddleware =
       ..add(MessagesActionsNames.downloadFile, _downloadFile)
       ..add(MessagesActionsNames.openFile, _openFile);
 
-void _loadMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _loadMessages(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   if (api.state.noInternet) return;
   next(action);
   final response = await _wrapper.send("api/message/getMyMessages");
   if (response != null) {
-    api.actions.messagesActions.loaded(response);
+    api.actions.messagesActions.loaded(response as List);
   } else {
     api.actions.refreshNoInternet();
   }
 }
 
-void _downloadFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Message> action) async {
+Future<void> _downloadFile(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<Message> action) async {
   if (api.state.noInternet) return;
   next(action);
 }
 
-void _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Message> action) async {
   next(action);
   final saveFile = File(
@@ -34,8 +38,10 @@ void _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   await OpenFile.open(saveFile.path);
 }
 
-void _markAsRead(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<int> action) async {
+Future<void> _markAsRead(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<int> action) async {
   next(action);
   final result = await _wrapper.send(
     "api/message/markAsRead",

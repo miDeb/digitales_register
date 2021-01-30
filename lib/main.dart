@@ -39,9 +39,10 @@ void main() {
   );
   runApp(
     ReduxProvider(
+      store: store,
       child: Listener(
+        onPointerDown: (_) => store.actions.loginActions.updateLogout(),
         child: DynamicTheme(
-          defaultBrightness: Brightness.light,
           data: (brightness, overridePlatform) {
             TargetPlatform platform;
             if (overridePlatform && Platform.isAndroid) {
@@ -60,19 +61,19 @@ void main() {
                   );
           },
           themedWidgetBuilder: (context, theme) => MaterialApp(
-            localizationsDelegates: [
+            localizationsDelegates: const [
               GlobalCupertinoLocalizations.delegate,
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
             ],
-            supportedLocales: [
-              const Locale("de"),
+            supportedLocales: const [
+              Locale("de"),
             ],
             navigatorKey: navigatorKey,
             scaffoldMessengerKey: scaffoldMessengerKey,
             initialRoute: "/",
             onGenerateRoute: (RouteSettings settings) {
-              List<String> pathElements = settings.name.split("/");
+              final List<String> pathElements = settings.name.split("/");
               if (pathElements[0] != "") return null;
               switch (pathElements[1]) {
                 case "":
@@ -122,34 +123,30 @@ void main() {
             debugShowCheckedModeBanner: false,
           ),
         ),
-        onPointerDown: (_) => store.actions.loginActions.updateLogout(),
       ),
-      store: store,
     ),
   );
-  WidgetsBinding.instance
-    ..addPostFrameCallback(
-      (_) async {
-        Uri uri;
-        if (Platform.isAndroid) {
-          uri = await getInitialUri();
-          getUriLinksStream().listen((event) {
-            store.actions.start(event);
-          });
-        }
-        store.actions.start(uri);
-        WidgetsBinding.instance
-          ..addObserver(
-            LifecycleObserver(
-              () {
-                store.actions.restarted();
-              },
-              // this might not finish in time:
-              store.actions.saveState,
-            ),
-          );
-      },
-    );
+  WidgetsBinding.instance.addPostFrameCallback(
+    (_) async {
+      Uri uri;
+      if (Platform.isAndroid) {
+        uri = await getInitialUri();
+        getUriLinksStream().listen((event) {
+          store.actions.start(event);
+        });
+      }
+      store.actions.start(uri);
+      WidgetsBinding.instance.addObserver(
+        LifecycleObserver(
+          () {
+            store.actions.restarted();
+          },
+          // this might not finish in time:
+          store.actions.saveState,
+        ),
+      );
+    },
+  );
 }
 
 class LifecycleObserver with WidgetsBindingObserver {

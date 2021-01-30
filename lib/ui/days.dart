@@ -66,11 +66,11 @@ class _DaysWidgetState extends State<DaysWidget> {
   bool _showScrollUp = false;
   bool _afterFirstFrame = false;
 
-  List<int> _targets = [];
-  List<int> _focused = [];
-  Map<int, int> _dayStartIndices = {};
-  Map<int, Homework> _homeworkIndexes = {};
-  Map<int, Day> _dayIndexes = {};
+  final List<int> _targets = [];
+  final List<int> _focused = [];
+  final Map<int, int> _dayStartIndices = {};
+  final Map<int, Homework> _homeworkIndexes = {};
+  final Map<int, Day> _dayIndexes = {};
 
   void _updateShowScrollUp() {
     final newScrollUp = controller.offset > 250;
@@ -103,7 +103,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         _targets.remove(target);
         controller.highlight(
           target,
-          highlightDuration: Duration(milliseconds: 500),
+          highlightDuration: const Duration(milliseconds: 500),
           cancelExistHighlights: false,
         );
         if (_targets.isEmpty) setState(() {});
@@ -137,14 +137,14 @@ class _DaysWidgetState extends State<DaysWidget> {
     _focused.clear();
     var index = 0;
     var dayIndex = 0;
-    for (var day in widget.vm.days) {
+    for (final day in widget.vm.days) {
       _dayStartIndices[dayIndex] = index;
       if (day.deletedHomework.any((h) => h.isChanged)) {
         _targets.add(index);
         _dayIndexes[index] = day;
       }
       index++;
-      for (var hw in day.homework) {
+      for (final hw in day.homework) {
         if (hw.isNew || hw.isChanged) {
           _targets.add(index);
         }
@@ -177,7 +177,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget getItem(int n, bool noEntries, bool noInternet) {
+  Widget getItem(int n, {@required bool noEntries, @required bool noInternet}) {
     if (n == 0) {
       return Stack(
         children: [
@@ -192,7 +192,7 @@ class _DaysWidgetState extends State<DaysWidget> {
                 Expanded(
                   child: AbsorbPointer(child: Container()),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 60,
                 ),
               ],
@@ -202,10 +202,10 @@ class _DaysWidgetState extends State<DaysWidget> {
             padding: const EdgeInsets.only(top: 5),
             child: Center(
               child: ElevatedButton(
+                onPressed: widget.onSwitchFuture,
                 child: Text(
                   widget.vm.future ? "Vergangenheit" : "Zukunft",
                 ),
-                onPressed: widget.onSwitchFuture,
               ),
             ),
           ),
@@ -216,7 +216,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       if (noEntries) {
         if (noInternet) {
           return Column(
-            children: <Widget>[
+            children: const [
               SizedBox(
                 height: 120,
               ),
@@ -236,7 +236,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           );
         }
       } else {
-        return SizedBox(
+        return const SizedBox(
           height: 160,
         );
       }
@@ -260,22 +260,24 @@ class _DaysWidgetState extends State<DaysWidget> {
     final noInternet = widget.vm.noInternet;
     final noEntries = widget.vm.days.isEmpty;
     Widget body = ListView.builder(
-      physics: AlwaysScrollableScrollPhysics(),
+      physics: const AlwaysScrollableScrollPhysics(),
       controller: controller,
       itemCount: widget.vm.days.length + 2,
       itemBuilder: (context, n) {
-        return getItem(n, noEntries, noInternet);
+        return getItem(n, noEntries: noEntries, noInternet: noInternet);
       },
     );
     if (!noInternet) {
       body = RefreshIndicator(
-          child: body, onRefresh: () async => widget.refresh());
+        onRefresh: () async => widget.refresh(),
+        child: body,
+      );
     }
     if (widget.vm.loading) {
       body = Stack(
         children: [
           body,
-          LinearProgressIndicator(),
+          const LinearProgressIndicator(),
         ],
       );
     }
@@ -293,17 +295,17 @@ class _DaysWidgetState extends State<DaysWidget> {
               onPressed: () {
                 controller.animateTo(
                   0,
-                  duration: Duration(milliseconds: 500),
+                  duration: const Duration(milliseconds: 500),
                   curve: Curves.decelerate,
                 );
               },
+              mini: true,
               child: Icon(
                 Icons.arrow_drop_up,
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.white
                     : Colors.black,
               ),
-              mini: true,
             ),
           if (_targets.isNotEmpty || _focused.isNotEmpty)
             FloatingActionButton(
@@ -312,14 +314,14 @@ class _DaysWidgetState extends State<DaysWidget> {
               onPressed: () {
                 widget.markAllAsSeenCallback();
               },
-              child: Icon(Icons.close),
               mini: true,
+              child: const Icon(Icons.close),
             ),
           if (_targets.isNotEmpty && _afterFirstFrame)
             FloatingActionButton.extended(
               backgroundColor: Colors.red,
-              icon: Icon(Icons.arrow_drop_down),
-              label: Text("Neue Einträge"),
+              icon: const Icon(Icons.arrow_drop_down),
+              label: const Text("Neue Einträge"),
               onPressed: () async {
                 await controller.scrollToIndex(
                   _targets.first,
@@ -330,7 +332,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         ],
       ),
       homeAppBar: ResponsiveAppBar(
-        title: Text("Register"),
+        title: const Text("Register"),
         actions: <Widget>[
           if (widget.vm.noInternet)
             TextButton(
@@ -338,14 +340,14 @@ class _DaysWidgetState extends State<DaysWidget> {
                 primary: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
+              onPressed: widget.refreshNoInternet,
               child: Row(
-                children: <Widget>[
+                children: const [
                   Text("Keine Verbindung"),
                   SizedBox(width: 8),
                   Icon(Icons.refresh),
                 ],
               ),
-              onPressed: widget.refreshNoInternet,
             ),
           if (widget.vm.showNotifications) NotificationIconContainer(),
         ],
@@ -360,7 +362,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           tabletMode: tabletMode,
         );
       },
-      homeId: Pages.Homework,
+      homeId: Pages.homework,
       navKey: nestedNavKey,
     );
   }
@@ -395,36 +397,36 @@ class DayWidget extends StatelessWidget {
   }) : super(key: key);
 
   Future<String> showEnterReminderDialog(BuildContext context) async {
-    return await showDialog(
+    return showDialog(
       context: context,
       builder: (context) {
         String message = "";
         return StatefulBuilder(
           builder: (context, setState) => InfoDialog(
-            title: Text("Erinnerung"),
+            title: const Text("Erinnerung"),
             content: TextField(
               maxLines: null,
               onChanged: (msg) {
                 setState(() => message = msg);
               },
-              decoration: InputDecoration(hintText: 'zB. Hausaufgabe'),
+              decoration: const InputDecoration(hintText: 'zB. Hausaufgabe'),
             ),
             actions: <Widget>[
               TextButton(
-                child: Text("Abbrechen"),
                 onPressed: () {
                   Navigator.pop(context);
                 },
+                child: const Text("Abbrechen"),
               ),
               ElevatedButton(
-                child: Text(
-                  "Speichern",
-                ),
                 onPressed: message.isNullOrEmpty
                     ? null
                     : () {
                         Navigator.pop(context, message);
                       },
+                child: const Text(
+                  "Speichern",
+                ),
               ),
             ],
           ),
@@ -454,9 +456,12 @@ class DayWidget extends StatelessWidget {
               ),
               if (day.deletedHomework.isNotEmpty)
                 AutoScrollTag(
+                  controller: controller,
+                  index: index,
+                  key: ValueKey(index),
+                  highlightColor: Colors.grey.withOpacity(0.5),
                   child: IconButton(
                     icon: Badge(
-                      child: Icon(Icons.info_outline),
                       badgeContent: Icon(
                         Icons.delete,
                         size: 15,
@@ -471,13 +476,14 @@ class DayWidget extends StatelessWidget {
                       padding: EdgeInsets.zero,
                       position: BadgePosition.topStart(),
                       elevation: 0,
+                      child: const Icon(Icons.info_outline),
                     ),
                     onPressed: () {
                       showDialog(
                         context: context,
                         builder: (_context) {
                           return InfoDialog(
-                            title: Text("Gelöschte Einträge"),
+                            title: const Text("Gelöschte Einträge"),
                             content: ListView(
                               shrinkWrap: true,
                               children: day.deletedHomework
@@ -494,15 +500,11 @@ class DayWidget extends StatelessWidget {
                       );
                     },
                   ),
-                  controller: controller,
-                  index: index,
-                  key: ValueKey(index),
-                  highlightColor: Colors.grey.withOpacity(0.5),
                 ),
-              Spacer(),
+              const Spacer(),
               if (vm.showAddReminder)
                 IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: vm.noInternet
                       ? null
                       : () async {
@@ -529,7 +531,7 @@ class DayWidget extends StatelessWidget {
             onDownloadAttachment: onDownloadAttachment,
             onOpenAttachment: onOpenAttachment,
           ),
-        Divider(),
+        const Divider(),
       ],
     );
   }
@@ -565,30 +567,30 @@ class ItemWidget extends StatelessWidget {
 
   Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
     var ask = true;
-    final delete = await showDialog(
+    final delete = await showDialog<bool>(
       context: context,
       builder: (context) {
         return InfoDialog(
           content: StatefulBuilder(
             builder: (context, setState) => SwitchListTile.adaptive(
-              title: Text("Nie fragen"),
+              title: const Text("Nie fragen"),
               onChanged: (bool value) {
                 setState(() => ask = !value);
               },
               value: !ask,
             ),
           ),
-          title: Text("Erinnerung löschen?"),
+          title: const Text("Erinnerung löschen?"),
           actions: <Widget>[
             TextButton(
-              child: Text("Abbrechen"),
               onPressed: () => Navigator.pop(context),
+              child: const Text("Abbrechen"),
             ),
             ElevatedButton(
-              child: Text(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text(
                 "Löschen",
               ),
-              onPressed: () => Navigator.pop(context, true),
             )
           ],
         );
@@ -611,7 +613,7 @@ class ItemWidget extends StatelessWidget {
               Text(formatChanged(historyItem)),
               if (historyItem.previousVersion != null)
                 ExpansionTile(
-                  title: Text("Versionen"),
+                  title: const Text("Versionen"),
                   children: <Widget>[
                     ItemWidget(
                       item: historyItem,
@@ -629,14 +631,14 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Card(
-      margin: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       elevation: 0,
       shape: RoundedRectangleBorder(
         side: item.warning
-            ? BorderSide(color: Colors.red, width: 1.5)
+            ? const BorderSide(color: Colors.red, width: 1.5)
             : item.type == HomeworkType.grade || item.checked
-                ? BorderSide(color: Colors.green, width: 0)
-                : BorderSide(color: Colors.grey, width: 0),
+                ? const BorderSide(color: Colors.green, width: 0)
+                : const BorderSide(color: Colors.grey, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
@@ -682,7 +684,8 @@ class ItemWidget extends StatelessWidget {
                                               : item.deleted
                                                   ? "gelöscht"
                                                   : "geändert",
-                                      style: TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 )
@@ -698,7 +701,7 @@ class ItemWidget extends StatelessWidget {
                                   !isDeletedView &&
                                   item.deleteable
                               ? IconButton(
-                                  icon: Icon(Icons.close),
+                                  icon: const Icon(Icons.close),
                                   onPressed: noInternet
                                       ? null
                                       : () async {
@@ -718,7 +721,7 @@ class ItemWidget extends StatelessWidget {
                                             removeThis();
                                           }
                                         },
-                                  padding: EdgeInsets.all(0),
+                                  padding: const EdgeInsets.all(0),
                                 )
                               : null,
                         ),
@@ -736,18 +739,18 @@ class ItemWidget extends StatelessWidget {
                                     : item.previousVersion) !=
                                 null
                             ? Badge(
-                                child: Icon(
-                                  Icons.info_outline,
-                                ),
-                                badgeContent: Icon(Icons.edit, size: 15),
+                                badgeContent: const Icon(Icons.edit, size: 15),
                                 padding: EdgeInsets.zero,
                                 badgeColor: isDeletedView
                                     ? Theme.of(context).dialogBackgroundColor
                                     : Theme.of(context).scaffoldBackgroundColor,
                                 toAnimate: false,
                                 elevation: 0,
+                                child: const Icon(
+                                  Icons.info_outline,
+                                ),
                               )
-                            : Icon(
+                            : const Icon(
                                 Icons.info_outline,
                               ),
                         onPressed: () {
@@ -759,7 +762,8 @@ class ItemWidget extends StatelessWidget {
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Text(
                           item.gradeFormatted,
-                          style: TextStyle(color: Colors.green, fontSize: 30),
+                          style: const TextStyle(
+                              color: Colors.green, fontSize: 30),
                         ),
                       )
                     else if (!isHistory && !isDeletedView && item.checkable)
@@ -778,7 +782,7 @@ class ItemWidget extends StatelessWidget {
               ],
             ),
             if (isHistory || isDeletedView) ...[
-              Divider(height: 0),
+              const Divider(height: 0),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -788,7 +792,7 @@ class ItemWidget extends StatelessWidget {
               ),
             ],
             if (item.gradeGroupSubmissions?.isNotEmpty == true) ...[
-              Divider(),
+              const Divider(),
               Align(
                 alignment: Alignment.centerLeft,
                 child: Padding(
@@ -814,8 +818,8 @@ class ItemWidget extends StatelessWidget {
         index: index,
         key: ValueKey(index),
         controller: controller,
-        child: child,
         highlightColor: Colors.grey.withOpacity(0.5),
+        child: child,
       );
     }
     return Column(
@@ -879,20 +883,20 @@ class AttachmentWidget extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: Column(
         children: [
-          Divider(
+          const Divider(
             indent: 16,
             height: 0,
           ),
           ListTile(title: Text(ggs.originalName)),
-          if (ggs.downloading) LinearProgressIndicator(),
+          if (ggs.downloading) const LinearProgressIndicator(),
           if (!ggs.fileAvailable)
             TextButton(
-              child: Text("Herunterladen"),
               onPressed: noInternet
                   ? null
                   : () {
                       downloadCallback(ggs);
                     },
+              child: const Text("Herunterladen"),
             )
           else
             IntrinsicHeight(
@@ -900,24 +904,24 @@ class AttachmentWidget extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: TextButton(
-                      child: Text("Erneut herunterladen"),
                       onPressed: noInternet
                           ? null
                           : () {
                               downloadCallback(ggs);
                             },
+                      child: const Text("Erneut herunterladen"),
                     ),
                   ),
-                  VerticalDivider(
+                  const VerticalDivider(
                     indent: 8,
                     endIndent: 8,
                   ),
                   Expanded(
                     child: TextButton(
-                      child: Text("Öffnen"),
                       onPressed: () {
                         openCallback(ggs);
                       },
+                      child: const Text("Öffnen"),
                     ),
                   ),
                 ],

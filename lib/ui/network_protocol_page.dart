@@ -7,7 +7,7 @@ class NetworkProtocolPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Netzwerkprotokoll"),
+        title: const Text("Netzwerkprotokoll"),
       ),
       body: NetworkProtocolContainer(),
     );

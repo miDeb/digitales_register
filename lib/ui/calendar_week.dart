@@ -14,11 +14,11 @@ class CalendarWeek extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final max = vm.days.fold(0, (a, b) => a < b.lenght ? b.lenght : a);
+    final max = vm.days.fold<int>(0, (a, b) => a < b.lenght ? b.lenght : a);
     return vm.days.isEmpty
         ? vm.noInternet
-            ? NoInternet()
-            : Center(
+            ? const NoInternet()
+            : const Center(
                 child: CircularProgressIndicator(),
               )
         : Column(
@@ -59,50 +59,51 @@ class CalendarDayWidget extends StatelessWidget {
           DateFormat("dd.MM", "de").format(calendarDay.date),
           style: DefaultTextStyle.of(context).style.copyWith(fontSize: 12),
         ),
-        calendarDay.lenght != 0
-            ? Expanded(
-                flex: calendarDay.lenght,
-                child: Stack(
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.grey, width: 0),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Container(),
-                      color: Colors.transparent,
-                      elevation: 0,
-                    ),
-                    Card(
-                      color: Colors.transparent,
-                      elevation: 0,
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Column(
-                        children: List.generate(
-                          calendarDay.hours.length * 2 - 1,
-                          (n) => n % 2 == 0
-                              ? HourWidget(
-                                  hour: calendarDay.hours[n ~/ 2],
-                                  subjectNicks: subjectNicks,
-                                )
-                              : Divider(
-                                  height: 0,
-                                ),
-                        ),
-                      ),
-                    ),
-                  ],
+        if (calendarDay.lenght != 0)
+          Expanded(
+            flex: calendarDay.lenght,
+            child: Stack(
+              children: <Widget>[
+                Card(
+                  shape: RoundedRectangleBorder(
+                    side: const BorderSide(color: Colors.grey, width: 0),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  color: Colors.transparent,
+                  elevation: 0,
+                  child: const SizedBox(),
                 ),
-              )
-            : Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text("Frei"),
+                Card(
+                  color: Colors.transparent,
+                  elevation: 0,
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    children: List.generate(
+                      calendarDay.hours.length * 2 - 1,
+                      (n) => n % 2 == 0
+                          ? HourWidget(
+                              hour: calendarDay.hours[n ~/ 2],
+                              subjectNicks: subjectNicks,
+                            )
+                          : const Divider(
+                              height: 0,
+                            ),
+                    ),
+                  ),
                 ),
-              ),
+              ],
+            ),
+          )
+        else
+          const Expanded(
+            child: Padding(
+              padding: EdgeInsets.only(top: 8.0),
+              child: Text("Frei"),
+            ),
+          ),
         Expanded(
           flex: max - calendarDay.lenght,
           child: Container(),
@@ -115,7 +116,7 @@ class CalendarDayWidget extends StatelessWidget {
 class HourWidget extends StatelessWidget {
   final CalendarHour hour;
   final BuiltMap<String, String> subjectNicks;
-  HourWidget({Key key, this.hour, this.subjectNicks}) : super(key: key);
+  const HourWidget({Key key, this.hour, this.subjectNicks}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -132,8 +133,8 @@ class HourWidget extends StatelessWidget {
                     text: TextSpan(
                       children: [
                         TextSpan(
-                          text: homeworkExam.typeName + ": ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          text: "${homeworkExam.typeName}: ",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         TextSpan(text: homeworkExam.name),
                       ],
@@ -144,7 +145,7 @@ class HourWidget extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: "Räume: ",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -157,7 +158,7 @@ class HourWidget extends StatelessWidget {
                   RichText(
                     text: TextSpan(
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: "Lehrer: ",
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -175,7 +176,7 @@ class HourWidget extends StatelessWidget {
                 content: ListView.separated(
                   itemCount: items.length,
                   shrinkWrap: true,
-                  separatorBuilder: (_, __) => Divider(),
+                  separatorBuilder: (_, __) => const Divider(),
                   itemBuilder: (context, i) => items[i],
                 ),
               );
@@ -183,17 +184,24 @@ class HourWidget extends StatelessWidget {
           );
         },
         child: Container(
+          decoration: hour.warning
+              ? const BoxDecoration(
+                  border: Border(
+                    left: BorderSide(color: Colors.red, width: 5),
+                  ),
+                )
+              : null,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  (subjectNicks[hour.subject.toLowerCase()] ?? hour.subject),
+                  subjectNicks[hour.subject.toLowerCase()] ?? hour.subject,
                   maxLines: 1,
                   softWrap: false,
                 ),
                 if (hour.teachers.isNotEmpty)
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                 for (final teacher in hour.teachers)
@@ -206,7 +214,7 @@ class HourWidget extends StatelessWidget {
                         .copyWith(fontSize: 11),
                   ),
                 if (hour.rooms.isNotEmpty)
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                 for (final room in hour.rooms)
@@ -221,13 +229,6 @@ class HourWidget extends StatelessWidget {
               ],
             ),
           ),
-          decoration: hour.warning
-              ? BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.red, width: 5),
-                  ),
-                )
-              : null,
         ),
       ),
     );
@@ -235,8 +236,6 @@ class HourWidget extends StatelessWidget {
 
   String formatList(List<String> teachers) {
     if (teachers.length <= 2) return teachers.join(" und ");
-    return teachers.sublist(0, teachers.length - 1).join(", ") +
-        " und " +
-        teachers.last;
+    return "${teachers.sublist(0, teachers.length - 1).join(", ")} und ${teachers.last}";
   }
 }

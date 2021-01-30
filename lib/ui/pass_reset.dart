@@ -13,7 +13,7 @@ class PassReset extends StatefulWidget {
   _PassResetState createState() => _PassResetState();
 }
 
-typedef void ResetPass(String newPass);
+typedef ResetPass = void Function(String newPass);
 
 class _PassResetState extends State<PassReset> {
   final _newPass1Controller = TextEditingController(),
@@ -34,7 +34,7 @@ class _PassResetState extends State<PassReset> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text("Passwort zurücksetzen"),
+          title: const Text("Passwort zurücksetzen"),
         ),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -52,7 +52,7 @@ class _PassResetState extends State<PassReset> {
                       ),
                     ),
                     padding: const EdgeInsets.all(8),
-                    child: Text(
+                    child: const Text(
                       "Das neue Passwort muss:\n"
                       "- mindestens 10 Zeichen lang sein\n"
                       "- mindestens einen Großbuchstaben enthalten\n"
@@ -63,13 +63,14 @@ class _PassResetState extends State<PassReset> {
                     ),
                   ),
                   TextField(
-                    autofillHints: [AutofillHints.newPassword],
+                    autofillHints: const [AutofillHints.newPassword],
                     controller: _newPass1Controller,
-                    decoration: InputDecoration(labelText: 'Neues Passwort'),
+                    decoration:
+                        const InputDecoration(labelText: 'Neues Passwort'),
                     obscureText: true,
                   ),
                   TextField(
-                    autofillHints: [AutofillHints.newPassword],
+                    autofillHints: const [AutofillHints.newPassword],
                     controller: _newPass2Controller,
                     decoration: InputDecoration(
                       labelText: 'Neues Passwort wiederholen',
@@ -80,18 +81,18 @@ class _PassResetState extends State<PassReset> {
                     ),
                     obscureText: true,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 16,
                   ),
                   if (widget.message == null || widget.failure)
                     ElevatedButton(
-                      child: Text("Passwort zurücksetzen"),
                       onPressed: _newPass1Controller.text !=
                               _newPass2Controller.text
                           ? null
                           : () => widget.resetPass(_newPass1Controller.text),
+                      child: const Text("Passwort zurücksetzen"),
                     ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   if (widget.message != null)
                     Center(
                       child: Text(
@@ -102,8 +103,8 @@ class _PassResetState extends State<PassReset> {
                     ),
                   if (widget.message != null && !widget.failure)
                     ElevatedButton(
-                      child: Text("Ok"),
                       onPressed: widget.onClose,
+                      child: const Text("Ok"),
                     )
                 ],
               ),

@@ -11,7 +11,7 @@ class RequestPassReset extends StatefulWidget {
   _RequestPassResetState createState() => _RequestPassResetState();
 }
 
-typedef void ResetPass(String username, String email);
+typedef ResetPass = void Function(String username, String email);
 
 class _RequestPassResetState extends State<RequestPassReset> {
   final _usernameController = TextEditingController(),
@@ -20,7 +20,7 @@ class _RequestPassResetState extends State<RequestPassReset> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Passwort vergessen"),
+        title: const Text("Passwort vergessen"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -30,25 +30,25 @@ class _RequestPassResetState extends State<RequestPassReset> {
               shrinkWrap: true,
               children: <Widget>[
                 TextField(
-                  autofillHints: [AutofillHints.username],
+                  autofillHints: const [AutofillHints.username],
                   controller: _usernameController,
-                  decoration: InputDecoration(labelText: 'Benutzername'),
+                  decoration: const InputDecoration(labelText: 'Benutzername'),
                 ),
                 TextField(
-                  autofillHints: [AutofillHints.email],
+                  autofillHints: const [AutofillHints.email],
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
-                  decoration: InputDecoration(labelText: 'Email-Adresse'),
+                  decoration: const InputDecoration(labelText: 'Email-Adresse'),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
-                  child: Text("Anfrage zum Zurücksetzen senden"),
                   onPressed: () => widget.resetPass(
                     _usernameController.text,
                     _emailController.text,
                   ),
+                  child: const Text("Anfrage zum Zurücksetzen senden"),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 if (widget.message != null)
                   Center(
                     child: Text(

@@ -18,13 +18,13 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(MessagesActionsNames.markAsRead, _markAsRead);
 
 void _loaded(
-    MessagesState state, Action<Object> action, MessagesStateBuilder builder) {
+    MessagesState state, Action<List> action, MessagesStateBuilder builder) {
   return builder.replace(_parseMessages(action.payload, state));
 }
 
 void _showMessage(
     MessagesState state, Action<int> action, MessagesStateBuilder builder) {
-  builder..showMessage = action.payload;
+  builder.showMessage = action.payload;
 }
 
 void _downloadFile(
@@ -59,24 +59,24 @@ void _markAsRead(
           );
 }
 
-MessagesState _parseMessages(json, MessagesState state) {
+MessagesState _parseMessages(List json, MessagesState state) {
   final messages = json.map((m) {
     final message = MessageBuilder()
-      ..subject = m["subject"]
-      ..text = m["text"]
+      ..subject = m["subject"] as String
+      ..text = m["text"] as String
       ..timeSent = DateTime.parse(
-        m["timeSent"],
+        m["timeSent"] as String,
       )
       ..timeRead = m["timeRead"] != null
           ? DateTime.parse(
-              m["timeRead"],
+              m["timeRead"] as String,
             )
           : null
-      ..recipientString = m["recipientString"]
-      ..fromName = m["fromName"]
-      ..fileName = m["fileName"]
-      ..fileOriginalName = m["fileOriginalName"]
-      ..id = m["id"];
+      ..recipientString = m["recipientString"] as String
+      ..fromName = m["fromName"] as String
+      ..fileName = m["fileName"] as String
+      ..fileOriginalName = m["fileOriginalName"] as String
+      ..id = m["id"] as int;
     final oldMessage = state?.messages?.firstWhere(
       (m) => m.id == message.id,
       orElse: () => null,

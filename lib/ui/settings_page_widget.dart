@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
@@ -32,7 +33,7 @@ class SettingsPageWidget extends StatefulWidget {
   final VoidCallback onShowProfile;
   final SettingsViewModel vm;
 
-  SettingsPageWidget({
+  const SettingsPageWidget({
     Key key,
     @required this.onSetNoPassSaving,
     @required this.onSetNoDataSaving,
@@ -99,51 +100,51 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       });
     }
     return Scaffold(
-      appBar: ResponsiveAppBar(
+      appBar: const ResponsiveAppBar(
         title: Text("Einstellungen"),
       ),
       body: ListView(
         controller: controller,
         children: <Widget>[
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           ListTile(
             title: Text(
               "Profil",
               style: Theme.of(context).textTheme.headline5,
             ),
-            trailing: Icon(Icons.chevron_right),
+            trailing: const Icon(Icons.chevron_right),
             onTap: widget.onShowProfile,
           ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 0,
+            key: const ObjectKey(0),
             child: ListTile(
               title: Text(
                 "Anmeldung",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 0,
-            key: ObjectKey(0),
           ),
           SwitchListTile.adaptive(
-            title: Text("Angemeldet bleiben"),
-            subtitle: Text("Deine Zugangsdaten werden lokal gespeichert"),
+            title: const Text("Angemeldet bleiben"),
+            subtitle: const Text("Deine Zugangsdaten werden lokal gespeichert"),
             onChanged: (bool value) {
               widget.onSetNoPassSaving(!value);
             },
             value: !widget.vm.noPassSaving,
           ),
           SwitchListTile.adaptive(
-            title: Text("Daten lokal speichern"),
-            subtitle: Text('Sehen, wann etwas eingetragen wurde'),
+            title: const Text("Daten lokal speichern"),
+            subtitle: const Text('Sehen, wann etwas eingetragen wurde'),
             onChanged: (bool value) {
               widget.onSetNoDataSaving(!value);
             },
             value: !widget.vm.noDataSaving,
           ),
           SwitchListTile.adaptive(
-            title: Text("Offline-Login"),
+            title: const Text("Offline-Login"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
                     widget.onSetOfflineEnabled(value);
@@ -152,7 +153,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: widget.vm.offlineEnabled,
           ),
           SwitchListTile.adaptive(
-            title: Text("Daten beim Ausloggen löschen"),
+            title: const Text("Daten beim Ausloggen löschen"),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
                     widget.onSetDeleteDataOnLogout(value);
@@ -160,20 +161,20 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 : null,
             value: widget.vm.deleteDataOnLogout,
           ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 1,
+            key: const ObjectKey(1),
             child: ListTile(
               title: Text(
                 "Theme",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 1,
-            key: ObjectKey(1),
           ),
           SwitchListTile.adaptive(
-            title: Text("Dark Mode"),
+            title: const Text("Dark Mode"),
             onChanged: DynamicTheme.of(context).followDevice
                 ? null
                 : (bool value) {
@@ -184,7 +185,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: DynamicTheme.of(context).customBrightness == Brightness.dark,
           ),
           SwitchListTile.adaptive(
-            title: Text("Geräte-Theme folgen"),
+            title: const Text("Geräte-Theme folgen"),
             onChanged: (bool value) {
               setState(() {
                 widget.onSetFollowDeviceDarkMode(value);
@@ -192,71 +193,71 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
             value: DynamicTheme.of(context).followDevice,
           ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 2,
+            key: const ObjectKey(2),
             child: ListTile(
               title: Text(
                 "Merkheft",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 2,
-            key: ObjectKey(2),
           ),
           SwitchListTile.adaptive(
-            title: Text("Neue oder geänderte Einträge markieren"),
+            title: const Text("Neue oder geänderte Einträge markieren"),
             onChanged: (bool value) {
               widget.onSetDashboardMarkNewOrChangedEntries(value);
             },
             value: widget.vm.dashboardMarkNewOrChangedEntries,
           ),
           SwitchListTile.adaptive(
-            title: Text("Doppelte Einträge ignorieren"),
+            title: const Text("Doppelte Einträge ignorieren"),
             onChanged: (bool value) {
               widget.onSetDashboardDeduplicateEntries(value);
             },
             value: widget.vm.dashboardDeduplicateEntries,
           ),
           SwitchListTile.adaptive(
-            title: Text("Beim Löschen von Erinnerungen fragen"),
+            title: const Text("Beim Löschen von Erinnerungen fragen"),
             onChanged: (bool value) {
               widget.onSetAskWhenDelete(value);
             },
             value: widget.vm.askWhenDelete,
           ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 3,
+            key: const ObjectKey(3),
             child: ListTile(
               title: Text(
                 "Noten",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 3,
-            key: ObjectKey(3),
           ),
           SwitchListTile.adaptive(
-            title: Text("Noten in einem Diagramm darstellen"),
+            title: const Text("Noten in einem Diagramm darstellen"),
             onChanged: (bool value) {
               widget.onSetShowGradesDiagram(value);
             },
             value: widget.vm.showGradesDiagram,
           ),
           SwitchListTile.adaptive(
-            title: Text('Durchschnitt aller Fächer anzeigen'),
+            title: const Text('Durchschnitt aller Fächer anzeigen'),
             onChanged: (bool value) {
               widget.onSetShowAllSubjectsAverage(value);
             },
             value: widget.vm.showAllSubjectsAverage,
           ),
           ListTile(
-            title: Text("Fächer für den Notendurchchnitt ignorieren"),
+            title: const Text("Fächer für den Notendurchchnitt ignorieren"),
             trailing: IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () async {
-                final newSubject = await showDialog(
+                final newSubject = await showDialog<String>(
                   context: context,
                   builder: (context) => AddSubject(
                     availableSubjects: notYetIgnoredForAverageSubjects,
@@ -270,8 +271,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ),
           ),
           if (widget.vm.ignoreForGradesAverage.isEmpty)
-            Padding(
-              padding: const EdgeInsets.only(left: 16),
+            const Padding(
+              padding: EdgeInsets.only(left: 16),
               child: ListTile(
                   title: Text(
                 "Kein Fach wird ignoriert",
@@ -285,7 +286,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 child: ListTile(
                   title: Text(subject),
                   trailing: IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.close,
                     ),
                     onPressed: () {
@@ -296,28 +297,28 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   ),
                 ),
               ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 4,
+            key: const ObjectKey(4),
             child: ListTile(
               title: Text(
                 "Kalender",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 4,
-            key: ObjectKey(4),
           ),
           ExpansionTile(
             initiallyExpanded: widget.vm.showSubjectNicks,
-            title: Text("Fächerkürzel"),
+            title: const Text("Fächerkürzel"),
             children: List.generate(
               widget.vm.subjectNicks.length + 1,
               (i) {
-                if (i == 0)
+                if (i == 0) {
                   return ListTile(
                     trailing: IconButton(
-                      icon: Icon(Icons.add),
+                      icon: const Icon(Icons.add),
                       onPressed: () async {
                         final newValue = await showEditSubjectNick(
                           context,
@@ -335,6 +336,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                       },
                     ),
                   );
+                }
                 i -= 1;
                 final key = widget.vm.subjectNicks.entries.toList()[i].key;
                 final value = widget.vm.subjectNicks[key];
@@ -345,34 +347,35 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       IconButton(
-                        icon: Icon(Icons.delete),
+                        icon: const Icon(Icons.delete),
                         onPressed: () async {
                           final delete = await showDialog(
                               context: context,
                               builder: (context) {
                                 return InfoDialog(
-                                  title: Text("Kürzel entfernen?"),
+                                  title: const Text("Kürzel entfernen?"),
                                   actions: <Widget>[
                                     TextButton(
-                                      child: Text("Abbrechen"),
                                       onPressed: Navigator.of(context).pop,
+                                      child: const Text("Abbrechen"),
                                     ),
                                     ElevatedButton(
-                                      child: Text("Ok"),
                                       onPressed: () =>
                                           Navigator.of(context).pop(true),
+                                      child: const Text("Ok"),
                                     ),
                                   ],
                                 );
                               });
-                          if (delete == true)
+                          if (delete == true) {
                             widget.onSetSubjectNicks(
                               Map.of(widget.vm.subjectNicks)..remove(key),
                             );
+                          }
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         onPressed: () async {
                           final newValue = await showEditSubjectNick(
                             context,
@@ -397,38 +400,38 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ),
           ),
           SwitchListTile.adaptive(
-            title: Text("Hinweis zum Bearbeiten von Kürzeln"),
-            subtitle: Text(
+            title: const Text("Hinweis zum Bearbeiten von Kürzeln"),
+            subtitle: const Text(
                 "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
             onChanged: (bool value) {
               widget.onSetShowCalendarEditNicksBar(value);
             },
             value: widget.vm.showCalendarEditNicksBar,
           ),
-          Divider(),
+          const Divider(),
           AutoScrollTag(
+            controller: controller,
+            index: 5,
+            key: const ObjectKey(5),
             child: ListTile(
               title: Text(
                 "Erweitert",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
-            controller: controller,
-            index: 5,
-            key: ObjectKey(5),
           ),
           if (Platform.isAndroid)
             SwitchListTile.adaptive(
-              title: Text("iOS Mode"),
-              subtitle:
-                  Text("Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              title: const Text("iOS Mode"),
+              subtitle: const Text(
+                  "Imitiere das Aussehen einer iOS-App (ein bisschen)"),
               onChanged: (bool value) {
                 widget.onSetPlatformOverride(value);
               },
               value: DynamicTheme.of(context).platformOverride,
             ),
           ListTile(
-            title: Text("Netzwerkprotokoll"),
+            title: const Text("Netzwerkprotokoll"),
             onTap: () {
               Navigator.push(
                 context,
@@ -441,16 +444,17 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
-            title: Text("Feedback geben"),
-            trailing: Icon(Icons.open_in_new),
+            title: const Text("Feedback geben"),
+            trailing: const Icon(Icons.open_in_new),
             onTap: () async {
               PackageInfo info;
               try {
                 info = await PackageInfo.fromPlatform();
               } catch (e) {
-                print("failed to get app version for feedback (settings)");
+                log("failed to get app version for feedback (settings)");
               }
               launch(
+                // ignore: prefer_interpolation_to_compose_strings
                 "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
                     (info?.version != null
                         ? "&entry.1362624919=${Uri.encodeQueryComponent(info.version)}"
@@ -459,7 +463,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
-            title: Text(
+            title: const Text(
               "Unterstütze uns jetzt!",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -471,11 +475,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
             builder: (context, info) => AboutListTile(
-              child: Text("Über diese App"),
-              icon: Icon(Icons.info_outline),
-              applicationIcon: Container(
-                child: Image.asset("assets/transparent.png"),
+              icon: const Icon(Icons.info_outline),
+              applicationIcon: SizedBox(
                 width: 100,
+                child: Image.asset("assets/transparent.png"),
               ),
               applicationLegalese:
                   "Michael Debertol und Simon Wachtler 2019-2021",
@@ -483,10 +486,11 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               applicationVersion: info.hasData
                   ? (info.data as PackageInfo).version
                   : "Unbekannte Version",
-              aboutBoxChildren: <Widget>[
+              aboutBoxChildren: const [
                 Text(
                     "Ein Client für das Digitale Register.\nGroßes Dankeschön an das Vinzentinum für die freundliche Unterstützung."),
               ],
+              child: const Text("Über diese App"),
             ),
           ),
         ],
@@ -496,7 +500,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
 
   Future<MapEntry<String, String>> showEditSubjectNick(BuildContext context,
       String key, String value, List<String> suggestions) async {
-    return await showDialog(
+    return showDialog(
       context: context,
       builder: (context) => EditSubjectsNicks(
         subjectName: key,
@@ -544,12 +548,12 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: Text("Kürzel " + (forNewNick ? "hinzufügen" : "bearbeiten")),
+      title: Text("Kürzel ${forNewNick ? "hinzufügen" : "bearbeiten"}"),
       content: Row(
         children: [
           Column(
             mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
+            children: const [
               Text("Fach"),
               SizedBox(
                 height: 27,
@@ -557,14 +561,14 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
               Text("Kürzel"),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           Expanded(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TypeAheadField(
+                TypeAheadField<String>(
                   suggestionsCallback: (pattern) {
                     return widget.suggestions.where((suggestion) => suggestion
                         .toLowerCase()
@@ -606,13 +610,12 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text("Abbrechen"),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          child: Text("Fertig"),
           onPressed: subjectController.text != "" && nickController.text != ""
               ? () {
                   Navigator.of(context).pop(
@@ -623,6 +626,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                   );
                 }
               : null,
+          child: const Text("Fertig"),
         ),
       ],
     );
@@ -659,8 +663,8 @@ class _AddSubjectState extends State<AddSubject> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: Text("Fach hinzufügen"),
-      content: TypeAheadField(
+      title: const Text("Fach hinzufügen"),
+      content: TypeAheadField<String>(
         suggestionsCallback: (pattern) {
           return widget.availableSubjects.where((suggestion) =>
               suggestion.toLowerCase().contains(pattern.toLowerCase()));
@@ -679,18 +683,18 @@ class _AddSubjectState extends State<AddSubject> {
       ),
       actions: <Widget>[
         TextButton(
-          child: Text("Abbrechen"),
           onPressed: () {
             Navigator.of(context).pop();
           },
+          child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          child: Text("Fertig"),
           onPressed: subjectController.text != ""
               ? () {
                   Navigator.of(context).pop(subjectController.text);
                 }
               : null,
+          child: const Text("Fertig"),
         ),
       ],
     );

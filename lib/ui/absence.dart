@@ -13,8 +13,8 @@ class AbsenceGroupWidget extends StatelessWidget {
       shape: RoundedRectangleBorder(
         side: vm.justified == AbsenceJustified.notYetJustified ||
                 vm.justified == AbsenceJustified.notJustified
-            ? BorderSide(color: Colors.red, width: 1)
-            : BorderSide(color: Colors.green, width: 0),
+            ? const BorderSide(color: Colors.red)
+            : const BorderSide(color: Colors.green, width: 0),
         borderRadius: BorderRadius.circular(16),
       ),
       color: Colors.transparent,
@@ -26,13 +26,13 @@ class AbsenceGroupWidget extends StatelessWidget {
             if (vm.reason != null) ...[
               Text(vm.reason),
               Row(
-                children: <Widget>[
+                children: const [
                   Spacer(),
                   Flexible(
+                    flex: 48,
                     child: Divider(
                       height: 8,
                     ),
-                    flex: 48,
                   ),
                   Spacer(),
                 ],
@@ -47,13 +47,13 @@ class AbsenceGroupWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText2,
             ),
             Row(
-              children: <Widget>[
+              children: const [
                 Spacer(),
                 Flexible(
+                  flex: 48,
                   child: Divider(
                     height: 8,
                   ),
-                  flex: 48,
                 ),
                 Spacer(),
               ],

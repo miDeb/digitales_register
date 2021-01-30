@@ -15,7 +15,7 @@ class AbsencesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveAppBar(
+      appBar: const ResponsiveAppBar(
         title: Text("Absenzen"),
       ),
       body: AbsencesBody(
@@ -56,8 +56,8 @@ class AbsencesBody extends StatelessWidget {
                 ),
               ])
         : noInternet
-            ? NoInternet()
-            : Center(
+            ? const NoInternet()
+            : const Center(
                 child: CircularProgressIndicator(),
               );
   }
@@ -71,31 +71,31 @@ class AbsencesStatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: Text("Statistik"),
+      title: const Text("Statistik"),
       children: <Widget>[
         ListTile(
-          title: Text("Absenzen"),
+          title: const Text("Absenzen"),
           trailing: Text(stat.counter.toString()),
         ),
         ListTile(
-          title: Text("Absenzen im Auftrag der Schule"),
+          title: const Text("Absenzen im Auftrag der Schule"),
           trailing: Text(stat.counterForSchool.toString()),
         ),
         ListTile(
-          title: Text("Verspätungen"),
+          title: const Text("Verspätungen"),
           trailing: Text(stat.delayed.toString()),
         ),
         ListTile(
-          title: Text("Entschuldigte Absenzen"),
+          title: const Text("Entschuldigte Absenzen"),
           trailing: Text(stat.justified.toString()),
         ),
         ListTile(
-          title: Text("Nicht entschuldigte Absenzen"),
+          title: const Text("Nicht entschuldigte Absenzen"),
           trailing: Text(stat.notJustified.toString()),
         ),
         ListTile(
-          title: Text("Abwesenheit"),
-          trailing: Text(stat.percentage + " %"),
+          title: const Text("Abwesenheit"),
+          trailing: Text("${stat.percentage} %"),
         ),
       ],
     );

@@ -1,13 +1,13 @@
 part of 'middleware.dart';
 
 enum Pages {
-  Homework,
-  Grades,
-  Absences,
-  Calendar,
-  Certificate,
-  Messages,
-  Settings,
+  homework,
+  grades,
+  absences,
+  calendar,
+  certificate,
+  messages,
+  settings,
 }
 
 final _routingMiddleware =
@@ -31,8 +31,10 @@ final _routingMiddleware =
       ..add(RoutingActionsNames.showMessages, _showMessages)
       ..add(RoutingActionsNames.showMessage, _showMessage);
 
-void _showLogin(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _showLogin(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   next(action);
   // hack since the current route is not exposed otherwise
   Route currentRoute;
@@ -84,7 +86,7 @@ void _showNotifications(
 void _showSettings(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(SettingsPageContainer(), Pages.Settings);
+      .selectContentWidget(SettingsPageContainer(), Pages.settings);
   next(action);
 }
 
@@ -107,7 +109,7 @@ void _showEditGradesAverageSettings(
 void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(CalendarContainer(), Pages.Calendar);
+      .selectContentWidget(CalendarContainer(), Pages.calendar);
   api.actions.calendarActions.setCurrentMonday(toMonday(now));
 
   next(action);
@@ -116,7 +118,7 @@ void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _showGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(GradesPageContainer(), Pages.Grades);
+      .selectContentWidget(GradesPageContainer(), Pages.grades);
   api.actions.gradesActions.load(api.state.gradesState.semester);
   next(action);
 }
@@ -124,7 +126,7 @@ void _showGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(AbsencesPageContainer(), Pages.Absences);
+      .selectContentWidget(AbsencesPageContainer(), Pages.absences);
   api.actions.absencesActions.load();
   next(action);
 }
@@ -132,7 +134,7 @@ void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _showCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(CertificateContainer(), Pages.Certificate);
+      .selectContentWidget(CertificateContainer(), Pages.certificate);
   api.actions.certificateActions.load();
   next(action);
 }
@@ -140,7 +142,7 @@ void _showCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 void _showMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
   scaffoldKey.currentState
-      .selectContentWidget(MessagesPageContainer(), Pages.Messages);
+      .selectContentWidget(MessagesPageContainer(), Pages.messages);
   api.actions.messagesActions.load();
   next(action);
 }

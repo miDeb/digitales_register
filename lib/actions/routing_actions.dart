@@ -4,8 +4,8 @@ import 'package:built_value/built_value.dart';
 part 'routing_actions.g.dart';
 
 abstract class RoutingActions extends ReduxActions {
-  RoutingActions._();
   factory RoutingActions() => _$RoutingActions();
+  RoutingActions._();
 
   ActionDispatcher<void> showLogin;
   ActionDispatcher<void> showProfile;
@@ -27,10 +27,10 @@ abstract class RoutingActions extends ReduxActions {
 
 abstract class ShowPassResetPayload
     implements Built<ShowPassResetPayload, ShowPassResetPayloadBuilder> {
-  ShowPassResetPayload._();
   factory ShowPassResetPayload(
           [void Function(ShowPassResetPayloadBuilder) updates]) =
       _$ShowPassResetPayload;
+  ShowPassResetPayload._();
 
   String get token;
   String get email;

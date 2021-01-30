@@ -24,11 +24,13 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profil"),
+        title: const Text("Profil"),
       ),
       body: profileState == null
           ? Center(
-              child: noInternet ? NoInternet() : CircularProgressIndicator(),
+              child: noInternet
+                  ? const NoInternet()
+                  : const CircularProgressIndicator(),
             )
           : ListView(
               children: <Widget>[
@@ -41,20 +43,20 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 SwitchListTile.adaptive(
-                  title: Text("Emails für Benachrichtigungen senden"),
+                  title: const Text("Emails für Benachrichtigungen senden"),
                   value: profileState.sendNotificationEmails,
                   onChanged: noInternet ? null : setSendNotificationEmails,
                 ),
                 ListTile(
-                  title: Text("Email-Adresse ändern"),
+                  title: const Text("Email-Adresse ändern"),
                   subtitle: Text(profileState.email),
-                  trailing: Icon(Icons.chevron_right),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: changeEmail,
                   enabled: !noInternet,
                 ),
                 ListTile(
-                  title: Text("Passwort ändern"),
-                  trailing: Icon(Icons.chevron_right),
+                  title: const Text("Passwort ändern"),
+                  trailing: const Icon(Icons.chevron_right),
                   onTap: changePass,
                   enabled: !noInternet,
                 ),

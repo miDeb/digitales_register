@@ -31,7 +31,7 @@ class InfoDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4, right: 4),
             child: IconButton(
-              icon: Icon(Icons.close),
+              icon: const Icon(Icons.close),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -41,7 +41,7 @@ class InfoDialog extends StatelessWidget {
       ),
       content: content == null
           ? null
-          : Container(
+          : SizedBox(
               width: double.maxFinite,
               child: content,
             ),

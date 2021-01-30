@@ -33,14 +33,14 @@ abstract class Day implements Built<Day, DayBuilder> {
   }
 
   static String format(DateTime date) {
-    DateTime today = dateToday();
-    Duration difference = date.difference(today);
+    final DateTime today = dateToday();
+    final Duration difference = date.difference(today);
     if (difference.inDays == 0) return "Heute";
     if (difference.inDays == 1) return "Morgen";
-    if (difference.inDays == -1)
+    if (difference.inDays == -1) {
       return "Gestern";
-    else {
-      String weekday = {
+    } else {
+      final String weekday = {
         1: "Montag",
         2: "Dienstag",
         3: "Mittwoch",
@@ -49,15 +49,15 @@ abstract class Day implements Built<Day, DayBuilder> {
         6: "Samstag",
         7: "Sonntag",
       }[date.weekday];
-      String dateString = "${date.day}.${date.month}.";
+      final String dateString = "${date.day}.${date.month}.";
       return "$weekday, $dateString";
     }
   }
 }
 
 abstract class Homework implements Built<Homework, HomeworkBuilder> {
-  Homework._();
   factory Homework([void Function(HomeworkBuilder) updates]) = _$Homework;
+  Homework._();
   static Serializer<Homework> get serializer => _$homeworkSerializer;
 
   bool get deleted;
@@ -124,10 +124,10 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   /// was assigned, so that previous entry was replaced. In this case [id] changes, so we check for
   /// [subtitle] and [label]. No check against [title], since that will also change to a generic one.
   bool _isGradeReplacementOf(Homework other) {
-    return this.type == HomeworkType.grade &&
+    return type == HomeworkType.grade &&
         other.type == HomeworkType.gradeGroup &&
-        _stringsAreAmended(this.subtitle, other.subtitle) &&
-        this.label == other.label;
+        _stringsAreAmended(subtitle, other.subtitle) &&
+        label == other.label;
   }
 
   /// Check if everything is the same, but the subtitles are similar (shortened or amended)
@@ -136,7 +136,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   bool _isIdenticalButSubtitleAmended(Homework other) {
     return deleted == other.deleted &&
         title == other.title &&
-        _stringsAreAmended(this.subtitle, other.subtitle) &&
+        _stringsAreAmended(subtitle, other.subtitle) &&
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
@@ -162,10 +162,10 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
 String formatGrade(String grade) {
   if (grade == null) return "keine Note eingetragen";
-  List<String> split = grade.split(".");
+  final List<String> split = grade.split(".");
   assert(split.length == 2);
-  int mainGrade = int.parse(split[0]);
-  String decimals = split[1];
+  final int mainGrade = int.parse(split[0]);
+  final String decimals = split[1];
   switch (decimals) {
     case "00":
       return "$mainGrade";
@@ -193,16 +193,16 @@ class HomeworkType extends EnumClass {
   static Serializer<HomeworkType> get serializer => _$homeworkTypeSerializer;
   @override
   String toString() {
-    return this.name;
+    return name;
   }
 }
 
 abstract class GradeGroupSubmission
     implements Built<GradeGroupSubmission, GradeGroupSubmissionBuilder> {
-  GradeGroupSubmission._();
   factory GradeGroupSubmission(
           [void Function(GradeGroupSubmissionBuilder) updates]) =
       _$GradeGroupSubmission;
+  GradeGroupSubmission._();
   static Serializer<GradeGroupSubmission> get serializer =>
       _$gradeGroupSubmissionSerializer;
 
@@ -224,9 +224,9 @@ abstract class GradeGroupSubmission
 
 abstract class Notification
     implements Built<Notification, NotificationBuilder> {
-  Notification._();
   factory Notification([void Function(NotificationBuilder) updates]) =
       _$Notification;
+  Notification._();
   static Serializer<Notification> get serializer => _$notificationSerializer;
 
   int get id;
@@ -241,8 +241,8 @@ abstract class Notification
 }
 
 abstract class Subject implements Built<Subject, SubjectBuilder> {
-  Subject._();
   factory Subject([void Function(SubjectBuilder) updates]) = _$Subject;
+  Subject._();
   static Serializer<Subject> get serializer => _$subjectSerializer;
 
   BuiltMap<Semester, BuiltList<GradeAll>> get gradesAll;
@@ -274,7 +274,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
     if (grades == null) return null;
     var sum = 0;
     var n = 0;
-    for (var grade in grades) {
+    for (final grade in grades) {
       if (grade.cancelled || grade.grade == null) continue;
       sum += grade.grade * grade.weightPercentage;
       n += grade.weightPercentage;
@@ -287,12 +287,13 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
     final avg = average(semester);
     if (avg != null) {
       return gradeAverageFormat.format(avg / 100);
-    } else
+    } else {
       return "/";
+    }
   }
 
   static Map<String, List<DetailEntry>> sortByType(List<DetailEntry> entries) {
-    final m = Map<String, List<DetailEntry>>();
+    final m = <String, List<DetailEntry>>{};
     for (final entry in entries) {
       String type;
       if (entry is Observation) {
@@ -300,10 +301,11 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
       } else if (entry is GradeDetail) {
         type = entry.type;
       }
-      if (m.containsKey(type))
+      if (m.containsKey(type)) {
         m[type].add(entry);
-      else
+      } else {
         m[type] = [entry];
+      }
     }
     return m;
   }
@@ -318,9 +320,9 @@ abstract class DetailEntry implements _Entry {}
 
 abstract class Observation
     implements _Entry, DetailEntry, Built<Observation, ObservationBuilder> {
-  Observation._();
   factory Observation([void Function(ObservationBuilder) updates]) =
       _$Observation;
+  Observation._();
   static Serializer<Observation> get serializer => _$observationSerializer;
 
   String get typeName;
@@ -332,14 +334,15 @@ abstract class _BasicGrade implements _Entry {
   @nullable
   int get grade;
   int get weightPercentage;
+  @override
   DateTime get date;
   String get type;
 }
 
 abstract class GradeAll
     implements _BasicGrade, Built<GradeAll, GradeAllBuilder> {
-  GradeAll._();
   factory GradeAll([void Function(GradeAllBuilder) updates]) = _$GradeAll;
+  GradeAll._();
   static Serializer<GradeAll> get serializer => _$gradeAllSerializer;
 }
 
@@ -348,9 +351,9 @@ abstract class GradeDetail
         _BasicGrade,
         DetailEntry,
         Built<GradeDetail, GradeDetailBuilder> {
-  GradeDetail._();
   factory GradeDetail([void Function(GradeDetailBuilder) updates]) =
       _$GradeDetail;
+  GradeDetail._();
   static Serializer<GradeDetail> get serializer => _$gradeDetailSerializer;
 
   String get gradeFormatted => _formatGrade(grade);
@@ -389,8 +392,8 @@ abstract class GradeDetail
 }
 
 abstract class Competence implements Built<Competence, CompetenceBuilder> {
-  Competence._();
   factory Competence([void Function(CompetenceBuilder) updates]) = _$Competence;
+  Competence._();
   static Serializer<Competence> get serializer => _$competenceSerializer;
 
   String get typeName;
@@ -410,18 +413,19 @@ abstract class AbsenceGroup
   int get hours;
   int get minutes;
   BuiltList<Absence> get absences;
+  factory AbsenceGroup([Function(AbsenceGroupBuilder b) updates]) =
+      _$AbsenceGroup;
   AbsenceGroup._();
-  factory AbsenceGroup([updates(AbsenceGroupBuilder b)]) = _$AbsenceGroup;
   static Serializer<AbsenceGroup> get serializer => _$absenceGroupSerializer;
 }
 
 abstract class AbsenceStatistic
     implements Built<AbsenceStatistic, AbsenceStatisticBuilder> {
+  factory AbsenceStatistic([Function(AbsenceStatisticBuilder b) updates]) =
+      _$AbsenceStatistic;
   AbsenceStatistic._();
   static Serializer<AbsenceStatistic> get serializer =>
       _$absenceStatisticSerializer;
-  factory AbsenceStatistic([updates(AbsenceStatisticBuilder b)]) =
-      _$AbsenceStatistic;
 
   int get counter;
   int get counterForSchool;
@@ -440,8 +444,8 @@ abstract class Absence implements Built<Absence, AbsenceBuilder> {
   int get minutesLeftTooEarly;
   DateTime get date;
   int get hour;
+  factory Absence([Function(AbsenceBuilder b) updates]) = _$Absence;
   Absence._();
-  factory Absence([updates(AbsenceBuilder b)]) = _$Absence;
   static Serializer<Absence> get serializer => _$absenceSerializer;
 }
 
@@ -456,10 +460,11 @@ class AbsenceJustified extends EnumClass {
   static AbsenceJustified fromInt(int i) {
     if (i == 2) return justified;
     if (i == 3) return notJustified;
-    if (i == 4)
+    if (i == 4) {
       return forSchool;
-    else
+    } else {
       return notYetJustified;
+    }
   }
 
   const AbsenceJustified._(String name) : super(name);
@@ -473,8 +478,8 @@ abstract class CalendarDay implements Built<CalendarDay, CalendarDayBuilder> {
   int get lenght => hours.fold(0, (a, b) => a + b.lenght);
 
   static Serializer<CalendarDay> get serializer => _$calendarDaySerializer;
+  factory CalendarDay([Function(CalendarDayBuilder b) updates]) = _$CalendarDay;
   CalendarDay._();
-  factory CalendarDay([updates(CalendarDayBuilder b)]) = _$CalendarDay;
 }
 
 abstract class CalendarHour
@@ -496,16 +501,17 @@ abstract class CalendarHour
       b..teachers = ListBuilder([]);
 
   static Serializer<CalendarHour> get serializer => _$calendarHourSerializer;
+  factory CalendarHour([Function(CalendarHourBuilder b) updates]) =
+      _$CalendarHour;
   CalendarHour._();
-  factory CalendarHour([updates(CalendarHourBuilder b)]) = _$CalendarHour;
 }
 
 abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   String get firstName;
   String get lastName;
   static Serializer<Teacher> get serializer => _$teacherSerializer;
+  factory Teacher([Function(TeacherBuilder b) updates]) = _$Teacher;
   Teacher._();
-  factory Teacher([updates(TeacherBuilder b)]) = _$Teacher;
 }
 
 abstract class HomeworkExam
@@ -521,8 +527,9 @@ abstract class HomeworkExam
   String get typeName;
   bool get warning => typeName == "Testarbeit" || typeName == "Schularbeit";
   static Serializer<HomeworkExam> get serializer => _$homeworkExamSerializer;
+  factory HomeworkExam([Function(HomeworkExamBuilder b) updates]) =
+      _$HomeworkExam;
   HomeworkExam._();
-  factory HomeworkExam([updates(HomeworkExamBuilder b)]) = _$HomeworkExam;
 }
 
 abstract class Message implements Built<Message, MessageBuilder> {
@@ -545,8 +552,8 @@ abstract class Message implements Built<Message, MessageBuilder> {
   bool get isNew => timeRead == null;
 
   static Serializer<Message> get serializer => _$messageSerializer;
+  factory Message([Function(MessageBuilder b) updates]) = _$Message;
   Message._();
-  factory Message([updates(MessageBuilder b)]) = _$Message;
   static void _initializeBuilder(MessageBuilder b) {
     b
       ..downloading = false

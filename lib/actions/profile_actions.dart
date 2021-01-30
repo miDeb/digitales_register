@@ -4,8 +4,8 @@ import 'package:built_value/built_value.dart';
 part 'profile_actions.g.dart';
 
 abstract class ProfileActions extends ReduxActions {
-  ProfileActions._();
   factory ProfileActions() => _$ProfileActions();
+  ProfileActions._();
 
   ActionDispatcher<void> load;
   ActionDispatcher<dynamic> loaded;
@@ -15,10 +15,10 @@ abstract class ProfileActions extends ReduxActions {
 
 abstract class ChangeEmailPayload
     implements Built<ChangeEmailPayload, ChangeEmailPayloadBuilder> {
-  ChangeEmailPayload._();
   factory ChangeEmailPayload(
           [void Function(ChangeEmailPayloadBuilder) updates]) =
       _$ChangeEmailPayload;
+  ChangeEmailPayload._();
 
   String get pass;
   String get email;

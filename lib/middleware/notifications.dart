@@ -6,7 +6,7 @@ final _notificationsMiddleware =
       ..add(NotificationsActionsNames.delete, _deleteNotification)
       ..add(NotificationsActionsNames.deleteAll, _deleteAllNotifications);
 
-void _loadNotifications(
+Future<void> _loadNotifications(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
@@ -16,13 +16,13 @@ void _loadNotifications(
   final data = await _wrapper.send("api/notification/unread");
 
   if (data != null) {
-    api.actions.notificationsActions.loaded(data);
+    api.actions.notificationsActions.loaded(data as List);
   } else {
     api.actions.refreshNoInternet();
   }
 }
 
-void _deleteNotification(
+Future<void> _deleteNotification(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<Notification> action) async {
@@ -32,7 +32,7 @@ void _deleteNotification(
   if (result == null) api.actions.refreshNoInternet();
 }
 
-void _deleteAllNotifications(
+Future<void> _deleteAllNotifications(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
@@ -41,7 +41,7 @@ void _deleteAllNotifications(
     "api/notification/markAsRead",
     args: {},
   );
-  for (var n in api.state.notificationState.notifications
+  for (final n in api.state.notificationState.notifications
       .where((n) => n.type == "message" && n.objectId != null)) {
     api.actions.messagesActions.markAsRead(n.objectId);
   }

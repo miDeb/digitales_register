@@ -151,7 +151,7 @@ const _servers = {
   "Scola mesana Urtijëi": "https://sm-urtijei.digitalesregister.it",
   "sogym - fotour": "https://sogym-fotour.digitalesregister.it",
   "SSP Abtei Scora elementara": "https://gs-abtei.digitalesregister.it",
-  "SSP Abtei Scuola media \"Tita Alton\"":
+  'SSP Abtei Scuola media "Tita Alton"':
       "https://ms-stern.digitalesregister.it",
   "Grundschule Ahrntal": "https://gs-ahrntal.digitalesregister.it",
   "Grundschule Luttach / Ahrntal": "https://gs-luttach.digitalesregister.it",
@@ -180,8 +180,7 @@ const _servers = {
   "Grundschule Girlan": "https://gs-girlan.digitalesregister.it",
   "Schulsprengel Eppan": "https://ssp-eppan.digitalesregister.it",
   "Grundschule Gries": "https://gs-gries.digitalesregister.it",
-  "Mittelschule \"Adalbert Stifter\"":
-      "https://ms-stifter.digitalesregister.it",
+  'Mittelschule "Adalbert Stifter"': "https://ms-stifter.digitalesregister.it",
   "Grundschule Innichen": "https://gs-innichen.digitalesregister.it",
   "Grundschule Sexten": "https://gs-sexten.digitalesregister.it",
   "Grundschule Vierschach": "https://gs-vierschach.digitalesregister.it",

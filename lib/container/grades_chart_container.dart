@@ -16,25 +16,29 @@ class GradesChartContainer extends StatelessWidget {
     return StoreConnection<AppState, AppActions,
         Map<SubjectGrades, SubjectGraphConfig>>(
       connect: (state) {
-        return Map.fromIterable(
-          state.gradesState.subjects,
-          key: (subject) {
-            final grades = state.gradesState.semester == Semester.all
-                ? (subject.gradesAll.values.fold<List<GradeAll>>(
-                    <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
-                  ..sort((GradeAll a, GradeAll b) => a.date.compareTo(b.date)))
-                : subject.gradesAll[state.gradesState.semester].toList();
+        SubjectGrades getKey(Subject subject) {
+          final grades = state.gradesState.semester == Semester.all
+              ? (subject.gradesAll.values.fold<List<GradeAll>>(
+                  <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
+                ..sort((GradeAll a, GradeAll b) => a.date.compareTo(b.date)))
+              : subject.gradesAll[state.gradesState.semester].toList();
+          grades.removeWhere((grade) => grade.cancelled || grade.grade == null);
 
-            return SubjectGrades(
-              Map.fromIterable(
-                grades..removeWhere((g) => g.cancelled || g.grade == null),
-                key: (g) => (g as GradeAll).date,
-                value: (g) => (g as GradeAll).grade,
-              ),
-            );
-          },
-          value: (s) => state.settingsState.graphConfigs[(s as Subject).id],
-        );
+          return SubjectGrades(
+            {
+              for (final grade in grades) grade.date: grade.grade,
+            },
+          );
+        }
+
+        SubjectGraphConfig getValue(Subject subject) {
+          return state.settingsState.graphConfigs[subject.id];
+        }
+
+        return {
+          for (final subject in state.gradesState.subjects)
+            getKey(subject): getValue(subject)
+        };
       },
       builder: (context, vm, actions) {
         return GradesChart(
@@ -45,14 +49,6 @@ class GradesChartContainer extends StatelessWidget {
       },
     );
   }
-}
-
-class GradesChartViewModel {
-  final Map<SubjectGrades, SubjectGraphConfig> graphs;
-  final bool isFullScreen;
-  final VoidCallback goFullScreen;
-
-  GradesChartViewModel(this.graphs, this.isFullScreen, this.goFullScreen);
 }
 
 class SubjectGrades {

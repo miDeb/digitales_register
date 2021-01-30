@@ -148,7 +148,7 @@ void _updateGradeGraphConfigs(SettingsState state,
       builder.graphConfigs.remove(entry);
     }
   }
-  for (var subject in action.payload) {
+  for (final subject in action.payload) {
     if (!builder.graphConfigs.build().containsKey(subject.id)) {
       builder.graphConfigs.update(
         (b) => b

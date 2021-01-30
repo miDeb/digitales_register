@@ -22,6 +22,7 @@ class GradesChartLegendEntry extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
+            flex: 3,
             child: Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Text(
@@ -29,9 +30,9 @@ class GradesChartLegendEntry extends StatelessWidget {
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
-            flex: 3,
           ),
           Expanded(
+            flex: 2,
             child: StatefulBuilder(builder: (context, setState) {
               return Slider(
                 onChanged: (double val) {
@@ -41,7 +42,7 @@ class GradesChartLegendEntry extends StatelessWidget {
                   setState(() {
                     thickness = val;
                   });
-                  Future.delayed(Duration(milliseconds: 100), () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
                     if (call != thisCall || value == config.thick) {
                       return;
                     }
@@ -49,14 +50,12 @@ class GradesChartLegendEntry extends StatelessWidget {
                   });
                 },
                 value: thickness,
-                min: 0,
                 max: 5,
                 divisions: 5,
                 activeColor: Color(config.color),
                 inactiveColor: Color(config.color).withOpacity(0.2),
               );
             }),
-            flex: 2,
           ),
         ],
       ),

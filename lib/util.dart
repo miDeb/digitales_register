@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
-Widget maybeWrap(Widget widget, bool wrap, Widget wrapWidget(Widget w)) {
-  if (wrap)
+Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
+    {@required bool wrap}) {
+  if (wrap) {
     return wrapWidget(widget);
-  else
+  } else {
     return widget;
+  }
 }
 
 extension StringUtils on String {
@@ -30,7 +32,7 @@ DateTime mockNow;
 
 extension MapEntryToTuple<K, V> on MapEntry<K, V> {
   Tuple2<K, V> toTuple() {
-    return Tuple2(this.key, this.value);
+    return Tuple2(key, value);
   }
 }
 

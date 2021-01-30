@@ -1,3 +1,5 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -6,9 +8,6 @@ import '../actions/grades_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/sorted_grades_widget.dart';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
 
 part 'sorted_grades_container.g.dart';
 
@@ -49,6 +48,11 @@ abstract class SortedGradesViewModel
   bool get showCancelled;
   bool get noInternet;
 
+  factory SortedGradesViewModel(
+          [void Function(SortedGradesViewModelBuilder) updates]) =
+      _$SortedGradesViewModel;
+  SortedGradesViewModel._();
+
   factory SortedGradesViewModel.from(AppState state) {
     return SortedGradesViewModel(
       (b) => b
@@ -61,9 +65,4 @@ abstract class SortedGradesViewModel
             state.settingsState.ignoreForGradesAverage.toBuilder(),
     );
   }
-
-  SortedGradesViewModel._();
-  factory SortedGradesViewModel(
-          [void Function(SortedGradesViewModelBuilder) updates]) =
-      _$SortedGradesViewModel;
 }

@@ -57,11 +57,12 @@ class Sidebar extends StatelessWidget {
       screenPadding: 0,
       title: DropdownButton(
         isExpanded: true,
-        underline: SizedBox(),
+        underline: const SizedBox(),
         value: 0,
         items: [
           for (var index = 0; index < otherAccounts.length + 2; index++)
             DropdownMenuItem(
+              value: index,
               child: Text(
                 index == 0
                     ? (username ?? "?")
@@ -69,10 +70,9 @@ class Sidebar extends StatelessWidget {
                         ? "Account hinzufügen"
                         : otherAccounts[index - 1],
               ),
-              value: index,
             ),
         ],
-        onChanged: (value) {
+        onChanged: (int value) {
           if (value == otherAccounts.length + 1) {
             addAccount();
           } else {
@@ -80,12 +80,12 @@ class Sidebar extends StatelessWidget {
           }
         },
       ),
-      toggleTitle: SizedBox(),
+      toggleTitle: const SizedBox(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:
           //"https://vinzentinum.digitalesregister.it/v2/theme/icons/profile_empty.png" is the (ugly) default
           userIcon?.endsWith("/profile_empty.png") != false
-              ? Icon(Icons.account_circle)
+              ? const Icon(Icons.account_circle)
               : Image.network(userIcon),
       unselectedIconColor: Theme.of(context).iconTheme.color,
       selectedIconColor: Theme.of(context).accentColor,
@@ -95,45 +95,45 @@ class Sidebar extends StatelessWidget {
       items: [
         if (tabletMode)
           CollapsibleItem(
-            isSelected: currentSelected == Pages.Homework,
+            isSelected: currentSelected == Pages.homework,
             icon: Icons.assignment,
             text: "Hausaufgabe",
             onPressed: goHome,
           ),
         CollapsibleItem(
           onPressed: showGrades,
-          isSelected: currentSelected == Pages.Grades,
+          isSelected: currentSelected == Pages.grades,
           text: "Noten",
           icon: Icons.grade,
         ),
         CollapsibleItem(
             text: "Absenzen",
             icon: Icons.hotel,
-            isSelected: currentSelected == Pages.Absences,
+            isSelected: currentSelected == Pages.absences,
             onPressed: showAbsences),
         CollapsibleItem(
           text: "Kalender",
           icon: Icons.calendar_today,
-          isSelected: currentSelected == Pages.Calendar,
+          isSelected: currentSelected == Pages.calendar,
           onPressed: showCalendar,
         ),
         CollapsibleItem(
           text: "Zeugnis",
           icon: Icons.list,
-          isSelected: currentSelected == Pages.Certificate,
+          isSelected: currentSelected == Pages.certificate,
           onPressed: showCertificate,
         ),
         CollapsibleItem(
           text: "Mitteilungen",
           icon: Icons.message,
-          isSelected: currentSelected == Pages.Messages,
+          isSelected: currentSelected == Pages.messages,
           onPressed: showMessages,
         ),
         CollapsibleItem(
           hasDivider: true,
           text: "Einstellungen",
           icon: Icons.settings,
-          isSelected: currentSelected == Pages.Settings,
+          isSelected: currentSelected == Pages.settings,
           onPressed: showSettings,
         ),
         CollapsibleItem(
@@ -143,7 +143,7 @@ class Sidebar extends StatelessWidget {
           onPressed: logout,
         ),
       ],
-      body: SizedBox(),
+      body: const SizedBox(),
     );
   }
 }

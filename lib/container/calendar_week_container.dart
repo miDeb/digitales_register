@@ -1,3 +1,5 @@
+import 'package:built_collection/built_collection.dart';
+import 'package:built_value/built_value.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -5,9 +7,6 @@ import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/calendar_week.dart';
-
-import 'package:built_collection/built_collection.dart';
-import 'package:built_value/built_value.dart';
 
 part 'calendar_week_container.g.dart';
 
@@ -36,10 +35,10 @@ abstract class CalendarWeekViewModel
   BuiltMap<String, String> get subjectNicks;
   bool get noInternet;
 
-  CalendarWeekViewModel._();
   factory CalendarWeekViewModel(
           [void Function(CalendarWeekViewModelBuilder) updates]) =
       _$CalendarWeekViewModel;
+  CalendarWeekViewModel._();
 
   factory CalendarWeekViewModel.fromStateAndWeek(
       AppState state, DateTime monday) {

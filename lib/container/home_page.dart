@@ -30,13 +30,13 @@ abstract class HomePageContentViewModel
         Built<HomePageContentViewModel, HomePageContentViewModelBuilder> {
   bool get splash;
 
+  factory HomePageContentViewModel(
+          [void Function(HomePageContentViewModelBuilder) updates]) =
+      _$HomePageContentViewModel;
+  HomePageContentViewModel._();
+
   factory HomePageContentViewModel.from(AppState state) {
     return HomePageContentViewModel(
         (b) => b..splash = !state.loginState.loggedIn);
   }
-
-  HomePageContentViewModel._();
-  factory HomePageContentViewModel(
-          [void Function(HomePageContentViewModelBuilder) updates]) =
-      _$HomePageContentViewModel;
 }

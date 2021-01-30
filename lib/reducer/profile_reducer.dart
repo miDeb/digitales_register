@@ -18,16 +18,16 @@ void _loaded(
 
 void _sendNotificationEmails(
     ProfileState state, Action<bool> action, ProfileStateBuilder builder) {
-  builder..sendNotificationEmails = action.payload;
+  builder.sendNotificationEmails = action.payload;
 }
 
 ProfileState _parseProfile(data) {
   return ProfileState(
     (b) => b
-      ..name = data["name"]
-      ..email = data["email"]
-      ..roleName = data["roleName"]
-      ..sendNotificationEmails = data["notificationsEnabled"]
-      ..username = data["username"],
+      ..name = data["name"] as String
+      ..email = data["email"] as String
+      ..roleName = data["roleName"] as String
+      ..sendNotificationEmails = data["notificationsEnabled"] as bool
+      ..username = data["username"] as String,
   );
 }

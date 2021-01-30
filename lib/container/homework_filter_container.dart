@@ -39,7 +39,7 @@ abstract class HomeworkFilterVM
   BuiltList<HomeworkType> get currentBlacklist;
   BuiltSet<HomeworkType> get allTypes;
 
-  HomeworkFilterVM._();
   factory HomeworkFilterVM([void Function(HomeworkFilterVMBuilder) updates]) =
       _$HomeworkFilterVM;
+  HomeworkFilterVM._();
 }

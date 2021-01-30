@@ -1,7 +1,7 @@
 import 'package:dr/wrapper.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-main() {
+void main() {
   test('parse webpage', () {
     final config = Wrapper.parseConfig(source);
     expect(config.userId, 3539);
@@ -13,8 +13,9 @@ main() {
 }
 
 String headers =
-    r"PHPSESSID=88e7ae2e1ae0aa0154e239c76e0c38ce; path=/; domain=vinzentinum.digitalesregister.it; secure; HttpOnly,registerSession=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT; Max-Age=0; registerSession=510397aa6e20160559685f88507805e035f92d5e; path=/; domain=vinzentinum.digitalesregister.it; secure; HttpOnly";
-String source = r"""<!DOCTYPE html>
+    "PHPSESSID=88e7ae2e1ae0aa0154e239c76e0c38ce; path=/; domain=vinzentinum.digitalesregister.it; secure; HttpOnly,registerSession=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT; Max-Age=0; registerSession=510397aa6e20160559685f88507805e035f92d5e; path=/; domain=vinzentinum.digitalesregister.it; secure; HttpOnly";
+String source = r"""
+<!DOCTYPE html>
 
 <html class="no-js linen" lang="de">
 

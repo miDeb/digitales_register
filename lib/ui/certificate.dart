@@ -12,14 +12,16 @@ class Certificate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveAppBar(title: Text("Zeugnis")),
+      appBar: const ResponsiveAppBar(title: Text("Zeugnis")),
       body: vm.html == null
           ? Center(
-              child: vm.noInternet ? NoInternet() : CircularProgressIndicator(),
+              child: vm.noInternet
+                  ? const NoInternet()
+                  : const CircularProgressIndicator(),
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: HtmlWidget(vm.html),
               ),
             ),

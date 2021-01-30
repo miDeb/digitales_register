@@ -4,8 +4,8 @@ import 'package:built_value/built_value.dart';
 part 'login_actions.g.dart';
 
 abstract class LoginActions extends ReduxActions {
-  LoginActions._();
   factory LoginActions() => _$LoginActions();
+  LoginActions._();
 
   ActionDispatcher<String> setUsername;
   ActionDispatcher<LoginPayload> login;
@@ -31,9 +31,9 @@ abstract class LoginActions extends ReduxActions {
 
 abstract class LoginPayload
     implements Built<LoginPayload, LoginPayloadBuilder> {
-  LoginPayload._();
   factory LoginPayload([void Function(LoginPayloadBuilder) updates]) =
       _$LoginPayload;
+  LoginPayload._();
 
   @override
   String toString() {
@@ -47,7 +47,7 @@ abstract class LoginPayload
   }
 
   static void _initializeBuilder(LoginPayloadBuilder b) {
-    b..offlineEnabled = false;
+    b.offlineEnabled = false;
   }
 
   String get user;
@@ -59,9 +59,9 @@ abstract class LoginPayload
 
 abstract class ChangePassPayload
     implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
-  ChangePassPayload._();
   factory ChangePassPayload([void Function(ChangePassPayloadBuilder) updates]) =
       _$ChangePassPayload;
+  ChangePassPayload._();
   String get url;
   String get user;
   String get oldPass;
@@ -70,19 +70,19 @@ abstract class ChangePassPayload
 
 abstract class RequestPassResetPayload
     implements Built<RequestPassResetPayload, RequestPassResetPayloadBuilder> {
-  RequestPassResetPayload._();
   factory RequestPassResetPayload(
           [void Function(RequestPassResetPayloadBuilder) updates]) =
       _$RequestPassResetPayload;
+  RequestPassResetPayload._();
   String get user;
   String get email;
 }
 
 abstract class LoggedInPayload
     implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
-  LoggedInPayload._();
   factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) =
       _$LoggedInPayload;
+  LoggedInPayload._();
 
   String get username;
   bool get fromStorage;
@@ -90,10 +90,10 @@ abstract class LoggedInPayload
 
 abstract class LoginFailedPayload
     implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
-  LoginFailedPayload._();
   factory LoginFailedPayload(
           [void Function(LoginFailedPayloadBuilder) updates]) =
       _$LoginFailedPayload;
+  LoginFailedPayload._();
 
   String get cause;
   @nullable
@@ -102,9 +102,9 @@ abstract class LoginFailedPayload
 
 abstract class LogoutPayload
     implements Built<LogoutPayload, LogoutPayloadBuilder> {
-  LogoutPayload._();
   factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) =
       _$LogoutPayload;
+  LogoutPayload._();
 
   bool get hard;
   bool get forced;

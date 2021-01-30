@@ -16,23 +16,23 @@ final notificationsReducerBuilder = NestedReducerBuilder<AppState,
   ..add(NotificationsActionsNames.deleteAll, _deleteAll)
   ..add(MessagesActionsNames.markAsRead, _markMessageAsRead);
 
-void _loaded(NotificationState state, Action<Object> action,
+void _loaded(NotificationState state, Action<List> action,
     NotificationStateBuilder builder) {
   builder.notifications = _parseNotifications(action.payload);
 }
 
-ListBuilder<Notification> _parseNotifications(data) {
+ListBuilder<Notification> _parseNotifications(List data) {
   return ListBuilder(
     data.map(
       (n) => Notification(
         (b) => b
-          ..id = n["id"]
-          ..title = n["title"]
-          ..type = n["type"]
-          ..objectId = n["objectId"]
-          ..subTitle = n["subTitle"]
+          ..id = n["id"] as int
+          ..title = n["title"] as String
+          ..type = n["type"] as String
+          ..objectId = n["objectId"] as int
+          ..subTitle = n["subTitle"] as String
           ..timeSent = DateTime.parse(
-            n["timeSent"],
+            n["timeSent"] as String,
           ),
       ),
     ),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class NoInternet extends StatelessWidget {
+  const NoInternet({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text(
             "Keine Verbindung",
@@ -15,10 +15,10 @@ class NoInternet extends StatelessWidget {
                 .headline6
                 .copyWith(color: Colors.red),
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
-          Text(
+          const Text(
             ":(",
             style: TextStyle(fontSize: 50, color: Colors.redAccent),
           ),

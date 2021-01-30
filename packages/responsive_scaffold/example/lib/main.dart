@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();
@@ -42,14 +43,14 @@ class _MyAppState extends State<MyApp> {
             title: Text("Home $count"),
           ),
           homeFloatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
             onPressed: () {
               setState(() {
                 count++;
               });
             },
+            child: const Icon(Icons.add),
           ),
-          homeBody: Scaffold(
+          homeBody: const Scaffold(
             body: FlutterLogo(),
           ),
           drawerBuilder: (onSelected, onGoHome, currentSelected, tabletMode) {
@@ -58,15 +59,15 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   if (tabletMode)
                     ListTile(
-                      title: Text("Homeaaaaaaaaaaaaaaaaaaaaaaaaa"),
+                      title: const Text("Homeaaaaaaaaaaaaaaaaaaaaaaaaa"),
                       onTap: onGoHome,
-                      trailing: Icon(Icons.home),
+                      trailing: const Icon(Icons.home),
                     ),
                   ListTile(
-                    title: Text("foo"),
-                    trailing: Icon(Icons.home),
+                    title: const Text("foo"),
+                    trailing: const Icon(Icons.home),
                     onTap: () => onSelected(
-                      Scaffold(
+                      const Scaffold(
                         appBar: ResponsiveAppBar(
                           title: Text("foo"),
                         ),

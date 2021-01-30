@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
@@ -83,11 +84,15 @@ final middleware = [
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) {
-          void handleError(e, StackTrace stackTrace) {
-            print(e);
+          void handleError(e, StackTrace trace) {
+            log("Error caught by error middleware",
+                error: e, stackTrace: trace);
+            var stackTrace = trace;
             try {
-              stackTrace ??= e.stackTrace;
-            } catch (e) {}
+              stackTrace ??= e.stackTrace as StackTrace;
+            } catch (e) {
+              // we can't get a stack trace
+            }
             navigatorKey.currentState.push(
               MaterialPageRoute(
                 fullscreenDialog: true,
@@ -95,21 +100,22 @@ NextActionHandler _errorMiddleware(
                   return Scaffold(
                     appBar: AppBar(
                       backgroundColor: Colors.red,
-                      title: Text("Fehler!"),
+                      title: const Text("Fehler!"),
                     ),
                     body: SingleChildScrollView(
                       child: Column(
                         children: <Widget>[
                           ElevatedButton(
-                            child: Text("Entwickler benachrichtigen"),
                             onPressed: () async {
                               final error = "$e\n\n$stackTrace";
                               launch(
                                   "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
                             },
+                            child: const Text("Entwickler benachrichtigen"),
                           ),
                           Text(
-                            """Ein Fehler ist aufgetreten.
+                            """
+Ein Fehler ist aufgetreten.
 Eine Funktion wird eventuell noch nicht unterstützt.
 Bitte benachrichtige uns, damit wir diesen Fehler beheben können:
 
@@ -143,7 +149,7 @@ void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   // do not call next: this action is only to update the logout time
 }
 
-void _refreshNoInternet(
+Future<void> _refreshNoInternet(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
@@ -163,17 +169,18 @@ void _refreshNoInternet(
   }
 }
 
-void _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   next(action);
   if (!api.state.noInternet) _popAll();
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
-  final user = login["user"];
-  final pass = login["pass"];
-  final url = login["url"];
-  final offlineEnabled = login["offlineEnabled"];
-  final List<String> otherAccounts =
-      List.from(login["otherAccounts"]?.map((login) => login["user"]) ?? []);
+  final user = login["user"] as String;
+  final pass = login["pass"] as String;
+  final url = login["url"] as String;
+  final offlineEnabled = login["offlineEnabled"] as bool;
+  final List<String> otherAccounts = List.from(
+    (login["otherAccounts"] as List)?.map((login) => login["user"]) ?? [],
+  );
   api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||
       (api.state.loginState.username != null &&
@@ -207,7 +214,7 @@ void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   api.actions.notificationsActions.load();
 }
 
-void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoggedInPayload> action) async {
   if (!api.state.settingsState.noPasswordSaving &&
       !action.payload.fromStorage) {
@@ -254,7 +261,7 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
-        print(e);
+        log("Failed to load data", error: e);
         next(action);
       }
     } else {
@@ -267,7 +274,9 @@ void _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   } else {
     next(action);
   }
-  api.state.loginState.callAfterLogin.forEach((f) => f());
+  for (final callback in api.state.loginState.callAfterLogin) {
+    callback();
+  }
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
 }
@@ -318,10 +327,11 @@ NextActionHandler _saveStateMiddleware(
               );
             }
 
-            if (immediately)
+            if (immediately) {
               save();
-            else
-              Future.delayed(Duration(seconds: 5), save);
+            } else {
+              Future.delayed(const Duration(seconds: 5), save);
+            }
           }
         };
 
@@ -329,12 +339,12 @@ String getStorageKey(String user, String server) {
   return json.encode({"username": user, "server_url": server});
 }
 
-void _writeToStorage(String key, String txt) async {
+Future<void> _writeToStorage(String key, String txt) async {
   await _secureStorage.write(key: key, value: txt);
 }
 
 Future<String> _readFromStorage(String key) async {
-  return await _secureStorage.read(key: key);
+  return _secureStorage.read(key: key);
 }
 
 void _saveNoData(
@@ -346,7 +356,7 @@ void _saveNoData(
   api.actions.saveState();
 }
 
-void _deleteData(
+Future<void> _deleteData(
   MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   ActionHandler next,
   Action<void> action,
@@ -467,21 +477,21 @@ Future<bool> _showDataSavingDialog() {
     barrierDismissible: false,
     context: navigatorKey.currentContext,
     builder: (context) => AlertDialog(
-      title: Text("Möchtest du alle Funktionen dieser App nutzen?"),
-      content: Text(
-          """Um alle Funktionen zu benutzen, müssen deine Daten (Hausaufgaben, Noten usw.) auf diesem Gerät gespeichert werden.
+      title: const Text("Möchtest du alle Funktionen dieser App nutzen?"),
+      content: const Text("""
+Um alle Funktionen zu benutzen, müssen deine Daten (Hausaufgaben, Noten usw.) auf diesem Gerät gespeichert werden.
 
 So ist es z.B. möglich, einen Offline-Modus bereitzustellen und neue, geänderte oder gelöschte Einträge hervorzuheben.
 
 Du kannst dies in den Einstellungen jederzeit wieder ändern."""),
       actions: [
         TextButton(
-          child: Text("Daten nicht speichern"),
           onPressed: () => Navigator.pop(context, false),
+          child: const Text("Daten nicht speichern"),
         ),
         ElevatedButton(
           onPressed: () => Navigator.pop(context, true),
-          child: Text("Daten speichern"),
+          child: const Text("Daten speichern"),
         )
       ],
     ),

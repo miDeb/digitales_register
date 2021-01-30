@@ -4,8 +4,10 @@ final _calendarMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(CalendarActionsNames.load, _loadCalendar);
 
-void _loadCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<DateTime> action) async {
+Future<void> _loadCalendar(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<DateTime> action) async {
   if (api.state.noInternet) return;
 
   next(action);
@@ -13,7 +15,7 @@ void _loadCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 
   if (data != null) {
-    api.actions.calendarActions.loaded(data);
+    api.actions.calendarActions.loaded(data as Map<String, dynamic>);
   } else {
     api.actions.refreshNoInternet();
   }

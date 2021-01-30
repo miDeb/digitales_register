@@ -13,15 +13,15 @@ class NotificationIcon extends StatelessWidget {
         ? IconButton(
             visualDensity: VisualDensity.standard,
             icon: Badge(
-              child: Icon(Icons.notifications),
               badgeContent: Text(
                 notifications.toString(),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               ),
               position: BadgePosition.bottomEnd(),
+              child: const Icon(Icons.notifications),
             ),
             onPressed: onTap,
           )
-        : SizedBox();
+        : const SizedBox();
   }
 }

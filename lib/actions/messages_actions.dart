@@ -5,11 +5,11 @@ import '../data.dart';
 part 'messages_actions.g.dart';
 
 abstract class MessagesActions extends ReduxActions {
-  MessagesActions._();
   factory MessagesActions() => _$MessagesActions();
+  MessagesActions._();
 
   ActionDispatcher<void> load;
-  ActionDispatcher<dynamic> loaded;
+  ActionDispatcher<List> loaded;
   ActionDispatcher<Message> downloadFile;
   ActionDispatcher<Message> fileAvailable;
   ActionDispatcher<Message> openFile;
