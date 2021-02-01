@@ -58,7 +58,9 @@ class SortedGradesWidget extends StatelessWidget {
             padding: EdgeInsets.only(top: 16),
             child: ListTile(
               title: Text(
-                  "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen"),
+                "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen",
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
       ],
@@ -102,8 +104,18 @@ class _SubjectWidgetState extends State<SubjectWidget> {
       absorbing: widget.noInternet && entries == null,
       child: ExpansionTile(
         key: ObjectKey(widget.subject),
-        title:
-            Text(widget.subject.name + (widget.ignoredForAverage ? " *" : "")),
+        title: Text.rich(
+          TextSpan(
+            text: widget.subject.name,
+            children: [
+              if (widget.ignoredForAverage)
+                const TextSpan(
+                  text: " *",
+                  style: TextStyle(color: Colors.grey),
+                ),
+            ],
+          ),
+        ),
         leading: widget.semester != Semester.all
             ? Text.rich(
                 TextSpan(
