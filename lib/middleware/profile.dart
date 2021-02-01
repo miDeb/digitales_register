@@ -10,7 +10,7 @@ Future<void> _loadProfile(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  next(action);
+  await next(action);
   if (api.state.noInternet) return;
   final result = await _wrapper.send("api/profile/get");
   if (result == null) {
@@ -24,7 +24,7 @@ Future<void> _setSendNotificationEmails(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.send(
     "api/profile/updateNotificationSettings",
     args: {
@@ -41,7 +41,7 @@ Future<void> _changeEmail(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<ChangeEmailPayload> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.send(
     "api/profile/updateProfile",
     args: {

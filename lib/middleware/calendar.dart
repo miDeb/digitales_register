@@ -10,7 +10,7 @@ Future<void> _loadCalendar(
     Action<DateTime> action) async {
   if (api.state.noInternet) return;
 
-  next(action);
+  await next(action);
   final data = await _wrapper.send("api/calendar/student",
       args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 

@@ -33,7 +33,7 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     assert(action.payload.hard);
     _wrapper.logout(hard: action.payload.hard);
   }
-  next(action);
+  await next(action);
   if (action.payload.hard) {
     _wrapper = Wrapper();
     api.actions.mountAppState(AppState());
@@ -43,7 +43,7 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoginPayload> action) async {
-  next(action);
+  await next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
@@ -131,7 +131,7 @@ Future<void> _changePass(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<ChangePassPayload> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.changePass(
     action.payload.url,
     action.payload.user,
@@ -164,18 +164,18 @@ Future<void> _changePass(
   }
 }
 
-void _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoginFailedPayload> action) {
-  next(action);
+Future<void> _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<LoginFailedPayload> action) async{
+  await next(action);
 
   api.actions.savePassActions.delete();
   api.actions.routingActions.showLogin();
 }
 
-void _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
   api.actions.routingActions.showLogin();
-  next(action);
+  await next(action);
 }
 
 Future<void> _requestPassReset(
@@ -227,7 +227,7 @@ Future<void> _addAccount(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  next(action);
+  await next(action);
   // Move the current default user credentials into `otherAccounts`
   final login = json.decode(await _secureStorage.read(key: "login"));
   final otherAccounts = login["otherAccounts"] as List ?? [];
@@ -259,7 +259,7 @@ Future<void> _selectAccount(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<int> action) async {
-  next(action);
+  await next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
   final otherAccounts = login["otherAccounts"] as List;
   var selectedIndex = action.payload;

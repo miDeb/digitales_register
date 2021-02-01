@@ -11,7 +11,7 @@ Future<void> _enableOffline(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) async {
-  next(action);
+  await next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
   final user = login["user"];
   final pass = login["pass"];
@@ -35,7 +35,7 @@ Future<void> _setSavePass(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<bool> action) async {
-  next(action);
+  await next(action);
   _wrapper.safeMode = action.payload;
   if (!api.state.loginState.loggedIn) return;
   if (!action.payload) {
@@ -47,7 +47,7 @@ Future<void> _setSavePass(
 
 Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
-  next(action);
+  await next(action);
   if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode) {
     return;
   }
@@ -70,7 +70,7 @@ Future<void> _deletePass(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  next(action);
+  await next(action);
   _secureStorage.write(
     key: "login",
     value: json.encode(

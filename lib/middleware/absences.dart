@@ -9,7 +9,7 @@ Future<void> _loadAbsences(
     ActionHandler next,
     Action<void> action) async {
   if (api.state.noInternet) return;
-  next(action);
+  await next(action);
   final response = await _wrapper.send("api/student/dashboard/absences");
   if (response != null) {
     api.actions.absencesActions.loaded(response);

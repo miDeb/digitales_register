@@ -15,7 +15,7 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<bool> action) async {
   if (api.state.noInternet) return;
 
-  next(action);
+  await next(action);
   final data = await _wrapper.send("api/student/dashboard/dashboard",
       args: {"viewFuture": action.payload});
 
@@ -37,9 +37,11 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   );
 }
 
-void _switchFuture(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
-  next(action);
+Future<void> _switchFuture(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
+  await next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
 }
 
@@ -47,7 +49,7 @@ Future<void> _addReminder(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<AddReminderPayload> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.send(
     "api/student/dashboard/save_reminder",
     args: {
@@ -80,7 +82,7 @@ Future<void> _deleteHomework(
     },
   );
   if (result != null && result["success"] == true) {
-    next(action);
+    await next(action);
   } else {
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
@@ -92,7 +94,7 @@ Future<void> _toggleDone(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<ToggleDonePayload> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.send(
     "api/student/dashboard/toggle_reminder",
     args: {
@@ -104,9 +106,9 @@ Future<void> _toggleDone(
   if (result != null && result["success"] == true) {
     // duplicate - protection from multiple, failing and not failing requests
     // TODO: Does this even work??
-    next(action);
+    await next(action);
   } else {
-    next(
+    await next(
       Action<ToggleDonePayload>(
         DashboardActionsNames.toggleDone.name,
         ToggleDonePayload(
@@ -122,14 +124,14 @@ Future<void> _toggleDone(
   }
 }
 
-void _markNotSeenEntries(
+Future<void> _markNotSeenEntries(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<bool> action) {
+    Action<bool> action) async{
   if (!action.payload) {
     api.actions.dashboardActions.markAllAsSeen();
   }
-  next(action);
+  await next(action);
 }
 
 Future<void> _downloadAttachment(
@@ -137,7 +139,7 @@ Future<void> _downloadAttachment(
     ActionHandler next,
     Action<GradeGroupSubmission> action) async {
   if (api.state.noInternet) return;
-  next(action);
+  await next(action);
   final saveFile = File(
     "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}",
   );
@@ -164,7 +166,7 @@ Future<void> _openAttachment(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<GradeGroupSubmission> action) async {
-  next(action);
+  await next(action);
   final saveFile = File(
       "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
   var path = saveFile.path;

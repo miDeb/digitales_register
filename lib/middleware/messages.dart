@@ -12,7 +12,7 @@ Future<void> _loadMessages(
     ActionHandler next,
     Action<void> action) async {
   if (api.state.noInternet) return;
-  next(action);
+  await next(action);
   final response = await _wrapper.send("api/message/getMyMessages");
   if (response != null) {
     api.actions.messagesActions.loaded(response as List);
@@ -26,12 +26,12 @@ Future<void> _downloadFile(
     ActionHandler next,
     Action<Message> action) async {
   if (api.state.noInternet) return;
-  next(action);
+  await next(action);
 }
 
 Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Message> action) async {
-  next(action);
+  await next(action);
   final saveFile = File(
     action.payload.fileOriginalName,
   );
@@ -42,7 +42,7 @@ Future<void> _markAsRead(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<int> action) async {
-  next(action);
+  await next(action);
   final result = await _wrapper.send(
     "api/message/markAsRead",
     args: {"messageId": action.payload},

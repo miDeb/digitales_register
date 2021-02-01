@@ -9,7 +9,7 @@ Future<void> _loadCertificate(
     ActionHandler next,
     Action<void> action) async {
   if (api.state.noInternet) return;
-  next(action);
+  await next(action);
   final response = await _wrapper.send("student/certificate", method: "GET");
   if (response != null) {
     api.actions.certificateActions.loaded(response as String);

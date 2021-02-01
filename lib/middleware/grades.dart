@@ -15,9 +15,9 @@ const String _subjects = "api/student/all_subjects";
 const String _subjectsDetail = "api/student/subject_detail";
 const String _grade = "api/student/entry/getGrade";
 
-void _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Semester> action) {
-  next(action);
+Future<void> _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<Semester> action) async{
+  await next(action);
   api.actions.gradesActions.load(action.payload);
 }
 
@@ -27,7 +27,7 @@ Future<void> _loadGrades(
     Action<Semester> action) async {
   if (api.state.noInternet) return;
 
-  next(action);
+  await next(action);
   _doForSemester(
     action.payload == Semester.all
         ? [Semester.first, Semester.second]
@@ -60,7 +60,7 @@ Future<void> _loadGradesDetails(
     Action<LoadSubjectDetailsPayload> action) async {
   if (api.state.noInternet) return;
 
-  next(action);
+  await next(action);
 
   _doForSemester(
     action.payload.semester == Semester.all
@@ -111,7 +111,7 @@ Future<void> _loadCancelledDescription(
     Action<LoadGradeCancelledDescriptionPayload> action) async {
   if (api.state.noInternet) return;
 
-  next(action);
+  await next(action);
   _doForSemester(
     [action.payload.semester],
     (s) async {

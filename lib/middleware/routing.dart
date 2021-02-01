@@ -35,7 +35,7 @@ Future<void> _showLogin(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  next(action);
+  await next(action);
   // hack since the current route is not exposed otherwise
   Route currentRoute;
   navigatorKey.currentState?.popUntil((route) {
@@ -48,114 +48,136 @@ Future<void> _showLogin(
   }
 }
 
-void _showRequestPassReset(
+Future<void> _showRequestPassReset(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) {
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/request_pass_reset");
-  next(action);
+  await next(action);
 }
 
-void _showPassReset(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showPassReset(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/pass_reset");
-  next(action);
+  await next(action);
 }
 
-void _showChangeEmail(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showChangeEmail(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/change_email");
-  next(action);
+  await next(action);
 }
 
-void _showProfile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showProfile(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/profile");
   api.actions.profileActions.load();
-  next(action);
+  await next(action);
 }
 
-void _showNotifications(
+Future<void> _showNotifications(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) {
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/notifications");
-  next(action);
+  await next(action);
 }
 
-void _showSettings(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showSettings(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(SettingsPageContainer(), Pages.settings);
-  next(action);
+  await next(action);
 }
 
-void _showEditCalendarSubjectNicks(
+Future<void> _showEditCalendarSubjectNicks(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) {
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/settings");
-  next(action);
+  await next(action);
 }
 
-void _showEditGradesAverageSettings(
+Future<void> _showEditGradesAverageSettings(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) {
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/settings");
-  next(action);
+  await next(action);
 }
 
-void _showCalendar(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showCalendar(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(CalendarContainer(), Pages.calendar);
   api.actions.calendarActions.setCurrentMonday(toMonday(now));
 
-  next(action);
+  await next(action);
 }
 
-void _showGrades(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showGrades(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(GradesPageContainer(), Pages.grades);
   api.actions.gradesActions.load(api.state.gradesState.semester);
-  next(action);
+  await next(action);
 }
 
-void _showAbsences(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showAbsences(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(AbsencesPageContainer(), Pages.absences);
   api.actions.absencesActions.load();
-  next(action);
+  await next(action);
 }
 
-void _showCertificate(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showCertificate(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(CertificateContainer(), Pages.certificate);
   api.actions.certificateActions.load();
-  next(action);
+  await next(action);
 }
 
-void _showMessages(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showMessages(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   scaffoldKey.currentState
       .selectContentWidget(MessagesPageContainer(), Pages.messages);
   api.actions.messagesActions.load();
-  next(action);
+  await next(action);
 }
 
-void _showMessage(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<int> action) {
+Future<void> _showMessage(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<int> action) async {
   navigatorKey.currentState.pop();
   api.actions.routingActions.showMessages();
-  next(action);
+  await next(action);
 }
 
-void _showGradesChart(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
+Future<void> _showGradesChart(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   navigatorKey.currentState.pushNamed("/gradesChart");
-  next(action);
+  await next(action);
 }

@@ -16,6 +16,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
+import 'package:package_info/package_info.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -83,7 +84,7 @@ final middleware = [
 
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
-    (ActionHandler next) => (Action action) {
+    (ActionHandler next) => (Action action) async {
           void handleError(e, StackTrace trace) {
             log("Error caught by error middleware",
                 error: e, stackTrace: trace);
@@ -102,18 +103,30 @@ NextActionHandler _errorMiddleware(
                       backgroundColor: Colors.red,
                       title: const Text("Fehler!"),
                     ),
-                    body: SingleChildScrollView(
-                      child: Column(
-                        children: <Widget>[
-                          ElevatedButton(
+                    body: ListView(
+                      padding: const EdgeInsets.all(16),
+                      children: <Widget>[
+                        Center(
+                          child: ElevatedButton(
                             onPressed: () async {
-                              final error = "$e\n\n$stackTrace";
+                              PackageInfo info;
+                              try {
+                                info = await PackageInfo.fromPlatform();
+                              } catch (e) {
+                                log("failed to get app version for feedback (error)");
+                              }
+                              final appVersion = info?.version;
+                              final error =
+                                  "$e\n\n$stackTrace\n\nApp Version: $appVersion";
                               launch(
                                   "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
                             },
                             child: const Text("Entwickler benachrichtigen"),
                           ),
-                          Text(
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
                             """
 Ein Fehler ist aufgetreten.
 Eine Funktion wird eventuell noch nicht unterstützt.
@@ -123,8 +136,8 @@ $e
 
 $stackTrace""",
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 },
@@ -136,7 +149,7 @@ $stackTrace""",
             handleError(action.payload, null);
           } else {
             try {
-              next(action);
+              await next(action);
             } catch (e, stackTrace) {
               handleError(e, stackTrace);
             }
@@ -153,7 +166,7 @@ Future<void> _refreshNoInternet(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  next(action);
+  await next(action);
   final noInternet = await _wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
@@ -171,7 +184,7 @@ Future<void> _refreshNoInternet(
 
 Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
-  next(action);
+  await next(action);
   if (!api.state.noInternet) _popAll();
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
   final user = login["user"] as String;
@@ -207,9 +220,9 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 }
 
-void _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) {
-  next(action);
+Future<void> _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next, Action<void> action) async {
+  await next(action);
   api.actions.dashboardActions.load(api.state.dashboardState.future);
   api.actions.notificationsActions.load();
 }
@@ -255,24 +268,24 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         }
 
         // next not at the beginning: bug fix (serialization)
-        next(action);
+        await next(action);
 
         api.actions.settingsActions
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
         log("Failed to load data", error: e);
-        next(action);
+        await next(action);
       }
     } else {
       final saveData = await _showDataSavingDialog();
       api.actions.settingsActions.saveNoData(!saveData);
-      next(action);
+      await next(action);
     }
 
     _popAll();
   } else {
-    next(action);
+    await next(action);
   }
   for (final callback in api.state.loginState.callAfterLogin) {
     callback();
@@ -292,8 +305,8 @@ bool _deletedData = false;
 
 NextActionHandler _saveStateMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
-    (ActionHandler next) => (Action action) {
-          next(action);
+    (ActionHandler next) => (Action action) async {
+          await next(action);
           if (api.state.loginState.loggedIn &&
               api.state.loginState.username != null) {
             _stateToSave = api.state;
@@ -347,12 +360,12 @@ Future<String> _readFromStorage(String key) async {
   return _secureStorage.read(key: key);
 }
 
-void _saveNoData(
+Future<void> _saveNoData(
   MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   ActionHandler next,
   Action<void> action,
-) {
-  next(action);
+) async {
+  await next(action);
   api.actions.saveState();
 }
 
@@ -361,17 +374,17 @@ Future<void> _deleteData(
   ActionHandler next,
   Action<void> action,
 ) async {
-  next(action);
+  await next(action);
   _deletedData = true;
   api.actions.saveState();
 }
 
-void _restarted(
+Future<void> _restarted(
   MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   ActionHandler next,
   Action<void> action,
-) {
-  next(action);
+) async {
+  await next(action);
   if (DateTime.now().difference(_wrapper.lastInteraction).inMinutes > 3) {
     _popAll();
     api.actions.loginActions.clearAfterLoginCallbacks();
