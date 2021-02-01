@@ -40,6 +40,8 @@ class DebugInterceptor extends Interceptor {
 
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
+class UnexpectedLogoutException implements Exception {}
+
 class Wrapper {
   final cookieJar = DefaultCookieJar();
   final dio = Dio();
@@ -345,9 +347,16 @@ class Wrapper {
       ..address = baseAddress + url
       ..response = stringifyMaybeJson(response)
       ..parameters = stringifyMaybeJson(args)));
-    if (response is String && response.trim() != "") {
-      //print(response);
-      //throw Error();
+
+    // returned if we were logged out:
+    //	<script type="text/javascript">
+    //window.location = "https://vinzentinum.digitalesregister.it/v2/login";
+    //</script>
+
+    if (response is String &&
+        RegExp(r'\s*<script type="text/javascript">\n?\s*window.location = "https://vinzentinum.digitalesregister.it/v2/login";\n?\s*</script>')
+            .hasMatch(response)) {
+      throw UnexpectedLogoutException();
     }
     return response;
   }

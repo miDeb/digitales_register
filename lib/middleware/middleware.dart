@@ -129,8 +129,14 @@ NextActionHandler _errorMiddleware(
                           child: Text(
                             """
 Ein Fehler ist aufgetreten.
+${e is UnexpectedLogoutException ? """
+
+Dieser Fehler kann auftreten, wenn zwei Geräte gleichzeitig auf dasselbe Konto zugreifen.
+In diesem Fall kannst du versuchen, die App zu schließen und erneut zu öffnen.
+
+Falls dies nicht zutrifft, bitte benachrichtige uns, damit wir diesen Fehler beheben können.""" : """
 Eine Funktion wird eventuell noch nicht unterstützt.
-Bitte benachrichtige uns, damit wir diesen Fehler beheben können:
+Bitte benachrichtige uns, damit wir diesen Fehler beheben können:"""}
 
 $e
 
