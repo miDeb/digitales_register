@@ -6,6 +6,6 @@ abstract class CertificateActions extends ReduxActions {
   factory CertificateActions() => _$CertificateActions();
   CertificateActions._();
 
-  ActionDispatcher<void> load;
+  VoidActionDispatcher load;
   ActionDispatcher<String> loaded;
 }

@@ -11,18 +11,18 @@ abstract class DashboardActions extends ReduxActions {
   DashboardActions._();
 
   ActionDispatcher<DaysLoadedPayload> loaded;
-  ActionDispatcher<void> notLoaded;
+  VoidActionDispatcher notLoaded;
   ActionDispatcher<bool> load;
-  ActionDispatcher<void> switchFuture;
+  VoidActionDispatcher switchFuture;
   ActionDispatcher<HomeworkAddedPayload> homeworkAdded;
   ActionDispatcher<AddReminderPayload> addReminder;
   ActionDispatcher<Homework> deleteHomework;
   ActionDispatcher<ToggleDonePayload> toggleDone;
   ActionDispatcher<Homework> markAsSeen;
   ActionDispatcher<Day> markDeletedHomeworkAsSeen;
-  ActionDispatcher<void> markAllAsSeen;
+  VoidActionDispatcher markAllAsSeen;
   ActionDispatcher<BuiltList<HomeworkType>> updateBlacklist;
-  ActionDispatcher<void> refresh;
+  VoidActionDispatcher refresh;
   ActionDispatcher<GradeGroupSubmission> downloadAttachment;
   ActionDispatcher<GradeGroupSubmission> attachmentReady;
   ActionDispatcher<GradeGroupSubmission> openAttachment;

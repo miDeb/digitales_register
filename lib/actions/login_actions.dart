@@ -12,19 +12,19 @@ abstract class LoginActions extends ReduxActions {
   ActionDispatcher<LoggedInPayload> loggedIn;
   ActionDispatcher<LoginFailedPayload> loginFailed;
   ActionDispatcher<LogoutPayload> logout;
-  ActionDispatcher<void> updateLogout;
-  ActionDispatcher<void> loggingIn;
-  ActionDispatcher<void> automaticallyReloggedIn;
+  VoidActionDispatcher updateLogout;
+  VoidActionDispatcher loggingIn;
+  VoidActionDispatcher automaticallyReloggedIn;
   ActionDispatcher<bool> showChangePass;
   ActionDispatcher<ChangePassPayload> changePass;
   ActionDispatcher<void Function()> addAfterLoginCallback;
-  ActionDispatcher<void> clearAfterLoginCallbacks;
+  VoidActionDispatcher clearAfterLoginCallbacks;
   ActionDispatcher<RequestPassResetPayload> requestPassReset;
   ActionDispatcher<String> resetPass;
   ActionDispatcher<String> passResetFailed;
   ActionDispatcher<String> passResetSucceeded;
   ActionDispatcher<List<String>> setAvailableAccounts;
-  ActionDispatcher<void> addAccount;
+  VoidActionDispatcher addAccount;
   // payload: the index of the selected account
   ActionDispatcher<int> selectAccount;
 }

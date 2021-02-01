@@ -30,11 +30,11 @@ dependencies:
   built_redux:
     git:
       url: https://github.com/miDeb/built_redux.git
-      ref: master
+      ref: nnbd
   flutter_built_redux:
     git:
       url: https://github.com/miDeb/flutter_built_redux.git
-      ref: master
+      ref: nnbd
   badges: any
   biometric_storage: ^1.1.0+1
   built_value: any
@@ -60,10 +60,6 @@ dependencies:
 dependency_overrides:
   intl: ">=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2"
   analyzer: ^0.40.6
-  built_redux:
-    git:
-      url: https://github.com/miDeb/built_redux.git
-      ref: master
 dev_dependencies:
   flutter_test:
     sdk: flutter

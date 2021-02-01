@@ -7,22 +7,22 @@ abstract class RoutingActions extends ReduxActions {
   factory RoutingActions() => _$RoutingActions();
   RoutingActions._();
 
-  ActionDispatcher<void> showLogin;
-  ActionDispatcher<void> showProfile;
-  ActionDispatcher<void> showChangeEmail;
-  ActionDispatcher<void> showRequestPassReset;
+  VoidActionDispatcher showLogin;
+  VoidActionDispatcher showProfile;
+  VoidActionDispatcher showChangeEmail;
+  VoidActionDispatcher showRequestPassReset;
   ActionDispatcher<ShowPassResetPayload> showPassReset;
-  ActionDispatcher<void> showAbsences;
-  ActionDispatcher<void> showNotifications;
-  ActionDispatcher<void> showSettings;
-  ActionDispatcher<void> showGrades;
-  ActionDispatcher<void> showGradesChart;
-  ActionDispatcher<void> showCalendar;
-  ActionDispatcher<void> showCertificate;
-  ActionDispatcher<void> showMessages;
+  VoidActionDispatcher showAbsences;
+  VoidActionDispatcher showNotifications;
+  VoidActionDispatcher showSettings;
+  VoidActionDispatcher showGrades;
+  VoidActionDispatcher showGradesChart;
+  VoidActionDispatcher showCalendar;
+  VoidActionDispatcher showCertificate;
+  VoidActionDispatcher showMessages;
   ActionDispatcher<int> showMessage;
-  ActionDispatcher<void> showEditCalendarSubjectNicks;
-  ActionDispatcher<void> showEditGradesAverageSettings;
+  VoidActionDispatcher showEditCalendarSubjectNicks;
+  VoidActionDispatcher showEditGradesAverageSettings;
 }
 
 abstract class ShowPassResetPayload

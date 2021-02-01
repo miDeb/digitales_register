@@ -7,7 +7,7 @@ abstract class ProfileActions extends ReduxActions {
   factory ProfileActions() => _$ProfileActions();
   ProfileActions._();
 
-  ActionDispatcher<void> load;
+  VoidActionDispatcher load;
   ActionDispatcher<dynamic> loaded;
   ActionDispatcher<bool> sendNotificationEmails;
   ActionDispatcher<ChangeEmailPayload> changeEmail;

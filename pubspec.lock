@@ -105,13 +105,13 @@ packages:
       name: built_collection
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.3.2"
+    version: "5.0.0-nullsafety.0"
   built_redux:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: a7c2a91b66cbcc05807165c1a0dc344caa9e7314
+      ref: nnbd
+      resolved-ref: "2539f8b1cc6c34bc514adffe4cfccad936dcec44"
       url: "https://github.com/miDeb/built_redux.git"
     source: git
     version: "7.5.11"
@@ -121,14 +121,14 @@ packages:
       name: built_value
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.0"
+    version: "8.0.0-nullsafety.0"
   built_value_generator:
     dependency: "direct dev"
     description:
       name: built_value_generator
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "7.1.0"
+    version: "8.0.0-nullsafety.0"
   characters:
     dependency: transitive
     description:
@@ -184,7 +184,7 @@ packages:
       name: code_builder
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.5.0"
+    version: "3.6.0"
   collapsible_sidebar:
     dependency: "direct main"
     description:
@@ -296,7 +296,7 @@ packages:
       name: fixnum
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.10.11"
+    version: "1.0.0-nullsafety.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -306,8 +306,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: b8ce4f34cffacd29797cfd78f9e632014ab6c4f4
+      ref: nnbd
+      resolved-ref: cffbeb1a5c84d3c5b0f6b7105fc3b47982f2ba84
       url: "https://github.com/miDeb/flutter_built_redux.git"
     source: git
     version: "0.6.0"
