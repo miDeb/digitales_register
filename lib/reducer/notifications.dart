@@ -29,14 +29,12 @@ ListBuilder<Notification> _parseNotifications(List data) {
         n,
         (n) => Notification(
           (b) => b
-            ..id = n["id"] as int
-            ..title = n["title"] as String
-            ..type = n["type"] as String
-            ..objectId = n["objectId"] as int
-            ..subTitle = n["subTitle"] as String
-            ..timeSent = DateTime.parse(
-              n["timeSent"] as String,
-            ),
+            ..id = getInt(n["id"])
+            ..title = getString(n["title"])
+            ..type = getString(n["type"])
+            ..objectId = getInt(n["objectId"])
+            ..subTitle = getString(n["subTitle"])
+            ..timeSent = DateTime.parse(getString(n["timeSent"])),
         ),
       ),
     ),

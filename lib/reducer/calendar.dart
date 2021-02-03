@@ -48,25 +48,23 @@ CalendarDayBuilder _parseCalendarDay(day, DateTime date) {
     ..date = date
     ..hours = ListBuilder(((day as Map).values.toList()
           ..removeWhere((e) => e == null || e["isLesson"] == 0)
-          ..sort((a, b) => a["hour"].compareTo(b["hour"]) as int))
+          ..sort((a, b) => getInt(a["hour"]).compareTo(getInt(b["hour"]))))
         .map((h) => tryParse(h, _parseHour).build()));
 }
 
 CalendarHourBuilder _parseHour(hour) {
   final lesson = hour["lesson"];
   return CalendarHourBuilder()
-    ..description = lesson["description"] as String
-    ..fromHour = lesson["hour"] as int
-    ..toHour = lesson["toHour"] as int
+    ..description = getString(lesson["description"])
+    ..fromHour = getInt(lesson["hour"])
+    ..toHour = getInt(lesson["toHour"])
     ..rooms = ListBuilder((lesson["rooms"] as List).map((r) => r["name"]))
-    ..subject = lesson["subject"]["name"] as String
+    ..subject = getString(lesson["subject"]["name"])
     ..teachers = ListBuilder(
       (lesson["teachers"] as List).map(
-        (r) => Teacher(
-          (b) => b
-            ..firstName = r["firstName"] as String
-            ..lastName = r["lastName"] as String,
-        ),
+        (r) => Teacher((b) => b
+          ..firstName = getString(r["firstName"])
+          ..lastName = getString(r["lastName"])),
       ),
     )
     ..homeworkExams = ListBuilder(
@@ -77,14 +75,14 @@ CalendarHourBuilder _parseHour(hour) {
 
 HomeworkExam _parseHomeworkExam(homeworkExam) {
   return HomeworkExam((b) => b
-    ..deadline = DateTime.parse(homeworkExam["deadline"] as String)
+    ..deadline = DateTime.parse(getString(homeworkExam["deadline"]))
     ..hasGradeGroupSubmissions =
-        homeworkExam["hasGradeGroupSubmissions"] as bool
-    ..hasGrades = homeworkExam["hasGrades"] as bool
+        getBool(homeworkExam["hasGradeGroupSubmissions"])
+    ..hasGrades = getBool(homeworkExam["hasGrades"])
     ..homework = homeworkExam["homework"] != 0
-    ..id = homeworkExam["id"] as int
-    ..name = homeworkExam["name"] as String
+    ..id = getInt(homeworkExam["id"])
+    ..name = getString(homeworkExam["name"])
     ..online = homeworkExam["online"] != 0
-    ..typeId = homeworkExam["typeId"] as int
-    ..typeName = homeworkExam["typeName"] as String);
+    ..typeId = getInt(homeworkExam["typeId"])
+    ..typeName = getString(homeworkExam["typeName"]));
 }

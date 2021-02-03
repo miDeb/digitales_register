@@ -25,10 +25,10 @@ void _sendNotificationEmails(
 ProfileState _parseProfile(data) {
   return ProfileState(
     (b) => b
-      ..name = data["name"] as String
-      ..email = data["email"] as String
-      ..roleName = data["roleName"] as String
-      ..sendNotificationEmails = data["notificationsEnabled"] as bool
-      ..username = data["username"] as String,
+      ..name = getString(data["name"])
+      ..email = getString(data["email"])
+      ..roleName = getString(data["roleName"])
+      ..sendNotificationEmails = getBool(data["notificationsEnabled"])
+      ..username = getString(data["username"]),
   );
 }

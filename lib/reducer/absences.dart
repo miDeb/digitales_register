@@ -17,34 +17,34 @@ void _loaded(
   return builder.replace(tryParse(action.payload, _parseAbsences));
 }
 
-AbsencesState _parseAbsences(json) {
+AbsencesState _parseAbsences(dynamic json) {
   final rawStats = json["statistics"];
   final stats = AbsenceStatisticBuilder()
-    ..counter = rawStats["counter"] as int
-    ..counterForSchool = rawStats["counterForSchool"] as int
-    ..delayed = rawStats["delayed"] as int
-    ..justified = rawStats["justified"] as int
-    ..notJustified = rawStats["notJustified"] as int
+    ..counter = getInt(rawStats["counter"])
+    ..counterForSchool = getInt(rawStats["counterForSchool"])
+    ..delayed = getInt(rawStats["delayed"])
+    ..justified = getInt(rawStats["justified"])
+    ..notJustified = getInt(rawStats["notJustified"])
     ..percentage = rawStats["percentage"].toString();
   final absences = (json["absences"] as List).map((g) {
     return AbsenceGroup(
       (b) => b
-        ..justified = AbsenceJustified.fromInt(g["justified"] as int)
-        ..reasonSignature = g["reason_signature"] as String
+        ..justified = AbsenceJustified.fromInt(getInt(g["justified"]))
+        ..reasonSignature = getString(g["reason_signature"])
         ..reasonTimestamp = g["reason_timestamp"] is String
             ? DateTime.tryParse(g["reason_timestamp"] as String)
             : null
-        ..reason = g["reason"] as String
+        ..reason = getString(g["reason"])
         ..absences = ListBuilder(
           (g["group"] as List).map(
             (a) {
               return Absence(
                 (b) => b
-                  ..minutes = a["minutes"] as int
-                  ..date = DateTime.parse(a["date"] as String)
-                  ..hour = a["hour"] as int
-                  ..minutesCameTooLate = a["minutes_begin"] as int
-                  ..minutesLeftTooEarly = a["minutes_end"] as int,
+                  ..minutes = getInt(a["minutes"])
+                  ..date = DateTime.parse(getString(a["date"]))
+                  ..hour = getInt(a["hour"])
+                  ..minutesCameTooLate = getInt(a["minutes_begin"])
+                  ..minutesLeftTooEarly = getInt(a["minutes_end"]),
               );
             },
           ),

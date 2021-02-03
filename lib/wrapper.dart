@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
@@ -413,9 +412,4 @@ class Wrapper {
   void _clearCookies() {
     cookieJar.deleteAll();
   }
-}
-
-String stringifyMaybeJson(dynamic param) {
-  final encoder = JsonEncoder.withIndent("  ", (object) => object.toString());
-  return encoder.convert(param);
 }

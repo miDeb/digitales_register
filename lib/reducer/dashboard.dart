@@ -166,30 +166,28 @@ Day _parseDay(data, bool deduplicate) {
   }
 
   return Day((b) => b
-    ..date = DateTime.parse(data["date"] as String)
+    ..date = DateTime.parse(getString(data["date"]))
     ..homework = items);
 }
 
 Homework _parseHomework(data) {
   return Homework((b) {
     b
-      ..id = data["id"] as int
-      ..title = data["title"] as String
-      ..subtitle = data["subtitle"] as String
-      ..label = data["label"] as String
-      ..warningServerSaid = data["warning"] as bool ?? b.warningServerSaid
-      ..checkable = data["checkable"] as bool ?? b.checkable
-      ..checked = data["checked"] is bool
-          ? data["checked"] as bool
-          : (data["checked"] ?? 0) != 0
-      ..deleteable = data["deleteable"] as bool ?? b.deleteable
+      ..id = getInt(data["id"])
+      ..title = getString(data["title"])
+      ..subtitle = getString(data["subtitle"])
+      ..label = getString(data["label"])
+      ..warningServerSaid = getBool(data["warning"]) ?? b.warningServerSaid
+      ..checkable = getBool(data["checkable"]) ?? b.checkable
+      ..checked = getBool(data["checked"]) ?? false
+      ..deleteable = getBool(data["deleteable"]) ?? b.deleteable
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
           : ListBuilder((data["gradeGroupSubmissions"] as List)
               .map((s) => tryParse(s, _parseGradeGroupSubmission))
               .where((s) => s != null));
 
-    final typeString = data["type"] as String;
+    final typeString = getString(data["type"]);
     HomeworkType type;
     switch (typeString) {
       case "lessonHomework":
@@ -215,8 +213,8 @@ Homework _parseHomework(data) {
 
     if (type == HomeworkType.grade) {
       b
-        ..gradeFormatted = formatGrade(data["grade"] as String)
-        ..grade = data["grade"] as String;
+        ..gradeFormatted = formatGrade(getString(data["grade"]))
+        ..grade = getString(data["grade"]);
     }
   });
 }
@@ -225,13 +223,13 @@ GradeGroupSubmission _parseGradeGroupSubmission(data) {
   try {
     return GradeGroupSubmission(
       (b) => b
-        ..file = data["file"] as String
-        ..originalName = data["originalName"] as String
-        ..timestamp = DateTime.parse(data["timestamp"] as String)
-        ..typeName = data["typeName"] as String
-        ..id = data["id"] as int
-        ..gradeGroupId = data["gradeGroupId"] as int
-        ..userId = data["userId"] as int,
+        ..file = getString(data["file"])
+        ..originalName = getString(data["originalName"])
+        ..timestamp = DateTime.parse(getString(data["timestamp"]))
+        ..typeName = getString(data["typeName"])
+        ..id = getInt(data["id"])
+        ..gradeGroupId = getInt(data["gradeGroupId"])
+        ..userId = getInt(data["userId"]),
     );
   } catch (e, s) {
     log("Failed to parse GradeGroupSubmission", error: e, stackTrace: s);

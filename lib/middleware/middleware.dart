@@ -203,10 +203,10 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   await next(action);
   if (!api.state.noInternet) _popAll();
   final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
-  final user = login["user"] as String;
-  final pass = login["pass"] as String;
-  final url = login["url"] as String;
-  final offlineEnabled = login["offlineEnabled"] as bool;
+  final user = getString(login["user"]);
+  final pass = getString(login["pass"]);
+  final url = getString(login["url"]);
+  final offlineEnabled = getBool(login["offlineEnabled"]);
   final List<String> otherAccounts = List.from(
     (login["otherAccounts"] as List)?.map((login) => login["user"]) ?? [],
   );

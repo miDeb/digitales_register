@@ -57,8 +57,8 @@ void _updateSubjects(BuiltList<Subject> subjects,
       subjectsBuilder.add(
         Subject(
           (b) => b
-            ..id = subject["subject"]["id"] as int
-            ..name = subject["subject"]["name"] as String
+            ..id = getInt(subject["subject"]["id"])
+            ..name = getString(subject["subject"]["name"])
             ..gradesAll = MapBuilder(
               {
                 semester: BuiltList<GradeAll>(
@@ -136,11 +136,11 @@ void _cancelledDescriptionLoaded(
 Observation _parseObservation(dynamic data) {
   return Observation(
     (b) => b
-      ..typeName = data["typeName"] as String
+      ..typeName = getString(data["typeName"])
       ..cancelled = data["cancelled"] != 0
-      ..created = data["created"] as String
-      ..note = data["note"] as String
-      ..date = DateTime.parse(data["date"] as String),
+      ..created = getString(data["created"])
+      ..note = getString(data["note"])
+      ..date = DateTime.parse(getString(data["date"])),
   );
 }
 
@@ -159,26 +159,26 @@ int _parseGradeValue(String grade) {
 GradeAll _parseGradeAll(dynamic data) {
   return GradeAll(
     (b) => b
-      ..grade = tryParse(data["grade"] as String, _parseGradeValue)
-      ..weightPercentage = data["weight"] as int
-      ..date = DateTime.parse(data["date"] as String)
+      ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
+      ..weightPercentage = getInt(data["weight"])
+      ..date = DateTime.parse(getString(data["date"]))
       ..cancelled = data["cancelled"] != 0
-      ..type = data["type"] as String,
+      ..type = getString(data["type"]),
   );
 }
 
 GradeDetail _parseGrade(dynamic data) {
   return GradeDetail(
     (b) => b
-      ..grade = tryParse(data["grade"] as String, _parseGradeValue)
-      ..date = DateTime.parse(data["date"] as String)
-      ..weightPercentage = data["weight"] as int
-      ..cancelled = data["cancelled"] != 0
-      ..type = data["typeName"] as String
-      ..created = data["created"] as String
-      ..name = data["name"] as String
-      ..description = data["description"] as String
-      ..id = data["id"] as int
+      ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
+      ..date = DateTime.parse(getString(data["date"]))
+      ..weightPercentage = getInt(data["weight"])
+      ..cancelled = getBool(data["cancelled"])
+      ..type = getString(data["typeName"])
+      ..created = getString(data["created"])
+      ..name = getString(data["name"])
+      ..description = getString(data["description"])
+      ..id = getInt(data["id"])
       ..competences = ListBuilder(
         (data["competences"] as List)?.map(
           (c) => tryParse(c, _parseCompetence),
@@ -189,14 +189,14 @@ GradeDetail _parseGrade(dynamic data) {
 
 GradeDetail _addCancelledDescription(GradeDetail grade, dynamic data) {
   return grade.rebuild(
-    (b) => b..cancelledDescription = data["cancelledDescription"] as String,
+    (b) => b..cancelledDescription = getString(data["cancelledDescription"]),
   );
 }
 
 Competence _parseCompetence(dynamic data) {
   return Competence((b) => b
-    ..typeName = data["typeName"] as String
-    ..grade = double.parse(data["grade"] as String).toInt());
+    ..typeName = getString(data["typeName"])
+    ..grade = double.parse(getString(data["grade"])).toInt());
 }
 
 void _setSemester(

@@ -71,21 +71,17 @@ MessagesState _parseMessages(List json, MessagesState state) {
 
 Message _parseMessage(dynamic json, MessagesState state) {
   final message = MessageBuilder()
-    ..subject = json["subject"] as String
-    ..text = json["text"] as String
-    ..timeSent = DateTime.parse(
-      json["timeSent"] as String,
-    )
+    ..subject = getString(json["subject"])
+    ..text = getString(json["text"])
+    ..timeSent = DateTime.parse(getString(json["timeSent"]))
     ..timeRead = json["timeRead"] != null
-        ? DateTime.parse(
-            json["timeRead"] as String,
-          )
+        ? DateTime.parse(getString(json["timeRead"]))
         : null
-    ..recipientString = json["recipientString"] as String
-    ..fromName = json["fromName"] as String
-    ..fileName = json["fileName"] as String
-    ..fileOriginalName = json["fileOriginalName"] as String
-    ..id = json["id"] as int;
+    ..recipientString = getString(json["recipientString"])
+    ..fromName = getString(json["fromName"])
+    ..fileName = getString(json["fileName"])
+    ..fileOriginalName = getString(json["fileOriginalName"])
+    ..id = getInt(json["id"]);
   final oldMessage = state?.messages?.firstWhere(
     (m) => m.id == message.id,
     orElse: () => null,
