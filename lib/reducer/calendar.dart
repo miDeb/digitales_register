@@ -4,6 +4,7 @@ import 'package:built_redux/built_redux.dart';
 import '../actions/calendar_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../util.dart';
 
 final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     CalendarState, CalendarStateBuilder>(
@@ -17,7 +18,8 @@ void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
   final t = action.payload.map((k, e) {
     final date = DateTime.parse(k);
-    return MapEntry(date, _parseCalendarDay(e, date).build());
+    return MapEntry(
+        date, tryParse(e, (e) => _parseCalendarDay(e, date)).build());
   });
   builder.days.addAll(t);
 }
@@ -47,7 +49,7 @@ CalendarDayBuilder _parseCalendarDay(day, DateTime date) {
     ..hours = ListBuilder(((day as Map).values.toList()
           ..removeWhere((e) => e == null || e["isLesson"] == 0)
           ..sort((a, b) => a["hour"].compareTo(b["hour"]) as int))
-        .map((h) => _parseHour(h).build()));
+        .map((h) => tryParse(h, _parseHour).build()));
 }
 
 CalendarHourBuilder _parseHour(hour) {
@@ -68,7 +70,8 @@ CalendarHourBuilder _parseHour(hour) {
       ),
     )
     ..homeworkExams = ListBuilder(
-      (lesson["homeworkExams"] as List).map(_parseHomeworkExam),
+      (lesson["homeworkExams"] as List)
+          .map((e) => tryParse(e, _parseHomeworkExam)),
     );
 }
 

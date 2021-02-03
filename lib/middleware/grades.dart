@@ -15,8 +15,10 @@ const String _subjects = "api/student/all_subjects";
 const String _subjectsDetail = "api/student/subject_detail";
 const String _grade = "api/student/entry/getGrade";
 
-Future<void> _setSemester(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Semester> action) async{
+Future<void> _setSemester(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<Semester> action) async {
   await next(action);
   api.actions.gradesActions.load(action.payload);
 }

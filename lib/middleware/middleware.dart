@@ -85,7 +85,7 @@ final middleware = [
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) async {
-          void handleError(e, StackTrace trace) {
+          Future<void> handleError(e, StackTrace trace) async {
             log("Error caught by error middleware",
                 error: e, stackTrace: trace);
             var stackTrace = trace;
@@ -94,6 +94,20 @@ NextActionHandler _errorMiddleware(
             } catch (e) {
               // we can't get a stack trace
             }
+            PackageInfo info;
+            try {
+              info = await PackageInfo.fromPlatform();
+            } catch (e) {
+              log("failed to get app version for feedback (error)");
+            }
+            final appVersion = info?.version;
+            var error = e.toString();
+            if (e is! ParseException) {
+              // ParseExceptions will already provide a more precise stack trace
+              error += "\n\n$stackTrace";
+            }
+            error +=
+                "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
             navigatorKey.currentState.push(
               MaterialPageRoute(
                 fullscreenDialog: true,
@@ -109,15 +123,6 @@ NextActionHandler _errorMiddleware(
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              PackageInfo info;
-                              try {
-                                info = await PackageInfo.fromPlatform();
-                              } catch (e) {
-                                log("failed to get app version for feedback (error)");
-                              }
-                              final appVersion = info?.version;
-                              final error =
-                                  "$e\n\n$stackTrace\n\nApp Version: $appVersion";
                               launch(
                                   "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
                             },
@@ -134,13 +139,18 @@ ${e is UnexpectedLogoutException ? """
 Dieser Fehler kann auftreten, wenn zwei Geräte gleichzeitig auf dasselbe Konto zugreifen.
 In diesem Fall kannst du versuchen, die App zu schließen und erneut zu öffnen.
 
-Falls dies nicht zutrifft, bitte benachrichtige uns, damit wir diesen Fehler beheben können.""" : """
+Falls dies nicht zutrifft, bitte benachrichtige uns, damit wir diesen Fehler beheben können.""" : e is ParseException ? """
+
+Beim Einlesen der Daten ist ein Fehler aufgetreten.
+Bitte benachrichtige uns, damit wir diesen Fehler beheben können.
+Bitte beachte, dass das Fehlerprotokoll möglicherweise private Daten enthält.""" : """
+
 Eine Funktion wird eventuell noch nicht unterstützt.
 Bitte benachrichtige uns, damit wir diesen Fehler beheben können:"""}
 
-$e
+ --  Fehlerprotokoll: --
 
-$stackTrace""",
+$error""",
                           ),
                         ),
                       ],

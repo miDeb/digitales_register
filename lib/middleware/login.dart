@@ -164,16 +164,20 @@ Future<void> _changePass(
   }
 }
 
-Future<void> _loginFailed(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<LoginFailedPayload> action) async{
+Future<void> _loginFailed(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<LoginFailedPayload> action) async {
   await next(action);
 
   api.actions.savePassActions.delete();
   api.actions.routingActions.showLogin();
 }
 
-Future<void> _showChangePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<void> action) async {
+Future<void> _showChangePass(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
   api.actions.routingActions.showLogin();
   await next(action);
 }

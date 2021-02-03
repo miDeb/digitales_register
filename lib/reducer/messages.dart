@@ -1,6 +1,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/util.dart';
 
 import '../actions/messages_actions.dart';
 import '../app_state.dart';
@@ -19,7 +20,8 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     MessagesState state, Action<List> action, MessagesStateBuilder builder) {
-  return builder.replace(_parseMessages(action.payload, state));
+  return builder.replace(tryParse(action.payload,
+      (List<dynamic> payload) => _parseMessages(payload, state)));
 }
 
 void _showMessage(
@@ -60,33 +62,36 @@ void _markAsRead(
 }
 
 MessagesState _parseMessages(List json, MessagesState state) {
-  final messages = json.map((m) {
-    final message = MessageBuilder()
-      ..subject = m["subject"] as String
-      ..text = m["text"] as String
-      ..timeSent = DateTime.parse(
-        m["timeSent"] as String,
-      )
-      ..timeRead = m["timeRead"] != null
-          ? DateTime.parse(
-              m["timeRead"] as String,
-            )
-          : null
-      ..recipientString = m["recipientString"] as String
-      ..fromName = m["fromName"] as String
-      ..fileName = m["fileName"] as String
-      ..fileOriginalName = m["fileOriginalName"] as String
-      ..id = m["id"] as int;
-    final oldMessage = state?.messages?.firstWhere(
-      (m) => m.id == message.id,
-      orElse: () => null,
-    );
-    if (oldMessage != null && oldMessage.fileName == message.fileName) {
-      message.fileAvailable = oldMessage.fileAvailable;
-    }
-    return message.build();
-  }).toList();
+  final messages =
+      json.map((m) => tryParse(m, (m) => _parseMessage(m, state))).toList();
   return MessagesState(
     (b) => b..messages = ListBuilder<Message>(messages),
   );
+}
+
+Message _parseMessage(dynamic json, MessagesState state) {
+  final message = MessageBuilder()
+    ..subject = json["subject"] as String
+    ..text = json["text"] as String
+    ..timeSent = DateTime.parse(
+      json["timeSent"] as String,
+    )
+    ..timeRead = json["timeRead"] != null
+        ? DateTime.parse(
+            json["timeRead"] as String,
+          )
+        : null
+    ..recipientString = json["recipientString"] as String
+    ..fromName = json["fromName"] as String
+    ..fileName = json["fileName"] as String
+    ..fileOriginalName = json["fileOriginalName"] as String
+    ..id = json["id"] as int;
+  final oldMessage = state?.messages?.firstWhere(
+    (m) => m.id == message.id,
+    orElse: () => null,
+  );
+  if (oldMessage != null && oldMessage.fileName == message.fileName) {
+    message.fileAvailable = oldMessage.fileAvailable;
+  }
+  return message.build();
 }

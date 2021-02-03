@@ -127,7 +127,7 @@ Future<void> _toggleDone(
 Future<void> _markNotSeenEntries(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<bool> action) async{
+    Action<bool> action) async {
   if (!action.payload) {
     api.actions.dashboardActions.markAllAsSeen();
   }

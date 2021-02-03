@@ -32,7 +32,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
   final loadedDays = [
     for (final day in action.payload.data)
-      _parseDay(day, action.payload.deduplicateEntries)
+      tryParse(day, (day) => _parseDay(day, action.payload.deduplicateEntries))
   ];
 
   final List<Day> daysToDelete = [];
@@ -149,7 +149,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
 Day _parseDay(data, bool deduplicate) {
   final ListBuilder<Homework> items = ListBuilder(
     (data["items"] as List).map(
-      (m) => _parseHomework(m),
+      (m) => tryParse(m, _parseHomework),
     ),
   );
   if (deduplicate) {
@@ -186,7 +186,7 @@ Homework _parseHomework(data) {
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
           : ListBuilder((data["gradeGroupSubmissions"] as List)
-              .map((s) => _parseGradeGroupSubmission(s))
+              .map((s) => tryParse(s, _parseGradeGroupSubmission))
               .where((s) => s != null));
 
     final typeString = data["type"] as String;

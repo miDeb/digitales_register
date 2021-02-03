@@ -6,6 +6,7 @@ import '../actions/grades_actions.dart';
 import '../actions/login_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../util.dart';
 
 final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     GradesState, GradesStateBuilder>(
@@ -48,7 +49,7 @@ void _updateSubjects(BuiltList<Subject> subjects,
         (b) => b
           ..gradesAll[semester] = BuiltList(
             (subject["grades"] as List).map(
-              (g) => _parseGradeAll(g),
+              (g) => tryParse(g, _parseGradeAll),
             ),
           ),
       );
@@ -62,7 +63,7 @@ void _updateSubjects(BuiltList<Subject> subjects,
               {
                 semester: BuiltList<GradeAll>(
                   (subject["grades"] as List).map(
-                    (g) => _parseGradeAll(g),
+                    (g) => tryParse(g, _parseGradeAll),
                   ),
                 ),
               },
@@ -86,7 +87,7 @@ void _detailsLoaded(GradesState state,
             (b) => b
               ..grades[action.payload.semester] = BuiltList(
                 (data["grades"] as List).map(
-                  (g) => _parseGrade(g).rebuild(
+                  (g) => tryParse(g, _parseGrade).rebuild(
                     (d) => d
                       // we will also try to load the [cancelledDescription]
                       // again, but for now keep the old one
@@ -101,7 +102,7 @@ void _detailsLoaded(GradesState state,
               )
               ..observations[action.payload.semester] = BuiltList(
                 (data["observations"] as List).map(
-                  (o) => _parseObservation(o),
+                  (o) => tryParse(o, _parseObservation),
                 ),
               ),
           )
@@ -158,7 +159,7 @@ int _parseGradeValue(String grade) {
 GradeAll _parseGradeAll(dynamic data) {
   return GradeAll(
     (b) => b
-      ..grade = _parseGradeValue(data["grade"] as String)
+      ..grade = tryParse(data["grade"] as String, _parseGradeValue)
       ..weightPercentage = data["weight"] as int
       ..date = DateTime.parse(data["date"] as String)
       ..cancelled = data["cancelled"] != 0
@@ -169,7 +170,7 @@ GradeAll _parseGradeAll(dynamic data) {
 GradeDetail _parseGrade(dynamic data) {
   return GradeDetail(
     (b) => b
-      ..grade = _parseGradeValue(data["grade"] as String)
+      ..grade = tryParse(data["grade"] as String, _parseGradeValue)
       ..date = DateTime.parse(data["date"] as String)
       ..weightPercentage = data["weight"] as int
       ..cancelled = data["cancelled"] != 0
@@ -180,7 +181,7 @@ GradeDetail _parseGrade(dynamic data) {
       ..id = data["id"] as int
       ..competences = ListBuilder(
         (data["competences"] as List)?.map(
-          (c) => _parseCompetence(c),
+          (c) => tryParse(c, _parseCompetence),
         ),
       ),
   );

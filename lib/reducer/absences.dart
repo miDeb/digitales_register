@@ -4,6 +4,7 @@ import 'package:built_redux/built_redux.dart';
 import '../actions/absences_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../util.dart';
 
 final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     AbsencesState, AbsencesStateBuilder>(
@@ -13,7 +14,7 @@ final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
-  return builder.replace(_parseAbsences(action.payload));
+  return builder.replace(tryParse(action.payload, _parseAbsences));
 }
 
 AbsencesState _parseAbsences(json) {

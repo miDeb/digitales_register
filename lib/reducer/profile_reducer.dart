@@ -2,6 +2,7 @@ import 'package:built_redux/built_redux.dart';
 
 import '../actions/profile_actions.dart';
 import '../app_state.dart';
+import '../util.dart';
 
 final profileReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     ProfileState, ProfileStateBuilder>(
@@ -13,7 +14,7 @@ final profileReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     ProfileState state, Action<Object> action, ProfileStateBuilder builder) {
-  return builder.replace(_parseProfile(action.payload));
+  return builder.replace(tryParse(action.payload, _parseProfile));
 }
 
 void _sendNotificationEmails(
