@@ -40,17 +40,20 @@ class CollapsibleSidebar extends StatefulWidget {
     this.topPadding = 0,
     this.fitItemsToBottom = false,
     this.alwaysExpanded = false,
-    this.initiallyExpanded = false,
+    this.expanded = false,
     required this.body,
     this.onExpansionChange,
+    required this.titleTooltip,
+    required this.toggleTooltip,
   }) : super(key: key);
 
   final Widget? title, toggleTitle;
+  final String titleTooltip, toggleTooltip;
   final TextStyle? titleStyle, textStyle, toggleTitleStyle;
   final Widget body;
   final Widget? avatar;
   final bool showToggleButton, fitItemsToBottom;
-  final bool alwaysExpanded, initiallyExpanded;
+  final bool alwaysExpanded, expanded;
   final List<CollapsibleItem> items;
   final double height,
       minWidth,
@@ -138,11 +141,21 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       setState(() {});
     });
 
-    _isCollapsed = !(widget.initiallyExpanded || widget.alwaysExpanded);
+    _isCollapsed = !(widget.expanded || widget.alwaysExpanded);
 
-    if (widget.alwaysExpanded || widget.initiallyExpanded) {
+    if (widget.alwaysExpanded || widget.expanded) {
       _animateTo(tempWidth);
       _controller.value = 1;
+    }
+  }
+
+  @override
+  void didUpdateWidget(CollapsibleSidebar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.expanded != !_isCollapsed) {
+      _isCollapsed = !_isCollapsed;
+      final endWidth = _isCollapsed ? widget.minWidth : tempWidth;
+      _animateTo(endWidth);
     }
   }
 
@@ -238,6 +251,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       ),
       title: widget.title,
       textStyle: _textStyle(widget.unselectedTextColor, widget.titleStyle),
+      tooltip: widget.titleTooltip,
     );
   }
 
@@ -251,6 +265,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         textColor = widget.selectedTextColor;
       }
       return CollapsibleItemWidget(
+        tooltip: item.text,
         curve: widget.curve,
         hasDivider: item.hasDivider,
         selectedBoxColor: widget.selectedIconBox,
@@ -296,6 +311,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         final endWidth = _isCollapsed ? widget.minWidth : tempWidth;
         _animateTo(endWidth);
       },
+      tooltip: widget.toggleTooltip,
     );
   }
 

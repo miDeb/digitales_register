@@ -25,7 +25,7 @@ class SidebarContainer extends StatelessWidget {
       builder: (BuildContext context, state, AppActions actions) {
         return Sidebar(
           currentSelected: currentSelected,
-          drawerInitiallyFullyExpanded: state.drawerInitiallyFullyExpanded,
+          drawerExpanded: state.drawerInitiallyFullyExpanded,
           goHome: goHome,
           onDrawerExpansionChange: actions.settingsActions.drawerExpandedChange,
           tabletMode: tabletMode,

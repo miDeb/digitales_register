@@ -118,6 +118,8 @@ class _SidebarPageState extends State<SidebarPage> {
             fontWeight: FontWeight.bold),
         toggleTitleStyle:
             const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        titleTooltip: 'John Smith',
+        toggleTooltip: 'Collapse',
       ),
     );
   }

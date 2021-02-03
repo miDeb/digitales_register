@@ -8,7 +8,7 @@ typedef SelectAccountCallback = void Function(int index);
 class Sidebar extends StatelessWidget {
   const Sidebar({
     Key key,
-    @required this.drawerInitiallyFullyExpanded,
+    @required this.drawerExpanded,
     @required this.onDrawerExpansionChange,
     @required this.username,
     @required this.userIcon,
@@ -37,7 +37,7 @@ class Sidebar extends StatelessWidget {
       showSettings,
       logout,
       addAccount;
-  final bool tabletMode, drawerInitiallyFullyExpanded;
+  final bool tabletMode, drawerExpanded;
   final Pages currentSelected;
   final String username, userIcon;
   final List<String> otherAccounts;
@@ -48,7 +48,7 @@ class Sidebar extends StatelessWidget {
     return CollapsibleSidebar(
       onExpansionChange: onDrawerExpansionChange,
       alwaysExpanded: !tabletMode,
-      initiallyExpanded: drawerInitiallyFullyExpanded,
+      expanded: drawerExpanded,
       iconSize: 30,
       textStyle: Theme.of(context).textTheme.subtitle1,
       fitItemsToBottom: true,
@@ -80,6 +80,8 @@ class Sidebar extends StatelessWidget {
           }
         },
       ),
+      titleTooltip: username,
+      toggleTooltip: "Einklappen",
       toggleTitle: const SizedBox(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:

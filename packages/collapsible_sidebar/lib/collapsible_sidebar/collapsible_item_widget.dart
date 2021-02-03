@@ -7,6 +7,7 @@ class CollapsibleItemWidget extends StatelessWidget {
     Key? key,
     required this.leading,
     required this.title,
+    required this.tooltip,
     required this.textStyle,
     required this.padding,
     required this.offsetX,
@@ -19,6 +20,7 @@ class CollapsibleItemWidget extends StatelessWidget {
 
   final Widget leading;
   final Widget? title;
+  final String tooltip;
   final TextStyle textStyle;
   final double offsetX, padding;
   final VoidCallback? onTap;
@@ -76,7 +78,10 @@ class CollapsibleItemWidget extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Row(
                         children: [
-                          leading,
+                          Tooltip(
+                            child: leading,
+                            message: tooltip,
+                          ),
                           if (title != null)
                             Container(
                               padding:
