@@ -267,7 +267,7 @@ abstract class SettingsState
       ..showCancelled = false
       ..deleteDataOnLogout = false
       ..offlineEnabled = true
-      ..subjectNicks = MapBuilder<String, String>({
+      ..subjectNicks = MapBuilder<String, String>(const {
         "Deutsch": "Deu",
         "Mathematik": "Mat",
         "Latein": "Lat",
