@@ -44,11 +44,12 @@ class CollapsibleSidebar extends StatefulWidget {
     required this.body,
     this.onExpansionChange,
     required this.titleTooltip,
-    required this.toggleTooltip,
+    required this.toggleTooltipCollapsed,
+    required this.toggleTooltipExpanded,
   }) : super(key: key);
 
   final Widget? title, toggleTitle;
-  final String titleTooltip, toggleTooltip;
+  final String titleTooltip, toggleTooltipCollapsed, toggleTooltipExpanded;
   final TextStyle? titleStyle, textStyle, toggleTitleStyle;
   final Widget body;
   final Widget? avatar;
@@ -311,7 +312,9 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
         final endWidth = _isCollapsed ? widget.minWidth : tempWidth;
         _animateTo(endWidth);
       },
-      tooltip: widget.toggleTooltip,
+      tooltip: _isCollapsed
+          ? widget.toggleTooltipCollapsed
+          : widget.toggleTooltipExpanded,
     );
   }
 

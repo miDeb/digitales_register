@@ -149,7 +149,8 @@ const _servers = {
   "Scola elementera Urtijei / Runcadic":
       "https://se-urtijei.digitalesregister.it",
   "Scola mesana Urtijëi": "https://sm-urtijei.digitalesregister.it",
-  "sogym - fotour": "https://sogym-fotour.digitalesregister.it",
+  "Sozialwissenschaftliches Gymnasium Bozen - Fachoberschule für Tourismus":
+      "https://sogym-fotour.digitalesregister.it",
   "SSP Abtei Scora elementara": "https://gs-abtei.digitalesregister.it",
   'SSP Abtei Scuola media "Tita Alton"':
       "https://ms-stern.digitalesregister.it",

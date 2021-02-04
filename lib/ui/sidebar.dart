@@ -80,8 +80,9 @@ class Sidebar extends StatelessWidget {
           }
         },
       ),
-      titleTooltip: username,
-      toggleTooltip: "Einklappen",
+      titleTooltip: username ?? "?",
+      toggleTooltipCollapsed: "Ausklappen",
+      toggleTooltipExpanded: "Einklappen",
       toggleTitle: const SizedBox(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:
