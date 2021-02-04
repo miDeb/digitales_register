@@ -79,8 +79,8 @@ class CollapsibleItemWidget extends StatelessWidget {
                       child: Row(
                         children: [
                           Tooltip(
-                            child: leading,
                             message: tooltip,
+                            child: leading,
                           ),
                           if (title != null)
                             Container(
