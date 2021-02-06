@@ -265,6 +265,7 @@ Future<void> _selectAccount(
     Action<int> action) async {
   await next(action);
   final login = json.decode(await _secureStorage.read(key: "login"));
+  login["otherAccounts"] ??= [];
   final otherAccounts = login["otherAccounts"] as List;
   var selectedIndex = action.payload;
   if (login["user"] != null &&
