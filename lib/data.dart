@@ -160,7 +160,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
     ..firstSeen = now;
 }
 
-String formatGrade(String grade) {
+String formatGradeFromString(String grade) {
   if (grade == null) return "keine Note eingetragen";
   final List<String> split = grade.split(".");
   assert(split.length == 2);
@@ -250,6 +250,21 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   BuiltMap<Semester, BuiltList<Observation>> get observations;
   int get id;
   String get name;
+
+  List<GradeAll> basicGrades(Semester semester) {
+    if (semester == Semester.all) {
+      final entries = (List.of(Semester.values)..remove(Semester.all))
+          .map((s) => basicGrades(s))
+          .toList();
+      entries.removeWhere((e) => e == null);
+      if (entries.isEmpty) return null;
+      return entries.fold([], (a, b) => [...a, ...b])
+        ..sort((a, b) => -a.date.compareTo(b.date));
+    }
+    if (gradesAll[semester] == null) return null;
+    return gradesAll[semester].toList()
+      ..sort((a, b) => -a.date.compareTo(b.date));
+  }
 
   List<DetailEntry> detailEntries(Semester semester) {
     if (semester == Semester.all) {
@@ -346,6 +361,26 @@ abstract class GradeAll
   static Serializer<GradeAll> get serializer => _$gradeAllSerializer;
 }
 
+String formatGradeFromInt(int grade) {
+  if (grade == null) {
+    return "";
+  }
+  final mainGrade = grade ~/ 100;
+  final decimals = grade % 100;
+  switch (decimals) {
+    case 0:
+      return "$mainGrade";
+    case 25:
+      return "$mainGrade+";
+    case 50:
+      return "$mainGrade/${mainGrade + 1}";
+    case 75:
+      return "${mainGrade + 1}-";
+    default:
+      return gradeAverageFormat.format(grade / 100);
+  }
+}
+
 abstract class GradeDetail
     implements
         _BasicGrade,
@@ -356,27 +391,7 @@ abstract class GradeDetail
   GradeDetail._();
   static Serializer<GradeDetail> get serializer => _$gradeDetailSerializer;
 
-  String get gradeFormatted => _formatGrade(grade);
-
-  static String _formatGrade(int grade) {
-    if (grade == null) {
-      return "";
-    }
-    final mainGrade = grade ~/ 100;
-    final decimals = grade % 100;
-    switch (decimals) {
-      case 0:
-        return "$mainGrade";
-      case 25:
-        return "$mainGrade+";
-      case 50:
-        return "$mainGrade/${mainGrade + 1}";
-      case 75:
-        return "${mainGrade + 1}-";
-      default:
-        return gradeAverageFormat.format(grade / 100);
-    }
-  }
+  String get gradeFormatted => formatGradeFromInt(grade);
 
   int get id;
   BuiltList<Competence> get competences;

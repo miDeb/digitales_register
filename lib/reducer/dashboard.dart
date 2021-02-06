@@ -213,7 +213,7 @@ Homework _parseHomework(data) {
 
     if (type == HomeworkType.grade) {
       b
-        ..gradeFormatted = formatGrade(getString(data["grade"]))
+        ..gradeFormatted = formatGradeFromString(getString(data["grade"]))
         ..grade = getString(data["grade"]);
     }
   });

@@ -1,3 +1,5 @@
+import 'package:badges/badges.dart';
+import 'package:dr/ui/grade_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -63,6 +65,36 @@ class SortedGradesWidget extends StatelessWidget {
               ),
             ),
           ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: ListTile(
+            title: Row(
+              children: [
+                const Text("Notenrechner"),
+                const SizedBox(
+                  width: 16,
+                ),
+                Badge(
+                  shape: BadgeShape.square,
+                  borderRadius: BorderRadius.circular(20),
+                  badgeContent: const Text("NEU!"),
+                ),
+              ],
+            ),
+            subtitle:
+                const Text("Berechne den Durchschnitt von beliebigen Noten"),
+            onTap: () => Navigator.of(
+              context,
+              rootNavigator: true,
+            ).push(
+              MaterialPageRoute(
+                builder: (context) => GradeCalculator(
+                  subjects: vm.subjects.toList(),
+                ),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
