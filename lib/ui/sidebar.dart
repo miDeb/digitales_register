@@ -73,7 +73,10 @@ class Sidebar extends StatelessWidget {
             ),
         ],
         onChanged: (int value) {
-          if (value == otherAccounts.length + 1) {
+          if (value == 0) {
+            // selected the current account that is already selected
+            // no-op
+          } else if (value == otherAccounts.length + 1) {
             addAccount();
           } else {
             selectAccount(value - 1);
