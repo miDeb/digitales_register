@@ -12,6 +12,7 @@ import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
 import 'main.dart';
+import 'ui/dialog.dart';
 
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
@@ -168,7 +169,7 @@ class Wrapper {
       builder: (context) {
         final textInputController = TextEditingController();
         return StatefulBuilder(
-          builder: (context, setState) => AlertDialog(
+          builder: (context, setState) => InfoDialog(
             title: Text(
                 wasWrong ? "Ungültiger Code" : "Zweiter Faktor wird benötigt"),
             content: TextField(
@@ -176,9 +177,7 @@ class Wrapper {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(
-                  context,
-                ),
+                onPressed: () => Navigator.pop(context),
                 child: const Text("Abbrechen"),
               ),
               ElevatedButton(
