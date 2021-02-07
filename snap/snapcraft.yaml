@@ -1,7 +1,7 @@
-name: dr
+name: digitales-register
 version: 0.1.0
-summary: Super Cool App
-description: Super Cool App that does everything!
+summary: Digitales Register
+description: Client für https://digitalesregister.it
 
 confinement: strict
 base: core18
@@ -20,6 +20,6 @@ parts:
     plugin: flutter
     flutter-target: lib/main.dart # The main entry-point file of the application
     build-packages:
-    - libsecret-1-dev
+      - libsecret-1-dev
     stage-packages:
-    - libsecret-1-dev
+      - libsecret-1-dev
