@@ -45,24 +45,24 @@ abstract class GradesPageViewModel
   GradesPageViewModel._();
 
   factory GradesPageViewModel.from(AppState state) {
-    return GradesPageViewModel((b) => b
-      ..showSemester = state.gradesState.semester.toBuilder()
-      ..loading = state.gradesState.loading
-      ..allSubjectsAverage = calculateAllSubjectsAverage(state)
-      ..hasData = state.gradesState.subjects.any(
-        (s) => state.gradesState.semester != Semester.all
-            ? s.gradesAll.containsKey(state.gradesState.semester)
-            : s.gradesAll.isNotEmpty,
-      )
-      ..noInternet = state.noInternet
-      ..showGradesDiagram = state.settingsState.showGradesDiagram
-      ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage &&
-          state.gradesState.semester.n != null);
+    return GradesPageViewModel(
+      (b) => b
+        ..showSemester = state.gradesState.semester.toBuilder()
+        ..loading = state.gradesState.loading
+        ..allSubjectsAverage = calculateAllSubjectsAverage(state)
+        ..hasData = state.gradesState.subjects.any(
+          (s) => state.gradesState.semester != Semester.all
+              ? s.gradesAll.containsKey(state.gradesState.semester)
+              : s.gradesAll.isNotEmpty,
+        )
+        ..noInternet = state.noInternet
+        ..showGradesDiagram = state.settingsState.showGradesDiagram
+        ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
+    );
   }
 }
 
 String calculateAllSubjectsAverage(AppState state) {
-  if (state.gradesState.semester == Semester.all) return null;
   var sum = 0;
   var n = 0;
   for (final subject in state.gradesState.subjects) {

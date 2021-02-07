@@ -284,8 +284,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   }
 
   int average(Semester semester) {
-    assert(semester != Semester.all);
-    final grades = gradesAll[semester];
+    final grades = basicGrades(semester);
     if (grades == null) return null;
     var sum = 0;
     var n = 0;

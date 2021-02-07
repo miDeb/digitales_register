@@ -148,18 +148,16 @@ class _SubjectWidgetState extends State<SubjectWidget> {
             ],
           ),
         ),
-        leading: widget.semester != Semester.all
-            ? Text.rich(
-                TextSpan(
-                  text: 'Ø ',
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: widget.subject.averageFormatted(widget.semester),
-                    ),
-                  ],
-                ),
-              )
-            : null,
+        leading: Text.rich(
+          TextSpan(
+            text: 'Ø ',
+            children: <TextSpan>[
+              TextSpan(
+                text: widget.subject.averageFormatted(widget.semester),
+              ),
+            ],
+          ),
+        ),
         trailing:
             widget.noInternet && entries == null ? const SizedBox() : null,
         onExpansionChanged: (expansion) {
