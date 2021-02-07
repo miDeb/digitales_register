@@ -1,5 +1,6 @@
 import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:tuple/tuple.dart';
 
 import '../data.dart';
@@ -196,16 +197,21 @@ class _GradeCalculatorState extends State<GradeCalculator> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: grades.isEmpty
-            ? _Greeting(
-                import: importGrades,
-                add: addGrade,
-              )
-            : _GradesList(
-                grades: grades,
-                updateGrade: updateGrade,
-                addGrade: addGrade,
-              ),
+        child: AnimatedCrossFade(
+          firstChild: _Greeting(
+            import: importGrades,
+            add: addGrade,
+          ),
+          secondChild: _GradesList(
+            grades: grades,
+            updateGrade: updateGrade,
+            addGrade: addGrade,
+          ),
+          crossFadeState: grades.isEmpty
+              ? CrossFadeState.showFirst
+              : CrossFadeState.showSecond,
+          duration: const Duration(milliseconds: 250),
+        ),
       ),
     );
   }
@@ -297,6 +303,9 @@ class _GradesList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    if (grades.isEmpty) {
+      return Container();
+    }
     return Column(
       children: [
         ListTile(
@@ -340,69 +349,90 @@ class _GradesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
+    return ClipRect(
+      child: Slidable(
+        actionPane: const SlidableDrawerActionPane(),
+        dismissal: SlidableDismissal(
+          onDismissed: (actionType) {
+            updateGrade(grade, null);
+          },
+          dragDismissible: false,
+          child: const SlidableDrawerDismissal(),
+        ),
+        actions: const [
+          IconSlideAction(
+            icon: Icons.delete,
+            color: Colors.red,
+          )
+        ],
+        key: ObjectKey(grade),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: 100,
-                child: _Input(
-                  initial: grade.weightPercentage.toString(),
-                  inputType: _InputType.weight,
-                  updateValue: (value) {
-                    if (value != null) {
-                      updateGrade(
-                        grade,
-                        _Grade(
-                          grade: grade.grade,
-                          weightPercentage: value,
-                          // show no description
-                        ),
-                      );
-                    }
-                  },
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 100,
+                    child: _Input(
+                      initial: grade.weightPercentage.toString(),
+                      inputType: _InputType.weight,
+                      updateValue: (value) {
+                        if (value != null) {
+                          updateGrade(
+                            grade,
+                            _Grade(
+                              grade: grade.grade,
+                              weightPercentage: value,
+                              // show no description
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _Input(
-                  initial: formatGradeFromInt(grade.grade),
-                  inputType: _InputType.grade,
-                  updateValue: (value) {
-                    if (value != null) {
-                      updateGrade(
-                        grade,
-                        _Grade(
-                          grade: value,
-                          weightPercentage: grade.weightPercentage,
-                          // show no description anymore
-                        ),
-                      );
-                    }
-                  },
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: _Input(
+                      initial: formatGradeFromInt(grade.grade),
+                      inputType: _InputType.grade,
+                      updateValue: (value) {
+                        if (value != null) {
+                          updateGrade(
+                            grade,
+                            _Grade(
+                              grade: value,
+                              weightPercentage: grade.weightPercentage,
+                              // show no description anymore
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
                 ),
-              ),
+                Builder(
+                  builder: (context) => IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Slidable.of(context).dismiss(),
+                  ),
+                ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () => updateGrade(grade, null),
-            ),
+            if (grade.description != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Text(
+                  grade.description,
+                  style: Theme.of(context).textTheme.caption,
+                ),
+              )
           ],
         ),
-        if (grade.description != null)
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(
-              grade.description,
-              style: Theme.of(context).textTheme.caption,
-            ),
-          )
-      ],
+      ),
     );
   }
 }
