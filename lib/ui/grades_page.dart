@@ -5,7 +5,6 @@ import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../container/grades_page_container.dart';
 import '../container/sorted_grades_container.dart';
-import '../util.dart';
 import 'no_internet.dart';
 
 class GradesPage extends StatelessWidget {
@@ -57,39 +56,38 @@ class GradesPage extends StatelessWidget {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : maybeWrap(
-                  ListView(
-                    children: <Widget>[
-                      if (vm.showGradesDiagram)
-                        const SizedBox(
-                          height: 150,
-                          width: 250,
-                          child: GradesChartContainer(isFullscreen: false),
-                        ),
-                      if (vm.showAllSubjectsAverage) ...[
-                        ListTile(
-                          title: Row(
-                            children: [
-                              const Text("Notendurchschnitt"),
-                              IconButton(
-                                icon: const Icon(Icons.settings),
-                                onPressed: showGradesSettings,
-                              ),
-                            ],
+              : Stack(
+                  children: [
+                    if (vm.loading) const LinearProgressIndicator(),
+                    ListView(
+                      children: <Widget>[
+                        if (vm.showGradesDiagram)
+                          const SizedBox(
+                            height: 150,
+                            width: 250,
+                            child: GradesChartContainer(isFullscreen: false),
                           ),
-                          trailing: Text(vm.allSubjectsAverage),
-                        ),
-                        const Divider(
-                          height: 0,
-                        ),
+                        if (vm.showAllSubjectsAverage) ...[
+                          ListTile(
+                            title: Row(
+                              children: [
+                                const Text("Notendurchschnitt"),
+                                IconButton(
+                                  icon: const Icon(Icons.settings),
+                                  onPressed: showGradesSettings,
+                                ),
+                              ],
+                            ),
+                            trailing: Text(vm.allSubjectsAverage),
+                          ),
+                          const Divider(
+                            height: 0,
+                          ),
+                        ],
+                        SortedGradesContainer(),
                       ],
-                      SortedGradesContainer(),
-                    ],
-                  ),
-                  (widget) => Stack(
-                    children: [const LinearProgressIndicator(), widget],
-                  ),
-                  wrap: vm.loading,
+                    ),
+                  ],
                 ),
     );
   }
