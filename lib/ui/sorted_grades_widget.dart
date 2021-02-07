@@ -1,5 +1,4 @@
 import 'package:badges/badges.dart';
-import 'package:dr/ui/grade_calculator.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -15,6 +14,7 @@ class SortedGradesWidget extends StatelessWidget {
   final SortedGradesViewModel vm;
   final ViewSubjectDetailCallback viewSubjectDetail;
   final SetBoolCallback sortByTypeCallback, showCancelledCallback;
+  final VoidCallback showGradeCalculator;
 
   const SortedGradesWidget({
     Key key,
@@ -22,6 +22,7 @@ class SortedGradesWidget extends StatelessWidget {
     this.viewSubjectDetail,
     this.sortByTypeCallback,
     this.showCancelledCallback,
+    this.showGradeCalculator,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -56,13 +57,10 @@ class SortedGradesWidget extends StatelessWidget {
             (element) => element.toLowerCase() == s.name.toLowerCase(),
           ),
         ))
-          const Padding(
-            padding: EdgeInsets.only(top: 16),
-            child: ListTile(
-              title: Text(
-                "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen",
-                style: TextStyle(color: Colors.grey),
-              ),
+          const ListTile(
+            title: Text(
+              "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen",
+              style: TextStyle(color: Colors.grey),
             ),
           ),
         Padding(
@@ -83,16 +81,7 @@ class SortedGradesWidget extends StatelessWidget {
             ),
             subtitle:
                 const Text("Berechne den Durchschnitt von beliebigen Noten"),
-            onTap: () => Navigator.of(
-              context,
-              rootNavigator: true,
-            ).push(
-              MaterialPageRoute(
-                builder: (context) => GradeCalculator(
-                  subjects: vm.subjects.toList(),
-                ),
-              ),
-            ),
+            onTap: showGradeCalculator,
           ),
         ),
       ],

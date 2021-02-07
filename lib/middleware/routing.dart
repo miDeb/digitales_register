@@ -27,6 +27,7 @@ final _routingMiddleware =
       ..add(RoutingActionsNames.showAbsences, _showAbsences)
       ..add(RoutingActionsNames.showGradesChart, _showGradesChart)
       ..add(RoutingActionsNames.showGrades, _showGrades)
+      ..add(RoutingActionsNames.showGradeCalculator, _showGradeCalculator)
       ..add(RoutingActionsNames.showCertificate, _showCertificate)
       ..add(RoutingActionsNames.showMessages, _showMessages)
       ..add(RoutingActionsNames.showMessage, _showMessage);
@@ -179,5 +180,14 @@ Future<void> _showGradesChart(
     ActionHandler next,
     Action<void> action) async {
   navigatorKey.currentState.pushNamed("/gradesChart");
+  await next(action);
+}
+
+Future<void> _showGradeCalculator(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<void> action) async {
+  navigatorKey.currentState.pushNamed("/gradeCalculator");
+  api.actions.gradesActions.load(Semester.all);
   await next(action);
 }

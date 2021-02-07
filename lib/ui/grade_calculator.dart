@@ -1,121 +1,128 @@
-import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:tuple/tuple.dart';
+import 'package:built_collection/built_collection.dart';
 
+import '../actions/app_actions.dart';
+import '../app_state.dart';
 import '../data.dart';
 import '../util.dart';
 import 'dialog.dart';
 
+bool isGradeInRange(int grade) {
+  return grade >= 0 && grade <= 1000;
+}
+
+int tryParseFormattedGrade(String grade) {
+  bool matchesWholeInput(RegExpMatch match) {
+    return match != null && match.start == 0 && match.end == match.input.length;
+  }
+
+  final accurate = RegExp(r"(\d+)(?:[.,](\d{1,2}))?").firstMatch(grade);
+  if (matchesWholeInput(accurate)) {
+    final major = accurate.group(1);
+    final minor = accurate.group(2);
+    final majorParsed = int.tryParse(major);
+    if (majorParsed == null) {
+      return null;
+    }
+    var minorParsed = minor != null ? int.tryParse(minor) : 0;
+    if (minor?.length == 1) {
+      // parse .5 as 50/100
+      minorParsed *= 10;
+    }
+    if (minorParsed == null) {
+      return null;
+    }
+    final combinedGrade = majorParsed * 100 + minorParsed;
+    if (!isGradeInRange(combinedGrade)) {
+      return null;
+    }
+    return combinedGrade;
+  }
+
+  final less = RegExp(r"(\d+)-").firstMatch(grade);
+  if (matchesWholeInput(less)) {
+    final lessParsed = int.tryParse(less.group(1));
+    if (lessParsed == null) {
+      return null;
+    }
+    final combinedGrade = lessParsed * 100 - 25;
+    if (!isGradeInRange(combinedGrade)) {
+      return null;
+    }
+    return combinedGrade;
+  }
+
+  final more = RegExp(r"(\d+)\+").firstMatch(grade);
+  if (matchesWholeInput(more)) {
+    final moreParsed = int.tryParse(more.group(1));
+    if (moreParsed == null) {
+      return null;
+    }
+    final combinedGrade = moreParsed * 100 + 25;
+    if (!isGradeInRange(combinedGrade)) {
+      return null;
+    }
+    return combinedGrade;
+  }
+
+  final between = RegExp(r"(\d+)[-/](\d+)").firstMatch(grade);
+  if (matchesWholeInput(between)) {
+    final startParsed = int.tryParse(between.group(1));
+    if (startParsed == null) {
+      return null;
+    }
+    final endParsed = int.tryParse(between.group(2));
+    if (endParsed == null) {
+      return null;
+    }
+    if (endParsed != startParsed + 1) {
+      return null;
+    }
+    final combinedGrade = startParsed * 100 + 50;
+    if (!isGradeInRange(combinedGrade)) {
+      return null;
+    }
+    return combinedGrade;
+  }
+
+  return null;
+}
+
+int _calculateAverage(List<_Grade> grades) {
+  var weights = 0;
+  var sum = 0;
+  for (final grade in grades) {
+    weights += grade.weightPercentage;
+    sum += grade.grade * grade.weightPercentage;
+  }
+  return sum ~/ weights;
+}
+
 typedef _UpdateGrade = void Function(_Grade previous, _Grade updated);
 
-enum _InputType { grade, weight }
-
-class _Input extends StatefulWidget {
-  final _InputType inputType;
-  final String initial;
-  final void Function(int) updateValue;
-  final bool showErrorForEmptyInput;
-
-  const _Input({
-    Key key,
-    this.inputType,
-    this.initial,
-    this.updateValue,
-    this.showErrorForEmptyInput = true,
-  }) : super(key: key);
-  @override
-  _InputState createState() => _InputState();
-}
-
-class _InputState extends State<_Input> {
-  TextEditingController controller;
-  final focusNode = FocusNode();
-
-  @override
-  void initState() {
-    super.initState();
-    controller = TextEditingController(text: widget.initial);
-    focusNode.addListener(() {
-      setState(() {
-        // update error text
-      });
-    });
-  }
-
-  int getValue() {
-    final value = controller.text;
-    switch (widget.inputType) {
-      case _InputType.grade:
-        return tryParseFormattedGrade(value);
-      case _InputType.weight:
-        final percentage = int.tryParse(value);
-        if (percentage != null && percentage >= 0 && percentage <= 100) {
-          return percentage;
-        } else {
-          return null;
-        }
-    }
-    assert(false);
-    return null;
-  }
-
-  bool isValid() => getValue() != null;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      focusNode: focusNode,
-      controller: controller,
-      decoration: InputDecoration(
-        errorText: isValid() ||
-                (!widget.showErrorForEmptyInput && controller.text.isEmpty) ||
-                focusNode.hasFocus
-            ? null
-            : "Ungültiger Wert",
-        labelText: widget.inputType == _InputType.grade ? "Note" : "Gewichtung",
-        suffixText: widget.inputType == _InputType.weight ? "%" : null,
-      ),
-      onChanged: (_) {
-        widget.updateValue(getValue());
-        setState(() {
-          // will show an error after checking the controller
-        });
-      },
-    );
-  }
-}
-
 class GradeCalculator extends StatefulWidget {
-  final List<Subject> subjects;
-
-  const GradeCalculator({Key key, this.subjects}) : super(key: key);
+  const GradeCalculator({Key key}) : super(key: key);
   @override
   _GradeCalculatorState createState() => _GradeCalculatorState();
 }
 
+class _Grade {
+  final int grade;
+  final int weightPercentage;
+  final String description;
+
+  _Grade({
+    this.grade,
+    this.weightPercentage,
+    this.description,
+  });
+}
+
 class _GradeCalculatorState extends State<GradeCalculator> {
   final List<_Grade> grades = [];
-  Future<void> importGrades() async {
-    final List<_Grade> result = await Navigator.of(
-      context,
-      rootNavigator: true,
-    ).push(
-      MaterialPageRoute(
-        builder: (context) => _ImportGrades(subjects: widget.subjects),
-        fullscreenDialog: true,
-      ),
-    );
-    if (result == null) {
-      return;
-    }
-    assert(grades.isEmpty);
-    assert(result.isNotEmpty);
-    setState(() {
-      grades.addAll(result);
-    });
-  }
-
   Future<void> addGrade() async {
     final Tuple2<int, int> grade = await showDialog(
       context: context,
@@ -179,6 +186,26 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     }
   }
 
+  Future<void> importGrades() async {
+    final List<_Grade> result = await Navigator.of(
+      context,
+      rootNavigator: true,
+    ).push(
+      MaterialPageRoute(
+        builder: (context) => _ImportGradesContainer(),
+        fullscreenDialog: true,
+      ),
+    );
+    if (result == null) {
+      return;
+    }
+    assert(grades.isEmpty);
+    assert(result.isNotEmpty);
+    setState(() {
+      grades.addAll(result);
+    });
+  }
+
   void updateGrade(_Grade previous, _Grade updated) {
     setState(() {
       if (updated == null) {
@@ -213,83 +240,6 @@ class _GradeCalculatorState extends State<GradeCalculator> {
           duration: const Duration(milliseconds: 250),
         ),
       ),
-    );
-  }
-}
-
-class _Grade {
-  final int grade;
-  final int weightPercentage;
-  final String description;
-
-  _Grade({
-    this.grade,
-    this.weightPercentage,
-    this.description,
-  });
-}
-
-int _calculateAverage(List<_Grade> grades) {
-  var weights = 0;
-  var sum = 0;
-  for (final grade in grades) {
-    weights += grade.weightPercentage;
-    sum += grade.grade * grade.weightPercentage;
-  }
-  return sum ~/ weights;
-}
-
-class _Greeting extends StatelessWidget {
-  final VoidCallback import, add;
-
-  const _Greeting({Key key, @required this.import, @required this.add})
-      : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(32),
-          child: Text(
-            "Um zu beginnen, importiere entweder bestehende Noten aus einem Fach\noder füge eine erste Note hinzu.",
-            style: Theme.of(context).textTheme.headline6,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: import,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.save_alt),
-                  SizedBox(width: 8),
-                  Text("Noten importieren"),
-                ],
-              ),
-            ),
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: ElevatedButton(
-              onPressed: add,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.add),
-                  SizedBox(width: 8),
-                  Text("Note hinzufügen"),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -437,12 +387,79 @@ class _GradesTile extends StatelessWidget {
   }
 }
 
+class _Greeting extends StatelessWidget {
+  final VoidCallback import, add;
+
+  const _Greeting({Key key, @required this.import, @required this.add})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(32),
+          child: Text(
+            "Um zu beginnen, importiere entweder bestehende Noten aus einem Fach\noder füge eine erste Note hinzu.",
+            style: Theme.of(context).textTheme.headline6,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: import,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.save_alt),
+                  SizedBox(width: 8),
+                  Text("Noten importieren"),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              onPressed: add,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.add),
+                  SizedBox(width: 8),
+                  Text("Note hinzufügen"),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _ImportGrades extends StatefulWidget {
   final List<Subject> subjects;
 
   const _ImportGrades({Key key, this.subjects}) : super(key: key);
   @override
   _ImportGradesState createState() => _ImportGradesState();
+}
+
+class _ImportGradesContainer extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnection<AppState, AppActions, BuiltList<Subject>>(
+      connect: (state) => state.gradesState.subjects,
+      builder: (context, state, actions) => _ImportGrades(
+        subjects: state.toList(),
+      ),
+    );
+  }
 }
 
 class _ImportGradesState extends State<_ImportGrades> {
@@ -562,83 +579,79 @@ class _ImportGradesState extends State<_ImportGrades> {
   }
 }
 
-bool isGradeInRange(int grade) {
-  return grade >= 0 && grade <= 1000;
+enum _InputType { grade, weight }
+
+class _Input extends StatefulWidget {
+  final _InputType inputType;
+  final String initial;
+  final void Function(int) updateValue;
+  final bool showErrorForEmptyInput;
+
+  const _Input({
+    Key key,
+    this.inputType,
+    this.initial,
+    this.updateValue,
+    this.showErrorForEmptyInput = true,
+  }) : super(key: key);
+  @override
+  _InputState createState() => _InputState();
 }
 
-int tryParseFormattedGrade(String grade) {
-  bool matchesWholeInput(RegExpMatch match) {
-    return match != null && match.start == 0 && match.end == match.input.length;
+class _InputState extends State<_Input> {
+  TextEditingController controller;
+  final focusNode = FocusNode();
+
+  int getValue() {
+    final value = controller.text;
+    switch (widget.inputType) {
+      case _InputType.grade:
+        return tryParseFormattedGrade(value);
+      case _InputType.weight:
+        final percentage = int.tryParse(value);
+        if (percentage != null && percentage >= 0 && percentage <= 100) {
+          return percentage;
+        } else {
+          return null;
+        }
+    }
+    assert(false);
+    return null;
   }
 
-  final accurate = RegExp(r"(\d+)(?:[.,](\d{1,2}))?").firstMatch(grade);
-  if (matchesWholeInput(accurate)) {
-    final major = accurate.group(1);
-    final minor = accurate.group(2);
-    final majorParsed = int.tryParse(major);
-    if (majorParsed == null) {
-      return null;
-    }
-    var minorParsed = minor != null ? int.tryParse(minor) : 0;
-    if (minor?.length == 1) {
-      // parse .5 as 50/100
-      minorParsed *= 10;
-    }
-    if (minorParsed == null) {
-      return null;
-    }
-    final combinedGrade = majorParsed * 100 + minorParsed;
-    if (!isGradeInRange(combinedGrade)) {
-      return null;
-    }
-    return combinedGrade;
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.initial);
+    focusNode.addListener(() {
+      setState(() {
+        // update error text
+      });
+    });
   }
 
-  final less = RegExp(r"(\d+)-").firstMatch(grade);
-  if (matchesWholeInput(less)) {
-    final lessParsed = int.tryParse(less.group(1));
-    if (lessParsed == null) {
-      return null;
-    }
-    final combinedGrade = lessParsed * 100 - 25;
-    if (!isGradeInRange(combinedGrade)) {
-      return null;
-    }
-    return combinedGrade;
-  }
+  bool isValid() => getValue() != null;
 
-  final more = RegExp(r"(\d+)\+").firstMatch(grade);
-  if (matchesWholeInput(more)) {
-    final moreParsed = int.tryParse(more.group(1));
-    if (moreParsed == null) {
-      return null;
-    }
-    final combinedGrade = moreParsed * 100 + 25;
-    if (!isGradeInRange(combinedGrade)) {
-      return null;
-    }
-    return combinedGrade;
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: focusNode,
+      controller: controller,
+      decoration: InputDecoration(
+        errorText: isValid() ||
+                (!widget.showErrorForEmptyInput && controller.text.isEmpty) ||
+                focusNode.hasFocus
+            ? null
+            : "Ungültiger Wert",
+        labelText: widget.inputType == _InputType.grade ? "Note" : "Gewichtung",
+        suffixText: widget.inputType == _InputType.weight ? "%" : null,
+      ),
+      onChanged: (_) {
+        widget.updateValue(getValue());
+        setState(() {
+          // will show an error after checking the controller
+        });
+      },
+    );
   }
-
-  final between = RegExp(r"(\d+)[-/](\d+)").firstMatch(grade);
-  if (matchesWholeInput(between)) {
-    final startParsed = int.tryParse(between.group(1));
-    if (startParsed == null) {
-      return null;
-    }
-    final endParsed = int.tryParse(between.group(2));
-    if (endParsed == null) {
-      return null;
-    }
-    if (endParsed != startParsed + 1) {
-      return null;
-    }
-    final combinedGrade = startParsed * 100 + 50;
-    if (!isGradeInRange(combinedGrade)) {
-      return null;
-    }
-    return combinedGrade;
-  }
-
-  return null;
 }

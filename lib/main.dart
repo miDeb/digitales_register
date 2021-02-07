@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/container/settings_page.dart';
+import 'package:dr/ui/grade_calculator.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +109,11 @@ void main() {
                 case "gradesChart":
                   return MaterialPageRoute(
                     builder: (_) => GradesChartPage(),
+                    fullscreenDialog: true,
+                  );
+                case "gradeCalculator":
+                  return MaterialPageRoute(
+                    builder: (_) => const GradeCalculator(),
                     fullscreenDialog: true,
                   );
                 case "settings":
