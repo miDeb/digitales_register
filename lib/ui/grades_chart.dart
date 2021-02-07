@@ -48,34 +48,43 @@ class GradesChart extends StatelessWidget {
   }
 
   List<charts.TickSpec<DateTime>> createDomainAxisTags(Locale locale) {
-    DateTime firstMonth;
-    DateTime lastMonth;
-    for (final sub in grades) {
-      if (sub.data.isEmpty) continue;
-      final firstSubjectDate = sub.data.first.key;
-      assert(sub.data.every((e) => !e.key.isBefore(firstSubjectDate)));
-      final lastSubjectDate = sub.data.last.key;
-      assert(sub.data.every((e) => !e.key.isAfter(lastSubjectDate)));
-      if (firstMonth == null || firstSubjectDate.isBefore(firstMonth)) {
-        firstMonth = firstSubjectDate;
+    DateTime first;
+    DateTime last;
+    // find the first given date and the last given date
+    for (final subject in grades) {
+      if (subject.data.isEmpty) continue;
+      final firstSubjectDate = subject.data.first.key;
+      assert(subject.data.every((e) => !e.key.isBefore(firstSubjectDate)));
+      final lastSubjectDate = subject.data.last.key;
+      assert(subject.data.every((e) => !e.key.isAfter(lastSubjectDate)));
+      if (first == null || firstSubjectDate.isBefore(first)) {
+        first = firstSubjectDate;
       }
-      if (lastMonth == null || lastSubjectDate.isAfter(lastMonth)) {
-        lastMonth = lastSubjectDate;
+      if (last == null || lastSubjectDate.isAfter(last)) {
+        last = lastSubjectDate;
       }
     }
-    if (firstMonth == null) return [];
+    // This means that there are no grades available
+    if (first == null) return [];
+    // Preferrably show all ticks on the 15th.
+    // However, if the first date is after the 15th, show the tick there to make
+    // sure all months are represented as ticks.
     final dates = [
-      DateTime(firstMonth.year, firstMonth.month,
-          firstMonth.day < 15 ? 15 : firstMonth.day)
+      DateTime(first.year, first.month, first.day < 15 ? 15 : first.day)
     ];
+    // Collect all 15th's that are before the last date
     while (true) {
       final newDate = DateTime(dates.last.year, dates.last.month + 1, 15);
-      if (lastMonth.isBefore(newDate)) break;
+      if (last.isBefore(newDate)) break;
       dates.add(newDate);
     }
-    if (dates.last.month != lastMonth.month) dates.add(lastMonth);
+    // make sure the last month is included
+    if (dates.last.month != last.month) dates.add(last);
+    // if the dates are in only one month, show ticks for the first and the last
+    // one. Also include the day in the label in this case.
+    // If there is only one date, show one tick for it.
     if (dates.length == 1) {
-      return [firstMonth, lastMonth].map((date) {
+      return (first == last ? [first] : [first, last]).map((date) {
         return charts.TickSpec(
           date,
           label: DateFormat.MMMd(
