@@ -241,6 +241,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.11"
+  deleteable_tile:
+    dependency: "direct main"
+    description:
+      name: deleteable_tile
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1-nullsafety.1"
   dio:
     dependency: "direct main"
     description:
