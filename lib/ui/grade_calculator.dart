@@ -304,6 +304,7 @@ class _GradesTile extends StatelessWidget {
       onDeleted: () {
         updateGrade(grade, null);
       },
+      icon: const Icon(Icons.close),
       child: Padding(
         padding: const EdgeInsets.all(2),
         child: Column(
