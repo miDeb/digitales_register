@@ -43,7 +43,6 @@ dependencies:
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
   flutter_secure_storage: any
-  flutter_slidable: ^0.5.7
   flutter_typeahead: ^1.9.3
   flutter_widget_from_html_core: ^0.3.2+1
   hive: ^1.4.4+1

@@ -1,6 +1,6 @@
+import 'package:dr/ui/deleteable_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:tuple/tuple.dart';
 import 'package:built_collection/built_collection.dart';
 
@@ -91,14 +91,18 @@ int tryParseFormattedGrade(String grade) {
   return null;
 }
 
-int _calculateAverage(List<_Grade> grades) {
+String _calculateAverage(List<_Grade> grades) {
   var weights = 0;
   var sum = 0;
   for (final grade in grades) {
     weights += grade.weightPercentage;
     sum += grade.grade * grade.weightPercentage;
   }
-  return sum ~/ weights;
+  if (weights == 0) {
+    return "/";
+  }
+  final average = sum ~/ weights;
+  return gradeAverageFormat.format(average / 100);
 }
 
 typedef _UpdateGrade = void Function(_Grade previous, _Grade updated);
@@ -110,9 +114,9 @@ class GradeCalculator extends StatefulWidget {
 }
 
 class _Grade {
-  final int grade;
-  final int weightPercentage;
-  final String description;
+  int grade;
+  int weightPercentage;
+  String description;
 
   _Grade({
     this.grade,
@@ -211,7 +215,10 @@ class _GradeCalculatorState extends State<GradeCalculator> {
       if (updated == null) {
         grades.remove(previous);
       } else {
-        grades[grades.indexOf(previous)] = updated;
+        assert(grades.contains(previous));
+        previous.description = updated.description;
+        previous.grade = updated.grade;
+        previous.weightPercentage = updated.weightPercentage;
       }
     });
   }
@@ -253,24 +260,18 @@ class _GradesList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    if (grades.isEmpty) {
-      return Container();
-    }
     return Column(
       children: [
         ListTile(
           title: const Text("Durchschnitt"),
-          trailing:
-              Text(gradeAverageFormat.format(_calculateAverage(grades) / 100)),
+          trailing: Text(_calculateAverage(grades)),
         ),
         const Divider(),
         for (final grade in grades)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: _GradesTile(
-              grade: grade,
-              updateGrade: updateGrade,
-            ),
+          _GradesTile(
+            key: ObjectKey(grade),
+            grade: grade,
+            updateGrade: updateGrade,
           ),
         Padding(
           padding: const EdgeInsets.all(16),
@@ -299,23 +300,12 @@ class _GradesTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRect(
-      child: Slidable(
-        actionPane: const SlidableDrawerActionPane(),
-        dismissal: SlidableDismissal(
-          onDismissed: (actionType) {
-            updateGrade(grade, null);
-          },
-          dragDismissible: false,
-          child: const SlidableDrawerDismissal(),
-        ),
-        actions: const [
-          IconSlideAction(
-            icon: Icons.delete,
-            color: Colors.red,
-          )
-        ],
-        key: ObjectKey(grade),
+    return DeleteableTile(
+      onDeleted: () {
+        updateGrade(grade, null);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(2),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -362,12 +352,6 @@ class _GradesTile extends StatelessWidget {
                         }
                       },
                     ),
-                  ),
-                ),
-                Builder(
-                  builder: (context) => IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Slidable.of(context).dismiss(),
                   ),
                 ),
               ],
