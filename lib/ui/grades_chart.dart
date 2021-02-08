@@ -275,6 +275,7 @@ class _SelectionWidgetState extends State<SelectionWidget>
         alignment: Alignment.topCenter,
         vsync: this,
         duration: const Duration(milliseconds: 150),
+        curve: Curves.ease,
         child: Stack(
           alignment: Alignment.topCenter,
           children: [
@@ -302,6 +303,22 @@ class _SelectionWidgetState extends State<SelectionWidget>
               child: Text(
                 DateFormat.MMMMd("de").format(widget.date),
                 style: const TextStyle(color: Colors.white),
+              ),
+            )
+          else
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 2,
+              ),
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.grey.shade700,
+              ),
+              child: const Text(
+                "Tippe auf das Diagramm, um Details zu sehen",
+                style: TextStyle(color: Colors.white),
               ),
             ),
           if (widget.selections != null)

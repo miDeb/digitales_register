@@ -1,3 +1,4 @@
+import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:intl/intl.dart';
 
@@ -26,41 +27,48 @@ class NotificationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Benachrichtigungen"),
       ),
-      body: notifications.isNotEmpty
-          ? ListView.builder(
-              itemCount: notifications.length + 1,
-              itemBuilder: (_, n) {
-                if (n == 0) {
-                  return Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: noInternet ? null : deleteAllNotifications,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: const [
-                          Text("Alle gelesen"),
-                          SizedBox(width: 8),
-                          Icon(Icons.done_all),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                return NotificationWidget(
-                  notification: notifications[n - 1],
-                  onDelete: deleteNotification,
-                  noInternet: noInternet,
-                  goToMessage: goToMessage,
-                );
-              },
-            )
-          : Center(
-              child: Text(
-                "Keine Benachrichtigungen",
-                style: Theme.of(context).textTheme.headline4,
-                textAlign: TextAlign.center,
-              ),
-            ),
+      body: AnimatedCrossFade(
+        firstChild: ListView.builder(
+          itemCount: notifications.length + 1,
+          itemBuilder: (_, n) {
+            if (n == 0) {
+              return Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: noInternet ? null : deleteAllNotifications,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: const [
+                      Text("Alle gelesen"),
+                      SizedBox(width: 8),
+                      Icon(Icons.done_all),
+                    ],
+                  ),
+                ),
+              );
+            }
+            n -= 1;
+            return NotificationWidget(
+              key: ObjectKey(notifications[n]),
+              notification: notifications[n],
+              onDelete: deleteNotification,
+              noInternet: noInternet,
+              goToMessage: goToMessage,
+            );
+          },
+        ),
+        secondChild: Center(
+          child: Text(
+            "Keine Benachrichtigungen",
+            style: Theme.of(context).textTheme.headline4,
+            textAlign: TextAlign.center,
+          ),
+        ),
+        crossFadeState: notifications.isEmpty
+            ? CrossFadeState.showSecond
+            : CrossFadeState.showFirst,
+        duration: const Duration(milliseconds: 250),
+      ),
     );
   }
 }
@@ -80,65 +88,74 @@ class NotificationWidget extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        side: const BorderSide(color: Colors.grey, width: 0),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      color: Colors.transparent,
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      notification.title,
-                      style: Theme.of(context).textTheme.subtitle1,
-                    ),
-                  ),
-                  if (!notification.subTitle.isNullOrEmpty)
+    return Deleteable(
+      showEntryAnimation: false,
+      builder: (context, delete) => Card(
+        shape: RoundedRectangleBorder(
+          side: const BorderSide(color: Colors.grey, width: 0),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        color: Colors.transparent,
+        elevation: 0,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  children: [
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        notification.subTitle,
-                        style: Theme.of(context).textTheme.bodyText2,
+                        notification.title,
+                        style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 2.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        DateFormat("d.M.yy H:mm").format(notification.timeSent),
-                        style: Theme.of(context).textTheme.caption,
+                    if (!notification.subTitle.isNullOrEmpty)
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          notification.subTitle,
+                          style: Theme.of(context).textTheme.bodyText2,
+                        ),
+                      ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 2.0),
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          DateFormat("d.M.yy H:mm")
+                              .format(notification.timeSent),
+                          style: Theme.of(context).textTheme.caption,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            if (notification.type != "message")
-              IconButton(
-                icon: const Icon(
-                  Icons.done,
-                ),
-                tooltip: "Gelesen",
-                onPressed: noInternet ? null : () => onDelete(notification),
-              )
-            else
-              IconButton(
-                icon: const Icon(
-                  Icons.exit_to_app,
-                ),
-                tooltip: "Zu Mitteilungen wechseln",
-                onPressed: () => goToMessage(notification.objectId),
-              )
-          ],
+              if (notification.type != "message")
+                IconButton(
+                  icon: const Icon(
+                    Icons.done,
+                  ),
+                  tooltip: "Gelesen",
+                  onPressed: noInternet
+                      ? null
+                      : () async {
+                          await delete();
+                          onDelete(notification);
+                        },
+                )
+              else
+                IconButton(
+                  icon: const Icon(
+                    Icons.exit_to_app,
+                  ),
+                  tooltip: "Zu Mitteilungen wechseln",
+                  onPressed: () => goToMessage(notification.objectId),
+                )
+            ],
+          ),
         ),
       ),
     );

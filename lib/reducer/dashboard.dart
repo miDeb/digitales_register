@@ -258,7 +258,15 @@ void _homeworkAdded(DashboardState state, Action<HomeworkAddedPayload> action,
   builder.allDays.map(
     (day) => day.date == action.payload.date
         ? day.rebuild(
-            (b) => b..homework.add(_parseHomework(action.payload.data)))
+            (b) => b
+              ..homework.add(
+                _parseHomework(action.payload.data).rebuild(
+                  (b) => b
+                    ..firstSeen = DateTime.now()
+                    ..lastNotSeen = DateTime.now(),
+                ),
+              ),
+          )
         : day,
   );
 }
