@@ -140,6 +140,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _Input(
+                  autofocus: true,
                   showErrorForEmptyInput: false,
                   inputType: _InputType.grade,
                   updateValue: (value) {
@@ -571,6 +572,7 @@ class _Input extends StatefulWidget {
   final String initial;
   final void Function(int) updateValue;
   final bool showErrorForEmptyInput;
+  final bool autofocus;
 
   const _Input({
     Key key,
@@ -578,6 +580,7 @@ class _Input extends StatefulWidget {
     this.initial,
     this.updateValue,
     this.showErrorForEmptyInput = true,
+    this.autofocus = false,
   }) : super(key: key);
   @override
   _InputState createState() => _InputState();
@@ -620,6 +623,11 @@ class _InputState extends State<_Input> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autofocus: widget.autofocus,
+      keyboardType: const TextInputType.numberWithOptions(
+        signed: true,
+        decimal: true,
+      ),
       focusNode: focusNode,
       controller: controller,
       decoration: InputDecoration(
