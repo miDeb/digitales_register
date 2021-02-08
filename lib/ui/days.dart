@@ -674,8 +674,9 @@ class ItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Deleteable(
-      showEntryAnimation: item.lastNotSeen != null &&
-          DateTime.now().difference(item.lastNotSeen) <
+      // this is a new entry or a reminder the user has just entered
+      showEntryAnimation: item.firstSeen != null &&
+          DateTime.now().difference(item.firstSeen) <
               const Duration(seconds: 1),
       builder: (context, delete) => Card(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
