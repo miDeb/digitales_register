@@ -8,7 +8,6 @@ import 'package:tuple/tuple.dart';
 import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../data.dart';
-import 'time_series_chart.dart';
 
 class _Selection {
   final String text;
@@ -134,7 +133,7 @@ class GradesChart extends StatelessWidget {
         children: [
           Hero(
             tag: 1337,
-            child: TimeSeriesChart(
+            child: charts.TimeSeriesChart(
               grades,
               animate: false,
               behaviors: isFullscreen

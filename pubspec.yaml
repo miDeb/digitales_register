@@ -31,6 +31,11 @@ dependencies:
     git:
       url: https://github.com/miDeb/built_redux.git
       ref: nnbd
+  charts_flutter:
+    git:
+      url: https://github.com/miDeb/charts.git
+      path: charts_flutter/
+      ref: select_nearest
   flutter_built_redux:
     git:
       url: https://github.com/miDeb/flutter_built_redux.git
@@ -38,7 +43,6 @@ dependencies:
   badges: any
   biometric_storage: ^1.1.0+1
   built_value: any
-  charts_flutter: any
   cookie_jar: ^1.0.1
   deleteable_tile: ^0.0.1-nullsafety.1
   dio: ^3.0.9

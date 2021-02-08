@@ -146,16 +146,18 @@ packages:
   charts_common:
     dependency: transitive
     description:
-      name: charts_common
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../../.pub-cache/git/charts-52269e2c19ebe909c679538c155c734ab471ba40/charts_common"
+      relative: true
+    source: path
     version: "0.9.0"
   charts_flutter:
     dependency: "direct main"
     description:
-      name: charts_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "charts_flutter/"
+      ref: select_nearest
+      resolved-ref: "52269e2c19ebe909c679538c155c734ab471ba40"
+      url: "https://github.com/miDeb/charts.git"
+    source: git
     version: "0.9.0"
   checked_yaml:
     dependency: transitive
