@@ -9,9 +9,10 @@ import '../app_state.dart';
 part 'chart_legend_entry_container.g.dart';
 
 class ChartLegendEntryContainer extends StatelessWidget {
-  final int id;
+  final String subjectName;
 
-  const ChartLegendEntryContainer({Key key, this.id}) : super(key: key);
+  const ChartLegendEntryContainer({Key key, this.subjectName})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, ChartLegendEntryVM>(
@@ -20,9 +21,9 @@ class ChartLegendEntryContainer extends StatelessWidget {
           config: vm.config,
           name: vm.name,
           setThickness: (thickness) {
-            actions.settingsActions.setGraphConfig(
+            actions.settingsActions.setSubjectTheme(
               MapEntry(
-                id,
+                subjectName,
                 vm.config.rebuild(
                   (b) => b.thick = thickness,
                 ),
@@ -32,7 +33,7 @@ class ChartLegendEntryContainer extends StatelessWidget {
         );
       },
       connect: (state) {
-        return ChartLegendEntryVM.from(state, id);
+        return ChartLegendEntryVM.from(state, subjectName);
       },
     );
   }
@@ -41,18 +42,18 @@ class ChartLegendEntryContainer extends StatelessWidget {
 abstract class ChartLegendEntryVM
     implements Built<ChartLegendEntryVM, ChartLegendEntryVMBuilder> {
   String get name;
-  SubjectGraphConfig get config;
+  SubjectTheme get config;
 
   factory ChartLegendEntryVM(
           [void Function(ChartLegendEntryVMBuilder) updates]) =
       _$ChartLegendEntryVM;
   ChartLegendEntryVM._();
 
-  factory ChartLegendEntryVM.from(AppState state, int id) {
+  factory ChartLegendEntryVM.from(AppState state, String name) {
     return ChartLegendEntryVM(
       (b) => b
-        ..name = state.gradesState.subjects.firstWhere((s) => s.id == id).name
-        ..config = state.settingsState.graphConfigs[id].toBuilder(),
+        ..name = name
+        ..config = state.settingsState.subjectThemes[name].toBuilder(),
     );
   }
 }

@@ -3,12 +3,14 @@ import 'dart:io';
 
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:package_info/package_info.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../app_state.dart';
 import '../container/settings_page.dart';
 import 'dialog.dart';
 import 'donations.dart';
@@ -34,6 +36,9 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetDarkMode;
   final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
+  final OnSettingChanged<bool> onSetDashboardColorBorders;
+  final OnSettingChanged<bool> onSetDashboardColorTestsInRed;
+  final OnSettingChanged<MapEntry<String, SubjectTheme>> onSetSubjectTheme;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
   final OnSettingChanged<List<String>> onSetIgnoreForGradesAverage;
   final VoidCallback onShowProfile;
@@ -58,6 +63,9 @@ class SettingsPageWidget extends StatefulWidget {
     @required this.onSetFollowDeviceDarkMode,
     @required this.onShowProfile,
     @required this.onSetIgnoreForGradesAverage,
+    @required this.onSetDashboardColorBorders,
+    @required this.onSetSubjectTheme,
+    @required this.onSetDashboardColorTestsInRed,
   }) : super(key: key);
 
   @override
@@ -197,7 +205,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(1),
             child: ListTile(
               title: Text(
-                "Theme",
+                "Aussehen",
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
@@ -219,6 +227,60 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             groupValue: currentTheme,
             onChanged: _selectTheme,
             title: const Text("Dunkel"),
+          ),
+          const Divider(
+            indent: 15,
+            endIndent: 15,
+          ),
+          ExpansionTile(
+            title: const Text("Fächerfarben"),
+            children: [
+              for (final theme in widget.vm.subjectThemes.entries)
+                ListTile(
+                  onTap: () async {
+                    final Color color = await showDialog(
+                      context: context,
+                      builder: (context) => _ColorPicker(
+                        initialColor: Color(theme.value.color),
+                      ),
+                    );
+                    if (color != null) {
+                      widget.onSetSubjectTheme(
+                        MapEntry(
+                          theme.key,
+                          theme.value.rebuild(
+                            (b) => b.color = color.value,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                  title: Text(theme.key),
+                  trailing: Container(
+                    width: 50,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: Color(theme.value.color),
+                      //  border: Border.all(),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          SwitchListTile.adaptive(
+            title: const Text(
+              "Hausaufgaben mit diesen Farben umrahmen",
+            ),
+            value: widget.vm.dashboardColorBorders,
+            onChanged: widget.onSetDashboardColorBorders,
+          ),
+          SwitchListTile.adaptive(
+            title: const Text(
+              "Tests immer rot umrahmen",
+            ),
+            value: widget.vm.dashboardColorTestsInRed,
+            onChanged: widget.onSetDashboardColorTestsInRed,
           ),
           const Divider(),
           AutoScrollTag(
@@ -722,6 +784,56 @@ class _AddSubjectState extends State<AddSubject> {
                 }
               : null,
           child: const Text("Fertig"),
+        ),
+      ],
+    );
+  }
+}
+
+class _ColorPicker extends StatefulWidget {
+  final Color initialColor;
+
+  const _ColorPicker({Key key, this.initialColor}) : super(key: key);
+  @override
+  _ColorPickerState createState() => _ColorPickerState();
+}
+
+class _ColorPickerState extends State<_ColorPicker> {
+  Color color;
+  @override
+  void initState() {
+    color = widget.initialColor;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InfoDialog(
+      title: const Text("Farbe auswählen"),
+      content: SingleChildScrollView(
+        child: MaterialPicker(
+          pickerColor: color,
+          onColorChanged: (pickedColor) {
+            setState(() {
+              color = pickedColor;
+            });
+          },
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text("Abbrechen"),
+        ),
+        ElevatedButton(
+          onPressed: color != widget.initialColor
+              ? () {
+                  Navigator.pop(context, color);
+                }
+              : null,
+          child: const Text("Auswählen"),
         ),
       ],
     );

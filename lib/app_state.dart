@@ -37,6 +37,25 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @BuiltValueField(serialize: false)
   String get url;
   static Serializer<AppState> get serializer => _$appStateSerializer;
+
+  List<String> extractAllSubjects() {
+    final subjects = <String>{};
+    for (final day in calendarState.days.values) {
+      for (final hour in day.hours) {
+        subjects.add(hour.subject);
+      }
+    }
+    for (final subject in gradesState.subjects) {
+      subjects.add(subject.name);
+    }
+    for (final day in dashboardState.allDays) {
+      for (final homework in day.homework) {
+        if (homework.label != null) subjects.add(homework.label);
+      }
+    }
+    return subjects.toList();
+  }
+
   factory AppState([Function(AppStateBuilder b) updates]) = _$AppState;
   AppState._();
   static void _initializeBuilder(AppStateBuilder builder) {
@@ -189,17 +208,16 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   }
 }
 
-abstract class SubjectGraphConfig
-    implements Built<SubjectGraphConfig, SubjectGraphConfigBuilder> {
+abstract class SubjectTheme
+    implements Built<SubjectTheme, SubjectThemeBuilder> {
   int get thick;
   int get color;
 
-  static Serializer<SubjectGraphConfig> get serializer =>
-      _$subjectGraphConfigSerializer;
+  static Serializer<SubjectTheme> get serializer => _$subjectThemeSerializer;
 
-  factory SubjectGraphConfig([Function(SubjectGraphConfigBuilder b) updates]) =
-      _$SubjectGraphConfig;
-  SubjectGraphConfig._();
+  factory SubjectTheme([Function(SubjectThemeBuilder b) updates]) =
+      _$SubjectTheme;
+  SubjectTheme._();
 }
 
 abstract class Semester implements Built<Semester, SemesterBuilder> {
@@ -247,7 +265,11 @@ abstract class SettingsState
   bool get showAllSubjectsAverage;
   bool get dashboardMarkNewOrChangedEntries;
   bool get dashboardDeduplicateEntries;
-  BuiltMap<int, SubjectGraphConfig> get graphConfigs;
+
+  // whether to color the borders of items in the color specified by subjectThemes
+  bool get dashboardColorBorders;
+  bool get dashboardColorTestsInRed;
+  BuiltMap<String, SubjectTheme> get subjectThemes;
   BuiltList<String> get ignoreForGradesAverage;
 
   // Whether to fully expand the drawer if in tablet mode
@@ -286,9 +308,11 @@ abstract class SettingsState
       ..showAllSubjectsAverage = true
       ..dashboardMarkNewOrChangedEntries = true
       ..dashboardDeduplicateEntries = true
-      ..graphConfigs = MapBuilder<int, SubjectGraphConfig>()
+      ..subjectThemes = MapBuilder<String, SubjectTheme>()
       ..drawerFullyExpanded = true
-      ..ignoreForGradesAverage = ListBuilder();
+      ..ignoreForGradesAverage = ListBuilder()
+      ..dashboardColorBorders = false
+      ..dashboardColorTestsInRed = true;
   }
 }
 

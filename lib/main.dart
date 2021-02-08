@@ -179,3 +179,37 @@ void showSnackBar(String message) {
     ),
   );
 }
+
+/*
+ThemeData _getDarkTheme(MaterialColor primarySwatch) {
+  final colorScheme = ColorScheme(
+    primary: primarySwatch,
+    primaryVariant: primarySwatch[700],
+    secondary: primarySwatch,
+    secondaryVariant: primarySwatch[700],
+    surface: Colors.grey[800],
+    background: Colors.grey[700],
+    error: Colors.red[700],
+    onPrimary: Colors.white,
+    onSecondary: Colors.white,
+    onSurface: Colors.white,
+    onBackground: Colors.white,
+    onError: Colors.black,
+    brightness: Brightness.dark,
+  );
+  return ThemeData(
+    brightness: Brightness.dark,
+    primarySwatch: primarySwatch,
+    primaryColor: primarySwatch,
+    primaryColorLight: primarySwatch[100],
+    primaryColorDark: primarySwatch[700],
+    toggleableActiveColor: primarySwatch[600],
+    accentColor: primarySwatch[500],
+    secondaryHeaderColor: primarySwatch[200],
+    backgroundColor: primarySwatch[200],
+    indicatorColor: primarySwatch[500],
+    buttonColor: primarySwatch[600],
+    colorScheme: colorScheme,
+  );
+}
+*/

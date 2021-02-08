@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:built_collection/built_collection.dart';
 
 class ChartLegend extends StatelessWidget {
-  final BuiltList<int> vm;
+  final BuiltList<String> vm;
 
   const ChartLegend({Key key, this.vm}) : super(key: key);
   @override
@@ -22,7 +22,7 @@ class ChartLegend extends StatelessWidget {
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return ChartLegendEntryContainer(
-                id: vm[index],
+                subjectName: vm[index],
               );
             },
             itemCount: vm.length,

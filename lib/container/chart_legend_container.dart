@@ -9,14 +9,14 @@ import '../ui/grades_chart_legend.dart';
 class ChartLegendContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return StoreConnection<AppState, AppActions, BuiltList<int>>(
+    return StoreConnection<AppState, AppActions, BuiltList<String>>(
       builder: (context, vm, actions) {
         return ChartLegend(
           vm: vm,
         );
       },
       connect: (state) {
-        return state.settingsState.graphConfigs.keys.toBuiltList();
+        return state.settingsState.subjectThemes.keys.toBuiltList();
       },
     );
   }

@@ -12,7 +12,9 @@ import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
+import 'package:built_collection/built_collection.dart';
 
+import '../app_state.dart';
 import '../container/days_container.dart';
 import '../container/homework_filter_container.dart';
 import '../data.dart';
@@ -253,6 +255,9 @@ class _DaysWidgetState extends State<DaysWidget> {
       setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
       onDownloadAttachment: widget.onDownloadAttachment,
       onOpenAttachment: widget.onOpenAttachment,
+      colorBorders: widget.vm.colorBorders,
+      colorTestsInRed: widget.vm.colorTestsInRed,
+      subjectThemes: widget.vm.subjectThemes,
     );
   }
 
@@ -377,6 +382,8 @@ class DayWidget extends StatelessWidget {
   final ToggleDoneCallback toggleDoneCallback;
   final VoidCallback setDoNotAskWhenDeleteCallback;
   final AttachmentCallback onDownloadAttachment, onOpenAttachment;
+  final bool colorBorders, colorTestsInRed;
+  final BuiltMap<String, SubjectTheme> subjectThemes;
 
   final Day day;
 
@@ -395,6 +402,9 @@ class DayWidget extends StatelessWidget {
     this.setDoNotAskWhenDeleteCallback,
     this.onDownloadAttachment,
     this.onOpenAttachment,
+    @required this.colorBorders,
+    @required this.subjectThemes,
+    @required this.colorTestsInRed,
   }) : super(key: key);
 
   Future<String> showEnterReminderDialog(BuildContext context) async {
@@ -492,6 +502,9 @@ class DayWidget extends StatelessWidget {
                                     (i) => ItemWidget(
                                       item: i,
                                       isDeletedView: true,
+                                      colorBorder: colorBorders,
+                                      subjectThemes: subjectThemes,
+                                      colorTestsInRed: colorTestsInRed,
                                     ),
                                   )
                                   .toList(),
@@ -531,6 +544,9 @@ class DayWidget extends StatelessWidget {
             index: ++i,
             onDownloadAttachment: onDownloadAttachment,
             onOpenAttachment: onOpenAttachment,
+            subjectThemes: subjectThemes,
+            colorBorder: colorBorders,
+            colorTestsInRed: colorTestsInRed,
           ),
         const Divider(),
       ],
@@ -543,15 +559,22 @@ class ItemWidget extends StatelessWidget {
   final VoidCallback removeThis;
   final VoidCallback toggleDone;
   final VoidCallback setDoNotAskWhenDelete;
-  final bool askWhenDelete, isHistory, isDeletedView, noInternet, isCurrent;
+  final bool askWhenDelete,
+      isHistory,
+      isDeletedView,
+      noInternet,
+      isCurrent,
+      colorBorder,
+      colorTestsInRed;
   final AttachmentCallback onDownloadAttachment, onOpenAttachment;
+  final BuiltMap<String, SubjectTheme> subjectThemes;
 
   final AutoScrollController controller;
   final int index;
 
   const ItemWidget({
     Key key,
-    this.item,
+    @required this.item,
     this.removeThis,
     this.toggleDone,
     this.askWhenDelete,
@@ -564,6 +587,9 @@ class ItemWidget extends StatelessWidget {
     this.isCurrent = true,
     this.onDownloadAttachment,
     this.onOpenAttachment,
+    @required this.colorBorder,
+    @required this.subjectThemes,
+    @required this.colorTestsInRed,
   }) : super(key: key);
 
   Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
@@ -619,6 +645,9 @@ class ItemWidget extends StatelessWidget {
                     ItemWidget(
                       item: historyItem,
                       isHistory: true,
+                      colorBorder: colorBorder,
+                      subjectThemes: subjectThemes,
+                      colorTestsInRed: colorTestsInRed,
                     ),
                   ],
                 ),
@@ -627,6 +656,19 @@ class ItemWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  Tuple2<Color, double> _getBorderConfig() {
+    if (item.warning && colorTestsInRed) {
+      return const Tuple2(Colors.red, 1.5);
+    }
+    if (colorBorder && subjectThemes.containsKey(item.label)) {
+      return Tuple2(Color(subjectThemes[item.label].color), 1.5);
+    }
+    if (item.type == HomeworkType.grade || item.checked) {
+      return const Tuple2(Colors.green, 0);
+    }
+    return const Tuple2(Colors.grey, 0);
   }
 
   @override
@@ -639,11 +681,10 @@ class ItemWidget extends StatelessWidget {
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         elevation: 0,
         shape: RoundedRectangleBorder(
-          side: item.warning
-              ? const BorderSide(color: Colors.red, width: 1.5)
-              : item.type == HomeworkType.grade || item.checked
-                  ? const BorderSide(color: Colors.green, width: 0)
-                  : const BorderSide(color: Colors.grey, width: 0),
+          side: BorderSide(
+            color: _getBorderConfig().item1,
+            width: _getBorderConfig().item2,
+          ),
           borderRadius: BorderRadius.circular(16),
         ),
         color: Colors.transparent,
@@ -698,7 +739,7 @@ class ItemWidget extends StatelessWidget {
                             ),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
-                            title: SelectableText(item.title),
+                            title: Text(item.title),
                             subtitle: item.subtitle.isNullOrEmpty
                                 ? null
                                 : SelectableText(item.subtitle),
@@ -842,6 +883,9 @@ class ItemWidget extends StatelessWidget {
             isHistory: true,
             isCurrent: false,
             item: item.previousVersion,
+            colorBorder: colorBorder,
+            subjectThemes: subjectThemes,
+            colorTestsInRed: colorTestsInRed,
           ),
       ],
     );

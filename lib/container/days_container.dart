@@ -74,6 +74,9 @@ abstract class DaysViewModel
   bool get noInternet;
   bool get loading;
   bool get showAddReminder;
+  bool get colorBorders;
+  bool get colorTestsInRed;
+  BuiltMap<String, SubjectTheme> get subjectThemes;
 
   bool get showNotifications;
   BuiltList<Day> get days;
@@ -99,18 +102,25 @@ abstract class DaysViewModel
             ?.toList() ??
         [];
 
-    return DaysViewModel((b) => b
-      ..days = ListBuilder(
-        !state.dashboardState.future ? unorderedDays?.reversed : unorderedDays,
-      )
-      ..noInternet = state.noInternet
-      ..future = state.dashboardState.future
-      ..loading = state.dashboardState.loading || state.loginState.loading
-      ..askWhenDelete = state.settingsState.askWhenDelete
-      ..showAddReminder =
-          !state.dashboardState.blacklist.contains(HomeworkType.homework)
-      ..showNotifications =
-          (state.notificationState.notifications?.length ?? 0) > 0);
+    return DaysViewModel(
+      (b) => b
+        ..days = ListBuilder(
+          !state.dashboardState.future
+              ? unorderedDays?.reversed
+              : unorderedDays,
+        )
+        ..noInternet = state.noInternet
+        ..future = state.dashboardState.future
+        ..loading = state.dashboardState.loading || state.loginState.loading
+        ..askWhenDelete = state.settingsState.askWhenDelete
+        ..showAddReminder =
+            !state.dashboardState.blacklist.contains(HomeworkType.homework)
+        ..showNotifications =
+            (state.notificationState.notifications?.length ?? 0) > 0
+        ..colorBorders = state.settingsState.dashboardColorBorders
+        ..colorTestsInRed = state.settingsState.dashboardColorTestsInRed
+        ..subjectThemes = state.settingsState.subjectThemes.toBuilder(),
+    );
   }
 }
 

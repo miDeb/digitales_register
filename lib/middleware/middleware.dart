@@ -46,11 +46,12 @@ part 'certificate.dart';
 part 'dashboard.dart';
 part 'grades.dart';
 part 'login.dart';
+part 'messages.dart';
 part 'notifications.dart';
 part 'pass.dart';
 part 'profile.dart';
 part 'routing.dart';
-part 'messages.dart';
+part 'settings.dart';
 
 final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
 var _wrapper = Wrapper();
@@ -78,7 +79,8 @@ final middleware = [
         ..combine(_routingMiddleware)
         ..combine(_certificateMiddleware)
         ..combine(_messagesMiddleware)
-        ..combine(_profileMiddleware))
+        ..combine(_profileMiddleware)
+        ..combine(_settingsMiddleware))
       .build(),
 ];
 

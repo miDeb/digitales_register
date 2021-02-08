@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 typedef SetThickness = void Function(int thickness);
 
 class GradesChartLegendEntry extends StatelessWidget {
-  final SubjectGraphConfig config;
+  final SubjectTheme config;
   final String name;
   final SetThickness setThickness;
 

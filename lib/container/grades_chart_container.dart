@@ -15,7 +15,7 @@ class GradesChartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions,
-        Map<SubjectGrades, SubjectGraphConfig>>(
+        Map<SubjectGrades, SubjectTheme>>(
       connect: (state) {
         SubjectGrades getKey(Subject subject) {
           final grades = state.gradesState.semester == Semester.all
@@ -34,8 +34,8 @@ class GradesChartContainer extends StatelessWidget {
           );
         }
 
-        SubjectGraphConfig getValue(Subject subject) {
-          return state.settingsState.graphConfigs[subject.id];
+        SubjectTheme getValue(Subject subject) {
+          return state.settingsState.subjectThemes[subject.name];
         }
 
         return {

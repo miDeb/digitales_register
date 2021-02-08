@@ -47,6 +47,7 @@ dependencies:
   deleteable_tile: ^0.0.1-nullsafety.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
+  flutter_colorpicker: ^0.3.5
   flutter_secure_storage: any
   flutter_typeahead: ^1.9.3
   flutter_widget_from_html_core: ^0.3.2+1

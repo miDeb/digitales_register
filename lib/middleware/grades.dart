@@ -50,8 +50,6 @@ Future<void> _loadGrades(
             ..semester = s.toBuilder(),
         ),
       );
-      api.actions.settingsActions
-          .updateGraphConfig(api.state.gradesState.subjects);
     },
   );
 }

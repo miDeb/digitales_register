@@ -5,7 +5,6 @@ import 'package:flutter/material.dart' hide Action;
 import '../actions/routing_actions.dart';
 import '../actions/settings_actions.dart';
 import '../app_state.dart';
-import '../data.dart';
 
 final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     SettingsState, SettingsStateBuilder>(
@@ -34,9 +33,12 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
       _markNotSeenDashboardEntries)
   ..add(SettingsActionsNames.deduplicateDashboardEntries,
       _deduplicateDashboardEntries)
-  ..add(SettingsActionsNames.updateGraphConfig, _updateGradeGraphConfigs)
-  ..add(SettingsActionsNames.setGraphConfig, _setGradeGraphConfig)
-  ..add(SettingsActionsNames.drawerExpandedChange, _drawerFullyExpanded);
+  ..add(SettingsActionsNames.updateSubjectThemes, _updateSubjectThemes)
+  ..add(SettingsActionsNames.setSubjectTheme, _setSubjectTheme)
+  ..add(SettingsActionsNames.drawerExpandedChange, _drawerFullyExpanded)
+  ..add(SettingsActionsNames.dashboardColorBorders, _dashboardColorBorders)
+  ..add(
+      SettingsActionsNames.dashboardColorTestsInRed, _dashboardColorTestsInRed);
 
 void _askWhenDeleteReminder(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
@@ -119,11 +121,11 @@ void _ignoreSubjectsForAverage(SettingsState state,
   builder.ignoreForGradesAverage.replace(action.payload);
 }
 
-void _setGradeGraphConfig(
+void _setSubjectTheme(
     SettingsState state,
-    Action<MapEntry<int, SubjectGraphConfig>> action,
+    Action<MapEntry<String, SubjectTheme>> action,
     SettingsStateBuilder builder) {
-  builder.graphConfigs[action.payload.key] = action.payload.value;
+  builder.subjectThemes[action.payload.key] = action.payload.value;
 }
 
 void _markNotSeenDashboardEntries(
@@ -141,27 +143,32 @@ void _drawerFullyExpanded(
   builder.drawerFullyExpanded = action.payload;
 }
 
-void _updateGradeGraphConfigs(SettingsState state,
-    Action<BuiltList<Subject>> action, SettingsStateBuilder builder) {
-  for (final entry in state.graphConfigs.entries) {
-    if (!action.payload.any((s) => s.id == entry.key)) {
-      builder.graphConfigs.remove(entry);
-    }
-  }
+void _dashboardColorBorders(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.dashboardColorBorders = action.payload;
+}
+
+void _dashboardColorTestsInRed(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.dashboardColorTestsInRed = action.payload;
+}
+
+void _updateSubjectThemes(SettingsState state, Action<List<String>> action,
+    SettingsStateBuilder builder) {
   for (final subject in action.payload) {
-    if (!builder.graphConfigs.build().containsKey(subject.id)) {
-      builder.graphConfigs.update(
+    if (!builder.subjectThemes.build().containsKey(subject)) {
+      builder.subjectThemes.update(
         (b) => b
-          ..[subject.id] = SubjectGraphConfig((b) => b
+          ..[subject] = SubjectTheme((b) => b
             ..thick = _defaultThick
             ..color = _colors
                 .firstWhere(
-                  (color) => !builder.graphConfigs
+                  (color) => !builder.subjectThemes
                       .build()
                       .values
                       .any((config) => config.color == color.value),
                   orElse: () => _similarColors.firstWhere(
-                    (color) => !builder.graphConfigs
+                    (color) => !builder.subjectThemes
                         .build()
                         .values
                         .any((config) => config.color == color.value),

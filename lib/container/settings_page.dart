@@ -44,6 +44,11 @@ class SettingsPageContainer extends StatelessWidget {
           onShowProfile: actions.routingActions.showProfile,
           onSetIgnoreForGradesAverage: (list) =>
               actions.settingsActions.ignoreSubjectsForAverage(BuiltList(list)),
+          onSetDashboardColorBorders:
+              actions.settingsActions.dashboardColorBorders,
+          onSetDashboardColorTestsInRed:
+              actions.settingsActions.dashboardColorTestsInRed,
+          onSetSubjectTheme: actions.settingsActions.setSubjectTheme,
         );
       },
       connect: (state) {
@@ -69,8 +74,11 @@ class SettingsViewModel {
   final bool dashboardDeduplicateEntries;
   final bool showSubjectNicks;
   final bool showGradesSettings;
+  final bool dashboardColorBorders;
+  final bool dashboardColorTestsInRed;
   final List<String> allSubjects;
   final List<String> ignoreForGradesAverage;
+  final BuiltMap<String, SubjectTheme> subjectThemes;
   SettingsViewModel(AppState state)
       : noPassSaving = state.settingsState.noPasswordSaving,
         noDataSaving = state.settingsState.noDataSaving,
@@ -87,25 +95,10 @@ class SettingsViewModel {
             state.settingsState.dashboardMarkNewOrChangedEntries,
         dashboardDeduplicateEntries =
             state.settingsState.dashboardDeduplicateEntries,
-        allSubjects = extractAllSubjects(state),
+        dashboardColorBorders = state.settingsState.dashboardColorBorders,
+        dashboardColorTestsInRed = state.settingsState.dashboardColorTestsInRed,
+        allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
-            state.settingsState.ignoreForGradesAverage.toList();
-
-  static List<String> extractAllSubjects(AppState appState) {
-    final subjects = <String>{};
-    for (final day in appState.calendarState.days.values) {
-      for (final hour in day.hours) {
-        subjects.add(hour.subject);
-      }
-    }
-    for (final subject in appState.gradesState.subjects) {
-      subjects.add(subject.name);
-    }
-    for (final day in appState.dashboardState.allDays) {
-      for (final homework in day.homework) {
-        if (homework.label != null) subjects.add(homework.label);
-      }
-    }
-    return subjects.toList();
-  }
+            state.settingsState.ignoreForGradesAverage.toList(),
+        subjectThemes = state.settingsState.subjectThemes;
 }
