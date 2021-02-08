@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -360,33 +361,53 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               },
             ),
           ),
-          if (widget.vm.ignoreForGradesAverage.isEmpty)
-            const Padding(
+          AnimatedCrossFade(
+            duration: const Duration(milliseconds: 250),
+            crossFadeState: widget.vm.ignoreForGradesAverage.isEmpty
+                ? CrossFadeState.showFirst
+                : CrossFadeState.showSecond,
+            firstChild: const Padding(
               padding: EdgeInsets.only(left: 16),
               child: ListTile(
-                  title: Text(
-                "Kein Fach wird ignoriert",
-                style: TextStyle(color: Colors.grey),
-              )),
-            )
-          else
-            for (final subject in widget.vm.ignoreForGradesAverage)
-              Padding(
-                padding: const EdgeInsets.only(left: 16),
-                child: ListTile(
-                  title: Text(subject),
-                  trailing: IconButton(
-                    icon: const Icon(
-                      Icons.close,
-                    ),
-                    onPressed: () {
-                      widget.onSetIgnoreForGradesAverage(
-                        widget.vm.ignoreForGradesAverage..remove(subject),
-                      );
-                    },
-                  ),
+                title: Text(
+                  "Kein Fach wird ignoriert",
+                  style: TextStyle(color: Colors.grey),
                 ),
               ),
+            ),
+            secondChild: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final subject in widget.vm.ignoreForGradesAverage)
+                  Deleteable(
+                    // don't show an animation if this is the only item
+                    // in that case, the AnimatedCrossFade will have done a different animation
+                    showExitAnimation:
+                        widget.vm.ignoreForGradesAverage.length != 1,
+                    showEntryAnimation:
+                        widget.vm.ignoreForGradesAverage.length != 1,
+                    key: ValueKey(subject),
+                    builder: (context, delete) => Padding(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: ListTile(
+                        title: Text(subject),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                          ),
+                          onPressed: () async {
+                            await delete();
+                            widget.onSetIgnoreForGradesAverage(
+                              widget.vm.ignoreForGradesAverage..remove(subject),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
           const Divider(),
           AutoScrollTag(
             controller: controller,
@@ -430,60 +451,44 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 i -= 1;
                 final key = widget.vm.subjectNicks.entries.toList()[i].key;
                 final value = widget.vm.subjectNicks[key];
-                return ListTile(
-                  title: Text(key),
-                  subtitle: Text(value),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () async {
-                          final delete = await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return InfoDialog(
-                                  title: const Text("Kürzel entfernen?"),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      onPressed: Navigator.of(context).pop,
-                                      child: const Text("Abbrechen"),
-                                    ),
-                                    ElevatedButton(
-                                      onPressed: () =>
-                                          Navigator.of(context).pop(true),
-                                      child: const Text("Ok"),
-                                    ),
-                                  ],
-                                );
-                              });
-                          if (delete == true) {
+                return Deleteable(
+                  key: ValueKey(key),
+                  builder: (context, delete) => ListTile(
+                    title: Text(key),
+                    subtitle: Text(value),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        IconButton(
+                          icon: const Icon(Icons.delete),
+                          onPressed: () async {
+                            await delete();
                             widget.onSetSubjectNicks(
                               Map.of(widget.vm.subjectNicks)..remove(key),
                             );
-                          }
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: () async {
-                          final newValue = await showEditSubjectNick(
-                            context,
-                            key,
-                            value,
-                            subjectsWithoutNick..add(key),
-                          );
-                          if (newValue != null) {
-                            widget.onSetSubjectNicks(
-                              Map.fromEntries(
-                                List.of(widget.vm.subjectNicks.entries)
-                                  ..[i] = newValue,
-                              ),
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit),
+                          onPressed: () async {
+                            final newValue = await showEditSubjectNick(
+                              context,
+                              key,
+                              value,
+                              subjectsWithoutNick..add(key),
                             );
-                          }
-                        },
-                      ),
-                    ],
+                            if (newValue != null) {
+                              widget.onSetSubjectNicks(
+                                Map.fromEntries(
+                                  List.of(widget.vm.subjectNicks.entries)
+                                    ..[i] = newValue,
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
