@@ -75,7 +75,12 @@ class SortedGradesWidget extends StatelessWidget {
                 Badge(
                   shape: BadgeShape.square,
                   borderRadius: BorderRadius.circular(20),
-                  badgeContent: const Text("NEU!"),
+                  badgeContent: const Text(
+                    "NEU!",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ],
             ),

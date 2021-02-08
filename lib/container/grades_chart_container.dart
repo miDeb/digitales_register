@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:tuple/tuple.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
@@ -26,8 +27,10 @@ class GradesChartContainer extends StatelessWidget {
 
           return SubjectGrades(
             {
-              for (final grade in grades) grade.date: grade.grade,
+              for (final grade in grades)
+                grade.date: Tuple2(grade.grade, grade.type),
             },
+            subject.name,
           );
         }
 
@@ -52,7 +55,8 @@ class GradesChartContainer extends StatelessWidget {
 }
 
 class SubjectGrades {
-  final Map<DateTime, int> grades;
+  final Map<DateTime, Tuple2<int, String>> grades;
+  final String name;
 
-  SubjectGrades(this.grades);
+  SubjectGrades(this.grades, this.name);
 }

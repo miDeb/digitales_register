@@ -1,15 +1,35 @@
+import 'dart:async';
+
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tuple/tuple.dart';
 
 import '../app_state.dart';
 import '../container/grades_chart_container.dart';
-import '../util.dart';
+import '../data.dart';
+import 'time_series_chart.dart';
+
+class _Selection {
+  final String text;
+  final Color color;
+
+  _Selection(this.text, this.color);
+}
 
 class GradesChart extends StatelessWidget {
   final VoidCallback goFullscreen;
   final bool isFullscreen;
-  final List<charts.Series<MapEntry<DateTime, int>, DateTime>> grades;
+  final List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
+      grades;
+
+  // we're using this weird stream-based setup to trigger rebuilds here to only
+  // trigger rebuilds of the selection description, as rebuilds of the diagram
+  // cause it to react poorly.
+  Stream<Tuple2<DateTime, List<_Selection>>> get selection => controller.stream;
+  Sink<Tuple2<DateTime, List<_Selection>>> get selectionSink => controller.sink;
+  final StreamController<Tuple2<DateTime, List<_Selection>>> controller =
+      StreamController();
 
   GradesChart({
     Key key,
@@ -19,8 +39,8 @@ class GradesChart extends StatelessWidget {
   })  : grades = convert(graphs),
         super(key: key);
 
-  static List<charts.Series<MapEntry<DateTime, int>, DateTime>> convert(
-      Map<SubjectGrades, SubjectGraphConfig> data) {
+  static List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
+      convert(Map<SubjectGrades, SubjectGraphConfig> data) {
     return data.entries
         .map(
           (entry) {
@@ -29,17 +49,18 @@ class GradesChart extends StatelessWidget {
             final color = Color(entry.value.color);
             return strokeWidth == 0
                 ? null
-                : charts.Series<MapEntry<DateTime, int>, DateTime>(
+                : charts.Series<MapEntry<DateTime, Tuple2<int, String>>,
+                    DateTime>(
                     colorFn: (_, __) => charts.Color(
                       r: color.red,
                       g: color.green,
                       b: color.blue,
                     ),
                     domainFn: (grade, _) => grade.key,
-                    measureFn: (grade, _) => grade.value / 100,
+                    measureFn: (grade, _) => grade.value.item1 / 100,
                     data: s.grades.entries.toList(),
                     strokeWidthPxFn: (_, __) => strokeWidth,
-                    id: "Grades",
+                    id: s.name,
                   );
           },
         )
@@ -107,11 +128,13 @@ class GradesChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final darkMode = Theme.of(context).brightness == Brightness.dark;
-    return Hero(
-      tag: 1337,
-      child: maybeWrap(
-          Center(
-            child: charts.TimeSeriesChart(
+    return GestureDetector(
+      onTap: isFullscreen ? null : goFullscreen,
+      child: Stack(
+        children: [
+          Hero(
+            tag: 1337,
+            child: TimeSeriesChart(
               grades,
               animate: false,
               behaviors: isFullscreen
@@ -121,6 +144,35 @@ class GradesChart extends StatelessWidget {
                       ),
                     ]
                   : null,
+              selectionModels: [
+                charts.SelectionModelConfig(
+                  changedListener: (model) async {
+                    DateTime allDate;
+                    final selections = model.selectedDatum.map((datum) {
+                      final grade = datum.datum.value.item1;
+                      final type = datum.datum.value.item2;
+                      final subject = datum.series.displayName;
+                      final color = datum.series.colorFn(0);
+                      final date = datum.datum.key as DateTime;
+                      assert(allDate == null || allDate == date);
+                      allDate = date;
+                      return _Selection(
+                        "$subject · $type: ${formatGradeFromInt(grade as int)}",
+                        Color.fromARGB(
+                          color.a,
+                          color.r,
+                          color.g,
+                          color.b,
+                        ),
+                      );
+                    }).toList();
+                    selectionSink.add(Tuple2(
+                      allDate,
+                      selections,
+                    ));
+                  },
+                )
+              ],
               primaryMeasureAxis: charts.NumericAxisSpec(
                 tickProviderSpec: const charts.StaticNumericTickProviderSpec(
                   [
@@ -168,21 +220,115 @@ class GradesChart extends StatelessWidget {
                 ),
               ),
             ),
-          ), (widget) {
-        return GestureDetector(
-          onTap: goFullscreen,
-          child: Stack(
-            children: <Widget>[
-              widget,
-              const Positioned(
-                right: 20,
-                bottom: 20,
-                child: Icon(Icons.fullscreen),
-              ),
-            ],
           ),
+          if (isFullscreen)
+            StreamBuilder<Object>(
+                stream: selection,
+                builder: (context, snapshot) {
+                  final data =
+                      snapshot.data as Tuple2<DateTime, List<_Selection>>;
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(32),
+                      child: SelectionWidget(
+                        date: data?.item1,
+                        selections: data?.item2,
+                      ),
+                    ),
+                  );
+                }),
+          if (!isFullscreen)
+            const Positioned(
+              right: 20,
+              bottom: 20,
+              child: Icon(Icons.fullscreen),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class SelectionWidget extends StatefulWidget {
+  final DateTime date;
+  final List<_Selection> selections;
+
+  const SelectionWidget({Key key, this.date, this.selections})
+      : super(key: key);
+  @override
+  _SelectionWidgetState createState() => _SelectionWidgetState();
+}
+
+class _SelectionWidgetState extends State<SelectionWidget>
+    with TickerProviderStateMixin {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
         );
-      }, wrap: !isFullscreen),
+      },
+      layoutBuilder: (currentChild, previousChildren) => AnimatedSize(
+        alignment: Alignment.topCenter,
+        vsync: this,
+        duration: const Duration(milliseconds: 150),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            ...previousChildren,
+            if (currentChild != null) currentChild,
+          ],
+        ),
+      ),
+      duration: const Duration(milliseconds: 150),
+      child: Column(
+        key: UniqueKey(),
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (widget.date != null)
+            Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 2,
+              ),
+              margin: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Colors.black,
+              ),
+              child: Text(
+                DateFormat.MMMMd("de").format(widget.date),
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          if (widget.selections != null)
+            for (final selection in widget.selections)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 2,
+                ),
+                margin: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: selection.color,
+                ),
+                child: Text(
+                  selection.text,
+                  style: TextStyle(
+                    color:
+                        ThemeData.estimateBrightnessForColor(selection.color) ==
+                                Brightness.light
+                            ? Colors.black
+                            : Colors.white,
+                  ),
+                ),
+              ),
+        ],
+      ),
     );
   }
 }
