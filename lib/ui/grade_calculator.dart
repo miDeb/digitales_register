@@ -624,10 +624,8 @@ class _InputState extends State<_Input> {
   Widget build(BuildContext context) {
     return TextField(
       autofocus: widget.autofocus,
-      keyboardType: const TextInputType.numberWithOptions(
-        signed: true,
-        decimal: true,
-      ),
+      keyboardType:
+          widget.inputType == _InputType.weight ? TextInputType.number : null,
       focusNode: focusNode,
       controller: controller,
       decoration: InputDecoration(

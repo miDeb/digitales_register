@@ -231,6 +231,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           const Divider(
             indent: 15,
             endIndent: 15,
+            height: 0,
           ),
           ExpansionTile(
             title: const Text("Fächerfarben"),
