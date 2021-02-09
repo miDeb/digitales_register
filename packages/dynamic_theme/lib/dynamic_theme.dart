@@ -11,9 +11,9 @@ typedef ThemeDataBuilder = ThemeData Function(
 
 class DynamicTheme extends StatefulWidget {
   const DynamicTheme({
-    Key key,
-    this.data,
-    this.themedWidgetBuilder,
+    Key? key,
+    required this.data,
+    required this.themedWidgetBuilder,
     this.defaultBrightness = Brightness.light,
   }) : super(key: key);
 
@@ -31,8 +31,8 @@ class DynamicTheme extends StatefulWidget {
   @override
   DynamicThemeState createState() => DynamicThemeState();
 
-  static DynamicThemeState of(BuildContext context) {
-    return context.findAncestorStateOfType<State<DynamicTheme>>();
+  static DynamicThemeState? of(BuildContext context) {
+    return context.findAncestorStateOfType<State<DynamicTheme>>() as DynamicThemeState?;
   }
 }
 
@@ -67,14 +67,14 @@ class DynamicThemeState extends State<DynamicTheme>
   bool get platformOverride => _platformOverride;
 
   Brightness _getDeviceBrightness() {
-    return WidgetsBinding.instance.window.platformBrightness;
+    return WidgetsBinding.instance!.window.platformBrightness;
   }
 
   @override
   void initState() {
     super.initState();
     _initVariables();
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance!.addObserver(this);
     _load();
   }
 
@@ -124,7 +124,7 @@ class DynamicThemeState extends State<DynamicTheme>
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
 
