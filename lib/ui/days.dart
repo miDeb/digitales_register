@@ -64,7 +64,7 @@ class DaysWidget extends StatefulWidget {
 }
 
 class _DaysWidgetState extends State<DaysWidget> {
-  final controller = AutoScrollController();
+  final controller = AutoScrollController(suggestedRowHeight: 100);
 
   bool _showScrollUp = false;
   bool _afterFirstFrame = false;
