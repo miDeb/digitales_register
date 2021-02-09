@@ -352,7 +352,7 @@ class Wrapper {
     //</script>
 
     if (response is String &&
-        RegExp(r'\s*<script type="text/javascript">\n?\s*window.location = "https://\w+.digitalesregister.it/v2/login";\n?\s*</script>')
+        RegExp(r'\s*<script type="text/javascript">\n?\s*window\.location = "https://.+\.digitalesregister.it/v2/login";\n?\s*</script>')
             .hasMatch(response)) {
       throw UnexpectedLogoutException();
     }
