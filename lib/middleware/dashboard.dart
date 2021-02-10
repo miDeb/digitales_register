@@ -30,9 +30,9 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         ..data = data
         ..future = action.payload
         ..markNewOrChangedEntries =
-            api.state.settingsState!.dashboardMarkNewOrChangedEntries
+            api.state.settingsState.dashboardMarkNewOrChangedEntries
         ..deduplicateEntries =
-            api.state.settingsState!.dashboardDeduplicateEntries,
+            api.state.settingsState.dashboardDeduplicateEntries,
     ),
   );
 }

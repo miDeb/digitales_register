@@ -53,7 +53,7 @@ abstract class ChartLegendEntryVM
     return ChartLegendEntryVM(
       (b) => b
         ..name = name
-        ..config = state.settingsState!.subjectThemes[name]!.toBuilder(),
+        ..config = state.settingsState.subjectThemes[name]!.toBuilder(),
     );
   }
 }

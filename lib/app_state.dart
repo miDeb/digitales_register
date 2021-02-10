@@ -88,7 +88,7 @@ abstract class MessagesState
   MessagesState._();
 
   static void _initializeBuilder(MessagesStateBuilder builder) {
-    builder..messages = ListBuilder();
+    builder.messages = ListBuilder();
   }
 }
 

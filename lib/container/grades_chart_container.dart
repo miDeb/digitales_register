@@ -36,7 +36,7 @@ class GradesChartContainer extends StatelessWidget {
         }
 
         SubjectTheme getValue(Subject subject) {
-          return state.settingsState!.subjectThemes[subject.name]!;
+          return state.settingsState.subjectThemes[subject.name]!;
         }
 
         return {

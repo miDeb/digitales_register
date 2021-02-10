@@ -65,7 +65,7 @@ class LoginPageViewModel {
   LoginPageViewModel.from(AppState state)
       : error = state.loginState.errorMsg,
         loading = state.loginState.loading,
-        safeMode = state.settingsState!.noPasswordSaving,
+        safeMode = state.settingsState.noPasswordSaving,
         noInternet = state.noInternet,
         servers = _servers,
         changePass = state.loginState.changePassword,

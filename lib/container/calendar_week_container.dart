@@ -48,7 +48,7 @@ abstract class CalendarWeekViewModel
         ..days = ListBuilder(state.calendarState.daysForWeek(monday))
         // converting all keys (subject names) to lower case to make accessing cheaper
         ..subjectNicks = MapBuilder(
-          state.settingsState!.subjectNicks.toMap().map(
+          state.settingsState.subjectNicks.toMap().map(
                 (key, value) => MapEntry(
                   key.toLowerCase(),
                   value,

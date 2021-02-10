@@ -49,11 +49,11 @@ void _fileAvailable(
 
 void _markAsRead(
     MessagesState state, Action<int> action, MessagesStateBuilder builder) {
-  if (action.payload == state!.showMessage) {
+  if (action.payload == state.showMessage) {
     builder.showMessage = null;
   }
-  builder.messages[state!.messages.indexWhere((m) => m.id == action.payload)] =
-      state!.messages
+  builder.messages[state.messages.indexWhere((m) => m.id == action.payload)] =
+      state.messages
           .firstWhere(
             (m) => m.id == action.payload,
           )
@@ -84,7 +84,7 @@ Message _parseMessage(Map json, MessagesState state) {
     ..fileName = getString(json["fileName"])
     ..fileOriginalName = getString(json["fileOriginalName"])
     ..id = getInt(json["id"]);
-  final oldMessage = state?.messages.firstWhereOrNull(
+  final oldMessage = state.messages.firstWhereOrNull(
     (m) => m.id == message.id,
   );
   if (oldMessage != null && oldMessage.fileName == message.fileName) {

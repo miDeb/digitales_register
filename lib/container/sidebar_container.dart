@@ -58,7 +58,7 @@ class SidebarContainer extends StatelessWidget {
             ..username = state.config?.fullName ?? state.loginState.username
             ..userIcon = state.config?.imgSource
             ..drawerInitiallyFullyExpanded =
-                state.settingsState!.drawerFullyExpanded
+                state.settingsState.drawerFullyExpanded
             ..otherAccounts = state.loginState.otherAccounts.toBuilder(),
         );
       },

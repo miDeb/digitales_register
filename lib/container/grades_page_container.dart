@@ -57,8 +57,8 @@ abstract class GradesPageViewModel
               : s.gradesAll.isNotEmpty,
         )
         ..noInternet = state.noInternet
-        ..showGradesDiagram = state.settingsState!.showGradesDiagram
-        ..showAllSubjectsAverage = state.settingsState!.showAllSubjectsAverage,
+        ..showGradesDiagram = state.settingsState.showGradesDiagram
+        ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
     );
   }
 }
@@ -69,7 +69,7 @@ String calculateAllSubjectsAverage(AppState state) {
   for (final subject in state.gradesState.subjects) {
     final average = subject.average(state.gradesState.semester);
     if (average != null &&
-        !state.settingsState!.ignoreForGradesAverage.any(
+        !state.settingsState.ignoreForGradesAverage.any(
           (element) => element.toLowerCase() == subject.name.toLowerCase(),
         )) {
       sum += average;

@@ -115,14 +115,14 @@ abstract class DaysViewModel
         ..noInternet = state.noInternet
         ..future = state.dashboardState.future
         ..loading = state.dashboardState.loading || state.loginState.loading
-        ..askWhenDelete = state.settingsState!.askWhenDelete
+        ..askWhenDelete = state.settingsState.askWhenDelete
         ..showAddReminder =
             !state.dashboardState.blacklist!.contains(HomeworkType.homework)
         ..showNotifications =
             (state.notificationState.notifications?.length ?? 0) > 0
-        ..colorBorders = state.settingsState!.dashboardColorBorders
-        ..colorTestsInRed = state.settingsState!.dashboardColorTestsInRed
-        ..subjectThemes = state.settingsState!.subjectThemes.toBuilder(),
+        ..colorBorders = state.settingsState.dashboardColorBorders
+        ..colorTestsInRed = state.settingsState.dashboardColorTestsInRed
+        ..subjectThemes = state.settingsState.subjectThemes.toBuilder(),
     );
   }
 }

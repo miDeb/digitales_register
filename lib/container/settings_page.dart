@@ -80,26 +80,26 @@ class SettingsViewModel {
   final List<String> ignoreForGradesAverage;
   final BuiltMap<String, SubjectTheme> subjectThemes;
   SettingsViewModel(AppState state)
-      : noPassSaving = state.settingsState!.noPasswordSaving,
-        noDataSaving = state.settingsState!.noDataSaving,
-        askWhenDelete = state.settingsState!.askWhenDelete,
-        deleteDataOnLogout = state.settingsState!.deleteDataOnLogout,
-        offlineEnabled = state.settingsState!.offlineEnabled,
-        subjectNicks = state.settingsState!.subjectNicks.toMap(),
-        showSubjectNicks = state.settingsState!.scrollToSubjectNicks,
-        showGradesSettings = state.settingsState!.scrollToGrades,
-        showCalendarEditNicksBar = state.settingsState!.showCalendarNicksBar,
-        showGradesDiagram = state.settingsState!.showGradesDiagram,
-        showAllSubjectsAverage = state.settingsState!.showAllSubjectsAverage,
+      : noPassSaving = state.settingsState.noPasswordSaving,
+        noDataSaving = state.settingsState.noDataSaving,
+        askWhenDelete = state.settingsState.askWhenDelete,
+        deleteDataOnLogout = state.settingsState.deleteDataOnLogout,
+        offlineEnabled = state.settingsState.offlineEnabled,
+        subjectNicks = state.settingsState.subjectNicks.toMap(),
+        showSubjectNicks = state.settingsState.scrollToSubjectNicks,
+        showGradesSettings = state.settingsState.scrollToGrades,
+        showCalendarEditNicksBar = state.settingsState.showCalendarNicksBar,
+        showGradesDiagram = state.settingsState.showGradesDiagram,
+        showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
         dashboardMarkNewOrChangedEntries =
-            state.settingsState!.dashboardMarkNewOrChangedEntries,
+            state.settingsState.dashboardMarkNewOrChangedEntries,
         dashboardDeduplicateEntries =
-            state.settingsState!.dashboardDeduplicateEntries,
-        dashboardColorBorders = state.settingsState!.dashboardColorBorders,
+            state.settingsState.dashboardDeduplicateEntries,
+        dashboardColorBorders = state.settingsState.dashboardColorBorders,
         dashboardColorTestsInRed =
-            state.settingsState!.dashboardColorTestsInRed,
+            state.settingsState.dashboardColorTestsInRed,
         allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
-            state.settingsState!.ignoreForGradesAverage.toList(),
-        subjectThemes = state.settingsState!.subjectThemes;
+            state.settingsState.ignoreForGradesAverage.toList(),
+        subjectThemes = state.settingsState.subjectThemes;
 }

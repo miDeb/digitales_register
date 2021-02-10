@@ -58,12 +58,12 @@ abstract class SortedGradesViewModel
     return SortedGradesViewModel(
       (b) => b
         ..subjects = state.gradesState.subjects.toBuilder()
-        ..sortByType = state.settingsState!.typeSorted
+        ..sortByType = state.settingsState.typeSorted
         ..semester = state.gradesState.semester.toBuilder()
-        ..showCancelled = state.settingsState!.showCancelled
+        ..showCancelled = state.settingsState.showCancelled
         ..noInternet = state.noInternet
         ..ignoredSubjectsForAverage =
-            state.settingsState!.ignoreForGradesAverage.toBuilder(),
+            state.settingsState.ignoreForGradesAverage.toBuilder(),
     );
   }
 }

@@ -14,7 +14,7 @@ final _loginMiddleware =
 
 Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) async {
-  if (!api.state.settingsState!.noPasswordSaving && action.payload.hard) {
+  if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
     await _secureStorage.write(
       key: "login",
       value: json.encode(
@@ -26,7 +26,7 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
   }
-  if (api.state.settingsState!.deleteDataOnLogout && action.payload.hard) {
+  if (api.state.settingsState.deleteDataOnLogout && action.payload.hard) {
     api.actions.deleteData();
   }
   if (!action.payload.forced) {
@@ -75,7 +75,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     logout: () => api.actions.loginActions.logout(
       LogoutPayload(
         (b) => b
-          ..hard = api.state.settingsState!.noPasswordSaving
+          ..hard = api.state.settingsState.noPasswordSaving
           ..forced = true,
       ),
     ),

@@ -36,7 +36,7 @@ class AbsencesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state.statistic != null
-        ? state!.absences.isEmpty
+        ? state.absences.isEmpty
             ? Center(
                 child: Text(
                   "Noch keine Absenzen",
@@ -49,9 +49,9 @@ class AbsencesBody extends StatelessWidget {
                   stat: state.statistic!,
                 ),
                 ...List.generate(
-                  state!.absences.length,
+                  state.absences.length,
                   (n) => AbsenceGroupContainer(
-                    group: state!.absences.length - n - 1,
+                    group: state.absences.length - n - 1,
                   ),
                 ),
               ])

@@ -247,7 +247,7 @@ Future<void> _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoggedInPayload> action) async {
-  if (!api.state.settingsState!.noPasswordSaving &&
+  if (!api.state.settingsState.noPasswordSaving &&
       !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
@@ -290,7 +290,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         await next(action);
 
         api.actions.settingsActions
-            .saveNoPass(api.state.settingsState!.noPasswordSaving);
+            .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
         log("Failed to load data", error: e);
@@ -341,13 +341,13 @@ NextActionHandler _saveStateMiddleware(
             void save() {
               _saveUnderway = false;
               String toSave;
-              if (!_stateToSave.settingsState!.noDataSaving && !_deletedData) {
+              if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
                 toSave = json.encode(
                   serializers.serialize(_stateToSave),
                 );
               } else {
                 toSave = json.encode(
-                  serializers.serialize(_stateToSave.settingsState!),
+                  serializers.serialize(_stateToSave.settingsState),
                 );
               }
               if (_lastSave == toSave && _lastUsernameSaved == user) return;
