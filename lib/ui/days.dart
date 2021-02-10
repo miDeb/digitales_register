@@ -876,7 +876,7 @@ class ItemWidget extends StatelessWidget {
       );
     }
     return Column(
-      key: ObjectKey(item),
+      key: ValueKey(item.id),
       children: <Widget>[
         child,
         if (isHistory && item.previousVersion != null)
