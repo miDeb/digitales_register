@@ -112,10 +112,10 @@ class Wrapper {
       assert(onAddProtocolItem != null);
     }
     this.url = url;
-    dynamic response;
+    Map response;
     _clearCookies();
     try {
-      response = (await dio.post(
+      response = getMap((await dio.post(
         loginAddress,
         data: {
           "username": user,
@@ -123,14 +123,14 @@ class Wrapper {
           if (tfaCode != null) "two_factor": tfaCode,
         },
       ))
-          .data;
+          .data);
     } catch (e) {
       _loggedIn = false;
       log("Error while logging in", error: e);
       error = "Unknown Error:\n$e";
       return null;
     }
-    if (response["loggedIn"] == true) {
+    if (getBool(response["loggedIn"])) {
       lastInteraction = DateTime.now();
       _loggedIn = true;
       this.user = user;
@@ -145,7 +145,7 @@ class Wrapper {
     } else {
       _loggedIn = false;
       error = "[${response["error"]}] ${response["message"]}";
-      switch (response["error"] as String) {
+      switch (getString(response["error"])) {
         case "two_factor_needed":
           final tfaCode = await _request2FA();
           if (tfaCode != null) {
@@ -197,10 +197,10 @@ class Wrapper {
   Future<dynamic> changePass(
       String url, String user, String oldPass, String newPass) async {
     this.url = url;
-    dynamic response;
+    Map response;
     _clearCookies();
     try {
-      response = (await dio.post(
+      response = getMap((await dio.post(
         "${baseAddress}api/auth/setNewPassword",
         data: {
           "username": user,
@@ -208,7 +208,7 @@ class Wrapper {
           "newPassword": newPass,
         },
       ))
-          .data;
+          .data);
     } catch (e) {
       _loggedIn = false;
       log("Failed to change pass", error: e);
@@ -372,9 +372,9 @@ class Wrapper {
     if (!_loggedIn) return;
     if (now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = await send("api/auth/extendSession", args: {
+      final result = getMap(await send("api/auth/extendSession", args: {
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
-      });
+      }));
       if (result == null) {
         logout(hard: safeMode, logoutForcedByServer: true);
         return;

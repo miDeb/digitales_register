@@ -85,7 +85,7 @@ const _servers = {
   "Fachschule Laimburg": "https://fslaimburg.digitalesregister.it",
   "Fachschule Neumarkt": "https://fachschule-neumarkt.digitalesregister.it",
   "Oberschulen J. Ph. Fallmerayer": "https://fallmerayer.digitalesregister.it",
-  "Fachoberschule für Wirtschaft, Grafik und Kommunikation":
+  "Fachoberschule für Wirtschaft, Grafik und Kommunikation (TFO/WFO Brixen)":
       "https://fo-brixen.digitalesregister.it",
   "FOS Meran": "https://fos-meran.digitalesregister.it",
   "Franziskanergymnasium Bozen":

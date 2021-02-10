@@ -62,14 +62,15 @@ void _markAsRead(
 }
 
 MessagesState _parseMessages(List json, MessagesState state) {
-  final messages =
-      json.map((m) => tryParse(m, (m) => _parseMessage(m, state))).toList();
+  final messages = json
+      .map((m) => tryParse(getMap(m), (Map m) => _parseMessage(m, state)))
+      .toList();
   return MessagesState(
     (b) => b..messages = ListBuilder<Message>(messages),
   );
 }
 
-Message _parseMessage(dynamic json, MessagesState state) {
+Message _parseMessage(Map json, MessagesState state) {
   final message = MessageBuilder()
     ..subject = getString(json["subject"])
     ..text = getString(json["text"])

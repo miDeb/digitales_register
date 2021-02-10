@@ -14,11 +14,11 @@ final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
-  return builder.replace(tryParse(action.payload, _parseAbsences));
+  return builder.replace(tryParse(getMap(action.payload), _parseAbsences));
 }
 
-AbsencesState _parseAbsences(dynamic json) {
-  final rawStats = json["statistics"];
+AbsencesState _parseAbsences(Map json) {
+  final rawStats = getMap(json["statistics"]);
   final stats = AbsenceStatisticBuilder()
     ..counter = getInt(rawStats["counter"])
     ..counterForSchool = getInt(rawStats["counterForSchool"])
