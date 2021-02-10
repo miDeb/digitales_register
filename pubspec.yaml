@@ -40,8 +40,14 @@ dependencies:
     git:
       url: https://github.com/miDeb/flutter_built_redux.git
       ref: nnbd
-  badges: any
-  biometric_storage: ^1.1.0+1
+  badges:
+    git:
+      url: https://github.com/miDeb/flutter_badges.git
+      ref: nnbd
+  biometric_storage:
+    git:
+      url: https://github.com/miDeb/biometric_storage.git
+      ref: nnbd
   built_value: any
   cookie_jar: ^1.0.1
   deleteable_tile: ^0.0.1-nullsafety.1
@@ -64,18 +70,14 @@ dependencies:
   uni_links: any
   url_launcher: any
 dependency_overrides:
+  analyzer: 0.42.0-nullsafety.0
   intl: ">=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2"
-  analyzer: ^0.40.6
+  quiver: ^3.0.0-nullsafety.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons:
-    git:
-      url: https://github.com/dirkbo/flutter_launcher_icons
-      ref: master
   build_runner: any
   built_value_generator: any
-  flutter_native_splash: ^0.2.2
   lint: ^1.5.1
 
 flutter_icons:
