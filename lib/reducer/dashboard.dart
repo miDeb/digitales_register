@@ -32,7 +32,8 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
   final loadedDays = [
     for (final day in action.payload.data)
-      tryParse(day, (day) => _parseDay(day, action.payload.deduplicateEntries))
+      tryParse(day,
+          (day) => _parseDay(getMap(day), action.payload.deduplicateEntries))
   ];
 
   final List<Day> daysToDelete = [];
@@ -146,10 +147,10 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
   builder.loading = false;
 }
 
-Day _parseDay(data, bool deduplicate) {
+Day _parseDay(Map data, bool deduplicate) {
   final ListBuilder<Homework> items = ListBuilder(
-    (data["items"] as List).map(
-      (m) => tryParse(m, _parseHomework),
+    getList(data["items"]).map(
+      (m) => tryParse(getMap(m), _parseHomework),
     ),
   );
   if (deduplicate) {
@@ -170,7 +171,7 @@ Day _parseDay(data, bool deduplicate) {
     ..homework = items);
 }
 
-Homework _parseHomework(data) {
+Homework _parseHomework(Map data) {
   return Homework((b) {
     b
       ..id = getInt(data["id"])
@@ -183,8 +184,8 @@ Homework _parseHomework(data) {
       ..deleteable = getBool(data["deleteable"]) ?? b.deleteable
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
-          : ListBuilder((data["gradeGroupSubmissions"] as List)
-              .map((s) => tryParse(s, _parseGradeGroupSubmission))
+          : ListBuilder(getList(data["gradeGroupSubmissions"])
+              .map((s) => tryParse(getMap(s), _parseGradeGroupSubmission))
               .where((s) => s != null));
 
     final typeString = getString(data["type"]);
@@ -219,7 +220,7 @@ Homework _parseHomework(data) {
   });
 }
 
-GradeGroupSubmission _parseGradeGroupSubmission(data) {
+GradeGroupSubmission _parseGradeGroupSubmission(Map data) {
   try {
     return GradeGroupSubmission(
       (b) => b
@@ -260,7 +261,7 @@ void _homeworkAdded(DashboardState state, Action<HomeworkAddedPayload> action,
         ? day.rebuild(
             (b) => b
               ..homework.add(
-                _parseHomework(action.payload.data).rebuild(
+                _parseHomework(getMap(action.payload.data)).rebuild(
                   (b) => b
                     ..firstSeen = DateTime.now()
                     ..lastNotSeen = DateTime.now(),

@@ -135,3 +135,39 @@ int getInt(dynamic value) {
   }
   return _unexpectedType(value);
 }
+
+Map getMap(dynamic value) {
+  if (value == null) return null;
+  var decoded = value;
+  if (value is String) {
+    decoded = tryParse(value, json.decode);
+  }
+  return _checkIsMap(decoded);
+}
+
+List getList(dynamic value) {
+  if (value == null) return null;
+  var decoded = value;
+  if (value is String) {
+    decoded = tryParse(value, json.decode);
+  }
+  return _checkIsList(decoded);
+}
+
+Map _checkIsMap(dynamic json) {
+  if (json is! Map) {
+    _unexpectedType<Map>(json);
+    return null;
+  } else {
+    return json as Map;
+  }
+}
+
+List _checkIsList(dynamic json) {
+  if (json is! List) {
+    _unexpectedType<List>(json);
+    return null;
+  } else {
+    return json as List;
+  }
+}

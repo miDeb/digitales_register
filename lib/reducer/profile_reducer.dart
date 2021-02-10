@@ -14,7 +14,7 @@ final profileReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     ProfileState state, Action<Object> action, ProfileStateBuilder builder) {
-  return builder.replace(tryParse(action.payload, _parseProfile));
+  return builder.replace(tryParse(getMap(action.payload), _parseProfile));
 }
 
 void _sendNotificationEmails(
@@ -22,7 +22,7 @@ void _sendNotificationEmails(
   builder.sendNotificationEmails = action.payload;
 }
 
-ProfileState _parseProfile(data) {
+ProfileState _parseProfile(Map data) {
   return ProfileState(
     (b) => b
       ..name = getString(data["name"])
