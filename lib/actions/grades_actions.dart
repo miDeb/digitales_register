@@ -10,14 +10,14 @@ abstract class GradesActions extends ReduxActions {
   factory GradesActions() => _$GradesActions();
   GradesActions._();
 
-  ActionDispatcher<Semester> setSemester;
-  ActionDispatcher<Semester> load;
-  ActionDispatcher<LoadSubjectDetailsPayload> loadDetails;
-  ActionDispatcher<LoadGradeCancelledDescriptionPayload>
+  abstract final ActionDispatcher<Semester> setSemester;
+  abstract final ActionDispatcher<Semester> load;
+  abstract final ActionDispatcher<LoadSubjectDetailsPayload> loadDetails;
+  abstract final ActionDispatcher<LoadGradeCancelledDescriptionPayload>
       loadCancelledDescription;
-  ActionDispatcher<SubjectsLoadedPayload> loaded;
-  ActionDispatcher<SubjectDetailLoadedPayload> detailsLoaded;
-  ActionDispatcher<GradeCancelledDescriptionLoadedPayload>
+  abstract final ActionDispatcher<SubjectsLoadedPayload> loaded;
+  abstract final ActionDispatcher<SubjectDetailLoadedPayload> detailsLoaded;
+  abstract final ActionDispatcher<GradeCancelledDescriptionLoadedPayload>
       cancelledDescriptionLoaded;
 }
 
@@ -25,7 +25,7 @@ abstract class LoadSubjectDetailsPayload
     implements
         Built<LoadSubjectDetailsPayload, LoadSubjectDetailsPayloadBuilder> {
   factory LoadSubjectDetailsPayload(
-          [void Function(LoadSubjectDetailsPayloadBuilder) updates]) =
+          [void Function(LoadSubjectDetailsPayloadBuilder)? updates]) =
       _$LoadSubjectDetailsPayload;
   LoadSubjectDetailsPayload._();
 
@@ -38,7 +38,7 @@ abstract class LoadGradeCancelledDescriptionPayload
         Built<LoadGradeCancelledDescriptionPayload,
             LoadGradeCancelledDescriptionPayloadBuilder> {
   factory LoadGradeCancelledDescriptionPayload(
-      [void Function(LoadGradeCancelledDescriptionPayloadBuilder)
+      [void Function(LoadGradeCancelledDescriptionPayloadBuilder)?
           updates]) = _$LoadGradeCancelledDescriptionPayload;
   LoadGradeCancelledDescriptionPayload._();
 
@@ -49,7 +49,7 @@ abstract class LoadGradeCancelledDescriptionPayload
 abstract class SubjectsLoadedPayload
     implements Built<SubjectsLoadedPayload, SubjectsLoadedPayloadBuilder> {
   factory SubjectsLoadedPayload(
-          [void Function(SubjectsLoadedPayloadBuilder) updates]) =
+          [void Function(SubjectsLoadedPayloadBuilder)? updates]) =
       _$SubjectsLoadedPayload;
   SubjectsLoadedPayload._();
 
@@ -61,7 +61,7 @@ abstract class SubjectDetailLoadedPayload
     implements
         Built<SubjectDetailLoadedPayload, SubjectDetailLoadedPayloadBuilder> {
   factory SubjectDetailLoadedPayload(
-          [void Function(SubjectDetailLoadedPayloadBuilder) updates]) =
+          [void Function(SubjectDetailLoadedPayloadBuilder)? updates]) =
       _$SubjectDetailLoadedPayload;
   SubjectDetailLoadedPayload._();
 
@@ -75,7 +75,7 @@ abstract class GradeCancelledDescriptionLoadedPayload
         Built<GradeCancelledDescriptionLoadedPayload,
             GradeCancelledDescriptionLoadedPayloadBuilder> {
   factory GradeCancelledDescriptionLoadedPayload(
-      [void Function(GradeCancelledDescriptionLoadedPayloadBuilder)
+      [void Function(GradeCancelledDescriptionLoadedPayloadBuilder)?
           updates]) = _$GradeCancelledDescriptionLoadedPayload;
   GradeCancelledDescriptionLoadedPayload._();
 

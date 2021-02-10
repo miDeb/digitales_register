@@ -17,7 +17,10 @@ class SidebarContainer extends StatelessWidget {
   final Pages currentSelected;
 
   const SidebarContainer(
-      {Key key, this.tabletMode, this.goHome, this.currentSelected})
+      {Key? key,
+      required this.tabletMode,
+      required this.goHome,
+      required this.currentSelected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -55,7 +58,7 @@ class SidebarContainer extends StatelessWidget {
             ..username = state.config?.fullName ?? state.loginState.username
             ..userIcon = state.config?.imgSource
             ..drawerInitiallyFullyExpanded =
-                state.settingsState.drawerFullyExpanded
+                state.settingsState!.drawerFullyExpanded
             ..otherAccounts = state.loginState.otherAccounts.toBuilder(),
         );
       },
@@ -65,14 +68,13 @@ class SidebarContainer extends StatelessWidget {
 
 abstract class SidebarViewModel
     implements Built<SidebarViewModel, SidebarViewModelBuilder> {
-  @nullable
-  String get username;
-  @nullable
-  String get userIcon;
+  String? get username;
+
+  String? get userIcon;
   bool get drawerInitiallyFullyExpanded;
   BuiltList<String> get otherAccounts;
 
-  factory SidebarViewModel([void Function(SidebarViewModelBuilder) updates]) =
+  factory SidebarViewModel([void Function(SidebarViewModelBuilder)? updates]) =
       _$SidebarViewModel;
   SidebarViewModel._();
 }

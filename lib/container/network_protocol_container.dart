@@ -13,7 +13,7 @@ class NetworkProtocolContainer extends StatelessWidget {
         return NetworkProtocol(items: vm);
       },
       connect: (state) {
-        return state.networkProtocolState?.items?.toList() ?? [];
+        return state.networkProtocolState?.items.toList() ?? [];
       },
     );
   }

@@ -13,12 +13,12 @@ final profileReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(ProfileActionsNames.sendNotificationEmails, _sendNotificationEmails);
 
 void _loaded(
-    ProfileState state, Action<Object> action, ProfileStateBuilder builder) {
-  return builder.replace(tryParse(getMap(action.payload), _parseProfile));
+    ProfileState? state, Action<Object> action, ProfileStateBuilder builder) {
+  return builder.replace(tryParse(getMap(action.payload)!, _parseProfile));
 }
 
 void _sendNotificationEmails(
-    ProfileState state, Action<bool> action, ProfileStateBuilder builder) {
+    ProfileState? state, Action<bool> action, ProfileStateBuilder builder) {
   builder.sendNotificationEmails = action.payload;
 }
 

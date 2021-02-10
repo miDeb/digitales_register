@@ -7,16 +7,16 @@ abstract class ProfileActions extends ReduxActions {
   factory ProfileActions() => _$ProfileActions();
   ProfileActions._();
 
-  VoidActionDispatcher load;
-  ActionDispatcher<dynamic> loaded;
-  ActionDispatcher<bool> sendNotificationEmails;
-  ActionDispatcher<ChangeEmailPayload> changeEmail;
+  abstract final VoidActionDispatcher load;
+  abstract final ActionDispatcher<Object> loaded;
+  abstract final ActionDispatcher<bool> sendNotificationEmails;
+  abstract final ActionDispatcher<ChangeEmailPayload> changeEmail;
 }
 
 abstract class ChangeEmailPayload
     implements Built<ChangeEmailPayload, ChangeEmailPayloadBuilder> {
   factory ChangeEmailPayload(
-          [void Function(ChangeEmailPayloadBuilder) updates]) =
+          [void Function(ChangeEmailPayloadBuilder)? updates]) =
       _$ChangeEmailPayload;
   ChangeEmailPayload._();
 

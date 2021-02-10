@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 /// Shows a close button
 class InfoDialog extends StatelessWidget {
   final Widget title;
-  final Widget content;
-  final List<Widget> actions;
+  final Widget? content;
+  final List<Widget>? actions;
 
   const InfoDialog({
-    Key key,
-    this.title,
+    Key? key,
+    required this.title,
     this.content,
     this.actions,
   }) : super(key: key);

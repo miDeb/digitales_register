@@ -10,7 +10,7 @@ import 'no_internet.dart';
 class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
 
-  const CalendarWeek({Key key, this.vm}) : super(key: key);
+  const CalendarWeek({Key? key, required this.vm}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,10 @@ class CalendarDayWidget extends StatelessWidget {
   final BuiltMap<String, String> subjectNicks;
 
   const CalendarDayWidget(
-      {Key key, this.max, this.calendarDay, this.subjectNicks})
+      {Key? key,
+      required this.max,
+      required this.calendarDay,
+      required this.subjectNicks})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -116,7 +119,8 @@ class CalendarDayWidget extends StatelessWidget {
 class HourWidget extends StatelessWidget {
   final CalendarHour hour;
   final BuiltMap<String, String> subjectNicks;
-  const HourWidget({Key key, this.hour, this.subjectNicks}) : super(key: key);
+  const HourWidget({Key? key, required this.hour, required this.subjectNicks})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -127,7 +131,7 @@ class HourWidget extends StatelessWidget {
             context: context,
             builder: (_) {
               final items = [
-                if (hour.hasDescription) Text(hour.description),
+                if (hour.hasDescription) Text(hour.description!),
                 for (HomeworkExam homeworkExam in hour.homeworkExams)
                   RichText(
                     text: TextSpan(

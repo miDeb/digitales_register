@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
 Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
-    {@required bool wrap}) {
+    {required bool wrap}) {
   if (wrap) {
     return wrapWidget(widget);
   } else {
@@ -14,10 +14,10 @@ Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
   }
 }
 
-extension StringUtils on String {
+extension StringUtils on String? {
   bool get isNullOrEmpty {
     if (this == null) return true;
-    return isEmpty;
+    return this!.isEmpty;
   }
 }
 
@@ -31,7 +31,7 @@ DateTime toMonday(DateTime date) {
 }
 
 DateTime get now => mockNow ?? DateTime.now();
-DateTime mockNow;
+DateTime? mockNow;
 
 String stringifyMaybeJson(dynamic param) {
   final encoder = JsonEncoder.withIndent("  ", (object) => object.toString());
@@ -59,7 +59,7 @@ class ParseException implements Exception {
     this.payload,
     this.parent,
     this.trace, {
-    this.hasEnoughContext,
+    required this.hasEnoughContext,
   });
 
   @override
@@ -95,18 +95,18 @@ O tryParse<O, I>(
   }
 }
 
-T _unexpectedType<T>(dynamic value) {
+T? _unexpectedType<T>(dynamic value) {
   assert(T != dynamic);
   assert(value is! T);
   // will construct a nice error message about this failing cast
   final result =
-      tryParse(value, (input) => input as T, hasEnoughContext: false);
+      tryParse(value, (dynamic input) => input as T?, hasEnoughContext: false);
   // this should not happen, as the above cast will fail.
   assert(false);
   return result;
 }
 
-String getString(dynamic value) {
+String? getString(dynamic value) {
   if (value == null) return null;
   if (value is! String) {
     log("getString: expected String but got ${value.runtimeType}");
@@ -114,7 +114,7 @@ String getString(dynamic value) {
   return value.toString();
 }
 
-bool getBool(dynamic value) {
+bool? getBool(dynamic value) {
   if (value == null) return null;
   if (value is bool) {
     return value;
@@ -125,7 +125,7 @@ bool getBool(dynamic value) {
   return _unexpectedType(value);
 }
 
-int getInt(dynamic value) {
+int? getInt(dynamic value) {
   if (value == null) return null;
   if (value is int) {
     return value;
@@ -136,7 +136,7 @@ int getInt(dynamic value) {
   return _unexpectedType(value);
 }
 
-Map getMap(dynamic value) {
+Map? getMap(dynamic value) {
   if (value == null) return null;
   var decoded = value;
   if (value is String) {
@@ -145,7 +145,7 @@ Map getMap(dynamic value) {
   return _checkIsMap(decoded);
 }
 
-List getList(dynamic value) {
+List? getList(dynamic value) {
   if (value == null) return null;
   var decoded = value;
   if (value is String) {
@@ -154,20 +154,20 @@ List getList(dynamic value) {
   return _checkIsList(decoded);
 }
 
-Map _checkIsMap(dynamic json) {
+Map? _checkIsMap(dynamic json) {
   if (json is! Map) {
     _unexpectedType<Map>(json);
     return null;
   } else {
-    return json as Map;
+    return json;
   }
 }
 
-List _checkIsList(dynamic json) {
+List? _checkIsList(dynamic json) {
   if (json is! List) {
     _unexpectedType<List>(json);
     return null;
   } else {
-    return json as List;
+    return json;
   }
 }

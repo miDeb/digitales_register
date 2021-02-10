@@ -15,15 +15,15 @@ class SettingsPageContainer extends StatelessWidget {
         return SettingsPageWidget(
           vm: vm,
           onSetDarkMode: (dm) {
-            DynamicTheme.of(context).setBrightness(
+            DynamicTheme.of(context)!.setBrightness(
               dm ? Brightness.dark : Brightness.light,
             );
           },
           onSetFollowDeviceDarkMode: (dm) {
-            DynamicTheme.of(context).setFollowDevice(dm);
+            DynamicTheme.of(context)!.setFollowDevice(dm);
           },
           onSetPlatformOverride: (o) {
-            DynamicTheme.of(context).setPlatformOverride(o);
+            DynamicTheme.of(context)!.setPlatformOverride(o);
           },
           onSetNoPassSaving: actions.settingsActions.saveNoPass,
           onSetNoDataSaving: actions.settingsActions.saveNoData,
@@ -80,25 +80,26 @@ class SettingsViewModel {
   final List<String> ignoreForGradesAverage;
   final BuiltMap<String, SubjectTheme> subjectThemes;
   SettingsViewModel(AppState state)
-      : noPassSaving = state.settingsState.noPasswordSaving,
-        noDataSaving = state.settingsState.noDataSaving,
-        askWhenDelete = state.settingsState.askWhenDelete,
-        deleteDataOnLogout = state.settingsState.deleteDataOnLogout,
-        offlineEnabled = state.settingsState.offlineEnabled,
-        subjectNicks = state.settingsState.subjectNicks.toMap(),
-        showSubjectNicks = state.settingsState.scrollToSubjectNicks,
-        showGradesSettings = state.settingsState.scrollToGrades,
-        showCalendarEditNicksBar = state.settingsState.showCalendarNicksBar,
-        showGradesDiagram = state.settingsState.showGradesDiagram,
-        showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
+      : noPassSaving = state.settingsState!.noPasswordSaving,
+        noDataSaving = state.settingsState!.noDataSaving,
+        askWhenDelete = state.settingsState!.askWhenDelete,
+        deleteDataOnLogout = state.settingsState!.deleteDataOnLogout,
+        offlineEnabled = state.settingsState!.offlineEnabled,
+        subjectNicks = state.settingsState!.subjectNicks.toMap(),
+        showSubjectNicks = state.settingsState!.scrollToSubjectNicks,
+        showGradesSettings = state.settingsState!.scrollToGrades,
+        showCalendarEditNicksBar = state.settingsState!.showCalendarNicksBar,
+        showGradesDiagram = state.settingsState!.showGradesDiagram,
+        showAllSubjectsAverage = state.settingsState!.showAllSubjectsAverage,
         dashboardMarkNewOrChangedEntries =
-            state.settingsState.dashboardMarkNewOrChangedEntries,
+            state.settingsState!.dashboardMarkNewOrChangedEntries,
         dashboardDeduplicateEntries =
-            state.settingsState.dashboardDeduplicateEntries,
-        dashboardColorBorders = state.settingsState.dashboardColorBorders,
-        dashboardColorTestsInRed = state.settingsState.dashboardColorTestsInRed,
+            state.settingsState!.dashboardDeduplicateEntries,
+        dashboardColorBorders = state.settingsState!.dashboardColorBorders,
+        dashboardColorTestsInRed =
+            state.settingsState!.dashboardColorTestsInRed,
         allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
-            state.settingsState.ignoreForGradesAverage.toList(),
-        subjectThemes = state.settingsState.subjectThemes;
+            state.settingsState!.ignoreForGradesAverage.toList(),
+        subjectThemes = state.settingsState!.subjectThemes;
 }

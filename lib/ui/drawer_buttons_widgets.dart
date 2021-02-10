@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class LogoutButtonWidget extends StatelessWidget {
   final VoidCallback onLogout;
 
-  const LogoutButtonWidget({Key key, this.onLogout}) : super(key: key);
+  const LogoutButtonWidget({Key? key, required this.onLogout})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -20,7 +21,8 @@ class SettingsButtonWidget extends StatelessWidget {
   final bool selected;
   final VoidCallback onShowSettings;
 
-  const SettingsButtonWidget({Key key, this.onShowSettings, this.selected})
+  const SettingsButtonWidget(
+      {Key? key, required this.onShowSettings, required this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,8 @@ class GradesButtonWidget extends StatelessWidget {
   final bool selected;
   final VoidCallback onShowGrades;
 
-  const GradesButtonWidget({Key key, this.onShowGrades, this.selected})
+  const GradesButtonWidget(
+      {Key? key, required this.onShowGrades, required this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,8 @@ class AbsencesButtonWidget extends StatelessWidget {
   final bool selected;
   final VoidCallback onShowAbsences;
 
-  const AbsencesButtonWidget({Key key, this.onShowAbsences, this.selected})
+  const AbsencesButtonWidget(
+      {Key? key, required this.onShowAbsences, required this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -77,7 +81,8 @@ class CalendarButtonWidget extends StatelessWidget {
   final bool selected;
   final VoidCallback onShowCalendar;
 
-  const CalendarButtonWidget({Key key, this.onShowCalendar, this.selected})
+  const CalendarButtonWidget(
+      {Key? key, required this.onShowCalendar, required this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -97,7 +102,7 @@ class CertificateButtonWidget extends StatelessWidget {
   final VoidCallback onShowCertificate;
 
   const CertificateButtonWidget(
-      {Key key, this.onShowCertificate, this.selected})
+      {Key? key, required this.onShowCertificate, required this.selected})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -116,7 +121,8 @@ class MessagesButtonWidget extends StatelessWidget {
   final bool selected;
   final VoidCallback onShowMessages;
 
-  const MessagesButtonWidget({Key key, this.onShowMessages, this.selected})
+  const MessagesButtonWidget(
+      {Key? key, required this.onShowMessages, required this.selected})
       : super(key: key);
 
   @override

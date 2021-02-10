@@ -44,20 +44,20 @@ class DaysWidget extends StatefulWidget {
   final AttachmentCallback onDownloadAttachment, onOpenAttachment;
 
   const DaysWidget({
-    Key key,
-    this.vm,
-    this.markAsSeenCallback,
-    this.markDeletedHomeworkAsSeenCallback,
-    this.addReminderCallback,
-    this.removeReminderCallback,
-    this.markAllAsSeenCallback,
-    this.onSwitchFuture,
-    this.toggleDoneCallback,
-    this.setDoNotAskWhenDeleteCallback,
-    this.refresh,
-    this.refreshNoInternet,
-    this.onDownloadAttachment,
-    this.onOpenAttachment,
+    Key? key,
+    required this.vm,
+    required this.markAsSeenCallback,
+    required this.markDeletedHomeworkAsSeenCallback,
+    required this.addReminderCallback,
+    required this.removeReminderCallback,
+    required this.markAllAsSeenCallback,
+    required this.onSwitchFuture,
+    required this.toggleDoneCallback,
+    required this.setDoNotAskWhenDeleteCallback,
+    required this.refresh,
+    required this.refreshNoInternet,
+    required this.onDownloadAttachment,
+    required this.onOpenAttachment,
   }) : super(key: key);
   @override
   _DaysWidgetState createState() => _DaysWidgetState();
@@ -84,12 +84,12 @@ class _DaysWidgetState extends State<DaysWidget> {
     }
   }
 
-  double _distanceToItem(int item) {
+  double? _distanceToItem(int item) {
     final ctx = controller.tagMap[item]?.context;
     if (ctx != null) {
       final renderBox = ctx.findRenderObject() as RenderBox;
       final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderBox);
+          RenderAbstractViewport.of(renderBox)!;
       var offsetToReveal = viewport.getOffsetToReveal(renderBox, 0.5).offset;
       if (offsetToReveal < 0) offsetToReveal = 0;
       final currentOffset = controller.offset;
@@ -117,9 +117,9 @@ class _DaysWidgetState extends State<DaysWidget> {
       if (distance == null || distance > 50) {
         _focused.remove(focusedItem);
         if (_dayIndexes.containsKey(focusedItem)) {
-          widget.markDeletedHomeworkAsSeenCallback(_dayIndexes[focusedItem]);
+          widget.markDeletedHomeworkAsSeenCallback(_dayIndexes[focusedItem]!);
         } else if (_homeworkIndexes.containsKey(focusedItem)) {
-          widget.markAsSeenCallback(_homeworkIndexes[focusedItem]);
+          widget.markAsSeenCallback(_homeworkIndexes[focusedItem]!);
         } else {
           assert(
             false,
@@ -164,7 +164,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     controller.addListener(() {
       update();
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       update();
       _afterFirstFrame = true;
       setState(() {});
@@ -180,7 +180,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget getItem(int n, {@required bool noEntries, @required bool noInternet}) {
+  Widget getItem(int n, {required bool noEntries, required bool noInternet}) {
     if (n == 0) {
       return Stack(
         children: [
@@ -248,7 +248,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       day: widget.vm.days[n - 1],
       vm: widget.vm,
       controller: controller,
-      index: _dayStartIndices[n - 1],
+      index: _dayStartIndices[n - 1]!,
       addReminderCallback: widget.addReminderCallback,
       removeReminderCallback: widget.removeReminderCallback,
       toggleDoneCallback: widget.toggleDoneCallback,
@@ -387,27 +387,27 @@ class DayWidget extends StatelessWidget {
 
   final Day day;
 
-  final AutoScrollController controller;
+  final AutoScrollController /*!*/ controller;
   final int index;
 
   const DayWidget({
-    Key key,
-    this.day,
-    this.vm,
-    this.controller,
-    this.index,
-    this.addReminderCallback,
-    this.removeReminderCallback,
-    this.toggleDoneCallback,
-    this.setDoNotAskWhenDeleteCallback,
-    this.onDownloadAttachment,
-    this.onOpenAttachment,
-    @required this.colorBorders,
-    @required this.subjectThemes,
-    @required this.colorTestsInRed,
+    Key? key,
+    required this.day,
+    required this.vm,
+    required this.controller,
+    required this.index,
+    required this.addReminderCallback,
+    required this.removeReminderCallback,
+    required this.toggleDoneCallback,
+    required this.setDoNotAskWhenDeleteCallback,
+    required this.onDownloadAttachment,
+    required this.onOpenAttachment,
+    required this.colorBorders,
+    required this.subjectThemes,
+    required this.colorTestsInRed,
   }) : super(key: key);
 
-  Future<String> showEnterReminderDialog(BuildContext context) async {
+  Future<String?> showEnterReminderDialog(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -505,6 +505,8 @@ class DayWidget extends StatelessWidget {
                                       colorBorder: colorBorders,
                                       subjectThemes: subjectThemes,
                                       colorTestsInRed: colorTestsInRed,
+                                      askWhenDelete: vm.askWhenDelete,
+                                      noInternet: vm.noInternet,
                                     ),
                                   )
                                   .toList(),
@@ -556,9 +558,9 @@ class DayWidget extends StatelessWidget {
 
 class ItemWidget extends StatelessWidget {
   final Homework item;
-  final VoidCallback removeThis;
-  final VoidCallback toggleDone;
-  final VoidCallback setDoNotAskWhenDelete;
+  final VoidCallback? removeThis;
+  final VoidCallback? toggleDone;
+  final VoidCallback? setDoNotAskWhenDelete;
   final bool askWhenDelete,
       isHistory,
       isDeletedView,
@@ -566,30 +568,30 @@ class ItemWidget extends StatelessWidget {
       isCurrent,
       colorBorder,
       colorTestsInRed;
-  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
+  final AttachmentCallback? onDownloadAttachment, onOpenAttachment;
   final BuiltMap<String, SubjectTheme> subjectThemes;
 
-  final AutoScrollController controller;
-  final int index;
+  final AutoScrollController? controller;
+  final int? index;
 
   const ItemWidget({
-    Key key,
-    @required this.item,
+    Key? key,
+    required this.item,
     this.removeThis,
     this.toggleDone,
-    this.askWhenDelete,
+    required this.askWhenDelete,
     this.setDoNotAskWhenDelete,
     this.isHistory = false,
     this.controller,
     this.index,
     this.isDeletedView = false,
-    this.noInternet,
+    required this.noInternet,
     this.isCurrent = true,
     this.onDownloadAttachment,
     this.onOpenAttachment,
-    @required this.colorBorder,
-    @required this.subjectThemes,
-    @required this.colorTestsInRed,
+    required this.colorBorder,
+    required this.subjectThemes,
+    required this.colorTestsInRed,
   }) : super(key: key);
 
   Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
@@ -623,7 +625,7 @@ class ItemWidget extends StatelessWidget {
         );
       },
     );
-    return Tuple2(delete, ask);
+    return Tuple2(delete ?? false, ask);
   }
 
   void _showHistory(BuildContext context) {
@@ -633,7 +635,7 @@ class ItemWidget extends StatelessWidget {
       context: context,
       builder: (_context) {
         return InfoDialog(
-          title: Text(historyItem.title),
+          title: Text(historyItem!.title),
           content: ListView(
             shrinkWrap: true,
             children: <Widget>[
@@ -648,6 +650,8 @@ class ItemWidget extends StatelessWidget {
                       colorBorder: colorBorder,
                       subjectThemes: subjectThemes,
                       colorTestsInRed: colorTestsInRed,
+                      askWhenDelete: askWhenDelete,
+                      noInternet: noInternet,
                     ),
                   ],
                 ),
@@ -662,8 +666,10 @@ class ItemWidget extends StatelessWidget {
     if (item.warning && colorTestsInRed) {
       return const Tuple2(Colors.red, 1.5);
     }
-    if (colorBorder && subjectThemes.containsKey(item.label)) {
-      return Tuple2(Color(subjectThemes[item.label].color), 1.5);
+    if (colorBorder &&
+        item.label != null &&
+        subjectThemes.containsKey(item.label!)) {
+      return Tuple2(Color(subjectThemes[item.label]!.color), 1.5);
     }
     if (item.type == HomeworkType.grade || item.checked) {
       return const Tuple2(Colors.green, 0);
@@ -675,9 +681,8 @@ class ItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget child = Deleteable(
       // this is a new entry or a reminder the user has just entered
-      showEntryAnimation: item.firstSeen != null &&
-          DateTime.now().difference(item.firstSeen) <
-              const Duration(seconds: 1),
+      showEntryAnimation: DateTime.now().difference(item.firstSeen) <
+          const Duration(seconds: 1),
       builder: (context, delete) => Card(
         margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
         elevation: 0,
@@ -710,7 +715,7 @@ class ItemWidget extends StatelessWidget {
                               children: <Widget>[
                                 Center(
                                   child: Text(
-                                    item.label,
+                                    item.label!,
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -761,14 +766,14 @@ class ItemWidget extends StatelessWidget {
                                                       confirmationResult.item2;
                                                   if (shouldDelete == true) {
                                                     if (!ask) {
-                                                      setDoNotAskWhenDelete();
+                                                      setDoNotAskWhenDelete!();
                                                     }
                                                     await delete();
-                                                    removeThis();
+                                                    removeThis!();
                                                   }
                                                 } else {
                                                   await delete();
-                                                  removeThis();
+                                                  removeThis!();
                                                 }
                                               },
                                         padding: const EdgeInsets.all(0),
@@ -785,7 +790,7 @@ class ItemWidget extends StatelessWidget {
                       if (!isHistory && item.label != null)
                         IconButton(
                           icon: (isDeletedView
-                                      ? item.previousVersion.previousVersion
+                                      ? item.previousVersion!.previousVersion
                                       : item.previousVersion) !=
                                   null
                               ? Badge(
@@ -813,7 +818,7 @@ class ItemWidget extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(right: 8.0),
                           child: Text(
-                            item.gradeFormatted,
+                            item.gradeFormatted!,
                             style: const TextStyle(
                                 color: Colors.green, fontSize: 30),
                           ),
@@ -826,7 +831,7 @@ class ItemWidget extends StatelessWidget {
                           onChanged: noInternet
                               ? null
                               : (done) {
-                                  toggleDone();
+                                  toggleDone!();
                                 },
                         ),
                     ],
@@ -853,12 +858,12 @@ class ItemWidget extends StatelessWidget {
                         style: Theme.of(context).textTheme.subtitle1),
                   ),
                 ),
-                for (final attachment in item.gradeGroupSubmissions)
+                for (final attachment in item.gradeGroupSubmissions!)
                   AttachmentWidget(
                     ggs: attachment,
                     noInternet: noInternet,
-                    downloadCallback: onDownloadAttachment,
-                    openCallback: onOpenAttachment,
+                    downloadCallback: onDownloadAttachment!,
+                    openCallback: onOpenAttachment!,
                   )
               ]
             ],
@@ -868,9 +873,9 @@ class ItemWidget extends StatelessWidget {
     );
     if (!isHistory && !isDeletedView) {
       child = AutoScrollTag(
-        index: index,
+        index: index!,
         key: ValueKey(index),
-        controller: controller,
+        controller: controller!,
         highlightColor: Colors.grey.withOpacity(0.5),
         child: child,
       );
@@ -883,10 +888,12 @@ class ItemWidget extends StatelessWidget {
           ItemWidget(
             isHistory: true,
             isCurrent: false,
-            item: item.previousVersion,
+            item: item.previousVersion!,
             colorBorder: colorBorder,
             subjectThemes: subjectThemes,
             colorTestsInRed: colorTestsInRed,
+            askWhenDelete: askWhenDelete,
+            noInternet: noInternet,
           ),
       ],
     );
@@ -898,19 +905,19 @@ String formatChanged(Homework hw) {
   if (hw.lastNotSeen == null) {
     date =
         "Vor ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)} ";
-  } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen)) {
+  } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen!)) {
     date = "Am ${DateFormat("EEEE, dd.MM,", "de").format(hw.firstSeen)}"
-        " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
+        " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen!)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
   } else {
     date =
-        "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen)} "
+        "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen!)} "
         "und ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)}";
   }
   if (hw.deleted) {
     return "$date gelöscht.";
   } else if (hw.previousVersion == null) {
     return "$date eingetragen.";
-  } else if (hw.previousVersion.deleted) {
+  } else if (hw.previousVersion!.deleted) {
     return "$date wiederhergestellt.";
   } else {
     return "$date geändert.";
@@ -922,17 +929,17 @@ DateTime toDate(DateTime dateTime) {
 }
 
 class AttachmentWidget extends StatelessWidget {
-  final GradeGroupSubmission ggs;
+  final GradeGroupSubmission /*!*/ ggs;
   final AttachmentCallback downloadCallback;
   final AttachmentCallback openCallback;
   final bool noInternet;
 
   const AttachmentWidget(
-      {Key key,
-      this.ggs,
-      this.downloadCallback,
-      this.noInternet,
-      this.openCallback})
+      {Key? key,
+      required this.ggs,
+      required this.downloadCallback,
+      required this.noInternet,
+      required this.openCallback})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

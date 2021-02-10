@@ -14,9 +14,10 @@ class ProfileContainer extends StatelessWidget {
         return Profile(
           profileState: vm.item2,
           noInternet: vm.item1,
-          setSendNotificationEmails:
-              actions.profileActions.sendNotificationEmails,
-          changeEmail: actions.routingActions.showChangeEmail,
+          setSendNotificationEmails: actions
+              .profileActions.sendNotificationEmails,
+          changeEmail:
+              actions.routingActions.showChangeEmail,
           changePass: () => actions.loginActions.showChangePass(false),
         );
       },

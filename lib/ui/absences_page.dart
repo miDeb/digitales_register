@@ -10,7 +10,7 @@ class AbsencesPage extends StatelessWidget {
   final AbsencesState state;
   final bool noInternet;
 
-  const AbsencesPage({Key key, @required this.state, this.noInternet})
+  const AbsencesPage({Key? key, required this.state, required this.noInternet})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -30,13 +30,13 @@ class AbsencesBody extends StatelessWidget {
   final AbsencesState state;
   final bool noInternet;
 
-  const AbsencesBody({Key key, @required this.state, this.noInternet})
+  const AbsencesBody({Key? key, required this.state, required this.noInternet})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return state != null
-        ? state.absences.isEmpty
+    return state.statistic != null
+        ? state!.absences.isEmpty
             ? Center(
                 child: Text(
                   "Noch keine Absenzen",
@@ -46,12 +46,12 @@ class AbsencesBody extends StatelessWidget {
               )
             : ListView(children: <Widget>[
                 AbsencesStatisticWidget(
-                  stat: state.statistic,
+                  stat: state.statistic!,
                 ),
                 ...List.generate(
-                  state.absences.length,
+                  state!.absences.length,
                   (n) => AbsenceGroupContainer(
-                    group: state.absences.length - n - 1,
+                    group: state!.absences.length - n - 1,
                   ),
                 ),
               ])
@@ -66,7 +66,7 @@ class AbsencesBody extends StatelessWidget {
 class AbsencesStatisticWidget extends StatelessWidget {
   final AbsenceStatistic stat;
 
-  const AbsencesStatisticWidget({Key key, @required this.stat})
+  const AbsencesStatisticWidget({Key? key, required this.stat})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

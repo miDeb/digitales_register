@@ -6,7 +6,7 @@ abstract class CalendarActions extends ReduxActions {
   factory CalendarActions() => _$CalendarActions();
   CalendarActions._();
 
-  ActionDispatcher<DateTime> load;
-  ActionDispatcher<Map<String, dynamic>> loaded;
-  ActionDispatcher<DateTime> setCurrentMonday;
+  abstract final ActionDispatcher<DateTime> load;
+  abstract final ActionDispatcher<Map<String, dynamic>> loaded;
+  abstract final ActionDispatcher<DateTime> setCurrentMonday;
 }

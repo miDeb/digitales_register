@@ -17,7 +17,7 @@ class _Selection {
 }
 
 class GradesChart extends StatelessWidget {
-  final VoidCallback goFullscreen;
+  final VoidCallback? goFullscreen;
   final bool isFullscreen;
   final List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
       grades;
@@ -26,50 +26,45 @@ class GradesChart extends StatelessWidget {
   // trigger rebuilds of the selection description, as rebuilds of the diagram
   // cause it to react poorly.
   Stream<Tuple2<DateTime, List<_Selection>>> get selection => controller.stream;
-  Sink<Tuple2<DateTime, List<_Selection>>> get selectionSink => controller.sink;
+  Sink<Tuple2<DateTime?, List<_Selection>>> get selectionSink =>
+      controller.sink;
   final StreamController<Tuple2<DateTime, List<_Selection>>> controller =
       StreamController();
 
   GradesChart({
-    Key key,
-    Map<SubjectGrades, SubjectTheme> graphs,
+    Key? key,
+    required Map<SubjectGrades, SubjectTheme> graphs,
     this.goFullscreen,
-    this.isFullscreen,
-  })  : grades = convert(graphs),
+    required this.isFullscreen,
+  })   : grades = convert(graphs),
         super(key: key);
 
   static List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
       convert(Map<SubjectGrades, SubjectTheme> data) {
-    return data.entries
-        .map(
-          (entry) {
-            final s = entry.key;
-            final strokeWidth = entry.value.thick;
-            final color = Color(entry.value.color);
-            return strokeWidth == 0
-                ? null
-                : charts.Series<MapEntry<DateTime, Tuple2<int, String>>,
-                    DateTime>(
-                    colorFn: (_, __) => charts.Color(
-                      r: color.red,
-                      g: color.green,
-                      b: color.blue,
-                    ),
-                    domainFn: (grade, _) => grade.key,
-                    measureFn: (grade, _) => grade.value.item1 / 100,
-                    data: s.grades.entries.toList(),
-                    strokeWidthPxFn: (_, __) => strokeWidth,
-                    id: s.name,
-                  );
-          },
-        )
-        .where((v) => v != null)
-        .toList();
+    return data.entries.where((entry) => entry.value.thick != 0).map(
+      (entry) {
+        final s = entry.key;
+        final strokeWidth = entry.value.thick;
+        final color = Color(entry.value.color);
+        return charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>(
+          colorFn: (_, __) => charts.Color(
+            r: color.red,
+            g: color.green,
+            b: color.blue,
+          ),
+          domainFn: (grade, _) => grade.key,
+          measureFn: (grade, _) => grade.value.item1 / 100,
+          data: s.grades.entries.toList(),
+          strokeWidthPxFn: (_, __) => strokeWidth,
+          id: s.name,
+        );
+      },
+    ).toList();
   }
 
   List<charts.TickSpec<DateTime>> createDomainAxisTags(Locale locale) {
-    DateTime first;
-    DateTime last;
+    DateTime? first;
+    DateTime? last;
     // find the first given date and the last given date
     for (final subject in grades) {
       if (subject.data.isEmpty) continue;
@@ -85,7 +80,7 @@ class GradesChart extends StatelessWidget {
       }
     }
     // This means that there are no grades available
-    if (first == null) return [];
+    if (first == null || last == null) return [];
     // Preferrably show all ticks on the 15th.
     // However, if the first date is after the 15th, show the tick there to make
     // sure all months are represented as ticks.
@@ -146,7 +141,7 @@ class GradesChart extends StatelessWidget {
               selectionModels: [
                 charts.SelectionModelConfig(
                   changedListener: (model) async {
-                    DateTime allDate;
+                    DateTime? allDate;
                     final selections = model.selectedDatum.map((datum) {
                       final grade = datum.datum.value.item1;
                       final type = datum.datum.value.item2;
@@ -156,7 +151,7 @@ class GradesChart extends StatelessWidget {
                       assert(allDate == null || allDate == date);
                       allDate = date;
                       return _Selection(
-                        "$subject · $type: ${formatGradeFromInt(grade as int)}",
+                        "$subject · $type: ${formatGradeFromInt(grade as int /*!*/)}",
                         Color.fromARGB(
                           color.a,
                           color.r,
@@ -225,7 +220,7 @@ class GradesChart extends StatelessWidget {
                 stream: selection,
                 builder: (context, snapshot) {
                   final data =
-                      snapshot.data as Tuple2<DateTime, List<_Selection>>;
+                      snapshot.data as Tuple2<DateTime, List<_Selection>>?;
                   return Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -250,10 +245,10 @@ class GradesChart extends StatelessWidget {
 }
 
 class SelectionWidget extends StatefulWidget {
-  final DateTime date;
-  final List<_Selection> selections;
+  final DateTime? date;
+  final List<_Selection>? selections;
 
-  const SelectionWidget({Key key, this.date, this.selections})
+  const SelectionWidget({Key? key, this.date, this.selections})
       : super(key: key);
   @override
   _SelectionWidgetState createState() => _SelectionWidgetState();
@@ -300,7 +295,7 @@ class _SelectionWidgetState extends State<SelectionWidget>
                 color: Colors.black,
               ),
               child: Text(
-                DateFormat.MMMMd("de").format(widget.date),
+                DateFormat.MMMMd("de").format(widget.date!),
                 style: const TextStyle(color: Colors.white),
               ),
             )
@@ -321,7 +316,7 @@ class _SelectionWidgetState extends State<SelectionWidget>
               ),
             ),
           if (widget.selections != null)
-            for (final selection in widget.selections)
+            for (final selection in widget.selections!)
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8,

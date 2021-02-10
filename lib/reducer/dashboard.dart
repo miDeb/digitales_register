@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
@@ -31,9 +32,11 @@ final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
   final loadedDays = [
-    for (final day in action.payload.data)
-      tryParse(day,
-          (day) => _parseDay(getMap(day), action.payload.deduplicateEntries))
+    for (final day in action.payload.data as Iterable)
+      tryParse(
+          day,
+          (dynamic day) =>
+              _parseDay(getMap(day)!, action.payload.deduplicateEntries))
   ];
 
   final List<Day> daysToDelete = [];
@@ -41,9 +44,8 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
   builder.allDays.map(
     (day) => day.rebuild(
       (b) {
-        final newDay = loadedDays.firstWhere(
+        final newDay = loadedDays.firstWhereOrNull(
           (d) => d.date == day.date,
-          orElse: () => null,
         );
         if (newDay == null) {
           if (!action.payload.future &&
@@ -57,17 +59,16 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
           return;
         }
         loadedDays.remove(newDay);
-        final newHomework = newDay.homework.toList();
+        final List<Homework> newHomework = newDay.homework.toList();
         for (final oldHw in day.homework.toList()) {
-          // look if there is any matching id first
-          final newHw = newHomework.firstWhere(
-            (d) => d.id == oldHw.id,
-            // then look for other similarities
-            orElse: () => newHomework.firstWhere(
-              (d) => d.isSuccessorOf(oldHw),
-              orElse: () => null,
-            ),
-          );
+          // look if there is any matching id first,
+          // then look for other similarities
+          final newHw = newHomework.firstWhereOrNull(
+                (d) => d.id == oldHw.id,
+              ) ??
+              newHomework.firstWhereOrNull(
+                (d) => d.isSuccessorOf(oldHw),
+              );
           if (newHw == null) {
             b.homework.remove(oldHw);
             if (oldHw.type != HomeworkType.homework) {
@@ -96,7 +97,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
               ..firstSeen = oldHw.firstSeen
               ..lastNotSeen = oldHw.lastNotSeen
               ..previousVersion = oldHw.previousVersion?.toBuilder();
-            mergedHw.gradeGroupSubmissions?.map(
+            mergedHw.gradeGroupSubmissions.map(
               (ggs) => ggs.rebuild(
                 (ggs) => ggs.fileAvailable = oldHw.gradeGroupSubmissions?.any(
                       (oldGgs) => oldGgs.file == ggs.file,
@@ -109,13 +110,12 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
           newHomework.remove(newHw);
         }
         for (final newHw in newHomework) {
-          final deletedHw = day.deletedHomework.firstWhere(
-            (d) => d.id == newHw.id,
-            orElse: () => day.deletedHomework.firstWhere(
-              (d) => d.isSuccessorOf(newHw),
-              orElse: () => null,
-            ),
-          );
+          final deletedHw = day.deletedHomework.firstWhereOrNull(
+                (d) => d.id == newHw.id,
+              ) ??
+              day.deletedHomework.firstWhereOrNull(
+                (d) => d.isSuccessorOf(newHw),
+              );
           if (deletedHw != null) {
             b.deletedHomework.remove(deletedHw);
             b.homework.add(newHw.rebuild((b) => b
@@ -149,8 +149,8 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
 
 Day _parseDay(Map data, bool deduplicate) {
   final ListBuilder<Homework> items = ListBuilder(
-    getList(data["items"]).map(
-      (m) => tryParse(getMap(m), _parseHomework),
+    getList(data["items"])!.map(
+      (m) => tryParse(getMap(m)!, _parseHomework),
     ),
   );
   if (deduplicate) {
@@ -167,7 +167,7 @@ Day _parseDay(Map data, bool deduplicate) {
   }
 
   return Day((b) => b
-    ..date = DateTime.parse(getString(data["date"]))
+    ..date = DateTime.parse(getString(data["date"])!)
     ..homework = items);
 }
 
@@ -184,8 +184,8 @@ Homework _parseHomework(Map data) {
       ..deleteable = getBool(data["deleteable"]) ?? b.deleteable
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
-          : ListBuilder(getList(data["gradeGroupSubmissions"])
-              .map((s) => tryParse(getMap(s), _parseGradeGroupSubmission))
+          : ListBuilder(getList(data["gradeGroupSubmissions"])!
+              .map((s) => tryParse(getMap(s)!, _parseGradeGroupSubmission))
               .where((s) => s != null));
 
     final typeString = getString(data["type"]);
@@ -220,13 +220,13 @@ Homework _parseHomework(Map data) {
   });
 }
 
-GradeGroupSubmission _parseGradeGroupSubmission(Map data) {
+GradeGroupSubmission? _parseGradeGroupSubmission(Map data) {
   try {
     return GradeGroupSubmission(
       (b) => b
         ..file = getString(data["file"])
         ..originalName = getString(data["originalName"])
-        ..timestamp = DateTime.parse(getString(data["timestamp"]))
+        ..timestamp = DateTime.parse(getString(data["timestamp"])!)
         ..typeName = getString(data["typeName"])
         ..id = getInt(data["id"])
         ..gradeGroupId = getInt(data["gradeGroupId"])
@@ -261,7 +261,7 @@ void _homeworkAdded(DashboardState state, Action<HomeworkAddedPayload> action,
         ? day.rebuild(
             (b) => b
               ..homework.add(
-                _parseHomework(getMap(action.payload.data)).rebuild(
+                _parseHomework(getMap(action.payload.data)!).rebuild(
                   (b) => b
                     ..firstSeen = DateTime.now()
                     ..lastNotSeen = DateTime.now(),

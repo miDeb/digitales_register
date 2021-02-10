@@ -13,7 +13,8 @@ part 'calendar_week_container.g.dart';
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
 
-  const CalendarWeekContainer({Key key, this.monday}) : super(key: key);
+  const CalendarWeekContainer({Key? key, required this.monday})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, CalendarWeekViewModel>(
@@ -36,7 +37,7 @@ abstract class CalendarWeekViewModel
   bool get noInternet;
 
   factory CalendarWeekViewModel(
-          [void Function(CalendarWeekViewModelBuilder) updates]) =
+          [void Function(CalendarWeekViewModelBuilder)? updates]) =
       _$CalendarWeekViewModel;
   CalendarWeekViewModel._();
 
@@ -47,7 +48,7 @@ abstract class CalendarWeekViewModel
         ..days = ListBuilder(state.calendarState.daysForWeek(monday))
         // converting all keys (subject names) to lower case to make accessing cheaper
         ..subjectNicks = MapBuilder(
-          state.settingsState.subjectNicks.toMap().map(
+          state.settingsState!.subjectNicks.toMap().map(
                 (key, value) => MapEntry(
                   key.toLowerCase(),
                   value,

@@ -9,7 +9,7 @@ class QuillDeltaViewer extends StatelessWidget {
   /// The document delta to be rendered
   final Delta delta;
 
-  const QuillDeltaViewer({Key key, this.delta}) : super(key: key);
+  const QuillDeltaViewer({Key? key, required this.delta}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return render(removeLastNewline(isolateLines(delta)), context);
@@ -21,7 +21,7 @@ class QuillDeltaViewer extends StatelessWidget {
     final List<Operation> operations = [];
     for (var i = 0; i < delta.length; i++) {
       final op = delta.elementAt(i);
-      var string = op.data;
+      var string = op.stringData;
       final split = <String>[];
       for (;;) {
         final index = string.indexOf("\n");
@@ -45,7 +45,7 @@ class QuillDeltaViewer extends StatelessWidget {
   }
 
   List<Operation> removeLastNewline(List<Operation> operations) {
-    while (operations.last.data.isEmpty) {
+    while (operations.last.stringData.isEmpty) {
       operations.removeLast();
     }
     return operations
@@ -57,11 +57,12 @@ class QuillDeltaViewer extends StatelessWidget {
   }
 
   Operation removeTrailingNewline(Operation operation) {
-    if (operation.data.lastIndexOf("\n") == operation.data.length - 1) {
+    if (operation.stringData.lastIndexOf("\n") ==
+        operation.stringData.length - 1) {
       return Operation.insert(
-        operation.data.substring(
+        operation.stringData.substring(
           0,
-          operation.data.length - 1,
+          operation.stringData.length - 1,
         ),
       );
     } else {
@@ -93,8 +94,8 @@ class QuillDeltaViewer extends StatelessWidget {
           spans = [];
         }
         var use = <Operation>[];
-        while (
-            reversed.length > i + 1 && !reversed[i + 1].data.endsWith("\n")) {
+        while (reversed.length > i + 1 &&
+            !reversed[i + 1].stringData.endsWith("\n")) {
           use.add(reversed[i + 1]);
           i++;
         }
@@ -129,7 +130,7 @@ class QuillDeltaViewer extends StatelessWidget {
 
     bool list = false;
     if (blockOperation.attributes != null) {
-      list = blockOperation.attributes["list"] != null;
+      list = blockOperation.attributes!["list"] != null;
     }
     final text = Text.rich(
       TextSpan(
@@ -157,19 +158,19 @@ class QuillDeltaViewer extends StatelessWidget {
   TextSpan renderText(Operation op, BuildContext context) {
     bool bold = false;
     bool italics = false;
-    String link;
+    String? link;
     bool strike = false;
     bool underline = false;
     if (op.attributes != null) {
-      bold = op.attributes["bold"] == true;
-      italics = op.attributes["italics"] == true;
-      link = op.attributes["link"] as String;
-      strike = op.attributes["strike"] == true;
-      underline = op.attributes["underline"] == true;
+      bold = op.attributes!["bold"] == true;
+      italics = op.attributes!["italics"] == true;
+      link = op.attributes!["link"] as String?;
+      strike = op.attributes!["strike"] == true;
+      underline = op.attributes!["underline"] == true;
     }
     final isLink = link != null;
 
-    final text = op.data;
+    final text = op.stringData;
 
     return TextSpan(
       text: text,
@@ -187,9 +188,13 @@ class QuillDeltaViewer extends StatelessWidget {
       recognizer: isLink
           ? (TapGestureRecognizer()
             ..onTap = () {
-              launch(link);
+              launch(link!);
             })
           : null,
     );
   }
+}
+
+extension DataHelper on Operation {
+  String get stringData => data as String;
 }

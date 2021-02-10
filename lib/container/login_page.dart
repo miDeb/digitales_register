@@ -35,10 +35,13 @@ class LoginPage extends StatelessWidget {
               ),
             );
           },
-          setSaveNoPass: actions.settingsActions.saveNoPass,
+          setSaveNoPass:
+              actions.settingsActions.saveNoPass,
           onReload: actions.load,
-          onRequestPassReset: actions.routingActions.showRequestPassReset,
-          onSelectAccount: actions.loginActions.selectAccount,
+          onRequestPassReset:
+              actions.routingActions.showRequestPassReset,
+          onSelectAccount:
+              actions.loginActions.selectAccount,
         );
       },
       connect: (state) {
@@ -52,9 +55,9 @@ typedef LoginCallback = void Function(String user, String pass, String url);
 typedef SetSafeModeCallback = void Function(bool safeMode);
 
 class LoginPageViewModel {
-  final String error;
-  final String username;
-  final String url;
+  final String? error;
+  final String? username;
+  final String? url;
   final bool loading, safeMode, noInternet, changePass, mustChangePass;
   final Map<String, String> servers;
   final List<String> otherAccounts;
@@ -62,14 +65,14 @@ class LoginPageViewModel {
   LoginPageViewModel.from(AppState state)
       : error = state.loginState.errorMsg,
         loading = state.loginState.loading,
-        safeMode = state.settingsState.noPasswordSaving,
+        safeMode = state.settingsState!.noPasswordSaving,
         noInternet = state.noInternet,
         servers = _servers,
         changePass = state.loginState.changePassword,
         mustChangePass = state.loginState.mustChangePassword,
         username = state.loginState.username,
         url = state.url,
-        otherAccounts = state.loginState.otherAccounts?.toList();
+        otherAccounts = state.loginState.otherAccounts.toList();
 }
 
 const _servers = {

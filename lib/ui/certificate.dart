@@ -8,7 +8,7 @@ import 'no_internet.dart';
 class Certificate extends StatelessWidget {
   final CertificateViewModel vm;
 
-  const Certificate({Key key, this.vm}) : super(key: key);
+  const Certificate({Key? key, required this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +22,7 @@ class Certificate extends StatelessWidget {
           : SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: HtmlWidget(vm.html),
+                child: HtmlWidget(vm.html!),
               ),
             ),
     );

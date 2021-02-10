@@ -32,18 +32,18 @@ class DynamicTheme extends StatefulWidget {
   DynamicThemeState createState() => DynamicThemeState();
 
   static DynamicThemeState? of(BuildContext context) {
-    return context.findAncestorStateOfType<State<DynamicTheme>>() as DynamicThemeState?;
+    return context.findAncestorStateOfType<DynamicThemeState>();
   }
 }
 
 class DynamicThemeState extends State<DynamicTheme>
     with WidgetsBindingObserver {
-  ThemeData _themeData;
+  late ThemeData _themeData;
 
-  Brightness _brightness;
-  Brightness _deviceBrightness;
-  bool _followDevice;
-  bool _platformOverride;
+  late Brightness _brightness;
+  late Brightness _deviceBrightness;
+  late bool _followDevice;
+  late bool _platformOverride;
 
   static const String _sharedPreferencesBrightnessKey = 'isDark';
   static const String _sharedPreferencesFollowDeviceKey = 'followDeviceTheme';

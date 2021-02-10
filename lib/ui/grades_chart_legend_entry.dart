@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 typedef SetThickness = void Function(int thickness);
 
 class GradesChartLegendEntry extends StatelessWidget {
-  final SubjectTheme config;
+  final SubjectTheme /*?*/ config;
   final String name;
   final SetThickness setThickness;
 
   // calls to setThickness are delayed by 100 ms to reduce jankiness. This leads
   // to some weird code.
   const GradesChartLegendEntry(
-      {Key key, this.config, this.name, this.setThickness})
+      {Key? key,
+      required this.config,
+      required this.name,
+      required this.setThickness})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

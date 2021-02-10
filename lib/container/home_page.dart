@@ -31,7 +31,7 @@ abstract class HomePageContentViewModel
   bool get splash;
 
   factory HomePageContentViewModel(
-          [void Function(HomePageContentViewModelBuilder) updates]) =
+          [void Function(HomePageContentViewModelBuilder)? updates]) =
       _$HomePageContentViewModel;
   HomePageContentViewModel._();
 

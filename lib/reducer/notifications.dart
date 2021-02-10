@@ -26,15 +26,15 @@ ListBuilder<Notification> _parseNotifications(List data) {
   return ListBuilder(
     data.map(
       (n) => tryParse(
-        n,
-        (n) => Notification(
+        getMap(n),
+        (dynamic n) => Notification(
           (b) => b
             ..id = getInt(n["id"])
             ..title = getString(n["title"])
             ..type = getString(n["type"])
             ..objectId = getInt(n["objectId"])
             ..subTitle = getString(n["subTitle"])
-            ..timeSent = DateTime.parse(getString(n["timeSent"])),
+            ..timeSent = DateTime.parse(getString(n["timeSent"])!),
         ),
       ),
     ),

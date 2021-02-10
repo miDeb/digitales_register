@@ -14,7 +14,7 @@ final _loginMiddleware =
 
 Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) async {
-  if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
+  if (!api.state.settingsState!.noPasswordSaving && action.payload.hard) {
     await _secureStorage.write(
       key: "login",
       value: json.encode(
@@ -26,7 +26,7 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
   }
-  if (api.state.settingsState.deleteDataOnLogout && action.payload.hard) {
+  if (api.state.settingsState!.deleteDataOnLogout && action.payload.hard) {
     api.actions.deleteData();
   }
   if (!action.payload.forced) {
@@ -75,12 +75,13 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     logout: () => api.actions.loginActions.logout(
       LogoutPayload(
         (b) => b
-          ..hard = api.state.settingsState.noPasswordSaving
+          ..hard = api.state.settingsState!.noPasswordSaving
           ..forced = true,
       ),
     ),
     configLoaded: () => api.actions.setConfig(_wrapper.config),
-    relogin: api.actions.loginActions.automaticallyReloggedIn,
+    relogin:
+        api.actions.loginActions.automaticallyReloggedIn ,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
   if (_wrapper.loggedIn) {
@@ -159,7 +160,7 @@ Future<void> _changePass(
           ..url = action.payload.url,
       ),
     );
-    navigatorKey.currentState.pop();
+    navigatorKey.currentState!.pop();
     showSnackBar("Passwort erfolgreich geändert");
   }
 }
@@ -199,7 +200,8 @@ Future<void> _requestPassReset(
     api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
   } else {
-    api.actions.loginActions.passResetSucceeded(result["message"] as String);
+    api.actions.loginActions
+        .passResetSucceeded((result["message"] as String?)!);
   }
 }
 
@@ -234,7 +236,7 @@ Future<void> _addAccount(
   await next(action);
   // Move the current default user credentials into `otherAccounts`
   final login = json.decode(await _secureStorage.read(key: "login"));
-  final otherAccounts = login["otherAccounts"] as List ?? [];
+  final otherAccounts = login["otherAccounts"] as List? ?? [];
   if (login["user"] != null &&
       login["pass"] != null &&
       login["url"] != null &&
@@ -291,7 +293,7 @@ Future<void> _selectAccount(
 }
 
 void _showUserTypeNotSupported(String url) {
-  navigatorKey.currentState.push(
+  navigatorKey.currentState!.push(
     MaterialPageRoute(
       builder: (context) => Scaffold(
         body: Center(

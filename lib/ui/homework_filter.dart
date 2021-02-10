@@ -12,7 +12,8 @@ class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;
   final HomeworkBlacklistCallback callback;
 
-  const HomeworkFilter({Key key, this.vm, this.callback}) : super(key: key);
+  const HomeworkFilter({Key? key, required this.vm, required this.callback})
+      : super(key: key);
 
   @override
   _HomeworkFilterState createState() => _HomeworkFilterState();
@@ -38,7 +39,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
       children: [
         CheckboxListTile(
           onChanged: (v) => widget.callback(
-            v
+            v!
                 ? (widget.vm.currentBlacklist.toBuilder()
                   ..remove(HomeworkType.grade)
                   ..remove(HomeworkType.gradeGroup))
@@ -51,7 +52,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
         ),
         CheckboxListTile(
             onChanged: (v) => widget.callback(
-                  v
+                  v!
                       ? (widget.vm.currentBlacklist.toBuilder()
                         ..remove(HomeworkType.homework)
                         ..remove(HomeworkType.lessonHomework))
@@ -63,7 +64,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
             value: !widget.vm.currentBlacklist.contains(HomeworkType.homework)),
         CheckboxListTile(
           onChanged: (v) => widget.callback(
-            v
+            v!
                 ? (widget.vm.currentBlacklist.toBuilder()
                   ..remove(HomeworkType.observation))
                 : (widget.vm.currentBlacklist.toBuilder()

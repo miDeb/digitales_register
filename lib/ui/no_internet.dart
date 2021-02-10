@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoInternet extends StatelessWidget {
-  const NoInternet({Key key}) : super(key: key);
+  const NoInternet({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -12,7 +12,7 @@ class NoInternet extends StatelessWidget {
             "Keine Verbindung",
             style: Theme.of(context)
                 .textTheme
-                .headline6
+                .headline6!
                 .copyWith(color: Colors.red),
           ),
           const SizedBox(

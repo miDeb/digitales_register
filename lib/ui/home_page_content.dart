@@ -11,18 +11,18 @@ class HomePageContent extends StatelessWidget {
   final HomePageContentViewModel vm;
 
   const HomePageContent({
-    Key key,
-    this.vm,
+    Key? key,
+    required this.vm,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (nestedNavKey.currentState.canPop()) {
-          nestedNavKey.currentState.pop();
+        if (nestedNavKey.currentState!.canPop()) {
+          nestedNavKey.currentState!.pop();
           return Future.value(false);
-        } else if (navigatorKey.currentState.canPop()) {
-          navigatorKey.currentState.pop();
+        } else if (navigatorKey.currentState!.canPop()) {
+          navigatorKey.currentState!.pop();
           return Future.value(false);
         }
         return Future.value(true);

@@ -37,7 +37,7 @@ Future<void> _loadGrades(
     (s) async {
       final data = await _wrapper.send(
         _subjects,
-        args: {"studentId": api.state.config.userId},
+        args: {"studentId": api.state.config!.userId},
       );
       if (data == null) {
         api.actions.refreshNoInternet();
@@ -70,7 +70,7 @@ Future<void> _loadGradesDetails(
       var data = await _wrapper.send(
         _subjectsDetail,
         args: {
-          "studentId": api.state.config.userId,
+          "studentId": api.state.config!.userId,
           "subjectId": action.payload.subject.id
         },
       );
@@ -79,7 +79,7 @@ Future<void> _loadGradesDetails(
         return;
       }
       if (data is String) {
-        data = json.decode(data as String);
+        data = json.decode(data);
       }
       api.actions.gradesActions.detailsLoaded(
         SubjectDetailLoadedPayload(
@@ -91,7 +91,7 @@ Future<void> _loadGradesDetails(
       );
       for (final grade in api.state.gradesState.subjects
           .firstWhere((s) => s.id == action.payload.subject.id)
-          .grades[s]
+          .grades[s]!
           .where((g) => g.cancelled)) {
         api.actions.gradesActions.loadCancelledDescription(
           LoadGradeCancelledDescriptionPayload(
@@ -144,7 +144,7 @@ void _doForSemester(
   final currentSemester = _gradesLock.current;
   if (semester.contains(currentSemester)) {
     semester.remove(currentSemester);
-    _gradesLock.synchronized(currentSemester, () => f(currentSemester));
+    _gradesLock.synchronized(currentSemester!, () => f(currentSemester));
   }
   for (final s in semester) {
     _gradesLock.synchronized(s, () => f(s));
@@ -155,7 +155,7 @@ typedef SemesterChangeCallback = Future<void> Function(Semester semester);
 typedef AsyncVoidCallback = Future<void> Function();
 
 class SemesterLock {
-  Semester current;
+  Semester? current;
   int usersOfCurrent = 0;
   final SemesterChangeCallback semesterChangeCallback;
   SemesterLock(this.semesterChangeCallback);
@@ -185,7 +185,7 @@ class SemesterLock {
       usersOfCurrent--;
     } else {
       if (waitlist.containsKey(semester)) {
-        waitlist[semester].add(f);
+        waitlist[semester]!.add(f);
       } else {
         waitlist[semester] = [f];
       }

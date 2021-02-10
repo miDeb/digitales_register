@@ -3,15 +3,19 @@ description: A new Flutter package project.
 version: 0.0.1
 author: null
 homepage: null
+publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0-0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  quill_delta: ^1.0.1
-  url_launcher: ">=5.4.2 <7.0.0"
+  quill_delta:
+    git:
+      url: https://github.com/miDeb/quill-delta-dart.git
+      ref: nnbd
+  url_launcher: ^6.0.0-nullsafety.6
 
 dev_dependencies:
   flutter_test:

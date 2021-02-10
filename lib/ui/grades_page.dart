@@ -13,10 +13,10 @@ class GradesPage extends StatelessWidget {
   final VoidCallback showGradesSettings;
 
   const GradesPage({
-    Key key,
-    @required this.vm,
-    @required this.changeSemester,
-    @required this.showGradesSettings,
+    Key? key,
+    required this.vm,
+    required this.changeSemester,
+    required this.showGradesSettings,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class GradesPage extends StatelessWidget {
                     )
                     .toList(),
                 onChanged: (value) {
-                  if (vm.showSemester != value) changeSemester(value);
+                  if (vm.showSemester != value) changeSemester(value!);
                 },
               ),
             ),

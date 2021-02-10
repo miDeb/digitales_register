@@ -14,12 +14,12 @@ class NotificationPage extends StatelessWidget {
   final bool noInternet;
 
   const NotificationPage({
-    Key key,
-    this.notifications,
-    this.deleteNotification,
-    this.deleteAllNotifications,
-    this.noInternet,
-    this.goToMessage,
+    Key? key,
+    required this.notifications,
+    required this.deleteNotification,
+    required this.deleteAllNotifications,
+    required this.noInternet,
+    required this.goToMessage,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -75,16 +75,16 @@ class NotificationPage extends StatelessWidget {
 
 class NotificationWidget extends StatelessWidget {
   final Notification notification;
-  final bool noInternet;
+  final bool? noInternet;
   final SingleArgumentVoidCallback<Notification> onDelete;
   final SingleArgumentVoidCallback<int> goToMessage;
 
   const NotificationWidget(
-      {Key key,
-      @required this.notification,
-      @required this.onDelete,
-      this.noInternet,
-      this.goToMessage})
+      {Key? key,
+      required this.notification,
+      required this.onDelete,
+      required this.noInternet,
+      required this.goToMessage})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class NotificationWidget extends StatelessWidget {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          notification.subTitle,
+                          notification.subTitle!,
                           style: Theme.of(context).textTheme.bodyText2,
                         ),
                       ),
@@ -139,7 +139,7 @@ class NotificationWidget extends StatelessWidget {
                     Icons.done,
                   ),
                   tooltip: "Gelesen",
-                  onPressed: noInternet
+                  onPressed: noInternet!
                       ? null
                       : () async {
                           await delete();
@@ -152,7 +152,7 @@ class NotificationWidget extends StatelessWidget {
                     Icons.exit_to_app,
                   ),
                   tooltip: "Zu Mitteilungen wechseln",
-                  onPressed: () => goToMessage(notification.objectId),
+                  onPressed: () => goToMessage(notification.objectId!),
                 )
             ],
           ),

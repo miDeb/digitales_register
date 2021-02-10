@@ -17,7 +17,7 @@ Future<void> _loadProfile(
     api.actions.refreshNoInternet();
     return;
   }
-  api.actions.profileActions.loaded(result);
+  api.actions.profileActions.loaded(result as Object);
 }
 
 Future<void> _setSendNotificationEmails(
@@ -55,7 +55,7 @@ Future<void> _changeEmail(
   }
   if (result["error"] == null) {
     showSnackBar(result["message"] as String);
-    navigatorKey.currentState.pop();
+    navigatorKey.currentState!.pop();
   } else {
     showSnackBar("[${result["error"]}]: ${result["message"]}");
   }

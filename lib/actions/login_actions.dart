@@ -7,31 +7,31 @@ abstract class LoginActions extends ReduxActions {
   factory LoginActions() => _$LoginActions();
   LoginActions._();
 
-  ActionDispatcher<String> setUsername;
-  ActionDispatcher<LoginPayload> login;
-  ActionDispatcher<LoggedInPayload> loggedIn;
-  ActionDispatcher<LoginFailedPayload> loginFailed;
-  ActionDispatcher<LogoutPayload> logout;
-  VoidActionDispatcher updateLogout;
-  VoidActionDispatcher loggingIn;
-  VoidActionDispatcher automaticallyReloggedIn;
-  ActionDispatcher<bool> showChangePass;
-  ActionDispatcher<ChangePassPayload> changePass;
-  ActionDispatcher<void Function()> addAfterLoginCallback;
-  VoidActionDispatcher clearAfterLoginCallbacks;
-  ActionDispatcher<RequestPassResetPayload> requestPassReset;
-  ActionDispatcher<String> resetPass;
-  ActionDispatcher<String> passResetFailed;
-  ActionDispatcher<String> passResetSucceeded;
-  ActionDispatcher<List<String>> setAvailableAccounts;
-  VoidActionDispatcher addAccount;
+  abstract final ActionDispatcher<String> setUsername;
+  abstract final ActionDispatcher<LoginPayload> login;
+  abstract final ActionDispatcher<LoggedInPayload> loggedIn;
+  abstract final ActionDispatcher<LoginFailedPayload> loginFailed;
+  abstract final ActionDispatcher<LogoutPayload> logout;
+  abstract final VoidActionDispatcher updateLogout;
+  abstract final VoidActionDispatcher loggingIn;
+  abstract final VoidActionDispatcher automaticallyReloggedIn;
+  abstract final ActionDispatcher<bool> showChangePass;
+  abstract final ActionDispatcher<ChangePassPayload> changePass;
+  abstract final ActionDispatcher<void Function()> addAfterLoginCallback;
+  abstract final VoidActionDispatcher clearAfterLoginCallbacks;
+  abstract final ActionDispatcher<RequestPassResetPayload> requestPassReset;
+  abstract final ActionDispatcher<String> resetPass;
+  abstract final ActionDispatcher<String> passResetFailed;
+  abstract final ActionDispatcher<String> passResetSucceeded;
+  abstract final ActionDispatcher<List<String>> setAvailableAccounts;
+  abstract final VoidActionDispatcher addAccount;
   // payload: the index of the selected account
-  ActionDispatcher<int> selectAccount;
+  abstract final ActionDispatcher<int> selectAccount;
 }
 
 abstract class LoginPayload
     implements Built<LoginPayload, LoginPayloadBuilder> {
-  factory LoginPayload([void Function(LoginPayloadBuilder) updates]) =
+  factory LoginPayload([void Function(LoginPayloadBuilder)? updates]) =
       _$LoginPayload;
   LoginPayload._();
 
@@ -59,8 +59,8 @@ abstract class LoginPayload
 
 abstract class ChangePassPayload
     implements Built<ChangePassPayload, ChangePassPayloadBuilder> {
-  factory ChangePassPayload([void Function(ChangePassPayloadBuilder) updates]) =
-      _$ChangePassPayload;
+  factory ChangePassPayload(
+      [void Function(ChangePassPayloadBuilder)? updates]) = _$ChangePassPayload;
   ChangePassPayload._();
   String get url;
   String get user;
@@ -71,7 +71,7 @@ abstract class ChangePassPayload
 abstract class RequestPassResetPayload
     implements Built<RequestPassResetPayload, RequestPassResetPayloadBuilder> {
   factory RequestPassResetPayload(
-          [void Function(RequestPassResetPayloadBuilder) updates]) =
+          [void Function(RequestPassResetPayloadBuilder)? updates]) =
       _$RequestPassResetPayload;
   RequestPassResetPayload._();
   String get user;
@@ -80,7 +80,7 @@ abstract class RequestPassResetPayload
 
 abstract class LoggedInPayload
     implements Built<LoggedInPayload, LoggedInPayloadBuilder> {
-  factory LoggedInPayload([void Function(LoggedInPayloadBuilder) updates]) =
+  factory LoggedInPayload([void Function(LoggedInPayloadBuilder)? updates]) =
       _$LoggedInPayload;
   LoggedInPayload._();
 
@@ -91,18 +91,18 @@ abstract class LoggedInPayload
 abstract class LoginFailedPayload
     implements Built<LoginFailedPayload, LoginFailedPayloadBuilder> {
   factory LoginFailedPayload(
-          [void Function(LoginFailedPayloadBuilder) updates]) =
+          [void Function(LoginFailedPayloadBuilder)? updates]) =
       _$LoginFailedPayload;
   LoginFailedPayload._();
 
   String get cause;
-  @nullable
-  String get username;
+
+  String? get username;
 }
 
 abstract class LogoutPayload
     implements Built<LogoutPayload, LogoutPayloadBuilder> {
-  factory LogoutPayload([void Function(LogoutPayloadBuilder) updates]) =
+  factory LogoutPayload([void Function(LogoutPayloadBuilder)? updates]) =
       _$LogoutPayload;
   LogoutPayload._();
 

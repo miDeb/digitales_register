@@ -6,7 +6,7 @@ import '../data.dart';
 class AbsenceGroupWidget extends StatelessWidget {
   final AbsencesViewModel vm;
 
-  const AbsenceGroupWidget({Key key, this.vm}) : super(key: key);
+  const AbsenceGroupWidget({Key? key, required this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -24,7 +24,7 @@ class AbsenceGroupWidget extends StatelessWidget {
         child: Column(
           children: <Widget>[
             if (vm.reason != null) ...[
-              Text(vm.reason),
+              Text(vm.reason!),
               Row(
                 children: const [
                   Spacer(),

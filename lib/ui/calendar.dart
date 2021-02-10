@@ -18,12 +18,12 @@ class Calendar extends StatefulWidget {
   final VoidCallback closeEditNicksBar;
 
   const Calendar({
-    Key key,
-    this.vm,
-    this.dayCallback,
-    this.currentMondayCallback,
-    this.showEditSubjectNicks,
-    this.closeEditNicksBar,
+    Key? key,
+    required this.vm,
+    required this.dayCallback,
+    required this.currentMondayCallback,
+    required this.showEditSubjectNicks,
+    required this.closeEditNicksBar,
   }) : super(key: key);
 
   @override
@@ -31,11 +31,11 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
-  PageController _controller;
-  AnimationController _chevronOpacityController;
-  Animation<double> _chevronOpacityAnimation;
-  AnimationController _dateRangeOpacityController;
-  Animation<double> _dateRangeOpacityAnimation;
+  late PageController _controller;
+  late AnimationController _chevronOpacityController;
+  late Animation<double> _chevronOpacityAnimation;
+  late AnimationController _dateRangeOpacityController;
+  late Animation<double> _dateRangeOpacityAnimation;
   final DateFormat _dateFormat = DateFormat("dd.MM.yy");
   final Curve _animatePageCurve = Curves.ease;
   final Duration _animatePageDuration = const Duration(milliseconds: 200);
@@ -44,7 +44,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   // While this might not be best practice otherwise, it prevents rebuilds of
   // every currently shown page when the calendar rebuilds. Such rebuilds happen
   // when changing the current page, and would lead to animation janks.
-  PageView _pageView;
+  late PageView _pageView;
 
   static final Animatable<double> _chevronOpacityTween =
       Tween<double>(begin: 1.0, end: 0.0)
@@ -90,10 +90,10 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     super.initState();
   }
 
-  List<int> animatingPages;
+  late List<int> animatingPages;
 
   void _pageViewControllerListener() {
-    final floor = _controller.page.floor(), ceil = _controller.page.ceil();
+    final floor = _controller.page!.floor(), ceil = _controller.page!.ceil();
     if (!animatingPages.contains(floor)) {
       widget.dayCallback(mondayOf(floor));
     }
@@ -191,7 +191,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                     },
                     child: widget.vm.first != null && widget.vm.last != null
                         ? Text(
-                            "${_dateFormat.format(widget.vm.first)} - ${_dateFormat.format(widget.vm.last)}",
+                            "${_dateFormat.format(widget.vm.first!)} - ${_dateFormat.format(widget.vm.last!)}",
                           )
                         : widget.vm.noInternet
                             ? const Text("Wähle ein Datum")
@@ -255,7 +255,11 @@ class EditNickBar extends StatelessWidget {
   final bool show;
   final VoidCallback onShowEditNicks, onClose;
 
-  const EditNickBar({Key key, this.show, this.onShowEditNicks, this.onClose})
+  const EditNickBar(
+      {Key? key,
+      required this.show,
+      required this.onShowEditNicks,
+      required this.onClose})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

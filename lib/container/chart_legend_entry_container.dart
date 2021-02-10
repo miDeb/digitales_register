@@ -11,7 +11,7 @@ part 'chart_legend_entry_container.g.dart';
 class ChartLegendEntryContainer extends StatelessWidget {
   final String subjectName;
 
-  const ChartLegendEntryContainer({Key key, this.subjectName})
+  const ChartLegendEntryContainer({Key? key, required this.subjectName})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ abstract class ChartLegendEntryVM
   SubjectTheme get config;
 
   factory ChartLegendEntryVM(
-          [void Function(ChartLegendEntryVMBuilder) updates]) =
+          [void Function(ChartLegendEntryVMBuilder)? updates]) =
       _$ChartLegendEntryVM;
   ChartLegendEntryVM._();
 
@@ -53,7 +53,7 @@ abstract class ChartLegendEntryVM
     return ChartLegendEntryVM(
       (b) => b
         ..name = name
-        ..config = state.settingsState.subjectThemes[name].toBuilder(),
+        ..config = state.settingsState!.subjectThemes[name]!.toBuilder(),
     );
   }
 }

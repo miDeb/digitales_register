@@ -14,26 +14,26 @@ bool isGradeInRange(int grade) {
   return grade >= 0 && grade <= 1000;
 }
 
-int tryParseFormattedGrade(String grade) {
-  bool matchesWholeInput(RegExpMatch match) {
+int? tryParseFormattedGrade(String grade) {
+  bool matchesWholeInput(RegExpMatch? match) {
     return match != null && match.start == 0 && match.end == match.input.length;
   }
 
   final accurate = RegExp(r"(\d+)(?:[.,](\d{1,2}))?").firstMatch(grade);
   if (matchesWholeInput(accurate)) {
-    final major = accurate.group(1);
+    final major = accurate!.group(1)!;
     final minor = accurate.group(2);
     final majorParsed = int.tryParse(major);
     if (majorParsed == null) {
       return null;
     }
     var minorParsed = minor != null ? int.tryParse(minor) : 0;
+    if (minorParsed == null) {
+      return null;
+    }
     if (minor?.length == 1) {
       // parse .5 as 50/100
       minorParsed *= 10;
-    }
-    if (minorParsed == null) {
-      return null;
     }
     final combinedGrade = majorParsed * 100 + minorParsed;
     if (!isGradeInRange(combinedGrade)) {
@@ -44,7 +44,7 @@ int tryParseFormattedGrade(String grade) {
 
   final less = RegExp(r"(\d+)-").firstMatch(grade);
   if (matchesWholeInput(less)) {
-    final lessParsed = int.tryParse(less.group(1));
+    final lessParsed = int.tryParse(less!.group(1)!);
     if (lessParsed == null) {
       return null;
     }
@@ -57,7 +57,7 @@ int tryParseFormattedGrade(String grade) {
 
   final more = RegExp(r"(\d+)\+").firstMatch(grade);
   if (matchesWholeInput(more)) {
-    final moreParsed = int.tryParse(more.group(1));
+    final moreParsed = int.tryParse(more!.group(1)!);
     if (moreParsed == null) {
       return null;
     }
@@ -70,11 +70,11 @@ int tryParseFormattedGrade(String grade) {
 
   final between = RegExp(r"(\d+)[-/](\d+)").firstMatch(grade);
   if (matchesWholeInput(between)) {
-    final startParsed = int.tryParse(between.group(1));
+    final startParsed = int.tryParse(between!.group(1)!);
     if (startParsed == null) {
       return null;
     }
-    final endParsed = int.tryParse(between.group(2));
+    final endParsed = int.tryParse(between.group(2)!);
     if (endParsed == null) {
       return null;
     }
@@ -105,10 +105,10 @@ String _calculateAverage(List<_Grade> grades) {
   return gradeAverageFormat.format(average / 100);
 }
 
-typedef _UpdateGrade = void Function(_Grade previous, _Grade updated);
+typedef _UpdateGrade = void Function(_Grade previous, _Grade? updated);
 
 class GradeCalculator extends StatefulWidget {
-  const GradeCalculator({Key key}) : super(key: key);
+  const GradeCalculator({Key? key}) : super(key: key);
   @override
   _GradeCalculatorState createState() => _GradeCalculatorState();
 }
@@ -116,11 +116,11 @@ class GradeCalculator extends StatefulWidget {
 class _Grade {
   int grade;
   int weightPercentage;
-  String description;
+  String? description;
 
   _Grade({
-    this.grade,
-    this.weightPercentage,
+    required this.grade,
+    required this.weightPercentage,
     this.description,
   });
 }
@@ -128,11 +128,11 @@ class _Grade {
 class _GradeCalculatorState extends State<GradeCalculator> {
   final List<_Grade> grades = [];
   Future<void> addGrade() async {
-    final Tuple2<int, int> grade = await showDialog(
+    final Tuple2<int, int>? grade = await showDialog(
       context: context,
       builder: (context) {
-        int grade;
-        int weight;
+        int? grade;
+        int? weight;
         return StatefulBuilder(
           builder: (context, setState) => InfoDialog(
             title: const Text("Neue Note erstellen"),
@@ -192,7 +192,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
   }
 
   Future<void> importGrades() async {
-    final List<_Grade> result = await Navigator.of(
+    final List<_Grade>? result = await Navigator.of(
       context,
       rootNavigator: true,
     ).push(
@@ -211,7 +211,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     });
   }
 
-  void updateGrade(_Grade previous, _Grade updated) {
+  void updateGrade(_Grade previous, _Grade? updated) {
     setState(() {
       if (updated == null) {
         grades.remove(previous);
@@ -257,7 +257,11 @@ class _GradesList extends StatelessWidget {
   final _UpdateGrade updateGrade;
   final VoidCallback addGrade;
 
-  const _GradesList({Key key, this.grades, this.updateGrade, this.addGrade})
+  const _GradesList(
+      {Key? key,
+      required this.grades,
+      required this.updateGrade,
+      required this.addGrade})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -297,7 +301,8 @@ class _GradesTile extends StatelessWidget {
   final _Grade grade;
   final _UpdateGrade updateGrade;
 
-  const _GradesTile({Key key, this.grade, this.updateGrade}) : super(key: key);
+  const _GradesTile({Key? key, required this.grade, required this.updateGrade})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -362,7 +367,7 @@ class _GradesTile extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
-                  grade.description,
+                  grade.description!,
                   style: Theme.of(context).textTheme.caption,
                 ),
               )
@@ -376,7 +381,7 @@ class _GradesTile extends StatelessWidget {
 class _Greeting extends StatelessWidget {
   final VoidCallback import, add;
 
-  const _Greeting({Key key, @required this.import, @required this.add})
+  const _Greeting({Key? key, required this.import, required this.add})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -431,7 +436,7 @@ class _Greeting extends StatelessWidget {
 class _ImportGrades extends StatefulWidget {
   final List<Subject> subjects;
 
-  const _ImportGrades({Key key, this.subjects}) : super(key: key);
+  const _ImportGrades({Key? key, required this.subjects}) : super(key: key);
   @override
   _ImportGradesState createState() => _ImportGradesState();
 }
@@ -449,23 +454,23 @@ class _ImportGradesContainer extends StatelessWidget {
 }
 
 class _ImportGradesState extends State<_ImportGrades> {
-  Subject selectedSubject;
-  Semester selectedSemester;
-  List<_Grade> grades;
+  Subject? selectedSubject;
+  Semester? selectedSemester;
+  List<_Grade>? grades;
 
   void _recalculateGrades() {
     setState(() {
       if (selectedSemester != null && selectedSubject != null) {
-        grades = selectedSubject
-                .basicGrades(selectedSemester)
+        grades = selectedSubject!
+                .basicGrades(selectedSemester!)
                 ?.map(
                   (e) => _Grade(
-                    grade: e.grade,
+                    grade: e.grade!,
                     weightPercentage: e.weightPercentage,
-                    description: "${selectedSubject.name} · ${e.type}",
+                    description: "${selectedSubject!.name} · ${e.type}",
                   ),
                 )
-                ?.toList() ??
+                .toList() ??
             [];
       } else {
         grades = [];
@@ -541,7 +546,7 @@ class _ImportGradesState extends State<_ImportGrades> {
             child: ElevatedButton(
               onPressed: selectedSemester != null &&
                       selectedSubject != null &&
-                      grades.isNotEmpty
+                      grades!.isNotEmpty
                   ? () {
                       Navigator.pop(context, grades);
                     }
@@ -551,7 +556,7 @@ class _ImportGradesState extends State<_ImportGrades> {
           ),
           if (selectedSemester != null &&
               selectedSubject != null &&
-              grades.isEmpty)
+              grades!.isEmpty)
             const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
@@ -569,16 +574,16 @@ enum _InputType { grade, weight }
 
 class _Input extends StatefulWidget {
   final _InputType inputType;
-  final String initial;
-  final void Function(int) updateValue;
+  final String? initial;
+  final void Function(int?) updateValue;
   final bool showErrorForEmptyInput;
   final bool autofocus;
 
   const _Input({
-    Key key,
-    this.inputType,
+    Key? key,
+    required this.inputType,
     this.initial,
-    this.updateValue,
+    required this.updateValue,
     this.showErrorForEmptyInput = true,
     this.autofocus = false,
   }) : super(key: key);
@@ -587,10 +592,10 @@ class _Input extends StatefulWidget {
 }
 
 class _InputState extends State<_Input> {
-  TextEditingController controller;
+  late final TextEditingController controller;
   final focusNode = FocusNode();
 
-  int getValue() {
+  int? getValue() {
     final value = controller.text;
     switch (widget.inputType) {
       case _InputType.grade:
@@ -603,8 +608,6 @@ class _InputState extends State<_Input> {
           return null;
         }
     }
-    assert(false);
-    return null;
   }
 
   @override

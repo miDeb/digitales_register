@@ -29,7 +29,7 @@ class LogoutButton extends StatelessWidget {
 class SettingsButton extends StatelessWidget {
   final bool selected;
 
-  const SettingsButton({Key key, this.selected}) : super(key: key);
+  const SettingsButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -37,7 +37,8 @@ class SettingsButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return SettingsButtonWidget(
           selected: selected,
-          onShowSettings: actions.routingActions.showSettings,
+          onShowSettings:
+              actions.routingActions.showSettings,
         );
       },
     );
@@ -47,7 +48,7 @@ class SettingsButton extends StatelessWidget {
 class GradesButton extends StatelessWidget {
   final bool selected;
 
-  const GradesButton({Key key, this.selected}) : super(key: key);
+  const GradesButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -65,7 +66,7 @@ class GradesButton extends StatelessWidget {
 class AbsencesButton extends StatelessWidget {
   final bool selected;
 
-  const AbsencesButton({Key key, this.selected}) : super(key: key);
+  const AbsencesButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -73,7 +74,8 @@ class AbsencesButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return AbsencesButtonWidget(
             selected: selected,
-            onShowAbsences: actions.routingActions.showAbsences);
+            onShowAbsences:
+                actions.routingActions.showAbsences);
       },
     );
   }
@@ -82,7 +84,7 @@ class AbsencesButton extends StatelessWidget {
 class CalendarButton extends StatelessWidget {
   final bool selected;
 
-  const CalendarButton({Key key, this.selected}) : super(key: key);
+  const CalendarButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -90,7 +92,8 @@ class CalendarButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return CalendarButtonWidget(
           selected: selected,
-          onShowCalendar: actions.routingActions.showCalendar,
+          onShowCalendar:
+              actions.routingActions.showCalendar,
         );
       },
     );
@@ -100,7 +103,7 @@ class CalendarButton extends StatelessWidget {
 class CertificateButton extends StatelessWidget {
   final bool selected;
 
-  const CertificateButton({Key key, this.selected}) : super(key: key);
+  const CertificateButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -108,7 +111,8 @@ class CertificateButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return CertificateButtonWidget(
           selected: selected,
-          onShowCertificate: actions.routingActions.showCertificate,
+          onShowCertificate:
+              actions.routingActions.showCertificate,
         );
       },
     );
@@ -118,7 +122,7 @@ class CertificateButton extends StatelessWidget {
 class MessagesButton extends StatelessWidget {
   final bool selected;
 
-  const MessagesButton({Key key, this.selected}) : super(key: key);
+  const MessagesButton({Key? key, required this.selected}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, void>(
@@ -126,7 +130,8 @@ class MessagesButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return MessagesButtonWidget(
           selected: selected,
-          onShowMessages: actions.routingActions.showMessages,
+          onShowMessages:
+              actions.routingActions.showMessages,
         );
       },
     );

@@ -17,12 +17,12 @@ class SortedGradesWidget extends StatelessWidget {
   final VoidCallback showGradeCalculator;
 
   const SortedGradesWidget({
-    Key key,
-    @required this.vm,
-    this.viewSubjectDetail,
-    this.sortByTypeCallback,
-    this.showCancelledCallback,
-    this.showGradeCalculator,
+    Key? key,
+    required this.vm,
+    required this.viewSubjectDetail,
+    required this.sortByTypeCallback,
+    required this.showCancelledCallback,
+    required this.showGradeCalculator,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class SortedGradesWidget extends StatelessWidget {
         SwitchListTile.adaptive(
           title: const Text("Gelöschte Noten anzeigen"),
           onChanged: showCancelledCallback,
-          value: vm.showCancelled,
+          value: vm.showCancelled!,
         ),
         const Divider(
           height: 0,
@@ -46,9 +46,9 @@ class SortedGradesWidget extends StatelessWidget {
             subject: s,
             sortByType: vm.sortByType,
             viewSubjectDetail: () => viewSubjectDetail(s),
-            showCancelled: vm.showCancelled,
+            showCancelled: vm.showCancelled!,
             semester: vm.semester,
-            noInternet: vm.noInternet,
+            noInternet: vm.noInternet!,
             ignoredForAverage: vm.ignoredSubjectsForAverage.any(
                 (element) => element.toLowerCase() == s.name.toLowerCase()),
           ),
@@ -101,14 +101,14 @@ class SubjectWidget extends StatefulWidget {
   final VoidCallback viewSubjectDetail;
 
   const SubjectWidget(
-      {Key key,
-      @required this.sortByType,
-      @required this.subject,
-      @required this.viewSubjectDetail,
-      @required this.showCancelled,
-      @required this.semester,
-      @required this.noInternet,
-      @required this.ignoredForAverage})
+      {Key? key,
+      required this.sortByType,
+      required this.subject,
+      required this.viewSubjectDetail,
+      required this.showCancelled,
+      required this.semester,
+      required this.noInternet,
+      required this.ignoredForAverage})
       : super(key: key);
 
   @override
@@ -197,7 +197,7 @@ const lineThrough = TextStyle(decoration: TextDecoration.lineThrough);
 class GradeWidget extends StatelessWidget {
   final GradeDetail grade;
 
-  const GradeWidget({Key key, this.grade}) : super(key: key);
+  const GradeWidget({Key? key, required this.grade}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -212,7 +212,7 @@ class GradeWidget extends StatelessWidget {
             children: <Widget>[
               if (!grade.description.isNullOrEmpty)
                 Text(
-                  grade.description,
+                  grade.description!,
                   style: Theme.of(context).textTheme.bodyText2,
                 ),
               Text(
@@ -225,7 +225,7 @@ class GradeWidget extends StatelessWidget {
               ),
               if (!grade.cancelledDescription.isNullOrEmpty)
                 Text(
-                  grade.cancelledDescription,
+                  grade.cancelledDescription!,
                   style: Theme.of(context).textTheme.caption,
                 ),
             ],
@@ -236,7 +236,7 @@ class GradeWidget extends StatelessWidget {
           ),
           isThreeLine: true,
         ),
-        if (grade.competences?.isNotEmpty == true)
+        if (grade.competences.isNotEmpty)
           for (final c in grade.competences)
             CompetenceWidget(
               competence: c,
@@ -250,7 +250,8 @@ class GradeWidget extends StatelessWidget {
 class ObservationWidget extends StatelessWidget {
   final Observation observation;
 
-  const ObservationWidget({Key key, this.observation}) : super(key: key);
+  const ObservationWidget({Key? key, required this.observation})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -270,7 +271,8 @@ class CompetenceWidget extends StatelessWidget {
   final Competence competence;
   final bool cancelled;
 
-  const CompetenceWidget({Key key, this.competence, this.cancelled})
+  const CompetenceWidget(
+      {Key? key, required this.competence, required this.cancelled})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -299,7 +301,7 @@ class CompetenceWidget extends StatelessWidget {
 class Star extends StatelessWidget {
   final bool filled;
 
-  const Star({Key key, this.filled}) : super(key: key);
+  const Star({Key? key, required this.filled}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Icon(filled ? Icons.star : Icons.star_border);
@@ -310,7 +312,8 @@ class GradeTypeWidget extends StatelessWidget {
   final String typeName;
   final List<DetailEntry> entries;
 
-  const GradeTypeWidget({Key key, this.typeName, this.entries})
+  const GradeTypeWidget(
+      {Key? key, required this.typeName, required this.entries})
       : super(key: key);
   @override
   Widget build(BuildContext context) {

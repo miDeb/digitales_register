@@ -8,8 +8,8 @@ abstract class NotificationsActions extends ReduxActions {
   factory NotificationsActions() => _$NotificationsActions();
   NotificationsActions._();
 
-  VoidActionDispatcher load;
-  ActionDispatcher<List> loaded;
-  ActionDispatcher<Notification> delete;
-  VoidActionDispatcher deleteAll;
+  abstract final VoidActionDispatcher load;
+  abstract final ActionDispatcher<List> loaded;
+  abstract final ActionDispatcher<Notification> delete;
+  abstract final VoidActionDispatcher deleteAll;
 }

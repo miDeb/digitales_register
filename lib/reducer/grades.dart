@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 
 import '../actions/app_actions.dart';
 import '../actions/grades_actions.dart';
@@ -29,8 +30,8 @@ void _loading(
 
 void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
     GradesStateBuilder builder) {
-  _updateSubjects(state.subjects, builder.subjects, getMap(action.payload.data),
-      action.payload.semester);
+  _updateSubjects(state.subjects, builder.subjects,
+      getMap(action.payload.data)!, action.payload.semester);
   builder
     ..serverSemester.replace(action.payload.semester)
     ..loading = false;
@@ -39,18 +40,17 @@ void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
 void _updateSubjects(BuiltList<Subject> subjects,
     ListBuilder<Subject> subjectsBuilder, Map data, Semester semester) {
   for (final Map<String, dynamic> subject
-      in List.from(getList(data["subjects"]))) {
-    final nestedSubject = getMap(subject["subject"]);
+      in List.from(getList(data["subjects"])!)) {
+    final nestedSubject = getMap(subject["subject"])!;
     final newId = getInt(nestedSubject["id"]);
-    final oldSubject =
-        subjects.singleWhere((s) => s.id == newId, orElse: () => null);
+    final oldSubject = subjects.singleWhereOrNull((s) => s.id == newId);
     if (oldSubject != null) {
       // just update the grades
       subjectsBuilder[subjects.indexOf(oldSubject)] = oldSubject.rebuild(
         (b) => b
           ..gradesAll[semester] = BuiltList(
-            getList(subject["grades"]).map(
-              (g) => tryParse(getMap(g), _parseGradeAll),
+            getList(subject["grades"])!.map(
+              (g) => tryParse(getMap(g)!, _parseGradeAll),
             ),
           ),
       );
@@ -63,8 +63,8 @@ void _updateSubjects(BuiltList<Subject> subjects,
             ..gradesAll = MapBuilder(
               {
                 semester: BuiltList<GradeAll>(
-                  getList(subject["grades"]).map(
-                    (g) => tryParse(getMap(g), _parseGradeAll),
+                  getList(subject["grades"])!.map(
+                    (g) => tryParse(getMap(g)!, _parseGradeAll),
                   ),
                 ),
               },
@@ -87,23 +87,22 @@ void _detailsLoaded(GradesState state,
         ? s.rebuild(
             (b) => b
               ..grades[action.payload.semester] = BuiltList(
-                getList(data["grades"]).map(
-                  (g) => tryParse(getMap(g), _parseGrade).rebuild(
+                getList(data!["grades"])!.map(
+                  (g) => tryParse(getMap(g)!, _parseGrade).rebuild(
                     (d) => d
                       // we will also try to load the [cancelledDescription]
                       // again, but for now keep the old one
                       ..cancelledDescription = b.grades[action.payload.semester]
-                          ?.firstWhere(
+                          ?.firstWhereOrNull(
                             (gd) => gd.id == d.id,
-                            orElse: () => null,
                           )
                           ?.cancelledDescription,
                   ),
                 ),
               )
               ..observations[action.payload.semester] = BuiltList(
-                getList(data["observations"]).map(
-                  (o) => tryParse(getMap(o), _parseObservation),
+                getList(data["observations"])!.map(
+                  (o) => tryParse(getMap(o)!, _parseObservation),
                 ),
               ),
           )
@@ -121,7 +120,7 @@ void _cancelledDescriptionLoaded(
         ? s.rebuild(
             (b) => b
               ..grades[action.payload.semester] =
-                  b.grades[action.payload.semester].rebuild(
+                  b.grades[action.payload.semester]!.rebuild(
                 (b) => b
                   ..map(
                     (g) => g == action.payload.grade
@@ -141,11 +140,11 @@ Observation _parseObservation(Map data) {
       ..cancelled = data["cancelled"] != 0
       ..created = getString(data["created"])
       ..note = getString(data["note"])
-      ..date = DateTime.parse(getString(data["date"])),
+      ..date = DateTime.parse(getString(data["date"])!),
   );
 }
 
-int _parseGradeValue(String grade) {
+int? _parseGradeValue(String? grade) {
   if (grade == null || grade == "") return null;
   final gradeSplitted = grade
       .split(".")
@@ -162,7 +161,7 @@ GradeAll _parseGradeAll(Map data) {
     (b) => b
       ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
       ..weightPercentage = getInt(data["weight"])
-      ..date = DateTime.parse(getString(data["date"]))
+      ..date = DateTime.parse(getString(data["date"])!)
       ..cancelled = data["cancelled"] != 0
       ..type = getString(data["type"]),
   );
@@ -172,7 +171,7 @@ GradeDetail _parseGrade(Map data) {
   return GradeDetail(
     (b) => b
       ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
-      ..date = DateTime.parse(getString(data["date"]))
+      ..date = DateTime.parse(getString(data["date"])!)
       ..weightPercentage = getInt(data["weight"])
       ..cancelled = getBool(data["cancelled"])
       ..type = getString(data["typeName"])
@@ -181,8 +180,8 @@ GradeDetail _parseGrade(Map data) {
       ..description = getString(data["description"])
       ..id = getInt(data["id"])
       ..competences = ListBuilder(
-        getList(data["competences"])?.map(
-          (c) => tryParse(getMap(c), _parseCompetence),
+        getList(data["competences"])!.map(
+          (c) => tryParse(getMap(c)!, _parseCompetence),
         ),
       ),
   );
@@ -197,7 +196,7 @@ GradeDetail _addCancelledDescription(GradeDetail grade, dynamic data) {
 Competence _parseCompetence(Map data) {
   return Competence((b) => b
     ..typeName = getString(data["typeName"])
-    ..grade = double.parse(getString(data["grade"])).toInt());
+    ..grade = double.parse(getString(data["grade"])!).toInt());
 }
 
 void _setSemester(

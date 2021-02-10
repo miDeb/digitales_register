@@ -4,10 +4,10 @@ class UserProfile extends StatelessWidget {
   final String name, username, role;
 
   const UserProfile({
-    Key key,
-    this.name,
-    this.username,
-    this.role,
+    Key? key,
+    required this.name,
+    required this.username,
+    required this.role,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {

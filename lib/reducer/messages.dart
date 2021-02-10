@@ -1,5 +1,6 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:dr/actions/routing_actions.dart';
 import 'package:dr/util.dart';
 
@@ -48,11 +49,11 @@ void _fileAvailable(
 
 void _markAsRead(
     MessagesState state, Action<int> action, MessagesStateBuilder builder) {
-  if (action.payload == state.showMessage) {
+  if (action.payload == state!.showMessage) {
     builder.showMessage = null;
   }
-  builder.messages[state.messages.indexWhere((m) => m.id == action.payload)] =
-      state.messages
+  builder.messages[state!.messages.indexWhere((m) => m.id == action.payload)] =
+      state!.messages
           .firstWhere(
             (m) => m.id == action.payload,
           )
@@ -63,7 +64,7 @@ void _markAsRead(
 
 MessagesState _parseMessages(List json, MessagesState state) {
   final messages = json
-      .map((m) => tryParse(getMap(m), (Map m) => _parseMessage(m, state)))
+      .map((m) => tryParse(getMap(m), (Map? m) => _parseMessage(m!, state)))
       .toList();
   return MessagesState(
     (b) => b..messages = ListBuilder<Message>(messages),
@@ -74,18 +75,17 @@ Message _parseMessage(Map json, MessagesState state) {
   final message = MessageBuilder()
     ..subject = getString(json["subject"])
     ..text = getString(json["text"])
-    ..timeSent = DateTime.parse(getString(json["timeSent"]))
+    ..timeSent = DateTime.parse(getString(json["timeSent"])!)
     ..timeRead = json["timeRead"] != null
-        ? DateTime.parse(getString(json["timeRead"]))
+        ? DateTime.parse(getString(json["timeRead"])!)
         : null
     ..recipientString = getString(json["recipientString"])
     ..fromName = getString(json["fromName"])
     ..fileName = getString(json["fileName"])
     ..fileOriginalName = getString(json["fileOriginalName"])
     ..id = getInt(json["id"]);
-  final oldMessage = state?.messages?.firstWhere(
+  final oldMessage = state?.messages.firstWhereOrNull(
     (m) => m.id == message.id,
-    orElse: () => null,
   );
   if (oldMessage != null && oldMessage.fileName == message.fileName) {
     message.fileAvailable = oldMessage.fileAvailable;

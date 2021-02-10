@@ -6,6 +6,6 @@ abstract class AbsencesActions extends ReduxActions {
   factory AbsencesActions() => _$AbsencesActions();
   AbsencesActions._();
 
-  VoidActionDispatcher load;
-  ActionDispatcher<dynamic> loaded;
+  abstract final VoidActionDispatcher load;
+  abstract final ActionDispatcher<dynamic> loaded;
 }

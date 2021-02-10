@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -27,7 +28,8 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<Box<String>> hiveBox = getEncryptedBox();
   DesktopSecureStorage();
   static Future<Box<String>> getEncryptedBox() async {
-    final applicationDocumentDirectory = await getApplicationSupportDirectory();
+    final applicationDocumentDirectory =
+        await (getApplicationSupportDirectory() as FutureOr<Directory>);
     final homeDirectory =
         Directory("${applicationDocumentDirectory.path}/RegisterDB");
     if (!await homeDirectory.exists()) {
@@ -51,46 +53,46 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
 
   @override
   Future<void> delete(
-      {String key,
+      {required String key,
       dynamic iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      secure_storage.AndroidOptions? aOptions}) async {
     (await hiveBox).delete(key);
   }
 
   @override
   Future<void> deleteAll(
-      {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
+      {dynamic iOptions, secure_storage.AndroidOptions? aOptions}) async {
     (await hiveBox).clear();
   }
 
   @override
-  Future<String> read(
-      {String key,
+  Future<String?> read(
+      {required String key,
       dynamic iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      secure_storage.AndroidOptions? aOptions}) async {
     return (await hiveBox).get(key);
   }
 
   @override
-  Future<Map<String, String>> readAll(
-      {dynamic iOptions, secure_storage.AndroidOptions aOptions}) async {
-    return (await hiveBox).toMap() as Map<String, String>;
+  Future<Map<String?, String>> readAll(
+      {dynamic iOptions, secure_storage.AndroidOptions? aOptions}) async {
+    return (await hiveBox).toMap() as Map<String?, String>;
   }
 
   @override
   Future<void> write(
-      {String key,
-      String value,
+      {required String key,
+      required String value,
       dynamic iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      secure_storage.AndroidOptions? aOptions}) async {
     return (await hiveBox).put(key, value);
   }
 
   @override
   Future<bool> containsKey(
-      {String key,
-      secure_storage.IOSOptions iOptions,
-      secure_storage.AndroidOptions aOptions}) async {
+      {required String key,
+      secure_storage.IOSOptions? iOptions,
+      secure_storage.AndroidOptions? aOptions}) async {
     return (await hiveBox).containsKey(key);
   }
 }

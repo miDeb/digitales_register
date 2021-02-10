@@ -45,7 +45,7 @@ void main() {
         onPointerDown: (_) => store.actions.loginActions.updateLogout(),
         child: DynamicTheme(
           data: (brightness, overridePlatform) {
-            TargetPlatform platform;
+            TargetPlatform? platform;
             if (overridePlatform && Platform.isAndroid) {
               platform = TargetPlatform.iOS;
             }
@@ -74,7 +74,7 @@ void main() {
             scaffoldMessengerKey: scaffoldMessengerKey,
             initialRoute: "/",
             onGenerateRoute: (RouteSettings settings) {
-              final List<String> pathElements = settings.name.split("/");
+              final List<String> pathElements = settings.name!.split("/");
               if (pathElements[0] != "") return null;
               switch (pathElements[1]) {
                 case "":
@@ -132,9 +132,9 @@ void main() {
       ),
     ),
   );
-  WidgetsBinding.instance.addPostFrameCallback(
+  WidgetsBinding.instance!.addPostFrameCallback(
     (_) async {
-      Uri uri;
+      Uri? uri;
       if (Platform.isAndroid) {
         uri = await getInitialUri();
         getUriLinksStream().listen((event) {
@@ -142,13 +142,13 @@ void main() {
         });
       }
       store.actions.start(uri);
-      WidgetsBinding.instance.addObserver(
+      WidgetsBinding.instance!.addObserver(
         LifecycleObserver(
           () {
             store.actions.restarted();
           },
           // this might not finish in time:
-          store.actions.saveState,
+          store.actions.saveState ,
         ),
       );
     },
@@ -173,7 +173,7 @@ class LifecycleObserver with WidgetsBindingObserver {
 
 /// Utility to show a global Snack Bar
 void showSnackBar(String message) {
-  scaffoldMessengerKey.currentState.showSnackBar(
+  scaffoldMessengerKey.currentState!.showSnackBar(
     SnackBar(
       content: Text(message),
     ),

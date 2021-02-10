@@ -13,12 +13,12 @@ class Profile extends StatelessWidget {
   final VoidCallback changePass;
 
   const Profile({
-    Key key,
-    this.profileState,
-    this.setSendNotificationEmails,
-    this.changeEmail,
-    this.changePass,
-    this.noInternet,
+    Key? key,
+    required this.profileState,
+    required this.setSendNotificationEmails,
+    required this.changeEmail,
+    required this.changePass,
+    required this.noInternet,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class Profile extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Profil"),
       ),
-      body: profileState == null
+      body: profileState.name == null
           ? Center(
               child: noInternet
                   ? const NoInternet()
@@ -37,19 +37,19 @@ class Profile extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: UserProfile(
-                    name: profileState.name,
-                    username: profileState.username,
-                    role: profileState.roleName,
+                    name: profileState.name!,
+                    username: profileState.username!,
+                    role: profileState.roleName!,
                   ),
                 ),
                 SwitchListTile.adaptive(
                   title: const Text("Emails für Benachrichtigungen senden"),
-                  value: profileState.sendNotificationEmails,
+                  value: profileState.sendNotificationEmails!,
                   onChanged: noInternet ? null : setSendNotificationEmails,
                 ),
                 ListTile(
                   title: const Text("Email-Adresse ändern"),
-                  subtitle: Text(profileState.email),
+                  subtitle: Text(profileState.email!),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: changeEmail,
                   enabled: !noInternet,

@@ -7,24 +7,24 @@ typedef SelectAccountCallback = void Function(int index);
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
-    Key key,
-    @required this.drawerExpanded,
-    @required this.onDrawerExpansionChange,
-    @required this.username,
-    @required this.userIcon,
-    @required this.tabletMode,
-    @required this.goHome,
-    @required this.currentSelected,
-    @required this.showGrades,
-    @required this.showAbsences,
-    @required this.showCalendar,
-    @required this.showCertificate,
-    @required this.showMessages,
-    @required this.showSettings,
-    @required this.logout,
-    @required this.otherAccounts,
-    @required this.selectAccount,
-    @required this.addAccount,
+    Key? key,
+    required this.drawerExpanded,
+    required this.onDrawerExpansionChange,
+    required this.username,
+    required this.userIcon,
+    required this.tabletMode,
+    required this.goHome,
+    required this.currentSelected,
+    required this.showGrades,
+    required this.showAbsences,
+    required this.showCalendar,
+    required this.showCertificate,
+    required this.showMessages,
+    required this.showSettings,
+    required this.logout,
+    required this.otherAccounts,
+    required this.selectAccount,
+    required this.addAccount,
   }) : super(key: key);
 
   final DrawerCallback onDrawerExpansionChange;
@@ -39,7 +39,7 @@ class Sidebar extends StatelessWidget {
       addAccount;
   final bool tabletMode, drawerExpanded;
   final Pages currentSelected;
-  final String username, userIcon;
+  final String? username, userIcon;
   final List<String> otherAccounts;
   final SelectAccountCallback selectAccount;
 
@@ -72,14 +72,14 @@ class Sidebar extends StatelessWidget {
               ),
             ),
         ],
-        onChanged: (int value) {
+        onChanged: (int? value) {
           if (value == 0) {
             // selected the current account that is already selected
             // no-op
           } else if (value == otherAccounts.length + 1) {
             addAccount();
           } else {
-            selectAccount(value - 1);
+            selectAccount(value! - 1);
           }
         },
       ),
@@ -90,12 +90,12 @@ class Sidebar extends StatelessWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:
           //"https://vinzentinum.digitalesregister.it/v2/theme/icons/profile_empty.png" is the (ugly) default
-          userIcon?.endsWith("/profile_empty.png") != false
+          userIcon?.endsWith("/profile_empty.png") ?? true
               ? const Icon(Icons.account_circle)
-              : Image.network(userIcon),
-      unselectedIconColor: Theme.of(context).iconTheme.color,
+              : Image.network(userIcon!),
+      unselectedIconColor: Theme.of(context).iconTheme.color!,
       selectedIconColor: Theme.of(context).accentColor,
-      unselectedTextColor: Theme.of(context).textTheme.subtitle1.color,
+      unselectedTextColor: Theme.of(context).textTheme.subtitle1!.color!,
       selectedTextColor: Theme.of(context).accentColor,
       selectedIconBox: Theme.of(context).accentColor.withAlpha(20),
       items: [

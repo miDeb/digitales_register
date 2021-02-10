@@ -25,14 +25,14 @@ class LoginPageContent extends StatefulWidget {
   final SelectAccountCallback onSelectAccount;
 
   const LoginPageContent({
-    Key key,
-    @required this.vm,
-    this.onLogin,
-    this.setSaveNoPass,
-    this.onReload,
-    this.onChangePass,
-    this.onRequestPassReset,
-    this.onSelectAccount,
+    Key? key,
+    required this.vm,
+    required this.onLogin,
+    required this.setSaveNoPass,
+    required this.onReload,
+    required this.onChangePass,
+    required this.onRequestPassReset,
+    required this.onSelectAccount,
   }) : super(key: key);
 
   @override
@@ -54,17 +54,19 @@ class _LoginPageContentState extends State<LoginPageContent> {
         ),
       );
   final _schoolFocusNode = FocusNode();
-  bool safeMode;
+  late bool safeMode;
   bool newPasswordsMatch = true;
-  Tuple2<String, String> nonCustomServer;
+  Tuple2<String, String?>? nonCustomServer;
   @override
   void initState() {
     safeMode = widget.vm.safeMode;
-    _usernameController.text = widget.vm.username;
+    if (widget.vm.username != null) {
+      _usernameController.text = widget.vm.username!;
+    }
     if (widget.vm.url != null) {
-      _urlController.text = widget.vm.url;
+      _urlController.text = widget.vm.url!;
       for (final entry in widget.vm.servers.entries) {
-        if (Uri.parse(entry.value).host == Uri.parse(widget.vm.url).host) {
+        if (Uri.parse(entry.value).host == Uri.parse(widget.vm.url!).host) {
           nonCustomServer = Tuple2(entry.key, entry.value);
           _schoolController.text = entry.key;
           break;
@@ -144,7 +146,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 const TextPosition(offset: 0),
                               );
                             } else {
-                              _urlController.text = nonCustomServer.item2;
+                              _urlController.text = nonCustomServer!.item2!;
                             }
                           });
                         },
@@ -189,7 +191,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         onPressed: () async {
-                          PackageInfo info;
+                          PackageInfo? info;
                           try {
                             info = await PackageInfo.fromPlatform();
                           } catch (e) {
@@ -199,7 +201,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             // ignore: prefer_interpolation_to_compose_strings
                             "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
                                 (info?.version != null
-                                    ? "&entry.1581750442=${Uri.encodeQueryComponent(info.version)}"
+                                    ? "&entry.1581750442=${Uri.encodeQueryComponent(info!.version)}"
                                     : ""),
                           );
                         },
@@ -400,10 +402,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                         ? Text(
                             widget.vm.noInternet
                                 ? "Keine Verbindung möglich"
-                                : widget.vm.error,
+                                : widget.vm.error!,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2
+                                .bodyText2!
                                 .copyWith(color: Colors.red),
                           )
                         : const SizedBox(),

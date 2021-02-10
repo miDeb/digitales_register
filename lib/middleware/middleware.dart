@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -87,16 +88,16 @@ final middleware = [
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) async {
-          Future<void> handleError(e, StackTrace trace) async {
+          Future<void> handleError(e, StackTrace? trace) async {
             log("Error caught by error middleware",
                 error: e, stackTrace: trace);
             var stackTrace = trace;
             try {
-              stackTrace ??= e.stackTrace as StackTrace;
+              stackTrace ??= e.stackTrace as StackTrace?;
             } catch (e) {
               // we can't get a stack trace
             }
-            PackageInfo info;
+            PackageInfo? info;
             try {
               info = await PackageInfo.fromPlatform();
             } catch (e) {
@@ -110,7 +111,7 @@ NextActionHandler _errorMiddleware(
             }
             error +=
                 "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
-            navigatorKey.currentState.push(
+            navigatorKey.currentState!.push(
               MaterialPageRoute(
                 fullscreenDialog: true,
                 builder: (_) {
@@ -210,7 +211,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final url = getString(login["url"]);
   final offlineEnabled = getBool(login["offlineEnabled"]);
   final List<String> otherAccounts = List.from(
-    (login["otherAccounts"] as List)?.map((login) => login["user"]) ?? [],
+    (login["otherAccounts"] as List?)?.map((login) => login["user"]) ?? [],
   );
   api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||
@@ -220,7 +221,6 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.savePassActions.delete();
     api.actions.routingActions.showLogin();
   } else {
-    api.actions.setUrl(url);
     if (user != null && pass != null) {
       api.actions.loginActions.login(
         LoginPayload(
@@ -247,7 +247,7 @@ Future<void> _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoggedInPayload> action) async {
-  if (!api.state.settingsState.noPasswordSaving &&
+  if (!api.state.settingsState!.noPasswordSaving &&
       !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
@@ -257,7 +257,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     final state = await _readFromStorage(key);
     if (state != null) {
       try {
-        final serializedState = serializers.deserialize(json.decode(state));
+        final serializedState =
+            serializers.deserialize(json.decode(state) as Object);
         if (serializedState is SettingsState) {
           api.actions.mountAppState(
             api.state.rebuild(
@@ -289,14 +290,14 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         await next(action);
 
         api.actions.settingsActions
-            .saveNoPass(api.state.settingsState.noPasswordSaving);
+            .saveNoPass(api.state.settingsState!.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
         log("Failed to load data", error: e);
         await next(action);
       }
     } else {
-      final saveData = await _showDataSavingDialog();
+      final saveData = await (_showDataSavingDialog() as FutureOr<bool>);
       api.actions.settingsActions.saveNoData(!saveData);
       await next(action);
     }
@@ -315,8 +316,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 var _saveUnderway = false;
 
 var _lastSave = "";
-String _lastUsernameSaved;
-AppState _stateToSave;
+String? _lastUsernameSaved;
+late AppState _stateToSave;
 // This is to avoid saving data in an action right after deleting data,
 // which would restore it.
 bool _deletedData = false;
@@ -340,13 +341,13 @@ NextActionHandler _saveStateMiddleware(
             void save() {
               _saveUnderway = false;
               String toSave;
-              if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
+              if (!_stateToSave.settingsState!.noDataSaving && !_deletedData) {
                 toSave = json.encode(
                   serializers.serialize(_stateToSave),
                 );
               } else {
                 toSave = json.encode(
-                  serializers.serialize(_stateToSave.settingsState),
+                  serializers.serialize(_stateToSave.settingsState!),
                 );
               }
               if (_lastSave == toSave && _lastUsernameSaved == user) return;
@@ -366,7 +367,7 @@ NextActionHandler _saveStateMiddleware(
           }
         };
 
-String getStorageKey(String user, String server) {
+String getStorageKey(String? user, String server) {
   return json.encode({"username": user, "server_url": server});
 }
 
@@ -374,7 +375,7 @@ Future<void> _writeToStorage(String key, String txt) async {
   await _secureStorage.write(key: key, value: txt);
 }
 
-Future<String> _readFromStorage(String key) async {
+Future<String?> _readFromStorage(String key) async {
   return _secureStorage.read(key: key);
 }
 
@@ -413,12 +414,12 @@ Future<void> _restarted(
 void _start(
   MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   ActionHandler next,
-  Action<Uri> action,
+  Action<Uri?> action,
 ) {
   api.actions.loginActions.clearAfterLoginCallbacks();
   if (action.payload != null) {
-    api.actions.setUrl(action.payload.origin);
-    final parameters = action.payload.queryParameters;
+    api.actions.setUrl(action.payload!.origin);
+    final parameters = action.payload!.queryParameters;
     switch (parameters["semesterWechsel"]) {
       case "1":
         api.actions.loginActions.addAfterLoginCallback(
@@ -430,7 +431,7 @@ void _start(
           () => api.actions.gradesActions.setSemester(Semester.second),
         );
     }
-    switch (action.payload.path) {
+    switch (action.payload!.path) {
       case "":
       case "/v2/":
         break;
@@ -448,16 +449,17 @@ void _start(
           return;
         }
         if (parameters["username"] != null) {
-          api.actions.loginActions.setUsername(parameters["username"]);
+          api.actions.loginActions.setUsername(parameters["username"]!);
         }
         if (parameters["redirect"] != null) {
-          redirectAfterLogin(parameters["redirect"].replaceFirst("#", ""), api);
+          redirectAfterLogin(
+              parameters["redirect"]!.replaceFirst("#", ""), api);
         }
         break;
       default:
         showSnackBar("Dieser Link konnte nicht geöffnet werden");
     }
-    redirectAfterLogin(action.payload.fragment, api);
+    redirectAfterLogin(action.payload!.fragment, api);
   }
   api.actions.load();
 }
@@ -470,27 +472,27 @@ void redirectAfterLogin(
       break;
     case "student/absences":
       api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showAbsences,
+        api.actions.routingActions.showAbsences ,
       );
       break;
     case "calendar/student":
       api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showCalendar,
+        api.actions.routingActions.showCalendar ,
       );
       break;
     case "student/subjects":
       api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showGrades,
+        api.actions.routingActions.showGrades ,
       );
       break;
     case "student/certificate":
       api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showCertificate,
+        api.actions.routingActions.showCertificate ,
       );
       break;
     case "message/list":
       api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showMessages,
+        api.actions.routingActions.showMessages ,
       );
       break;
     default:
@@ -503,10 +505,10 @@ void _popAll() {
   nestedNavKey.currentState?.popUntil((route) => route.isFirst);
 }
 
-Future<bool> _showDataSavingDialog() {
+Future<bool?> _showDataSavingDialog() {
   return showDialog(
     barrierDismissible: false,
-    context: navigatorKey.currentContext,
+    context: navigatorKey.currentContext!,
     builder: (context) => AlertDialog(
       title: const Text("Möchtest du alle Funktionen dieser App nutzen?"),
       content: const Text("""

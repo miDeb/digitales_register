@@ -46,27 +46,27 @@ class SettingsPageWidget extends StatefulWidget {
   final SettingsViewModel vm;
 
   const SettingsPageWidget({
-    Key key,
-    @required this.onSetNoPassSaving,
-    @required this.onSetNoDataSaving,
-    @required this.onSetAskWhenDelete,
-    @required this.onSetDeleteDataOnLogout,
-    @required this.onSetOfflineEnabled,
-    @required this.onSetShowCalendarEditNicksBar,
-    @required this.onSetShowGradesDiagram,
-    @required this.onSetShowAllSubjectsAverage,
-    @required this.onSetDashboardMarkNewOrChangedEntries,
-    @required this.onSetDashboardDeduplicateEntries,
-    @required this.onSetDarkMode,
-    @required this.onSetSubjectNicks,
-    @required this.vm,
-    @required this.onSetPlatformOverride,
-    @required this.onSetFollowDeviceDarkMode,
-    @required this.onShowProfile,
-    @required this.onSetIgnoreForGradesAverage,
-    @required this.onSetDashboardColorBorders,
-    @required this.onSetSubjectTheme,
-    @required this.onSetDashboardColorTestsInRed,
+    Key? key,
+    required this.onSetNoPassSaving,
+    required this.onSetNoDataSaving,
+    required this.onSetAskWhenDelete,
+    required this.onSetDeleteDataOnLogout,
+    required this.onSetOfflineEnabled,
+    required this.onSetShowCalendarEditNicksBar,
+    required this.onSetShowGradesDiagram,
+    required this.onSetShowAllSubjectsAverage,
+    required this.onSetDashboardMarkNewOrChangedEntries,
+    required this.onSetDashboardDeduplicateEntries,
+    required this.onSetDarkMode,
+    required this.onSetSubjectNicks,
+    required this.vm,
+    required this.onSetPlatformOverride,
+    required this.onSetFollowDeviceDarkMode,
+    required this.onShowProfile,
+    required this.onSetIgnoreForGradesAverage,
+    required this.onSetDashboardColorBorders,
+    required this.onSetSubjectTheme,
+    required this.onSetDashboardColorTestsInRed,
   }) : super(key: key);
 
   @override
@@ -86,7 +86,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   @override
   void initState() {
     if (widget.vm.showSubjectNicks) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
         await controller.scrollToIndex(4,
             preferPosition: AutoScrollPosition.begin);
         final newValue =
@@ -100,16 +100,16 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       });
     }
     if (widget.vm.showGradesSettings) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance!.addPostFrameCallback((_) {
         controller.scrollToIndex(3, preferPosition: AutoScrollPosition.begin);
       });
     }
     super.initState();
   }
 
-  void _selectTheme(_Theme theme) {
+  void _selectTheme(_Theme? theme) {
     setState(() {
-      switch (theme) {
+      switch (theme!) {
         case _Theme.light:
           widget.onSetFollowDeviceDarkMode(false);
           widget.onSetDarkMode(false);
@@ -128,13 +128,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.vm.showSubjectNicks) {
-      WidgetsBinding.instance.addPostFrameCallback((_) async {
+      WidgetsBinding.instance!.addPostFrameCallback((_) async {
         controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
       });
     }
-    final currentTheme = DynamicTheme.of(context).followDevice
+    final currentTheme = DynamicTheme.of(context)!.followDevice
         ? _Theme.followDevice
-        : DynamicTheme.of(context).customBrightness == Brightness.dark
+        : DynamicTheme.of(context)!.customBrightness == Brightness.dark
             ? _Theme.dark
             : _Theme.light;
     return Scaffold(
@@ -240,7 +240,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               for (final theme in widget.vm.subjectThemes.entries)
                 ListTile(
                   onTap: () async {
-                    final Color color = await showDialog(
+                    final Color? color = await showDialog(
                       context: context,
                       builder: (context) => _ColorPicker(
                         initialColor: Color(theme.value.color),
@@ -455,7 +455,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                   key: ValueKey(key),
                   builder: (context, delete) => ListTile(
                     title: Text(key),
-                    subtitle: Text(value),
+                    subtitle: Text(value!),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
@@ -523,7 +523,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               onChanged: (bool value) {
                 widget.onSetPlatformOverride(value);
               },
-              value: DynamicTheme.of(context).platformOverride,
+              value: DynamicTheme.of(context)!.platformOverride,
             ),
           ListTile(
             title: const Text("Netzwerkprotokoll"),
@@ -542,7 +542,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: const Text("Feedback geben"),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
-              PackageInfo info;
+              PackageInfo? info;
               try {
                 info = await PackageInfo.fromPlatform();
               } catch (e) {
@@ -552,7 +552,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 // ignore: prefer_interpolation_to_compose_strings
                 "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
                     (info?.version != null
-                        ? "&entry.1362624919=${Uri.encodeQueryComponent(info.version)}"
+                        ? "&entry.1362624919=${Uri.encodeQueryComponent(info!.version)}"
                         : ""),
               );
             },
@@ -593,8 +593,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
     );
   }
 
-  Future<MapEntry<String, String>> showEditSubjectNick(BuildContext context,
-      String key, String value, List<String> suggestions) async {
+  Future<MapEntry<String, String>?> showEditSubjectNick(BuildContext context,
+      String key, String? value, List<String> suggestions) async {
     return showDialog(
       context: context,
       builder: (context) => EditSubjectsNicks(
@@ -607,25 +607,25 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
 }
 
 class EditSubjectsNicks extends StatefulWidget {
-  final String subjectName;
-  final String subjectNick;
-  final List<String> suggestions;
+  final String? subjectName;
+  final String? subjectNick;
+  final List<String>? suggestions;
 
   const EditSubjectsNicks(
-      {Key key, this.subjectName, this.subjectNick, this.suggestions})
+      {Key? key, this.subjectName, this.subjectNick, this.suggestions})
       : super(key: key);
   @override
   _EditSubjectsNicksState createState() => _EditSubjectsNicksState();
 }
 
 class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
-  TextEditingController subjectController;
-  TextEditingController nickController;
-  FocusNode focusNode;
-  bool forNewNick;
+  TextEditingController? subjectController;
+  TextEditingController? nickController;
+  FocusNode? focusNode;
+  late bool forNewNick;
   @override
   void initState() {
-    forNewNick = widget.subjectName.isEmpty;
+    forNewNick = widget.subjectName!.isEmpty;
     subjectController = TextEditingController(text: widget.subjectName);
     nickController = TextEditingController(text: widget.subjectNick);
     focusNode = FocusNode();
@@ -634,9 +634,9 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
 
   @override
   void dispose() {
-    subjectController.dispose();
-    nickController.dispose();
-    focusNode.dispose();
+    subjectController!.dispose();
+    nickController!.dispose();
+    focusNode!.dispose();
     super.dispose();
   }
 
@@ -665,7 +665,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
               children: <Widget>[
                 TypeAheadField<String>(
                   suggestionsCallback: (pattern) {
-                    return widget.suggestions.where((suggestion) => suggestion
+                    return widget.suggestions!.where((suggestion) => suggestion
                         .toLowerCase()
                         .contains(pattern.toLowerCase()));
                   },
@@ -673,11 +673,11 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                     return ListTile(title: Text(suggestion));
                   },
                   onSuggestionSelected: (suggestion) {
-                    subjectController.text = suggestion;
+                    subjectController!.text = suggestion;
                   },
                   textFieldConfiguration: TextFieldConfiguration(
                     controller: subjectController,
-                    autofocus: subjectController.text.isEmpty,
+                    autofocus: subjectController!.text.isEmpty,
                   ),
                   hideOnEmpty: true,
                 ),
@@ -687,12 +687,12 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                   onChanged: (_) => setState(() {}),
                   focusNode: focusNode,
                   onSubmitted: (_) {
-                    if (subjectController.text != "" &&
-                        nickController.text != "") {
+                    if (subjectController!.text != "" &&
+                        nickController!.text != "") {
                       Navigator.of(context).pop(
                         MapEntry(
-                          subjectController.text,
-                          nickController.text,
+                          subjectController!.text,
+                          nickController!.text,
                         ),
                       );
                     }
@@ -711,12 +711,12 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectController.text != "" && nickController.text != ""
+          onPressed: subjectController!.text != "" && nickController!.text != ""
               ? () {
                   Navigator.of(context).pop(
                     MapEntry(
-                      subjectController.text,
-                      nickController.text,
+                      subjectController!.text,
+                      nickController!.text,
                     ),
                   );
                 }
@@ -729,19 +729,19 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
 }
 
 class AddSubject extends StatefulWidget {
-  final List<String> availableSubjects;
+  final List<String>? availableSubjects;
 
-  const AddSubject({Key key, this.availableSubjects}) : super(key: key);
+  const AddSubject({Key? key, this.availableSubjects}) : super(key: key);
   @override
   _AddSubjectState createState() => _AddSubjectState();
 }
 
 class _AddSubjectState extends State<AddSubject> {
-  TextEditingController subjectController;
+  TextEditingController? subjectController;
   @override
   void initState() {
     subjectController = TextEditingController();
-    subjectController.addListener(() {
+    subjectController!.addListener(() {
       setState(() {
         // if the subjectController's text changed, we might update the buttons
       });
@@ -751,7 +751,7 @@ class _AddSubjectState extends State<AddSubject> {
 
   @override
   void dispose() {
-    subjectController.dispose();
+    subjectController!.dispose();
     super.dispose();
   }
 
@@ -761,18 +761,18 @@ class _AddSubjectState extends State<AddSubject> {
       title: const Text("Fach hinzufügen"),
       content: TypeAheadField<String>(
         suggestionsCallback: (pattern) {
-          return widget.availableSubjects.where((suggestion) =>
+          return widget.availableSubjects!.where((suggestion) =>
               suggestion.toLowerCase().contains(pattern.toLowerCase()));
         },
         itemBuilder: (BuildContext context, String suggestion) {
           return ListTile(title: Text(suggestion));
         },
         onSuggestionSelected: (suggestion) {
-          subjectController.text = suggestion;
+          subjectController!.text = suggestion;
         },
         textFieldConfiguration: TextFieldConfiguration(
           controller: subjectController,
-          autofocus: subjectController.text.isEmpty,
+          autofocus: subjectController!.text.isEmpty,
         ),
         hideOnEmpty: true,
       ),
@@ -784,9 +784,9 @@ class _AddSubjectState extends State<AddSubject> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectController.text != ""
+          onPressed: subjectController!.text != ""
               ? () {
-                  Navigator.of(context).pop(subjectController.text);
+                  Navigator.of(context).pop(subjectController!.text);
                 }
               : null,
           child: const Text("Fertig"),
@@ -797,15 +797,15 @@ class _AddSubjectState extends State<AddSubject> {
 }
 
 class _ColorPicker extends StatefulWidget {
-  final Color initialColor;
+  final Color? initialColor;
 
-  const _ColorPicker({Key key, this.initialColor}) : super(key: key);
+  const _ColorPicker({Key? key, this.initialColor}) : super(key: key);
   @override
   _ColorPickerState createState() => _ColorPickerState();
 }
 
 class _ColorPickerState extends State<_ColorPicker> {
-  Color color;
+  Color? color;
   @override
   void initState() {
     color = widget.initialColor;
@@ -818,7 +818,7 @@ class _ColorPickerState extends State<_ColorPicker> {
       title: const Text("Farbe auswählen"),
       content: SingleChildScrollView(
         child: MaterialPicker(
-          pickerColor: color,
+          pickerColor: color!,
           onColorChanged: (pickedColor) {
             setState(() {
               color = pickedColor;

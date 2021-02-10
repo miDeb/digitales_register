@@ -12,7 +12,7 @@ version: 8.1.0+21
 publish_to: none
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -28,18 +28,14 @@ dependencies:
   responsive_scaffold:
     path: packages/responsive_scaffold/
   built_redux:
-    git:
-      url: https://github.com/miDeb/built_redux.git
-      ref: nnbd
+    path: ../built_redux
   charts_flutter:
     git:
       url: https://github.com/miDeb/charts.git
       path: charts_flutter/
       ref: select_nearest
   flutter_built_redux:
-    git:
-      url: https://github.com/miDeb/flutter_built_redux.git
-      ref: nnbd
+    path: ../flutter_built_redux
   badges:
     git:
       url: https://github.com/miDeb/flutter_badges.git
@@ -48,28 +44,36 @@ dependencies:
     git:
       url: https://github.com/miDeb/biometric_storage.git
       ref: nnbd
-  built_value: any
+  built_value: ^8.0.0
   cookie_jar: ^1.0.1
   deleteable_tile: ^0.0.1-nullsafety.1
   dio: ^3.0.9
   dio_cookie_manager: ^1.0.0
-  flutter_colorpicker: ^0.3.5
+  flutter_colorpicker: ^0.4.0-nullsafety.0
   flutter_secure_storage: any
-  flutter_typeahead: ^1.9.3
+  flutter_typeahead: ^3.0.0-nullsafety.0
   flutter_widget_from_html_core: ^0.3.2+1
-  hive: ^1.4.4+1
+  hive: ^1.6.0-nullsafety.2
   http: ^0.12.2
-  intl: any
-  mutex: any
+  intl: ^0.17.0-nullsafety.2
+  mutex: ^2.0.0-nullsafety.0
   open_file: any
-  package_info: any
-  path_provider: any
-  quill_delta: ^1.0.1
-  scroll_to_index: any
-  tuple: any
+  package_info: ^0.5.0-nullsafety
+  path_provider: ^2.0.0-nullsafety
+  quill_delta:
+    git:
+      url: https://github.com/miDeb/quill-delta-dart.git
+      ref: nnbd
+  scroll_to_index:
+    git:
+      url: https://github.com/miDeb/scroll-to-index.git
+      ref: nnbd
+  tuple: ^2.0.0-nullsafety.0
   uni_links: any
-  url_launcher: any
+  url_launcher: ^6.0.0-nullsafety.6
+  collection: ^1.15.0-nullsafety.4
 dependency_overrides:
+  glob: ^2.0.0-nullsafety.0
   analyzer: 0.42.0-nullsafety.0
   intl: ">=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2"
   quiver: ^3.0.0-nullsafety.3
@@ -77,7 +81,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   build_runner: any
-  built_value_generator: any
+  built_value_generator: ^8.0.0
   lint: ^1.5.1
 
 flutter_icons:

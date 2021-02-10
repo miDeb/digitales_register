@@ -24,7 +24,7 @@ class HomeworkFilterContainer extends StatelessWidget {
       connect: (AppState state) {
         return HomeworkFilterVM(
           (b) => b
-            ..currentBlacklist = state.dashboardState.blacklist.toBuilder()
+            ..currentBlacklist = state.dashboardState.blacklist!.toBuilder()
             ..allTypes = HomeworkType.values.toBuilder(),
         );
       },
@@ -39,7 +39,7 @@ abstract class HomeworkFilterVM
   BuiltList<HomeworkType> get currentBlacklist;
   BuiltSet<HomeworkType> get allTypes;
 
-  factory HomeworkFilterVM([void Function(HomeworkFilterVMBuilder) updates]) =
+  factory HomeworkFilterVM([void Function(HomeworkFilterVMBuilder)? updates]) =
       _$HomeworkFilterVM;
   HomeworkFilterVM._();
 }

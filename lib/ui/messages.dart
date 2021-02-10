@@ -14,19 +14,19 @@ import 'no_internet.dart';
 typedef MessageCallback = void Function(Message message);
 
 class MessagesPage extends StatelessWidget {
-  final MessagesState state;
+  final MessagesState? state;
   final bool noInternet;
   final MessageCallback onDownloadFile;
   final MessageCallback onOpenFile;
   final MessageCallback onMarkAsRead;
 
   const MessagesPage(
-      {Key key,
-      @required this.state,
-      this.noInternet,
-      this.onDownloadFile,
-      this.onOpenFile,
-      this.onMarkAsRead})
+      {Key? key,
+      required this.state,
+      required this.noInternet,
+      required this.onDownloadFile,
+      required this.onOpenFile,
+      required this.onMarkAsRead})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -40,10 +40,10 @@ class MessagesPage extends StatelessWidget {
               : const Center(child: CircularProgressIndicator())
           : Stack(
               children: <Widget>[
-                if (state.showMessage != null &&
-                    !state.messages.any((m) => m.id == state.showMessage))
+                if (state!.showMessage != null &&
+                    !state!.messages.any((m) => m.id == state!.showMessage))
                   const LinearProgressIndicator()
-                else if (state.messages.isEmpty)
+                else if (state!.messages.isEmpty)
                   Center(
                     child: Text(
                       "Noch keine Mitteilungen",
@@ -52,15 +52,15 @@ class MessagesPage extends StatelessWidget {
                     ),
                   ),
                 ListView.builder(
-                  itemCount: state.messages.length,
+                  itemCount: state!.messages.length,
                   itemBuilder: (context, i) {
                     return MessageWidget(
-                      message: state.messages[i],
+                      message: state!.messages[i],
                       onDownloadFile: onDownloadFile,
                       onOpenFile: onOpenFile,
                       onMarkAsRead: onMarkAsRead,
                       noInternet: noInternet,
-                      expand: state.messages[i].id == state.showMessage,
+                      expand: state!.messages[i].id == state!.showMessage,
                     );
                   },
                 ),
@@ -79,13 +79,13 @@ class MessageWidget extends StatefulWidget {
   final bool expand;
 
   const MessageWidget({
-    Key key,
-    this.message,
-    this.onDownloadFile,
-    this.onOpenFile,
-    this.noInternet,
-    this.onMarkAsRead,
-    this.expand,
+    Key? key,
+    required this.message,
+    required this.onDownloadFile,
+    required this.onOpenFile,
+    required this.noInternet,
+    required this.onMarkAsRead,
+    required this.expand,
   }) : super(key: key);
 
   @override
@@ -93,7 +93,7 @@ class MessageWidget extends StatefulWidget {
 }
 
 class _MessageWidgetState extends State<MessageWidget> {
-  bool initiallyExpanded;
+  late final bool initiallyExpanded;
   @override
   void initState() {
     initiallyExpanded = widget.expand;
@@ -186,7 +186,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                   children: <Widget>[
                     Expanded(
                       child: Text(
-                        widget.message.fileOriginalName,
+                        widget.message.fileOriginalName!,
                       ),
                     ),
                   ],

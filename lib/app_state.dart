@@ -15,27 +15,27 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   LoginState get loginState;
   NotificationState get notificationState;
   GradesState get gradesState;
-  @nullable
+
   AbsencesState get absencesState;
-  @nullable
+
   @BuiltValueField(serialize: false)
-  Config get config;
+  Config? get config;
   @BuiltValueField(serialize: false)
   bool get noInternet;
-  @nullable
+
   SettingsState get settingsState;
-  @nullable
+
   ProfileState get profileState;
   CalendarState get calendarState;
   CertificateState get certificateState;
-  @nullable
+
   MessagesState get messagesState;
-  @nullable
+
   @BuiltValueField(serialize: false)
   NetworkProtocolState get networkProtocolState;
-  @nullable
+
   @BuiltValueField(serialize: false)
-  String get url;
+  String? get url;
   static Serializer<AppState> get serializer => _$appStateSerializer;
 
   List<String> extractAllSubjects() {
@@ -48,15 +48,15 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     for (final subject in gradesState.subjects) {
       subjects.add(subject.name);
     }
-    for (final day in dashboardState.allDays) {
+    for (final day in dashboardState.allDays!) {
       for (final homework in day.homework) {
-        if (homework.label != null) subjects.add(homework.label);
+        if (homework.label != null) subjects.add(homework.label!);
       }
     }
     return subjects.toList();
   }
 
-  factory AppState([Function(AppStateBuilder b) updates]) = _$AppState;
+  factory AppState([Function(AppStateBuilder b)? updates]) = _$AppState;
   AppState._();
   static void _initializeBuilder(AppStateBuilder builder) {
     builder
@@ -67,6 +67,10 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
       ..calendarState = CalendarStateBuilder()
       ..settingsState = SettingsStateBuilder()
       ..certificateState = CertificateStateBuilder()
+      ..absencesState = AbsencesStateBuilder()
+      ..messagesState = MessagesStateBuilder()
+      ..profileState = ProfileStateBuilder()
+      ..networkProtocolState = NetworkProtocolStateBuilder()
       ..noInternet = false;
   }
 }
@@ -74,14 +78,18 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
 abstract class MessagesState
     implements Built<MessagesState, MessagesStateBuilder> {
   BuiltList<Message> get messages;
-  @nullable
-  int get showMessage;
+
+  int? get showMessage;
 
   static Serializer<MessagesState> get serializer => _$messagesStateSerializer;
 
-  factory MessagesState([Function(MessagesStateBuilder b) updates]) =
+  factory MessagesState([Function(MessagesStateBuilder b)? updates]) =
       _$MessagesState;
   MessagesState._();
+
+  static void _initializeBuilder(MessagesStateBuilder builder) {
+    builder..messages = ListBuilder();
+  }
 }
 
 abstract class DashboardState
@@ -89,14 +97,14 @@ abstract class DashboardState
   @BuiltValueField(serialize: false)
   bool get loading;
   bool get future;
-  @nullable
-  BuiltList<HomeworkType> get blacklist;
-  @nullable
-  BuiltList<Day> get allDays;
+
+  BuiltList<HomeworkType>? get blacklist;
+
+  BuiltList<Day>? get allDays;
   static Serializer<DashboardState> get serializer =>
       _$dashboardStateSerializer;
 
-  factory DashboardState([Function(DashboardStateBuilder b) updates]) =
+  factory DashboardState([Function(DashboardStateBuilder b)? updates]) =
       _$DashboardState;
   DashboardState._();
   static void _initializeBuilder(DashboardStateBuilder builder) {
@@ -110,16 +118,16 @@ abstract class DashboardState
 abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
   bool get loggedIn;
   bool get loading;
-  @nullable
-  String get errorMsg;
-  @nullable
-  String get username;
+
+  String? get errorMsg;
+
+  String? get username;
   bool get changePassword;
   bool get mustChangePassword;
   BuiltList<void Function()> get callAfterLogin;
   BuiltList<String> get otherAccounts;
   ResetPassState get resetPassState;
-  factory LoginState([Function(LoginStateBuilder b) updates]) = _$LoginState;
+  factory LoginState([Function(LoginStateBuilder b)? updates]) = _$LoginState;
   LoginState._();
   static void _initializeBuilder(LoginStateBuilder builder) {
     builder
@@ -135,16 +143,15 @@ abstract class LoginState implements Built<LoginState, LoginStateBuilder> {
 
 abstract class ResetPassState
     implements Built<ResetPassState, ResetPassStateBuilder> {
-  @nullable
-  String get message;
+  String? get message;
   bool get failure;
-  @nullable
-  String get token;
-  @nullable
-  String get email;
-  @nullable
-  String get username;
-  factory ResetPassState([Function(ResetPassStateBuilder b) updates]) =
+
+  String? get token;
+
+  String? get email;
+
+  String? get username;
+  factory ResetPassState([Function(ResetPassStateBuilder b)? updates]) =
       _$ResetPassState;
   ResetPassState._();
   static void _initializeBuilder(ResetPassStateBuilder builder) {
@@ -155,14 +162,13 @@ abstract class ResetPassState
 @immutable
 abstract class NotificationState
     implements Built<NotificationState, NotificationStateBuilder> {
-  @nullable
-  BuiltList<Notification> get notifications;
+  BuiltList<Notification>? get notifications;
   bool get loading => notifications == null;
-  bool get hasNotifications => !loading && notifications.isNotEmpty;
+  bool get hasNotifications => !loading && notifications!.isNotEmpty;
   static Serializer<NotificationState> get serializer =>
       _$notificationStateSerializer;
 
-  factory NotificationState([Function(NotificationStateBuilder b) updates]) =
+  factory NotificationState([Function(NotificationStateBuilder b)? updates]) =
       _$NotificationState;
   // ignore: prefer_const_constructors_in_immutables
   NotificationState._();
@@ -174,12 +180,12 @@ abstract class Config implements Built<Config, ConfigBuilder> {
   int get autoLogoutSeconds;
   String get fullName;
   String get imgSource;
-  @nullable
-  int get currentSemesterMaybe;
+
+  int? get currentSemesterMaybe;
   bool get isStudentOrParent;
   static Serializer<Config> get serializer => _$configSerializer;
 
-  factory Config([Function(ConfigBuilder b) updates]) = _$Config;
+  factory Config([Function(ConfigBuilder b)? updates]) = _$Config;
   // ignore: prefer_const_constructors_in_immutables
   Config._();
 }
@@ -187,18 +193,19 @@ abstract class Config implements Built<Config, ConfigBuilder> {
 abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   @BuiltValueField(serialize: false)
   bool get loading;
-  bool get hasGrades => subjects?.isEmpty != true;
+  bool get hasGrades => subjects.isNotEmpty;
   Semester get semester;
   BuiltList<Subject> get subjects;
 
   /// If unknown: null
-  @nullable
+
   @BuiltValueField(serialize: false)
-  Semester get serverSemester;
+  Semester? get serverSemester;
 
   static Serializer<GradesState> get serializer => _$gradesStateSerializer;
 
-  factory GradesState([Function(GradesStateBuilder b) updates]) = _$GradesState;
+  factory GradesState([Function(GradesStateBuilder b)? updates]) =
+      _$GradesState;
   GradesState._();
   static void _initializeBuilder(GradesStateBuilder builder) {
     builder
@@ -215,15 +222,15 @@ abstract class SubjectTheme
 
   static Serializer<SubjectTheme> get serializer => _$subjectThemeSerializer;
 
-  factory SubjectTheme([Function(SubjectThemeBuilder b) updates]) =
+  factory SubjectTheme([Function(SubjectThemeBuilder b)? updates]) =
       _$SubjectTheme;
   SubjectTheme._();
 }
 
 abstract class Semester implements Built<Semester, SemesterBuilder> {
   String get name;
-  @nullable
-  int get n;
+
+  int? get n;
   static final first = _$Semester((b) => b
     ..name = "1. Semester"
     ..n = 1);
@@ -233,7 +240,7 @@ abstract class Semester implements Built<Semester, SemesterBuilder> {
   static final all = _$Semester((b) => b..name = "Beide Semester");
   static final values = [first, second, all];
   static Serializer<Semester> get serializer => _$semesterSerializer;
-  factory Semester([void Function(SemesterBuilder) updates]) = _$Semester;
+  factory Semester([void Function(SemesterBuilder)? updates]) = _$Semester;
   Semester._();
 }
 
@@ -254,10 +261,8 @@ abstract class SettingsState
 
   // This is not a setting, but relevant for the UI behavior
   // of the settings page and is therefore not serialized
-  @nullable
   @BuiltValueField(serialize: false)
   bool get scrollToSubjectNicks;
-  @nullable
   @BuiltValueField(serialize: false)
   bool get scrollToGrades;
   bool get showCalendarNicksBar;
@@ -276,7 +281,7 @@ abstract class SettingsState
   // if not, only the icons are shown
   bool get drawerFullyExpanded;
 
-  factory SettingsState([Function(SettingsStateBuilder b) updates]) =
+  factory SettingsState([Function(SettingsStateBuilder b)? updates]) =
       _$SettingsState;
   SettingsState._();
   static Serializer<SettingsState> get serializer => _$settingsStateSerializer;
@@ -312,44 +317,48 @@ abstract class SettingsState
       ..drawerFullyExpanded = true
       ..ignoreForGradesAverage = ListBuilder()
       ..dashboardColorBorders = false
-      ..dashboardColorTestsInRed = true;
+      ..dashboardColorTestsInRed = true
+      ..scrollToGrades = false
+      ..scrollToSubjectNicks = false;
   }
 }
 
 abstract class ProfileState
     implements Built<ProfileState, ProfileStateBuilder> {
-  factory ProfileState([Function(ProfileStateBuilder b) updates]) =
+  factory ProfileState([Function(ProfileStateBuilder b)? updates]) =
       _$ProfileState;
   ProfileState._();
   static Serializer<ProfileState> get serializer => _$profileStateSerializer;
 
-  String get email;
-  String get username;
-  String get roleName;
-  String get name;
-  bool get sendNotificationEmails;
+  String? get email;
+  String? get username;
+  String? get roleName;
+  String? get name;
+  bool? get sendNotificationEmails;
 }
 
 abstract class AbsencesState
     implements Built<AbsencesState, AbsencesStateBuilder> {
-  factory AbsencesState([Function(AbsencesStateBuilder b) updates]) =
+  factory AbsencesState([Function(AbsencesStateBuilder b)? updates]) =
       _$AbsencesState;
   AbsencesState._();
   static Serializer<AbsencesState> get serializer => _$absencesStateSerializer;
 
-  AbsenceStatistic get statistic;
+  AbsenceStatistic? get statistic;
   BuiltList<AbsenceGroup> get absences;
+
+  //static void _initializeBuilder()
 }
 
 abstract class CalendarState
     implements Built<CalendarState, CalendarStateBuilder> {
   BuiltMap<DateTime, CalendarDay> get days;
-  @nullable
+
   @BuiltValueField(serialize: false)
-  DateTime get currentMonday;
+  DateTime? get currentMonday;
 
   Iterable<CalendarDay> get currentDays {
-    return daysForWeek(currentMonday);
+    return daysForWeek(currentMonday!);
   }
 
   Iterable<CalendarDay> daysForWeek(DateTime monday) {
@@ -360,7 +369,7 @@ abstract class CalendarState
     });
   }
 
-  factory CalendarState([Function(CalendarStateBuilder b) updates]) =
+  factory CalendarState([Function(CalendarStateBuilder b)? updates]) =
       _$CalendarState;
   CalendarState._();
   static Serializer<CalendarState> get serializer => _$calendarStateSerializer;
@@ -371,10 +380,9 @@ abstract class CalendarState
 
 abstract class CertificateState
     implements Built<CertificateState, CertificateStateBuilder> {
-  @nullable
-  String get html;
+  String? get html;
 
-  factory CertificateState([void Function(CertificateStateBuilder) updates]) =
+  factory CertificateState([void Function(CertificateStateBuilder)? updates]) =
       _$CertificateState;
   CertificateState._();
   static Serializer<CertificateState> get serializer =>
@@ -386,9 +394,13 @@ abstract class NetworkProtocolState
   BuiltList<NetworkProtocolItem> get items;
 
   factory NetworkProtocolState(
-          [Function(NetworkProtocolStateBuilder b) updates]) =
+          [Function(NetworkProtocolStateBuilder b)? updates]) =
       _$NetworkProtocolState;
   NetworkProtocolState._();
+
+  static void _initializeBuilder(NetworkProtocolStateBuilder builder){
+    builder.items = ListBuilder();
+  }
 }
 
 abstract class NetworkProtocolItem
@@ -398,6 +410,7 @@ abstract class NetworkProtocolItem
   String get response;
 
   factory NetworkProtocolItem(
-      [Function(NetworkProtocolItemBuilder b) updates]) = _$NetworkProtocolItem;
+          [Function(NetworkProtocolItemBuilder b)? updates]) =
+      _$NetworkProtocolItem;
   NetworkProtocolItem._();
 }

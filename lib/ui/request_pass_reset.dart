@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 class RequestPassReset extends StatefulWidget {
   final ResetPass resetPass;
   final bool failure;
-  final String message;
+  final String? message;
 
-  const RequestPassReset({Key key, this.resetPass, this.failure, this.message})
+  const RequestPassReset(
+      {Key? key, required this.resetPass, required this.failure, this.message})
       : super(key: key);
   @override
   _RequestPassResetState createState() => _RequestPassResetState();
@@ -52,8 +53,8 @@ class _RequestPassResetState extends State<RequestPassReset> {
                 if (widget.message != null)
                   Center(
                     child: Text(
-                      widget.message,
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                      widget.message!,
+                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
                           color: widget.failure ? Colors.red : Colors.green),
                     ),
                   )

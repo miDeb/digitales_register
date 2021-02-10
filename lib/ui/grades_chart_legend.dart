@@ -5,7 +5,7 @@ import 'package:built_collection/built_collection.dart';
 class ChartLegend extends StatelessWidget {
   final BuiltList<String> vm;
 
-  const ChartLegend({Key key, this.vm}) : super(key: key);
+  const ChartLegend({Key? key, required this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

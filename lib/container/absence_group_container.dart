@@ -11,8 +11,8 @@ class AbsenceGroupContainer extends StatelessWidget {
   final int group;
 
   const AbsenceGroupContainer({
-    Key key,
-    @required this.group,
+    Key? key,
+    required this.group,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class AbsenceGroupContainer extends StatelessWidget {
           case AbsenceJustified.justified:
             justifiedString = absenceGroup.reasonSignature != null &&
                     absenceGroup.reasonTimestamp != null
-                ? "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp)} von ${absenceGroup.reasonSignature} entschuldigt"
+                ? "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp!)} von ${absenceGroup.reasonSignature} entschuldigt"
                 : "entschuldigt";
             break;
           case AbsenceJustified.forSchool:
@@ -73,7 +73,7 @@ class AbsencesViewModel {
   final String fromTo;
   final String duration;
   final String justifiedString;
-  final String reason;
+  final String? reason;
   final AbsenceJustified justified;
 
   AbsencesViewModel(this.fromTo, this.duration, this.justifiedString,

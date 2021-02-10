@@ -16,9 +16,10 @@ class GradesPageContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return GradesPage(
           vm: vm,
-          changeSemester: actions.gradesActions.setSemester,
-          showGradesSettings:
-              actions.routingActions.showEditGradesAverageSettings,
+          changeSemester:
+              actions.gradesActions.setSemester,
+          showGradesSettings: actions
+              .routingActions.showEditGradesAverageSettings,
         );
       },
       connect: (state) {
@@ -31,7 +32,7 @@ class GradesPageContainer extends StatelessWidget {
 abstract class GradesPageViewModel
     implements Built<GradesPageViewModel, GradesPageViewModelBuilder> {
   Semester get showSemester;
-  @nullable
+
   String get allSubjectsAverage;
   bool get loading;
   bool get showGradesDiagram;
@@ -40,7 +41,7 @@ abstract class GradesPageViewModel
   bool get noInternet;
 
   factory GradesPageViewModel(
-          [void Function(GradesPageViewModelBuilder) updates]) =
+          [void Function(GradesPageViewModelBuilder)? updates]) =
       _$GradesPageViewModel;
   GradesPageViewModel._();
 
@@ -56,8 +57,8 @@ abstract class GradesPageViewModel
               : s.gradesAll.isNotEmpty,
         )
         ..noInternet = state.noInternet
-        ..showGradesDiagram = state.settingsState.showGradesDiagram
-        ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
+        ..showGradesDiagram = state.settingsState!.showGradesDiagram
+        ..showAllSubjectsAverage = state.settingsState!.showAllSubjectsAverage,
     );
   }
 }
@@ -68,7 +69,7 @@ String calculateAllSubjectsAverage(AppState state) {
   for (final subject in state.gradesState.subjects) {
     final average = subject.average(state.gradesState.semester);
     if (average != null &&
-        !state.settingsState.ignoreForGradesAverage.any(
+        !state.settingsState!.ignoreForGradesAverage.any(
           (element) => element.toLowerCase() == subject.name.toLowerCase(),
         )) {
       sum += average;

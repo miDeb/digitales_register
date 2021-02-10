@@ -18,7 +18,8 @@ class DaysContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return DaysWidget(
           vm: vm,
-          onSwitchFuture: actions.dashboardActions.switchFuture,
+          onSwitchFuture:
+              actions.dashboardActions.switchFuture,
           refresh: actions.dashboardActions.refresh,
           addReminderCallback: (day, msg) {
             actions.dashboardActions.addReminder(
@@ -44,10 +45,12 @@ class DaysContainer extends StatelessWidget {
           setDoNotAskWhenDeleteCallback: () {
             actions.settingsActions.askWhenDeleteReminder(false);
           },
-          markAsSeenCallback: actions.dashboardActions.markAsSeen,
-          markDeletedHomeworkAsSeenCallback:
-              actions.dashboardActions.markDeletedHomeworkAsSeen,
-          markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
+          markAsSeenCallback:
+              actions.dashboardActions.markAsSeen,
+          markDeletedHomeworkAsSeenCallback: actions
+              .dashboardActions.markDeletedHomeworkAsSeen,
+          markAllAsSeenCallback:
+              actions.dashboardActions.markAllAsSeen,
           refreshNoInternet: actions.refreshNoInternet,
           onDownloadAttachment: actions.dashboardActions.downloadAttachment,
           onOpenAttachment: actions.dashboardActions.openAttachment,
@@ -81,45 +84,45 @@ abstract class DaysViewModel
   bool get showNotifications;
   BuiltList<Day> get days;
 
-  factory DaysViewModel([void Function(DaysViewModelBuilder) updates]) =
+  factory DaysViewModel([void Function(DaysViewModelBuilder)? updates]) =
       _$DaysViewModel;
   DaysViewModel._();
 
   factory DaysViewModel.from(AppState state) {
     final unorderedDays = state.dashboardState.allDays
             ?.where((day) => day.future == state.dashboardState.future)
-            ?.map(
+            .map(
               (day) => day.rebuild(
                 (b) => b
                   ..deletedHomework.where(
-                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist),
+                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist!),
                   )
                   ..homework.where(
-                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist),
+                    (hw) => !isBlacklisted(hw, state.dashboardState.blacklist!),
                   ),
               ),
             )
-            ?.toList() ??
+            .toList() ??
         [];
 
     return DaysViewModel(
       (b) => b
         ..days = ListBuilder(
           !state.dashboardState.future
-              ? unorderedDays?.reversed
+              ? unorderedDays.reversed
               : unorderedDays,
         )
         ..noInternet = state.noInternet
         ..future = state.dashboardState.future
         ..loading = state.dashboardState.loading || state.loginState.loading
-        ..askWhenDelete = state.settingsState.askWhenDelete
+        ..askWhenDelete = state.settingsState!.askWhenDelete
         ..showAddReminder =
-            !state.dashboardState.blacklist.contains(HomeworkType.homework)
+            !state.dashboardState.blacklist!.contains(HomeworkType.homework)
         ..showNotifications =
             (state.notificationState.notifications?.length ?? 0) > 0
-        ..colorBorders = state.settingsState.dashboardColorBorders
-        ..colorTestsInRed = state.settingsState.dashboardColorTestsInRed
-        ..subjectThemes = state.settingsState.subjectThemes.toBuilder(),
+        ..colorBorders = state.settingsState!.dashboardColorBorders
+        ..colorTestsInRed = state.settingsState!.dashboardColorTestsInRed
+        ..subjectThemes = state.settingsState!.subjectThemes.toBuilder(),
     );
   }
 }
@@ -136,7 +139,7 @@ const typesToTitles = {
 
 bool isBlacklisted(Homework homework, BuiltList<HomeworkType> blacklist) {
   return blacklist.any((blacklisted) {
-    return typesToTitles[blacklisted]
+    return typesToTitles[blacklisted]!
         .any((blacklistedTitle) => homework.title.contains(blacklistedTitle));
   });
 }

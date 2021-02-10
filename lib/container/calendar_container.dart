@@ -13,8 +13,8 @@ class CalendarContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return Calendar(
           vm: vm,
-          showEditSubjectNicks:
-              actions.routingActions.showEditCalendarSubjectNicks,
+          showEditSubjectNicks: actions
+              .routingActions.showEditCalendarSubjectNicks,
           closeEditNicksBar: () =>
               actions.settingsActions.showCalendarSubjectNicksBar(false),
           dayCallback: actions.calendarActions.load,
@@ -32,8 +32,8 @@ typedef DayCallback = void Function(DateTime day);
 
 class CalendarViewModel {
   final bool showEditNicksBar, noInternet;
-  final DateTime first;
-  final DateTime last;
+  final DateTime? first;
+  final DateTime? last;
   final DateTime currentMonday;
 
   CalendarViewModel(AppState state)
@@ -43,14 +43,14 @@ class CalendarViewModel {
         last = state.calendarState.currentDays.isEmpty
             ? null
             : state.calendarState.currentDays.last.date,
-        currentMonday = state.calendarState.currentMonday,
+        currentMonday = state.calendarState.currentMonday!,
         showEditNicksBar = state.calendarState.currentDays.any(
               (day) => day.hours.any(
-                (hour) => state.settingsState.subjectNicks.entries.every(
+                (hour) => state.settingsState!.subjectNicks.entries.every(
                   (entry) => !equalsIgnoreAsciiCase(entry.key, hour.subject),
                 ),
               ),
             ) &&
-            state.settingsState.showCalendarNicksBar,
+            state.settingsState!.showCalendarNicksBar,
         noInternet = state.noInternet;
 }

@@ -22,7 +22,7 @@ class StorageHelper {
     return value != null;
   }
 
-  Future<String> read(String user) async {
+  Future<String?> read(String user) async {
     return getFlutterSecureStorage().read(key: getStorageKey(user, serverUrl));
   }
 
@@ -81,7 +81,8 @@ void main() {
       true,
     );
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is AppState,
         true);
   });
@@ -111,7 +112,8 @@ void main() {
     );
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is SettingsState,
         true);
   });
@@ -141,7 +143,8 @@ void main() {
     );
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is AppState,
         true);
     store.actions.loginActions.logout(
@@ -154,7 +157,8 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is SettingsState,
         true);
   });
@@ -182,7 +186,8 @@ void main() {
     );
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is AppState,
         true);
 
@@ -190,7 +195,8 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is SettingsState,
         true);
 
@@ -198,7 +204,8 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is AppState,
         true);
 
@@ -206,7 +213,8 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is SettingsState,
         true);
 
@@ -214,7 +222,8 @@ void main() {
     await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
-        serializers.deserialize(json.decode(await storageHelper.read(username)))
+        serializers.deserialize(
+                json.decode((await storageHelper.read(username))!) as Object)
             is AppState,
         true);
   });

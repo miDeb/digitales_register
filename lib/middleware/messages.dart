@@ -33,7 +33,7 @@ Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Message> action) async {
   await next(action);
   final saveFile = File(
-    action.payload.fileOriginalName,
+    action.payload.fileOriginalName!,
   );
   await OpenFile.open(saveFile.path);
 }

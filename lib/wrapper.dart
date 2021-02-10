@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:dr/util.dart';
-import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
@@ -47,15 +46,15 @@ class Wrapper {
   final dio = Dio();
   String get loginAddress => "${baseAddress}api/auth/login";
   String get baseAddress => "$url/v2/";
-  String user, pass, _url;
+  String? user, pass, _url;
 
   Wrapper() {
     dio.interceptors.add(CookieManager(cookieJar));
     //dio.interceptors.add(DebugInterceptor());
   }
 
-  String get url => _url;
-  set url(String value) {
+  String? get url => _url;
+  set url(String? value) {
     if (value != _url) {
       // we should already be logged out, but why not double check
       logout(hard: true);
@@ -65,9 +64,9 @@ class Wrapper {
 
   bool get loggedIn => _loggedIn;
   bool _loggedIn = false;
-  VoidCallback onLogout, onConfigLoaded, onRelogin;
-  AddNetworkProtocolItem onAddProtocolItem;
-  bool safeMode;
+  VoidCallback? onLogout, onConfigLoaded, onRelogin;
+  AddNetworkProtocolItem? onAddProtocolItem;
+  late bool safeMode;
   Future<bool> get noInternet async {
     final address = url != null ? baseAddress : "https://digitalesregister.it";
     try {
@@ -81,16 +80,17 @@ class Wrapper {
     }
   }
 
-  String error;
+  String? error;
 
   DateTime lastInteraction = now;
-  DateTime _serverLogoutTime;
-  Config config;
-  Future<dynamic> login(String user, String pass, String tfaCode, String url,
-      {VoidCallback logout,
-      VoidCallback configLoaded,
-      VoidCallback relogin,
-      AddNetworkProtocolItem addProtocolItem}) async {
+  late DateTime _serverLogoutTime;
+  late Config config;
+  Future<dynamic> login(
+      String? user, String? pass, String? tfaCode, String? url,
+      {VoidCallback? logout,
+      VoidCallback? configLoaded,
+      VoidCallback? relogin,
+      AddNetworkProtocolItem? addProtocolItem}) async {
     if (logout != null) {
       onLogout = logout;
     } else {
@@ -123,14 +123,14 @@ class Wrapper {
           if (tfaCode != null) "two_factor": tfaCode,
         },
       ))
-          .data);
+          .data)!;
     } catch (e) {
       _loggedIn = false;
       log("Error while logging in", error: e);
       error = "Unknown Error:\n$e";
       return null;
     }
-    if (getBool(response["loggedIn"])) {
+    if (getBool(response["loggedIn"]) ?? false) {
       lastInteraction = DateTime.now();
       _loggedIn = true;
       this.user = user;
@@ -140,7 +140,7 @@ class Wrapper {
         _serverLogoutTime =
             now.add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
-        onConfigLoaded();
+        onConfigLoaded!();
       });
     } else {
       _loggedIn = false;
@@ -163,9 +163,9 @@ class Wrapper {
     return response;
   }
 
-  Future<String> _request2FA({bool wasWrong = false}) {
+  Future<String?> _request2FA({bool wasWrong = false}) {
     return showDialog(
-      context: navigatorKey.currentContext,
+      context: navigatorKey.currentContext!,
       builder: (context) {
         final textInputController = TextEditingController();
         return StatefulBuilder(
@@ -208,7 +208,7 @@ class Wrapper {
           "newPassword": newPass,
         },
       ))
-          .data);
+          .data)!;
     } catch (e) {
       _loggedIn = false;
       log("Failed to change pass", error: e);
@@ -253,7 +253,7 @@ class Wrapper {
     return !source.contains("var isStudentOrParent=0;");
   }
 
-  static int _readCurrentSemester(String source) {
+  static int? _readCurrentSemester(String source) {
     if (source.contains("semesterWechsel=1")) return 2;
     if (source.contains("semesterWechsel=2")) {
       return 1;
@@ -310,7 +310,7 @@ class Wrapper {
           _mutex.release();
           return null;
         } else {
-          onRelogin();
+          onRelogin!();
         }
       } else {
         _mutex.release();
@@ -335,13 +335,13 @@ class Wrapper {
       response = response.data;
     } on Exception catch (e) {
       await _handleError(e);
-      onAddProtocolItem(NetworkProtocolItem((b) => b
+      onAddProtocolItem!(NetworkProtocolItem((b) => b
         ..address = baseAddress + url
         ..response = stringifyMaybeJson(response)
         ..parameters = stringifyMaybeJson(args)));
       return null;
     }
-    onAddProtocolItem(NetworkProtocolItem((b) => b
+    onAddProtocolItem!(NetworkProtocolItem((b) => b
       ..address = baseAddress + url
       ..response = stringifyMaybeJson(response)
       ..parameters = stringifyMaybeJson(args)));
@@ -394,13 +394,13 @@ class Wrapper {
     lastInteraction = now;
   }
 
-  void logout({@required bool hard, bool logoutForcedByServer = false}) {
+  void logout({required bool hard, bool logoutForcedByServer = false}) {
     if (!logoutForcedByServer && _url != null) {
       dio.get("${baseAddress}logout");
     }
     if (hard) {
       if (logoutForcedByServer) {
-        onLogout();
+        onLogout!();
       }
       _url = user = pass = null;
     }

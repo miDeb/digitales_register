@@ -13,12 +13,12 @@ final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 )..add(AbsencesActionsNames.loaded, _loaded);
 
 void _loaded(
-    AbsencesState state, Action<Object> action, AbsencesStateBuilder builder) {
-  return builder.replace(tryParse(getMap(action.payload), _parseAbsences));
+    AbsencesState state, Action<dynamic> action, AbsencesStateBuilder builder) {
+  return builder.replace(tryParse(getMap(action.payload)!, _parseAbsences));
 }
 
 AbsencesState _parseAbsences(Map json) {
-  final rawStats = getMap(json["statistics"]);
+  final rawStats = getMap(json["statistics"])!;
   final stats = AbsenceStatisticBuilder()
     ..counter = getInt(rawStats["counter"])
     ..counterForSchool = getInt(rawStats["counterForSchool"])
@@ -29,7 +29,7 @@ AbsencesState _parseAbsences(Map json) {
   final absences = (json["absences"] as List).map((g) {
     return AbsenceGroup(
       (b) => b
-        ..justified = AbsenceJustified.fromInt(getInt(g["justified"]))
+        ..justified = AbsenceJustified.fromInt(getInt(g["justified"])!)
         ..reasonSignature = getString(g["reason_signature"])
         ..reasonTimestamp = g["reason_timestamp"] is String
             ? DateTime.tryParse(g["reason_timestamp"] as String)
@@ -41,7 +41,7 @@ AbsencesState _parseAbsences(Map json) {
               return Absence(
                 (b) => b
                   ..minutes = getInt(a["minutes"])
-                  ..date = DateTime.parse(getString(a["date"]))
+                  ..date = DateTime.parse(getString(a["date"])!)
                   ..hour = getInt(a["hour"])
                   ..minutesCameTooLate = getInt(a["minutes_begin"])
                   ..minutesLeftTooEarly = getInt(a["minutes_end"]),
@@ -49,18 +49,22 @@ AbsencesState _parseAbsences(Map json) {
             },
           ),
         )
-        ..minutes = b.absences.build().fold(0, (min, a) {
-          if (a.minutes != 50) {
-            min += a.minutesCameTooLate + a.minutesLeftTooEarly;
-          }
-          return min;
-        })
-        ..hours = b.absences.build().fold(0, (h, a) {
-          if (a.minutes == 50) {
-            h++;
-          }
-          return h;
-        }),
+        ..minutes = b.absences.build().fold<int>(
+            0,
+            (min, a) {
+              if (a.minutes != 50) {
+                min += a.minutesCameTooLate + a.minutesLeftTooEarly;
+              }
+              return min;
+            } )
+        ..hours = b.absences.build().fold<int>(
+            0,
+            (h, a) {
+              if (a.minutes == 50) {
+                h++;
+              }
+              return h;
+            } ),
     );
   });
   return AbsencesState(

@@ -16,7 +16,7 @@ class ChartLegendContainer extends StatelessWidget {
         );
       },
       connect: (state) {
-        return state.settingsState.subjectThemes.keys.toBuiltList();
+        return state.settingsState!.subjectThemes.keys.toBuiltList();
       },
     );
   }

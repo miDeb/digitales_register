@@ -10,7 +10,8 @@ import '../ui/grades_chart.dart';
 class GradesChartContainer extends StatelessWidget {
   final bool isFullscreen;
 
-  const GradesChartContainer({Key key, this.isFullscreen}) : super(key: key);
+  const GradesChartContainer({Key? key, required this.isFullscreen})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,20 +23,20 @@ class GradesChartContainer extends StatelessWidget {
               ? (subject.gradesAll.values.fold<List<GradeAll>>(
                   <GradeAll>[], (a, b) => <GradeAll>[...a, ...b])
                 ..sort((GradeAll a, GradeAll b) => a.date.compareTo(b.date)))
-              : subject.gradesAll[state.gradesState.semester].toList();
+              : subject.gradesAll[state.gradesState.semester]?.toList() ?? [];
           grades.removeWhere((grade) => grade.cancelled || grade.grade == null);
 
           return SubjectGrades(
             {
               for (final grade in grades)
-                grade.date: Tuple2(grade.grade, grade.type),
+                grade.date: Tuple2(grade.grade!, grade.type),
             },
             subject.name,
           );
         }
 
         SubjectTheme getValue(Subject subject) {
-          return state.settingsState.subjectThemes[subject.name];
+          return state.settingsState!.subjectThemes[subject.name]!;
         }
 
         return {
@@ -47,7 +48,8 @@ class GradesChartContainer extends StatelessWidget {
         return GradesChart(
           graphs: vm,
           isFullscreen: isFullscreen,
-          goFullscreen: actions.routingActions.showGradesChart,
+          goFullscreen:
+              actions.routingActions.showGradesChart,
         );
       },
     );

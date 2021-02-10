@@ -58,7 +58,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "user": _wrapper.user,
         "pass": _wrapper.pass,
         "url": _wrapper.url,
-        "offlineEnabled": api.state.settingsState.offlineEnabled,
+        "offlineEnabled": api.state.settingsState!.offlineEnabled,
         "otherAccounts": json.decode(
             await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },

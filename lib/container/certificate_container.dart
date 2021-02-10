@@ -23,11 +23,11 @@ class CertificateContainer extends StatelessWidget {
 }
 
 class CertificateViewModel {
-  final String html;
+  final String? html;
   final bool noInternet;
 
   CertificateViewModel({
-    @required this.html,
-    @required this.noInternet,
+    required this.html,
+    required this.noInternet,
   });
 }

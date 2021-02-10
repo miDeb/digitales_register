@@ -75,7 +75,7 @@ void _deleteDataOnLogout(
   builder.deleteDataOnLogout = action.payload;
 }
 
-void _subjectNicks(SettingsState state, Action<BuiltMap<String, String>> action,
+void _subjectNicks(SettingsState? state, Action<BuiltMap<String, String>> action,
     SettingsStateBuilder builder) {
   builder.subjectNicks.replace(action.payload);
 }
@@ -116,7 +116,7 @@ void _allSubjectsAverage(
   builder.showAllSubjectsAverage = action.payload;
 }
 
-void _ignoreSubjectsForAverage(SettingsState state,
+void _ignoreSubjectsForAverage(SettingsState? state,
     Action<BuiltList<String>> action, SettingsStateBuilder builder) {
   builder.ignoreForGradesAverage.replace(action.payload);
 }
@@ -153,7 +153,7 @@ void _dashboardColorTestsInRed(
   builder.dashboardColorTestsInRed = action.payload;
 }
 
-void _updateSubjectThemes(SettingsState state, Action<List<String>> action,
+void _updateSubjectThemes(SettingsState? state, Action<List<String>> action,
     SettingsStateBuilder builder) {
   for (final subject in action.payload) {
     if (!builder.subjectThemes.build().containsKey(subject)) {

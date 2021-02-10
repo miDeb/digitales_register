@@ -8,10 +8,10 @@ abstract class MessagesActions extends ReduxActions {
   factory MessagesActions() => _$MessagesActions();
   MessagesActions._();
 
-  VoidActionDispatcher load;
-  ActionDispatcher<List> loaded;
-  ActionDispatcher<Message> downloadFile;
-  ActionDispatcher<Message> fileAvailable;
-  ActionDispatcher<Message> openFile;
-  ActionDispatcher<int> markAsRead;
+  abstract final VoidActionDispatcher load;
+  abstract final ActionDispatcher<List> loaded;
+  abstract final ActionDispatcher<Message> downloadFile;
+  abstract final ActionDispatcher<Message> fileAvailable;
+  abstract final ActionDispatcher<Message> openFile;
+  abstract final ActionDispatcher<int> markAsRead;
 }

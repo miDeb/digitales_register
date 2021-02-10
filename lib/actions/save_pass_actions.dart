@@ -6,6 +6,6 @@ abstract class SavePassActions extends ReduxActions {
   factory SavePassActions() => _$SavePassActions();
   SavePassActions._();
 
-  VoidActionDispatcher save;
-  VoidActionDispatcher delete;
+  abstract final VoidActionDispatcher save;
+  abstract final VoidActionDispatcher delete;
 }

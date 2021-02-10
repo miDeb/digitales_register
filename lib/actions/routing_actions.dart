@@ -7,29 +7,29 @@ abstract class RoutingActions extends ReduxActions {
   factory RoutingActions() => _$RoutingActions();
   RoutingActions._();
 
-  VoidActionDispatcher showLogin;
-  VoidActionDispatcher showProfile;
-  VoidActionDispatcher showChangeEmail;
-  VoidActionDispatcher showRequestPassReset;
-  ActionDispatcher<ShowPassResetPayload> showPassReset;
-  VoidActionDispatcher showAbsences;
-  VoidActionDispatcher showNotifications;
-  VoidActionDispatcher showSettings;
-  VoidActionDispatcher showGrades;
-  VoidActionDispatcher showGradesChart;
-  VoidActionDispatcher showGradeCalculator;
-  VoidActionDispatcher showCalendar;
-  VoidActionDispatcher showCertificate;
-  VoidActionDispatcher showMessages;
-  ActionDispatcher<int> showMessage;
-  VoidActionDispatcher showEditCalendarSubjectNicks;
-  VoidActionDispatcher showEditGradesAverageSettings;
+  abstract final VoidActionDispatcher showLogin;
+  abstract final VoidActionDispatcher showProfile;
+  abstract final VoidActionDispatcher showChangeEmail;
+  abstract final VoidActionDispatcher showRequestPassReset;
+  abstract final ActionDispatcher<ShowPassResetPayload> showPassReset;
+  abstract final VoidActionDispatcher showAbsences;
+  abstract final VoidActionDispatcher showNotifications;
+  abstract final VoidActionDispatcher showSettings;
+  abstract final VoidActionDispatcher showGrades;
+  abstract final VoidActionDispatcher showGradesChart;
+  abstract final VoidActionDispatcher showGradeCalculator;
+  abstract final VoidActionDispatcher showCalendar;
+  abstract final VoidActionDispatcher showCertificate;
+  abstract final VoidActionDispatcher showMessages;
+  abstract final ActionDispatcher<int> showMessage;
+  abstract final VoidActionDispatcher showEditCalendarSubjectNicks;
+  abstract final VoidActionDispatcher showEditGradesAverageSettings;
 }
 
 abstract class ShowPassResetPayload
     implements Built<ShowPassResetPayload, ShowPassResetPayloadBuilder> {
   factory ShowPassResetPayload(
-          [void Function(ShowPassResetPayloadBuilder) updates]) =
+          [void Function(ShowPassResetPayloadBuilder)? updates]) =
       _$ShowPassResetPayload;
   ShowPassResetPayload._();
 

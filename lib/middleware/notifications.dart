@@ -37,9 +37,9 @@ Future<void> _deleteAllNotifications(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  for (final n in api.state.notificationState.notifications
+  for (final n in api.state.notificationState.notifications!
       .where((n) => n.type == "message" && n.objectId != null)) {
-    api.actions.messagesActions.markAsRead(n.objectId);
+    api.actions.messagesActions.markAsRead(n.objectId!);
   }
   final result = _wrapper.send(
     "api/notification/markAsRead",

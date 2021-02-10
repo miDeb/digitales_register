@@ -73,7 +73,7 @@ void main() {
       ),
     );
     expect(
-      store.state.dashboardState.allDays.single.homework.single,
+      store.state.dashboardState.allDays!.single.homework.single,
       Homework(
         (b) => b
           ..checkable = true
