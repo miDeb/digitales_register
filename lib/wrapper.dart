@@ -130,7 +130,7 @@ class Wrapper {
       error = "Unknown Error:\n$e";
       return null;
     }
-    if (getBool(response["loggedIn"])) {
+    if (getBool(response["loggedIn"]) == true) {
       lastInteraction = DateTime.now();
       _loggedIn = true;
       this.user = user;
