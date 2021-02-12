@@ -154,19 +154,25 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
 
   @override
   Widget build(BuildContext context) {
+    bool? previousTabletMode;
     return Portal(
       child: LayoutBuilder(
         builder: (context, constraints) {
           tabletMode = constraints.maxWidth > tabletLayoutBreakpoint;
-          if (tabletMode) {
-            if (isInitialized && _drawerAnimationController.value == 0) {
-              _drawerAnimationController.fling();
-            } else {
-              _drawerAnimationController.value = 1;
+          if (tabletMode != previousTabletMode) {
+            if (tabletMode) {
+              if (isInitialized) {
+                if (_drawerAnimationController.value != 1) {
+                  _drawerAnimationController.fling();
+                }
+              } else {
+                _drawerAnimationController.value = 1;
+              }
+            } else if (_drawerAnimationController.value != 0) {
+              _drawerAnimationController.fling(velocity: -1);
             }
-          } else if (_drawerAnimationController.value != 0) {
-            _drawerAnimationController.fling(velocity: -1);
           }
+          previousTabletMode = tabletMode;
           isInitialized = true;
           return _InheritedTabletMode(
             tabletMode: tabletMode,
