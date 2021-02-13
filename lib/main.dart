@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/container/settings_page.dart';
+import 'package:dr/desktop.dart';
 import 'package:dr/ui/grade_calculator.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/foundation.dart';
@@ -24,14 +25,19 @@ import 'middleware/middleware.dart';
 import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
 
-GlobalKey<NavigatorState> navigatorKey = GlobalKey();
-GlobalKey<NavigatorState> nestedNavKey = GlobalKey();
-GlobalKey<ResponsiveScaffoldState<Pages>> scaffoldKey = GlobalKey();
-GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey();
+GlobalKey<NavigatorState> navigatorKey;
+GlobalKey<NavigatorState> nestedNavKey;
+GlobalKey<ResponsiveScaffoldState<Pages>> scaffoldKey;
+GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey;
 
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
 void main() {
+  navigatorKey = GlobalKey();
+  nestedNavKey = GlobalKey();
+  scaffoldKey = GlobalKey();
+  scaffoldMessengerKey = GlobalKey();
+  secureStorage = getFlutterSecureStorage();
   final store = Store<AppState, AppStateBuilder, AppActions>(
     appReducerBuilder.build(),
     AppState(),

@@ -15,19 +15,20 @@ final _loginMiddleware =
 Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LogoutPayload> action) async {
   if (!api.state.settingsState.noPasswordSaving && action.payload.hard) {
-    await _secureStorage.write(
+    await secureStorage.write(
       key: "login",
       value: json.encode(
         {
           "url": _wrapper.url,
-          "otherAccounts": json
-              .decode(await _secureStorage.read(key: "login"))["otherAccounts"],
+          if (await secureStorage.containsKey(key: "login"))
+            "otherAccounts": json.decode(
+                await secureStorage.read(key: "login"))["otherAccounts"],
         },
       ),
     );
   }
   if (api.state.settingsState.deleteDataOnLogout && action.payload.hard) {
-    api.actions.deleteData();
+    await api.actions.deleteData();
   }
   if (!action.payload.forced) {
     assert(action.payload.hard);
@@ -159,7 +160,7 @@ Future<void> _changePass(
           ..url = action.payload.url,
       ),
     );
-    navigatorKey.currentState.pop();
+    navigatorKey?.currentState?.pop();
     showSnackBar("Passwort erfolgreich geändert");
   }
 }
@@ -233,7 +234,7 @@ Future<void> _addAccount(
     Action<void> action) async {
   await next(action);
   // Move the current default user credentials into `otherAccounts`
-  final login = json.decode(await _secureStorage.read(key: "login"));
+  final login = json.decode(await secureStorage.read(key: "login"));
   final otherAccounts = login["otherAccounts"] as List ?? [];
   if (login["user"] != null &&
       login["pass"] != null &&
@@ -246,7 +247,7 @@ Future<void> _addAccount(
       "offlineEnabled": login["offlineEnabled"],
     });
   }
-  await _secureStorage.write(
+  await secureStorage.write(
     key: "login",
     value: json.encode(
       {
@@ -264,7 +265,7 @@ Future<void> _selectAccount(
     ActionHandler next,
     Action<int> action) async {
   await next(action);
-  final login = json.decode(await _secureStorage.read(key: "login"));
+  final login = json.decode(await secureStorage.read(key: "login"));
   login["otherAccounts"] ??= [];
   final otherAccounts = login["otherAccounts"] as List;
   var selectedIndex = action.payload;
@@ -285,13 +286,13 @@ Future<void> _selectAccount(
   login["pass"] = selected["pass"];
   login["url"] = selected["url"];
   login["offlineEnabled"] = selected["offlineEnabled"];
-  await _secureStorage.write(key: "login", value: json.encode(login));
+  await secureStorage.write(key: "login", value: json.encode(login));
   api.actions.mountAppState(AppState());
   api.actions.load();
 }
 
 void _showUserTypeNotSupported(String url) {
-  navigatorKey.currentState.push(
+  navigatorKey?.currentState?.push(
     MaterialPageRoute(
       builder: (context) => Scaffold(
         body: Center(

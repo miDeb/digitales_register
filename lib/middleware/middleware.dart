@@ -34,7 +34,6 @@ import '../actions/save_pass_actions.dart';
 import '../actions/settings_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
-import '../desktop.dart';
 import '../main.dart';
 import '../serializers.dart';
 import '../util.dart';
@@ -53,7 +52,8 @@ part 'profile.dart';
 part 'routing.dart';
 part 'settings.dart';
 
-final FlutterSecureStorage _secureStorage = getFlutterSecureStorage();
+FlutterSecureStorage secureStorage;
+
 var _wrapper = Wrapper();
 
 final middleware = [
@@ -110,7 +110,7 @@ NextActionHandler _errorMiddleware(
             }
             error +=
                 "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
-            navigatorKey.currentState.push(
+            navigatorKey?.currentState?.push(
               MaterialPageRoute(
                 fullscreenDialog: true,
                 builder: (_) {
@@ -204,7 +204,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
   if (!api.state.noInternet) _popAll();
-  final login = json.decode(await _secureStorage.read(key: "login") ?? "{}");
+  final login = json.decode(await secureStorage.read(key: "login") ?? "{}");
   final user = getString(login["user"]);
   final pass = getString(login["pass"]);
   final url = getString(login["url"]);
@@ -296,8 +296,11 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         await next(action);
       }
     } else {
-      final saveData = await _showDataSavingDialog();
-      api.actions.settingsActions.saveNoData(!saveData);
+      // navigatorKey is null in unit tests
+      if (navigatorKey?.currentContext != null) {
+        final saveData = await _showDataSavingDialog();
+        api.actions.settingsActions.saveNoData(!saveData);
+      }
       await next(action);
     }
 
@@ -371,11 +374,11 @@ String getStorageKey(String user, String server) {
 }
 
 Future<void> _writeToStorage(String key, String txt) async {
-  await _secureStorage.write(key: key, value: txt);
+  await secureStorage.write(key: key, value: txt);
 }
 
 Future<String> _readFromStorage(String key) async {
-  return _secureStorage.read(key: key);
+  return secureStorage.read(key: key);
 }
 
 Future<void> _saveNoData(
@@ -394,7 +397,7 @@ Future<void> _deleteData(
 ) async {
   await next(action);
   _deletedData = true;
-  api.actions.saveState();
+  await api.actions.saveState();
 }
 
 Future<void> _restarted(
@@ -499,8 +502,10 @@ void redirectAfterLogin(
 }
 
 void _popAll() {
-  navigatorKey.currentState?.popUntil((route) => route.isFirst);
-  nestedNavKey.currentState?.popUntil((route) => route.isFirst);
+  if (WidgetsBinding.instance != null) {
+    navigatorKey?.currentState?.popUntil((route) => route.isFirst);
+    nestedNavKey?.currentState?.popUntil((route) => route.isFirst);
+  }
 }
 
 Future<bool> _showDataSavingDialog() {

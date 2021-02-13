@@ -12,11 +12,11 @@ Future<void> _enableOffline(
     ActionHandler next,
     Action<bool> action) async {
   await next(action);
-  final login = json.decode(await _secureStorage.read(key: "login"));
+  final login = json.decode(await secureStorage.read(key: "login"));
   final user = login["user"];
   final pass = login["pass"];
   final url = login["url"];
-  _secureStorage.write(
+  secureStorage.write(
     key: "login",
     value: json.encode(
       {
@@ -25,7 +25,7 @@ Future<void> _enableOffline(
         "url": url,
         "offlineEnabled": action.payload,
         "otherAccounts": json.decode(
-            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
+            await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );
@@ -51,7 +51,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode) {
     return;
   }
-  _secureStorage.write(
+  secureStorage.write(
     key: "login",
     value: json.encode(
       {
@@ -60,7 +60,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "url": _wrapper.url,
         "offlineEnabled": api.state.settingsState.offlineEnabled,
         "otherAccounts": json.decode(
-            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
+            await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );
@@ -71,13 +71,13 @@ Future<void> _deletePass(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  _secureStorage.write(
+  secureStorage.write(
     key: "login",
     value: json.encode(
       {
         "url": _wrapper.url,
         "otherAccounts": json.decode(
-            await _secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
+            await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },
     ),
   );

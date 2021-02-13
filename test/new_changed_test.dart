@@ -7,7 +7,6 @@ import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/util.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:built_collection/built_collection.dart';
 
 void main() {
   test('new entries are marked', () {
@@ -52,7 +51,7 @@ void main() {
           ..future = false
           ..markNewOrChangedEntries = true
           ..deduplicateEntries = false
-          ..data = BuiltList([
+          ..data = [
             {
               "items": [
                 {
@@ -69,7 +68,7 @@ void main() {
               ],
               "date": "2020-01-05",
             }
-          ]),
+          ],
       ),
     );
     expect(
