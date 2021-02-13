@@ -178,23 +178,27 @@ class _DaysWidgetState extends State<DaysWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget getItem(int n) {
+  Widget getItem(int n, {required bool isLast}) {
     if (n == 0) {
       return DashboardHeader(
         future: widget.vm.future,
         onSwitchFuture: widget.onSwitchFuture,
       );
     }
-    if (n == widget.vm.days.length + 1) {
+    if (isLast) {
       return const SizedBox(
         height: 160,
       );
     }
+    if (n % 2 == 0) {
+      return const Divider(height: 0);
+    }
+    final itemIndex = (n - 1) ~/ 2;
     return DayWidget(
-      day: widget.vm.days[n - 1],
+      day: widget.vm.days[itemIndex],
       vm: widget.vm,
       controller: controller,
-      index: _dayStartIndices[n - 1]!,
+      index: _dayStartIndices[itemIndex]!,
       addReminderCallback: widget.addReminderCallback,
       removeReminderCallback: widget.removeReminderCallback,
       toggleDoneCallback: widget.toggleDoneCallback,
@@ -243,9 +247,14 @@ class _DaysWidgetState extends State<DaysWidget> {
       body = ListView.builder(
         physics: const AlwaysScrollableScrollPhysics(),
         controller: controller,
-        itemCount: widget.vm.days.length + 2,
+        // times two for the divider, minus one because there's no divider after the last item
+        // the first item is the DashboardHeader, the last one a SizedBox (as a spacer)
+        itemCount: (widget.vm.days.length * 2 - 1) + 2,
         itemBuilder: (context, n) {
-          return getItem(n);
+          return getItem(
+            n,
+            isLast: n == (widget.vm.days.length * 2 - 1) + 1,
+          );
         },
       );
       if (widget.vm.loading) {
@@ -581,7 +590,6 @@ class DayWidget extends StatelessWidget {
             colorBorder: colorBorders,
             colorTestsInRed: colorTestsInRed,
           ),
-        const Divider(),
       ],
     );
   }

@@ -114,6 +114,132 @@ Future<void> main() async {
     await expectLater(
         find.byType(ReduxProvider), matchesGoldenFile("loading_not_empty.png"));
   });
+
+  testGoldens('Multiple Entries', (WidgetTester tester) async {
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        ReducerBuilder<AppState, AppStateBuilder>().build(),
+        AppState(
+          (b) => b.dashboardState
+            ..allDays = ListBuilder(
+              [
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder([
+                      Homework(
+                        (b) => b
+                          ..checkable = true
+                          ..checked = false
+                          ..deleteable = false
+                          ..deleted = false
+                          ..firstSeen = DateTime.now()
+                          ..id = 1
+                          ..isChanged = false
+                          ..isNew = false
+                          ..type = HomeworkType.lessonHomework
+                          ..warningServerSaid = true
+                          ..title = "Test"
+                          ..subtitle = "Subtitle"
+                          ..gradeFormatted = "7/9",
+                      ),
+                    ])
+                    ..lastRequested = DateTime.now(),
+                ),
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder()
+                    ..lastRequested = DateTime.now(),
+                ),
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder(
+                      [
+                        Homework(
+                          (b) => b
+                            ..checkable = true
+                            ..checked = true
+                            ..deleteable = false
+                            ..deleted = true
+                            ..firstSeen = DateTime.now()
+                            ..id = 1234
+                            ..isChanged = false
+                            ..isNew = false
+                            ..type = HomeworkType.lessonHomework
+                            ..warningServerSaid = false
+                            ..title = "Titel"
+                            ..subtitle = "Subtitle",
+                        ),
+                      ],
+                    )
+                    ..homework = ListBuilder(
+                      [
+                        Homework(
+                          (b) => b
+                            ..checkable = true
+                            ..checked = true
+                            ..deleteable = false
+                            ..deleted = false
+                            ..firstSeen = DateTime.now()
+                            ..id = 0
+                            ..isChanged = false
+                            ..isNew = false
+                            ..type = HomeworkType.lessonHomework
+                            ..warningServerSaid = false
+                            ..title = "Title"
+                            ..subtitle = "Subtitle",
+                        ),
+                        Homework(
+                          (b) => b
+                            ..checkable = true
+                            ..checked = false
+                            ..deleteable = false
+                            ..deleted = false
+                            ..firstSeen = DateTime.now()
+                            ..id = 1
+                            ..isChanged = false
+                            ..isNew = false
+                            ..type = HomeworkType.lessonHomework
+                            ..warningServerSaid = true
+                            ..title = "Test"
+                            ..subtitle = "Subtitle",
+                        ),
+                      ],
+                    )
+                    ..lastRequested = DateTime.now(),
+                ),
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder()
+                    ..lastRequested = DateTime.now(),
+                ),
+              ],
+            ),
+        ),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: DaysContainer(),
+        theme:
+            ThemeData(primarySwatch: Colors.teal, brightness: Brightness.dark),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(find.byType(DayWidget), findsNWidgets(4));
+    expect(find.byType(ItemWidget), findsNWidgets(3));
+    expect(find.byIcon(Icons.delete), findsOneWidget);
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("multiple_entries.png"));
+  });
+
   testGoldens('dark mode', (WidgetTester tester) async {
     final widget = ReduxProvider(
       store: Store<AppState, AppStateBuilder, AppActions>(
@@ -147,6 +273,7 @@ Future<void> main() async {
     await expectLater(
         find.byType(DaysWidget), matchesGoldenFile("dark_not_empty.png"));
   });
+
   testWidgets('tooltips', (WidgetTester tester) async {
     const username = "Michael Debertol";
     final widget = ReduxProvider(
