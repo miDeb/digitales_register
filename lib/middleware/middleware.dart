@@ -506,7 +506,7 @@ void redirectAfterLogin(
 void _popAll() {
   if (WidgetsBinding.instance != null) {
     navigatorKey?.currentState?.popUntil((route) => route.isFirst);
-    nestedNavKey?.currentState?.popUntil((route) => route.isFirst);
+    nestedNavKey.currentState?.popUntil((route) => route.isFirst);
   }
 }
 

@@ -103,7 +103,7 @@ class Sidebar extends StatelessWidget {
           CollapsibleItem(
             isSelected: currentSelected == Pages.homework,
             icon: Icons.assignment,
-            text: "Hausaufgabe",
+            text: "Hausaufgaben",
             onPressed: goHome,
           ),
         CollapsibleItem(

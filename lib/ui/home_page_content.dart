@@ -18,8 +18,8 @@ class HomePageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if (nestedNavKey!.currentState!.canPop()) {
-          nestedNavKey!.currentState!.pop();
+        if (nestedNavKey.currentState!.canPop()) {
+          nestedNavKey.currentState!.pop();
           return Future.value(false);
         } else if (navigatorKey!.currentState!.canPop()) {
           navigatorKey!.currentState!.pop();

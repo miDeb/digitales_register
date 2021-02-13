@@ -26,7 +26,7 @@ import 'reducer/reducer.dart';
 import 'ui/grades_chart_page.dart';
 
 GlobalKey<NavigatorState>? navigatorKey;
-GlobalKey<NavigatorState>? nestedNavKey;
+GlobalKey<NavigatorState> nestedNavKey = GlobalKey();
 GlobalKey<ResponsiveScaffoldState<Pages>>? scaffoldKey;
 GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
 
@@ -34,7 +34,6 @@ typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
 void main() {
   navigatorKey = GlobalKey();
-  nestedNavKey = GlobalKey();
   scaffoldKey = GlobalKey();
   scaffoldMessengerKey = GlobalKey();
   secureStorage = getFlutterSecureStorage();

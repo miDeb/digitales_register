@@ -354,7 +354,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         );
       },
       homeId: Pages.homework,
-      navKey: nestedNavKey!,
+      navKey: nestedNavKey,
     );
   }
 }
