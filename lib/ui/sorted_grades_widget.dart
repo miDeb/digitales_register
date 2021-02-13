@@ -115,7 +115,8 @@ class SubjectWidget extends StatefulWidget {
   _SubjectWidgetState createState() => _SubjectWidgetState();
 }
 
-class _SubjectWidgetState extends State<SubjectWidget> {
+class _SubjectWidgetState extends State<SubjectWidget>
+    with TickerProviderStateMixin {
   bool closed = true;
   @override
   void didUpdateWidget(SubjectWidget oldWidget) {
@@ -129,7 +130,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
     return AbsorbPointer(
       absorbing: widget.noInternet && entries == null,
       child: ExpansionTile(
-        key: ObjectKey(widget.subject),
+        key: ValueKey(widget.subject.id),
         title: Text.rich(
           TextSpan(
             text: widget.subject.name,
@@ -161,32 +162,41 @@ class _SubjectWidgetState extends State<SubjectWidget> {
           }
         },
         initiallyExpanded: !closed,
-        children: entries != null
-            ? widget.sortByType
-                ? Subject.sortByType(entries)
-                    .entries
-                    .map(
-                      (entry) => GradeTypeWidget(
-                        typeName: entry.key,
-                        entries: entry.value
+        children: [
+          AnimatedSize(
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeIn,
+            vsync: this,
+            child: entries != null
+                ? Column(
+                    children: [
+                      if (widget.sortByType)
+                        ...Subject.sortByType(entries).entries.map(
+                              (entry) => GradeTypeWidget(
+                                typeName: entry.key,
+                                entries: entry.value
+                                    .where((g) =>
+                                        widget.showCancelled || !g.cancelled)
+                                    .toList(),
+                              ),
+                            )
+                      else
+                        ...entries
                             .where((g) => widget.showCancelled || !g.cancelled)
-                            .toList(),
-                      ),
-                    )
-                    .toList()
-                : entries
-                    .where((g) => widget.showCancelled || !g.cancelled)
-                    .map(
-                      (g) => g is GradeDetail
-                          ? GradeWidget(grade: g)
-                          : ObservationWidget(
-                              observation: g as Observation,
-                            ),
-                    )
-                    .toList()
-            : [
-                if (!widget.noInternet) const LinearProgressIndicator(),
-              ],
+                            .map(
+                              (g) => g is GradeDetail
+                                  ? GradeWidget(grade: g)
+                                  : ObservationWidget(
+                                      observation: g as Observation,
+                                    ),
+                            )
+                    ],
+                  )
+                : (!widget.noInternet)
+                    ? const LinearProgressIndicator()
+                    : const SizedBox(),
+          )
+        ],
       ),
     );
   }

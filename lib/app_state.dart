@@ -398,7 +398,7 @@ abstract class NetworkProtocolState
       _$NetworkProtocolState;
   NetworkProtocolState._();
 
-  static void _initializeBuilder(NetworkProtocolStateBuilder builder){
+  static void _initializeBuilder(NetworkProtocolStateBuilder builder) {
     builder.items = ListBuilder();
   }
 }

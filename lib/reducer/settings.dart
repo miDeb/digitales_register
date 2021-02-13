@@ -75,8 +75,8 @@ void _deleteDataOnLogout(
   builder.deleteDataOnLogout = action.payload;
 }
 
-void _subjectNicks(SettingsState? state, Action<BuiltMap<String, String>> action,
-    SettingsStateBuilder builder) {
+void _subjectNicks(SettingsState? state,
+    Action<BuiltMap<String, String>> action, SettingsStateBuilder builder) {
   builder.subjectNicks.replace(action.payload);
 }
 

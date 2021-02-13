@@ -48,8 +48,7 @@ class GradesChartContainer extends StatelessWidget {
         return GradesChart(
           graphs: vm,
           isFullscreen: isFullscreen,
-          goFullscreen:
-              actions.routingActions.showGradesChart,
+          goFullscreen: actions.routingActions.showGradesChart,
         );
       },
     );

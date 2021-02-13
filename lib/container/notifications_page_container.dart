@@ -17,8 +17,7 @@ class NotificationPageContainer extends StatelessWidget {
           notifications: vm.item1,
           noInternet: vm.item2,
           deleteNotification: actions.notificationsActions.delete,
-          deleteAllNotifications:
-              actions.notificationsActions.deleteAll ,
+          deleteAllNotifications: actions.notificationsActions.deleteAll,
           goToMessage: actions.routingActions.showMessage,
         );
       },

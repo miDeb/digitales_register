@@ -96,8 +96,7 @@ class SettingsViewModel {
         dashboardDeduplicateEntries =
             state.settingsState.dashboardDeduplicateEntries,
         dashboardColorBorders = state.settingsState.dashboardColorBorders,
-        dashboardColorTestsInRed =
-            state.settingsState.dashboardColorTestsInRed,
+        dashboardColorTestsInRed = state.settingsState.dashboardColorTestsInRed,
         allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
             state.settingsState.ignoreForGradesAverage.toList(),

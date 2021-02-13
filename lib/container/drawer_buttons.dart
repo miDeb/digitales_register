@@ -37,8 +37,7 @@ class SettingsButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return SettingsButtonWidget(
           selected: selected,
-          onShowSettings:
-              actions.routingActions.showSettings,
+          onShowSettings: actions.routingActions.showSettings,
         );
       },
     );
@@ -74,8 +73,7 @@ class AbsencesButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return AbsencesButtonWidget(
             selected: selected,
-            onShowAbsences:
-                actions.routingActions.showAbsences);
+            onShowAbsences: actions.routingActions.showAbsences);
       },
     );
   }
@@ -92,8 +90,7 @@ class CalendarButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return CalendarButtonWidget(
           selected: selected,
-          onShowCalendar:
-              actions.routingActions.showCalendar,
+          onShowCalendar: actions.routingActions.showCalendar,
         );
       },
     );
@@ -111,8 +108,7 @@ class CertificateButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return CertificateButtonWidget(
           selected: selected,
-          onShowCertificate:
-              actions.routingActions.showCertificate,
+          onShowCertificate: actions.routingActions.showCertificate,
         );
       },
     );
@@ -130,8 +126,7 @@ class MessagesButton extends StatelessWidget {
       builder: (context, vm, actions) {
         return MessagesButtonWidget(
           selected: selected,
-          onShowMessages:
-              actions.routingActions.showMessages,
+          onShowMessages: actions.routingActions.showMessages,
         );
       },
     );

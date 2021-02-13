@@ -66,7 +66,6 @@ class DaysWidget extends StatefulWidget {
 class _DaysWidgetState extends State<DaysWidget> {
   final controller = AutoScrollController(suggestedRowHeight: 100);
 
-  bool _showScrollUp = false;
   bool _afterFirstFrame = false;
 
   final List<int> _targets = [];
@@ -75,12 +74,11 @@ class _DaysWidgetState extends State<DaysWidget> {
   final Map<int, Homework> _homeworkIndexes = {};
   final Map<int, Day> _dayIndexes = {};
 
+  final ValueNotifier<bool> _showScrollUp = ValueNotifier(false);
+
   void _updateShowScrollUp() {
-    final newScrollUp = controller.offset > 250;
-    if (_showScrollUp != newScrollUp) {
-      setState(() {
-        _showScrollUp = newScrollUp;
-      });
+    if (controller.hasClients) {
+      _showScrollUp.value = controller.offset > 250;
     }
   }
 
@@ -180,69 +178,17 @@ class _DaysWidgetState extends State<DaysWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget getItem(int n, {required bool noEntries, required bool noInternet}) {
+  Widget getItem(int n) {
     if (n == 0) {
-      return Stack(
-        children: [
-          HomeworkFilterContainer(),
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Row(
-              children: [
-                Expanded(
-                  child: AbsorbPointer(child: Container()),
-                ),
-                const SizedBox(
-                  width: 60,
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Center(
-              child: ElevatedButton(
-                onPressed: widget.onSwitchFuture,
-                child: Text(
-                  widget.vm.future ? "Vergangenheit" : "Zukunft",
-                ),
-              ),
-            ),
-          ),
-        ],
+      return DashboardHeader(
+        future: widget.vm.future,
+        onSwitchFuture: widget.onSwitchFuture,
       );
     }
     if (n == widget.vm.days.length + 1) {
-      if (noEntries) {
-        if (noInternet) {
-          return Column(
-            children: const [
-              SizedBox(
-                height: 120,
-              ),
-              NoInternet(),
-            ],
-          );
-        } else {
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Text(
-                "Keine Einträge vorhanden",
-                style: Theme.of(context).textTheme.headline4,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-        }
-      } else {
-        return const SizedBox(
-          height: 160,
-        );
-      }
+      return const SizedBox(
+        height: 160,
+      );
     }
     return DayWidget(
       day: widget.vm.days[n - 1],
@@ -265,26 +211,56 @@ class _DaysWidgetState extends State<DaysWidget> {
   Widget build(BuildContext context) {
     final noInternet = widget.vm.noInternet;
     final noEntries = widget.vm.days.isEmpty;
-    Widget body = ListView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
-      controller: controller,
-      itemCount: widget.vm.days.length + 2,
-      itemBuilder: (context, n) {
-        return getItem(n, noEntries: noEntries, noInternet: noInternet);
-      },
-    );
-    if (!noInternet) {
+    Widget body;
+    if (noEntries) {
+      Widget fullScreenBody;
+      if (widget.vm.loading) {
+        fullScreenBody = const CircularProgressIndicator();
+      } else if (noInternet) {
+        fullScreenBody = const NoInternet();
+      } else {
+        fullScreenBody = Padding(
+          padding: const EdgeInsets.all(32),
+          child: Text(
+            "Keine Einträge vorhanden",
+            style: Theme.of(context).textTheme.headline4,
+            textAlign: TextAlign.center,
+          ),
+        );
+      }
+      body = Column(
+        children: [
+          DashboardHeader(
+            future: widget.vm.future,
+            onSwitchFuture: widget.onSwitchFuture,
+          ),
+          Expanded(
+            child: Center(child: fullScreenBody),
+          ),
+        ],
+      );
+    } else {
+      body = ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
+        controller: controller,
+        itemCount: widget.vm.days.length + 2,
+        itemBuilder: (context, n) {
+          return getItem(n);
+        },
+      );
+      if (widget.vm.loading) {
+        body = Stack(
+          children: [
+            body,
+            const LinearProgressIndicator(),
+          ],
+        );
+      }
+    }
+    if (!noInternet && !widget.vm.loading) {
       body = RefreshIndicator(
         onRefresh: () async => widget.refresh(),
         child: body,
-      );
-    }
-    if (widget.vm.loading) {
-      body = Stack(
-        children: [
-          body,
-          const LinearProgressIndicator(),
-        ],
       );
     }
     return ResponsiveScaffold<Pages>(
@@ -294,8 +270,16 @@ class _DaysWidgetState extends State<DaysWidget> {
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
-          if (_showScrollUp)
-            FloatingActionButton(
+          ValueListenableBuilder(
+            valueListenable: _showScrollUp,
+            builder: (context, bool value, child) {
+              if (value) {
+                return child!;
+              } else {
+                return const SizedBox();
+              }
+            },
+            child: FloatingActionButton(
               backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               heroTag: null,
               onPressed: () {
@@ -313,6 +297,7 @@ class _DaysWidgetState extends State<DaysWidget> {
                     : Colors.black,
               ),
             ),
+          ),
           if (_targets.isNotEmpty || _focused.isNotEmpty)
             FloatingActionButton(
               backgroundColor: Colors.red,
@@ -369,7 +354,53 @@ class _DaysWidgetState extends State<DaysWidget> {
         );
       },
       homeId: Pages.homework,
-      navKey: nestedNavKey,
+      navKey: nestedNavKey!,
+    );
+  }
+}
+
+class DashboardHeader extends StatelessWidget {
+  final VoidCallback onSwitchFuture;
+  final bool future;
+  const DashboardHeader({
+    Key? key,
+    required this.future,
+    required this.onSwitchFuture,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        HomeworkFilterContainer(),
+        Positioned(
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Row(
+            children: [
+              Expanded(
+                child: AbsorbPointer(child: Container()),
+              ),
+              const SizedBox(
+                width: 60,
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Center(
+            child: ElevatedButton(
+              onPressed: onSwitchFuture,
+              child: Text(
+                future ? "Vergangenheit" : "Zukunft",
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -881,7 +912,7 @@ class ItemWidget extends StatelessWidget {
       );
     }
     return Column(
-      key: ObjectKey(item),
+      key: ValueKey(item.id),
       children: <Widget>[
         child,
         if (isHistory && item.previousVersion != null)

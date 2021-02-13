@@ -165,7 +165,7 @@ class Wrapper {
 
   Future<String?> _request2FA({bool wasWrong = false}) {
     return showDialog(
-      context: navigatorKey.currentContext!,
+      context: navigatorKey!.currentContext!,
       builder: (context) {
         final textInputController = TextEditingController();
         return StatefulBuilder(

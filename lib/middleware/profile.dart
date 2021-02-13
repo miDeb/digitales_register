@@ -55,7 +55,7 @@ Future<void> _changeEmail(
   }
   if (result["error"] == null) {
     showSnackBar(result["message"] as String);
-    navigatorKey.currentState!.pop();
+    navigatorKey?.currentState?.pop();
   } else {
     showSnackBar("[${result["error"]}]: ${result["message"]}");
   }
