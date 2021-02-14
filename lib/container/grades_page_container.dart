@@ -10,6 +10,8 @@ import '../ui/grades_page.dart';
 part 'grades_page_container.g.dart';
 
 class GradesPageContainer extends StatelessWidget {
+  const GradesPageContainer({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, GradesPageViewModel>(

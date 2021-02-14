@@ -4,6 +4,8 @@ import '../container/chart_legend_container.dart';
 import '../container/grades_chart_container.dart';
 
 class GradesChartPage extends StatelessWidget {
+  const GradesChartPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
