@@ -237,7 +237,7 @@ class __DrawerState extends State<_Drawer> {
   void initState() {
     widget._drawerAnimationController.addStatusListener((status) {
       final shouldBeVisible = status != AnimationStatus.dismissed;
-      if (shouldBeVisible != visible) {
+      if (shouldBeVisible != visible && mounted) {
         setState(() {
           visible = shouldBeVisible;
         });
