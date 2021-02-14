@@ -3,6 +3,7 @@ import 'package:dr/actions/app_actions.dart';
 import 'package:dr/app_state.dart';
 import 'package:dr/container/days_container.dart';
 import 'package:dr/data.dart';
+import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/days.dart';
 import 'package:dr/ui/no_internet.dart';
 import 'package:dr/ui/sidebar.dart';
@@ -320,5 +321,184 @@ Future<void> main() async {
     await tester.pumpWidget(widget);
     expect(find.byTooltip("Einklappen"), findsNothing);
     expect(find.byTooltip("Ausklappen"), findsOneWidget);
+  });
+
+  testGoldens('new entries are animated', (WidgetTester tester) async {
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        appReducerBuilder.build(),
+        AppState(
+          (b) => b.dashboardState
+            ..allDays = ListBuilder(
+              [
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder([
+                      Homework(
+                        (b) => b
+                          ..checkable = true
+                          ..checked = false
+                          ..deleteable = false
+                          ..deleted = false
+                          ..firstSeen = DateTime.now()
+                          ..id = 0
+                          ..isChanged = false
+                          ..isNew = false
+                          ..type = HomeworkType.lessonHomework
+                          ..warningServerSaid = false
+                          ..title = "Title"
+                          ..subtitle = "Subtitle",
+                      ),
+                    ])
+                    ..lastRequested = DateTime.now(),
+                ),
+              ],
+            ),
+        ),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: DaysContainer(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    await expectLater(find.byType(DaysWidget),
+        matchesGoldenFile("new_entry_not_yet_animating.png"));
+    // start the entry animation
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 75));
+    // should now be halfway opened
+    expect(find.byType(ItemWidget), findsOneWidget);
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("new_entry_animating.png"));
+    await tester.pump(const Duration(milliseconds: 200));
+    // should be fully opened
+    await tester.pump();
+    expect(find.byType(ItemWidget), findsOneWidget);
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("new_entry_animated.png"));
+  });
+
+  testGoldens('animation for reminder deletion', (WidgetTester tester) async {
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        appReducerBuilder.build(),
+        AppState(
+          (b) => b.dashboardState
+            ..allDays = ListBuilder(
+              [
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder([
+                      Homework(
+                        (b) => b
+                          ..checkable = true
+                          ..checked = true
+                          ..deleteable = true
+                          ..deleted = false
+                          ..firstSeen = DateTime.now()
+                              // do not show a entry animation
+                              .subtract(const Duration(seconds: 10))
+                          ..id = 0
+                          ..isChanged = false
+                          ..isNew = false
+                          ..type = HomeworkType.homework
+                          ..warningServerSaid = false
+                          ..title = "Title"
+                          ..subtitle = "Subtitle",
+                      ),
+                    ])
+                    ..lastRequested = DateTime.now(),
+                ),
+              ],
+            ),
+        ),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: DaysContainer(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    expect(find.byType(ItemWidget), findsOneWidget);
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("reminder.png"));
+    // trigger the close animation
+    await tester.tap(find.byIcon(Icons.close));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    // should now be halfway closed
+    expect(find.byType(ItemWidget), findsOneWidget);
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("reminder_deleting.png"));
+    await tester.pump(const Duration(milliseconds: 200));
+    // should be gone
+    await tester.pump();
+    expect(find.byType(ItemWidget), findsNothing);
+  });
+
+  testGoldens('animation for checking an item', (WidgetTester tester) async {
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        appReducerBuilder.build(),
+        AppState(
+          (b) => b.dashboardState
+            ..allDays = ListBuilder(
+              [
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder([
+                      Homework(
+                        (b) => b
+                          ..checkable = true
+                          ..checked = false
+                          ..deleteable = true
+                          ..deleted = false
+                          ..firstSeen = DateTime.now()
+                              // do not show a entry animation
+                              .subtract(const Duration(seconds: 10))
+                          ..id = 0
+                          ..isChanged = false
+                          ..isNew = false
+                          ..type = HomeworkType.homework
+                          ..warningServerSaid = false
+                          ..title = "Title"
+                          ..subtitle = "Subtitle",
+                      ),
+                    ])
+                    ..lastRequested = DateTime.now(),
+                ),
+              ],
+            ),
+        ),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: DaysContainer(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    expect(find.byType(ItemWidget), findsOneWidget);
+    // trigger the checkbox animation
+    await tester.tap(find.byType(Checkbox));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 180));
+    // should now be halfway checked
+    await expectLater(find.byType(DaysWidget),
+        matchesGoldenFile("item_checking_animation.png"));
+    await tester.pump(const Duration(milliseconds: 250));
+    // should be fully checked
+    await tester.pump();
+    await expectLater(
+        find.byType(DaysWidget), matchesGoldenFile("item_checked.png"));
   });
 }
