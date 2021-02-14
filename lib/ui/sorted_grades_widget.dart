@@ -167,35 +167,55 @@ class _SubjectWidgetState extends State<SubjectWidget>
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeIn,
             vsync: this,
-            child: entries != null
-                ? Column(
-                    children: [
-                      if (widget.sortByType)
-                        ...Subject.sortByType(entries).entries.map(
-                              (entry) => GradeTypeWidget(
-                                typeName: entry.key,
-                                entries: entry.value
-                                    .where((g) =>
-                                        widget.showCancelled || !g.cancelled)
-                                    .toList(),
-                              ),
-                            )
-                      else
-                        ...entries
-                            .where((g) => widget.showCancelled || !g.cancelled)
-                            .map(
-                              (g) => g is GradeDetail
-                                  ? GradeWidget(grade: g)
-                                  : ObservationWidget(
-                                      observation: g as Observation,
-                                    ),
-                            )
-                    ],
-                  )
-                : (!widget.noInternet)
-                    ? const LinearProgressIndicator()
-                    : const SizedBox(),
-          )
+            alignment: Alignment.topCenter,
+            child: AnimatedSwitcher(
+              layoutBuilder: (currentChild, previousChildren) {
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    if (currentChild != null) currentChild,
+                    for (final child in previousChildren)
+                      Positioned(top: 0, child: child, left: 0, right: 0),
+                  ],
+                );
+              },
+              duration: const Duration(milliseconds: 200),
+              child: entries != null
+                  ? Column(
+                      // we're using a UniqueKey here so that the framework
+                      // detects a change on every rebuild. There would be no
+                      // animations otherwise, as the Column as the direct child
+                      // of the AnimatedSwitcher always stays the same (just different children).
+                      key: UniqueKey(),
+                      children: [
+                        if (widget.sortByType)
+                          ...Subject.sortByType(entries).entries.map(
+                                (entry) => GradeTypeWidget(
+                                  typeName: entry.key,
+                                  entries: entry.value
+                                      .where((g) =>
+                                          widget.showCancelled || !g.cancelled)
+                                      .toList(),
+                                ),
+                              )
+                        else
+                          ...entries
+                              .where(
+                                  (g) => widget.showCancelled || !g.cancelled)
+                              .map(
+                                (g) => g is GradeDetail
+                                    ? GradeWidget(grade: g)
+                                    : ObservationWidget(
+                                        observation: g as Observation,
+                                      ),
+                              )
+                      ],
+                    )
+                  : (!widget.noInternet)
+                      ? const LinearProgressIndicator()
+                      : const SizedBox(),
+            ),
+          ),
         ],
       ),
     );
