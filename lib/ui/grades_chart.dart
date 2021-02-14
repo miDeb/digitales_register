@@ -259,12 +259,6 @@ class _SelectionWidgetState extends State<SelectionWidget>
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      transitionBuilder: (Widget child, Animation<double> animation) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
       layoutBuilder: (currentChild, previousChildren) => AnimatedSize(
         alignment: Alignment.topCenter,
         vsync: this,
