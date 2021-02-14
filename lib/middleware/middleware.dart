@@ -388,7 +388,7 @@ Future<void> _saveNoData(
   Action<void> action,
 ) async {
   await next(action);
-  api.actions.saveState();
+  await api.actions.saveState();
 }
 
 Future<void> _deleteData(

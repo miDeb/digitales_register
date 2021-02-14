@@ -10,6 +10,7 @@ import 'package:dr/serializers.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
+import 'package:quiver/testing/src/async/fake_async.dart';
 
 const serverUrl = "null/v2/api/auth/login";
 
@@ -74,27 +75,28 @@ void main() {
   secureStorage = MockSecureStorage();
   final storageHelper = StorageHelper();
   storageHelper.cleanup();
-  test('save state occurs after five seconds', () async {
-    const username = "test_username";
-    final store = Store<AppState, AppStateBuilder, AppActions>(
-      appReducerBuilder.build(),
-      AppState((b) => b.loginState
-        ..loggedIn = true
-        ..username = username),
-      AppActions(),
-      middleware: middleware,
-    );
-    // dispatch any action to trigger a state save
-    store.actions.setUrl("abc");
-    // saving the state is throttled by five seconds
-    await Future.delayed(const Duration(seconds: 1));
+  test('save state occurs after five seconds', () {
+    FakeAsync().run((async) async {
+      const username = "test_username";
+      final store = Store<AppState, AppStateBuilder, AppActions>(
+        appReducerBuilder.build(),
+        AppState((b) => b.loginState
+          ..loggedIn = true
+          ..username = username),
+        AppActions(),
+        middleware: middleware,
+      );
+      // dispatch any action to trigger a state save
+      store.actions.setUrl("abc");
+      // saving the state is throttled by five seconds
+      async.elapse(const Duration(seconds: 1));
 
-    expect(
-      await storageHelper.exists(username),
-      false,
-    );
-    // after over 5 seconds, the state should be saved
-    await Future.delayed(const Duration(seconds: 6), () async {
+      expect(
+        await storageHelper.exists(username),
+        false,
+      );
+      // after over 5 seconds, the state should be saved
+      async.elapse(const Duration(seconds: 6));
       expect(
         await storageHelper.exists(username),
         true,
@@ -112,19 +114,17 @@ void main() {
       middleware: middleware,
     );
 
-    store.actions.saveState();
+    await store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
     );
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is AppState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<AppState>());
   });
   test('state is not saved when data saving is disabled', () async {
     const username = "test_username2";
@@ -151,9 +151,8 @@ void main() {
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is SettingsState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<SettingsState>());
   });
   test('state is deleted on logout when state saving is disabled', () async {
     const username = "test_username3";
@@ -181,9 +180,8 @@ void main() {
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is AppState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<AppState>());
     await store.actions.loginActions.logout(
       LogoutPayload(
         (b) => b
@@ -191,7 +189,6 @@ void main() {
           ..forced = true,
       ),
     );
-    await Future.delayed(const Duration(milliseconds: 100));
 
     expect(
         serializers.deserialize(
@@ -212,12 +209,9 @@ void main() {
         ..username = username),
     );
 
-    await Future.delayed(const Duration(milliseconds: 100));
-
     await store.actions.saveState();
 
     // the state should be saved immediately
-    await Future.delayed(const Duration(milliseconds: 100));
     expect(
       await storageHelper.exists(username),
       true,
@@ -225,44 +219,35 @@ void main() {
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is AppState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<AppState>());
 
-    store.actions.settingsActions.saveNoData(true);
-    await Future.delayed(const Duration(milliseconds: 100));
+    await store.actions.settingsActions.saveNoData(true);
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is SettingsState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<SettingsState>());
 
-    store.actions.settingsActions.saveNoData(false);
-    await Future.delayed(const Duration(milliseconds: 100));
+    await store.actions.settingsActions.saveNoData(false);
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is AppState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<AppState>());
 
-    store.actions.settingsActions.saveNoData(true);
-    await Future.delayed(const Duration(milliseconds: 100));
+    await store.actions.settingsActions.saveNoData(true);
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is SettingsState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<SettingsState>());
 
-    store.actions.settingsActions.saveNoData(false);
-    await Future.delayed(const Duration(milliseconds: 100));
+    await store.actions.settingsActions.saveNoData(false);
 
     expect(
         serializers.deserialize(
-                json.decode((await storageHelper.read(username))!) as Object)
-            is AppState,
-        true);
+            json.decode((await storageHelper.read(username))!) as Object),
+        const TypeMatcher<AppState>());
   });
 }
