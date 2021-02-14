@@ -27,47 +27,46 @@ class NotificationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Benachrichtigungen"),
       ),
-      body: AnimatedCrossFade(
-        firstChild: ListView.builder(
-          itemCount: notifications.length + 1,
-          itemBuilder: (_, n) {
-            if (n == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: noInternet ? null : deleteAllNotifications,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: const [
-                      Text("Alle gelesen"),
-                      SizedBox(width: 8),
-                      Icon(Icons.done_all),
-                    ],
-                  ),
-                ),
-              );
-            }
-            n -= 1;
-            return NotificationWidget(
-              key: ObjectKey(notifications[n]),
-              notification: notifications[n],
-              onDelete: deleteNotification,
-              noInternet: noInternet,
-              goToMessage: goToMessage,
-            );
-          },
-        ),
-        secondChild: Center(
-          child: Text(
-            "Keine Benachrichtigungen",
-            style: Theme.of(context).textTheme.headline4,
-            textAlign: TextAlign.center,
-          ),
-        ),
-        crossFadeState: notifications.isEmpty
-            ? CrossFadeState.showSecond
-            : CrossFadeState.showFirst,
+      body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 250),
+        child: notifications.isEmpty
+            ? Center(
+                child: Text(
+                  "Keine Benachrichtigungen",
+                  style: Theme.of(context).textTheme.headline4,
+                  textAlign: TextAlign.center,
+                ),
+              )
+            : ListView.builder(
+                itemCount: notifications.length + 1,
+                itemBuilder: (_, n) {
+                  if (n == 0) {
+                    return Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: noInternet ? null : deleteAllNotifications,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: const [
+                            Text("Alle gelesen"),
+                            SizedBox(width: 8),
+                            Icon(Icons.done_all),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                  n -= 1;
+                  return NotificationWidget(
+                    key: ObjectKey(notifications[n]),
+                    notification: notifications[n],
+                    onDelete: deleteNotification,
+                    noInternet: noInternet,
+                    goToMessage: goToMessage,
+                    isLast: notifications.length == 1,
+                  );
+                },
+              ),
       ),
     );
   }
@@ -78,18 +77,21 @@ class NotificationWidget extends StatelessWidget {
   final bool? noInternet;
   final SingleArgumentVoidCallback<Notification> onDelete;
   final SingleArgumentVoidCallback<int> goToMessage;
+  final bool isLast;
 
-  const NotificationWidget(
-      {Key? key,
-      required this.notification,
-      required this.onDelete,
-      required this.noInternet,
-      required this.goToMessage})
-      : super(key: key);
+  const NotificationWidget({
+    Key? key,
+    required this.notification,
+    required this.onDelete,
+    required this.noInternet,
+    required this.goToMessage,
+    required this.isLast,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Deleteable(
       showEntryAnimation: false,
+      showExitAnimation: !isLast,
       builder: (context, delete) => Card(
         shape: RoundedRectangleBorder(
           side: const BorderSide(color: Colors.grey, width: 0),
