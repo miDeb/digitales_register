@@ -207,4 +207,56 @@ void main() {
       );
     },
   );
+  testWidgets(
+    'changing the thickness of a subject clears the selection',
+    (tester) async {
+      final widget = ReduxProvider(
+        store: Store<AppState, AppStateBuilder, AppActions>(
+          appReducerBuilder.build(),
+          _gradesState,
+          AppActions(),
+        ),
+        child: MaterialApp(
+          localizationsDelegates: const [
+            GlobalCupertinoLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale("de"),
+          ],
+          home: const Material(
+            child: GradesChartPage(),
+          ),
+          theme: ThemeData(
+            primarySwatch: Colors.deepOrange,
+          ),
+        ),
+      );
+
+      await tester.pumpWidget(widget);
+      expect(find.text("Tippe auf das Diagramm, um Details zu sehen"),
+          findsOneWidget);
+      // select an item in the diagram
+      await tester.tapAt(const Offset(750, 200));
+      await tester.pumpAndSettle();
+      expect(find.text("Tippe auf das Diagramm, um Details zu sehen"),
+          findsNothing);
+      expect(find.text("Fach1 · Schularbeit3: 7+"), findsOneWidget);
+
+      expect(find.text("4. Januar"), findsOneWidget);
+      expect(find.text("Legende"), findsOneWidget);
+      // open the legend
+      await tester.tap(find.text("Legende"));
+      await tester.pumpAndSettle();
+      // increase the thickness of a subject
+      await tester.tapAt(const Offset(510, 515));
+      await tester.pumpAndSettle();
+      expect(find.text("Tippe auf das Diagramm, um Details zu sehen"),
+          findsOneWidget);
+      expect(find.text("Fach1 · Schularbeit3: 7+"), findsNothing);
+
+      expect(find.text("4. Januar"), findsNothing);
+    },
+  );
 }

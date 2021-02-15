@@ -175,7 +175,12 @@ class _SubjectWidgetState extends State<SubjectWidget>
                   children: [
                     if (currentChild != null) currentChild,
                     for (final child in previousChildren)
-                      Positioned(top: 0, child: child, left: 0, right: 0),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: child,
+                      ),
                   ],
                 );
               },

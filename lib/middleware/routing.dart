@@ -132,7 +132,7 @@ Future<void> _showGrades(
     ActionHandler next,
     Action<void> action) async {
   scaffoldKey?.currentState
-      ?.selectContentWidget(GradesPageContainer(), Pages.grades);
+      ?.selectContentWidget(const GradesPageContainer(), Pages.grades);
   api.actions.gradesActions.load(api.state.gradesState.semester);
   await next(action);
 }

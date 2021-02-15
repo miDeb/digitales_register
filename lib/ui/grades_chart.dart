@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:built_collection/built_collection.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -22,14 +21,8 @@ class GradesChart extends StatelessWidget {
   final List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
       grades;
 
-  // we're using this weird stream-based setup to trigger rebuilds here to only
-  // trigger rebuilds of the selection description, as rebuilds of the diagram
-  // cause it to react poorly.
-  Stream<Tuple2<DateTime, List<_Selection>>> get selection => controller.stream;
-  Sink<Tuple2<DateTime?, List<_Selection>>> get selectionSink =>
-      controller.sink;
-  final StreamController<Tuple2<DateTime, List<_Selection>>> controller =
-      StreamController();
+  final ValueNotifier<Tuple2<DateTime, BuiltList<_Selection>>?> selection =
+      ValueNotifier(null);
 
   GradesChart({
     Key? key,
@@ -151,7 +144,7 @@ class GradesChart extends StatelessWidget {
                       assert(allDate == null || allDate == date);
                       allDate = date;
                       return _Selection(
-                        "$subject · $type: ${formatGradeFromInt(grade as int /*!*/)}",
+                        "$subject · $type: ${formatGradeFromInt(grade as int)}",
                         Color.fromARGB(
                           color.a,
                           color.r,
@@ -159,11 +152,15 @@ class GradesChart extends StatelessWidget {
                           color.b,
                         ),
                       );
-                    }).toList();
-                    selectionSink.add(Tuple2(
-                      allDate,
-                      selections,
-                    ));
+                    }).toBuiltList();
+                    if (allDate != null) {
+                      selection.value = Tuple2(
+                        allDate!,
+                        selections,
+                      );
+                    } else {
+                      selection.value = null;
+                    }
                   },
                 )
               ],
@@ -216,11 +213,9 @@ class GradesChart extends StatelessWidget {
             ),
           ),
           if (isFullscreen)
-            StreamBuilder<Object>(
-                stream: selection,
-                builder: (context, snapshot) {
-                  final data =
-                      snapshot.data as Tuple2<DateTime, List<_Selection>>?;
+            ValueListenableBuilder<Tuple2<DateTime, BuiltList<_Selection>>?>(
+                valueListenable: selection,
+                builder: (context, data, _) {
                   return Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
@@ -246,7 +241,7 @@ class GradesChart extends StatelessWidget {
 
 class SelectionWidget extends StatefulWidget {
   final DateTime? date;
-  final List<_Selection>? selections;
+  final BuiltList<_Selection>? selections;
 
   const SelectionWidget({Key? key, this.date, this.selections})
       : super(key: key);
@@ -273,28 +268,51 @@ class _SelectionWidgetState extends State<SelectionWidget>
         ),
       ),
       duration: const Duration(milliseconds: 150),
-      child: Column(
-        key: UniqueKey(),
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (widget.date != null)
-            Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 2,
-              ),
-              margin: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
-                color: Colors.black,
-              ),
-              child: Text(
-                DateFormat.MMMMd("de").format(widget.date!),
-                style: const TextStyle(color: Colors.white),
-              ),
+      child: widget.date != null && widget.selections?.isNotEmpty == true
+          ? Column(
+              key: ValueKey(widget.selections),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 2,
+                  ),
+                  margin: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    color: Colors.black,
+                  ),
+                  child: Text(
+                    DateFormat.MMMMd("de").format(widget.date!),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                for (final selection in widget.selections!)
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 2,
+                    ),
+                    margin: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: selection.color,
+                    ),
+                    child: Text(
+                      selection.text,
+                      style: TextStyle(
+                        color: ThemeData.estimateBrightnessForColor(
+                                    selection.color) ==
+                                Brightness.light
+                            ? Colors.black
+                            : Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
             )
-          else
-            Container(
+          : Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 2,
@@ -309,31 +327,6 @@ class _SelectionWidgetState extends State<SelectionWidget>
                 style: TextStyle(color: Colors.white),
               ),
             ),
-          if (widget.selections != null)
-            for (final selection in widget.selections!)
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 2,
-                ),
-                margin: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: selection.color,
-                ),
-                child: Text(
-                  selection.text,
-                  style: TextStyle(
-                    color:
-                        ThemeData.estimateBrightnessForColor(selection.color) ==
-                                Brightness.light
-                            ? Colors.black
-                            : Colors.white,
-                  ),
-                ),
-              ),
-        ],
-      ),
     );
   }
 }

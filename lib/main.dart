@@ -113,7 +113,7 @@ void main() {
                   );
                 case "gradesChart":
                   return MaterialPageRoute(
-                    builder: (_) => GradesChartPage(),
+                    builder: (_) => const GradesChartPage(),
                     fullscreenDialog: true,
                   );
                 case "gradeCalculator":
