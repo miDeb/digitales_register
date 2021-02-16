@@ -45,8 +45,8 @@ class GradesChart extends StatelessWidget {
             g: color.green,
             b: color.blue,
           ),
-          domainFn: (grade, _) => grade.key,
-          measureFn: (grade, _) => grade.value.item1 / 100,
+          domainFn: (grade, _) => grade!.key,
+          measureFn: (grade, _) => grade!.value.item1 / 100,
           data: s.grades.entries.toList(),
           strokeWidthPxFn: (_, __) => strokeWidth,
           id: s.name,
@@ -138,8 +138,8 @@ class GradesChart extends StatelessWidget {
                     final selections = model.selectedDatum.map((datum) {
                       final grade = datum.datum.value.item1;
                       final type = datum.datum.value.item2;
-                      final subject = datum.series.displayName;
-                      final color = datum.series.colorFn(0);
+                      final subject = datum.series!.displayName;
+                      final color = datum.series!.colorFn!(0)!;
                       final date = datum.datum.key as DateTime;
                       assert(allDate == null || allDate == date);
                       allDate = date;

@@ -87,7 +87,7 @@ packages:
     description:
       path: "build_runner/"
       ref: master
-      resolved-ref: ca28278de07d0f80616dbd543bc9d8fc80f85006
+      resolved-ref: "3383b9bf07973e64f8fa89be409730aee4f3ad0b"
       url: "https://github.com/dart-lang/build"
     source: git
     version: "1.11.2-dev"
@@ -144,8 +144,8 @@ packages:
     dependency: transitive
     description:
       path: "charts_common/"
-      ref: select_nearest
-      resolved-ref: "8f87023c68c17ccbee78ef49b725d2655292eeea"
+      ref: nnbd-2
+      resolved-ref: "4d9bf85c67d9f854d2b80ffde96c92db8aa4c284"
       url: "https://github.com/miDeb/charts.git"
     source: git
     version: "0.9.0"
@@ -153,8 +153,8 @@ packages:
     dependency: "direct main"
     description:
       path: "charts_flutter/"
-      ref: select_nearest
-      resolved-ref: "8f87023c68c17ccbee78ef49b725d2655292eeea"
+      ref: nnbd-2
+      resolved-ref: "4d9bf85c67d9f854d2b80ffde96c92db8aa4c284"
       url: "https://github.com/miDeb/charts.git"
     source: git
     version: "0.9.0"

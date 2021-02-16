@@ -43,7 +43,7 @@ dependencies:
     git:
       url: https://github.com/miDeb/charts.git
       path: charts_flutter/
-      ref: select_nearest
+      ref: nnbd-2
   open_file:
     git:
       url: https://github.com/miDeb/open_file.git
