@@ -517,10 +517,12 @@ packages:
   open_file:
     dependency: "direct main"
     description:
-      name: open_file
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
+      path: "."
+      ref: master
+      resolved-ref: e0bd77627289bc3083f41b3e98e31e92f501a869
+      url: "https://github.com/miDeb/open_file.git"
+    source: git
+    version: "3.0.3"
   package_config:
     dependency: transitive
     description:

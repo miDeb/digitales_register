@@ -169,13 +169,5 @@ Future<void> _openAttachment(
   await next(action);
   final saveFile = File(
       "${(await getApplicationDocumentsDirectory())!.path}/${action.payload.originalName}");
-  var path = saveFile.path;
-  if (Platform.isLinux || Platform.isMacOS) {
-    final buffer = StringBuffer();
-    for (final char in path.characters) {
-      buffer.write("\\$char");
-    }
-    path = buffer.toString();
-  }
-  await OpenFile.open(path);
+  await OpenFile.open(saveFile.path);
 }

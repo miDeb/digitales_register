@@ -12,30 +12,25 @@ version: 8.1.0+21
 publish_to: none
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  built_redux:
+    path: ../built_redux
   collapsible_sidebar:
     path: packages/collapsible_sidebar/
   dynamic_theme:
     path: packages/dynamic_theme/
+  flutter_built_redux:
+    path: ../flutter_built_redux
   quill_delta_viewer:
     path: packages/quill_delta_viewer/
   responsive_scaffold:
     path: packages/responsive_scaffold/
-  built_redux:
-    path: ../built_redux
-  charts_flutter:
-    git:
-      url: https://github.com/miDeb/charts.git
-      path: charts_flutter/
-      ref: select_nearest
-  flutter_built_redux:
-    path: ../flutter_built_redux
   badges:
     git:
       url: https://github.com/miDeb/flutter_badges.git
@@ -44,7 +39,25 @@ dependencies:
     git:
       url: https://github.com/miDeb/biometric_storage.git
       ref: nnbd
+  charts_flutter:
+    git:
+      url: https://github.com/miDeb/charts.git
+      path: charts_flutter/
+      ref: select_nearest
+  open_file:
+    git:
+      url: https://github.com/miDeb/open_file.git
+      ref: master
+  quill_delta:
+    git:
+      url: https://github.com/miDeb/quill-delta-dart.git
+      ref: nnbd
+  scroll_to_index:
+    git:
+      url: https://github.com/miDeb/scroll-to-index.git
+      ref: nnbd
   built_value: ^8.0.0
+  collection: ^1.15.0-nullsafety.4
   cookie_jar: ^1.0.1
   deleteable_tile: ^0.0.1-nullsafety.1
   dio: ^3.0.9
@@ -57,21 +70,11 @@ dependencies:
   http: ^0.12.2
   intl: ^0.17.0-nullsafety.2
   mutex: ^2.0.0-nullsafety.0
-  open_file: any
   package_info: ^0.5.0-nullsafety
   path_provider: ^2.0.0-nullsafety
-  quill_delta:
-    git:
-      url: https://github.com/miDeb/quill-delta-dart.git
-      ref: nnbd
-  scroll_to_index:
-    git:
-      url: https://github.com/miDeb/scroll-to-index.git
-      ref: nnbd
   tuple: ^2.0.0-nullsafety.0
   uni_links: any
   url_launcher: ^6.0.0-nullsafety.6
-  collection: ^1.15.0-nullsafety.4
 dependency_overrides:
   glob: ^2.0.0-nullsafety.0
   analyzer: ^1.0.0
@@ -86,9 +89,9 @@ dev_dependencies:
       ref: master
       path: build_runner/
   built_value_generator: ^8.0.0
+  golden_toolkit: ^0.9.0-nullsafety.0
   lint: ^1.5.1
   matcher: ^0.12.10-nullsafety.3
-  golden_toolkit: ^0.9.0-nullsafety.0
   quiver: ^3.0.0-nullsafety.3
 
 flutter_icons:
