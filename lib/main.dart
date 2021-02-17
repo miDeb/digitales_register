@@ -33,6 +33,9 @@ GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
 void main() {
+  // This is required to access the secure storage
+  // (crash report from a desktop user, possible race?)
+  WidgetsFlutterBinding.ensureInitialized();
   navigatorKey = GlobalKey();
   scaffoldKey = GlobalKey();
   scaffoldMessengerKey = GlobalKey();
@@ -142,7 +145,7 @@ void main() {
       Uri? uri;
       if (Platform.isAndroid) {
         uri = await getInitialUri();
-        getUriLinksStream().listen((event) {
+        uriLinkStream.listen((event) {
           store.actions.start(event);
         });
       }
