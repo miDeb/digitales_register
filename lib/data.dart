@@ -441,12 +441,22 @@ abstract class AbsenceStatistic
   static Serializer<AbsenceStatistic> get serializer =>
       _$absenceStatisticSerializer;
 
+  @nullable
   int get counter;
+  @nullable
   int get counterForSchool;
+  @nullable
   int get delayed;
+  @nullable
   int get justified;
+  @nullable
   int get notJustified;
+  @nullable
   String get percentage;
+  // TODO: Remove this at some point
+  @BuiltValueField(serialize: false)
+  @nullable
+  bool get sentinel;
 }
 
 abstract class Absence implements Built<Absence, AbsenceBuilder> {

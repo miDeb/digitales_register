@@ -131,7 +131,7 @@ int getInt(dynamic value) {
     return value;
   }
   if (value is String) {
-    return tryParse(value, int.parse, hasEnoughContext: false);
+    return int.tryParse(value);
   }
   return _unexpectedType(value);
 }
