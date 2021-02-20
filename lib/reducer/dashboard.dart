@@ -185,7 +185,8 @@ Homework _parseHomework(Map data) {
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
           : ListBuilder(getList(data["gradeGroupSubmissions"])!
-              .map((dynamic s) => tryParse(getMap(s)!, _parseGradeGroupSubmission))
+              .map((dynamic s) =>
+                  tryParse(getMap(s)!, _parseGradeGroupSubmission))
               .where((s) => s != null));
 
     final typeString = getString(data["type"]);
@@ -263,8 +264,8 @@ void _homeworkAdded(DashboardState state, Action<HomeworkAddedPayload> action,
               ..homework.add(
                 _parseHomework(getMap(action.payload.data)!).rebuild(
                   (b) => b
-                    ..firstSeen = DateTime.now()
-                    ..lastNotSeen = DateTime.now(),
+                    ..firstSeen = now
+                    ..lastNotSeen = now,
                 ),
               ),
           )

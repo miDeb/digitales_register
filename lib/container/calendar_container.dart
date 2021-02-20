@@ -46,8 +46,8 @@ class CalendarViewModel {
         currentMonday = state.calendarState.currentMonday!,
         showEditNicksBar = state.calendarState.currentDays.any(
               (day) => day.hours.any(
-                (hour) => state.settingsState.subjectNicks.entries.every(
-                  (entry) => !equalsIgnoreAsciiCase(entry.key, hour.subject),
+                (hour) => state.settingsState.subjectNicks.entries.none(
+                  (entry) => equalsIgnoreAsciiCase(entry.key, hour.subject),
                 ),
               ),
             ) &&

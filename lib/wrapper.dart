@@ -131,7 +131,7 @@ class Wrapper {
       return null;
     }
     if (getBool(response["loggedIn"]) ?? false) {
-      lastInteraction = DateTime.now();
+      lastInteraction = now;
       _loggedIn = true;
       this.user = user;
       this.pass = pass;

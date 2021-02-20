@@ -407,7 +407,7 @@ Future<void> _restarted(
   Action<void> action,
 ) async {
   await next(action);
-  if (DateTime.now().difference(_wrapper.lastInteraction).inMinutes > 3) {
+  if (now.difference(_wrapper.lastInteraction).inMinutes > 3) {
     _popAll();
     api.actions.loginActions.clearAfterLoginCallbacks();
     api.actions.load();
