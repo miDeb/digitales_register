@@ -14,7 +14,7 @@ import 'package:quiver/testing/src/async/fake_async.dart';
 
 const serverUrl = "null/v2/api/auth/login";
 
-class MockSecureStorage implements FlutterSecureStorage {
+class FakeSecureStorage implements FlutterSecureStorage {
   final Map<String, String> storage = {};
   @override
   Future<bool> containsKey(
@@ -72,9 +72,14 @@ class StorageHelper {
 }
 
 void main() {
-  secureStorage = MockSecureStorage();
+  secureStorage = FakeSecureStorage();
   final storageHelper = StorageHelper();
-  storageHelper.cleanup();
+
+  tearDown(() {
+    deletedData = false;
+    storageHelper.cleanup();
+  });
+
   test('save state occurs after five seconds', () {
     FakeAsync().run((async) async {
       const username = "test_username";
@@ -84,7 +89,7 @@ void main() {
           ..loggedIn = true
           ..username = username),
         AppActions(),
-        middleware: middleware(),
+        middleware: middleware(includeErrorMiddleware: false),
       );
       // dispatch any action to trigger a state save
       store.actions.setUrl("abc");
@@ -111,7 +116,7 @@ void main() {
         ..loggedIn = true
         ..username = username),
       AppActions(),
-      middleware: middleware(),
+      middleware: middleware(includeErrorMiddleware: false),
     );
 
     await store.actions.saveState();
@@ -139,7 +144,7 @@ void main() {
         },
       ),
       AppActions(),
-      middleware: middleware(),
+      middleware: middleware(includeErrorMiddleware: false),
     );
 
     await store.actions.saveState();
@@ -167,7 +172,7 @@ void main() {
         },
       ),
       AppActions(),
-      middleware: middleware(),
+      middleware: middleware(includeErrorMiddleware: false),
     );
 
     await store.actions.saveState();
@@ -199,14 +204,16 @@ void main() {
     const username = "test_username4";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
-      AppState(),
+      AppState(
+        (b) {
+          b.loginState
+            ..loggedIn = true
+            ..username = username;
+          b.settingsState.noDataSaving = false;
+        },
+      ),
       AppActions(),
-      middleware: middleware(),
-    );
-    await store.actions.loginActions.loggedIn(
-      LoggedInPayload((b) => b
-        ..fromStorage = false
-        ..username = username),
+      middleware: middleware(includeErrorMiddleware: false),
     );
 
     await store.actions.saveState();

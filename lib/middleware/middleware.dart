@@ -207,13 +207,16 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
   if (!api.state.noInternet) _popAll();
-  final dynamic login = json.decode(await secureStorage.read(key: "login") ?? "{}");
+  final dynamic login =
+      json.decode(await secureStorage.read(key: "login") ?? "{}");
   final user = getString(login["user"]);
   final pass = getString(login["pass"]);
   final url = getString(login["url"]);
   final offlineEnabled = getBool(login["offlineEnabled"]);
   final List<String> otherAccounts = List.from(
-    (login["otherAccounts"] as List?)?.map<String>((dynamic login) => login["user"] as String) ?? <String>[],
+    (login["otherAccounts"] as List?)
+            ?.map<String>((dynamic login) => login["user"] as String) ??
+        <String>[],
   );
   api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||
@@ -253,7 +256,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       !action.payload.fromStorage) {
     api.actions.savePassActions.save();
   }
-  _deletedData = false;
+  deletedData = false;
   final key = getStorageKey(action.payload.username, _wrapper.loginAddress);
   if (!api.state.loginState.loggedIn) {
     final state = await _readFromStorage(key);
@@ -325,7 +328,8 @@ String? _lastUsernameSaved;
 late AppState _stateToSave;
 // This is to avoid saving data in an action right after deleting data,
 // which would restore it.
-bool _deletedData = false;
+@visibleForTesting
+bool deletedData = false;
 
 NextActionHandler _saveStateMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
@@ -343,10 +347,10 @@ NextActionHandler _saveStateMiddleware(
                 _stateToSave.loginState.username, _wrapper.loginAddress);
             _saveUnderway = true;
 
-            void save() {
+            Future<void> save() async {
               _saveUnderway = false;
               String toSave;
-              if (!_stateToSave.settingsState.noDataSaving && !_deletedData) {
+              if (!_stateToSave.settingsState.noDataSaving && !deletedData) {
                 toSave = json.encode(
                   serializers.serialize(_stateToSave),
                 );
@@ -358,14 +362,14 @@ NextActionHandler _saveStateMiddleware(
               if (_lastSave == toSave && _lastUsernameSaved == user) return;
               _lastSave = toSave;
               _lastUsernameSaved = user;
-              _writeToStorage(
+              await _writeToStorage(
                 user,
                 toSave,
               );
             }
 
             if (immediately) {
-              save();
+              await save();
             } else {
               Future.delayed(const Duration(seconds: 5), save);
             }
@@ -399,7 +403,7 @@ Future<void> _deleteData(
   Action<void> action,
 ) async {
   await next(action);
-  _deletedData = true;
+  deletedData = true;
   await api.actions.saveState();
 }
 
