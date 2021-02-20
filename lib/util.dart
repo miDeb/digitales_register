@@ -34,7 +34,8 @@ DateTime get now => mockNow ?? DateTime.now();
 DateTime? mockNow;
 
 String stringifyMaybeJson(dynamic param) {
-  final encoder = JsonEncoder.withIndent("  ", (object) => object.toString());
+  final encoder =
+      JsonEncoder.withIndent("  ", (dynamic object) => object.toString());
   return encoder.convert(param);
 }
 
@@ -95,15 +96,18 @@ O tryParse<O, I>(
   }
 }
 
-T? _unexpectedType<T>(dynamic value) {
+Never _unexpectedType<T>(dynamic value) {
   assert(T != dynamic);
   assert(value is! T);
   // will construct a nice error message about this failing cast
-  final result =
-      tryParse(value, (dynamic input) => input as T?, hasEnoughContext: false);
-  // this should not happen, as the above cast will fail.
-  assert(false);
-  return result;
+  tryParse<Never, dynamic>(
+    value,
+    (dynamic input) {
+      input as T?;
+      throw Error();
+    },
+    hasEnoughContext: false,
+  );
 }
 
 String? getString(dynamic value) {
@@ -122,7 +126,7 @@ bool? getBool(dynamic value) {
   if (value is int) {
     return value != 0;
   }
-  return _unexpectedType(value);
+  return _unexpectedType<bool>(value);
 }
 
 int? getInt(dynamic value) {
@@ -133,23 +137,23 @@ int? getInt(dynamic value) {
   if (value is String) {
     return tryParse(value, int.parse, hasEnoughContext: false);
   }
-  return _unexpectedType(value);
+  return _unexpectedType<int>(value);
 }
 
 Map? getMap(dynamic value) {
   if (value == null) return null;
-  var decoded = value;
+  dynamic decoded = value;
   if (value is String) {
-    decoded = tryParse(value, json.decode);
+    decoded = tryParse<dynamic, String>(value, json.decode);
   }
   return _checkIsMap(decoded);
 }
 
 List? getList(dynamic value) {
   if (value == null) return null;
-  var decoded = value;
+  dynamic decoded = value;
   if (value is String) {
-    decoded = tryParse(value, json.decode);
+    decoded = tryParse<dynamic, String>(value, json.decode);
   }
   return _checkIsList(decoded);
 }
@@ -157,7 +161,6 @@ List? getList(dynamic value) {
 Map? _checkIsMap(dynamic json) {
   if (json is! Map) {
     _unexpectedType<Map>(json);
-    return null;
   } else {
     return json;
   }
@@ -166,7 +169,6 @@ Map? _checkIsMap(dynamic json) {
 List? _checkIsList(dynamic json) {
   if (json is! List) {
     _unexpectedType<List>(json);
-    return null;
   } else {
     return json;
   }

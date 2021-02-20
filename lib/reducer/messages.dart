@@ -64,7 +64,7 @@ void _markAsRead(
 
 MessagesState _parseMessages(List json, MessagesState state) {
   final messages = json
-      .map((m) => tryParse(getMap(m), (Map? m) => _parseMessage(m!, state)))
+      .map((dynamic m) => tryParse(getMap(m), (Map? m) => _parseMessage(m!, state)))
       .toList();
   return MessagesState(
     (b) => b..messages = ListBuilder<Message>(messages),

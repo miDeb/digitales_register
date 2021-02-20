@@ -13,7 +13,7 @@ Future<void> _loadMessages(
     Action<void> action) async {
   if (api.state.noInternet) return;
   await next(action);
-  final response = await _wrapper.send("api/message/getMyMessages");
+  final dynamic response = await _wrapper.send("api/message/getMyMessages");
   if (response != null) {
     api.actions.messagesActions.loaded(response as List);
   } else {
@@ -43,7 +43,7 @@ Future<void> _markAsRead(
     ActionHandler next,
     Action<int> action) async {
   await next(action);
-  final result = await _wrapper.send(
+  final dynamic result = await _wrapper.send(
     "api/message/markAsRead",
     args: {"messageId": action.payload},
   );

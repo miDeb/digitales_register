@@ -191,7 +191,9 @@ class _DaysWidgetState extends State<DaysWidget> {
       );
     }
     if (n % 2 == 0) {
-      return const Divider(height: 0);
+      return const Divider(
+        height: 16,
+      );
     }
     final itemIndex = (n - 1) ~/ 2;
     return DayWidget(
@@ -530,7 +532,7 @@ class DayWidget extends StatelessWidget {
                       child: const Icon(Icons.info_outline),
                     ),
                     onPressed: () {
-                      showDialog(
+                      showDialog<void>(
                         context: context,
                         builder: (_context) {
                           return InfoDialog(
@@ -670,7 +672,7 @@ class ItemWidget extends StatelessWidget {
   void _showHistory(BuildContext context) {
     // if we are in the deleted view, show the history for the previous item
     final historyItem = isDeletedView ? item.previousVersion : item;
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (_context) {
         return InfoDialog(

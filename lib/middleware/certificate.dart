@@ -10,7 +10,8 @@ Future<void> _loadCertificate(
     Action<void> action) async {
   if (api.state.noInternet) return;
   await next(action);
-  final response = await _wrapper.send("student/certificate", method: "GET");
+  final dynamic response =
+      await _wrapper.send("student/certificate", method: "GET");
   if (response != null) {
     api.actions.certificateActions.loaded(response as String);
   } else {

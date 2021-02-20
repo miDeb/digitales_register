@@ -21,7 +21,7 @@ abstract class Day implements Built<Day, DayBuilder> {
   static void _initializeBuilder(DayBuilder builder) {
     builder
       ..lastRequested = now
-      ..deletedHomework = ListBuilder([]);
+      ..deletedHomework = ListBuilder();
   }
 
   static DateTime dateToday() {
@@ -516,7 +516,7 @@ abstract class CalendarHour
   BuiltList<Teacher> get teachers;
 
   static void _initializeBuilder(CalendarHourBuilder b) =>
-      b..teachers = ListBuilder([]);
+      b..teachers = ListBuilder();
 
   static Serializer<CalendarHour> get serializer => _$calendarHourSerializer;
   factory CalendarHour([Function(CalendarHourBuilder b)? updates]) =

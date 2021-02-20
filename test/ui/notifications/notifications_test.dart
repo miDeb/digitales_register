@@ -19,7 +19,7 @@ void main() {
         ReducerBuilder<AppState, AppStateBuilder>().build(),
         AppState(
           (b) => b.notificationState.notifications = ListBuilder(
-            [
+            <Notification>[
               Notification(
                 (b) => b
                   ..id = 0
@@ -51,7 +51,7 @@ void main() {
         ReducerBuilder<AppState, AppStateBuilder>().build(),
         AppState(
           (b) => b.notificationState.notifications = ListBuilder(
-            [
+            <Notification>[
               Notification(
                 (b) => b
                   ..id = 0
@@ -95,7 +95,7 @@ void main() {
         appReducerBuilder.build(),
         AppState(
           (b) => b.notificationState.notifications = ListBuilder(
-            [
+            <Notification>[
               Notification(
                 (b) => b
                   ..id = 0
@@ -147,7 +147,7 @@ void main() {
         appReducerBuilder.build(),
         AppState(
           (b) => b.notificationState.notifications = ListBuilder(
-            [
+            <Notification>[
               Notification(
                 (b) => b
                   ..id = 0
@@ -199,7 +199,7 @@ void main() {
         appReducerBuilder.build(),
         AppState(
           (b) => b.notificationState.notifications = ListBuilder(
-            [
+            <Notification>[
               Notification(
                 (b) => b
                   ..id = 0

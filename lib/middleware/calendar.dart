@@ -11,8 +11,10 @@ Future<void> _loadCalendar(
   if (api.state.noInternet) return;
 
   await next(action);
-  final data = await _wrapper.send("api/calendar/student",
-      args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
+  final dynamic data = await _wrapper.send("api/calendar/student",
+      args: {
+        "startDate": DateFormat("yyyy-MM-dd").format(action.payload)
+      });
 
   if (data != null) {
     api.actions.calendarActions.loaded(data as Map<String, dynamic>);

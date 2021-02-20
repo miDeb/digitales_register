@@ -12,14 +12,14 @@ Future<void> _enableOffline(
     ActionHandler next,
     Action<bool> action) async {
   await next(action);
-  final login = json.decode(await secureStorage.read(key: "login"));
-  final user = login["user"];
-  final pass = login["pass"];
-  final url = login["url"];
+  final dynamic login = json.decode((await secureStorage.read(key: "login"))!);
+  final user = login["user"] as String;
+  final pass = login["pass"] as String;
+  final url = login["url"] as String;
   secureStorage.write(
     key: "login",
     value: json.encode(
-      {
+      <String, Object?>{
         "user": user,
         "pass": pass,
         "url": url,
@@ -54,7 +54,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   secureStorage.write(
     key: "login",
     value: json.encode(
-      {
+  <String, Object?>     {
         "user": _wrapper.user,
         "pass": _wrapper.pass,
         "url": _wrapper.url,
@@ -74,7 +74,7 @@ Future<void> _deletePass(
   secureStorage.write(
     key: "login",
     value: json.encode(
-      {
+    <String, Object?>   {
         "url": _wrapper.url,
         "otherAccounts": json.decode(
             await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],

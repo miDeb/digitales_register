@@ -12,7 +12,7 @@ Future<void> _loadProfile(
     Action<void> action) async {
   await next(action);
   if (api.state.noInternet) return;
-  final result = await _wrapper.send("api/profile/get");
+  final dynamic result = await _wrapper.send("api/profile/get");
   if (result == null) {
     api.actions.refreshNoInternet();
     return;
@@ -25,7 +25,7 @@ Future<void> _setSendNotificationEmails(
     ActionHandler next,
     Action<bool> action) async {
   await next(action);
-  final result = await _wrapper.send(
+  final dynamic result = await _wrapper.send(
     "api/profile/updateNotificationSettings",
     args: {
       "notificationsEnabled": action.payload,
@@ -42,7 +42,7 @@ Future<void> _changeEmail(
     ActionHandler next,
     Action<ChangeEmailPayload> action) async {
   await next(action);
-  final result = await _wrapper.send(
+  final dynamic result = await _wrapper.send(
     "api/profile/updateProfile",
     args: {
       "email": action.payload.email,

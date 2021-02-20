@@ -49,8 +49,8 @@ void _updateSubjects(BuiltList<Subject> subjects,
       subjectsBuilder[subjects.indexOf(oldSubject)] = oldSubject.rebuild(
         (b) => b
           ..gradesAll[semester] = BuiltList(
-            getList(subject["grades"])!.map(
-              (g) => tryParse(getMap(g)!, _parseGradeAll),
+            getList(subject["grades"])!.map<GradeAll>(
+              (dynamic g) => tryParse(getMap(g)!, _parseGradeAll),
             ),
           ),
       );
@@ -63,8 +63,8 @@ void _updateSubjects(BuiltList<Subject> subjects,
             ..gradesAll = MapBuilder(
               {
                 semester: BuiltList<GradeAll>(
-                  getList(subject["grades"])!.map(
-                    (g) => tryParse(getMap(g)!, _parseGradeAll),
+                  getList(subject["grades"])!.map<GradeAll>(
+                    (dynamic g) => tryParse(getMap(g)!, _parseGradeAll),
                   ),
                 ),
               },
@@ -87,8 +87,8 @@ void _detailsLoaded(GradesState state,
         ? s.rebuild(
             (b) => b
               ..grades[action.payload.semester] = BuiltList(
-                getList(data!["grades"])!.map(
-                  (g) => tryParse(getMap(g)!, _parseGrade).rebuild(
+                getList(data!["grades"])!.map<GradeDetail>(
+                  (dynamic g) => tryParse(getMap(g)!, _parseGrade).rebuild(
                     (d) => d
                       // we will also try to load the [cancelledDescription]
                       // again, but for now keep the old one
@@ -101,8 +101,8 @@ void _detailsLoaded(GradesState state,
                 ),
               )
               ..observations[action.payload.semester] = BuiltList(
-                getList(data["observations"])!.map(
-                  (o) => tryParse(getMap(o)!, _parseObservation),
+                getList(data["observations"])!.map<Observation>(
+                  (dynamic o) => tryParse(getMap(o)!, _parseObservation),
                 ),
               ),
           )
@@ -180,8 +180,8 @@ GradeDetail _parseGrade(Map data) {
       ..description = getString(data["description"])
       ..id = getInt(data["id"])
       ..competences = ListBuilder(
-        getList(data["competences"])!.map(
-          (c) => tryParse(getMap(c)!, _parseCompetence),
+        getList(data["competences"])!.map<Competence>(
+          (dynamic c) => tryParse(getMap(c)!, _parseCompetence),
         ),
       ),
   );

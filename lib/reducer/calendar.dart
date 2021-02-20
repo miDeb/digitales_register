@@ -16,12 +16,12 @@ final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
-  final t = action.payload.map((k, e) {
+  final t = action.payload.map((k, dynamic e) {
     final date = DateTime.parse(k);
     return MapEntry(
         date,
-        tryParse(e, (dynamic e) => _parseCalendarDay(getMap(e)!, date))
-            .build());
+        tryParse<CalendarDayBuilder, dynamic>(
+            e, (dynamic e) => _parseCalendarDay(getMap(e)!, date)).build());
   });
   builder.days.addAll(t);
 }
@@ -48,10 +48,18 @@ CalendarDayBuilder _parseCalendarDay(Map day, DateTime date) {
   }
   return CalendarDayBuilder()
     ..date = date
-    ..hours = ListBuilder((day.values.toList()
-          ..removeWhere((e) => e == null || e["isLesson"] == 0)
-          ..sort((a, b) => getInt(a["hour"])!.compareTo(getInt(b["hour"])!)))
-        .map((h) => tryParse(getMap(h)!, _parseHour).build()));
+    ..hours = ListBuilder(
+      (day.values.toList()
+            ..removeWhere((dynamic e) => e == null || e["isLesson"] == 0)
+            ..sort(
+              (dynamic a, dynamic b) => getInt(a["hour"])!.compareTo(
+                getInt(b["hour"])!,
+              ),
+            ))
+          .map<CalendarHour>(
+        (dynamic h) => tryParse(getMap(h)!, _parseHour).build(),
+      ),
+    );
 }
 
 CalendarHourBuilder _parseHour(Map hour) {
@@ -60,18 +68,20 @@ CalendarHourBuilder _parseHour(Map hour) {
     ..description = getString(lesson["description"])
     ..fromHour = getInt(lesson["hour"])
     ..toHour = getInt(lesson["toHour"])
-    ..rooms = ListBuilder(getList(lesson["rooms"])!.map((r) => r["name"]))
+    ..rooms = ListBuilder(
+      getList(lesson["rooms"])!.map<String>((dynamic r) => r["name"] as String),
+    )
     ..subject = getString(lesson["subject"]["name"])
     ..teachers = ListBuilder(
-      getList(lesson["teachers"])!.map(
-        (r) => Teacher((b) => b
+      getList(lesson["teachers"])!.map<Teacher>(
+        (dynamic r) => Teacher((b) => b
           ..firstName = getString(r["firstName"])
           ..lastName = getString(r["lastName"])),
       ),
     )
     ..homeworkExams = ListBuilder(
-      (lesson["homeworkExams"] as List)
-          .map((e) => tryParse(getMap(e)!, _parseHomeworkExam)),
+      (lesson["homeworkExams"] as List).map<HomeworkExam>(
+          (dynamic e) => tryParse(getMap(e)!, _parseHomeworkExam)),
     );
 }
 

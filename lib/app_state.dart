@@ -111,7 +111,7 @@ abstract class DashboardState
     builder
       ..future = true
       ..loading = false
-      ..blacklist = ListBuilder([]);
+      ..blacklist = ListBuilder();
   }
 }
 
@@ -210,7 +210,7 @@ abstract class GradesState implements Built<GradesState, GradesStateBuilder> {
   static void _initializeBuilder(GradesStateBuilder builder) {
     builder
       ..semester = Semester.all.toBuilder()
-      ..subjects = ListBuilder([])
+      ..subjects = ListBuilder()
       ..loading = false;
   }
 }

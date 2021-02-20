@@ -88,7 +88,7 @@ final middleware = [
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) async {
-          Future<void> handleError(e, StackTrace? trace) async {
+          Future<void> handleError(dynamic e, StackTrace? trace) async {
             log("Error caught by error middleware",
                 error: e, stackTrace: trace);
             var stackTrace = trace;
@@ -112,7 +112,7 @@ NextActionHandler _errorMiddleware(
             error +=
                 "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
             navigatorKey?.currentState?.push(
-              MaterialPageRoute(
+              MaterialPageRoute<void>(
                 fullscreenDialog: true,
                 builder: (_) {
                   return Scaffold(
@@ -205,13 +205,13 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
   if (!api.state.noInternet) _popAll();
-  final login = json.decode(await secureStorage.read(key: "login") ?? "{}");
+  final dynamic login = json.decode(await secureStorage.read(key: "login") ?? "{}");
   final user = getString(login["user"]);
   final pass = getString(login["pass"]);
   final url = getString(login["url"]);
   final offlineEnabled = getBool(login["offlineEnabled"]);
   final List<String> otherAccounts = List.from(
-    (login["otherAccounts"] as List?)?.map((login) => login["user"]) ?? [],
+    (login["otherAccounts"] as List?)?.map<String>((dynamic login) => login["user"] as String) ?? <String>[],
   );
   api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||

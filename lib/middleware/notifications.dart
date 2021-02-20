@@ -13,7 +13,7 @@ Future<void> _loadNotifications(
   if (api.state.noInternet) return;
 
   await next(action);
-  final data = await _wrapper.send("api/notification/unread");
+  final dynamic data = await _wrapper.send("api/notification/unread");
 
   if (data != null) {
     api.actions.notificationsActions.loaded(data as List);
@@ -27,7 +27,7 @@ Future<void> _deleteNotification(
     ActionHandler next,
     Action<Notification> action) async {
   await next(action);
-  final result = await _wrapper
+  final dynamic result = await _wrapper
       .send("api/notification/markAsRead", args: {"id": action.payload.id});
   if (result == null) api.actions.refreshNoInternet();
 }

@@ -33,7 +33,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
   final loadedDays = [
     for (final day in action.payload.data as Iterable)
-      tryParse(
+      tryParse<Day, dynamic>(
           day,
           (dynamic day) =>
               _parseDay(getMap(day)!, action.payload.deduplicateEntries))
@@ -149,8 +149,8 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
 
 Day _parseDay(Map data, bool deduplicate) {
   final ListBuilder<Homework> items = ListBuilder(
-    getList(data["items"])!.map(
-      (m) => tryParse(getMap(m)!, _parseHomework),
+    getList(data["items"])!.map<Homework>(
+      (dynamic m) => tryParse(getMap(m)!, _parseHomework),
     ),
   );
   if (deduplicate) {
@@ -185,7 +185,7 @@ Homework _parseHomework(Map data) {
       ..gradeGroupSubmissions = data["gradeGroupSubmissions"] == null
           ? null
           : ListBuilder(getList(data["gradeGroupSubmissions"])!
-              .map((s) => tryParse(getMap(s)!, _parseGradeGroupSubmission))
+              .map((dynamic s) => tryParse(getMap(s)!, _parseGradeGroupSubmission))
               .where((s) => s != null));
 
     final typeString = getString(data["type"]);

@@ -4,3 +4,6 @@ analyzer:
     - "**.g.dart"
   errors:
     sort_pub_dependencies: ignore
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false

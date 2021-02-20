@@ -18,11 +18,11 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     await secureStorage.write(
       key: "login",
       value: json.encode(
-        {
+        <String, Object?>{
           "url": _wrapper.url,
           if (await secureStorage.containsKey(key: "login"))
             "otherAccounts": json.decode(
-                await secureStorage.read(key: "login"))["otherAccounts"],
+                (await secureStorage.read(key: "login"))!)["otherAccounts"],
         },
       ),
     );
@@ -68,7 +68,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     url = url.substring(0, url.length - defaultUrlPath.length);
   }
   api.actions.loginActions.loggingIn();
-  final result = await _wrapper.login(
+  final dynamic result = await _wrapper.login(
     action.payload.user,
     action.payload.pass,
     null,
@@ -133,7 +133,7 @@ Future<void> _changePass(
     ActionHandler next,
     Action<ChangePassPayload> action) async {
   await next(action);
-  final result = await _wrapper.changePass(
+  final dynamic result = await _wrapper.changePass(
     action.payload.url,
     action.payload.user,
     action.payload.oldPass,
@@ -188,7 +188,7 @@ Future<void> _requestPassReset(
     ActionHandler next,
     Action<RequestPassResetPayload> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
-  final result = (await dio.Dio().post(
+  final dynamic result = (await dio.Dio().post<dynamic>(
     "${api.state.url}/api/auth/resetPassword",
     data: {
       "email": action.payload.email,
@@ -210,7 +210,7 @@ Future<void> _resetPass(
     ActionHandler next,
     Action<String> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
-  final result = (await dio.Dio().post(
+  final dynamic result = (await dio.Dio().post<dynamic>(
     "${api.state.url}/api/auth/setNewPassword",
     data: {
       "username": "",
@@ -235,13 +235,13 @@ Future<void> _addAccount(
     Action<void> action) async {
   await next(action);
   // Move the current default user credentials into `otherAccounts`
-  final login = json.decode(await secureStorage.read(key: "login"));
-  final otherAccounts = login["otherAccounts"] as List? ?? [];
+  final dynamic login = json.decode((await secureStorage.read(key: "login"))!);
+  final otherAccounts = login["otherAccounts"] as List? ?? <Object?>[];
   if (login["user"] != null &&
       login["pass"] != null &&
       login["url"] != null &&
       login["offlineEnabled"] != null) {
-    otherAccounts.insert(0, {
+    otherAccounts.insert(0, <String, Object?>{
       "user": login["user"],
       "pass": login["pass"],
       "url": login["url"],
@@ -251,7 +251,7 @@ Future<void> _addAccount(
   await secureStorage.write(
     key: "login",
     value: json.encode(
-      {
+ <String, Object?>     {
         "url": login["url"],
         "otherAccounts": otherAccounts,
       },
@@ -266,15 +266,15 @@ Future<void> _selectAccount(
     ActionHandler next,
     Action<int> action) async {
   await next(action);
-  final login = json.decode(await secureStorage.read(key: "login"));
-  login["otherAccounts"] ??= [];
-  final otherAccounts = login["otherAccounts"] as List;
+  final dynamic login = json.decode((await secureStorage.read(key: "login"))!);
+  login["otherAccounts"] ??= <Object>[];
+  final otherAccounts = login["otherAccounts"] as List<Object>;
   var selectedIndex = action.payload;
   if (login["user"] != null &&
       login["pass"] != null &&
       login["url"] != null &&
       login["offlineEnabled"] != null) {
-    otherAccounts.insert(0, {
+    otherAccounts.insert(0, <String, Object?>{
       "user": login["user"],
       "pass": login["pass"],
       "url": login["url"],
@@ -282,7 +282,7 @@ Future<void> _selectAccount(
     });
     selectedIndex += 1;
   }
-  final selected = otherAccounts.removeAt(selectedIndex);
+  final dynamic selected = otherAccounts.removeAt(selectedIndex);
   login["user"] = selected["user"];
   login["pass"] = selected["pass"];
   login["url"] = selected["url"];
@@ -294,7 +294,7 @@ Future<void> _selectAccount(
 
 void _showUserTypeNotSupported(String url) {
   navigatorKey?.currentState?.push(
-    MaterialPageRoute(
+    MaterialPageRoute<void>(
       builder: (context) => Scaffold(
         body: Center(
           child: Column(

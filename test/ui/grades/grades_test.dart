@@ -17,7 +17,7 @@ AppState _getGradesState({bool loading = false}) {
       b.gradesState
         ..loading = loading
         ..subjects = ListBuilder(
-          [
+          <Subject>[
             Subject(
               (b) => b
                 ..name = "Fach1"

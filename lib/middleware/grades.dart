@@ -35,7 +35,7 @@ Future<void> _loadGrades(
         ? [Semester.first, Semester.second]
         : [action.payload],
     (s) async {
-      final data = await _wrapper.send(
+      final dynamic data = await _wrapper.send(
         _subjects,
         args: {"studentId": api.state.config!.userId},
       );
@@ -67,7 +67,7 @@ Future<void> _loadGradesDetails(
         ? [Semester.first, Semester.second]
         : [action.payload.semester],
     (s) async {
-      var data = await _wrapper.send(
+      dynamic data = await _wrapper.send(
         _subjectsDetail,
         args: {
           "studentId": api.state.config!.userId,
@@ -115,7 +115,7 @@ Future<void> _loadCancelledDescription(
   _doForSemester(
     [action.payload.semester],
     (s) async {
-      final data = await _wrapper.send(
+      final dynamic data = await _wrapper.send(
         _grade,
         args: {
           "gradeId": action.payload.grade.id,
@@ -165,7 +165,7 @@ class SemesterLock {
   Future<void> synchronized(
       Semester semester, Future<void> Function() f) async {
     await _mutex.acquire();
-    bool mutexAquired = true;
+    bool mutexAcquired = true;
     if (usersOfCurrent == 0 || semester == current) {
       usersOfCurrent++;
       if (semester != current) {
@@ -173,7 +173,7 @@ class SemesterLock {
         current = semester;
       }
       _mutex.release();
-      mutexAquired = false;
+      mutexAcquired = false;
       await f();
       if (usersOfCurrent == 1 && waitlist.isNotEmpty) {
         final last = waitlist.entries.first;
@@ -190,7 +190,7 @@ class SemesterLock {
         waitlist[semester] = [f];
       }
     }
-    if (mutexAquired) {
+    if (mutexAcquired) {
       _mutex.release();
     }
   }

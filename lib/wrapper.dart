@@ -24,7 +24,7 @@ class DebugInterceptor extends Interceptor {
 
   @override
   Future onResponse(Response response) async {
-    log("Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
+    log("Response, uri: ${response.request!.uri},\nheaders: ${response.headers}");
     if (response.data.toString().length <= 100) {
       log(response.data.toString());
     } else {
@@ -70,7 +70,7 @@ class Wrapper {
   Future<bool> get noInternet async {
     final address = url != null ? baseAddress : "https://digitalesregister.it";
     try {
-      final result = await http.get(address);
+      final result = await http.get(Uri.parse(address));
       if (result.statusCode == 200) {
         return false;
       }
@@ -115,7 +115,7 @@ class Wrapper {
     Map response;
     _clearCookies();
     try {
-      response = getMap((await dio.post(
+      response = getMap((await dio.post<dynamic>(
         loginAddress,
         data: {
           "username": user,
@@ -200,7 +200,7 @@ class Wrapper {
     Map response;
     _clearCookies();
     try {
-      response = getMap((await dio.post(
+      response = getMap((await dio.post<dynamic>(
         "${baseAddress}api/auth/setNewPassword",
         data: {
           "username": user,
@@ -227,7 +227,7 @@ class Wrapper {
   }
 
   Future<void> _loadConfig() async {
-    final source = (await dio.get(baseAddress)).data;
+    final source = (await dio.get<String>(baseAddress)).data;
     config = parseConfig(source as String);
   }
 
@@ -300,7 +300,8 @@ class Wrapper {
 
   final _mutex = Mutex();
   Future<dynamic> send(String url,
-      {Map<String, dynamic> args = const {}, String method = "POST"}) async {
+      {Map<String, Object?> args = const <String, Object?>{},
+      String method = "POST"}) async {
     assert(!url.startsWith("/"));
     await _mutex.acquire();
     if (!_loggedIn) {
@@ -322,12 +323,12 @@ class Wrapper {
     dynamic response;
     try {
       response = method == "POST"
-          ? await dio.post(
+          ? await dio.post<dynamic>(
               baseAddress + url,
               data: args,
             )
           : method == "GET"
-              ? await dio.get(
+              ? await dio.get<dynamic>(
                   baseAddress + url,
                 )
               : throw Exception(
@@ -372,7 +373,8 @@ class Wrapper {
     if (!_loggedIn) return;
     if (now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
-      final result = getMap(await send("api/auth/extendSession", args: {
+      final result =
+          getMap(await send("api/auth/extendSession", args: <String, Object?>{
         "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
       }));
       if (result == null) {
@@ -396,7 +398,7 @@ class Wrapper {
 
   void logout({required bool hard, bool logoutForcedByServer = false}) {
     if (!logoutForcedByServer && _url != null) {
-      dio.get("${baseAddress}logout");
+      dio.get<dynamic>("${baseAddress}logout");
     }
     if (hard) {
       if (logoutForcedByServer) {

@@ -45,8 +45,8 @@ class GradesChart extends StatelessWidget {
             g: color.green,
             b: color.blue,
           ),
-          domainFn: (grade, _) => grade!.key,
-          measureFn: (grade, _) => grade!.value.item1 / 100,
+          domainFn: (grade, _) => grade.key,
+          measureFn: (grade, _) => grade.value.item1 / 100,
           data: s.grades.entries.toList(),
           strokeWidthPxFn: (_, __) => strokeWidth,
           id: s.name,
@@ -133,23 +133,23 @@ class GradesChart extends StatelessWidget {
                   : null,
               selectionModels: [
                 charts.SelectionModelConfig(
-                  changedListener: (model) async {
+                  changedListener: (model) {
                     DateTime? allDate;
                     final selections = model.selectedDatum.map((datum) {
-                      final grade = datum.datum.value.item1;
-                      final type = datum.datum.value.item2;
+                      final grade = datum.datum.value.item1 as int;
+                      final type = datum.datum.value.item2 as String;
                       final subject = datum.series!.displayName;
                       final color = datum.series!.colorFn!(0)!;
                       final date = datum.datum.key as DateTime;
                       assert(allDate == null || allDate == date);
                       allDate = date;
                       return _Selection(
-                        "$subject · $type: ${formatGradeFromInt(grade as int)}",
+                        "$subject · $type: ${formatGradeFromInt(grade)}",
                         Color.fromARGB(
                           color.a,
-                          color.r,
-                          color.g,
-                          color.b,
+                          color.r!,
+                          color.g!,
+                          color.b!,
                         ),
                       );
                     }).toBuiltList();

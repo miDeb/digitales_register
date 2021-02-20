@@ -10,7 +10,7 @@ final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     AbsencesState, AbsencesStateBuilder>(
   (s) => s.absencesState,
   (b) => b.absencesState,
-)..add(AbsencesActionsNames.loaded, _loaded);
+)..add<dynamic>(AbsencesActionsNames.loaded, _loaded);
 
 void _loaded(
     AbsencesState state, Action<dynamic> action, AbsencesStateBuilder builder) {
@@ -26,7 +26,7 @@ AbsencesState _parseAbsences(Map json) {
     ..justified = getInt(rawStats["justified"])
     ..notJustified = getInt(rawStats["notJustified"])
     ..percentage = rawStats["percentage"].toString();
-  final absences = (json["absences"] as List).map((g) {
+  final absences = (json["absences"] as List).map((dynamic g) {
     return AbsenceGroup(
       (b) => b
         ..justified = AbsenceJustified.fromInt(getInt(g["justified"])!)
@@ -36,8 +36,8 @@ AbsencesState _parseAbsences(Map json) {
             : null
         ..reason = getString(g["reason"])
         ..absences = ListBuilder(
-          (g["group"] as List).map(
-            (a) {
+          (g["group"] as List).map<Absence>(
+            (dynamic a) {
               return Absence(
                 (b) => b
                   ..minutes = getInt(a["minutes"])

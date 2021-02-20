@@ -86,46 +86,46 @@ void main() {
               if (pathElements[0] != "") return null;
               switch (pathElements[1]) {
                 case "":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => HomePage(),
                   );
                 case "login":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => LoginPage(),
                   );
                 case "request_pass_reset":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => RequestPassResetContainer(),
                   );
                 case "pass_reset":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => PassResetContainer(),
                   );
                 case "change_email":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => ChangeEmailContainer(),
                   );
                 case "profile":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => ProfileContainer(),
                   );
                 case "notifications":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => NotificationPageContainer(),
                     fullscreenDialog: true,
                   );
                 case "gradesChart":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => const GradesChartPage(),
                     fullscreenDialog: true,
                   );
                 case "gradeCalculator":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => const GradeCalculator(),
                     fullscreenDialog: true,
                   );
                 case "settings":
-                  return MaterialPageRoute(
+                  return MaterialPageRoute<void>(
                     builder: (_) => SettingsPageContainer(),
                     fullscreenDialog: true,
                   );

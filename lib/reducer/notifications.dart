@@ -24,8 +24,8 @@ void _loaded(NotificationState state, Action<List> action,
 
 ListBuilder<Notification> _parseNotifications(List data) {
   return ListBuilder(
-    data.map(
-      (n) => tryParse(
+    data.map<Notification>(
+      (dynamic n) => tryParse(
         getMap(n),
         (dynamic n) => Notification(
           (b) => b

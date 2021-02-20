@@ -87,7 +87,7 @@ Future<void> main() async {
           (b) => b.dashboardState
             ..loading = true
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
@@ -123,12 +123,12 @@ Future<void> main() async {
         AppState(
           (b) => b.dashboardState
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
                     ..deletedHomework = ListBuilder()
-                    ..homework = ListBuilder([
+                    ..homework = ListBuilder(<Homework>[
                       Homework(
                         (b) => b
                           ..checkable = true
@@ -159,7 +159,7 @@ Future<void> main() async {
                   (b) => b
                     ..date = DateTime.now()
                     ..deletedHomework = ListBuilder(
-                      [
+                      <Homework>[
                         Homework(
                           (b) => b
                             ..checkable = true
@@ -178,7 +178,7 @@ Future<void> main() async {
                       ],
                     )
                     ..homework = ListBuilder(
-                      [
+                      <Homework>[
                         Homework(
                           (b) => b
                             ..checkable = true
@@ -248,7 +248,7 @@ Future<void> main() async {
         AppState(
           (b) => b.dashboardState
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
@@ -330,12 +330,12 @@ Future<void> main() async {
         AppState(
           (b) => b.dashboardState
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
                     ..deletedHomework = ListBuilder()
-                    ..homework = ListBuilder([
+                    ..homework = ListBuilder(<Homework>[
                       Homework(
                         (b) => b
                           ..checkable = true
@@ -389,12 +389,12 @@ Future<void> main() async {
         AppState(
           (b) => b.dashboardState
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
                     ..deletedHomework = ListBuilder()
-                    ..homework = ListBuilder([
+                    ..homework = ListBuilder(<Homework>[
                       Homework(
                         (b) => b
                           ..checkable = true
@@ -450,12 +450,12 @@ Future<void> main() async {
         AppState(
           (b) => b.dashboardState
             ..allDays = ListBuilder(
-              [
+              <Day>[
                 Day(
                   (b) => b
                     ..date = DateTime.now()
                     ..deletedHomework = ListBuilder()
-                    ..homework = ListBuilder([
+                    ..homework = ListBuilder(<Homework>[
                       Homework(
                         (b) => b
                           ..checkable = true

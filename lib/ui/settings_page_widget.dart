@@ -530,7 +530,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
+                MaterialPageRoute<void>(
                   builder: (context) {
                     return NetworkProtocolPage();
                   },
@@ -563,8 +563,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (context) => Donate()));
+              Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (context) => Donate()));
             },
           ),
           FutureBuilder(
@@ -669,8 +669,8 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                         .toLowerCase()
                         .contains(pattern.toLowerCase()));
                   },
-                  itemBuilder: (BuildContext context, String suggestion) {
-                    return ListTile(title: Text(suggestion));
+                  itemBuilder: (BuildContext context, String? suggestion) {
+                    return ListTile(title: Text(suggestion!));
                   },
                   onSuggestionSelected: (suggestion) {
                     subjectController!.text = suggestion;
@@ -764,8 +764,8 @@ class _AddSubjectState extends State<AddSubject> {
           return widget.availableSubjects!.where((suggestion) =>
               suggestion.toLowerCase().contains(pattern.toLowerCase()));
         },
-        itemBuilder: (BuildContext context, String suggestion) {
-          return ListTile(title: Text(suggestion));
+        itemBuilder: (BuildContext context, String? suggestion) {
+          return ListTile(title: Text(suggestion!));
         },
         onSuggestionSelected: (suggestion) {
           subjectController!.text = suggestion;

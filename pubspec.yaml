@@ -40,10 +40,7 @@ dependencies:
       url: https://github.com/miDeb/biometric_storage.git
       ref: nnbd
   charts_flutter:
-    git:
-      url: https://github.com/miDeb/charts.git
-      path: charts_flutter/
-      ref: nnbd-2
+    path: ../charts/charts_flutter
   open_file:
     git:
       url: https://github.com/miDeb/open_file.git
@@ -58,36 +55,54 @@ dependencies:
       ref: nnbd
   built_value: ^8.0.0
   collection: ^1.15.0-nullsafety.4
-  cookie_jar: ^1.0.1
+  cookie_jar:
+    git:
+      url: https://github.com/miDeb/cookie_jar
+      ref: master
   deleteable_tile: ^0.0.1-nullsafety.1
-  dio: ^3.0.9
-  dio_cookie_manager: ^1.0.0
+  dio:
+    git:
+      url: https://github.com/miDeb/dio
+      ref: null-safety
+      path: dio
+  dio_cookie_manager:
+    git:
+      url: https://github.com/miDeb/dio
+      ref: null-safety
+      path: plugins/cookie_manager
   flutter_colorpicker: ^0.4.0-nullsafety.0
-  flutter_secure_storage: any
+  flutter_secure_storage:
+    git:
+      url: https://github.com/SteveAlexander/flutter_secure_storage
+      ref: develop
   flutter_typeahead: ^3.0.0-nullsafety.0
-  flutter_widget_from_html_core: ^0.3.2+1
+  flutter_widget_from_html_core:
+    git:
+      url: https://github.com/miDeb/flutter_widget_from_html
+      ref: nnbd
+      path: packages/core
   hive: ^1.6.0-nullsafety.2
-  http: ^0.12.2
+  http: ^0.13.0
   intl: ^0.17.0-nullsafety.2
   mutex: ^2.0.0-nullsafety.0
   package_info: ^0.5.0-nullsafety
   path_provider: ^2.0.0-nullsafety
   tuple: ^2.0.0-nullsafety.0
-  uni_links: any
+  uni_links:
+    git:
+      url: https://github.com/miDeb/uni_links.git
+      ref: modernized
+      path: uni_links/
   url_launcher: ^6.0.0-nullsafety.6
 dependency_overrides:
-  glob: ^2.0.0-nullsafety.0
+  built_value:
+    path: ../../devprojects/built_value.dart/built_value
   analyzer: ^1.0.0
-  intl: ">=0.17.0-nullsafety.2 <= 0.17.0-nullsafety.2"
   quiver: ^3.0.0-nullsafety.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  build_runner:
-    git:
-      url: https://github.com/dart-lang/build
-      ref: master
-      path: build_runner/
+  build_runner: ^1.11.1
   built_value_generator: ^8.0.0
   golden_toolkit: ^0.9.0-nullsafety.0
   lint: ^1.5.1

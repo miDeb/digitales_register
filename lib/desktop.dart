@@ -74,18 +74,18 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   }
 
   @override
-  Future<Map<String?, String>> readAll(
+  Future<Map<String, String>> readAll(
       {dynamic iOptions, secure_storage.AndroidOptions? aOptions}) async {
-    return (await hiveBox).toMap() as Map<String?, String>;
+    return (await hiveBox).toMap() as Map<String, String>;
   }
 
   @override
   Future<void> write(
       {required String key,
-      required String value,
+      required String? value,
       dynamic iOptions,
       secure_storage.AndroidOptions? aOptions}) async {
-    return (await hiveBox).put(key, value);
+    return (await hiveBox).put(key, value!);
   }
 
   @override
