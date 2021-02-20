@@ -444,12 +444,12 @@ abstract class AbsenceStatistic
   static Serializer<AbsenceStatistic> get serializer =>
       _$absenceStatisticSerializer;
 
-  int get counter;
-  int get counterForSchool;
-  int get delayed;
-  int get justified;
-  int get notJustified;
-  String get percentage;
+  int? get counter;
+  int? get counterForSchool;
+  int? get delayed;
+  int? get justified;
+  int? get notJustified;
+  String? get percentage;
 }
 
 abstract class Absence implements Built<Absence, AbsenceBuilder> {

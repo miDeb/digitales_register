@@ -44,7 +44,7 @@ void main() {
     appReducerBuilder.build(),
     AppState(),
     AppActions(),
-    middleware: middleware,
+    middleware: middleware(),
   );
   runApp(
     ReduxProvider(

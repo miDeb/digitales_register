@@ -43,7 +43,7 @@ void main() {
               ),
       ),
       AppActions(),
-      middleware: middleware,
+      middleware: middleware(),
     );
     store.actions.dashboardActions.loaded(
       DaysLoadedPayload(

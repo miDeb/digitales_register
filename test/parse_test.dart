@@ -235,9 +235,10 @@ void main() {
     appReducerBuilder.build(),
     AppState(),
     AppActions(),
-    middleware: middleware,
+    middleware: middleware(includeErrorMiddleware: false),
   );
   test('parse absences', () {
+    // should not throw
     store.actions.absencesActions.loaded(absences);
     store.actions.absencesActions.loaded(json.encode(absences));
   });

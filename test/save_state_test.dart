@@ -84,7 +84,7 @@ void main() {
           ..loggedIn = true
           ..username = username),
         AppActions(),
-        middleware: middleware,
+        middleware: middleware(),
       );
       // dispatch any action to trigger a state save
       store.actions.setUrl("abc");
@@ -111,7 +111,7 @@ void main() {
         ..loggedIn = true
         ..username = username),
       AppActions(),
-      middleware: middleware,
+      middleware: middleware(),
     );
 
     await store.actions.saveState();
@@ -139,7 +139,7 @@ void main() {
         },
       ),
       AppActions(),
-      middleware: middleware,
+      middleware: middleware(),
     );
 
     await store.actions.saveState();
@@ -167,7 +167,7 @@ void main() {
         },
       ),
       AppActions(),
-      middleware: middleware,
+      middleware: middleware(),
     );
 
     await store.actions.saveState();
@@ -201,7 +201,7 @@ void main() {
       appReducerBuilder.build(),
       AppState(),
       AppActions(),
-      middleware: middleware,
+      middleware: middleware(),
     );
     await store.actions.loginActions.loggedIn(
       LoggedInPayload((b) => b

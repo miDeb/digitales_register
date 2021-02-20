@@ -57,33 +57,35 @@ late FlutterSecureStorage secureStorage;
 
 var _wrapper = Wrapper();
 
-final middleware = [
-  _errorMiddleware,
-  _saveStateMiddleware,
-  (MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-        ..add(LoginActionsNames.updateLogout, _tap)
-        ..add(SettingsActionsNames.saveNoData, _saveNoData)
-        ..add(AppActionsNames.deleteData, _deleteData)
-        ..add(AppActionsNames.load, _load)
-        ..add(AppActionsNames.start, _start)
-        ..add(DashboardActionsNames.refresh, _refresh)
-        ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
-        ..add(LoginActionsNames.loggedIn, _loggedIn)
-        ..add(AppActionsNames.restarted, _restarted)
-        ..combine(_absencesMiddleware)
-        ..combine(_calendarMiddleware)
-        ..combine(_dashboardMiddleware)
-        ..combine(_gradesMiddleware)
-        ..combine(_loginMiddleware)
-        ..combine(_notificationsMiddleware)
-        ..combine(_passMiddleware)
-        ..combine(_routingMiddleware)
-        ..combine(_certificateMiddleware)
-        ..combine(_messagesMiddleware)
-        ..combine(_profileMiddleware)
-        ..combine(_settingsMiddleware))
-      .build(),
-];
+List<Middleware<AppState, AppStateBuilder, AppActions>> middleware(
+        {bool includeErrorMiddleware = true}) =>
+    [
+      if (includeErrorMiddleware) _errorMiddleware,
+      _saveStateMiddleware,
+      (MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
+            ..add(LoginActionsNames.updateLogout, _tap)
+            ..add(SettingsActionsNames.saveNoData, _saveNoData)
+            ..add(AppActionsNames.deleteData, _deleteData)
+            ..add(AppActionsNames.load, _load)
+            ..add(AppActionsNames.start, _start)
+            ..add(DashboardActionsNames.refresh, _refresh)
+            ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
+            ..add(LoginActionsNames.loggedIn, _loggedIn)
+            ..add(AppActionsNames.restarted, _restarted)
+            ..combine(_absencesMiddleware)
+            ..combine(_calendarMiddleware)
+            ..combine(_dashboardMiddleware)
+            ..combine(_gradesMiddleware)
+            ..combine(_loginMiddleware)
+            ..combine(_notificationsMiddleware)
+            ..combine(_passMiddleware)
+            ..combine(_routingMiddleware)
+            ..combine(_certificateMiddleware)
+            ..combine(_messagesMiddleware)
+            ..combine(_profileMiddleware)
+            ..combine(_settingsMiddleware))
+          .build(),
+    ];
 
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>

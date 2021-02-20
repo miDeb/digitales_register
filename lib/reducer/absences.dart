@@ -25,7 +25,9 @@ AbsencesState _parseAbsences(Map json) {
     ..delayed = getInt(rawStats["delayed"])
     ..justified = getInt(rawStats["justified"])
     ..notJustified = getInt(rawStats["notJustified"])
-    ..percentage = rawStats["percentage"].toString();
+    ..percentage = rawStats["percentage"]?.toString().isNotEmpty == true
+        ? rawStats["percentage"].toString()
+        : null;
   final absences = (json["absences"] as List).map((dynamic g) {
     return AbsenceGroup(
       (b) => b

@@ -73,30 +73,36 @@ class AbsencesStatisticWidget extends StatelessWidget {
     return ExpansionTile(
       title: const Text("Statistik"),
       children: <Widget>[
-        ListTile(
-          title: const Text("Absenzen"),
-          trailing: Text(stat.counter.toString()),
-        ),
-        ListTile(
-          title: const Text("Absenzen im Auftrag der Schule"),
-          trailing: Text(stat.counterForSchool.toString()),
-        ),
-        ListTile(
-          title: const Text("Verspätungen"),
-          trailing: Text(stat.delayed.toString()),
-        ),
-        ListTile(
-          title: const Text("Entschuldigte Absenzen"),
-          trailing: Text(stat.justified.toString()),
-        ),
-        ListTile(
-          title: const Text("Nicht entschuldigte Absenzen"),
-          trailing: Text(stat.notJustified.toString()),
-        ),
-        ListTile(
-          title: const Text("Abwesenheit"),
-          trailing: Text("${stat.percentage} %"),
-        ),
+        if (stat.counter != null)
+          ListTile(
+            title: const Text("Absenzen"),
+            trailing: Text(stat.counter.toString()),
+          ),
+        if (stat.counterForSchool != null)
+          ListTile(
+            title: const Text("Absenzen im Auftrag der Schule"),
+            trailing: Text(stat.counterForSchool.toString()),
+          ),
+        if (stat.delayed != null)
+          ListTile(
+            title: const Text("Verspätungen"),
+            trailing: Text(stat.delayed.toString()),
+          ),
+        if (stat.justified != null)
+          ListTile(
+            title: const Text("Entschuldigte Absenzen"),
+            trailing: Text(stat.justified.toString()),
+          ),
+        if (stat.notJustified != null)
+          ListTile(
+            title: const Text("Nicht entschuldigte Absenzen"),
+            trailing: Text(stat.notJustified.toString()),
+          ),
+        if (stat.percentage != null)
+          ListTile(
+            title: const Text("Abwesenheit"),
+            trailing: Text("${stat.percentage} %"),
+          ),
       ],
     );
   }
