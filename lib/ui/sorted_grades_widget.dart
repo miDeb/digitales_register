@@ -67,21 +67,8 @@ class SortedGradesWidget extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: ListTile(
             title: Row(
-              children: [
-                const Text("Notenrechner"),
-                const SizedBox(
-                  width: 16,
-                ),
-                Badge(
-                  shape: BadgeShape.square,
-                  borderRadius: BorderRadius.circular(20),
-                  badgeContent: const Text(
-                    "NEU!",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
+              children: const [
+                Text("Notenrechner"),
               ],
             ),
             subtitle:
