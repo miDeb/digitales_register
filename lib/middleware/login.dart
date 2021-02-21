@@ -267,8 +267,8 @@ Future<void> _selectAccount(
     Action<int> action) async {
   await next(action);
   final dynamic login = json.decode((await secureStorage.read(key: "login"))!);
-  login["otherAccounts"] ??= <Object>[];
-  final otherAccounts = login["otherAccounts"] as List<Object>;
+  login["otherAccounts"] ??= <Object?>[];
+  final otherAccounts = login["otherAccounts"] as List<Object?>;
   var selectedIndex = action.payload;
   if (login["user"] != null &&
       login["pass"] != null &&
