@@ -107,11 +107,15 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
     super.initState();
   }
 
-  /// Pushes [content] to the body of the scaffold, associating [data] with it.
-  void selectContentWidget(Widget content, T data) {
+  void closeDrawerIfOpen() {
     if (scaffoldKey.currentState?.isDrawerOpen == true) {
       Navigator.of(scaffoldKey.currentContext!).pop();
     }
+  }
+
+  /// Pushes [content] to the body of the scaffold, associating [data] with it.
+  void selectContentWidget(Widget content, T data) {
+    closeDrawerIfOpen();
     final route = tabletMode
         ? PageRouteBuilder(
             settings: RouteSettings(arguments: data),

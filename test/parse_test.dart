@@ -241,5 +241,6 @@ void main() {
     // should not throw
     store.actions.absencesActions.loaded(absences);
     store.actions.absencesActions.loaded(json.encode(absences));
+    store.actions.absencesActions.loaded(json.decode(json.encode(absences)));
   });
 }

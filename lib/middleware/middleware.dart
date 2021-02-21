@@ -57,8 +57,9 @@ late FlutterSecureStorage secureStorage;
 
 var _wrapper = Wrapper();
 
-List<Middleware<AppState, AppStateBuilder, AppActions>> middleware(
-        {bool includeErrorMiddleware = true}) =>
+List<Middleware<AppState, AppStateBuilder, AppActions>> middleware({
+  @visibleForTesting bool includeErrorMiddleware = true,
+}) =>
     [
       if (includeErrorMiddleware) _errorMiddleware,
       _saveStateMiddleware,

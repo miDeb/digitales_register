@@ -3,6 +3,8 @@ import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:flutter/material.dart';
 
+import '../main.dart';
+
 typedef SelectAccountCallback = void Function(int index);
 
 class Sidebar extends StatelessWidget {
@@ -55,33 +57,37 @@ class Sidebar extends StatelessWidget {
       borderRadius: 0,
       minWidth: 70,
       screenPadding: 0,
-      title: DropdownButton(
-        isExpanded: true,
-        underline: const SizedBox(),
-        value: 0,
-        items: [
-          for (var index = 0; index < otherAccounts.length + 2; index++)
-            DropdownMenuItem(
-              value: index,
-              child: Text(
-                index == 0
-                    ? (username ?? "?")
-                    : index == otherAccounts.length + 1
-                        ? "Account hinzufügen"
-                        : otherAccounts[index - 1],
+      title: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isExpanded: true,
+          value: 0,
+          items: [
+            for (var index = 0; index < otherAccounts.length + 2; index++)
+              DropdownMenuItem(
+                value: index,
+                child: Text(
+                  index == 0
+                      ? (username ?? "?")
+                      : index == otherAccounts.length + 1
+                          ? "Account hinzufügen"
+                          : otherAccounts[index - 1],
+                ),
               ),
-            ),
-        ],
-        onChanged: (int? value) {
-          if (value == 0) {
-            // selected the current account that is already selected
-            // no-op
-          } else if (value == otherAccounts.length + 1) {
-            addAccount();
-          } else {
-            selectAccount(value! - 1);
-          }
-        },
+          ],
+          onChanged: (int? value) {
+            if (value == 0) {
+              // selected the current account that is already selected
+              // no-op
+            } else {
+              scaffoldKey?.currentState?.closeDrawerIfOpen();
+              if (value == otherAccounts.length + 1) {
+                addAccount();
+              } else {
+                selectAccount(value! - 1);
+              }
+            }
+          },
+        ),
       ),
       titleTooltip: username ?? "?",
       toggleTooltipCollapsed: "Ausklappen",

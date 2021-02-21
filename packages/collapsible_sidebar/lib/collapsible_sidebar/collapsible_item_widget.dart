@@ -1,5 +1,4 @@
 import 'dart:ui' as ui;
-import 'package:collapsible_sidebar/collapsible_sidebar/unconstrained_overflow_widget.dart';
 import 'package:flutter/material.dart';
 
 class CollapsibleItemWidget extends StatelessWidget {
@@ -69,30 +68,33 @@ class CollapsibleItemWidget extends StatelessWidget {
                     return ui.Gradient.linear(
                       Offset(bounds.right - 10, 0),
                       Offset(bounds.right, 0),
-                      [Colors.white, Colors.transparent],
+                      [Colors.white, Colors.white.withAlpha(0)],
                     );
                   },
                   child: Padding(
                     padding: EdgeInsets.all(padding),
-                    child: UnconstrainedOverflowBox(
-                      alignment: Alignment.centerLeft,
-                      child: Row(
-                        children: [
-                          Tooltip(
-                            message: tooltip,
-                            child: leading,
-                          ),
-                          if (title != null)
-                            Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              width: 210,
-                              child: DefaultTextStyle(
-                                style: textStyle,
-                                child: title!,
-                              ),
+                    child: IntrinsicHeight(
+                      child: OverflowBox(
+                        maxWidth: 300,
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Tooltip(
+                              message: tooltip,
+                              child: leading,
                             ),
-                        ],
+                            if (title != null)
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                width: 210,
+                                child: DefaultTextStyle(
+                                  style: textStyle,
+                                  child: title!,
+                                ),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
