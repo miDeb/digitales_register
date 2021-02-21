@@ -79,7 +79,7 @@ List<Middleware<AppState, AppStateBuilder, AppActions>> middleware(
             ..combine(_loginMiddleware)
             ..combine(_notificationsMiddleware)
             ..combine(_passMiddleware)
-            ..combine(_routingMiddleware)
+            ..combine(routingMiddleware)
             ..combine(_certificateMiddleware)
             ..combine(_messagesMiddleware)
             ..combine(_profileMiddleware)

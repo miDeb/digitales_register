@@ -48,9 +48,11 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
     for (final subject in gradesState.subjects) {
       subjects.add(subject.name);
     }
-    for (final day in dashboardState.allDays!) {
-      for (final homework in day.homework) {
-        if (homework.label != null) subjects.add(homework.label!);
+    if (dashboardState.allDays != null) {
+      for (final day in dashboardState.allDays!) {
+        for (final homework in day.homework) {
+          if (homework.label != null) subjects.add(homework.label!);
+        }
       }
     }
     return subjects.toList();

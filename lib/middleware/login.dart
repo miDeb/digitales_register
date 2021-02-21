@@ -251,7 +251,7 @@ Future<void> _addAccount(
   await secureStorage.write(
     key: "login",
     value: json.encode(
- <String, Object?>     {
+      <String, Object?>{
         "url": login["url"],
         "otherAccounts": otherAccounts,
       },

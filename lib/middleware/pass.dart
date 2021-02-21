@@ -54,7 +54,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   secureStorage.write(
     key: "login",
     value: json.encode(
-  <String, Object?>     {
+      <String, Object?>{
         "user": _wrapper.user,
         "pass": _wrapper.pass,
         "url": _wrapper.url,
@@ -74,7 +74,7 @@ Future<void> _deletePass(
   secureStorage.write(
     key: "login",
     value: json.encode(
-    <String, Object?>   {
+      <String, Object?>{
         "url": _wrapper.url,
         "otherAccounts": json.decode(
             await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],

@@ -10,7 +10,9 @@ enum Pages {
   settings,
 }
 
-final _routingMiddleware =
+// This allows tests to just include the routingMiddleware
+@visibleForTesting
+final routingMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(RoutingActionsNames.showLogin, _showLogin)
       ..add(RoutingActionsNames.showRequestPassReset, _showRequestPassReset)

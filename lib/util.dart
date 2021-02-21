@@ -31,6 +31,7 @@ DateTime toMonday(DateTime date) {
 }
 
 DateTime get now => mockNow ?? DateTime.now();
+@visibleForTesting
 DateTime? mockNow;
 
 String stringifyMaybeJson(dynamic param) {
