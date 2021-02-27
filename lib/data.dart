@@ -317,7 +317,9 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
         type = entry.type;
       } else {
         // can't happen as long as there are no other subtypes of DetailEntry
-        throw Error();
+        throw Exception(
+          "A new subtype of DetailEntry was introduced without updating sortByType",
+        );
       }
       if (m.containsKey(type)) {
         m[type]!.add(entry);
@@ -404,7 +406,6 @@ abstract class GradeDetail
 
   /// This is presented as "comment" in the ui, however I wanted to be conistent
   /// with the api naming here.
-
   String? get description;
 }
 
@@ -415,7 +416,7 @@ abstract class Competence implements Built<Competence, CompetenceBuilder> {
   static Serializer<Competence> get serializer => _$competenceSerializer;
 
   String get typeName;
-  // $grade of 5
+  // The grade from 0 to 5.
   int get grade;
 }
 
