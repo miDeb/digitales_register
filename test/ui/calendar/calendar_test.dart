@@ -175,15 +175,17 @@ Future<void> main() async {
   testWidgets("tapping the bar opens settings", (WidgetTester tester) async {
     final widget =
         getCalendar(nicksBarEnabled: true, hasSubjctWithoutNick: true);
-    await tester.pumpWidget(DynamicTheme(
-      data: (brightness, overridePlatform) {
-        return ThemeData(
-          primarySwatch: Colors.deepOrange,
-          brightness: brightness,
-        );
-      },
-      themedWidgetBuilder: (context, data) => widget,
-    ));
+    await tester.pumpWidget(
+      DynamicTheme(
+        data: (brightness, overridePlatform) {
+          return ThemeData(
+            primarySwatch: Colors.deepOrange,
+            brightness: brightness,
+          );
+        },
+        themedWidgetBuilder: (context, data) => widget,
+      ),
+    );
     await tester.tap(find.textContaining("Kürzel"));
     await tester.pumpAndSettle();
     // a dialog should be opened

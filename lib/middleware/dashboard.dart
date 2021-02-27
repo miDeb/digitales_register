@@ -141,7 +141,7 @@ Future<void> _downloadAttachment(
   if (api.state.noInternet) return;
   await next(action);
   final saveFile = File(
-    "${(await getApplicationDocumentsDirectory())!.path}/${action.payload.originalName}",
+    "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}",
   );
 
   final result = await _wrapper.dio.get<dynamic>(
@@ -168,6 +168,6 @@ Future<void> _openAttachment(
     Action<GradeGroupSubmission> action) async {
   await next(action);
   final saveFile = File(
-      "${(await getApplicationDocumentsDirectory())!.path}/${action.payload.originalName}");
+      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
   await OpenFile.open(saveFile.path);
 }

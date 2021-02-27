@@ -28,8 +28,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<Box<String>> hiveBox = getEncryptedBox();
   DesktopSecureStorage();
   static Future<Box<String>> getEncryptedBox() async {
-    final applicationDocumentDirectory =
-        await (getApplicationSupportDirectory() as FutureOr<Directory>);
+    final applicationDocumentDirectory = await getApplicationSupportDirectory();
     final homeDirectory =
         Directory("${applicationDocumentDirectory.path}/RegisterDB");
     if (!await homeDirectory.exists()) {

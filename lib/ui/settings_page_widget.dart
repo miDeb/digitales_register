@@ -6,7 +6,7 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -344,7 +344,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: widget.vm.showAllSubjectsAverage,
           ),
           ListTile(
-            title: const Text("Fächer für den Notendurchchnitt ignorieren"),
+            title: const Text("Fächer aus dem Notendurchschnitt ausschließen"),
             trailing: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () async {
@@ -370,7 +370,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               padding: EdgeInsets.only(left: 16),
               child: ListTile(
                 title: Text(
-                  "Kein Fach wird ignoriert",
+                  "Kein Fach ausgeschlossen",
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
@@ -569,24 +569,25 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
-            builder: (context, info) => AboutListTile(
-              icon: const Icon(Icons.info_outline),
-              applicationIcon: SizedBox(
-                width: 100,
-                child: Image.asset("assets/transparent.png"),
-              ),
-              applicationLegalese:
-                  "Michael Debertol und Simon Wachtler 2019-2021",
-              applicationName: "Digitales Register (Client)",
-              applicationVersion: info.hasData
-                  ? (info.data as PackageInfo).version
-                  : "Unbekannte Version",
-              aboutBoxChildren: const [
-                Text(
-                    "Ein Client für das Digitale Register.\nGroßes Dankeschön an das Vinzentinum für die freundliche Unterstützung."),
-              ],
-              child: const Text("Über diese App"),
-            ),
+            builder: (context, AsyncSnapshot<PackageInfo> info) {
+              return AboutListTile(
+                icon: const Icon(Icons.info_outline),
+                applicationIcon: SizedBox(
+                  width: 100,
+                  child: Image.asset("assets/transparent.png"),
+                ),
+                applicationLegalese:
+                    "Michael Debertol und Simon Wachtler 2019-2021",
+                applicationName: "Digitales Register (Client)",
+                applicationVersion: info.data?.version ?? "Unbekannte Version",
+                aboutBoxChildren: const [
+                  Text("""
+Ein Client für das Digitale Register.
+Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
+                ],
+                child: const Text("Über diese App"),
+              );
+            },
           ),
         ],
       ),
