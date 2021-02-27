@@ -106,9 +106,11 @@ packages:
   built_redux:
     dependency: "direct main"
     description:
-      path: "../built_redux"
-      relative: true
-    source: path
+      path: "."
+      ref: nnbd
+      resolved-ref: "8047e27b3e67b7e44cb97a9596ca53333ae4fc6e"
+      url: "https://github.com/miDeb/built_redux.git"
+    source: git
     version: "7.5.11"
   built_value:
     dependency: "direct main"
@@ -141,16 +143,20 @@ packages:
   charts_common:
     dependency: transitive
     description:
-      path: "../charts/charts_common"
-      relative: true
-    source: path
+      path: charts_common
+      ref: nnbd-1
+      resolved-ref: f2647f8df01edcd6689ed9133f343331ef3782b9
+      url: "https://github.com/miDeb/charts"
+    source: git
     version: "0.9.0"
   charts_flutter:
     dependency: "direct main"
     description:
-      path: "../charts/charts_flutter"
-      relative: true
-    source: path
+      path: charts_flutter
+      ref: nnbd-1
+      resolved-ref: f2647f8df01edcd6689ed9133f343331ef3782b9
+      url: "https://github.com/miDeb/charts"
+    source: git
     version: "0.9.0"
   checked_yaml:
     dependency: transitive
@@ -306,9 +312,11 @@ packages:
   flutter_built_redux:
     dependency: "direct main"
     description:
-      path: "../flutter_built_redux"
-      relative: true
-    source: path
+      path: "."
+      ref: nnbd
+      resolved-ref: cffbeb1a5c84d3c5b0f6b7105fc3b47982f2ba84
+      url: "https://github.com/miDeb/flutter_built_redux.git"
+    source: git
     version: "0.6.0"
   flutter_colorpicker:
     dependency: "direct main"
@@ -353,12 +361,10 @@ packages:
   flutter_secure_storage:
     dependency: "direct main"
     description:
-      path: "."
-      ref: develop
-      resolved-ref: "225334e472b262ec06cfa5f1b8ee61bd42652d69"
-      url: "https://github.com/SteveAlexander/flutter_secure_storage"
-    source: git
-    version: "3.3.5"
+      name: flutter_secure_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -379,12 +385,10 @@ packages:
   flutter_widget_from_html_core:
     dependency: "direct main"
     description:
-      path: "packages/core"
-      ref: nnbd
-      resolved-ref: d0aa7c3b7085bbed62b9a47297d82910ae06750e
-      url: "https://github.com/miDeb/flutter_widget_from_html"
-    source: git
-    version: "0.5.2"
+      name: flutter_widget_from_html_core
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.6.0-rc.2021022601"
   glob:
     dependency: transitive
     description:
@@ -1004,4 +1008,4 @@ packages:
     version: "3.0.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.25.0-8.1.pre"
+  flutter: ">=1.26.0-17.6.pre"

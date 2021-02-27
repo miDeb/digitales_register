@@ -20,13 +20,17 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   built_redux:
-    path: ../built_redux
+    git:
+      url: https://github.com/miDeb/built_redux.git
+      ref: nnbd
   collapsible_sidebar:
     path: packages/collapsible_sidebar/
   dynamic_theme:
     path: packages/dynamic_theme/
   flutter_built_redux:
-    path: ../flutter_built_redux
+    git:
+      url: https://github.com/miDeb/flutter_built_redux.git
+      ref: nnbd
   quill_delta_viewer:
     path: packages/quill_delta_viewer/
   responsive_scaffold:
@@ -40,7 +44,10 @@ dependencies:
       url: https://github.com/miDeb/biometric_storage.git
       ref: nnbd
   charts_flutter:
-    path: ../charts/charts_flutter
+    git:
+      url: https://github.com/miDeb/charts
+      ref: nnbd-1
+      path: charts_flutter
   open_file:
     git:
       url: https://github.com/miDeb/open_file.git
@@ -71,16 +78,9 @@ dependencies:
       ref: null-safety
       path: plugins/cookie_manager
   flutter_colorpicker: ^0.4.0-nullsafety.0
-  flutter_secure_storage:
-    git:
-      url: https://github.com/SteveAlexander/flutter_secure_storage
-      ref: develop
+  flutter_secure_storage: ^4.0.0
   flutter_typeahead: ^3.0.0-nullsafety.0
-  flutter_widget_from_html_core:
-    git:
-      url: https://github.com/miDeb/flutter_widget_from_html
-      ref: nnbd
-      path: packages/core
+  flutter_widget_from_html_core: ^0.6.0-rc.2021022601
   hive: ^1.6.0-nullsafety.2
   http: ^0.13.0
   intl: ^0.17.0-nullsafety.2
@@ -96,7 +96,7 @@ dependencies:
   url_launcher: ^6.0.0-nullsafety.6
 dependency_overrides:
   built_value:
-    path: ../../devprojects/built_value.dart/built_value
+    path: ../built_value.dart/built_value
   analyzer: ^1.0.0
   quiver: ^3.0.0-nullsafety.3
 dev_dependencies:
