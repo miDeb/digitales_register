@@ -8,7 +8,7 @@ import 'package:dr/reducer/reducer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // client-subbmitted (name changed)
-const absences = {
+const absencesJson = {
   "absences": [
     {
       "group": [
@@ -239,8 +239,8 @@ void main() {
   );
   test('parse absences', () {
     // should not throw
-    store.actions.absencesActions.loaded(absences);
-    store.actions.absencesActions.loaded(json.encode(absences));
-    store.actions.absencesActions.loaded(json.decode(json.encode(absences)));
+    store.actions.absencesActions.loaded(absencesJson);
+    store.actions.absencesActions.loaded(json.encode(absencesJson));
+    store.actions.absencesActions.loaded(json.decode(json.encode(absencesJson)));
   });
 }

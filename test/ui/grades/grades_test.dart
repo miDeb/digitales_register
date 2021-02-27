@@ -86,13 +86,32 @@ AppState _getGradesState({bool loading = false}) {
                           ..date = DateTime(2021, 1, 4)
                           ..created = "am 5. 2. erstellt"
                           ..grade = 7 * 100 + 25 // 7+
-                          ..type = "Schularbeit3",
+                          ..type = "Schularbeit3"
+                          ..competences = ListBuilder(
+                            <Competence>[
+                              Competence(
+                                (b) => b
+                                  ..grade = 3
+                                  ..typeName = "Kompetenz1",
+                              ),
+                            ],
+                          ),
                       ),
                     ].toBuiltList(),
                   },
                 )
-                ..observations =
-                    MapBuilder({Semester.first: <Observation>[].toBuiltList()}),
+                ..observations = MapBuilder({
+                  Semester.first: <Observation>[
+                    Observation(
+                      (b) => b
+                        ..typeName = "Beobachtung"
+                        ..created = "Am 3. März 2021"
+                        ..note = "Notiz blabla bla"
+                        ..cancelled = false
+                        ..date = DateTime(2021, 2, 21),
+                    )
+                  ].toBuiltList()
+                }),
             ),
             Subject(
               (b) => b
@@ -203,11 +222,29 @@ void main() {
 
     expect(
       find.byType(GradeTypeWidget),
-      findsNWidgets(3),
+      findsNWidgets(4),
     );
     await expectLater(
       find.byType(GradesPageContainer),
       matchesGoldenFile("open_sorted.png"),
     );
+  });
+  testWidgets('competences', (tester) async {
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        appReducerBuilder.build(),
+        _getGradesState(),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: const GradesPageContainer(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    await tester.tap(find.text("Fach1"));
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.star), findsNWidgets(3));
+    expect(find.byIcon(Icons.star_border), findsNWidgets(2));
   });
 }

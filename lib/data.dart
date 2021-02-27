@@ -339,7 +339,7 @@ abstract class _Entry {
 abstract class DetailEntry implements _Entry {}
 
 abstract class Observation
-    implements _Entry, DetailEntry, Built<Observation, ObservationBuilder> {
+    implements DetailEntry, Built<Observation, ObservationBuilder> {
   factory Observation([void Function(ObservationBuilder)? updates]) =
       _$Observation;
   Observation._();

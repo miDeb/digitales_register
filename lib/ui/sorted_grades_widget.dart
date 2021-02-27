@@ -49,7 +49,8 @@ class SortedGradesWidget extends StatelessWidget {
             semester: vm.semester,
             noInternet: vm.noInternet!,
             ignoredForAverage: vm.ignoredSubjectsForAverage.any(
-                (element) => element.toLowerCase() == s.name.toLowerCase()),
+              (element) => element.toLowerCase() == s.name.toLowerCase(),
+            ),
           ),
         if (vm.subjects.any(
           (s) => vm.ignoredSubjectsForAverage.any(
@@ -281,7 +282,7 @@ class ObservationWidget extends StatelessWidget {
         style: observation.cancelled ? lineThrough : null,
       ),
       subtitle: Text(
-        "${DateFormat("dd/MM/yy").format(observation.date)}${observation.note.isNullOrEmpty ? "" : ":\n${observation.note}"}",
+        "${DateFormat("dd.MM.yy").format(observation.date)}${observation.note.isNullOrEmpty ? "" : ": ${observation.note}"}\n${observation.created}",
         style: observation.cancelled ? lineThrough : null,
       ),
     );
