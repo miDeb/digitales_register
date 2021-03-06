@@ -228,7 +228,7 @@ class Wrapper {
 
   Future<void> _loadConfig() async {
     final source = (await dio.get<String>(baseAddress)).data;
-    config = parseConfig(source as String);
+    config = parseConfig(source!);
   }
 
   static Config parseConfig(String source) {
@@ -320,9 +320,9 @@ class Wrapper {
     }
     _mutex.release();
 
-    dynamic response;
+    dynamic responseData;
     try {
-      response = method == "POST"
+      final response = method == "POST"
           ? await dio.post<dynamic>(
               baseAddress + url,
               data: args,
@@ -333,18 +333,18 @@ class Wrapper {
                 )
               : throw Exception(
                   "invalid method: $method; expected POST or GET");
-      response = response.data;
+      responseData = response.data;
     } on Exception catch (e) {
       await _handleError(e);
       onAddProtocolItem!(NetworkProtocolItem((b) => b
         ..address = baseAddress + url
-        ..response = stringifyMaybeJson(response)
+        ..response = stringifyMaybeJson(responseData)
         ..parameters = stringifyMaybeJson(args)));
       return null;
     }
     onAddProtocolItem!(NetworkProtocolItem((b) => b
       ..address = baseAddress + url
-      ..response = stringifyMaybeJson(response)
+      ..response = stringifyMaybeJson(responseData)
       ..parameters = stringifyMaybeJson(args)));
 
     // returned if we were logged out:
@@ -352,12 +352,12 @@ class Wrapper {
     //window.location = "https://vinzentinum.digitalesregister.it/v2/login";
     //</script>
 
-    if (response is String &&
+    if (responseData is String &&
         RegExp(r'\s*<script type="text/javascript">\n?\s*window\.location = "https://.+\.digitalesregister.it/v2/login";\n?\s*</script>')
-            .hasMatch(response)) {
+            .hasMatch(responseData)) {
       throw UnexpectedLogoutException();
     }
-    return response;
+    return responseData;
   }
 
   Future<void> _handleError(Exception e) async {

@@ -85,7 +85,7 @@ class _DaysWidgetState extends State<DaysWidget> {
   double? _distanceToItem(int item) {
     final ctx = controller.tagMap[item]?.context;
     if (ctx != null) {
-      final renderBox = ctx.findRenderObject() as RenderBox;
+      final renderBox = ctx.findRenderObject()! as RenderBox;
       final RenderAbstractViewport viewport =
           RenderAbstractViewport.of(renderBox)!;
       var offsetToReveal = viewport.getOffsetToReveal(renderBox, 0.5).offset;

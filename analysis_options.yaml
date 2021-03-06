@@ -4,6 +4,8 @@ analyzer:
     - "**.g.dart"
   errors:
     sort_pub_dependencies: ignore
+    # This lint is not helpful in combination with implicit-dynamic: false.
+    avoid_dynamic_calls: ignore
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
