@@ -537,21 +537,22 @@ class DayWidget extends StatelessWidget {
                         builder: (_context) {
                           return InfoDialog(
                             title: const Text("Gelöschte Einträge"),
-                            content: ListView(
-                              shrinkWrap: true,
-                              children: day.deletedHomework
-                                  .map(
-                                    (i) => ItemWidget(
-                                      item: i,
-                                      isDeletedView: true,
-                                      colorBorder: colorBorders,
-                                      subjectThemes: subjectThemes,
-                                      colorTestsInRed: colorTestsInRed,
-                                      askWhenDelete: vm.askWhenDelete,
-                                      noInternet: vm.noInternet,
-                                    ),
-                                  )
-                                  .toList(),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                children: day.deletedHomework
+                                    .map(
+                                      (i) => ItemWidget(
+                                        item: i,
+                                        isDeletedView: true,
+                                        colorBorder: colorBorders,
+                                        subjectThemes: subjectThemes,
+                                        colorTestsInRed: colorTestsInRed,
+                                        askWhenDelete: vm.askWhenDelete,
+                                        noInternet: vm.noInternet,
+                                      ),
+                                    )
+                                    .toList(),
+                              ),
                             ),
                           );
                         },
@@ -677,26 +678,27 @@ class ItemWidget extends StatelessWidget {
       builder: (_context) {
         return InfoDialog(
           title: Text(historyItem!.title),
-          content: ListView(
-            shrinkWrap: true,
-            children: <Widget>[
-              Text(formatChanged(historyItem)),
-              if (historyItem.previousVersion != null)
-                ExpansionTile(
-                  title: const Text("Versionen"),
-                  children: <Widget>[
-                    ItemWidget(
-                      item: historyItem,
-                      isHistory: true,
-                      colorBorder: colorBorder,
-                      subjectThemes: subjectThemes,
-                      colorTestsInRed: colorTestsInRed,
-                      askWhenDelete: askWhenDelete,
-                      noInternet: noInternet,
-                    ),
-                  ],
-                ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(formatChanged(historyItem)),
+                if (historyItem.previousVersion != null)
+                  ExpansionTile(
+                    title: const Text("Versionen"),
+                    children: <Widget>[
+                      ItemWidget(
+                        item: historyItem,
+                        isHistory: true,
+                        colorBorder: colorBorder,
+                        subjectThemes: subjectThemes,
+                        colorTestsInRed: colorTestsInRed,
+                        askWhenDelete: askWhenDelete,
+                        noInternet: noInternet,
+                      ),
+                    ],
+                  ),
+              ],
+            ),
           ),
         );
       },

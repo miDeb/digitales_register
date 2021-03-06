@@ -382,8 +382,11 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     const Divider(
                       height: 16,
                     ),
-                    const ListTile(
-                      title: Text("Andere Accounts"),
+                    ListTile(
+                      title: Text(
+                        "Andere Accounts",
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                     Column(
                       children: [

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:built_collection/built_collection.dart';
@@ -176,14 +178,17 @@ class HourWidget extends StatelessWidget {
                   ),
               ];
               return InfoDialog(
-                title: Text(hour.subject),
-                content: ListView.separated(
-                  itemCount: items.length,
-                  shrinkWrap: true,
-                  separatorBuilder: (_, __) => const Divider(),
-                  itemBuilder: (context, i) => items[i],
-                ),
-              );
+                  title: Text(hour.subject),
+                  content: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: List.generate(
+                        max(items.length * 2 - 1, 0),
+                        (index) =>
+                            index.isEven ? items[index ~/ 2] : const Divider(),
+                      ),
+                    ),
+                  ));
             },
           );
         },

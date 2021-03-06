@@ -381,7 +381,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 for (final subject in widget.vm.ignoreForGradesAverage)
                   Deleteable(
                     // don't show an animation if this is the only item
-                    // in that case, the AnimatedCrossFade will have done a different animation
+                    // in that case, the AnimatedCrossFade will do a different animation
                     showExitAnimation:
                         widget.vm.ignoreForGradesAverage.length != 1,
                     showEntryAnimation:

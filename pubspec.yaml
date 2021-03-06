@@ -76,7 +76,10 @@ dependencies:
       path: plugins/cookie_manager
   flutter_colorpicker: ^0.4.0-nullsafety.0
   flutter_secure_storage: ^4.0.0
-  flutter_typeahead: ^3.0.0-nullsafety.0
+  flutter_typeahead:
+    git:
+      url: https://github.com/miDeb/flutter_typeahead.git
+      ref: bug_fixes
   flutter_widget_from_html_core: ^0.6.0-rc.2021022601
   hive: ^1.6.0-nullsafety.2
   http: ^0.13.0

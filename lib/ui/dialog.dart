@@ -39,12 +39,10 @@ class InfoDialog extends StatelessWidget {
           ),
         ],
       ),
-      content: content == null
-          ? null
-          : SizedBox(
-              width: double.maxFinite,
-              child: content,
-            ),
+      content: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 300),
+        child: content,
+      ),
       actions: actions,
     );
   }

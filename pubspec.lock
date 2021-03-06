@@ -371,9 +371,11 @@ packages:
   flutter_typeahead:
     dependency: "direct main"
     description:
-      name: flutter_typeahead
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: bug_fixes
+      resolved-ref: "0d973c7734346a82c4bee5b5db4806de7bbb5b93"
+      url: "https://github.com/miDeb/flutter_typeahead.git"
+    source: git
     version: "3.0.0-nullsafety.0"
   flutter_web_plugins:
     dependency: transitive
