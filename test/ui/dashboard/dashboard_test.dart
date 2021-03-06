@@ -1,14 +1,19 @@
+import 'dart:core';
+
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/app_actions.dart';
 import 'package:dr/app_state.dart';
 import 'package:dr/container/days_container.dart';
 import 'package:dr/data.dart';
+import 'package:dr/main.dart';
+import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/days.dart';
 import 'package:dr/ui/no_internet.dart';
 import 'package:dr/ui/sidebar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
@@ -500,5 +505,60 @@ Future<void> main() async {
     await tester.pump();
     await expectLater(
         find.byType(DaysWidget), matchesGoldenFile("item_checked.png"));
+  });
+
+  testWidgets("check box when offline but not yet in offline mode",
+      (WidgetTester tester) async {
+    // HttpClients fail with status code 400 in widget tests.
+    // This will make the app believe that we have no connection.
+    secureStorage = const FlutterSecureStorage();
+    scaffoldMessengerKey = GlobalKey();
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+          appReducerBuilder.build(),
+          AppState(
+            (b) => b.dashboardState
+              ..allDays = ListBuilder(
+                <Day>[
+                  Day(
+                    (b) => b
+                      ..date = DateTime.now()
+                      ..deletedHomework = ListBuilder()
+                      ..homework = ListBuilder(<Homework>[
+                        Homework(
+                          (b) => b
+                            ..checkable = true
+                            ..checked = false
+                            ..deleteable = true
+                            ..deleted = false
+                            ..firstSeen = DateTime(2021, 2, 2)
+                            ..id = 0
+                            ..isChanged = false
+                            ..isNew = false
+                            ..type = HomeworkType.homework
+                            ..warningServerSaid = false
+                            ..title = "Title"
+                            ..subtitle = "Subtitle",
+                        ),
+                      ])
+                      ..lastRequested = DateTime.now(),
+                  ),
+                ],
+              ),
+          ),
+          AppActions(),
+          middleware: middleware(includeErrorMiddleware: false)),
+      child: MaterialApp(
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        home: DaysContainer(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
+    await tester.tap(find.byType(Checkbox));
+    await tester.pumpAndSettle();
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).onChanged, isNull);
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
   });
 }

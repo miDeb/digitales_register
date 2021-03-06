@@ -98,8 +98,8 @@ Future<void> _toggleDone(
   final dynamic result = await _wrapper.send(
     "api/student/dashboard/toggle_reminder",
     args: {
-      "id": action.payload.hw.id,
-      "type": action.payload.hw.type.name,
+      "id": action.payload.homeworkId,
+      "type": action.payload.type,
       "value": action.payload.done,
     },
   );
@@ -113,14 +113,14 @@ Future<void> _toggleDone(
         DashboardActionsNames.toggleDone.name,
         ToggleDonePayload(
           (b) => b
-            ..hw = action.payload.hw.toBuilder()
-            ..done = !action.payload.hw.checked,
+            ..homeworkId = action.payload.homeworkId
+            ..type = action.payload.type
+            ..done = !action.payload.done,
         ),
       ),
     );
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     api.actions.refreshNoInternet();
-    return;
   }
 }
 

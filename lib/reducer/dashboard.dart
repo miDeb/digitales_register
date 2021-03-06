@@ -281,11 +281,18 @@ void _homeworkRemoved(DashboardState state, Action<Homework> action,
 
 void _toggleDone(DashboardState state, Action<ToggleDonePayload> action,
     DashboardStateBuilder builder) {
-  builder.allDays.map((day) => day.homework.contains(action.payload.hw)
-      ? day.rebuild((b) => b
-        ..homework[day.homework.indexOf(action.payload.hw)] = action.payload.hw
-            .rebuild((hb) => hb..checked = action.payload.done))
-      : day);
+  builder.allDays.map((day) {
+    final index =
+        day.homework.indexWhere((hw) => hw.id == action.payload.homeworkId);
+    if (index == -1) {
+      return day;
+    }
+    return day.rebuild(
+      (b) => b
+        ..homework[index] = b.homework[index]
+            .rebuild((hb) => hb..checked = action.payload.done),
+    );
+  });
 }
 
 void _markAsSeen(DashboardState state, Action<Homework> action,

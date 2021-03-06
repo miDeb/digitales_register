@@ -36,7 +36,8 @@ class DaysContainer extends StatelessWidget {
             actions.dashboardActions.toggleDone(
               ToggleDonePayload(
                 (b) => b
-                  ..hw = hw.toBuilder()
+                  ..homeworkId = hw.id
+                  ..type = hw.type.name
                   ..done = done,
               ),
             );

@@ -68,6 +68,7 @@ abstract class ToggleDonePayload
       [void Function(ToggleDonePayloadBuilder)? updates]) = _$ToggleDonePayload;
   ToggleDonePayload._();
 
-  Homework get hw;
+  int get homeworkId;
+  String get type;
   bool get done;
 }
