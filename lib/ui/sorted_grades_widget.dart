@@ -26,6 +26,7 @@ class SortedGradesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      key: ValueKey(vm.semester),
       children: <Widget>[
         SwitchListTile.adaptive(
           title: const Text("Noten nach Art sortieren"),
