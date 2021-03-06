@@ -21,7 +21,7 @@ class LoginPageContent extends StatefulWidget {
   final ChangePassCallback onChangePass;
   final SetSafeModeCallback setSaveNoPass;
   final VoidCallback onReload;
-  final VoidCallback onRequestPassReset;
+  final void Function(String url) onRequestPassReset;
   final SelectAccountCallback onSelectAccount;
 
   const LoginPageContent({
@@ -255,7 +255,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ),
-                              onPressed: widget.onRequestPassReset,
+                              onPressed: () => widget.onRequestPassReset(
+                                nonCustomServer?.item2 ?? _urlController.text,
+                              ),
                               child: const Text(
                                 "Passwort vergessen",
                               ),

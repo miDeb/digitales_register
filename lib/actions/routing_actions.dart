@@ -10,7 +10,7 @@ abstract class RoutingActions extends ReduxActions {
   abstract final VoidActionDispatcher showLogin;
   abstract final VoidActionDispatcher showProfile;
   abstract final VoidActionDispatcher showChangeEmail;
-  abstract final VoidActionDispatcher showRequestPassReset;
+  abstract final ActionDispatcher<String> showRequestPassReset;
   abstract final ActionDispatcher<ShowPassResetPayload> showPassReset;
   abstract final VoidActionDispatcher showAbsences;
   abstract final VoidActionDispatcher showNotifications;

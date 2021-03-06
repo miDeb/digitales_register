@@ -55,7 +55,8 @@ Future<void> _showLogin(
 Future<void> _showRequestPassReset(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<void> action) async {
+    Action<String> action) async {
+  api.actions.setUrl(action.payload);
   navigatorKey?.currentState?.pushNamed("/request_pass_reset");
   await next(action);
 }

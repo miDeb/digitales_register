@@ -1,4 +1,5 @@
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/util.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';
@@ -45,5 +46,5 @@ void _mountState(
 }
 
 void _setUrl(AppState state, Action<String> action, AppStateBuilder builder) {
-  builder.url = action.payload;
+  builder.url = fixupUrl(action.payload);
 }

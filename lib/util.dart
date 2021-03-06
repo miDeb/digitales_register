@@ -174,3 +174,18 @@ List? _checkIsList(dynamic json) {
     return json;
   }
 }
+
+String fixupUrl(String enteredUrl) {
+  var url = enteredUrl;
+  if (Uri.parse(url).scheme.isEmpty) {
+    // add https:// if there is no uri scheme
+    url = "https://$url";
+  }
+  const defaultUrlPath = "v2/login";
+  if (url.endsWith(defaultUrlPath)) {
+    // /v2/login is the default path the browser is redirected to when loading
+    // the web app. Users might just copy-paste that url, so let's strip it.
+    url = url.substring(0, url.length - defaultUrlPath.length);
+  }
+  return url;
+}

@@ -56,17 +56,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     return;
   }
 
-  String url = action.payload.url;
-  if (Uri.parse(action.payload.url).scheme.isEmpty) {
-    // add https:// if there is no uri scheme
-    url = "https://${action.payload.url}";
-  }
-  const defaultUrlPath = "v2/login";
-  if (url.endsWith(defaultUrlPath)) {
-    // /v2/login is the default path the browser is redirected to when loading
-    // the web app. Users might just copy-paste that url, so let's strip it.
-    url = url.substring(0, url.length - defaultUrlPath.length);
-  }
+  final url = fixupUrl(action.payload.url);
   api.actions.loginActions.loggingIn();
   final dynamic result = await _wrapper.login(
     action.payload.user,
@@ -95,13 +85,14 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       _showUserTypeNotSupported(url);
       return;
     }
-    api.actions.loginActions.loggedIn(
+    await api.actions.loginActions.loggedIn(
       LoggedInPayload(
         (b) => b
           ..username = _wrapper.user
           ..fromStorage = action.payload.fromStorage,
       ),
     );
+    api.actions.setUrl(url);
   } else if (result is Map && result["error"] == "password_expired") {
     api.actions.savePassActions.delete();
     api.actions.loginActions.showChangePass(true);
