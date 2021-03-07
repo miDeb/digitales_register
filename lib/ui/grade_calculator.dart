@@ -172,7 +172,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
               ElevatedButton(
                 onPressed: grade != null && weight != null
                     ? () {
-                        Navigator.pop(context, Tuple2(grade, weight));
+                        Navigator.pop(context, Tuple2(grade!, weight!));
                       }
                     : null,
                 child: const Text(
@@ -233,7 +233,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
       body: Padding(
         padding: const EdgeInsets.all(8),
         child: AnimatedCrossFade(
-          firstChild: _Greeting(
+          firstChild: Greeting(
             import: importGrades,
             add: addGrade,
           ),
@@ -378,10 +378,11 @@ class _GradesTile extends StatelessWidget {
   }
 }
 
-class _Greeting extends StatelessWidget {
+@visibleForTesting
+class Greeting extends StatelessWidget {
   final VoidCallback import, add;
 
-  const _Greeting({Key? key, required this.import, required this.add})
+  const Greeting({Key? key, required this.import, required this.add})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
