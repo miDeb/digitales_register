@@ -208,8 +208,19 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
   if (!api.state.noInternet) _popAll();
-  final dynamic login =
-      json.decode(await secureStorage.read(key: "login") ?? "{}");
+  dynamic login;
+  try {
+    login = json.decode(await secureStorage.read(key: "login") ?? "{}");
+  } catch (e) {
+    login = <Never, Never>{};
+    showSnackBar("Fehler beim Laden der gespeicherten Daten");
+    log("Failed to load login credentials", error: e);
+    try {
+      secureStorage.deleteAll();
+    } catch (e) {
+      showSnackBar("Bitte versuche, die App neu zu installieren.");
+    }
+  }
   final user = getString(login["user"]);
   final pass = getString(login["pass"]);
   final url = getString(login["url"]);
@@ -386,7 +397,16 @@ Future<void> _writeToStorage(String key, String txt) async {
 }
 
 Future<String?> _readFromStorage(String key) async {
-  return secureStorage.read(key: key);
+  try {
+    return secureStorage.read(key: key);
+  } catch (e) {
+    try {
+      secureStorage.deleteAll();
+    } catch (e) {
+      showSnackBar("Fehler: Bitte versuche, die App neu zu installieren.");
+    }
+    return null;
+  }
 }
 
 Future<void> _saveNoData(
