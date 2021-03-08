@@ -26,6 +26,20 @@ Future<void> _downloadFile(
     ActionHandler next,
     Action<Message> action) async {
   if (api.state.noInternet) return;
+  final success = await downloadFile(
+    "${_wrapper.baseAddress}/api/message/download",
+    action.payload.fileOriginalName ?? DateTime.now().toString(),
+    <String, dynamic>{
+      "messageId": action.payload.id,
+      "fileName": action.payload.fileName,
+    },
+  );
+  if (success) {
+    showSnackBar("Heruntergeladen");
+    api.actions.messagesActions.fileAvailable(action.payload);
+  } else {
+    showSnackBar("Download fehlgeschlagen");
+  }
   await next(action);
 }
 

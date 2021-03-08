@@ -562,3 +562,23 @@ Du kannst dies in den Einstellungen jederzeit wieder ändern."""),
     ),
   );
 }
+
+/// Downloads a file.
+///
+/// Returns true on success and false on a failure.
+Future<bool> downloadFile(
+    String url, String fileName, Map<String, dynamic> parameters) async {
+  final saveFile = File(
+    "${(await getApplicationDocumentsDirectory()).path}/$fileName",
+  );
+  final result = await _wrapper.dio.get<dynamic>(
+    url,
+    queryParameters: parameters,
+    options: dio.Options(responseType: dio.ResponseType.stream),
+  );
+  final sink = saveFile.openWrite();
+  await sink.addStream((result.data as dio.ResponseBody).stream);
+  await sink.flush();
+  await sink.close();
+  return result.statusCode == 200;
+}

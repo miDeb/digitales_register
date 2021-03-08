@@ -558,7 +558,7 @@ abstract class Message implements Built<Message, MessageBuilder> {
 
   DateTime? get timeRead;
   String get recipientString;
-  String /*!*/ get fromName;
+  String get fromName;
 
   String? get fileName;
 

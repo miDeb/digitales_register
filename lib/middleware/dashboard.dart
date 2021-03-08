@@ -140,25 +140,19 @@ Future<void> _downloadAttachment(
     Action<GradeGroupSubmission> action) async {
   if (api.state.noInternet) return;
   await next(action);
-  final saveFile = File(
-    "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}",
-  );
-
-  final result = await _wrapper.dio.get<dynamic>(
+  final success = await downloadFile(
     "${_wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
-    queryParameters: <String, dynamic>{
+    action.payload.originalName,
+    <String, dynamic>{
       "submissionId": action.payload.id,
       "parentId": action.payload.gradeGroupId,
     },
-    options: dio.Options(responseType: dio.ResponseType.stream),
   );
-  final sink = saveFile.openWrite();
-  await sink.addStream((result.data as dio.ResponseBody).stream);
-  await sink.flush();
-  await sink.close();
-  if (result.statusCode == 200) {
+  if (success) {
     showSnackBar("Heruntergeladen");
     api.actions.dashboardActions.attachmentReady(action.payload);
+  } else {
+    showSnackBar("Download fehlgeschlagen");
   }
 }
 
