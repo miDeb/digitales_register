@@ -24,7 +24,7 @@ class DebugInterceptor extends Interceptor {
 
   @override
   Future onResponse(Response response) async {
-    log("Response, uri: ${response.request!.uri},\nheaders: ${response.headers}");
+    log("Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
     if (response.data.toString().length <= 100) {
       log(response.data.toString());
     } else {

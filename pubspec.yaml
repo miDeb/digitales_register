@@ -19,18 +19,10 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  built_redux:
-    git:
-      url: https://github.com/miDeb/built_redux.git
-      ref: nnbd
   collapsible_sidebar:
     path: packages/collapsible_sidebar/
   dynamic_theme:
     path: packages/dynamic_theme/
-  flutter_built_redux:
-    git:
-      url: https://github.com/miDeb/flutter_built_redux.git
-      ref: nnbd
   quill_delta_viewer:
     path: packages/quill_delta_viewer/
   responsive_scaffold:
@@ -39,12 +31,23 @@ dependencies:
     git:
       url: https://github.com/miDeb/flutter_badges.git
       ref: nnbd
-  biometric_storage: ^2.0.0
+  built_redux:
+    git:
+      url: https://github.com/miDeb/built_redux.git
+      ref: nnbd
   charts_flutter:
     git:
       url: https://github.com/miDeb/charts
       ref: nnbd-1
       path: charts_flutter
+  flutter_built_redux:
+    git:
+      url: https://github.com/miDeb/flutter_built_redux.git
+      ref: nnbd
+  flutter_typeahead:
+    git:
+      url: https://github.com/miDeb/flutter_typeahead.git
+      ref: bug_fixes
   open_file:
     git:
       url: https://github.com/miDeb/open_file.git
@@ -57,29 +60,20 @@ dependencies:
     git:
       url: https://github.com/miDeb/scroll-to-index.git
       ref: nnbd
+  uni_links:
+    git:
+      url: https://github.com/miDeb/uni_links.git
+      ref: modernized
+      path: uni_links/
+  biometric_storage: ^2.0.0
   built_value: ^8.0.0
   collection: ^1.15.0-nullsafety.4
-  cookie_jar:
-    git:
-      url: https://github.com/miDeb/cookie_jar
-      ref: master
+  cookie_jar: ^3.0.0-beta2
   deleteable_tile: ^0.0.1-nullsafety.1
-  dio:
-    git:
-      url: https://github.com/miDeb/dio
-      ref: null-safety
-      path: dio
-  dio_cookie_manager:
-    git:
-      url: https://github.com/miDeb/dio
-      ref: null-safety
-      path: plugins/cookie_manager
+  dio: ^4.0.0-beta6
+  dio_cookie_manager: ^2.0.0-beta1
   flutter_colorpicker: ^0.4.0-nullsafety.0
   flutter_secure_storage: ^4.0.0
-  flutter_typeahead:
-    git:
-      url: https://github.com/miDeb/flutter_typeahead.git
-      ref: bug_fixes
   flutter_widget_from_html_core: ^0.6.0-rc.2021022601
   hive: ^1.6.0-nullsafety.2
   http: ^0.13.0
@@ -88,11 +82,6 @@ dependencies:
   package_info_plus: ^1.0.0-nullsafety.0
   path_provider: ^2.0.0-nullsafety
   tuple: ^2.0.0-nullsafety.0
-  uni_links:
-    git:
-      url: https://github.com/miDeb/uni_links.git
-      ref: modernized
-      path: uni_links/
   url_launcher: ^6.0.0-nullsafety.6
 dependency_overrides:
   built_value:

@@ -208,12 +208,10 @@ packages:
   cookie_jar:
     dependency: "direct main"
     description:
-      path: "."
-      ref: master
-      resolved-ref: "78782c50ea7413f8ae948717d1d7f9605382eb32"
-      url: "https://github.com/miDeb/cookie_jar"
-    source: git
-    version: "2.0.0-nullsafety.0"
+      name: cookie_jar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0-beta2"
   coverage:
     dependency: transitive
     description:
@@ -252,21 +250,17 @@ packages:
   dio:
     dependency: "direct main"
     description:
-      path: dio
-      ref: null-safety
-      resolved-ref: "4681e1a776eb7e653e30c6d7d888a432d9c20a0e"
-      url: "https://github.com/miDeb/dio"
-    source: git
-    version: "3.0.10"
+      name: dio
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0-beta6"
   dio_cookie_manager:
     dependency: "direct main"
     description:
-      path: "plugins/cookie_manager"
-      ref: null-safety
-      resolved-ref: "4681e1a776eb7e653e30c6d7d888a432d9c20a0e"
-      url: "https://github.com/miDeb/dio"
-    source: git
-    version: "1.0.0"
+      name: dio_cookie_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0-beta1"
   dynamic_theme:
     dependency: "direct main"
     description:
