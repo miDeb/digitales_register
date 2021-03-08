@@ -23,13 +23,14 @@ class _PopObserver extends NavigatorObserver {
 /// A widget that provides a responsive scaffold implementation.
 ///
 /// Concepts:
-/// - There is one home page, and zero or more sub pages.
+/// - There is one home page, and zero or more sub-pages.
 /// - On mobile, the drawer can be opened by tapping on the hamburger menu on
-///   the home page, where a sub page can be selected to navigate to. Navigating
-///   back is possible by tapping the back button in the AppBar of each sub
-///   page. The home page is not shown in the drawer.
-/// - On tablets, the drawer is always expanded on the side. Sub pages and the
-///   home page are listed in the sidebar. After navigating to a sub page, it is
+///   the home page, where a sub-page can be selected to navigate to. The drag
+///   area to open the drawer is increased to the whole screen to make single-
+///   handed navigation easier. Navigating back is possible by tapping the back
+///   button in the AppBar of each sub-page. The home page is not shown in the drawer.
+/// - On tablets, the drawer is always expanded as a sidebar. Sub-pages and the
+///   home page are listed in the sidebar. After navigating to a sub-page, it is
 ///   possible to navigate back to the main page by selecting it in the sidebar.
 ///
 /// Usage:
@@ -405,6 +406,7 @@ class _HomePage extends StatelessWidget {
       body: widgets.body,
       key: widgets.scaffoldKey,
       floatingActionButton: widgets.fab,
+      drawerEdgeDragWidth: double.infinity,
     );
   }
 }

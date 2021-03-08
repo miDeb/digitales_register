@@ -19,6 +19,38 @@ import 'package:built_collection/built_collection.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
 Future<void> main() async {
+  testGoldens('Open drawer in phone mode', (WidgetTester tester) async {
+    ScaffoldState getScaffoldState() {
+      return tester.state(find.byType(Scaffold));
+    }
+
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        ReducerBuilder<AppState, AppStateBuilder>().build(),
+        AppState(),
+        AppActions(),
+      ),
+      child: MaterialApp(home: DaysContainer()),
+    );
+    await tester.pumpWidget(
+      Center(
+        child: SizedBox(
+          width: 300,
+          child: widget,
+        ),
+      ),
+    );
+    expect(getScaffoldState().isDrawerOpen, isFalse);
+    // scroll vertically
+    await tester.fling(find.byType(Scaffold), const Offset(0, 500), 1000);
+    expect(getScaffoldState().isDrawerOpen, isFalse);
+    // scroll vertically, but also a bit horizontally
+    await tester.fling(find.byType(Scaffold), const Offset(30, 100), 1000);
+    expect(getScaffoldState().isDrawerOpen, isFalse);
+    // scroll mostly horizontally
+    await tester.fling(find.byType(Scaffold), const Offset(100, 30), 1000);
+    expect(getScaffoldState().isDrawerOpen, isTrue);
+  });
   testWidgets('Home page shows no internet message',
       (WidgetTester tester) async {
     final widget = ReduxProvider(
@@ -515,39 +547,40 @@ Future<void> main() async {
     scaffoldMessengerKey = GlobalKey();
     final widget = ReduxProvider(
       store: Store<AppState, AppStateBuilder, AppActions>(
-          appReducerBuilder.build(),
-          AppState(
-            (b) => b.dashboardState
-              ..allDays = ListBuilder(
-                <Day>[
-                  Day(
-                    (b) => b
-                      ..date = DateTime.now()
-                      ..deletedHomework = ListBuilder()
-                      ..homework = ListBuilder(<Homework>[
-                        Homework(
-                          (b) => b
-                            ..checkable = true
-                            ..checked = false
-                            ..deleteable = true
-                            ..deleted = false
-                            ..firstSeen = DateTime(2021, 2, 2)
-                            ..id = 0
-                            ..isChanged = false
-                            ..isNew = false
-                            ..type = HomeworkType.homework
-                            ..warningServerSaid = false
-                            ..title = "Title"
-                            ..subtitle = "Subtitle",
-                        ),
-                      ])
-                      ..lastRequested = DateTime.now(),
-                  ),
-                ],
-              ),
-          ),
-          AppActions(),
-          middleware: middleware(includeErrorMiddleware: false)),
+        appReducerBuilder.build(),
+        AppState(
+          (b) => b.dashboardState
+            ..allDays = ListBuilder(
+              <Day>[
+                Day(
+                  (b) => b
+                    ..date = DateTime.now()
+                    ..deletedHomework = ListBuilder()
+                    ..homework = ListBuilder(<Homework>[
+                      Homework(
+                        (b) => b
+                          ..checkable = true
+                          ..checked = false
+                          ..deleteable = true
+                          ..deleted = false
+                          ..firstSeen = DateTime(2021, 2, 2)
+                          ..id = 0
+                          ..isChanged = false
+                          ..isNew = false
+                          ..type = HomeworkType.homework
+                          ..warningServerSaid = false
+                          ..title = "Title"
+                          ..subtitle = "Subtitle",
+                      ),
+                    ])
+                    ..lastRequested = DateTime.now(),
+                ),
+              ],
+            ),
+        ),
+        AppActions(),
+        middleware: middleware(includeErrorMiddleware: false),
+      ),
       child: MaterialApp(
         scaffoldMessengerKey: scaffoldMessengerKey,
         home: DaysContainer(),
