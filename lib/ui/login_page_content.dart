@@ -8,6 +8,7 @@ import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../container/login_page.dart';
+import 'animated_linear_progress_indicator.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
 typedef ChangePassCallback = void Function(
@@ -418,7 +419,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                 ],
               ),
             ),
-            if (widget.vm.loading) const LinearProgressIndicator(),
+            AnimatedLinearProgressIndicator(show: widget.vm.loading),
           ],
         ),
       ),

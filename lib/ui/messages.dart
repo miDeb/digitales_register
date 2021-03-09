@@ -9,6 +9,7 @@ import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 import '../app_state.dart';
 import '../data.dart';
+import 'animated_linear_progress_indicator.dart';
 import 'no_internet.dart';
 
 typedef MessageCallback = void Function(Message message);
@@ -40,10 +41,11 @@ class MessagesPage extends StatelessWidget {
               : const Center(child: CircularProgressIndicator())
           : Stack(
               children: <Widget>[
-                if (state!.showMessage != null &&
-                    !state!.messages.any((m) => m.id == state!.showMessage))
-                  const LinearProgressIndicator()
-                else if (state!.messages.isEmpty)
+                AnimatedLinearProgressIndicator(
+                  show: state!.showMessage != null &&
+                      !state!.messages.any((m) => m.id == state!.showMessage),
+                ),
+                if (state!.messages.isEmpty)
                   Center(
                     child: Text(
                       "Noch keine Mitteilungen",
@@ -188,7 +190,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                 Text(
                   widget.message.fileOriginalName!,
                 ),
-                if (widget.message.downloading) const LinearProgressIndicator(),
+                AnimatedLinearProgressIndicator(show: widget.message.downloading),
                 if (!widget.message.fileAvailable)
                   SizedBox(
                     width: double.infinity,

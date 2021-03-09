@@ -5,6 +5,7 @@ import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../container/grades_page_container.dart';
 import '../container/sorted_grades_container.dart';
+import 'animated_linear_progress_indicator.dart';
 import 'no_internet.dart';
 
 class GradesPage extends StatelessWidget {
@@ -58,7 +59,7 @@ class GradesPage extends StatelessWidget {
                 )
               : Stack(
                   children: [
-                    if (vm.loading) const LinearProgressIndicator(),
+                    AnimatedLinearProgressIndicator(show: vm.loading),
                     ListView(
                       children: <Widget>[
                         if (vm.showGradesDiagram)

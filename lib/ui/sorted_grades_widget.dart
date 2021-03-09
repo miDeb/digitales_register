@@ -5,6 +5,7 @@ import '../app_state.dart';
 import '../container/sorted_grades_container.dart';
 import '../data.dart';
 import '../util.dart';
+import 'animated_linear_progress_indicator.dart';
 
 typedef ViewSubjectDetailCallback = void Function(Subject s);
 typedef SetBoolCallback = void Function(bool byType);
@@ -204,9 +205,7 @@ class _SubjectWidgetState extends State<SubjectWidget>
                               )
                       ],
                     )
-                  : (!widget.noInternet)
-                      ? const LinearProgressIndicator()
-                      : const SizedBox(),
+                  : AnimatedLinearProgressIndicator(show: !widget.noInternet),
             ),
           ),
         ],

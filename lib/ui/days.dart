@@ -4,6 +4,7 @@ import 'package:dr/container/notification_icon_container.dart';
 import 'package:dr/container/sidebar_container.dart';
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
+import 'package:dr/ui/animated_linear_progress_indicator.dart';
 
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
@@ -259,19 +260,17 @@ class _DaysWidgetState extends State<DaysWidget> {
           );
         },
       );
-      if (widget.vm.loading) {
-        body = Stack(
-          children: [
-            body,
-            const LinearProgressIndicator(),
-          ],
+      if (!noInternet && !widget.vm.loading) {
+        body = RefreshIndicator(
+          onRefresh: () async => widget.refresh(),
+          child: body,
         );
       }
-    }
-    if (!noInternet && !widget.vm.loading) {
-      body = RefreshIndicator(
-        onRefresh: () async => widget.refresh(),
-        child: body,
+      body = Stack(
+        children: [
+          body,
+          AnimatedLinearProgressIndicator(show: widget.vm.loading),
+        ],
       );
     }
     return ResponsiveScaffold<Pages>(
@@ -995,7 +994,7 @@ class AttachmentWidget extends StatelessWidget {
             height: 0,
           ),
           ListTile(title: Text(ggs.originalName)),
-          if (ggs.downloading) const LinearProgressIndicator(),
+          AnimatedLinearProgressIndicator(show: ggs.downloading),
           if (!ggs.fileAvailable)
             TextButton(
               onPressed: noInternet

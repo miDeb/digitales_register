@@ -191,6 +191,8 @@ void main() {
     await tester.pumpWidget(widget);
     expect(find.byType(CircularProgressIndicator), findsNothing);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
+    // The linear progress indicator will still be animating in.
+    await tester.pump(const Duration(milliseconds: 100));
     await expectLater(
       find.byType(GradesPageContainer),
       matchesGoldenFile("loading_not_empty.png"),
