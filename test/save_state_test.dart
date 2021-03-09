@@ -17,41 +17,61 @@ const serverUrl = "null/v2/api/auth/login";
 class FakeSecureStorage implements FlutterSecureStorage {
   final Map<String, String> storage = {};
   @override
-  Future<bool> containsKey(
-      {String? key, IOSOptions? iOptions, AndroidOptions? aOptions}) async {
+  Future<bool> containsKey({
+    String? key,
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     return storage.containsKey(key);
   }
 
   @override
-  Future<void> delete(
-      {String? key, IOSOptions? iOptions, AndroidOptions? aOptions}) async {
+  Future<void> delete({
+    String? key,
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     storage.remove(key);
   }
 
   @override
-  Future<void> deleteAll(
-      {IOSOptions? iOptions, AndroidOptions? aOptions}) async {
+  Future<void> deleteAll({
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     storage.clear();
   }
 
   @override
-  Future<String?> read(
-      {String? key, IOSOptions? iOptions, AndroidOptions? aOptions}) async {
+  Future<String?> read({
+    String? key,
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     return storage[key];
   }
 
   @override
-  Future<Map<String, String>> readAll(
-      {IOSOptions? iOptions, AndroidOptions? aOptions}) async {
+  Future<Map<String, String>> readAll({
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     return storage;
   }
 
   @override
-  Future<void> write(
-      {String? key,
-      String? value,
-      IOSOptions? iOptions,
-      AndroidOptions? aOptions}) async {
+  Future<void> write({
+    String? key,
+    String? value,
+    IOSOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
     storage[key!] = value!;
   }
 }

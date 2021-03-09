@@ -51,47 +51,61 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   }
 
   @override
-  Future<void> delete(
-      {required String key,
-      dynamic iOptions,
-      secure_storage.AndroidOptions? aOptions}) async {
+  Future<void> delete({
+    required String key,
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     (await hiveBox).delete(key);
   }
 
   @override
-  Future<void> deleteAll(
-      {dynamic iOptions, secure_storage.AndroidOptions? aOptions}) async {
+  Future<void> deleteAll({
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     (await hiveBox).clear();
   }
 
   @override
-  Future<String?> read(
-      {required String key,
-      dynamic iOptions,
-      secure_storage.AndroidOptions? aOptions}) async {
+  Future<String?> read({
+    required String key,
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     return (await hiveBox).get(key);
   }
 
   @override
-  Future<Map<String, String>> readAll(
-      {dynamic iOptions, secure_storage.AndroidOptions? aOptions}) async {
+  Future<Map<String, String>> readAll({
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     return (await hiveBox).toMap() as Map<String, String>;
   }
 
   @override
-  Future<void> write(
-      {required String key,
-      required String? value,
-      dynamic iOptions,
-      secure_storage.AndroidOptions? aOptions}) async {
+  Future<void> write({
+    required String key,
+    required String? value,
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     return (await hiveBox).put(key, value!);
   }
 
   @override
-  Future<bool> containsKey(
-      {required String key,
-      secure_storage.IOSOptions? iOptions,
-      secure_storage.AndroidOptions? aOptions}) async {
+  Future<bool> containsKey({
+    required String key,
+    secure_storage.IOSOptions? iOptions,
+    secure_storage.AndroidOptions? aOptions,
+    secure_storage.LinuxOptions? lOptions,
+  }) async {
     return (await hiveBox).containsKey(key);
   }
 }
