@@ -28,7 +28,7 @@ Future<void> _downloadFile(
   if (api.state.noInternet) return;
   final success = await downloadFile(
     "${_wrapper.baseAddress}/api/message/download",
-    action.payload.fileOriginalName ?? DateTime.now().toString(),
+    action.payload.fileOriginalName!,
     <String, dynamic>{
       "messageId": action.payload.id,
       "fileName": action.payload.fileName,
@@ -47,8 +47,7 @@ Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<Message> action) async {
   await next(action);
   final saveFile = File(
-    action.payload.fileOriginalName!,
-  );
+      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.fileOriginalName!}");
   await OpenFile.open(saveFile.path);
 }
 

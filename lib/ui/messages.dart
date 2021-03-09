@@ -125,7 +125,10 @@ class _MessageWidgetState extends State<MessageWidget> {
             Badge(
               shape: BadgeShape.square,
               borderRadius: BorderRadius.circular(20),
-              badgeContent: const Text("neu"),
+              badgeContent: const Text(
+                "neu",
+                style: TextStyle(color: Colors.white),
+              ),
             )
         ],
       ),
@@ -182,15 +185,51 @@ class _MessageWidgetState extends State<MessageWidget> {
                   "Anhang:",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: Text(
-                        widget.message.fileOriginalName!,
-                      ),
-                    ),
-                  ],
+                Text(
+                  widget.message.fileOriginalName!,
                 ),
+                if (widget.message.downloading) const LinearProgressIndicator(),
+                if (!widget.message.fileAvailable)
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: widget.noInternet
+                          ? null
+                          : () {
+                              widget.onDownloadFile(widget.message);
+                            },
+                      child: const Text("Herunterladen"),
+                    ),
+                  ),
+                if (widget.message.fileAvailable)
+                  IntrinsicHeight(
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: TextButton(
+                            onPressed: widget.noInternet
+                                ? null
+                                : () {
+                                    widget.onDownloadFile(widget.message);
+                                  },
+                            child: const Text("Erneut herunterladen"),
+                          ),
+                        ),
+                        const VerticalDivider(
+                          indent: 8,
+                          endIndent: 8,
+                        ),
+                        Expanded(
+                          child: TextButton(
+                            onPressed: () {
+                              widget.onOpenFile(widget.message);
+                            },
+                            child: const Text("Öffnen"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
               ],
             ],
           ),
