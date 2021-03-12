@@ -52,14 +52,15 @@ void _markAsRead(
   if (action.payload == state.showMessage) {
     builder.showMessage = null;
   }
-  builder.messages[state.messages.indexWhere((m) => m.id == action.payload)] =
-      state.messages
-          .firstWhere(
-            (m) => m.id == action.payload,
-          )
-          .rebuild(
-            (b) => b..timeRead = now,
-          );
+  final index = state.messages.indexWhere((m) => m.id == action.payload);
+  if (index == -1) {
+    // This means that we are trying to mark a message as read that has not been loaded yet.
+    // This happens when marking a message as read via a notification.
+    return;
+  }
+  builder.messages[index] = state.messages[index].rebuild(
+    (b) => b..timeRead = now,
+  );
 }
 
 MessagesState _parseMessages(List json, MessagesState state) {

@@ -190,7 +190,8 @@ class _MessageWidgetState extends State<MessageWidget> {
                 Text(
                   widget.message.fileOriginalName!,
                 ),
-                AnimatedLinearProgressIndicator(show: widget.message.downloading),
+                AnimatedLinearProgressIndicator(
+                    show: widget.message.downloading),
                 if (!widget.message.fileAvailable)
                   SizedBox(
                     width: double.infinity,
