@@ -55,7 +55,8 @@ part 'settings.dart';
 
 late FlutterSecureStorage secureStorage;
 
-var _wrapper = Wrapper();
+@visibleForTesting
+Wrapper wrapper = Wrapper();
 
 List<Middleware<AppState, AppStateBuilder, AppActions>> middleware({
   @visibleForTesting bool includeErrorMiddleware = true,
@@ -180,7 +181,7 @@ $error""",
 
 void _tap(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) {
-  _wrapper.interaction();
+  wrapper.interaction();
   // do not call next: this action is only to update the logout time
 }
 
@@ -189,12 +190,12 @@ Future<void> _refreshNoInternet(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  final noInternet = await _wrapper.noInternet;
+  final noInternet = await wrapper.noInternet;
   final prevNoInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
     if (noInternet) {
       showSnackBar("Keine Verbindung");
-      _wrapper.logout(
+      wrapper.logout(
         hard: false,
         logoutForcedByServer: true,
       );
@@ -212,7 +213,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   try {
     login = json.decode(await secureStorage.read(key: "login") ?? "{}");
   } catch (e) {
-    login = <Never, Never>{};
+    login = const <Never, Never>{};
     showSnackBar("Fehler beim Laden der gespeicherten Daten");
     log("Failed to load login credentials", error: e);
     try {
@@ -269,7 +270,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.savePassActions.save();
   }
   deletedData = false;
-  final key = getStorageKey(action.payload.username, _wrapper.loginAddress);
+  final key = getStorageKey(action.payload.username, wrapper.loginAddress);
   if (!api.state.loginState.loggedIn) {
     final state = await _readFromStorage(key);
     if (state != null) {
@@ -315,6 +316,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       }
     } else {
       // navigatorKey is null in unit tests
+      // TODO: Remove distinctions between real world and unit tests
       if (navigatorKey?.currentContext != null) {
         final saveData = await _showDataSavingDialog() ?? false;
         api.actions.settingsActions.saveNoData(!saveData);
@@ -356,7 +358,7 @@ NextActionHandler _saveStateMiddleware(
               return;
             }
             final user = getStorageKey(
-                _stateToSave.loginState.username, _wrapper.loginAddress);
+                _stateToSave.loginState.username, wrapper.loginAddress);
             _saveUnderway = true;
 
             Future<void> save() async {
@@ -434,7 +436,7 @@ Future<void> _restarted(
   Action<void> action,
 ) async {
   await next(action);
-  if (now.difference(_wrapper.lastInteraction).inMinutes > 3) {
+  if (now.difference(wrapper.lastInteraction).inMinutes > 3) {
     _popAll();
     api.actions.loginActions.clearAfterLoginCallbacks();
     api.actions.load();
@@ -571,7 +573,7 @@ Future<bool> downloadFile(
   final saveFile = File(
     "${(await getApplicationDocumentsDirectory()).path}/$fileName",
   );
-  final result = await _wrapper.dio.get<dynamic>(
+  final result = await wrapper.dio.get<dynamic>(
     url,
     queryParameters: parameters,
     options: dio.Options(responseType: dio.ResponseType.stream),

@@ -11,7 +11,7 @@ Future<void> _loadCalendar(
   if (api.state.noInternet) return;
 
   await next(action);
-  final dynamic data = await _wrapper.send("api/calendar/student",
+  final dynamic data = await wrapper.send("api/calendar/student",
       args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 
   if (data != null) {

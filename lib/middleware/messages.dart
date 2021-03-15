@@ -13,7 +13,7 @@ Future<void> _loadMessages(
     Action<void> action) async {
   if (api.state.noInternet) return;
   await next(action);
-  final dynamic response = await _wrapper.send("api/message/getMyMessages");
+  final dynamic response = await wrapper.send("api/message/getMyMessages");
   if (response != null) {
     api.actions.messagesActions.loaded(response as List);
   } else {
@@ -27,7 +27,7 @@ Future<void> _downloadFile(
     Action<Message> action) async {
   if (api.state.noInternet) return;
   final success = await downloadFile(
-    "${_wrapper.baseAddress}/api/message/download",
+    "${wrapper.baseAddress}/api/message/download",
     action.payload.fileOriginalName!,
     <String, dynamic>{
       "messageId": action.payload.id,
@@ -56,7 +56,7 @@ Future<void> _markAsRead(
     ActionHandler next,
     Action<int> action) async {
   await next(action);
-  final dynamic result = await _wrapper.send(
+  final dynamic result = await wrapper.send(
     "api/message/markAsRead",
     args: {"messageId": action.payload},
   );

@@ -19,7 +19,7 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       key: "login",
       value: json.encode(
         <String, Object?>{
-          "url": _wrapper.url,
+          "url": wrapper.url,
           if (await secureStorage.containsKey(key: "login"))
             "otherAccounts": json.decode(
                 (await secureStorage.read(key: "login"))!)["otherAccounts"],
@@ -32,11 +32,11 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
   if (!action.payload.forced) {
     assert(action.payload.hard);
-    _wrapper.logout(hard: action.payload.hard);
+    wrapper.logout(hard: action.payload.hard);
   }
   await next(action);
   if (action.payload.hard) {
-    _wrapper = Wrapper();
+    wrapper = Wrapper();
     api.actions.mountAppState(AppState());
     api.actions.load();
   }
@@ -58,7 +58,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
   final url = fixupUrl(action.payload.url);
   api.actions.loginActions.loggingIn();
-  final dynamic result = await _wrapper.login(
+  final dynamic result = await wrapper.login(
     action.payload.user,
     action.payload.pass,
     null,
@@ -70,13 +70,13 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..forced = true,
       ),
     ),
-    configLoaded: () => api.actions.setConfig(_wrapper.config),
+    configLoaded: () => api.actions.setConfig(wrapper.config),
     relogin: api.actions.loginActions.automaticallyReloggedIn,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
-  if (_wrapper.loggedIn) {
-    if (!_wrapper.config.isStudentOrParent) {
-      _wrapper.logout(hard: true);
+  if (wrapper.loggedIn) {
+    if (!wrapper.config.isStudentOrParent) {
+      wrapper.logout(hard: true);
       api.actions.loginActions.loginFailed(
         LoginFailedPayload(
           (b) => b..cause = "Dieser Benutzertyp wird nicht unterstützt.",
@@ -88,35 +88,36 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     await api.actions.loginActions.loggedIn(
       LoggedInPayload(
         (b) => b
-          ..username = _wrapper.user
+          ..username = wrapper.user
           ..fromStorage = action.payload.fromStorage,
       ),
     );
-    api.actions.setUrl(url);
   } else if (result is Map && result["error"] == "password_expired") {
     api.actions.savePassActions.delete();
     api.actions.loginActions.showChangePass(true);
   } else {
-    final noInternet = await _wrapper.noInternet;
+    final noInternet = await wrapper.noInternet;
     if (noInternet) {
       api.actions.noInternet(true);
       if (action.payload.offlineEnabled) {
-        api.actions.loginActions.loggedIn(
+        await api.actions.loginActions.loggedIn(
           LoggedInPayload(
             (b) => b
               ..username = action.payload.user
               ..fromStorage = true,
           ),
         );
+        api.actions.setUrl(url);
         return;
       }
     }
     api.actions.loginActions.loginFailed(
       LoginFailedPayload((b) => b
-        ..cause = _wrapper.error
+        ..cause = wrapper.error
         ..username = action.payload.user),
     );
   }
+  api.actions.setUrl(url);
 }
 
 Future<void> _changePass(
@@ -124,7 +125,7 @@ Future<void> _changePass(
     ActionHandler next,
     Action<ChangePassPayload> action) async {
   await next(action);
-  final dynamic result = await _wrapper.changePass(
+  final dynamic result = await wrapper.changePass(
     action.payload.url,
     action.payload.user,
     action.payload.oldPass,
@@ -138,7 +139,7 @@ Future<void> _changePass(
   if (result["error"] != null) {
     api.actions.loginActions.loginFailed(
       LoginFailedPayload((b) => b
-        ..cause = _wrapper.error
+        ..cause = wrapper.error
         ..username = action.payload.user),
     );
   } else {
@@ -174,12 +175,15 @@ Future<void> _showChangePass(
   await next(action);
 }
 
+@visibleForTesting
+dio.Dio? passDio;
+
 Future<void> _requestPassReset(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<RequestPassResetPayload> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
-  final dynamic result = (await dio.Dio().post<dynamic>(
+  final dynamic result = (await (passDio ?? dio.Dio()).post<dynamic>(
     "${api.state.url}/api/auth/resetPassword",
     data: {
       "email": action.payload.email,
@@ -201,7 +205,7 @@ Future<void> _resetPass(
     ActionHandler next,
     Action<String> action) async {
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
-  final dynamic result = (await dio.Dio().post<dynamic>(
+  final dynamic result = (await (passDio ?? dio.Dio()).post<dynamic>(
     "${api.state.url}/api/auth/setNewPassword",
     data: {
       "username": "",

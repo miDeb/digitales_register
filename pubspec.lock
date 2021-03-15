@@ -502,6 +502,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  mocktail:
+    dependency: "direct main"
+    description:
+      path: "packages/mocktail"
+      ref: generic_fallbacks
+      resolved-ref: e48fed348c056f0bd873f920bb2d6abb2903c203
+      url: "https://github.com/miDeb/mocktail.git"
+    source: git
+    version: "0.1.0"
   mutex:
     dependency: "direct main"
     description:

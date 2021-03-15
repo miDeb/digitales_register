@@ -8,7 +8,7 @@ final _gradesMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(GradesActionsNames.loadCancelledDescription, _loadCancelledDescription);
 
 final _gradesLock = SemesterLock((s) async {
-  await _wrapper.send("?semesterWechsel=${s.n}");
+  await wrapper.send("?semesterWechsel=${s.n}");
 });
 
 const String _subjects = "api/student/all_subjects";
@@ -35,7 +35,7 @@ Future<void> _loadGrades(
         ? [Semester.first, Semester.second]
         : [action.payload],
     (s) async {
-      final dynamic data = await _wrapper.send(
+      final dynamic data = await wrapper.send(
         _subjects,
         args: {"studentId": api.state.config!.userId},
       );
@@ -67,7 +67,7 @@ Future<void> _loadGradesDetails(
         ? [Semester.first, Semester.second]
         : [action.payload.semester],
     (s) async {
-      dynamic data = await _wrapper.send(
+      dynamic data = await wrapper.send(
         _subjectsDetail,
         args: {
           "studentId": api.state.config!.userId,
@@ -115,7 +115,7 @@ Future<void> _loadCancelledDescription(
   _doForSemester(
     [action.payload.semester],
     (s) async {
-      final dynamic data = await _wrapper.send(
+      final dynamic data = await wrapper.send(
         _grade,
         args: {
           "gradeId": action.payload.grade.id,

@@ -87,11 +87,12 @@ void main() {
         tester.testTextInput.enterText("Fach1");
         expect(find.byType(TextField), findsNWidgets(2));
         await tester.enterText(
-            find.descendant(
-              of: find.byType(InfoDialog),
-              matching: find.byType(TextField).last,
-            ),
-            "F1");
+          find.descendant(
+            of: find.byType(InfoDialog),
+            matching: find.byType(TextField).last,
+          ),
+          "F1",
+        );
         await tester.pumpAndSettle();
         await tester.tap(find.text("Fertig"));
         expect(store.state.settingsState.subjectNicks["Fach1"], "F1");

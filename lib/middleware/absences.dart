@@ -10,8 +10,7 @@ Future<void> _loadAbsences(
     Action<void> action) async {
   if (api.state.noInternet) return;
   await next(action);
-  final dynamic response =
-      await _wrapper.send("api/student/dashboard/absences");
+  final dynamic response = await wrapper.send("api/student/dashboard/absences");
   if (response != null) {
     api.actions.absencesActions.loaded(response);
   } else {

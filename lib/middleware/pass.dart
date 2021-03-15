@@ -36,7 +36,7 @@ Future<void> _setSavePass(
     ActionHandler next,
     Action<bool> action) async {
   await next(action);
-  _wrapper.safeMode = action.payload;
+  wrapper.safeMode = action.payload;
   if (!api.state.loginState.loggedIn) return;
   if (!action.payload) {
     api.actions.savePassActions.save();
@@ -48,16 +48,16 @@ Future<void> _setSavePass(
 Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
-  if (_wrapper.user == null || _wrapper.pass == null || _wrapper.safeMode) {
+  if (wrapper.user == null || wrapper.pass == null || wrapper.safeMode) {
     return;
   }
   secureStorage.write(
     key: "login",
     value: json.encode(
       <String, Object?>{
-        "user": _wrapper.user,
-        "pass": _wrapper.pass,
-        "url": _wrapper.url,
+        "user": wrapper.user,
+        "pass": wrapper.pass,
+        "url": wrapper.url,
         "offlineEnabled": api.state.settingsState.offlineEnabled,
         "otherAccounts": json.decode(
             await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
@@ -75,7 +75,7 @@ Future<void> _deletePass(
     key: "login",
     value: json.encode(
       <String, Object?>{
-        "url": _wrapper.url,
+        "url": wrapper.url,
         "otherAccounts": json.decode(
             await secureStorage.read(key: "login") ?? "{}")["otherAccounts"],
       },

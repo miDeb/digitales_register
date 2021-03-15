@@ -78,6 +78,11 @@ dependencies:
   hive: ^2.0.0
   http: ^0.13.0
   intl: ^0.17.0-nullsafety.2
+  mocktail:
+    git:
+      url: https://github.com/miDeb/mocktail.git
+      ref: generic_fallbacks
+      path: packages/mocktail
   mutex: ^2.0.0-nullsafety.0
   package_info_plus: ^1.0.0-nullsafety.0
   path_provider: ^2.0.0-nullsafety

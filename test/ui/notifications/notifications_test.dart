@@ -8,11 +8,15 @@ import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/notifications_page.dart';
+import 'package:dr/wrapper.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockWrapper extends Mock implements Wrapper {}
 
 void main() {
   testGoldens('Notification icon shows badge', (WidgetTester tester) async {
@@ -236,6 +240,8 @@ void main() {
   });
 
   testWidgets('mark other types as read', (WidgetTester tester) async {
+    wrapper = MockWrapper();
+
     final notifications = [
       Notification(
         (b) => b
@@ -270,9 +276,9 @@ void main() {
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState(
-        (b) => b.notificationState.notifications = ListBuilder(
-          notifications,
-        ),
+        (b) {
+          b.notificationState.notifications = ListBuilder(notifications);
+        },
       ),
       AppActions(),
       middleware: middleware(includeErrorMiddleware: false),
@@ -294,6 +300,16 @@ void main() {
     await tester.pumpWidget(widget);
 
     // delete the 0th notification
+    when(
+      () => wrapper.send(
+        "api/notification/markAsRead",
+        args: {
+          "id": isIn([0, null]),
+        },
+      ),
+    ).thenAnswer(
+      (invocation) => Future<dynamic>.value(""),
+    );
     expect(find.text("title0"), findsOneWidget);
     await tester.tap(find.byIcon(Icons.done).first);
     await tester.pumpAndSettle();
@@ -303,11 +319,33 @@ void main() {
       (notifications.toList()..removeAt(0)).build(),
     );
 
-    // TODO: Properly mock network calls
-    await store.actions.noInternet(false);
-    await tester.pumpAndSettle();
-
     // delete all
+    when(
+      () => wrapper.send(
+        "api/notification/markAsRead",
+        args: {},
+      ),
+    ).thenAnswer(
+      (invocation) => Future<dynamic>.value(""),
+    );
+    // TODO: remove when https://github.com/felangel/mocktail/pull/34 is merged
+    registerFallbackValue<Map<String, Object?>>({});
+    when(
+      () => wrapper.send(
+        "api/message/markAsRead",
+        args: {"messageId": 25},
+      ),
+    ).thenAnswer(
+      (invocation) => Future<dynamic>.value(""),
+    );
+    when(
+      () => wrapper.send(
+        "api/message/markAsRead",
+        args: {"messageId": 50},
+      ),
+    ).thenAnswer(
+      (invocation) => Future<dynamic>.value(""),
+    );
     await tester.tap(find.byIcon(Icons.done_all));
     await tester.pumpAndSettle();
     expect(find.textContaining("title"), findsNothing);

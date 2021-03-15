@@ -43,7 +43,7 @@ class UnexpectedLogoutException implements Exception {}
 
 class Wrapper {
   final cookieJar = DefaultCookieJar();
-  final dio = Dio();
+  final Dio dio = Dio();
   String get loginAddress => "${baseAddress}api/auth/login";
   String get baseAddress => "$url/v2/";
   String? user, pass, _url;

@@ -46,8 +46,41 @@ void main() {
     AppActions(),
     middleware: middleware(),
   );
-  runApp(
-    ReduxProvider(
+  runApp(RegisterApp(store: store));
+  WidgetsBinding.instance!.addPostFrameCallback(
+    (_) async {
+      Uri? uri;
+      if (Platform.isAndroid) {
+        uri = await getInitialUri();
+        uriLinkStream.listen((event) {
+          store.actions.start(event);
+        });
+      }
+      store.actions.start(uri);
+      WidgetsBinding.instance!.addObserver(
+        LifecycleObserver(
+          () {
+            store.actions.restarted();
+          },
+          // this might not finish in time:
+          store.actions.saveState,
+        ),
+      );
+    },
+  );
+}
+
+class RegisterApp extends StatelessWidget {
+  const RegisterApp({
+    Key? key,
+    required this.store,
+  }) : super(key: key);
+
+  final Store<AppState, AppStateBuilder, AppActions> store;
+
+  @override
+  Widget build(BuildContext context) {
+    return ReduxProvider(
       store: store,
       child: Listener(
         onPointerDown: (_) => store.actions.loginActions.updateLogout(),
@@ -138,29 +171,8 @@ void main() {
           ),
         ),
       ),
-    ),
-  );
-  WidgetsBinding.instance!.addPostFrameCallback(
-    (_) async {
-      Uri? uri;
-      if (Platform.isAndroid) {
-        uri = await getInitialUri();
-        uriLinkStream.listen((event) {
-          store.actions.start(event);
-        });
-      }
-      store.actions.start(uri);
-      WidgetsBinding.instance!.addObserver(
-        LifecycleObserver(
-          () {
-            store.actions.restarted();
-          },
-          // this might not finish in time:
-          store.actions.saveState,
-        ),
-      );
-    },
-  );
+    );
+  }
 }
 
 class LifecycleObserver with WidgetsBindingObserver {

@@ -16,7 +16,7 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (api.state.noInternet) return;
 
   await next(action);
-  final dynamic data = await _wrapper.send("api/student/dashboard/dashboard",
+  final dynamic data = await wrapper.send("api/student/dashboard/dashboard",
       args: {"viewFuture": action.payload});
 
   if (data is! List) {
@@ -50,7 +50,7 @@ Future<void> _addReminder(
     ActionHandler next,
     Action<AddReminderPayload> action) async {
   await next(action);
-  final dynamic result = await _wrapper.send(
+  final dynamic result = await wrapper.send(
     "api/student/dashboard/save_reminder",
     args: {
       "date": DateFormat("yyyy-MM-dd").format(action.payload.date),
@@ -75,7 +75,7 @@ Future<void> _deleteHomework(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<Homework> action) async {
-  final dynamic result = await _wrapper.send(
+  final dynamic result = await wrapper.send(
     "api/student/dashboard/delete_reminder",
     args: {
       "id": action.payload.id,
@@ -95,7 +95,7 @@ Future<void> _toggleDone(
     ActionHandler next,
     Action<ToggleDonePayload> action) async {
   await next(action);
-  final dynamic result = await _wrapper.send(
+  final dynamic result = await wrapper.send(
     "api/student/dashboard/toggle_reminder",
     args: {
       "id": action.payload.homeworkId,
@@ -141,7 +141,7 @@ Future<void> _downloadAttachment(
   if (api.state.noInternet) return;
   await next(action);
   final success = await downloadFile(
-    "${_wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
+    "${wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
     action.payload.originalName,
     <String, dynamic>{
       "submissionId": action.payload.id,

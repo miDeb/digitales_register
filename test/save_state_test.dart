@@ -4,9 +4,11 @@ import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/app_actions.dart';
 import 'package:dr/actions/login_actions.dart';
 import 'package:dr/app_state.dart';
+import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/serializers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matcher/matcher.dart';
@@ -14,8 +16,11 @@ import 'package:quiver/testing/src/async/fake_async.dart';
 
 const serverUrl = "null/v2/api/auth/login";
 
+/// Implememts [FlutterSecureStorage] in memory.
 class FakeSecureStorage implements FlutterSecureStorage {
-  final Map<String, String> storage = {};
+  FakeSecureStorage({Map<String, String>? storage}) : storage = storage ?? {};
+
+  final Map<String, String> storage;
   @override
   Future<bool> containsKey({
     String? key,
@@ -180,6 +185,7 @@ void main() {
         const TypeMatcher<SettingsState>());
   });
   test('state is deleted on logout when state saving is disabled', () async {
+    navigatorKey = GlobalKey();
     const username = "test_username3";
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
