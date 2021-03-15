@@ -457,6 +457,7 @@ class DayWidget extends StatelessWidget {
           builder: (context, setState) => InfoDialog(
             title: const Text("Erinnerung"),
             content: TextField(
+              autofocus: true,
               maxLines: null,
               onChanged: (msg) {
                 setState(() => message = msg);
