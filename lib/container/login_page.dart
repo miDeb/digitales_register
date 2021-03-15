@@ -141,8 +141,10 @@ const _servers = {
   "Grundschule Walten in Passeier": "https://gs-walten.digitalesregister.it",
   "SSP St. Leonhard": "https://ssp-stleonhard.digitalesregister.it",
   "Mühlbach": "https://ssp-muehlbach.digitalesregister.it",
-  "Grundschulen Sterzing III": "https://gs-sterzing3.digitalesregister.it",
-  "SSP Sterzing 3": "https://schulsprengel-sterzing3.digitalesregister.it",
+  "Grundschulen Sterzing III (Kematen, Mauls, St. Jakob, Stilfes, Trens, Wiesen)":
+      "https://gs-sterzing3.digitalesregister.it",
+  "SSP Sterzing 3 (Vigil Raber)":
+      "https://schulsprengel-sterzing3.digitalesregister.it",
   "Grundschulen SSP Terlan": "https://gs-sspterlan.digitalesregister.it",
   "Mittelschule Terlan": "https://ms-sspterlan.digitalesregister.it",
   "Scola Mesana Selva": "https://sm-selva.digitalesregister.it",
@@ -168,9 +170,9 @@ const _servers = {
   "SSP Ahrntal": "https://ssp-ahrntal.digitalesregister.it",
   "MS Algund": "https://ms-algund.digitalesregister.it",
   "SSP Algund - Grundschulen": "https://ssp-algund.digitalesregister.it",
-  "Grundschulen SSP Bozen Europa":
+  "Grundschulen SSP Bozen Europa (Grundschule J. H. Pestalozzi, Grundschule A. Langer)":
       "https://gs-bozeneuropa.digitalesregister.it",
-  "Mittelschule SSP Bozen Europa":
+  "Mittelschule SSP Bozen Europa (Mittelschule A. Schweitzer)":
       "https://ms-bozeneuropa.digitalesregister.it",
   "SSP Bruneck 1": "https://bruneck1.digitalesregister.it",
   "Mittelschule Bruneck II": "https://meusburger.digitalesregister.it",
@@ -259,7 +261,8 @@ const _servers = {
   "SSP Ulten": "https://ssp-ulten.digitalesregister.it",
   "Schulsprengel Vintl": "https://ssp-vintl.digitalesregister.it",
   "MS Welsberg": "https://ms-welsberg.digitalesregister.it",
-  "Schulsprengel Sterzing I": "https://sterzing1.digitalesregister.it",
+  "Schulsprengel Sterzing I (GS Sterzing J.Rampold, GS Gossensaß, MS Gossensaß, GS Innerpflersch)":
+      "https://sterzing1.digitalesregister.it",
   "GS Ahornach": "https://gs-ahornach.digitalesregister.it",
   "GS Lappach": "https://gs-lappach.digitalesregister.it",
   "GS Mühlwald": "https://gs-muehlwald.digitalesregister.it",
