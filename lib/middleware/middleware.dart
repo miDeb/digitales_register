@@ -391,6 +391,8 @@ NextActionHandler _saveStateMiddleware(
         };
 
 String getStorageKey(String? user, String server) {
+  // This is safe because the default Map in dart is a LinkedHashMap, which mantains
+  // a stable ordering of its items.
   return json.encode({"username": user, "server_url": server});
 }
 

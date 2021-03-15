@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 
 import 'package:built_redux/built_redux.dart';
@@ -282,5 +283,12 @@ void main() {
         serializers.deserialize(
             json.decode((await storageHelper.read(username))!) as Object),
         const TypeMatcher<AppState>());
+  });
+
+  test('Default map is ordered', () {
+    expect({"username": "asdf", "url": "foo"}, isA<LinkedHashMap>());
+    final keys = {"username": "asdf", "url": "foo"}.keys.toList();
+    expect(keys[0], "username");
+    expect(keys[1], "url");
   });
 }
