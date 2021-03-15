@@ -64,7 +64,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   int get id;
   bool get isNew;
   bool get isChanged;
-  String /*!*/ get title;
+  String get title;
   String get subtitle;
 
   String? get label;
@@ -460,7 +460,7 @@ abstract class Absence implements Built<Absence, AbsenceBuilder> {
   int get minutes;
   int get minutesCameTooLate;
   int get minutesLeftTooEarly;
-  DateTime /*!*/ get date;
+  DateTime get date;
   int get hour;
   factory Absence([Function(AbsenceBuilder b)? updates]) = _$Absence;
   Absence._();

@@ -428,7 +428,7 @@ class DayWidget extends StatelessWidget {
 
   final Day day;
 
-  final AutoScrollController /*!*/ controller;
+  final AutoScrollController controller;
   final int index;
 
   const DayWidget({
@@ -972,7 +972,7 @@ DateTime toDate(DateTime dateTime) {
 }
 
 class AttachmentWidget extends StatelessWidget {
-  final GradeGroupSubmission /*!*/ ggs;
+  final GradeGroupSubmission ggs;
   final AttachmentCallback downloadCallback;
   final AttachmentCallback openCallback;
   final bool noInternet;
