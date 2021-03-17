@@ -82,6 +82,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
     super.initState();
   }
 
+  String get url => nonCustomServer?.item2 ?? _urlController.text;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -109,6 +111,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: TypeAheadField<String>(
                         textFieldConfiguration: TextFieldConfiguration(
+                          enabled: !widget.vm.loading,
                           focusNode: _schoolFocusNode,
                           autofocus: _schoolController.text.isEmpty,
                           controller: _schoolController,
@@ -256,9 +259,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ),
-                              onPressed: () => widget.onRequestPassReset(
-                                nonCustomServer?.item2 ?? _urlController.text,
-                              ),
+                              onPressed: () => widget.onRequestPassReset(url),
                               child: const Text(
                                 "Passwort vergessen",
                               ),
@@ -344,15 +345,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                         _usernameController.text,
                                         _passwordController.text,
                                         _newPassword1Controller.text,
-                                        nonCustomServer?.item2 ??
-                                            _urlController.text,
+                                        url,
                                       );
                                     } else {
                                       widget.onLogin(
                                         _usernameController.value.text,
                                         _passwordController.value.text,
-                                        nonCustomServer?.item2 ??
-                                            _urlController.text,
+                                        url,
                                       );
                                     }
                                   },
@@ -407,7 +406,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     child: widget.vm.error?.isNotEmpty == true
                         ? Text(
                             widget.vm.noInternet
-                                ? "Keine Verbindung möglich"
+                                ? 'Keine Verbindung mit "${widget.vm.url}" möglich. Bitte überprüfe deine Internetverbindung.\nWenn du "Andere Schule" ausgewählt hast, musst du eine gültige Adresse eingeben.'
                                 : widget.vm.error!,
                             style: Theme.of(context)
                                 .textTheme

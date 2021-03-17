@@ -283,7 +283,8 @@ const _servers = {
   "Grundschulen im Schulsprengel Laas": "https://gs-laas.digitalesregister.it",
   "Mittelschule Laas": "https://ms-laas.digitalesregister.it",
   "Grundschulsprengel Neumarkt": "https://gsp-neumarkt.digitalesregister.it",
-  "Grundschulsprengel Bozen": "https://bozen1.digitalesregister.it",
+  "Grundschulsprengel Bozen 1 (Goethe, Chini, Wolff)":
+      "https://bozen1.digitalesregister.it",
   "Grundschulsprengel Eppan": "https://gspeppan.digitalesregister.it",
   "Grundschule Kaltern": "https://gs-kaltern.digitalesregister.it",
   "Waldorf WOB Bozen": "https://wob.digitalesregister.it",

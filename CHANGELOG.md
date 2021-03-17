@@ -1,4 +1,7 @@
-## x.x.x (unveröffentlicht)
+## x.x.x
+- Fehlende Schulen wurden hinzugefügt
+
+## 8.1.5
 - Fehler beim Tippen auf "Alle Gelesen" behoben
 - Schulen im Schulsprengel Sterzing I/III und im SSP Bozen Europa wurden aufgeschlüsselt,
   sodass einzelne Schulen leichter zu finden sind.
