@@ -120,45 +120,55 @@ class RegisterApp extends StatelessWidget {
               switch (pathElements[1]) {
                 case "":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => HomePage(),
                   );
                 case "login":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => LoginPage(),
                   );
                 case "request_pass_reset":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => RequestPassResetContainer(),
                   );
                 case "pass_reset":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => PassResetContainer(),
                   );
                 case "change_email":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => ChangeEmailContainer(),
                   );
                 case "profile":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => ProfileContainer(),
                   );
                 case "notifications":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => NotificationPageContainer(),
                     fullscreenDialog: true,
                   );
                 case "gradesChart":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => const GradesChartPage(),
                     fullscreenDialog: true,
                   );
                 case "gradeCalculator":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => const GradeCalculator(),
                     fullscreenDialog: true,
                   );
                 case "settings":
                   return MaterialPageRoute<void>(
+                    settings: settings,
                     builder: (_) => SettingsPageContainer(),
                     fullscreenDialog: true,
                   );

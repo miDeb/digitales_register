@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_escaping_inner_quotes
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -154,7 +155,7 @@ const _servers = {
   "Sozialwissenschaftliches Gymnasium Bozen - Fachoberschule für Tourismus":
       "https://sogym-fotour.digitalesregister.it",
   "SSP Abtei Scora elementara": "https://gs-abtei.digitalesregister.it",
-  'SSP Abtei Scuola media "Tita Alton"':
+  "SSP Abtei Scuola media \"Tita Alton\"":
       "https://ms-stern.digitalesregister.it",
   "Grundschule Ahrntal": "https://gs-ahrntal.digitalesregister.it",
   "Grundschule Luttach / Ahrntal": "https://gs-luttach.digitalesregister.it",
@@ -183,7 +184,8 @@ const _servers = {
   "Grundschule Girlan": "https://gs-girlan.digitalesregister.it",
   "Schulsprengel Eppan": "https://ssp-eppan.digitalesregister.it",
   "Grundschule Gries": "https://gs-gries.digitalesregister.it",
-  'Mittelschule "Adalbert Stifter"': "https://ms-stifter.digitalesregister.it",
+  "Mittelschule \"Adalbert Stifter\"":
+      "https://ms-stifter.digitalesregister.it",
   "Grundschule Innichen": "https://gs-innichen.digitalesregister.it",
   "Grundschule Sexten": "https://gs-sexten.digitalesregister.it",
   "Grundschule Vierschach": "https://gs-vierschach.digitalesregister.it",
@@ -281,6 +283,11 @@ const _servers = {
   "Grundschulen im Schulsprengel Laas": "https://gs-laas.digitalesregister.it",
   "Mittelschule Laas": "https://ms-laas.digitalesregister.it",
   "Grundschulsprengel Neumarkt": "https://gsp-neumarkt.digitalesregister.it",
-  "Grundschulsprengel Bozen": "https://bozen1.digitalesregister.it",
-  "Grundschulsprengel Eppan": "https://gspeppan.digitalesregister.it"
+  "Grundschulsprengel Bozen 1 (Goethe, Chini, Wolff)":
+      "https://bozen1.digitalesregister.it",
+  "Grundschulsprengel Eppan": "https://gspeppan.digitalesregister.it",
+  "Grundschule Kaltern": "https://gs-kaltern.digitalesregister.it",
+  "Waldorf WOB Bozen": "https://wob.digitalesregister.it",
+  "Mittelschule Kaltern": "https://ms-kaltern.digitalesregister.it",
+  "BBZ Bruneck": "https://bbz.digitalesregister.it"
 };
