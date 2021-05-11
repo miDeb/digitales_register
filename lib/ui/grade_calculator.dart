@@ -269,6 +269,8 @@ class GradesList extends StatelessWidget {
       children: [
         ListTile(
           title: const Text("Durchschnitt"),
+          subtitle:
+              Text(grades.length == 1 ? "1 Note" : "${grades.length} Noten"),
           trailing: Text(_calculateAverage(grades)),
         ),
         const Divider(),
