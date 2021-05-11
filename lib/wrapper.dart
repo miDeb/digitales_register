@@ -12,7 +12,7 @@ import 'package:mutex/mutex.dart';
 import 'app_state.dart';
 import 'main.dart';
 import 'ui/dialog.dart';
-
+/*
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
 class DebugInterceptor extends Interceptor {
@@ -36,7 +36,7 @@ class DebugInterceptor extends Interceptor {
   @override
   Future onError(DioError err) async => err;
 }
-
+*/
 typedef AddNetworkProtocolItem = void Function(NetworkProtocolItem item);
 
 class UnexpectedLogoutException implements Exception {}

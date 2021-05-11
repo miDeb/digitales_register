@@ -88,7 +88,7 @@ void main() {
           data: {
             "message": "Eine Email wurde gesendet...",
           },
-          request: RequestOptions(
+          requestOptions: RequestOptions(
             path:
                 "https://vinzentinum.digitalesregister.it/api/auth/resetPassword",
           ),
