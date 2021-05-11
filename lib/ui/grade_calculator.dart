@@ -230,34 +230,32 @@ class _GradeCalculatorState extends State<GradeCalculator> {
       appBar: AppBar(
         title: const Text("Notenrechner"),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: AnimatedCrossFade(
-          firstChild: Greeting(
-            import: importGrades,
-            add: addGrade,
-          ),
-          secondChild: _GradesList(
-            grades: grades,
-            updateGrade: updateGrade,
-            addGrade: addGrade,
-          ),
-          crossFadeState: grades.isEmpty
-              ? CrossFadeState.showFirst
-              : CrossFadeState.showSecond,
-          duration: const Duration(milliseconds: 250),
+      body: AnimatedCrossFade(
+        firstChild: Greeting(
+          import: importGrades,
+          add: addGrade,
         ),
+        secondChild: GradesList(
+          grades: grades,
+          updateGrade: updateGrade,
+          addGrade: addGrade,
+        ),
+        crossFadeState: grades.isEmpty
+            ? CrossFadeState.showFirst
+            : CrossFadeState.showSecond,
+        duration: const Duration(milliseconds: 250),
       ),
     );
   }
 }
 
-class _GradesList extends StatelessWidget {
+@visibleForTesting
+class GradesList extends StatelessWidget {
   final List<_Grade> grades;
   final _UpdateGrade updateGrade;
   final VoidCallback addGrade;
 
-  const _GradesList(
+  const GradesList(
       {Key? key,
       required this.grades,
       required this.updateGrade,
@@ -265,7 +263,9 @@ class _GradesList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView(
+      padding: const EdgeInsets.all(8),
+      shrinkWrap: grades.isEmpty,
       children: [
         ListTile(
           title: const Text("Durchschnitt"),

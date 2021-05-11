@@ -76,4 +76,83 @@ void main() {
       matchesGoldenFile("one_grade.png"),
     );
   });
+
+  testWidgets("can scroll to grade", (WidgetTester tester) async {
+    Future<void> addGrade(String grade, {required bool isFirst}) async {
+      if (!isFirst) {
+        await tester.scrollUntilVisible(
+          find.descendant(
+            of: find.byType(GradesList),
+            matching: find.text("Note hinzufügen"),
+          ),
+          50,
+          scrollable: find
+              .descendant(
+                of: find.byType(GradesList),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+        );
+        await tester.pumpAndSettle();
+      }
+
+      await tester.tap(
+        find.descendant(
+          of: find.byType(isFirst ? Greeting : GradesList),
+          matching: find.text("Note hinzufügen"),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find
+            .ancestor(
+              of: find.text("Note"),
+              matching: find.byType(TextField),
+            )
+            .last,
+        grade,
+      );
+      await tester.enterText(
+        find
+            .ancestor(
+              of: find.text("Gewichtung"),
+              matching: find.byType(TextField),
+            )
+            .last,
+        "32",
+      );
+      await tester.pump();
+      await tester.tap(find.text("Hinzufügen"));
+      await tester.pumpAndSettle();
+    }
+
+    final widget = ReduxProvider(
+      store: Store<AppState, AppStateBuilder, AppActions>(
+        ReducerBuilder<AppState, AppStateBuilder>().build(),
+        AppState((b) => b.gradesState.loading = true),
+        AppActions(),
+      ),
+      child: MaterialApp(
+        home: const GradeCalculator(),
+        theme: ThemeData(primarySwatch: Colors.deepOrange),
+      ),
+    );
+    await tester.pumpWidget(widget);
+    for (var i = 0; i < 10; i++) {
+      await addGrade("9/10", isFirst: i == 0);
+    }
+    await addGrade("5", isFirst: false);
+    // The average does not whow because it's out of frame.
+    expect(find.text("Durchschnitt"), findsNothing);
+    expect(find.text("5"), findsOneWidget);
+    // We are able to scroll to the average
+    await tester.scrollUntilVisible(find.text("Durchschnitt"), -50,
+        scrollable: find
+            .descendant(
+              of: find.byType(GradesList),
+              matching: find.byType(Scrollable),
+            )
+            .first);
+  });
 }
