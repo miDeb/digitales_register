@@ -15,84 +15,86 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  collapsible_sidebar:
-    path: packages/collapsible_sidebar/
-  dynamic_theme:
-    path: packages/dynamic_theme/
-  quill_delta_viewer:
-    path: packages/quill_delta_viewer/
-  responsive_scaffold:
-    path: packages/responsive_scaffold/
   badges:
     git:
       url: https://github.com/miDeb/flutter_badges.git
       ref: nnbd
+  biometric_storage: ^2.0.0
+  built_collection: ^5.1.0
   built_redux:
     git:
       url: https://github.com/miDeb/built_redux.git
       ref: nnbd
+  built_value: ^8.0.2
   charts_flutter:
     git:
       url: https://github.com/miDeb/charts
       ref: select_nearest
       path: charts_flutter
-  flutter_built_redux:
-    git:
-      url: https://github.com/miDeb/flutter_built_redux.git
-      ref: nnbd
-  flutter_typeahead:
-    git:
-      url: https://github.com/miDeb/flutter_typeahead.git
-      ref: bug_fixes
-  open_file:
-    git:
-      url: https://github.com/miDeb/open_file.git
-      ref: master
-  quill_delta:
-    git:
-      url: https://github.com/miDeb/quill-delta-dart.git
-      ref: nnbd
-  scroll_to_index:
-    git:
-      url: https://github.com/miDeb/scroll-to-index.git
-      ref: nnbd
-  uni_links:
-    git:
-      url: https://github.com/miDeb/uni_links.git
-      ref: modernized
-      path: uni_links/
-  biometric_storage: ^2.0.0
-  built_value: ^8.0.2
+  collapsible_sidebar:
+    path: packages/collapsible_sidebar/
   collection: ^1.15.0-nullsafety.4
   cookie_jar: ^3.0.0-beta2
   deleteable_tile: ^0.0.1-nullsafety.1
   dio: ^4.0.0-beta6
   dio_cookie_manager: ^2.0.0-beta1
+  dynamic_theme:
+    path: packages/dynamic_theme/
+  flutter:
+    sdk: flutter
+  flutter_built_redux:
+    git:
+      url: https://github.com/miDeb/flutter_built_redux.git
+      ref: nnbd
   flutter_colorpicker: ^0.5.0
+  flutter_localizations:
+    sdk: flutter
   flutter_secure_storage: ^4.0.0
+  flutter_typeahead:
+    git:
+      url: https://github.com/miDeb/flutter_typeahead.git
+      ref: bug_fixes
   flutter_widget_from_html_core: ^0.6.2
   hive: ^2.0.0
   http: ^0.13.0
   intl: ^0.17.0-nullsafety.2
+  meta: ^1.7.0
   mocktail:
     git:
       url: https://github.com/miDeb/mocktail.git
       ref: generic_fallbacks
       path: packages/mocktail
   mutex: ^2.0.0-nullsafety.0
+  open_file:
+    git:
+      url: https://github.com/miDeb/open_file.git
+      ref: master
   package_info_plus: ^1.0.0-nullsafety.0
   path_provider: ^2.0.0-nullsafety
+  quill_delta:
+    git:
+      url: https://github.com/miDeb/quill-delta-dart.git
+      ref: nnbd
+  quill_delta_viewer:
+    path: packages/quill_delta_viewer/
+  responsive_scaffold:
+    path: packages/responsive_scaffold/
+  scroll_to_index:
+    git:
+      url: https://github.com/miDeb/scroll-to-index.git
+      ref: nnbd
   tuple: ^2.0.0-nullsafety.0
+  uni_links:
+    git:
+      url: https://github.com/miDeb/uni_links.git
+      ref: modernized
+      path: uni_links/
   url_launcher: ^6.0.0-nullsafety.6
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   build_runner: ^1.11.1
   built_value_generator: ^8.0.2
+  flutter_test:
+    sdk: flutter
   golden_toolkit: ^0.9.0-nullsafety.0
   lint: ^1.5.1
   matcher: ^0.12.10-nullsafety.3

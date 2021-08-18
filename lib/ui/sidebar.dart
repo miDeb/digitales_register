@@ -100,10 +100,10 @@ class Sidebar extends StatelessWidget {
               ? const Icon(Icons.account_circle)
               : Image.network(userIcon!),
       unselectedIconColor: Theme.of(context).iconTheme.color!,
-      selectedIconColor: Theme.of(context).accentColor,
+      selectedIconColor: Theme.of(context).colorScheme.secondary,
       unselectedTextColor: Theme.of(context).textTheme.subtitle1!.color!,
-      selectedTextColor: Theme.of(context).accentColor,
-      selectedIconBox: Theme.of(context).accentColor.withAlpha(20),
+      selectedTextColor: Theme.of(context).colorScheme.secondary,
+      selectedIconBox: Theme.of(context).colorScheme.secondary.withAlpha(20),
       items: [
         if (tabletMode)
           CollapsibleItem(

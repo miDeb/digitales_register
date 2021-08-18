@@ -1,6 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:dr/container/chart_legend_entry_container.dart';
 import 'package:flutter/material.dart';
-import 'package:built_collection/built_collection.dart';
 
 class ChartLegend extends StatelessWidget {
   final BuiltList<String> vm;

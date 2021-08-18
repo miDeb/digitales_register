@@ -183,7 +183,7 @@ class QuillDeltaViewer extends StatelessWidget {
             if (underline) TextDecoration.underline,
           ],
         ),
-        color: isLink ? Theme.of(context).accentColor : null,
+        color: isLink ? Theme.of(context).colorScheme.secondary : null,
       ),
       recognizer: isLink
           ? (TapGestureRecognizer()

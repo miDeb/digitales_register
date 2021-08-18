@@ -36,9 +36,6 @@ class GradesPage extends StatelessWidget {
                         value: s,
                         child: Text(
                           s.name,
-                          style: (Theme.of(context).appBarTheme.textTheme ??
-                                  Theme.of(context).primaryTextTheme)
-                              .bodyText2,
                         ),
                       ),
                     )

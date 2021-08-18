@@ -249,14 +249,12 @@ class SelectionWidget extends StatefulWidget {
   _SelectionWidgetState createState() => _SelectionWidgetState();
 }
 
-class _SelectionWidgetState extends State<SelectionWidget>
-    with TickerProviderStateMixin {
+class _SelectionWidgetState extends State<SelectionWidget> {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       layoutBuilder: (currentChild, previousChildren) => AnimatedSize(
         alignment: Alignment.topCenter,
-        vsync: this,
         duration: const Duration(milliseconds: 150),
         curve: Curves.ease,
         child: Stack(

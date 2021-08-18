@@ -2,3 +2,7 @@ include: package:lint/analysis_options_package.yaml
 analyzer:
   errors:
     sort_pub_dependencies: ignore
+
+linter:
+  rules:
+    avoid_multiple_declarations_per_line: false

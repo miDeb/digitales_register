@@ -1,11 +1,11 @@
 import 'package:badges/badges.dart';
+import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:dr/container/notification_icon_container.dart';
 import 'package:dr/container/sidebar_container.dart';
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
-
 import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../app_state.dart';
 import '../container/days_container.dart';
@@ -819,7 +818,7 @@ class ItemWidget extends StatelessWidget {
                                                   removeThis!();
                                                 }
                                               },
-                                        padding: const EdgeInsets.all(0),
+                                        padding: EdgeInsets.zero
                                       )
                                     : null,
                           ),

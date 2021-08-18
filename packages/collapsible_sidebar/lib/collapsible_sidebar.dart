@@ -2,10 +2,10 @@ library collapsible_sidebar;
 
 import 'dart:math' as math show pi;
 
-import 'package:flutter/material.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_container.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 import 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item_widget.dart';
+import 'package:flutter/material.dart';
 
 export 'package:collapsible_sidebar/collapsible_sidebar/collapsible_item.dart';
 
@@ -248,7 +248,7 @@ class _CollapsibleSidebarState extends State<CollapsibleSidebar>
       leading: SizedBox(
         height: widget.iconSize,
         width: widget.iconSize,
-        child: widget.avatar!,
+        child: widget.avatar,
       ),
       title: widget.title,
       textStyle: _textStyle(widget.unselectedTextColor, widget.titleStyle),

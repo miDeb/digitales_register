@@ -1,6 +1,6 @@
+import 'package:built_collection/built_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-import 'package:built_collection/built_collection.dart';
 
 import '../actions/app_actions.dart';
 import '../app_state.dart';

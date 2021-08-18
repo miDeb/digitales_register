@@ -1,11 +1,17 @@
 include: package:lint/analysis_options.yaml
+
 analyzer:
   exclude:
     - "**.g.dart"
   errors:
-    sort_pub_dependencies: ignore
     # This lint is not helpful in combination with implicit-dynamic: false.
     avoid_dynamic_calls: ignore
   strong-mode:
     implicit-casts: false
     implicit-dynamic: false
+
+linter:
+  rules:
+    avoid_multiple_declarations_per_line: false
+    require_trailing_commas: false
+    avoid_escaping_inner_quotes: false

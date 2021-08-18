@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:biometric_storage/biometric_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     as secure_storage;
 import 'package:hive/hive.dart';
-import 'package:biometric_storage/biometric_storage.dart';
 import 'package:path_provider/path_provider.dart';
 
 // This file contains wrappers to make initial desktop compatibility easier.

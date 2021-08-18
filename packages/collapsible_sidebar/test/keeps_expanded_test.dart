@@ -33,14 +33,14 @@ void main() {
 
     await tester.pumpWidget(sidebar);
     await tester.pumpAndSettle();
-    var box = find.byType(CollapsibleSidebar).evaluate().single.renderObject
+    var box = find.byType(CollapsibleSidebar).evaluate().single.renderObject!
         as RenderBox;
     final initialWidth = box.size.width;
     expect(initialWidth, 278);
     // trigger a rebuild
     await tester.tap(find.text("Press me"));
     await tester.pumpAndSettle();
-    box = find.byType(CollapsibleSidebar).evaluate().single.renderObject
+    box = find.byType(CollapsibleSidebar).evaluate().single.renderObject!
         as RenderBox;
     // rebuilding should not change the size
     expect(box.size.width, initialWidth);
