@@ -138,8 +138,8 @@ class GradesChart extends StatelessWidget {
                     final selections = model.selectedDatum.map((datum) {
                       final grade = datum.datum.value.item1 as int;
                       final type = datum.datum.value.item2 as String;
-                      final subject = datum.series!.displayName;
-                      final color = datum.series!.colorFn!(0)!;
+                      final subject = datum.series.displayName;
+                      final color = datum.series.colorFn!(0)!;
                       final date = datum.datum.key as DateTime;
                       assert(allDate == null || allDate == date);
                       allDate = date;
@@ -147,9 +147,9 @@ class GradesChart extends StatelessWidget {
                         "$subject · $type: ${formatGradeFromInt(grade)}",
                         Color.fromARGB(
                           color.a,
-                          color.r!,
-                          color.g!,
-                          color.b!,
+                          color.r,
+                          color.g,
+                          color.b,
                         ),
                       );
                     }).toBuiltList();
