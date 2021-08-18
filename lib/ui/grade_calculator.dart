@@ -468,7 +468,8 @@ class _ImportGradesState extends State<_ImportGrades> {
       if (selectedSemester != null && selectedSubject != null) {
         grades = selectedSubject!
                 .basicGrades(selectedSemester!)
-                ?.map(
+                ?.where((e) => !e.cancelled)
+                .map(
                   (e) => _Grade(
                     grade: e.grade!,
                     weightPercentage: e.weightPercentage,
