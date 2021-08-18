@@ -167,7 +167,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     .toLowerCase()
                                     .contains(pattern.toLowerCase()))
                                 .toList()
-                                  ..sort(),
+                              ..sort(),
                             "Andere Schule",
                           ];
                           // Only too general querys (e.g. "Grundschule") have

@@ -259,7 +259,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
       if (entries.isEmpty) return null;
       return entries
           .fold<List<GradeAll>>([], (a, b) => [...a, if (b != null) ...b])
-            ..sort((a, b) => -a.date.compareTo(b.date));
+        ..sort((a, b) => -a.date.compareTo(b.date));
     }
     if (gradesAll[semester] == null) return null;
     return gradesAll[semester]!.toList()
@@ -275,7 +275,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
       if (entries.isEmpty) return null;
       return entries
           .fold<List<DetailEntry>>([], (a, b) => [...a, if (b != null) ...b])
-            ..sort((a, b) => -a.date.compareTo(b.date));
+        ..sort((a, b) => -a.date.compareTo(b.date));
     }
     if (grades[semester] == null || observations[semester] == null) return null;
     return <DetailEntry>[

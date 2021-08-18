@@ -29,7 +29,7 @@ class GradesChart extends StatelessWidget {
     required Map<SubjectGrades, SubjectTheme> graphs,
     this.goFullscreen,
     required this.isFullscreen,
-  })   : grades = convert(graphs),
+  })  : grades = convert(graphs),
         super(key: key);
 
   static List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>

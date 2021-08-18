@@ -1,17 +1,18 @@
 import 'dart:async';
 import 'dart:developer';
+
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
-import 'package:dr/util.dart';
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
 import 'main.dart';
 import 'ui/dialog.dart';
+
 /*
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info

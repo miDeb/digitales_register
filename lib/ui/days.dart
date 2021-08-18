@@ -818,8 +818,7 @@ class ItemWidget extends StatelessWidget {
                                                   removeThis!();
                                                 }
                                               },
-                                        padding: EdgeInsets.zero
-                                      )
+                                        padding: EdgeInsets.zero)
                                     : null,
                           ),
                         ],

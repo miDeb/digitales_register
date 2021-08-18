@@ -226,7 +226,7 @@ class _Drawer extends StatefulWidget {
     Key? key,
     required AnimationController drawerAnimationController,
     required this.child,
-  })   : _drawerAnimationController = drawerAnimationController,
+  })  : _drawerAnimationController = drawerAnimationController,
         super(key: key);
 
   final AnimationController _drawerAnimationController;
