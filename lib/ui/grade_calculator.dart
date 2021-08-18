@@ -226,6 +226,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
 
   @override
   Widget build(BuildContext context) {
+    final showGreeting = grades.isEmpty;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Notenrechner"),
@@ -240,11 +241,17 @@ class _GradeCalculatorState extends State<GradeCalculator> {
           updateGrade: updateGrade,
           addGrade: addGrade,
         ),
-        crossFadeState: grades.isEmpty
-            ? CrossFadeState.showFirst
-            : CrossFadeState.showSecond,
+        crossFadeState:
+            showGreeting ? CrossFadeState.showFirst : CrossFadeState.showSecond,
         duration: const Duration(milliseconds: 250),
       ),
+      floatingActionButton: showGreeting
+          ? null
+          : FloatingActionButton.extended(
+              onPressed: addGrade,
+              label: const Text("Note hinzufügen"),
+              icon: const Icon(Icons.add),
+            ),
     );
   }
 }
@@ -263,37 +270,31 @@ class GradesList extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: const EdgeInsets.all(8),
-      shrinkWrap: grades.isEmpty,
+    return Column(
       children: [
-        ListTile(
-          title: const Text("Durchschnitt"),
-          subtitle:
-              Text(grades.length == 1 ? "1 Note" : "${grades.length} Noten"),
-          trailing: Text(_calculateAverage(grades)),
-        ),
-        const Divider(),
-        for (final grade in grades)
-          _GradesTile(
-            key: ObjectKey(grade),
-            grade: grade,
-            updateGrade: updateGrade,
+        Material(
+          elevation: 2,
+          child: ListTile(
+            title: const Text("Durchschnitt"),
+            subtitle:
+                Text(grades.length == 1 ? "1 Note" : "${grades.length} Noten"),
+            trailing: Text(_calculateAverage(grades)),
           ),
-        Padding(
-          padding: const EdgeInsets.all(16),
-          child: ElevatedButton(
-            onPressed: addGrade,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: const [
-                Icon(Icons.add),
-                SizedBox(width: 16),
-                Text("Note hinzufügen"),
+        ),
+        if (grades.isNotEmpty)
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(8).copyWith(bottom: 160),
+              children: [
+                for (final grade in grades)
+                  _GradesTile(
+                    key: ObjectKey(grade),
+                    grade: grade,
+                    updateGrade: updateGrade,
+                  ),
               ],
             ),
           ),
-        ),
       ],
     );
   }
