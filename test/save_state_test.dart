@@ -12,7 +12,6 @@ import 'package:dr/serializers.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:matcher/matcher.dart';
 import 'package:quiver/testing/src/async/fake_async.dart';
 
 const serverUrl = "null/v2/api/auth/login";

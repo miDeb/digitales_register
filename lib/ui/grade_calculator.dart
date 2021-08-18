@@ -287,7 +287,7 @@ class GradesList extends StatelessWidget {
               padding: const EdgeInsets.all(8).copyWith(bottom: 160),
               children: [
                 for (final grade in grades)
-                  _GradesTile(
+                  GradeTile(
                     key: ObjectKey(grade),
                     grade: grade,
                     updateGrade: updateGrade,
@@ -300,11 +300,12 @@ class GradesList extends StatelessWidget {
   }
 }
 
-class _GradesTile extends StatelessWidget {
+@visibleForTesting
+class GradeTile extends StatelessWidget {
   final _Grade grade;
   final _UpdateGrade updateGrade;
 
-  const _GradesTile({Key? key, required this.grade, required this.updateGrade})
+  const GradeTile({Key? key, required this.grade, required this.updateGrade})
       : super(key: key);
 
   @override

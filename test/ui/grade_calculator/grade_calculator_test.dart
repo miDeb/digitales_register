@@ -81,10 +81,7 @@ void main() {
     Future<void> addGrade(String grade, {required bool isFirst}) async {
       if (!isFirst) {
         await tester.scrollUntilVisible(
-          find.descendant(
-            of: find.byType(GradesList),
-            matching: find.text("Note hinzufügen"),
-          ),
+          find.byType(GradeTile).last,
           50,
           scrollable: find
               .descendant(
@@ -98,7 +95,7 @@ void main() {
 
       await tester.tap(
         find.descendant(
-          of: find.byType(isFirst ? Greeting : GradesList),
+          of: find.byType(isFirst ? Greeting : FloatingActionButton),
           matching: find.text("Note hinzufügen"),
         ),
       );
@@ -139,15 +136,14 @@ void main() {
       ),
     );
     await tester.pumpWidget(widget);
-    for (var i = 0; i < 10; i++) {
-      await addGrade("9/10", isFirst: i == 0);
+    for (var i = 0; i < 11; i++) {
+      await addGrade(i.toString(), isFirst: i == 0);
     }
-    await addGrade("5", isFirst: false);
-    // The average does not whow because it's out of frame.
-    expect(find.text("Durchschnitt"), findsNothing);
-    expect(find.text("5"), findsOneWidget);
-    // We are able to scroll to the average
-    await tester.scrollUntilVisible(find.text("Durchschnitt"), -50,
+    // The first grade does not show because it's out of frame.
+    expect(find.text("0"), findsNothing);
+    expect(find.text("10"), findsOneWidget);
+    // We are able to scroll to the first grade
+    await tester.scrollUntilVisible(find.text("0"), -50,
         scrollable: find
             .descendant(
               of: find.byType(GradesList),
