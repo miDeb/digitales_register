@@ -2,7 +2,7 @@
 
 Date : 2021-01-16 21:02:29
 
-Directory /Users/gernotwachtler/dr
+Directory /Users/simonwachtler/digitales-register
 
 Total : 231 files,  14532 codes, 856 comments, 1547 blanks, all 16935 lines
 
