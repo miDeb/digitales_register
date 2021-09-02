@@ -289,5 +289,11 @@ const _servers = {
   "Grundschule Kaltern": "https://gs-kaltern.digitalesregister.it",
   "Waldorf WOB Bozen": "https://wob.digitalesregister.it",
   "Mittelschule Kaltern": "https://ms-kaltern.digitalesregister.it",
-  "BBZ Bruneck": "https://bbz.digitalesregister.it"
+  "BBZ Bruneck": "https://bbz.digitalesregister.it",
+  "Oberbozen (SSP Ritten)": "https://oberbozen.digitalesregister.it",
+  "Wangen (SSP Ritten)": "https://wangen.digitalesregister.it",
+  "GS Lengmoos (SSP Ritten)": "https://lengmoos.digitalesregister.it",
+  "GS Oberinn (SSP Ritten)": "https://oberinn.digitalesregister.it",
+  "GS Lengstein (SSP Ritten)": "https://lengstein.digitalesregister.it",
+  "Unterinn (SSP Ritten)": "https://unterinn.digitalesregister.it",
 };
