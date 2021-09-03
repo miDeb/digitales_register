@@ -46,7 +46,7 @@ dependencies:
     git:
       url: https://github.com/miDeb/flutter_built_redux.git
       ref: nnbd
-  flutter_colorpicker: ^0.4.0
+  flutter_colorpicker: ^0.5.0
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^4.0.0
