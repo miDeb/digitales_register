@@ -97,6 +97,7 @@ dev_dependencies:
   golden_toolkit: ^0.9.0-nullsafety.0
   lint: ^1.5.1
   matcher: ^0.12.10-nullsafety.3
+  msix: ^2.1.3
   quiver: ^3.0.0-nullsafety.3
 
 flutter_icons:
@@ -143,3 +144,15 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.io/custom-fonts/#from-packages
+
+msix_config:
+  display_name: Digitales Register
+  publisher_display_name: Michael Debertol
+  identity_name: 2097MichaelDebertol.DigitalesRegister
+  publisher: CN=2508760A-808B-4829-867A-4DB53593750E
+  msix_version: 8.1.8.0
+  vs_generated_images_folder_path: windows\Assets
+  icons_background_color: transparent
+  architecture: x64
+  capabilities: 'internetClient'
+  #store: true
