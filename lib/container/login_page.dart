@@ -124,7 +124,7 @@ const _servers = {
   "WFO Auer": "https://wfoauer.digitalesregister.it",
   "Realgymnasium und Fachoberschule für Bauwesen „Peter Anich“ Bozen":
       "https://rg-fob.digitalesregister.it",
-  "RG/TFO Meran": "https://rgtfo-me.digitalesregister.it",
+  "RG/TFO Albert Einstein Meran": "https://rgtfo-me.digitalesregister.it",
   "Grundschulsprengel Brixen": "https://brixen1.digitalesregister.it",
   "SSP Sarntal": "https://ssp-sarntal.digitalesregister.it",
   "GS Kastelruth": "https://gs-kastelruth.digitalesregister.it",
