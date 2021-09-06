@@ -296,4 +296,5 @@ const _servers = {
   "GS Oberinn (SSP Ritten)": "https://oberinn.digitalesregister.it",
   "GS Lengstein (SSP Ritten)": "https://lengstein.digitalesregister.it",
   "Unterinn (SSP Ritten)": "https://unterinn.digitalesregister.it",
+  "OSZ Schlanders": "https://osz-schlanders.digitalesregister.it"
 };
