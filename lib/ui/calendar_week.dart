@@ -134,6 +134,19 @@ class HourWidget extends StatelessWidget {
             builder: (_) {
               final items = [
                 if (hour.hasDescription) Text(hour.description!),
+                for (final lessonContent in hour.lessonContents)
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "${lessonContent.typeName}: ",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        TextSpan(text: lessonContent.name),
+                      ],
+                      style: DefaultTextStyle.of(context).style,
+                    ),
+                  ),
                 for (HomeworkExam homeworkExam in hour.homeworkExams)
                   RichText(
                     text: TextSpan(

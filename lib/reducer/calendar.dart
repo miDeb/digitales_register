@@ -82,6 +82,10 @@ CalendarHourBuilder _parseHour(Map hour) {
     ..homeworkExams = ListBuilder(
       (lesson["homeworkExams"] as List).map<HomeworkExam>(
           (dynamic e) => tryParse(getMap(e)!, _parseHomeworkExam)),
+    )
+    ..lessonContents = ListBuilder(
+      (lesson["lessonContents"] as List).map<LessonContent>(
+          (dynamic e) => tryParse(getMap(e)!, _parseLessonContent)),
     );
 }
 
@@ -97,4 +101,12 @@ HomeworkExam _parseHomeworkExam(Map homeworkExam) {
     ..online = homeworkExam["online"] != 0
     ..typeId = getInt(homeworkExam["typeId"])
     ..typeName = getString(homeworkExam["typeName"]));
+}
+
+LessonContent _parseLessonContent(Map lessonContent) {
+  return LessonContent(
+    (b) => b
+      ..name = getString(lessonContent["name"])
+      ..typeName = getString(lessonContent["typeName"]),
+  );
 }

@@ -510,6 +510,7 @@ abstract class CalendarHour
   String? get description;
   String get subject;
   BuiltList<HomeworkExam> get homeworkExams;
+  BuiltList<LessonContent> get lessonContents;
   int get lenght => toHour - fromHour + 1;
   bool get hasDescription => !description.isNullOrEmpty;
   bool get warning => homeworkExams.any((it) => it.warning);
@@ -549,6 +550,17 @@ abstract class HomeworkExam
   factory HomeworkExam([Function(HomeworkExamBuilder b)? updates]) =
       _$HomeworkExam;
   HomeworkExam._();
+}
+
+abstract class LessonContent
+    implements Built<LessonContent, LessonContentBuilder> {
+  String get name;
+  String get typeName;
+
+  static Serializer<LessonContent> get serializer => _$lessonContentSerializer;
+  factory LessonContent([void Function(LessonContentBuilder) updates]) =
+      _$LessonContent;
+  LessonContent._();
 }
 
 abstract class Message implements Built<Message, MessageBuilder> {
