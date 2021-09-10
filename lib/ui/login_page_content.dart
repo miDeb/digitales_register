@@ -154,27 +154,27 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             }
                           });
                         },
-                        suggestionsCallback: (String pattern) {
-                          // This prevents being able to query all available
-                          // schools easily, as well as initially showing a huge
-                          // list of unrelated results.
-                          if (pattern.trim().length < 3) {
-                            return [];
-                          }
+                        suggestionsCallback: (String initialPattern) {
+                          final pattern = initialPattern.toLowerCase().trim();
                           final candidates = [
                             ...widget.vm.servers.keys
                                 .where((element) => element
                                     .toLowerCase()
                                     .contains(pattern.toLowerCase()))
                                 .toList()
-                              ..sort(),
+                              ..sort((a, b) {
+                                final index = a
+                                    .toLowerCase()
+                                    .indexOf(pattern)
+                                    .compareTo(
+                                        b.toLowerCase().indexOf(pattern));
+                                if (index != 0) {
+                                  return index;
+                                }
+                                return a.compareTo(b);
+                              }),
                             "Andere Schule",
                           ];
-                          // Only too general querys (e.g. "Grundschule") have
-                          // that many candidates. Demand more letters from the user.
-                          if (candidates.length > 15) {
-                            return [];
-                          }
                           return candidates;
                         },
                         noItemsFoundBuilder: (context) {
