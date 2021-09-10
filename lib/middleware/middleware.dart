@@ -315,12 +315,6 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         await next(action);
       }
     } else {
-      // navigatorKey is null in unit tests
-      // TODO: Remove distinctions between real world and unit tests
-      if (navigatorKey?.currentContext != null) {
-        final saveData = await _showDataSavingDialog() ?? false;
-        api.actions.settingsActions.saveNoData(!saveData);
-      }
       await next(action);
     }
 
@@ -539,32 +533,6 @@ void _popAll() {
     navigatorKey?.currentState?.popUntil((route) => route.isFirst);
     nestedNavKey.currentState?.popUntil((route) => route.isFirst);
   }
-}
-
-Future<bool?> _showDataSavingDialog() {
-  return showDialog(
-    barrierDismissible: false,
-    context: navigatorKey!.currentContext!,
-    builder: (context) => AlertDialog(
-      title: const Text("Möchtest du alle Funktionen dieser App nutzen?"),
-      content: const Text("""
-Um alle Funktionen zu benutzen, müssen deine Daten (Hausaufgaben, Noten usw.) auf diesem Gerät gespeichert werden.
-
-So ist es z.B. möglich, einen Offline-Modus bereitzustellen und neue, geänderte oder gelöschte Einträge hervorzuheben.
-
-Du kannst dies in den Einstellungen jederzeit wieder ändern."""),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context, false),
-          child: const Text("Daten nicht speichern"),
-        ),
-        ElevatedButton(
-          onPressed: () => Navigator.pop(context, true),
-          child: const Text("Daten speichern"),
-        )
-      ],
-    ),
-  );
 }
 
 /// Downloads a file.
