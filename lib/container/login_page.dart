@@ -297,5 +297,7 @@ const _servers = {
   "GS Lengstein (SSP Ritten)": "https://lengstein.digitalesregister.it",
   "Unterinn (SSP Ritten)": "https://unterinn.digitalesregister.it",
   "OSZ Schlanders": "https://osz-schlanders.digitalesregister.it",
-  "GS Vinzenz Goller (GSP Brixen)": "https://bx-goller.digitalesregister.it"
+  "GS Vinzenz Goller (GSP Brixen)": "https://bx-goller.digitalesregister.it",
+  "Mittelschule Oswald von Wolkenstein Brixen":
+      "https://mittelschule-brixen.digitalesregister.it",
 };
