@@ -300,4 +300,5 @@ const _servers = {
   "GS Vinzenz Goller (GSP Brixen)": "https://bx-goller.digitalesregister.it",
   "Mittelschule Oswald von Wolkenstein Brixen":
       "https://mittelschule-brixen.digitalesregister.it",
+  "Mittelschule Naturns": "ms-naturns.digitalesregister.it",
 };
