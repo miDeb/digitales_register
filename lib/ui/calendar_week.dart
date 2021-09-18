@@ -127,128 +127,129 @@ class HourWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       flex: hour.lenght,
-      child: InkWell(
-        onTap: () {
-          showDialog<void>(
-            context: context,
-            builder: (_) {
-              final items = [
-                if (hour.hasDescription) Text(hour.description!),
-                for (final lessonContent in hour.lessonContents)
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "${lessonContent.typeName}: ",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: lessonContent.name),
-                      ],
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-                for (HomeworkExam homeworkExam in hour.homeworkExams)
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "${homeworkExam.typeName}: ",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: homeworkExam.name),
-                      ],
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-                if (hour.rooms.isNotEmpty)
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: "Räume: ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(text: formatList(hour.rooms.toList())),
-                      ],
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-                if (hour.teachers.isNotEmpty)
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        const TextSpan(
-                          text: "Lehrer: ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        TextSpan(
-                            text: formatList(hour.teachers
-                                .map((t) => "${t.firstName} ${t.lastName}")
-                                .toList())),
-                      ],
-                      style: DefaultTextStyle.of(context).style,
-                    ),
-                  ),
-              ];
-              return InfoDialog(
-                  title: Text(hour.subject),
-                  content: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: List.generate(
-                        max(items.length * 2 - 1, 0),
-                        (index) =>
-                            index.isEven ? items[index ~/ 2] : const Divider(),
+      child: ClipRect(
+        child: InkWell(
+          onTap: () {
+            showDialog<void>(
+              context: context,
+              builder: (_) {
+                final items = [
+                  if (hour.hasDescription) Text(hour.description!),
+                  for (final lessonContent in hour.lessonContents)
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${lessonContent.typeName}: ",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: lessonContent.name),
+                        ],
+                        style: DefaultTextStyle.of(context).style,
                       ),
                     ),
-                  ));
-            },
-          );
-        },
-        child: Container(
-          decoration: hour.warning
-              ? const BoxDecoration(
-                  border: Border(
-                    left: BorderSide(color: Colors.red, width: 5),
-                  ),
-                )
-              : null,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  subjectNicks[hour.subject.toLowerCase()] ?? hour.subject,
-                  maxLines: 1,
-                  softWrap: false,
-                ),
-                if (hour.teachers.isNotEmpty)
-                  const SizedBox(
-                    height: 5,
-                  ),
-                for (final teacher in hour.teachers)
+                  for (HomeworkExam homeworkExam in hour.homeworkExams)
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "${homeworkExam.typeName}: ",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: homeworkExam.name),
+                        ],
+                        style: DefaultTextStyle.of(context).style,
+                      ),
+                    ),
+                  if (hour.rooms.isNotEmpty)
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "Räume: ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(text: formatList(hour.rooms.toList())),
+                        ],
+                        style: DefaultTextStyle.of(context).style,
+                      ),
+                    ),
+                  if (hour.teachers.isNotEmpty)
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          const TextSpan(
+                            text: "Lehrer: ",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          TextSpan(
+                              text: formatList(hour.teachers
+                                  .map((t) => "${t.firstName} ${t.lastName}")
+                                  .toList())),
+                        ],
+                        style: DefaultTextStyle.of(context).style,
+                      ),
+                    ),
+                ];
+                return InfoDialog(
+                    title: Text(hour.subject),
+                    content: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: List.generate(
+                          max(items.length * 2 - 1, 0),
+                          (index) => index.isEven
+                              ? items[index ~/ 2]
+                              : const Divider(),
+                        ),
+                      ),
+                    ));
+              },
+            );
+          },
+          child: Container(
+            decoration: hour.warning
+                ? const BoxDecoration(
+                    border: Border(
+                      left: BorderSide(color: Colors.red, width: 5),
+                    ),
+                  )
+                : null,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
                   Text(
-                    teacher.lastName,
+                    subjectNicks[hour.subject.toLowerCase()] ?? hour.subject,
+                    maxLines: 1,
+                    softWrap: false,
+                  ),
+                  if (hour.teachers.isNotEmpty)
+                    const SizedBox(
+                      height: 5,
+                    ),
+                  Text(
+                    hour.teachers.map((teacher) => teacher.lastName).join(", "),
                     maxLines: 1,
                     softWrap: false,
                     style: DefaultTextStyle.of(context)
                         .style
                         .copyWith(fontSize: 11),
                   ),
-                if (hour.rooms.isNotEmpty)
-                  const SizedBox(
-                    height: 5,
-                  ),
-                for (final room in hour.rooms)
-                  Text(
-                    room,
-                    maxLines: 1,
-                    softWrap: false,
-                    style: DefaultTextStyle.of(context)
-                        .style
-                        .copyWith(fontSize: 11),
-                  ),
-              ],
+                  if (hour.rooms.isNotEmpty)
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      hour.rooms.join(", "),
+                      maxLines: 1,
+                      softWrap: false,
+                      style: DefaultTextStyle.of(context)
+                          .style
+                          .copyWith(fontSize: 11),
+                    ),
+                ],
+              ),
             ),
           ),
         ),
