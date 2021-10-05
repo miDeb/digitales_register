@@ -242,5 +242,6 @@ const Map<String, String> schools = {
   "GS Vinzenz Goller (GSP Brixen)": "https://bx-goller.digitalesregister.it",
   "Mittelschule Oswald von Wolkenstein Brixen":
       "https://mittelschule-brixen.digitalesregister.it",
-  "Mittelschule Naturns": "ms-naturns.digitalesregister.it",
+  "Mittelschule Naturns": "https://ms-naturns.digitalesregister.it",
+  "Grundschule Marling": "https://gs-marling.digitalesregister.it"
 };
