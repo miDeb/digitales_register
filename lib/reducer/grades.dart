@@ -162,7 +162,7 @@ Observation _parseObservation(Map data) {
 }
 
 int? _parseGradeValue(String? grade) {
-  if (grade == null || grade == "") return null;
+  if (grade == null || grade == "" || grade == "0") return null;
   final gradeSplitted = grade
       .split(".")
       .map(
