@@ -10,16 +10,21 @@ grade: stable
 apps:
   dr:
     command: dr
-    extensions: [flutter-master] # Where "master" defines which Flutter channel to use for the build
+    extensions: [flutter-beta] # Where "master" defines which Flutter channel to use for the build
     plugs:
       - network
 
 parts:
   dr:
+    override-pull: |
+     set -eux
+     test -e $SNAPCRAFT_PROJECT_DIR/build && rm -rf $SNAPCRAFT_PROJECT_DIR/build
+     snapcraftctl pull
     source: .
     plugin: flutter
     flutter-target: lib/main.dart # The main entry-point file of the application
     build-packages:
       - libsecret-1-dev
+      - libjsoncpp-dev
     stage-packages:
       - libsecret-1-dev
