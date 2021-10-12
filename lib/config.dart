@@ -243,5 +243,7 @@ const Map<String, String> schools = {
   "Mittelschule Oswald von Wolkenstein Brixen":
       "https://mittelschule-brixen.digitalesregister.it",
   "Mittelschule Naturns": "https://ms-naturns.digitalesregister.it",
-  "Grundschule Marling": "https://gs-marling.digitalesregister.it"
+  "Grundschule Marling": "https://gs-marling.digitalesregister.it",
+  "Mittelschule Peter Rosegger":
+      "https://ms-untermais.digitalesregister.it/v2/login",
 };
