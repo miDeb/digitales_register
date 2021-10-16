@@ -54,16 +54,20 @@ void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
     ..loading = false;
 }
 
-void _updateSubjects(BuiltList<Subject> subjects,
+void _updateSubjects(BuiltList<Subject> oldSubjects,
     ListBuilder<Subject> subjectsBuilder, Map data, Semester semester) {
-  for (final Map<String, dynamic> subject
-      in List.from(getList(data["subjects"])!)) {
+  final newSubjects = List<Map<String, dynamic>>.from(
+    getList(data["subjects"])!,
+  );
+  final removedIds = oldSubjects.map((s) => s.id).toSet();
+  for (final subject in newSubjects) {
     final nestedSubject = getMap(subject["subject"])!;
-    final newId = getInt(nestedSubject["id"]);
-    final oldSubject = subjects.singleWhereOrNull((s) => s.id == newId);
-    if (oldSubject != null) {
+    final id = getInt(nestedSubject["id"]);
+    removedIds.remove(id);
+    final subjectIdx = oldSubjects.indexWhere((s) => s.id == id);
+    if (subjectIdx != -1) {
       // just update the grades
-      subjectsBuilder[subjects.indexOf(oldSubject)] = oldSubject.rebuild(
+      subjectsBuilder[subjectIdx] = subjectsBuilder[subjectIdx].rebuild(
         (b) => b
           ..gradesAll[semester] = BuiltList(
             getList(subject["grades"])!.map<GradeAll>(
@@ -89,10 +93,11 @@ void _updateSubjects(BuiltList<Subject> subjects,
         ),
       );
     }
-    (data["subjects"] as List).remove(subject);
   }
-  for (final subject in data["subjects"] as List) {
-    subjectsBuilder.removeWhere((s) => s.id == subject["id"]);
+  // Remove all subjects that no longer exist. The user no longer attends
+  // them in the new school year.
+  for (final subject in removedIds) {
+    subjectsBuilder.removeWhere((s) => s.id == subject);
   }
 }
 
