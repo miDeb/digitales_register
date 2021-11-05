@@ -18,6 +18,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
+import 'package:collection/collection.dart';
 
 import 'app_state.dart';
 import 'util.dart';
@@ -515,7 +516,8 @@ class AbsenceJustified extends EnumClass {
 abstract class CalendarDay implements Built<CalendarDay, CalendarDayBuilder> {
   DateTime get date;
   BuiltList<CalendarHour> get hours;
-  int get lenght => hours.fold(0, (a, b) => a + b.lenght);
+  int get fromHour => hours.firstOrNull?.fromHour ?? 0;
+  int get toHour => hours.lastOrNull?.toHour ?? 0;
 
   static Serializer<CalendarDay> get serializer => _$calendarDaySerializer;
   factory CalendarDay([Function(CalendarDayBuilder b)? updates]) =

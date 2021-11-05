@@ -31,7 +31,8 @@ class CalendarWeek extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final max = vm.days.fold<int>(0, (a, b) => a < b.lenght ? b.lenght : a);
+    final latestHour =
+        vm.days.fold<int>(0, (a, b) => a < b.toHour ? b.toHour : a);
     return vm.days.isEmpty
         ? vm.noInternet
             ? const NoInternet()
@@ -42,20 +43,72 @@ class CalendarWeek extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Row(
-                    children: vm.days
-                        .map(
-                          (d) => Expanded(
-                            child: CalendarDayWidget(
-                              calendarDay: d,
-                              max: max,
-                              subjectNicks: vm.subjectNicks,
-                            ),
+                  children: vm.days
+                      .map(
+                        (d) => Expanded(
+                          child: CalendarDayWidget(
+                            calendarDay: d,
+                            max: latestHour,
+                            subjectNicks: vm.subjectNicks,
                           ),
-                        )
-                        .toList()),
+                        ),
+                      )
+                      .toList(),
+                ),
               ),
             ],
           );
+  }
+}
+
+class _HoursChunk extends StatelessWidget {
+  final BuiltMap<String, String> subjectNicks;
+  final List<CalendarHour> hours;
+  final CalendarDay day;
+  const _HoursChunk({
+    Key? key,
+    required this.subjectNicks,
+    required this.hours,
+    required this.day,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        Card(
+          shape: RoundedRectangleBorder(
+            side: const BorderSide(color: Colors.grey, width: 0),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          color: Colors.transparent,
+          elevation: 0,
+          child: Container(),
+        ),
+        Card(
+          color: Colors.transparent,
+          elevation: 0,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: List.generate(
+              hours.length * 2 - 1,
+              (n) => n % 2 == 0
+                  ? HourWidget(
+                      hour: hours[n ~/ 2],
+                      subjectNicks: subjectNicks,
+                      day: day,
+                    )
+                  : const Divider(
+                      height: 0,
+                    ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -64,14 +117,27 @@ class CalendarDayWidget extends StatelessWidget {
   final CalendarDay calendarDay;
   final BuiltMap<String, String> subjectNicks;
 
-  const CalendarDayWidget(
-      {Key? key,
-      required this.max,
-      required this.calendarDay,
-      required this.subjectNicks})
-      : super(key: key);
+  const CalendarDayWidget({
+    Key? key,
+    required this.max,
+    required this.calendarDay,
+    required this.subjectNicks,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final chunks = <List<CalendarHour>>[];
+    for (final hour in calendarDay.hours) {
+      if (chunks.isEmpty) {
+        chunks.add([hour]);
+      } else {
+        final last = chunks.last;
+        if (last.last.toHour + 1 < hour.fromHour) {
+          chunks.add([hour]);
+        } else {
+          last.add(hour);
+        }
+      }
+    }
     return Column(
       children: <Widget>[
         Text(DateFormat("E", "de").format(calendarDay.date)),
@@ -79,56 +145,34 @@ class CalendarDayWidget extends StatelessWidget {
           DateFormat("dd.MM", "de").format(calendarDay.date),
           style: DefaultTextStyle.of(context).style.copyWith(fontSize: 12),
         ),
-        if (calendarDay.lenght != 0)
-          Expanded(
-            flex: calendarDay.lenght,
-            child: Stack(
-              children: <Widget>[
-                Card(
-                  shape: RoundedRectangleBorder(
-                    side: const BorderSide(color: Colors.grey, width: 0),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  color: Colors.transparent,
-                  elevation: 0,
-                  child: Container(),
-                ),
-                Card(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Column(
-                    children: List.generate(
-                      calendarDay.hours.length * 2 - 1,
-                      (n) => n % 2 == 0
-                          ? HourWidget(
-                              hour: calendarDay.hours[n ~/ 2],
-                              subjectNicks: subjectNicks,
-                              day: calendarDay,
-                            )
-                          : const Divider(
-                              height: 0,
-                            ),
-                    ),
-                  ),
-                ),
-              ],
+        if (chunks.isNotEmpty) ...[
+          for (var i = 0; i < chunks.length; i++) ...[
+            Expanded(
+              flex: chunks[i].first.fromHour -
+                  (i == 0 ? 0 : chunks[i - 1].last.toHour) -
+                  1,
+              child: Container(),
             ),
+            Expanded(
+              flex: chunks[i].last.toHour - chunks[i].first.fromHour + 1,
+              child: _HoursChunk(
+                hours: chunks[i],
+                subjectNicks: subjectNicks,
+                day: calendarDay,
+              ),
+            )
+          ],
+          Expanded(
+            flex: max - calendarDay.toHour,
+            child: Container(),
           )
-        else
+        ] else
           const Expanded(
             child: Padding(
               padding: EdgeInsets.only(top: 8.0),
               child: Text("Frei"),
             ),
           ),
-        Expanded(
-          flex: max - calendarDay.lenght,
-          child: Container(),
-        )
       ],
     );
   }
@@ -209,10 +253,5 @@ class HourWidget extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String formatList(List<String> teachers) {
-    if (teachers.length <= 2) return teachers.join(" und ");
-    return "${teachers.sublist(0, teachers.length - 1).join(", ")} und ${teachers.last}";
   }
 }
