@@ -20,6 +20,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:fuzzy/fuzzy.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -171,25 +172,11 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             }
                           });
                         },
-                        suggestionsCallback: (String initialPattern) {
-                          final pattern = initialPattern.toLowerCase().trim();
+                        suggestionsCallback: (String pattern) {
                           final candidates = [
-                            ...widget.vm.servers.keys
-                                .where((element) => element
-                                    .toLowerCase()
-                                    .contains(pattern.toLowerCase()))
-                                .toList()
-                              ..sort((a, b) {
-                                final index = a
-                                    .toLowerCase()
-                                    .indexOf(pattern)
-                                    .compareTo(
-                                        b.toLowerCase().indexOf(pattern));
-                                if (index != 0) {
-                                  return index;
-                                }
-                                return a.compareTo(b);
-                              }),
+                            ...Fuzzy(widget.vm.servers.keys.toList())
+                                .search(pattern)
+                                .map((e) => e.item),
                             "Andere Schule",
                           ];
                           return candidates;
