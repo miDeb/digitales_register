@@ -18,11 +18,14 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dr/ui/calendar_detail.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
 import 'no_internet.dart';
+
+const holidayIconSize = 65.0;
 
 class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
@@ -167,10 +170,25 @@ class CalendarDayWidget extends StatelessWidget {
             child: Container(),
           )
         ] else
-          const Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(top: 8.0),
-              child: Text("Frei"),
+          Expanded(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 32, bottom: 4),
+                  child: SizedBox(
+                    height: 75,
+                    width: 75,
+                    child: _findIconForSeason(
+                      calendarDay.date,
+                      Theme.of(context).iconTheme.color!,
+                    ),
+                  ),
+                ),
+                Text(
+                  "Frei",
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+              ],
             ),
           ),
       ],
@@ -254,4 +272,81 @@ class HourWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+bool _dateIsNear(DateTime date1, DateTime date2) {
+  return date1.difference(date2).inDays.abs() <= 3;
+}
+
+Widget _findIconForSeason(DateTime date, Color color) {
+  final month = date.month;
+  final day = date.day;
+  // Summer
+  if (month >= 6 && month <= 9) {
+    return const Icon(
+      Icons.beach_access,
+      size: holidayIconSize,
+    );
+  }
+  // Christmas
+  if (month == 12 && day >= 22 || month == 1 && day <= 10) {
+    return const Icon(
+      Icons.ac_unit_rounded,
+      size: holidayIconSize,
+    );
+  }
+  // Halloween
+  if (month == 10 && day >= 24 || month == 11 && day <= 8) {
+    return SvgPicture.asset(
+      "assets/halloween.svg",
+      color: color,
+      height: holidayIconSize,
+      width: holidayIconSize,
+    );
+  }
+  // Easter
+  final easter = calculateEaster(date.year);
+  if (_dateIsNear(date, easter)) {
+    return SvgPicture.asset(
+      "assets/easter.svg",
+      color: color,
+      height: holidayIconSize,
+      width: holidayIconSize,
+    );
+  }
+  // Carnival
+  final carnival = easter.subtract(const Duration(days: 47));
+  if (_dateIsNear(date, carnival)) {
+    return SvgPicture.asset(
+      "assets/carnival.svg",
+      color: color,
+      height: holidayIconSize,
+      width: holidayIconSize,
+    );
+  }
+
+  // Default
+  return const Icon(
+    Icons.celebration,
+    size: holidayIconSize,
+  );
+}
+
+/// Calculate the date of easter
+// https://en.wikipedia.org/wiki/Date_of_Easter#Meeus.27s_Julian_algorithm
+DateTime calculateEaster(int year) {
+  final a = year % 19;
+  final b = year ~/ 100;
+  final c = year % 100;
+  final d = b ~/ 4;
+  final e = b % 4;
+  final g = (8 * b + 13) ~/ 25;
+  final h = (19 * a + b - d - g + 15) % 30;
+  final i = c ~/ 4;
+  final k = c % 4;
+  final l = (32 + 2 * e + 2 * i - h - k) % 7;
+  final m = (a + 11 * h + 19 * l) ~/ 433;
+  final n = (h + l - 7 * m + 90) ~/ 25;
+  final p = (h + l - 7 * m + 33 * n + 19) % 32;
+  return DateTime(year, n, p);
 }
