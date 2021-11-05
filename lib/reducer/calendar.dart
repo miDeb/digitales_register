@@ -81,10 +81,36 @@ CalendarDayBuilder _parseCalendarDay(Map day, DateTime date) {
 
 CalendarHourBuilder _parseHour(Map hour) {
   final lesson = getMap(hour["lesson"])!;
+  final timeSpans = ListBuilder<TimeSpan>();
+  for (final linkedLesson in <dynamic>[
+    lesson,
+    ...getList(lesson["linkedHours"]) ?? <dynamic>[],
+  ]) {
+    final date = tryParse(
+      getString(linkedLesson["date"])!,
+      (String s) => DateTime.parse(s),
+    );
+    DateTime parseTime(DateTime date, Map timeObject) {
+      final h = getInt(timeObject["h"])!;
+      final m = getInt(timeObject["m"])!;
+      return DateTime(date.year, date.month, date.day, h, m);
+    }
+
+    final from = parseTime(date, getMap(linkedLesson["timeStartObject"])!);
+    final to = parseTime(date, getMap(linkedLesson["timeEndObject"])!);
+
+    timeSpans.add(
+      TimeSpan(
+        (b) => b
+          ..from = from
+          ..to = to,
+      ),
+    );
+  }
   return CalendarHourBuilder()
-    ..description = getString(lesson["description"])
     ..fromHour = getInt(lesson["hour"])
     ..toHour = getInt(lesson["toHour"])
+    ..timeSpans = timeSpans
     ..rooms = ListBuilder(
       getList(lesson["rooms"])!.map<String>((dynamic r) => r["name"] as String),
     )

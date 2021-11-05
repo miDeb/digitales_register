@@ -24,6 +24,12 @@ import 'util.dart';
 
 part 'data.g.dart';
 
+bool estimateShouldWarn(String name) {
+  return name == "Schularbeit" ||
+      name == "Testarbeit" ||
+      name.contains("Prüfung");
+}
+
 abstract class Day implements Built<Day, DayBuilder> {
   factory Day([void Function(DayBuilder)? updates]) = _$Day;
   Day._();
@@ -94,8 +100,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   @BuiltValueField(wireName: "warning")
   bool get warningServerSaid;
   // Heuristics to still show a warning when it would make sense
-  bool get warning =>
-      warningServerSaid || title == "Testarbeit" || title == "Schularbeit";
+  bool get warning => warningServerSaid || estimateShouldWarn(title);
   bool get checkable;
   bool get checked;
   bool get deleteable;
@@ -522,20 +527,20 @@ abstract class CalendarHour
     implements Built<CalendarHour, CalendarHourBuilder> {
   int get fromHour;
   int get toHour;
+  BuiltList<TimeSpan> get timeSpans;
   BuiltList<String> get rooms;
 
-  String? get description;
   String get subject;
   BuiltList<HomeworkExam> get homeworkExams;
   BuiltList<LessonContent> get lessonContents;
   int get lenght => toHour - fromHour + 1;
-  bool get hasDescription => !description.isNullOrEmpty;
   bool get warning => homeworkExams.any((it) => it.warning);
 
   BuiltList<Teacher> get teachers;
 
-  static void _initializeBuilder(CalendarHourBuilder b) =>
-      b..teachers = ListBuilder();
+  static void _initializeBuilder(CalendarHourBuilder b) => b
+    ..teachers = ListBuilder()
+    ..timeSpans = ListBuilder();
 
   static Serializer<CalendarHour> get serializer => _$calendarHourSerializer;
   factory CalendarHour([Function(CalendarHourBuilder b)? updates]) =
@@ -543,9 +548,20 @@ abstract class CalendarHour
   CalendarHour._();
 }
 
+abstract class TimeSpan implements Built<TimeSpan, TimeSpanBuilder> {
+  factory TimeSpan([Function(TimeSpanBuilder b)? updates]) = _$TimeSpan;
+  TimeSpan._();
+  static Serializer<TimeSpan> get serializer => _$timeSpanSerializer;
+
+  DateTime get from;
+
+  DateTime get to;
+}
+
 abstract class Teacher implements Built<Teacher, TeacherBuilder> {
   String get firstName;
   String get lastName;
+  String get fullName => "$firstName $lastName";
   static Serializer<Teacher> get serializer => _$teacherSerializer;
   factory Teacher([Function(TeacherBuilder b)? updates]) = _$Teacher;
   Teacher._();
@@ -562,7 +578,7 @@ abstract class HomeworkExam
   bool get hasGradeGroupSubmissions;
   int get typeId;
   String get typeName;
-  bool get warning => typeName == "Testarbeit" || typeName == "Schularbeit";
+  bool get warning => estimateShouldWarn(typeName);
   static Serializer<HomeworkExam> get serializer => _$homeworkExamSerializer;
   factory HomeworkExam([Function(HomeworkExamBuilder b)? updates]) =
       _$HomeworkExam;

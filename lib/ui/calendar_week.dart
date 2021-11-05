@@ -15,15 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'dart:math';
-
 import 'package:built_collection/built_collection.dart';
+import 'package:dr/ui/calendar_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
-import 'dialog.dart';
 import 'no_internet.dart';
 
 class CalendarWeek extends StatelessWidget {
@@ -109,6 +107,7 @@ class CalendarDayWidget extends StatelessWidget {
                           ? HourWidget(
                               hour: calendarDay.hours[n ~/ 2],
                               subjectNicks: subjectNicks,
+                              day: calendarDay,
                             )
                           : const Divider(
                               height: 0,
@@ -137,9 +136,14 @@ class CalendarDayWidget extends StatelessWidget {
 
 class HourWidget extends StatelessWidget {
   final CalendarHour hour;
+  final CalendarDay day;
   final BuiltMap<String, String> subjectNicks;
-  const HourWidget({Key? key, required this.hour, required this.subjectNicks})
-      : super(key: key);
+  const HourWidget({
+    Key? key,
+    required this.hour,
+    required this.subjectNicks,
+    required this.day,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -147,81 +151,12 @@ class HourWidget extends StatelessWidget {
       child: ClipRect(
         child: InkWell(
           onTap: () {
-            showDialog<void>(
-              context: context,
-              builder: (_) {
-                final items = [
-                  if (hour.hasDescription) Text(hour.description!),
-                  for (final lessonContent in hour.lessonContents)
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${lessonContent.typeName}: ",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: lessonContent.name),
-                        ],
-                        style: DefaultTextStyle.of(context).style,
-                      ),
-                    ),
-                  for (HomeworkExam homeworkExam in hour.homeworkExams)
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "${homeworkExam.typeName}: ",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: homeworkExam.name),
-                        ],
-                        style: DefaultTextStyle.of(context).style,
-                      ),
-                    ),
-                  if (hour.rooms.isNotEmpty)
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: "Räume: ",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(text: formatList(hour.rooms.toList())),
-                        ],
-                        style: DefaultTextStyle.of(context).style,
-                      ),
-                    ),
-                  if (hour.teachers.isNotEmpty)
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(
-                            text: "Lehrer: ",
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          TextSpan(
-                              text: formatList(hour.teachers
-                                  .map((t) => "${t.firstName} ${t.lastName}")
-                                  .toList())),
-                        ],
-                        style: DefaultTextStyle.of(context).style,
-                      ),
-                    ),
-                ];
-                return InfoDialog(
-                    title: Text(hour.subject),
-                    content: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: List.generate(
-                          max(items.length * 2 - 1, 0),
-                          (index) => index.isEven
-                              ? items[index ~/ 2]
-                              : const Divider(),
-                        ),
-                      ),
-                    ));
-              },
+            Navigator.of(context).push<void>(
+              MaterialPageRoute(
+                builder: (context) =>
+                    CalendarDetail(day: day, targetHour: hour),
+                fullscreenDialog: true,
+              ),
             );
           },
           child: Container(

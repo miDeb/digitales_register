@@ -755,6 +755,13 @@ packages:
       url: "https://github.com/miDeb/scroll-to-index.git"
     source: git
     version: "2.0.0"
+  scrollable_positioned_list:
+    dependency: "direct main"
+    description:
+      name: scrollable_positioned_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.2"
   shared_preferences:
     dependency: transitive
     description:
@@ -886,13 +893,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  string_similarity:
-    dependency: "direct main"
-    description:
-      name: string_similarity
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   term_glyph:
     dependency: transitive
     description:
