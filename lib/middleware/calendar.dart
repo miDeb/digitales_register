@@ -19,7 +19,8 @@ part of 'middleware.dart';
 
 final _calendarMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
-      ..add(CalendarActionsNames.load, _loadCalendar);
+      ..add(CalendarActionsNames.load, _loadCalendar)
+      ..add(CalendarActionsNames.select, _selectionChanged);
 
 Future<void> _loadCalendar(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -35,5 +36,17 @@ Future<void> _loadCalendar(
     api.actions.calendarActions.loaded(data as Map<String, dynamic>);
   } else {
     api.actions.refreshNoInternet();
+  }
+}
+
+Future<void> _selectionChanged(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<CalendarSelection> action) async {
+  await next(action);
+  final newWeek = toMonday(action.payload.date);
+  if (api.state.calendarState.currentMonday != newWeek) {
+    api.actions.calendarActions.setCurrentMonday(newWeek);
+    api.actions.calendarActions.load(newWeek);
   }
 }

@@ -135,6 +135,15 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   }
 
   @override
+  void didUpdateWidget(covariant Calendar oldWidget) {
+    final page = pageOf(widget.vm.currentMonday);
+    if (page != _controller.page?.round()) {
+      _controller.jumpToPage(page);
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ResponsiveAppBar(

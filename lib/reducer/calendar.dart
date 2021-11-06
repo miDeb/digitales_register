@@ -29,7 +29,8 @@ final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   (b) => b.calendarState,
 )
   ..add(CalendarActionsNames.loaded, _loaded)
-  ..add(CalendarActionsNames.setCurrentMonday, _currentMonday);
+  ..add(CalendarActionsNames.setCurrentMonday, _currentMonday)
+  ..add(CalendarActionsNames.select, _selectedDay);
 
 void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
@@ -46,6 +47,11 @@ void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
 void _currentMonday(CalendarState state, Action<DateTime> action,
     CalendarStateBuilder builder) {
   builder.currentMonday = action.payload;
+}
+
+void _selectedDay(CalendarState state, Action<CalendarSelection> action,
+    CalendarStateBuilder builder) {
+  builder.selection = action.payload.toBuilder();
 }
 
 CalendarDayBuilder _parseCalendarDay(Map day, DateTime date) {

@@ -375,6 +375,8 @@ abstract class CalendarState
 
   @BuiltValueField(serialize: false)
   DateTime? get currentMonday;
+  @BuiltValueField(serialize: false)
+  CalendarSelection? get selection;
 
   Iterable<CalendarDay> get currentDays {
     return daysForWeek(currentMonday!);
@@ -395,6 +397,18 @@ abstract class CalendarState
   static void _initializeBuilder(CalendarStateBuilder builder) {
     builder.days = MapBuilder<DateTime, CalendarDay>();
   }
+}
+
+abstract class CalendarSelection
+    implements Built<CalendarSelection, CalendarSelectionBuilder> {
+  DateTime get date;
+  int? get hour;
+
+  factory CalendarSelection([Function(CalendarSelectionBuilder b)? updates]) =
+      _$CalendarSelection;
+  CalendarSelection._();
+  static Serializer<CalendarSelection> get serializer =>
+      _$calendarSelectionSerializer;
 }
 
 abstract class CertificateState

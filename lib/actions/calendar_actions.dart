@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/app_state.dart';
 
 part 'calendar_actions.g.dart';
 
@@ -26,4 +27,5 @@ abstract class CalendarActions extends ReduxActions {
   abstract final ActionDispatcher<DateTime> load;
   abstract final ActionDispatcher<Map<String, dynamic>> loaded;
   abstract final ActionDispatcher<DateTime> setCurrentMonday;
+  abstract final ActionDispatcher<CalendarSelection> select;
 }

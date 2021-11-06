@@ -16,7 +16,9 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_collection/built_collection.dart';
-import 'package:dr/ui/calendar_detail.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/container/calendar_detail_container.dart';
+import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -178,9 +180,10 @@ class CalendarDayWidget extends StatelessWidget {
                   child: SizedBox(
                     height: 75,
                     width: 75,
-                    child: _findIconForSeason(
+                    child: findHolidayIconForSeason(
                       calendarDay.date,
                       Theme.of(context).iconTheme.color!,
+                      holidayIconSize,
                     ),
                   ),
                 ),
@@ -213,10 +216,14 @@ class HourWidget extends StatelessWidget {
       child: ClipRect(
         child: InkWell(
           onTap: () {
+            actions.calendarActions.select(
+              CalendarSelection((b) => b
+                ..date = day.date
+                ..hour = hour.fromHour),
+            );
             Navigator.of(context).push<void>(
               MaterialPageRoute(
-                builder: (context) =>
-                    CalendarDetail(day: day, targetHour: hour),
+                builder: (context) => const CalendarDetailContainer(),
                 fullscreenDialog: true,
               ),
             );
@@ -278,21 +285,31 @@ bool _dateIsNear(DateTime date1, DateTime date2) {
   return date1.difference(date2).inDays.abs() <= 3;
 }
 
-Widget _findIconForSeason(DateTime date, Color color) {
+Widget findHolidayIconForSeason(DateTime date, Color color, double size) {
+  // Weekends
+  if (date.weekday >= 6) {
+    return Icon(
+      Icons.weekend,
+      color: color,
+      size: size,
+    );
+  }
   final month = date.month;
   final day = date.day;
   // Summer
   if (month >= 6 && month <= 9) {
-    return const Icon(
+    return Icon(
       Icons.beach_access,
-      size: holidayIconSize,
+      size: size,
+      color: color,
     );
   }
   // Christmas
   if (month == 12 && day >= 22 || month == 1 && day <= 10) {
-    return const Icon(
+    return Icon(
       Icons.ac_unit_rounded,
-      size: holidayIconSize,
+      size: size,
+      color: color,
     );
   }
   // Halloween
@@ -300,8 +317,8 @@ Widget _findIconForSeason(DateTime date, Color color) {
     return SvgPicture.asset(
       "assets/halloween.svg",
       color: color,
-      height: holidayIconSize,
-      width: holidayIconSize,
+      height: size,
+      width: size,
     );
   }
   // Easter
@@ -310,8 +327,8 @@ Widget _findIconForSeason(DateTime date, Color color) {
     return SvgPicture.asset(
       "assets/easter.svg",
       color: color,
-      height: holidayIconSize,
-      width: holidayIconSize,
+      height: size,
+      width: size,
     );
   }
   // Carnival
@@ -320,15 +337,16 @@ Widget _findIconForSeason(DateTime date, Color color) {
     return SvgPicture.asset(
       "assets/carnival.svg",
       color: color,
-      height: holidayIconSize,
-      width: holidayIconSize,
+      height: size,
+      width: size,
     );
   }
 
   // Default
-  return const Icon(
+  return Icon(
     Icons.celebration,
-    size: holidayIconSize,
+    size: size,
+    color: color,
   );
 }
 

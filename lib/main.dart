@@ -49,6 +49,10 @@ GlobalKey<ScaffoldMessengerState>? scaffoldMessengerKey;
 
 typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
+// Actions are now global (although this doesn't seem to be the case in the official example).
+// This way it is easier for ui code to dispatch actions.
+final AppActions actions = AppActions();
+
 void main() {
   // This is required to access the secure storage
   // (crash report from a desktop user, possible race?)
@@ -60,7 +64,7 @@ void main() {
   final store = Store<AppState, AppStateBuilder, AppActions>(
     appReducerBuilder.build(),
     AppState(),
-    AppActions(),
+    actions,
     middleware: middleware(),
   );
   runApp(RegisterApp(store: store));
