@@ -557,6 +557,18 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.monetization_on),
+            title: const Text(
+              "Unterstütze uns jetzt!",
+            ),
+            trailing: const Icon(Icons.open_in_new),
+            onTap: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (context) => Donate()));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.feedback),
             title: const Text("Feedback geben"),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
@@ -576,14 +588,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             },
           ),
           ListTile(
-            title: const Text(
-              "Unterstütze uns jetzt!",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (context) => Donate()));
-            },
+            leading: const Icon(Icons.code),
+            trailing: const Icon(Icons.open_in_new),
+            title: const Text("Zum Quellcode"),
+            onTap: () => launch("https://github.com/miDeb/digitales_register"),
           ),
           FutureBuilder(
             future: PackageInfo.fromPlatform(),
@@ -598,23 +606,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                     "Copyright Michael Debertol und Simon Wachtler 2019-2021",
                 applicationName: "Digitales Register (Client)",
                 applicationVersion: info.data?.version ?? "Unbekannte Version",
-                aboutBoxChildren: [
-                  const Text("""
+                aboutBoxChildren: const [
+                  Text("""
 Ein Client für das Digitale Register.
-Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          launch("https://github.com/miDeb/digitales_register");
-                        },
-                        child: const Text(
-                          "View Source Code on Github",
-                        ),
-                      ),
-                    ),
-                  ),
+Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung.""")
                 ],
                 child: const Text("Über diese App"),
               );
