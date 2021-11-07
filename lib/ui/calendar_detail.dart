@@ -15,19 +15,66 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'package:dr/app_state.dart';
 import 'package:dr/container/calendar_card_container.dart';
 import 'package:dr/container/calendar_detail_container.dart';
 import 'package:dr/ui/calendar_week.dart';
 import 'package:dr/ui/no_internet.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
+import '../app_state.dart';
 import '../data.dart';
 import '../main.dart';
 
 const _pageViewAnimationDuration = Duration(milliseconds: 250);
+
+class RightSidebar extends StatefulWidget {
+  final Widget child;
+  final bool show;
+  const RightSidebar({
+    Key? key,
+    required this.child,
+    required this.show,
+  }) : super(key: key);
+
+  @override
+  State<RightSidebar> createState() => _RightSidebarState();
+}
+
+class _RightSidebarState extends State<RightSidebar>
+    with SingleTickerProviderStateMixin {
+  late final _animationController = AnimationController(
+    vsync: this,
+    duration: _pageViewAnimationDuration,
+    value: 0,
+  );
+  @override
+  void didUpdateWidget(RightSidebar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.show != widget.show) {
+      _animationController.animateTo(
+        widget.show ? 1.0 : 0.0,
+        duration: _pageViewAnimationDuration,
+        curve: Curves.ease,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizeTransition(
+      axis: Axis.horizontal,
+      sizeFactor: _animationController,
+      axisAlignment: -1,
+      child: SizedBox(
+        width: 350,
+        child: widget.child,
+      ),
+    );
+  }
+}
 
 int _pageViewIndex(DateTime date) {
   return (date.difference(DateTime(1970)).inHours / 24).round();
@@ -43,10 +90,13 @@ DateTime _dateForPageViewIndex(int idx) {
 class CalendarDetailPage extends StatefulWidget {
   final DateTime? selectedDay;
   final int? selectedHour;
+  final bool isSidebar, show;
   const CalendarDetailPage({
     Key? key,
     required this.selectedDay,
     required this.selectedHour,
+    required this.isSidebar,
+    required this.show,
   }) : super(key: key);
 
   @override
@@ -57,6 +107,7 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
   late final PageView _pageView;
   late final PageController _controller;
   DateTime? selectedDate;
+  int programmaticPageAnimations = 0;
 
   void _pageBack() {
     _controller.previousPage(
@@ -73,6 +124,9 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
   }
 
   void _handlePageChanged(int index) {
+    if (programmaticPageAnimations != 0) {
+      return;
+    }
     final date = _dateForPageViewIndex(index);
     actions.calendarActions.select(
       CalendarSelection((b) => b..date = date),
@@ -85,9 +139,33 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
   @override
   void didUpdateWidget(CalendarDetailPage oldWidget) {
     super.didUpdateWidget(oldWidget);
+    if (!widget.show && oldWidget.show) {
+      // clear the selection
+      actions.calendarActions.select(null);
+    }
+    if (widget.selectedDay == null) {
+      return;
+    }
     final pageViewIndex = _pageViewIndex(widget.selectedDay!);
     if (pageViewIndex != _controller.page?.round()) {
-      _controller.jumpToPage(pageViewIndex);
+      selectedDate = widget.selectedDay;
+      if (oldWidget.selectedDay != null) {
+        programmaticPageAnimations++;
+        _controller
+            .animateToPage(
+          pageViewIndex,
+          duration: _pageViewAnimationDuration,
+          curve: Curves.ease,
+        )
+            .then((_) {
+          programmaticPageAnimations--;
+        });
+      } else {
+        // We were previouly closed, so we don't want to show a page animation.
+        programmaticPageAnimations++;
+        _controller.jumpToPage(pageViewIndex);
+        programmaticPageAnimations--;
+      }
     }
   }
 
@@ -96,7 +174,8 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
     super.initState();
 
     _controller = PageController(
-      initialPage: _pageViewIndex(widget.selectedDay!),
+      initialPage:
+          widget.selectedDay != null ? _pageViewIndex(widget.selectedDay!) : 0,
     );
 
     _pageView = PageView.builder(
@@ -104,34 +183,51 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
         final date = _dateForPageViewIndex(index);
         return CalendarDetailItemContainer(
           date: date,
-          hourIndex: date == widget.selectedDay ? widget.selectedHour : null,
         );
       },
       controller: _controller,
       onPageChanged: _handlePageChanged,
     );
+
     selectedDate = widget.selectedDay;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          DateFormat.MMMEd("de").format(selectedDate!),
+    return maybeWrap(
+      Scaffold(
+        appBar: AppBar(
+          leading: widget.isSidebar
+              ? IconButton(
+                  icon: const Icon(Icons.arrow_forward_ios),
+                  onPressed: () {
+                    actions.calendarActions.select(null);
+                  },
+                )
+              : null,
+          title: Text(
+            selectedDate != null
+                ? DateFormat.MMMEd("de").format(selectedDate!)
+                : "Detailansicht",
+          ),
+          actions: [
+            IconButton(
+              onPressed: _pageBack,
+              icon: const Icon(Icons.chevron_left),
+            ),
+            IconButton(
+              onPressed: _pageForward,
+              icon: const Icon(Icons.chevron_right),
+            ),
+          ],
         ),
-        actions: [
-          IconButton(
-            onPressed: _pageBack,
-            icon: const Icon(Icons.chevron_left),
-          ),
-          IconButton(
-            onPressed: _pageForward,
-            icon: const Icon(Icons.chevron_right),
-          ),
-        ],
+        body: _pageView,
       ),
-      body: _pageView,
+      (scaffold) => RightSidebar(
+        show: widget.selectedDay != null && widget.show,
+        child: scaffold,
+      ),
+      wrap: widget.isSidebar,
     );
   }
 }
@@ -162,7 +258,6 @@ class CalendarDetailWrapper extends StatelessWidget {
       child = _NoSchool(date: date);
     } else {
       child = CalendarDetail(
-        key: ValueKey(day),
         day: day!,
         targetHour: targetHour,
         noInternet: noInternet,
@@ -211,6 +306,21 @@ class _CalendarDetailState extends State<CalendarDetail> {
   }
 
   @override
+  void didUpdateWidget(covariant CalendarDetail oldWidget) {
+    final targetHour = widget.targetHour;
+    if (targetHour != null && targetHour != oldWidget.targetHour) {
+      itemScrollController.scrollTo(
+        index: widget.day.hours.indexOf(targetHour),
+        alignment: 0.10,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.ease,
+      );
+    }
+
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
       itemScrollController: itemScrollController,
@@ -224,7 +334,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
           ),
           child: CalendarCardContainer(
             hour: hour,
-            selected: hour == widget.targetHour,
+            day: widget.day.date,
           ),
         );
       },

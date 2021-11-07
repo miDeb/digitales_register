@@ -52,6 +52,7 @@ class CalendarViewModel {
   final DateTime? first;
   final DateTime? last;
   final DateTime currentMonday;
+  final CalendarSelection? selection;
 
   CalendarViewModel(AppState state)
       : first = state.calendarState.currentDays.isEmpty
@@ -69,5 +70,6 @@ class CalendarViewModel {
               ),
             ) &&
             state.settingsState.showCalendarNicksBar,
-        noInternet = state.noInternet;
+        noInternet = state.noInternet,
+        selection = state.calendarState.selection;
 }

@@ -25,11 +25,12 @@ import '../app_state.dart';
 
 class CalendarCardContainer extends StatelessWidget {
   final CalendarHour hour;
-  final bool selected;
+  final DateTime day;
+
   const CalendarCardContainer({
     Key? key,
     required this.hour,
-    required this.selected,
+    required this.day,
   }) : super(key: key);
 
   @override
@@ -39,12 +40,14 @@ class CalendarCardContainer extends StatelessWidget {
         return CalendarCard(
           hour: state.hour,
           theme: state.theme,
-          selected: selected,
+          selected: state.selected,
         );
       },
       connect: (state) => CalendarCardViewModel(
-        hour,
-        state.settingsState.subjectThemes[hour.subject]!,
+        hour: hour,
+        theme: state.settingsState.subjectThemes[hour.subject]!,
+        selected: state.calendarState.selection?.date == day &&
+            state.calendarState.selection?.hour == hour.fromHour,
       ),
     );
   }
@@ -53,6 +56,11 @@ class CalendarCardContainer extends StatelessWidget {
 class CalendarCardViewModel {
   final CalendarHour hour;
   final SubjectTheme theme;
+  final bool selected;
 
-  CalendarCardViewModel(this.hour, this.theme);
+  CalendarCardViewModel({
+    required this.hour,
+    required this.theme,
+    required this.selected,
+  });
 }

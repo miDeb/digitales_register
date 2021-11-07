@@ -49,9 +49,9 @@ void _currentMonday(CalendarState state, Action<DateTime> action,
   builder.currentMonday = action.payload;
 }
 
-void _selectedDay(CalendarState state, Action<CalendarSelection> action,
+void _selectedDay(CalendarState state, Action<CalendarSelection?> action,
     CalendarStateBuilder builder) {
-  builder.selection = action.payload.toBuilder();
+  builder.selection = action.payload?.toBuilder();
 }
 
 CalendarDayBuilder _parseCalendarDay(Map day, DateTime date) {

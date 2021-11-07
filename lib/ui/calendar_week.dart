@@ -17,7 +17,6 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:dr/app_state.dart';
-import 'package:dr/container/calendar_detail_container.dart';
 import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,7 +31,10 @@ const holidayIconSize = 65.0;
 class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
 
-  const CalendarWeek({Key? key, required this.vm}) : super(key: key);
+  const CalendarWeek({
+    Key? key,
+    required this.vm,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +57,10 @@ class CalendarWeek extends StatelessWidget {
                             calendarDay: d,
                             max: latestHour,
                             subjectNicks: vm.subjectNicks,
+                            isSelected: vm.selection?.date == d.date,
+                            selectedHour: vm.selection?.date == d.date
+                                ? vm.selection?.hour
+                                : null,
                           ),
                         ),
                       )
@@ -70,11 +76,15 @@ class _HoursChunk extends StatelessWidget {
   final BuiltMap<String, String> subjectNicks;
   final List<CalendarHour> hours;
   final CalendarDay day;
+  final int? selectedHour;
+  final bool isSelected;
   const _HoursChunk({
     Key? key,
     required this.subjectNicks,
     required this.hours,
     required this.day,
+    required this.selectedHour,
+    required this.isSelected,
   }) : super(key: key);
 
   @override
@@ -83,10 +93,14 @@ class _HoursChunk extends StatelessWidget {
       children: <Widget>[
         Card(
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.grey, width: 0),
+            side: BorderSide(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.secondary
+                    : Colors.grey,
+                width: 0),
             borderRadius: BorderRadius.circular(8),
           ),
-          color: Colors.transparent,
+          color: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           child: Container(),
         ),
@@ -105,6 +119,7 @@ class _HoursChunk extends StatelessWidget {
                       hour: hours[n ~/ 2],
                       subjectNicks: subjectNicks,
                       day: day,
+                      isSelected: selectedHour == hours[n ~/ 2].fromHour,
                     )
                   : const Divider(
                       height: 0,
@@ -121,12 +136,16 @@ class CalendarDayWidget extends StatelessWidget {
   final int max;
   final CalendarDay calendarDay;
   final BuiltMap<String, String> subjectNicks;
+  final bool isSelected;
+  final int? selectedHour;
 
   const CalendarDayWidget({
     Key? key,
     required this.max,
     required this.calendarDay,
     required this.subjectNicks,
+    required this.isSelected,
+    required this.selectedHour,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -164,6 +183,8 @@ class CalendarDayWidget extends StatelessWidget {
                 hours: chunks[i],
                 subjectNicks: subjectNicks,
                 day: calendarDay,
+                selectedHour: selectedHour,
+                isSelected: isSelected,
               ),
             )
           ],
@@ -203,11 +224,13 @@ class HourWidget extends StatelessWidget {
   final CalendarHour hour;
   final CalendarDay day;
   final BuiltMap<String, String> subjectNicks;
+  final bool isSelected;
   const HourWidget({
     Key? key,
     required this.hour,
     required this.subjectNicks,
     required this.day,
+    required this.isSelected,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -221,21 +244,18 @@ class HourWidget extends StatelessWidget {
                 ..date = day.date
                 ..hour = hour.fromHour),
             );
-            Navigator.of(context).push<void>(
-              MaterialPageRoute(
-                builder: (context) => const CalendarDetailContainer(),
-                fullscreenDialog: true,
-              ),
-            );
           },
           child: Container(
-            decoration: hour.warning
-                ? const BoxDecoration(
-                    border: Border(
+            decoration: BoxDecoration(
+              border: hour.warning
+                  ? const Border(
                       left: BorderSide(color: Colors.red, width: 5),
-                    ),
-                  )
-                : null,
+                    )
+                  : null,
+              color: isSelected
+                  ? Theme.of(context).colorScheme.secondary.withAlpha(15)
+                  : null,
+            ),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

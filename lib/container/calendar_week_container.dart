@@ -30,16 +30,24 @@ part 'calendar_week_container.g.dart';
 class CalendarWeekContainer extends StatelessWidget {
   final DateTime monday;
 
-  const CalendarWeekContainer({Key? key, required this.monday})
-      : super(key: key);
+  const CalendarWeekContainer({
+    Key? key,
+    required this.monday,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, CalendarWeekViewModel>(
       builder: (context, vm, actions) {
-        return CalendarWeek(vm: vm, key: key);
+        return CalendarWeek(
+          vm: vm,
+          key: key,
+        );
       },
       connect: (state) {
-        return CalendarWeekViewModel.fromStateAndWeek(state, monday);
+        return CalendarWeekViewModel.fromStateAndWeek(
+          state,
+          monday,
+        );
       },
     );
   }
@@ -52,6 +60,7 @@ abstract class CalendarWeekViewModel
   BuiltList<CalendarDay> get days;
   BuiltMap<String, String> get subjectNicks;
   bool get noInternet;
+  CalendarSelection? get selection;
 
   factory CalendarWeekViewModel(
           [void Function(CalendarWeekViewModelBuilder)? updates]) =
@@ -72,7 +81,8 @@ abstract class CalendarWeekViewModel
                 ),
               ),
         )
-        ..noInternet = state.noInternet,
+        ..noInternet = state.noInternet
+        ..selection = state.calendarState.selection?.toBuilder(),
     );
   }
 }

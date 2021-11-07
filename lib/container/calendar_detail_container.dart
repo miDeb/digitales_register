@@ -29,7 +29,13 @@ import '../data.dart';
 part 'calendar_detail_container.g.dart';
 
 class CalendarDetailContainer extends StatelessWidget {
-  const CalendarDetailContainer({Key? key}) : super(key: key);
+  final bool isSidebar;
+  final bool show;
+  const CalendarDetailContainer({
+    Key? key,
+    required this.isSidebar,
+    required this.show,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +43,8 @@ class CalendarDetailContainer extends StatelessWidget {
       builder: (context, state, actions) => CalendarDetailPage(
         selectedDay: state.selectedDay,
         selectedHour: state.selectedHour,
+        isSidebar: isSidebar,
+        show: show,
       ),
       connect: (state) {
         final selection = state.calendarState.selection;
@@ -61,11 +69,9 @@ class CalendarDetailVM {
 
 class CalendarDetailItemContainer extends StatelessWidget {
   final DateTime date;
-  final int? hourIndex;
   const CalendarDetailItemContainer({
     Key? key,
     required this.date,
-    required this.hourIndex,
   }) : super(key: key);
 
   @override
@@ -80,9 +86,13 @@ class CalendarDetailItemContainer extends StatelessWidget {
       ),
       connect: (state) {
         final day = state.calendarState.days[date];
+        final hourIndex = state.calendarState.selection?.date == date
+            ? state.calendarState.selection?.hour
+            : null;
+
         final hour = day != null && hourIndex != null
             ? day.hours.firstWhereOrNull(
-                (h) => h.fromHour <= hourIndex! && h.toHour >= hourIndex!)
+                (h) => h.fromHour <= hourIndex && h.toHour >= hourIndex)
             : null;
         final loading = state.calendarState.daysForWeek(toMonday(date)).isEmpty;
         return CalendarDetailItemVM(

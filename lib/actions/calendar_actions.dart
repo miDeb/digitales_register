@@ -27,5 +27,5 @@ abstract class CalendarActions extends ReduxActions {
   abstract final ActionDispatcher<DateTime> load;
   abstract final ActionDispatcher<Map<String, dynamic>> loaded;
   abstract final ActionDispatcher<DateTime> setCurrentMonday;
-  abstract final ActionDispatcher<CalendarSelection> select;
+  abstract final ActionDispatcher<CalendarSelection?> select;
 }

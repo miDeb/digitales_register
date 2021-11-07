@@ -39,6 +39,8 @@ extension StringUtils on String? {
 }
 
 DateTime toMonday(DateTime date) {
+  // ignore: parameter_assignments
+  date = DateTime.utc(date.year, date.month, date.day);
   final s = date.weekday >= 6
       ? date.add(Duration(days: 8 - date.weekday))
       : date.subtract(
