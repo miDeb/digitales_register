@@ -90,13 +90,19 @@ class CalendarCard extends StatelessWidget {
                 icon: Icons.school,
               ),
             for (HomeworkExam homeworkExam in hour.homeworkExams)
-              _ContentItem(
-                title: homeworkExam.typeName,
-                content: homeworkExam.name,
-                icon: estimateShouldWarn(homeworkExam.typeName)
-                    ? Icons.grade
-                    : Icons.assignment,
-              ),
+              if (estimateShouldWarn(homeworkExam.typeName))
+                _ContentItem(
+                  title: homeworkExam.typeName,
+                  content: homeworkExam.name,
+                  icon: Icons.grade,
+                  iconColor: Colors.red,
+                )
+              else
+                _ContentItem(
+                  title: homeworkExam.typeName,
+                  content: homeworkExam.name,
+                  icon: Icons.assignment,
+                ),
             if (hour.teachers.isNotEmpty)
               _ContentItem(
                 title: "Lehrer",
@@ -165,11 +171,13 @@ class CircledLetter extends StatelessWidget {
 class _ContentItem extends StatelessWidget {
   final String title, content;
   final IconData icon;
+  final Color iconColor;
   const _ContentItem({
     Key? key,
     required this.title,
     required this.content,
     required this.icon,
+    this.iconColor = Colors.grey,
   }) : super(key: key);
 
   @override
@@ -181,7 +189,7 @@ class _ContentItem extends StatelessWidget {
           padding: const EdgeInsets.only(top: 4),
           child: Icon(
             icon,
-            color: Colors.grey,
+            color: iconColor,
           ),
         ),
         const SizedBox(width: 8),
