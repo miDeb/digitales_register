@@ -101,6 +101,8 @@ abstract class MessagesState
 
   int? get showMessage;
 
+  UtcDateTime? get lastFetched;
+
   static Serializer<MessagesState> get serializer => _$messagesStateSerializer;
 
   factory MessagesState([Function(MessagesStateBuilder b)? updates]) =
@@ -183,6 +185,8 @@ abstract class ResetPassState
 abstract class NotificationState
     implements Built<NotificationState, NotificationStateBuilder> {
   BuiltList<Notification>? get notifications;
+  UtcDateTime? get lastFetched;
+
   bool get loading => notifications == null;
   bool get hasNotifications => !loading && notifications!.isNotEmpty;
   static Serializer<NotificationState> get serializer =>
@@ -367,6 +371,8 @@ abstract class AbsencesState
   AbsenceStatistic? get statistic;
   BuiltList<AbsenceGroup> get absences;
 
+  UtcDateTime? get lastFetched;
+
   //static void _initializeBuilder()
 }
 
@@ -415,6 +421,7 @@ abstract class CalendarSelection
 abstract class CertificateState
     implements Built<CertificateState, CertificateStateBuilder> {
   String? get html;
+  UtcDateTime? get lastFetched;
 
   factory CertificateState([void Function(CertificateStateBuilder)? updates]) =
       _$CertificateState;

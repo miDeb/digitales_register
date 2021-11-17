@@ -71,6 +71,7 @@ CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
     return _parseCalendarDay(getMap(day.values.single)!, date);
   }
   return CalendarDayBuilder()
+    ..lastFetched = UtcDateTime.now()
     ..date = date
     ..hours = ListBuilder(
       (day.values.toList()

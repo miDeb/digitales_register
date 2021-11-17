@@ -273,6 +273,8 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
   BuiltMap<Semester, BuiltList<Observation>> get observations;
   int? get id;
   String get name;
+  BuiltMap<Semester, UtcDateTime>? get lastFetchedBasic;
+  BuiltMap<Semester, UtcDateTime>? get lastFetchedDetailed;
 
   List<GradeAll>? basicGrades(Semester semester) {
     if (semester == Semester.all) {
@@ -519,6 +521,8 @@ abstract class CalendarDay implements Built<CalendarDay, CalendarDayBuilder> {
   BuiltList<CalendarHour> get hours;
   int get fromHour => hours.firstOrNull?.fromHour ?? 0;
   int get toHour => hours.lastOrNull?.toHour ?? 0;
+
+  UtcDateTime? get lastFetched;
 
   static Serializer<CalendarDay> get serializer => _$calendarDaySerializer;
   factory CalendarDay([Function(CalendarDayBuilder b)? updates]) =

@@ -86,6 +86,7 @@ AbsencesState _parseAbsences(Map json) {
   return AbsencesState(
     (b) => b
       ..statistic = stats
-      ..absences = ListBuilder(absences),
+      ..absences = ListBuilder(absences)
+      ..lastFetched = UtcDateTime.now(),
   );
 }

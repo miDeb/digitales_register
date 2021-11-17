@@ -74,7 +74,8 @@ void _updateSubjects(BuiltList<Subject> oldSubjects,
             getList(subject["grades"])!.map<GradeAll>(
               (dynamic g) => tryParse(getMap(g)!, _parseGradeAll),
             ),
-          ),
+          )
+          ..lastFetchedBasic[semester] = UtcDateTime.now(),
       );
     } else {
       subjectsBuilder.add(
@@ -127,7 +128,9 @@ void _detailsLoaded(GradesState state,
                 getList(data["observations"])!.map<Observation>(
                   (dynamic o) => tryParse(getMap(o)!, _parseObservation),
                 ),
-              ),
+              )
+              ..lastFetchedDetailed[action.payload.semester] =
+                  UtcDateTime.now(),
           )
         : s,
   );

@@ -37,7 +37,9 @@ final notificationsReducerBuilder = NestedReducerBuilder<AppState,
 
 void _loaded(NotificationState state, Action<List> action,
     NotificationStateBuilder builder) {
-  builder.notifications = tryParse(action.payload, _parseNotifications);
+  builder
+    ..notifications = tryParse(action.payload, _parseNotifications)
+    ..lastFetched = UtcDateTime.now();
 }
 
 ListBuilder<Notification> _parseNotifications(List data) {

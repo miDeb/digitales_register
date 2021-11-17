@@ -39,8 +39,12 @@ final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(
     MessagesState state, Action<List> action, MessagesStateBuilder builder) {
-  return builder.replace(tryParse(action.payload,
-      (List<dynamic> payload) => _parseMessages(payload, state)));
+  return builder.replace(
+    tryParse(
+      action.payload,
+      (List<dynamic> payload) => _parseMessages(payload, state),
+    ),
+  );
 }
 
 void _showMessage(
@@ -87,7 +91,9 @@ MessagesState _parseMessages(List json, MessagesState state) {
           tryParse(getMap(m), (Map? m) => _parseMessage(m!, state)))
       .toList();
   return MessagesState(
-    (b) => b..messages = ListBuilder<Message>(messages),
+    (b) => b
+      ..messages = ListBuilder<Message>(messages)
+      ..lastFetched = UtcDateTime.now(),
   );
 }
 

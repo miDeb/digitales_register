@@ -17,6 +17,7 @@
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/certificate_actions.dart';
+import 'package:dr/utc_date_time.dart';
 
 import '../app_state.dart';
 
@@ -28,5 +29,7 @@ final certificateReducerBuilder = NestedReducerBuilder<AppState,
 
 void _loaded(CertificateState state, Action<String> action,
     CertificateStateBuilder builder) {
-  builder.html = action.payload;
+  builder
+    ..html = action.payload
+    ..lastFetched = UtcDateTime.now();
 }
