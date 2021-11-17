@@ -22,6 +22,7 @@ import 'package:flutter_built_redux/flutter_built_redux.dart';
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../ui/calendar.dart';
+import '../utc_date_time.dart';
 
 class CalendarContainer extends StatelessWidget {
   @override
@@ -45,13 +46,13 @@ class CalendarContainer extends StatelessWidget {
   }
 }
 
-typedef DayCallback = void Function(DateTime day);
+typedef DayCallback = void Function(UtcDateTime day);
 
 class CalendarViewModel {
   final bool showEditNicksBar, noInternet;
-  final DateTime? first;
-  final DateTime? last;
-  final DateTime currentMonday;
+  final UtcDateTime? first;
+  final UtcDateTime? last;
+  final UtcDateTime currentMonday;
   final CalendarSelection? selection;
 
   CalendarViewModel(AppState state)

@@ -18,17 +18,17 @@
 import 'package:dr/container/calendar_detail_container.dart';
 import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 
 import '../container/calendar_container.dart';
 import '../container/calendar_week_container.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 const tabletLayoutBreakPoint = 825;
 
-typedef DayCallback = void Function(DateTime day);
+typedef DayCallback = void Function(UtcDateTime day);
 
 class Calendar extends StatefulWidget {
   final CalendarViewModel vm;
@@ -231,8 +231,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                 onPressed: () async {
                                   final result = await showDatePicker(
                                     context: context,
-                                    firstDate: DateTime(2018),
-                                    lastDate: DateTime(2050),
+                                    firstDate: UtcDateTime(2018),
+                                    lastDate: UtcDateTime(2050),
                                     initialDate: widget.vm.currentMonday,
                                     selectableDayPredicate: (final day) {
                                       return day.weekday != DateTime.sunday &&
@@ -240,7 +240,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                     },
                                   );
                                   if (result == null) return;
-                                  final date = toMonday(result);
+                                  final date = toMonday(result.makeUtc());
                                   if (date != widget.vm.currentMonday) {
                                     _controller.animateToPage(
                                       pageOf(date),
@@ -336,11 +336,11 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   }
 }
 
-int pageOf(DateTime monday) =>
-    monday.difference(DateTime.utc(2010, 1, 3, 0, 0, 0, 0, 1)).inDays ~/ 7;
+int pageOf(UtcDateTime monday) =>
+    monday.difference(UtcDateTime(2010, 1, 3, 0, 0, 0, 0, 1)).inDays ~/ 7;
 
-DateTime mondayOf(int page) =>
-    DateTime.utc(2010, 1, 4).add(Duration(days: page * 7));
+UtcDateTime mondayOf(int page) =>
+    UtcDateTime(2010, 1, 4).add(Duration(days: page * 7));
 
 class EditNickBar extends StatelessWidget {
   final bool show;

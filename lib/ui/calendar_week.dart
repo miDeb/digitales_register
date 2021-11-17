@@ -24,6 +24,7 @@ import 'package:intl/intl.dart';
 
 import '../container/calendar_week_container.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import 'no_internet.dart';
 
 const holidayIconSize = 65.0;
@@ -301,11 +302,11 @@ class HourWidget extends StatelessWidget {
   }
 }
 
-bool _dateIsNear(DateTime date1, DateTime date2) {
+bool _dateIsNear(UtcDateTime date1, UtcDateTime date2) {
   return date1.difference(date2).inDays.abs() <= 3;
 }
 
-Widget findHolidayIconForSeason(DateTime date, Color color, double size) {
+Widget findHolidayIconForSeason(UtcDateTime date, Color color, double size) {
   // Weekends
   if (date.weekday >= 6) {
     return Icon(
@@ -372,7 +373,7 @@ Widget findHolidayIconForSeason(DateTime date, Color color, double size) {
 
 /// Calculate the date of easter
 // https://en.wikipedia.org/wiki/Date_of_Easter#Meeus.27s_Julian_algorithm
-DateTime calculateEaster(int year) {
+UtcDateTime calculateEaster(int year) {
   final a = year % 19;
   final b = year ~/ 100;
   final c = year % 100;
@@ -386,5 +387,5 @@ DateTime calculateEaster(int year) {
   final m = (a + 11 * h + 19 * l) ~/ 433;
   final n = (h + l - 7 * m + 90) ~/ 25;
   final p = (h + l - 7 * m + 33 * n + 19) % 32;
-  return DateTime(year, n, p);
+  return UtcDateTime(year, n, p);
 }

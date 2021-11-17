@@ -25,6 +25,7 @@ import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 
 part 'calendar_detail_container.g.dart';
 
@@ -58,7 +59,7 @@ class CalendarDetailContainer extends StatelessWidget {
 }
 
 class CalendarDetailVM {
-  final DateTime? selectedDay;
+  final UtcDateTime? selectedDay;
   final int? selectedHour;
 
   CalendarDetailVM({
@@ -68,7 +69,7 @@ class CalendarDetailVM {
 }
 
 class CalendarDetailItemContainer extends StatelessWidget {
-  final DateTime date;
+  final UtcDateTime date;
   const CalendarDetailItemContainer({
     Key? key,
     required this.date,

@@ -22,12 +22,13 @@ import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test('new entries are marked', () {
-    mockNow = DateTime(2020, 1, 10);
+    mockNow = UtcDateTime(2020, 1, 10);
     final store = Store<AppState, AppStateBuilder, AppActions>(
       appReducerBuilder.build(),
       AppState(
@@ -35,8 +36,8 @@ void main() {
           ..dashboardState.allDays.add(
                 Day(
                   (b) => b
-                    ..date = DateTime(2020, 1, 5)
-                    ..lastRequested = DateTime(2020)
+                    ..date = UtcDateTime(2020, 1, 5)
+                    ..lastRequested = UtcDateTime(2020)
                     ..homework.add(
                       Homework(
                         (b) => b
@@ -44,12 +45,12 @@ void main() {
                           ..checked = false
                           ..deleteable = false
                           ..deleted = false
-                          ..firstSeen = DateTime(2020)
+                          ..firstSeen = UtcDateTime(2020)
                           ..id = 1
                           ..isChanged = false
                           ..isNew = false
                           ..label = "Fach"
-                          ..lastNotSeen = DateTime(2019, 12, 24)
+                          ..lastNotSeen = UtcDateTime(2019, 12, 24)
                           ..subtitle = "Untertitel"
                           ..title = "Titel"
                           ..type = HomeworkType.lessonHomework
@@ -101,7 +102,7 @@ void main() {
           ..isChanged = true
           ..isNew = false
           ..label = "Fach"
-          ..lastNotSeen = DateTime(2020)
+          ..lastNotSeen = UtcDateTime(2020)
           ..subtitle = "Neuer Untertitel"
           ..title = "Neuer Titel"
           ..type = HomeworkType.lessonHomework
@@ -111,12 +112,12 @@ void main() {
             ..checked = false
             ..deleteable = false
             ..deleted = false
-            ..firstSeen = DateTime(2020)
+            ..firstSeen = UtcDateTime(2020)
             ..id = 1
             ..isChanged = false
             ..isNew = false
             ..label = "Fach"
-            ..lastNotSeen = DateTime(2019, 12, 24)
+            ..lastNotSeen = UtcDateTime(2019, 12, 24)
             ..subtitle = "Untertitel"
             ..title = "Titel"
             ..type = HomeworkType.lessonHomework

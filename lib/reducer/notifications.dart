@@ -22,6 +22,7 @@ import 'package:dr/actions/messages_actions.dart';
 import '../actions/notifications_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 final notificationsReducerBuilder = NestedReducerBuilder<AppState,
@@ -51,7 +52,7 @@ ListBuilder<Notification> _parseNotifications(List data) {
             ..type = getString(n["type"])
             ..objectId = getInt(n["objectId"])
             ..subTitle = getString(n["subTitle"])
-            ..timeSent = DateTime.parse(getString(n["timeSent"])!),
+            ..timeSent = UtcDateTime.parse(getString(n["timeSent"])!),
         ),
       ),
     ),

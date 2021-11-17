@@ -22,6 +22,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
 
+import 'utc_date_time.dart';
+
 Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
     {required bool wrap}) {
   if (wrap) {
@@ -38,20 +40,18 @@ extension StringUtils on String? {
   }
 }
 
-DateTime toMonday(DateTime date) {
-  // ignore: parameter_assignments
-  date = DateTime.utc(date.year, date.month, date.day);
+UtcDateTime toMonday(UtcDateTime date) {
   final s = date.weekday >= 6
       ? date.add(Duration(days: 8 - date.weekday))
       : date.subtract(
           Duration(days: date.weekday - 1),
         );
-  return DateTime.utc(s.year, s.month, s.day);
+  return UtcDateTime(s.year, s.month, s.day);
 }
 
-DateTime get now => mockNow ?? DateTime.now();
+UtcDateTime get now => mockNow ?? UtcDateTime.now();
 @visibleForTesting
-DateTime? mockNow;
+UtcDateTime? mockNow;
 
 String stringifyMaybeJson(dynamic param) {
   final encoder =

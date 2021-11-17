@@ -29,6 +29,7 @@ import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/days.dart';
 import 'package:dr/ui/no_internet.dart';
 import 'package:dr/ui/sidebar.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -144,10 +145,10 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -180,7 +181,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -189,7 +190,7 @@ Future<void> main() async {
                           ..checked = false
                           ..deleteable = false
                           ..deleted = false
-                          ..firstSeen = DateTime.now()
+                          ..firstSeen = UtcDateTime.now()
                           ..id = 1
                           ..isChanged = false
                           ..isNew = false
@@ -200,18 +201,18 @@ Future<void> main() async {
                           ..gradeFormatted = "7/9",
                       ),
                     ])
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder(
                       <Homework>[
                         Homework(
@@ -220,7 +221,7 @@ Future<void> main() async {
                             ..checked = true
                             ..deleteable = false
                             ..deleted = true
-                            ..firstSeen = DateTime.now()
+                            ..firstSeen = UtcDateTime.now()
                             ..id = 1234
                             ..isChanged = false
                             ..isNew = false
@@ -239,7 +240,7 @@ Future<void> main() async {
                             ..checked = true
                             ..deleteable = false
                             ..deleted = false
-                            ..firstSeen = DateTime.now()
+                            ..firstSeen = UtcDateTime.now()
                             ..id = 0
                             ..isChanged = false
                             ..isNew = false
@@ -254,7 +255,7 @@ Future<void> main() async {
                             ..checked = false
                             ..deleteable = false
                             ..deleted = false
-                            ..firstSeen = DateTime.now()
+                            ..firstSeen = UtcDateTime.now()
                             ..id = 1
                             ..isChanged = false
                             ..isNew = false
@@ -265,14 +266,14 @@ Future<void> main() async {
                         ),
                       ],
                     )
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -305,10 +306,10 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -387,7 +388,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -396,7 +397,7 @@ Future<void> main() async {
                           ..checked = false
                           ..deleteable = false
                           ..deleted = false
-                          ..firstSeen = DateTime.now()
+                          ..firstSeen = UtcDateTime.now()
                           ..id = 0
                           ..isChanged = false
                           ..isNew = false
@@ -406,7 +407,7 @@ Future<void> main() async {
                           ..subtitle = "Subtitle",
                       ),
                     ])
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -446,7 +447,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -455,7 +456,7 @@ Future<void> main() async {
                           ..checked = true
                           ..deleteable = true
                           ..deleted = false
-                          ..firstSeen = DateTime.now()
+                          ..firstSeen = UtcDateTime.now()
                               // do not show a entry animation
                               .subtract(const Duration(seconds: 10))
                           ..id = 0
@@ -467,7 +468,7 @@ Future<void> main() async {
                           ..subtitle = "Subtitle",
                       ),
                     ])
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -507,7 +508,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -516,7 +517,7 @@ Future<void> main() async {
                           ..checked = false
                           ..deleteable = true
                           ..deleted = false
-                          ..firstSeen = DateTime.now()
+                          ..firstSeen = UtcDateTime.now()
                               // do not show a entry animation
                               .subtract(const Duration(seconds: 10))
                           ..id = 0
@@ -528,7 +529,7 @@ Future<void> main() async {
                           ..subtitle = "Subtitle",
                       ),
                     ])
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),
@@ -571,7 +572,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = DateTime.now()
+                    ..date = UtcDateTime.now()
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -580,7 +581,7 @@ Future<void> main() async {
                           ..checked = false
                           ..deleteable = true
                           ..deleted = false
-                          ..firstSeen = DateTime(2021, 2, 2)
+                          ..firstSeen = UtcDateTime(2021, 2, 2)
                           ..id = 0
                           ..isChanged = false
                           ..isNew = false
@@ -590,7 +591,7 @@ Future<void> main() async {
                           ..subtitle = "Subtitle",
                       ),
                     ])
-                    ..lastRequested = DateTime.now(),
+                    ..lastRequested = UtcDateTime.now(),
                 ),
               ],
             ),

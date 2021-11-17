@@ -24,6 +24,7 @@ import 'package:collection/collection.dart' show IterableExtension;
 import '../actions/dashboard_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
@@ -184,7 +185,7 @@ Day _parseDay(Map data, bool deduplicate) {
   }
 
   return Day((b) => b
-    ..date = DateTime.parse(getString(data["date"])!)
+    ..date = UtcDateTime.parse(getString(data["date"])!)
     ..homework = items);
 }
 
@@ -244,7 +245,7 @@ GradeGroupSubmission? _parseGradeGroupSubmission(Map data) {
       (b) => b
         ..file = getString(data["file"])
         ..originalName = getString(data["originalName"])
-        ..timestamp = DateTime.parse(getString(data["timestamp"])!)
+        ..timestamp = UtcDateTime.parse(getString(data["timestamp"])!)
         ..typeName = getString(data["typeName"])
         ..id = getInt(data["id"])
         ..gradeGroupId = getInt(data["gradeGroupId"])

@@ -26,6 +26,7 @@ import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/notifications_page.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/wrapper.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
@@ -47,7 +48,7 @@ void main() {
                 (b) => b
                   ..id = 0
                   ..title = "title"
-                  ..timeSent = DateTime.now(),
+                  ..timeSent = UtcDateTime.now(),
               ),
             ],
           ),
@@ -79,19 +80,19 @@ void main() {
                 (b) => b
                   ..id = 0
                   ..title = "title1"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title2"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title3"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
             ],
           ),
@@ -123,19 +124,19 @@ void main() {
                 (b) => b
                   ..id = 0
                   ..title = "title1"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title2"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title3"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
             ],
           ),
@@ -175,19 +176,19 @@ void main() {
                 (b) => b
                   ..id = 0
                   ..title = "title1"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title2"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
               Notification(
                 (b) => b
                   ..id = 0
                   ..title = "title3"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
             ],
           ),
@@ -227,7 +228,7 @@ void main() {
                 (b) => b
                   ..id = 0
                   ..title = "title1"
-                  ..timeSent = DateTime(2020, 1, 2),
+                  ..timeSent = UtcDateTime(2020, 1, 2),
               ),
             ],
           ),
@@ -264,19 +265,19 @@ void main() {
         (b) => b
           ..id = 0
           ..title = "title0"
-          ..timeSent = DateTime(2021, 3, 12),
+          ..timeSent = UtcDateTime(2021, 3, 12),
       ),
       Notification(
         (b) => b
           ..id = 1
           ..title = "title1"
-          ..timeSent = DateTime(2021, 3, 12),
+          ..timeSent = UtcDateTime(2021, 3, 12),
       ),
       Notification(
         (b) => b
           ..id = 2
           ..title = "title2"
-          ..timeSent = DateTime(2021, 3, 12)
+          ..timeSent = UtcDateTime(2021, 3, 12)
           ..objectId = 25
           ..type = "message",
       ),
@@ -284,7 +285,7 @@ void main() {
         (b) => b
           ..id = 3
           ..title = "title3"
-          ..timeSent = DateTime(2021, 3, 12)
+          ..timeSent = UtcDateTime(2021, 3, 12)
           ..objectId = 50
           ..type = "message",
       ),

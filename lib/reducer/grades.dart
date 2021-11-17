@@ -24,6 +24,7 @@ import '../actions/grades_actions.dart';
 import '../actions/login_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
@@ -162,7 +163,7 @@ Observation _parseObservation(Map data) {
       ..cancelled = data["cancelled"] != 0
       ..created = getString(data["created"])
       ..note = getString(data["note"])
-      ..date = DateTime.parse(getString(data["date"])!),
+      ..date = UtcDateTime.parse(getString(data["date"])!),
   );
 }
 
@@ -183,7 +184,7 @@ GradeAll _parseGradeAll(Map data) {
     (b) => b
       ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
       ..weightPercentage = getInt(data["weight"])
-      ..date = DateTime.parse(getString(data["date"])!)
+      ..date = UtcDateTime.parse(getString(data["date"])!)
       ..cancelled = data["cancelled"] != 0
       ..type = getString(data["type"]),
   );
@@ -193,7 +194,7 @@ GradeDetail _parseGrade(Map data) {
   return GradeDetail(
     (b) => b
       ..grade = tryParse(getString(data["grade"]), _parseGradeValue)
-      ..date = DateTime.parse(getString(data["date"])!)
+      ..date = UtcDateTime.parse(getString(data["date"])!)
       ..weightPercentage = getInt(data["weight"])
       ..cancelled = getBool(data["cancelled"])
       ..type = getString(data["typeName"])

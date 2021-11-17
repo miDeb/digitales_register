@@ -27,6 +27,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../main.dart';
+import '../utc_date_time.dart';
 
 const _pageViewAnimationDuration = Duration(milliseconds: 250);
 
@@ -76,19 +77,19 @@ class _RightSidebarState extends State<RightSidebar>
   }
 }
 
-int _pageViewIndex(DateTime date) {
-  return (date.difference(DateTime(1970)).inHours / 24).round();
+int _pageViewIndex(UtcDateTime date) {
+  return (date.difference(UtcDateTime(1970)).inHours / 24).round();
 }
 
-DateTime _dateForPageViewIndex(int idx) {
-  final date = DateTime(1970).add(Duration(days: idx));
+UtcDateTime _dateForPageViewIndex(int idx) {
+  final date = UtcDateTime(1970).add(Duration(days: idx));
   // Prevent daylight saving times to interfere.
   // Should have used utc from the beginning...
-  return DateTime(date.year, date.month, date.day);
+  return UtcDateTime(date.year, date.month, date.day);
 }
 
 class CalendarDetailPage extends StatefulWidget {
-  final DateTime? selectedDay;
+  final UtcDateTime? selectedDay;
   final int? selectedHour;
   final bool isSidebar, show;
   const CalendarDetailPage({
@@ -106,7 +107,7 @@ class CalendarDetailPage extends StatefulWidget {
 class _CalendarDetailPageState extends State<CalendarDetailPage> {
   late final PageView _pageView;
   late final PageController _controller;
-  DateTime? selectedDate;
+  UtcDateTime? selectedDate;
   int programmaticPageAnimations = 0;
 
   void _pageBack() {
@@ -233,7 +234,7 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
 }
 
 class CalendarDetailWrapper extends StatelessWidget {
-  final DateTime date;
+  final UtcDateTime date;
   final CalendarDay? day;
   final CalendarHour? targetHour;
   final bool noInternet;
@@ -343,7 +344,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
 }
 
 class _NoSchool extends StatelessWidget {
-  final DateTime date;
+  final UtcDateTime date;
   const _NoSchool({
     Key? key,
     required this.date,

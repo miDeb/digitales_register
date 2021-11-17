@@ -22,7 +22,6 @@ import 'package:dr/container/settings_page.dart';
 import 'package:dr/desktop.dart';
 import 'package:dr/ui/grade_calculator.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

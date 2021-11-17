@@ -21,6 +21,7 @@ import 'package:built_redux/built_redux.dart';
 import '../actions/absences_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
@@ -51,7 +52,7 @@ AbsencesState _parseAbsences(Map json) {
         ..justified = AbsenceJustified.fromInt(getInt(g["justified"])!)
         ..reasonSignature = getString(g["reason_signature"])
         ..reasonTimestamp = g["reason_timestamp"] is String
-            ? DateTime.tryParse(g["reason_timestamp"] as String)
+            ? UtcDateTime.tryParse(g["reason_timestamp"] as String)
             : null
         ..reason = getString(g["reason"])
         ..absences = ListBuilder(
@@ -60,7 +61,7 @@ AbsencesState _parseAbsences(Map json) {
               return Absence(
                 (b) => b
                   ..minutes = getInt(a["minutes"])
-                  ..date = DateTime.parse(getString(a["date"])!)
+                  ..date = UtcDateTime.parse(getString(a["date"])!)
                   ..hour = getInt(a["hour"])
                   ..minutesCameTooLate = getInt(a["minutes_begin"])
                   ..minutesLeftTooEarly = getInt(a["minutes_end"]),

@@ -27,7 +27,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
-import 'package:matcher/matcher.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../save_state_test.dart';

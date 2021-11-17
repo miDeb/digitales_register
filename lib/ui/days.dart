@@ -23,7 +23,6 @@ import 'package:dr/container/sidebar_container.dart';
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -35,6 +34,7 @@ import '../app_state.dart';
 import '../container/days_container.dart';
 import '../container/homework_filter_container.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 import 'dialog.dart';
 import 'no_internet.dart';
@@ -982,8 +982,8 @@ String formatChanged(Homework hw) {
   }
 }
 
-DateTime toDate(DateTime dateTime) {
-  return DateTime(dateTime.year, dateTime.month, dateTime.day);
+UtcDateTime toDate(UtcDateTime dateTime) {
+  return UtcDateTime(dateTime.year, dateTime.month, dateTime.day);
 }
 
 class AttachmentWidget extends StatelessWidget {

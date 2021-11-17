@@ -24,11 +24,12 @@ import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/calendar_week.dart';
+import '../utc_date_time.dart';
 
 part 'calendar_week_container.g.dart';
 
 class CalendarWeekContainer extends StatelessWidget {
-  final DateTime monday;
+  final UtcDateTime monday;
 
   const CalendarWeekContainer({
     Key? key,
@@ -53,7 +54,7 @@ class CalendarWeekContainer extends StatelessWidget {
   }
 }
 
-typedef DayCallback = void Function(DateTime day);
+typedef DayCallback = void Function(UtcDateTime day);
 
 abstract class CalendarWeekViewModel
     implements Built<CalendarWeekViewModel, CalendarWeekViewModelBuilder> {
@@ -68,7 +69,7 @@ abstract class CalendarWeekViewModel
   CalendarWeekViewModel._();
 
   factory CalendarWeekViewModel.fromStateAndWeek(
-      AppState state, DateTime monday) {
+      AppState state, UtcDateTime monday) {
     return CalendarWeekViewModel(
       (b) => b
         ..days = ListBuilder(state.calendarState.daysForWeek(monday))

@@ -20,6 +20,7 @@ import 'package:built_redux/built_redux.dart';
 import 'package:built_value/built_value.dart';
 
 import '../data.dart';
+import '../utc_date_time.dart';
 
 part 'dashboard_actions.g.dart';
 
@@ -65,7 +66,7 @@ abstract class HomeworkAddedPayload
   HomeworkAddedPayload._();
 
   Object get data;
-  DateTime get date;
+  UtcDateTime get date;
 }
 
 abstract class AddReminderPayload
@@ -76,7 +77,7 @@ abstract class AddReminderPayload
   AddReminderPayload._();
 
   String get msg;
-  DateTime get date;
+  UtcDateTime get date;
 }
 
 abstract class ToggleDonePayload

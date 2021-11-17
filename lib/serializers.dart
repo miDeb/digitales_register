@@ -20,6 +20,7 @@ import 'package:built_value/serializer.dart';
 
 import 'app_state.dart';
 import 'data.dart';
+import 'utc_date_time.dart';
 
 part 'serializers.g.dart';
 
@@ -43,22 +44,22 @@ final Serializers serializers = (_$serializers.toBuilder()
     //
     .build();
 
-class DateTimeSerializer implements PrimitiveSerializer<DateTime> {
+class DateTimeSerializer implements PrimitiveSerializer<UtcDateTime> {
   final bool structured = false;
   @override
-  final Iterable<Type> types = BuiltList<Type>(<Type>[DateTime]);
+  final Iterable<Type> types = BuiltList<Type>(<Type>[UtcDateTime]);
   @override
-  final String wireName = 'DateTime';
+  final String wireName = 'UtcDateTime';
 
   @override
-  Object serialize(Serializers serializers, DateTime dateTime,
+  Object serialize(Serializers serializers, UtcDateTime dateTime,
       {FullType specifiedType = FullType.unspecified}) {
     return dateTime.toIso8601String();
   }
 
   @override
-  DateTime deserialize(Serializers serializers, Object serialized,
+  UtcDateTime deserialize(Serializers serializers, Object serialized,
       {FullType specifiedType = FullType.unspecified}) {
-    return DateTime.parse(serialized as String);
+    return UtcDateTime.parse(serialized as String);
   }
 }

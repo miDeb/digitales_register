@@ -23,6 +23,7 @@ import 'package:built_value/serializer.dart';
 import 'package:meta/meta.dart';
 
 import 'data.dart';
+import 'utc_date_time.dart';
 
 part 'app_state.g.dart';
 
@@ -371,10 +372,10 @@ abstract class AbsencesState
 
 abstract class CalendarState
     implements Built<CalendarState, CalendarStateBuilder> {
-  BuiltMap<DateTime, CalendarDay> get days;
+  BuiltMap<UtcDateTime, CalendarDay> get days;
 
   @BuiltValueField(serialize: false)
-  DateTime? get currentMonday;
+  UtcDateTime? get currentMonday;
   @BuiltValueField(serialize: false)
   CalendarSelection? get selection;
 
@@ -382,9 +383,9 @@ abstract class CalendarState
     return daysForWeek(currentMonday!);
   }
 
-  Iterable<CalendarDay> daysForWeek(DateTime monday) {
+  Iterable<CalendarDay> daysForWeek(UtcDateTime monday) {
     return days.values.where((d) {
-      final date = DateTime.utc(d.date.year, d.date.month, d.date.day);
+      final date = UtcDateTime(d.date.year, d.date.month, d.date.day);
       return !date.isBefore(monday) &&
           date.isBefore(monday.add(const Duration(days: 7)));
     });
@@ -395,13 +396,13 @@ abstract class CalendarState
   CalendarState._();
   static Serializer<CalendarState> get serializer => _$calendarStateSerializer;
   static void _initializeBuilder(CalendarStateBuilder builder) {
-    builder.days = MapBuilder<DateTime, CalendarDay>();
+    builder.days = MapBuilder<UtcDateTime, CalendarDay>();
   }
 }
 
 abstract class CalendarSelection
     implements Built<CalendarSelection, CalendarSelectionBuilder> {
-  DateTime get date;
+  UtcDateTime get date;
   int? get hour;
 
   factory CalendarSelection([Function(CalendarSelectionBuilder b)? updates]) =

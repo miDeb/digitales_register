@@ -23,6 +23,7 @@ import 'package:dr/container/grades_chart_container.dart';
 import 'package:dr/data.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/grades_chart_page.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -46,7 +47,7 @@ AppState get _gradesState {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 2)
+                          ..date = UtcDateTime(2021, 1, 2)
                           ..grade = 7 * 100 + 75 // 8-
                           ..type = "Schularbeit1",
                       ),
@@ -54,7 +55,7 @@ AppState get _gradesState {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 3)
+                          ..date = UtcDateTime(2021, 1, 3)
                           ..grade = 7 * 100 + 50 // 7/8
                           ..type = "Schularbeit2",
                       ),
@@ -62,7 +63,7 @@ AppState get _gradesState {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 4)
+                          ..date = UtcDateTime(2021, 1, 4)
                           ..grade = 7 * 100 + 25 // 7+
                           ..type = "Schularbeit3",
                       ),
@@ -82,7 +83,7 @@ AppState get _gradesState {
                         (b) => b
                           ..weightPercentage = 25
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 2)
+                          ..date = UtcDateTime(2021, 1, 2)
                           ..grade = 4 * 100
                           ..type = "Test",
                       ),

@@ -24,6 +24,7 @@ import 'package:tuple/tuple.dart';
 import '../app_state.dart';
 import '../container/grades_chart_container.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 
 class _Selection {
   final String text;
@@ -35,10 +36,12 @@ class _Selection {
 class GradesChart extends StatelessWidget {
   final VoidCallback? goFullscreen;
   final bool isFullscreen;
-  final List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
+  final List<
+          charts
+              .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>>
       grades;
 
-  final ValueNotifier<Tuple2<DateTime, BuiltList<_Selection>>?> selection =
+  final ValueNotifier<Tuple2<UtcDateTime, BuiltList<_Selection>>?> selection =
       ValueNotifier(null);
 
   GradesChart({
@@ -49,14 +52,17 @@ class GradesChart extends StatelessWidget {
   })  : grades = convert(graphs),
         super(key: key);
 
-  static List<charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>>
+  static List<
+          charts
+              .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>>
       convert(Map<SubjectGrades, SubjectTheme> data) {
     return data.entries.where((entry) => entry.value.thick != 0).map(
       (entry) {
         final s = entry.key;
         final strokeWidth = entry.value.thick;
         final color = Color(entry.value.color);
-        return charts.Series<MapEntry<DateTime, Tuple2<int, String>>, DateTime>(
+        return charts.Series<MapEntry<UtcDateTime, Tuple2<int, String>>,
+            UtcDateTime>(
           colorFn: (_, __) => charts.Color(
             r: color.red,
             g: color.green,
@@ -72,9 +78,9 @@ class GradesChart extends StatelessWidget {
     ).toList();
   }
 
-  List<charts.TickSpec<DateTime>> createDomainAxisTags(Locale locale) {
-    DateTime? first;
-    DateTime? last;
+  List<charts.TickSpec<UtcDateTime>> createDomainAxisTags(Locale locale) {
+    UtcDateTime? first;
+    UtcDateTime? last;
     // find the first given date and the last given date
     for (final subject in grades) {
       if (subject.data.isEmpty) continue;
@@ -95,11 +101,11 @@ class GradesChart extends StatelessWidget {
     // However, if the first date is after the 15th, show the tick there to make
     // sure all months are represented as ticks.
     final dates = [
-      DateTime(first.year, first.month, first.day < 15 ? 15 : first.day)
+      UtcDateTime(first.year, first.month, first.day < 15 ? 15 : first.day)
     ];
     // Collect all 15th's that are before the last date
     while (true) {
-      final newDate = DateTime(dates.last.year, dates.last.month + 1, 15);
+      final newDate = UtcDateTime(dates.last.year, dates.last.month + 1, 15);
       if (last.isBefore(newDate)) break;
       dates.add(newDate);
     }
@@ -151,13 +157,13 @@ class GradesChart extends StatelessWidget {
               selectionModels: [
                 charts.SelectionModelConfig(
                   changedListener: (model) {
-                    DateTime? allDate;
+                    UtcDateTime? allDate;
                     final selections = model.selectedDatum.map((datum) {
                       final grade = datum.datum.value.item1 as int;
                       final type = datum.datum.value.item2 as String;
                       final subject = datum.series.displayName;
                       final color = datum.series.colorFn!(0)!;
-                      final date = datum.datum.key as DateTime;
+                      final date = datum.datum.key as UtcDateTime;
                       assert(allDate == null || allDate == date);
                       allDate = date;
                       return _Selection(
@@ -230,7 +236,7 @@ class GradesChart extends StatelessWidget {
             ),
           ),
           if (isFullscreen)
-            ValueListenableBuilder<Tuple2<DateTime, BuiltList<_Selection>>?>(
+            ValueListenableBuilder<Tuple2<UtcDateTime, BuiltList<_Selection>>?>(
                 valueListenable: selection,
                 builder: (context, data, _) {
                   return Align(
@@ -257,7 +263,7 @@ class GradesChart extends StatelessWidget {
 }
 
 class SelectionWidget extends StatefulWidget {
-  final DateTime? date;
+  final UtcDateTime? date;
   final BuiltList<_Selection>? selections;
 
   const SelectionWidget({Key? key, this.date, this.selections})

@@ -6,7 +6,7 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//
+//D
 // digitales_register is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,6 +21,7 @@ import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 
 import 'app_state.dart';
+import 'utc_date_time.dart';
 import 'util.dart';
 
 part 'data.g.dart';
@@ -37,10 +38,10 @@ abstract class Day implements Built<Day, DayBuilder> {
   static Serializer<Day> get serializer => _$daySerializer;
   BuiltList<Homework> get homework;
   BuiltList<Homework> get deletedHomework;
-  DateTime get date;
+  UtcDateTime get date;
   String get displayName => format(date);
   bool get future => _isFuture(date);
-  DateTime get lastRequested;
+  UtcDateTime get lastRequested;
 
   static void _initializeBuilder(DayBuilder builder) {
     builder
@@ -48,16 +49,16 @@ abstract class Day implements Built<Day, DayBuilder> {
       ..deletedHomework = ListBuilder();
   }
 
-  static DateTime dateToday() {
-    return DateTime(now.year, now.month, now.day);
+  static UtcDateTime dateToday() {
+    return UtcDateTime(now.year, now.month, now.day);
   }
 
-  static bool _isFuture(DateTime date) {
+  static bool _isFuture(UtcDateTime date) {
     return !date.isBefore(dateToday());
   }
 
-  static String format(DateTime date) {
-    final DateTime today = dateToday();
+  static String format(UtcDateTime date) {
+    final UtcDateTime today = dateToday();
     final Duration difference = date.difference(today);
     if (difference.inDays == 0) return "Heute";
     if (difference.inDays == 1) return "Morgen";
@@ -110,8 +111,8 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
   Homework? get previousVersion;
 
-  DateTime? get lastNotSeen;
-  DateTime get firstSeen;
+  UtcDateTime? get lastNotSeen;
+  UtcDateTime get firstSeen;
 
   BuiltList<GradeGroupSubmission>? get gradeGroupSubmissions;
 
@@ -228,7 +229,7 @@ abstract class GradeGroupSubmission
   static Serializer<GradeGroupSubmission> get serializer =>
       _$gradeGroupSubmissionSerializer;
 
-  DateTime get timestamp;
+  UtcDateTime get timestamp;
   String get file;
   String get originalName;
   String get typeName;
@@ -255,7 +256,7 @@ abstract class Notification
   String get title;
 
   String? get subTitle;
-  DateTime get timeSent;
+  UtcDateTime get timeSent;
 
   String? get type;
 
@@ -355,7 +356,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
 }
 
 abstract class _Entry {
-  DateTime get date;
+  UtcDateTime get date;
   bool get cancelled;
 }
 
@@ -377,7 +378,7 @@ abstract class _BasicGrade implements _Entry {
   int? get grade;
   int get weightPercentage;
   @override
-  DateTime get date;
+  UtcDateTime get date;
   String get type;
 }
 
@@ -449,7 +450,7 @@ abstract class AbsenceGroup
 
   String? get reasonSignature;
 
-  DateTime? get reasonTimestamp;
+  UtcDateTime? get reasonTimestamp;
   AbsenceJustified get justified;
   int get hours;
   int get minutes;
@@ -483,7 +484,7 @@ abstract class Absence implements Built<Absence, AbsenceBuilder> {
   int get minutes;
   int get minutesCameTooLate;
   int get minutesLeftTooEarly;
-  DateTime get date;
+  UtcDateTime get date;
   int get hour;
   factory Absence([Function(AbsenceBuilder b)? updates]) = _$Absence;
   Absence._();
@@ -514,7 +515,7 @@ class AbsenceJustified extends EnumClass {
 }
 
 abstract class CalendarDay implements Built<CalendarDay, CalendarDayBuilder> {
-  DateTime get date;
+  UtcDateTime get date;
   BuiltList<CalendarHour> get hours;
   int get fromHour => hours.firstOrNull?.fromHour ?? 0;
   int get toHour => hours.lastOrNull?.toHour ?? 0;
@@ -555,9 +556,9 @@ abstract class TimeSpan implements Built<TimeSpan, TimeSpanBuilder> {
   TimeSpan._();
   static Serializer<TimeSpan> get serializer => _$timeSpanSerializer;
 
-  DateTime get from;
+  UtcDateTime get from;
 
-  DateTime get to;
+  UtcDateTime get to;
 }
 
 abstract class Teacher implements Built<Teacher, TeacherBuilder> {
@@ -575,7 +576,7 @@ abstract class HomeworkExam
   String get name;
   bool get homework;
   bool get online;
-  DateTime get deadline;
+  UtcDateTime get deadline;
   bool get hasGrades;
   bool get hasGradeGroupSubmissions;
   int get typeId;
@@ -601,9 +602,9 @@ abstract class LessonContent
 abstract class Message implements Built<Message, MessageBuilder> {
   String get subject;
   String get text;
-  DateTime get timeSent;
+  UtcDateTime get timeSent;
 
-  DateTime? get timeRead;
+  UtcDateTime? get timeRead;
   String get recipientString;
   String get fromName;
 

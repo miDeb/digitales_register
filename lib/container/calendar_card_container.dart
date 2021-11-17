@@ -22,10 +22,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 import '../app_state.dart';
+import '../utc_date_time.dart';
 
 class CalendarCardContainer extends StatelessWidget {
   final CalendarHour hour;
-  final DateTime day;
+  final UtcDateTime day;
 
   const CalendarCardContainer({
     Key? key,

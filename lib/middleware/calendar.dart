@@ -27,7 +27,7 @@ final _calendarMiddleware =
 Future<void> _loadCalendar(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<DateTime> action) async {
+    Action<UtcDateTime> action) async {
   if (api.state.noInternet) return;
 
   await next(action);
@@ -59,14 +59,14 @@ Future<void> _selectionChanged(
 Future<void> _weekChanged(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<DateTime> action) async {
+    Action<UtcDateTime> action) async {
   await next(action);
   final selectedDate = api.state.calendarState.selection?.date;
   if (selectedDate != null && toMonday(selectedDate) != action.payload) {
     api.actions.calendarActions.select(
       CalendarSelection(
         (b) => b
-          ..date = DateTime(
+          ..date = UtcDateTime(
             action.payload.year,
             action.payload.month,
             action.payload.day,

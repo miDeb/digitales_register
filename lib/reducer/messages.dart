@@ -24,6 +24,7 @@ import 'package:dr/util.dart';
 import '../actions/messages_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 
 final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     MessagesState, MessagesStateBuilder>(
@@ -94,9 +95,9 @@ Message _parseMessage(Map json, MessagesState state) {
   final message = MessageBuilder()
     ..subject = getString(json["subject"])
     ..text = getString(json["text"])
-    ..timeSent = DateTime.parse(getString(json["timeSent"])!)
+    ..timeSent = UtcDateTime.parse(getString(json["timeSent"])!)
     ..timeRead = json["timeRead"] != null
-        ? DateTime.parse(getString(json["timeRead"])!)
+        ? UtcDateTime.parse(getString(json["timeRead"])!)
         : null
     ..recipientString = getString(json["recipientString"])
     ..fromName = getString(json["fromName"])

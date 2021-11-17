@@ -21,6 +21,7 @@ import 'package:built_redux/built_redux.dart';
 import '../actions/calendar_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
+import '../utc_date_time.dart';
 import '../util.dart';
 
 final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
@@ -35,7 +36,7 @@ final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
   final t = action.payload.map((k, dynamic e) {
-    final date = DateTime.parse(k);
+    final date = UtcDateTime.parse(k);
     return MapEntry(
         date,
         tryParse<CalendarDayBuilder, dynamic>(
@@ -44,7 +45,7 @@ void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
   builder.days.addAll(t);
 }
 
-void _currentMonday(CalendarState state, Action<DateTime> action,
+void _currentMonday(CalendarState state, Action<UtcDateTime> action,
     CalendarStateBuilder builder) {
   builder.currentMonday = action.payload;
 }
@@ -54,7 +55,7 @@ void _selectedDay(CalendarState state, Action<CalendarSelection?> action,
   builder.selection = action.payload?.toBuilder();
 }
 
-CalendarDayBuilder _parseCalendarDay(Map day, DateTime date) {
+CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
   // needed because JSON now looks like:
   // "2019-11-04": {
   //    "1": {
@@ -94,12 +95,12 @@ CalendarHourBuilder _parseHour(Map hour) {
   ]) {
     final date = tryParse(
       getString(linkedLesson["date"])!,
-      (String s) => DateTime.parse(s),
+      (String s) => UtcDateTime.parse(s),
     );
-    DateTime parseTime(DateTime date, Map timeObject) {
+    UtcDateTime parseTime(UtcDateTime date, Map timeObject) {
       final h = getInt(timeObject["h"])!;
       final m = getInt(timeObject["m"])!;
-      return DateTime(date.year, date.month, date.day, h, m);
+      return UtcDateTime(date.year, date.month, date.day, h, m);
     }
 
     final from = parseTime(date, getMap(linkedLesson["timeStartObject"])!);
@@ -140,7 +141,7 @@ CalendarHourBuilder _parseHour(Map hour) {
 
 HomeworkExam _parseHomeworkExam(Map homeworkExam) {
   return HomeworkExam((b) => b
-    ..deadline = DateTime.parse(getString(homeworkExam["deadline"])!)
+    ..deadline = UtcDateTime.parse(getString(homeworkExam["deadline"])!)
     ..hasGradeGroupSubmissions =
         getBool(homeworkExam["hasGradeGroupSubmissions"])
     ..hasGrades = getBool(homeworkExam["hasGrades"])

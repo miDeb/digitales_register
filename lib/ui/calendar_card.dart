@@ -20,6 +20,8 @@ import 'package:dr/data.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../utc_date_time.dart';
+
 class CalendarCard extends StatelessWidget {
   final CalendarHour hour;
   final SubjectTheme theme;
@@ -31,7 +33,7 @@ class CalendarCard extends StatelessWidget {
     required this.selected,
   }) : super(key: key);
 
-  String formatTime(DateTime dateTime) {
+  String formatTime(UtcDateTime dateTime) {
     return DateFormat.Hm("de").format(dateTime);
   }
 

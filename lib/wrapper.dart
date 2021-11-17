@@ -29,6 +29,7 @@ import 'package:mutex/mutex.dart';
 import 'app_state.dart';
 import 'main.dart';
 import 'ui/dialog.dart';
+import 'utc_date_time.dart';
 
 /*
 // Debug all requests
@@ -100,8 +101,8 @@ class Wrapper {
 
   String? error;
 
-  DateTime lastInteraction = now;
-  late DateTime _serverLogoutTime;
+  UtcDateTime lastInteraction = now;
+  late UtcDateTime _serverLogoutTime;
   late Config config;
   Future<dynamic> login(
       String? user, String? pass, String? tfaCode, String? url,
@@ -404,7 +405,8 @@ class Wrapper {
         return;
       } else {
         _serverLogoutTime = DateTime.fromMillisecondsSinceEpoch(
-            (result["newExpiration"] as int) * 1000);
+                (result["newExpiration"] as int) * 1000)
+            .makeUtc();
       }
     }
     Future.delayed(const Duration(seconds: 5), _updateLogout);

@@ -26,6 +26,7 @@ import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/dialog.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
@@ -44,12 +45,12 @@ Future<void> main() async {
         AppState(
           (b) {
             b.calendarState
-              ..currentMonday = DateTime(2021, 2, 20)
+              ..currentMonday = UtcDateTime(2021, 2, 20)
               ..days = MapBuilder(
-                <DateTime, CalendarDay>{
-                  DateTime(2021, 2, 20): CalendarDay(
+                <UtcDateTime, CalendarDay>{
+                  UtcDateTime(2021, 2, 20): CalendarDay(
                     (b) => b
-                      ..date = DateTime(2021, 2, 20)
+                      ..date = UtcDateTime(2021, 2, 20)
                       ..hours = ListBuilder(
                         <CalendarHour>[
                           CalendarHour(
@@ -62,7 +63,7 @@ Future<void> main() async {
                                 <HomeworkExam>[
                                   HomeworkExam(
                                     (b) => b
-                                      ..deadline = DateTime.now()
+                                      ..deadline = UtcDateTime.now()
                                       ..hasGradeGroupSubmissions = false
                                       ..hasGrades = false
                                       ..homework = false
@@ -154,7 +155,7 @@ Future<void> main() async {
         appReducerBuilder.build(),
         AppState(
           (b) {
-            b.calendarState.currentMonday = DateTime(2021, 1, 20);
+            b.calendarState.currentMonday = UtcDateTime(2021, 1, 20);
           },
         ),
         AppActions(),
@@ -173,7 +174,7 @@ Future<void> main() async {
       ),
     );
     // the shown week is the previous week
-    mockNow = DateTime(2021, 1, 27);
+    mockNow = UtcDateTime(2021, 1, 27);
     await tester.pumpWidget(widget);
     // one circular progressindicator on top, one on the body
     expect(find.byType(CircularProgressIndicator), findsNWidgets(2));

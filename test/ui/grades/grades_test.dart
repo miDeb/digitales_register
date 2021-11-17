@@ -23,6 +23,7 @@ import 'package:dr/container/grades_page_container.dart';
 import 'package:dr/data.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/ui/sorted_grades_widget.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -46,7 +47,7 @@ AppState _getGradesState({bool loading = false}) {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 2)
+                          ..date = UtcDateTime(2021, 1, 2)
                           ..grade = 7 * 100 + 75 // 8-
                           ..type = "Schularbeit1",
                       ),
@@ -54,7 +55,7 @@ AppState _getGradesState({bool loading = false}) {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 3)
+                          ..date = UtcDateTime(2021, 1, 3)
                           ..grade = 7 * 100 + 50 // 7/8
                           ..type = "Schularbeit2",
                       ),
@@ -62,7 +63,7 @@ AppState _getGradesState({bool loading = false}) {
                         (b) => b
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 4)
+                          ..date = UtcDateTime(2021, 1, 4)
                           ..grade = 7 * 100 + 25 // 7+
                           ..type = "Schularbeit3",
                       ),
@@ -78,7 +79,7 @@ AppState _getGradesState({bool loading = false}) {
                           ..id = 0
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 2)
+                          ..date = UtcDateTime(2021, 1, 2)
                           ..created = "am 3. 2. erstellt"
                           ..grade = 7 * 100 + 75 // 8-
                           ..type = "Schularbeit1",
@@ -89,7 +90,7 @@ AppState _getGradesState({bool loading = false}) {
                           ..id = 1
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 3)
+                          ..date = UtcDateTime(2021, 1, 3)
                           ..created = "am 4. 2. erstellt"
                           ..grade = 7 * 100 + 50 // 7/8
                           ..type = "Schularbeit2",
@@ -100,7 +101,7 @@ AppState _getGradesState({bool loading = false}) {
                           ..id = 2
                           ..weightPercentage = 100
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 4)
+                          ..date = UtcDateTime(2021, 1, 4)
                           ..created = "am 5. 2. erstellt"
                           ..grade = 7 * 100 + 25 // 7+
                           ..type = "Schularbeit3"
@@ -125,7 +126,7 @@ AppState _getGradesState({bool loading = false}) {
                         ..created = "Am 3. März 2021"
                         ..note = "Notiz blabla bla"
                         ..cancelled = false
-                        ..date = DateTime(2021, 2, 21),
+                        ..date = UtcDateTime(2021, 2, 21),
                     )
                   ].toBuiltList()
                 }),
@@ -141,7 +142,7 @@ AppState _getGradesState({bool loading = false}) {
                         (b) => b
                           ..weightPercentage = 25
                           ..cancelled = false
-                          ..date = DateTime(2021, 1, 2)
+                          ..date = UtcDateTime(2021, 1, 2)
                           ..grade = 4 * 100
                           ..type = "Test",
                       ),

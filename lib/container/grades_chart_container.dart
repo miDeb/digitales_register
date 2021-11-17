@@ -23,6 +23,7 @@ import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../data.dart';
 import '../ui/grades_chart.dart';
+import '../utc_date_time.dart';
 
 class GradesChartContainer extends StatelessWidget {
   final bool isFullscreen;
@@ -73,7 +74,7 @@ class GradesChartContainer extends StatelessWidget {
 }
 
 class SubjectGrades {
-  final Map<DateTime, Tuple2<int, String>> grades;
+  final Map<UtcDateTime, Tuple2<int, String>> grades;
   final String name;
 
   SubjectGrades(this.grades, this.name);
