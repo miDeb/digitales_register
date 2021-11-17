@@ -254,7 +254,7 @@ class HourWidget extends StatelessWidget {
                     )
                   : null,
               color: isSelected
-                  ? Theme.of(context).colorScheme.secondary.withAlpha(15)
+                  ? Theme.of(context).colorScheme.secondary.withAlpha(35)
                   : null,
             ),
             child: Center(
