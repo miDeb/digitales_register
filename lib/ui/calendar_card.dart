@@ -50,7 +50,7 @@ class CalendarCard extends StatelessWidget {
             : BorderSide.none,
       ),
       color: Theme.of(context).scaffoldBackgroundColor,
-      elevation: 5,
+      elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
