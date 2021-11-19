@@ -49,6 +49,7 @@ final dashboardReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
     DashboardStateBuilder builder) {
+  final loadTime = now;
   final loadedDays = [
     for (final day in action.payload.data as Iterable)
       tryParse<Day, dynamic>(
@@ -68,7 +69,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
         if (newDay == null) {
           if (!action.payload.future &&
               day.date.isBefore(
-                now.subtract(
+                loadTime.subtract(
                   const Duration(days: 1),
                 ), // subtract to not accidentally delete today
               )) {
@@ -96,7 +97,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
                   ..isChanged = action.payload.markNewOrChangedEntries
                   ..previousVersion = oldHw.toBuilder()
                   ..lastNotSeen = day.lastRequested
-                  ..firstSeen = now),
+                  ..firstSeen = loadTime),
               );
             }
           } else if (!newHw.serverEquals(oldHw)) {
@@ -104,7 +105,7 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
             b.homework.add(newHw.rebuild((b) => b
               ..previousVersion = oldHw.toBuilder()
               ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
+              ..firstSeen = loadTime
               ..isChanged = action.payload.markNewOrChangedEntries &&
                   // there was already a notification in this case (new grade)
                   !(oldHw.type == HomeworkType.gradeGroup &&
@@ -139,18 +140,18 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
             b.homework.add(newHw.rebuild((b) => b
               ..previousVersion = deletedHw.toBuilder()
               ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
+              ..firstSeen = loadTime
               ..isChanged = action.payload.markNewOrChangedEntries));
           } else {
             b.homework.add(newHw.rebuild((b) => b
               ..lastNotSeen = day.lastRequested
-              ..firstSeen = now
+              ..firstSeen = loadTime
               ..isNew = newHw.type != HomeworkType.grade &&
                   newHw.type != HomeworkType.homework &&
                   action.payload.markNewOrChangedEntries));
           }
         }
-        b.lastRequested = now;
+        b.lastRequested = loadTime;
       },
     ),
   );
@@ -158,8 +159,8 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
 
   for (final newDay in loadedDays) {
     builder.allDays.add(newDay.rebuild((b) => b
-      ..lastRequested = now
-      ..homework.map((h) => h.rebuild((b) => b..firstSeen = now))));
+      ..lastRequested = loadTime
+      ..homework.map((h) => h.rebuild((b) => b..firstSeen = loadTime))));
   }
   builder.allDays.sort((a, b) => a.date.compareTo(b.date));
   builder.loading = false;
