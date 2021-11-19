@@ -57,6 +57,7 @@ Future<void> _loadGrades(
         args: {"studentId": api.state.config!.userId},
       );
       if (data == null) {
+        api.actions.gradesActions.loadFailed();
         api.actions.refreshNoInternet();
         return;
       }

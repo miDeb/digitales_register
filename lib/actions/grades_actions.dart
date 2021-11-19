@@ -33,6 +33,7 @@ abstract class GradesActions extends ReduxActions {
   abstract final ActionDispatcher<LoadGradeCancelledDescriptionPayload>
       loadCancelledDescription;
   abstract final ActionDispatcher<SubjectsLoadedPayload> loaded;
+  abstract final VoidActionDispatcher loadFailed;
   abstract final ActionDispatcher<SubjectDetailLoadedPayload> detailsLoaded;
   abstract final ActionDispatcher<GradeCancelledDescriptionLoadedPayload>
       cancelledDescriptionLoaded;

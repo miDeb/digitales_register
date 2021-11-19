@@ -34,6 +34,7 @@ final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 )
   ..add(GradesActionsNames.load, _loading)
   ..add(GradesActionsNames.loaded, _loaded)
+  ..add(GradesActionsNames.loadFailed, _loadFailed)
   ..add(GradesActionsNames.cancelledDescriptionLoaded,
       _cancelledDescriptionLoaded)
   ..add(GradesActionsNames.setSemester, _setSemester)
@@ -53,6 +54,11 @@ void _loaded(GradesState state, Action<SubjectsLoadedPayload> action,
   builder
     ..serverSemester.replace(action.payload.semester)
     ..loading = false;
+}
+
+void _loadFailed(
+    GradesState state, Action<void> action, GradesStateBuilder builder) {
+  builder.loading = false;
 }
 
 void _updateSubjects(BuiltList<Subject> oldSubjects,
