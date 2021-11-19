@@ -64,7 +64,7 @@ abstract class SortedGradesViewModel
   Semester get semester;
   bool get sortByType;
   bool? get showCancelled;
-  bool? get noInternet;
+  bool get noInternet;
 
   factory SortedGradesViewModel(
           [void Function(SortedGradesViewModelBuilder)? updates]) =

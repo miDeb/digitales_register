@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/grades_page_container.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -66,7 +67,7 @@ class SortedGradesWidget extends StatelessWidget {
             viewSubjectDetail: () => viewSubjectDetail(s),
             showCancelled: vm.showCancelled!,
             semester: vm.semester,
-            noInternet: vm.noInternet!,
+            noInternet: vm.noInternet,
             ignoredForAverage: vm.ignoredSubjectsForAverage.any(
               (element) => element.toLowerCase() == s.name.toLowerCase(),
             ),
@@ -130,6 +131,24 @@ class _SubjectWidgetState extends State<SubjectWidget>
     super.didUpdateWidget(oldWidget);
   }
 
+  Widget? _lastFetchedMessage() {
+    if (closed || !widget.noInternet) {
+      return null;
+    }
+    final formatted = formatTimeAgoPerSemester(
+      noInternet: widget.noInternet,
+      lastFetched: widget.subject.lastFetchedDetailed,
+      semester: widget.semester,
+    );
+    if (formatted == null) {
+      return null;
+    }
+    return Text(
+      formatted,
+      style: Theme.of(context).textTheme.caption,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final entries = widget.subject.detailEntries(widget.semester);
@@ -149,6 +168,7 @@ class _SubjectWidgetState extends State<SubjectWidget>
             ],
           ),
         ),
+        subtitle: _lastFetchedMessage(),
         leading: Text.rich(
           TextSpan(
             text: 'Ø ',
@@ -162,10 +182,12 @@ class _SubjectWidgetState extends State<SubjectWidget>
         trailing:
             widget.noInternet && entries == null ? const SizedBox() : null,
         onExpansionChanged: (expansion) {
-          closed = !expansion;
-          if (expansion) {
-            widget.viewSubjectDetail();
-          }
+          setState(() {
+            closed = !expansion;
+            if (expansion) {
+              widget.viewSubjectDetail();
+            }
+          });
         },
         initiallyExpanded: !closed,
         children: [

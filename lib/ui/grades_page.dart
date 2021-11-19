@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 
@@ -36,6 +37,7 @@ class GradesPage extends StatelessWidget {
     required this.changeSemester,
     required this.showGradesSettings,
   }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,33 +76,37 @@ class GradesPage extends StatelessWidget {
               : Stack(
                   children: [
                     AnimatedLinearProgressIndicator(show: vm.loading),
-                    ListView(
-                      children: <Widget>[
-                        if (vm.showGradesDiagram)
-                          const SizedBox(
-                            height: 150,
-                            width: 250,
-                            child: GradesChartContainer(isFullscreen: false),
-                          ),
-                        if (vm.showAllSubjectsAverage) ...[
-                          ListTile(
-                            title: Row(
-                              children: [
-                                const Text("Notendurchschnitt"),
-                                IconButton(
-                                  icon: const Icon(Icons.settings),
-                                  onPressed: showGradesSettings,
-                                ),
-                              ],
+                    RawLastFetchedOverlay(
+                      message: vm.lastFetchedMessage,
+                      child: ListView(
+                        children: <Widget>[
+                          if (vm.showGradesDiagram)
+                            const SizedBox(
+                              height: 150,
+                              width: 250,
+                              child: GradesChartContainer(isFullscreen: false),
                             ),
-                            trailing: Text(vm.allSubjectsAverage),
-                          ),
-                          const Divider(
-                            height: 0,
-                          ),
+                          if (vm.showAllSubjectsAverage) ...[
+                            ListTile(
+                              title: Row(
+                                children: [
+                                  const Text("Notendurchschnitt"),
+                                  IconButton(
+                                    icon: const Icon(Icons.settings),
+                                    onPressed: showGradesSettings,
+                                  ),
+                                ],
+                              ),
+                              trailing: Text(vm.allSubjectsAverage),
+                            ),
+                            const Divider(
+                              height: 0,
+                            ),
+                          ],
+                          SortedGradesContainer(),
+                          const SizedBox(height: 50),
                         ],
-                        SortedGradesContainer(),
-                      ],
+                      ),
                     ),
                   ],
                 ),

@@ -18,6 +18,7 @@
 import 'dart:convert';
 
 import 'package:badges/badges.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
@@ -56,34 +57,38 @@ class MessagesPage extends StatelessWidget {
           ? noInternet
               ? const NoInternet()
               : const Center(child: CircularProgressIndicator())
-          : Stack(
-              children: <Widget>[
-                AnimatedLinearProgressIndicator(
-                  show: state!.showMessage != null &&
-                      !state!.messages.any((m) => m.id == state!.showMessage),
-                ),
-                if (state!.messages.isEmpty)
-                  Center(
-                    child: Text(
-                      "Noch keine Mitteilungen",
-                      style: Theme.of(context).textTheme.headline4,
-                      textAlign: TextAlign.center,
-                    ),
+          : LastFetchedOverlay(
+              lastFetched: state!.lastFetched,
+              noInternet: noInternet,
+              child: Stack(
+                children: <Widget>[
+                  AnimatedLinearProgressIndicator(
+                    show: state!.showMessage != null &&
+                        !state!.messages.any((m) => m.id == state!.showMessage),
                   ),
-                ListView.builder(
-                  itemCount: state!.messages.length,
-                  itemBuilder: (context, i) {
-                    return MessageWidget(
-                      message: state!.messages[i],
-                      onDownloadFile: onDownloadFile,
-                      onOpenFile: onOpenFile,
-                      onMarkAsRead: onMarkAsRead,
-                      noInternet: noInternet,
-                      expand: state!.messages[i].id == state!.showMessage,
-                    );
-                  },
-                ),
-              ],
+                  if (state!.messages.isEmpty)
+                    Center(
+                      child: Text(
+                        "Noch keine Mitteilungen",
+                        style: Theme.of(context).textTheme.headline4,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ListView.builder(
+                    itemCount: state!.messages.length,
+                    itemBuilder: (context, i) {
+                      return MessageWidget(
+                        message: state!.messages[i],
+                        onDownloadFile: onDownloadFile,
+                        onOpenFile: onOpenFile,
+                        onMarkAsRead: onMarkAsRead,
+                        noInternet: noInternet,
+                        expand: state!.messages[i].id == state!.showMessage,
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
     );
   }

@@ -18,6 +18,7 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:dr/app_state.dart';
 import 'package:dr/main.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -47,28 +48,32 @@ class CalendarWeek extends StatelessWidget {
             : const Center(
                 child: CircularProgressIndicator(),
               )
-        : Column(
-            children: <Widget>[
-              Expanded(
-                child: Row(
-                  children: vm.days
-                      .map(
-                        (d) => Expanded(
-                          child: CalendarDayWidget(
-                            calendarDay: d,
-                            max: latestHour,
-                            subjectNicks: vm.subjectNicks,
-                            isSelected: vm.selection?.date == d.date,
-                            selectedHour: vm.selection?.date == d.date
-                                ? vm.selection?.hour
-                                : null,
+        : LastFetchedOverlay(
+            lastFetched: vm.days.first.lastFetched,
+            noInternet: vm.noInternet,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: vm.days
+                        .map(
+                          (d) => Expanded(
+                            child: CalendarDayWidget(
+                              calendarDay: d,
+                              max: latestHour,
+                              subjectNicks: vm.subjectNicks,
+                              isSelected: vm.selection?.date == d.date,
+                              selectedHour: vm.selection?.date == d.date
+                                  ? vm.selection?.hour
+                                  : null,
+                            ),
                           ),
-                        ),
-                      )
-                      .toList(),
+                        )
+                        .toList(),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 }

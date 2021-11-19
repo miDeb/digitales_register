@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 
@@ -35,9 +36,13 @@ class AbsencesPage extends StatelessWidget {
       appBar: const ResponsiveAppBar(
         title: Text("Absenzen"),
       ),
-      body: AbsencesBody(
-        state: state,
+      body: LastFetchedOverlay(
+        lastFetched: state.lastFetched,
         noInternet: noInternet,
+        child: AbsencesBody(
+          state: state,
+          noInternet: noInternet,
+        ),
       ),
     );
   }

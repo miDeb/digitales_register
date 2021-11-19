@@ -16,6 +16,8 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:intl/intl.dart';
 
@@ -29,6 +31,7 @@ class NotificationPage extends StatelessWidget {
   final SingleArgumentVoidCallback<int> goToMessage;
   final VoidCallback deleteAllNotifications;
   final bool noInternet;
+  final UtcDateTime? lastFetched;
 
   const NotificationPage({
     Key? key,
@@ -37,6 +40,7 @@ class NotificationPage extends StatelessWidget {
     required this.deleteAllNotifications,
     required this.noInternet,
     required this.goToMessage,
+    required this.lastFetched,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -44,46 +48,50 @@ class NotificationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Benachrichtigungen"),
       ),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 250),
-        child: notifications.isEmpty
-            ? Center(
-                child: Text(
-                  "Keine Benachrichtigungen",
-                  style: Theme.of(context).textTheme.headline4,
-                  textAlign: TextAlign.center,
-                ),
-              )
-            : ListView.builder(
-                itemCount: notifications.length + 1,
-                itemBuilder: (_, n) {
-                  if (n == 0) {
-                    return Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: noInternet ? null : deleteAllNotifications,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: const [
-                            Text("Alle gelesen"),
-                            SizedBox(width: 8),
-                            Icon(Icons.done_all),
-                          ],
+      body: LastFetchedOverlay(
+        lastFetched: lastFetched,
+        noInternet: noInternet,
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 250),
+          child: notifications.isEmpty
+              ? Center(
+                  child: Text(
+                    "Keine Benachrichtigungen",
+                    style: Theme.of(context).textTheme.headline4,
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              : ListView.builder(
+                  itemCount: notifications.length + 1,
+                  itemBuilder: (_, n) {
+                    if (n == 0) {
+                      return Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: noInternet ? null : deleteAllNotifications,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: const [
+                              Text("Alle gelesen"),
+                              SizedBox(width: 8),
+                              Icon(Icons.done_all),
+                            ],
+                          ),
                         ),
-                      ),
+                      );
+                    }
+                    n -= 1;
+                    return NotificationWidget(
+                      key: ObjectKey(notifications[n]),
+                      notification: notifications[n],
+                      onDelete: deleteNotification,
+                      noInternet: noInternet,
+                      goToMessage: goToMessage,
+                      isLast: notifications.length == 1,
                     );
-                  }
-                  n -= 1;
-                  return NotificationWidget(
-                    key: ObjectKey(notifications[n]),
-                    notification: notifications[n],
-                    onDelete: deleteNotification,
-                    noInternet: noInternet,
-                    goToMessage: goToMessage,
-                    isLast: notifications.length == 1,
-                  );
-                },
-              ),
+                  },
+                ),
+        ),
       ),
     );
   }

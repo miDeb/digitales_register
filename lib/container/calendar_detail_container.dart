@@ -70,9 +70,11 @@ class CalendarDetailVM {
 
 class CalendarDetailItemContainer extends StatelessWidget {
   final UtcDateTime date;
+  final bool isSidebar;
   const CalendarDetailItemContainer({
     Key? key,
     required this.date,
+    required this.isSidebar,
   }) : super(key: key);
 
   @override
@@ -84,6 +86,7 @@ class CalendarDetailItemContainer extends StatelessWidget {
         targetHour: state.hour,
         noInternet: state.noInternet,
         loading: state.loading,
+        isSidebar: isSidebar,
       ),
       connect: (state) {
         final day = state.calendarState.days[date];

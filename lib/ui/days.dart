@@ -23,6 +23,7 @@ import 'package:dr/container/sidebar_container.dart';
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -195,7 +196,11 @@ class _DaysWidgetState extends State<DaysWidget> {
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget getItem(int n, {required bool isLast}) {
+  Widget getItem(
+    int n, {
+    required bool isLast,
+    required bool showLastFetched,
+  }) {
     if (n == 0) {
       return DashboardHeader(
         future: widget.vm.future,
@@ -227,6 +232,7 @@ class _DaysWidgetState extends State<DaysWidget> {
       colorBorders: widget.vm.colorBorders,
       colorTestsInRed: widget.vm.colorTestsInRed,
       subjectThemes: widget.vm.subjectThemes,
+      showLastFetched: showLastFetched,
     );
   }
 
@@ -263,18 +269,36 @@ class _DaysWidgetState extends State<DaysWidget> {
         ],
       );
     } else {
-      body = ListView.builder(
-        physics: const AlwaysScrollableScrollPhysics(),
-        controller: controller,
-        // times two for the divider, minus one because there's no divider after the last item
-        // the first item is the DashboardHeader, the last one a SizedBox (as a spacer)
-        itemCount: (widget.vm.days.length * 2 - 1) + 2,
-        itemBuilder: (context, n) {
-          return getItem(
-            n,
-            isLast: n == (widget.vm.days.length * 2 - 1) + 1,
-          );
-        },
+      UtcDateTime? lastFetched;
+      // If not all days were fetched at the same time we want to show a string
+      // for each day individually.
+      bool daysShouldShowLastFetched = false;
+      if (widget.vm.days.first.lastRequested ==
+          widget.vm.days.last.lastRequested) {
+        lastFetched = widget.vm.days.first.lastRequested;
+      } else {
+        daysShouldShowLastFetched = true;
+      }
+      body = LastFetchedOverlay(
+        // Avoid getting covered by the "^" (scroll up) fab
+        rightPadding: 50,
+        noInternet: widget.vm.noInternet,
+        lastFetched: lastFetched,
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(),
+          controller: controller,
+          // Times two for the divider, minus one because there's no divider after the last item.
+          // The first item is the DashboardHeader, the last one a SizedBox (a spacer).
+          itemCount: (widget.vm.days.length * 2 - 1) + 2,
+          itemBuilder: (context, n) {
+            return getItem(
+              n,
+              isLast: n == (widget.vm.days.length * 2 - 1) + 1,
+              showLastFetched:
+                  widget.vm.noInternet && daysShouldShowLastFetched,
+            );
+          },
+        ),
       );
       if (!noInternet && !widget.vm.loading) {
         body = RefreshIndicator(
@@ -447,6 +471,8 @@ class DayWidget extends StatelessWidget {
   final AutoScrollController controller;
   final int index;
 
+  final bool showLastFetched;
+
   const DayWidget({
     Key? key,
     required this.day,
@@ -462,6 +488,7 @@ class DayWidget extends StatelessWidget {
     required this.colorBorders,
     required this.subjectThemes,
     required this.colorTestsInRed,
+    required this.showLastFetched,
   }) : super(key: key);
 
   Future<String?> showEnterReminderDialog(BuildContext context) async {
@@ -515,12 +542,19 @@ class DayWidget extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only(left: 15),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    day.displayName,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      day.displayName,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                    if (showLastFetched)
+                      Text(
+                        "Zuletzt synchronisiert ${formatTimeAgo(day.lastRequested)}.",
+                        style: Theme.of(context).textTheme.caption,
+                      ),
+                  ],
                 ),
               ),
               if (day.deletedHomework.isNotEmpty)

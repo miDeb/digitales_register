@@ -15,7 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
@@ -23,6 +25,7 @@ import 'package:flutter_built_redux/flutter_built_redux.dart';
 import '../actions/app_actions.dart';
 import '../app_state.dart';
 import '../ui/grades_page.dart';
+import '../utc_date_time.dart';
 
 part 'grades_page_container.g.dart';
 
@@ -52,6 +55,7 @@ abstract class GradesPageViewModel
   Semester get showSemester;
 
   String get allSubjectsAverage;
+  String? get lastFetchedMessage;
   bool get loading;
   bool get showGradesDiagram;
   bool get showAllSubjectsAverage;
@@ -76,7 +80,8 @@ abstract class GradesPageViewModel
         )
         ..noInternet = state.noInternet
         ..showGradesDiagram = state.settingsState.showGradesDiagram
-        ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage,
+        ..showAllSubjectsAverage = state.settingsState.showAllSubjectsAverage
+        ..lastFetchedMessage = _lastFetchedMessage(state),
     );
   }
 }
@@ -99,4 +104,50 @@ String calculateAllSubjectsAverage(AppState state) {
   } else {
     return gradeAverageFormat.format(sum / n / 100);
   }
+}
+
+String? _lastFetchedMessage(AppState state) {
+  if (state.gradesState.subjects.isEmpty) {
+    return null;
+  }
+  final timeAgoString = formatTimeAgoPerSemester(
+    noInternet: state.noInternet,
+    lastFetched: state.gradesState.subjects.first.lastFetchedBasic,
+    semester: state.gradesState.semester,
+  );
+  if (timeAgoString == null) {
+    return null;
+  }
+  return "Offline-Modus aktiv. $timeAgoString.";
+}
+
+String? formatTimeAgoPerSemester({
+  required bool noInternet,
+  required BuiltMap<Semester, UtcDateTime>? lastFetched,
+  required Semester semester,
+}) {
+  if (lastFetched == null || !noInternet) {
+    return null;
+  }
+  final String lastFetchedFormatted;
+  if (semester == Semester.all) {
+    final first = lastFetched[Semester.first];
+    final second = lastFetched[Semester.second];
+    if (first == null || second == null) {
+      return null;
+    }
+    final firstFormatted = formatTimeAgo(first);
+    final secondFormatted = formatTimeAgo(second);
+    if (firstFormatted != secondFormatted) {
+      return "Zuletzt synchronisiert $firstFormatted (1. Semester) / $secondFormatted (2. Semester)";
+    }
+    lastFetchedFormatted = firstFormatted;
+  } else {
+    final last = lastFetched[semester];
+    if (last == null) {
+      return null;
+    }
+    lastFetchedFormatted = formatTimeAgo(last);
+  }
+  return "Zuletzt synchronisiert $lastFetchedFormatted";
 }

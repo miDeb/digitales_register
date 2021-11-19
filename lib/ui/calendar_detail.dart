@@ -18,6 +18,7 @@
 import 'package:dr/container/calendar_card_container.dart';
 import 'package:dr/container/calendar_detail_container.dart';
 import 'package:dr/ui/calendar_week.dart';
+import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/ui/no_internet.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
@@ -184,6 +185,7 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
         final date = _dateForPageViewIndex(index);
         return CalendarDetailItemContainer(
           date: date,
+          isSidebar: widget.isSidebar,
         );
       },
       controller: _controller,
@@ -239,6 +241,7 @@ class CalendarDetailWrapper extends StatelessWidget {
   final CalendarHour? targetHour;
   final bool noInternet;
   final bool loading;
+  final bool isSidebar;
   const CalendarDetailWrapper({
     Key? key,
     required this.day,
@@ -246,11 +249,12 @@ class CalendarDetailWrapper extends StatelessWidget {
     required this.noInternet,
     required this.date,
     required this.loading,
+    required this.isSidebar,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Widget child;
+    Widget child;
     if (day == null && noInternet) {
       child = const NoInternet();
     } else if (day == null && loading) {
@@ -262,6 +266,13 @@ class CalendarDetailWrapper extends StatelessWidget {
         day: day!,
         targetHour: targetHour,
         noInternet: noInternet,
+      );
+    }
+    if (day != null && !isSidebar) {
+      child = LastFetchedOverlay(
+        noInternet: noInternet,
+        lastFetched: day!.lastFetched,
+        child: child,
       );
     }
     return AnimatedSwitcher(

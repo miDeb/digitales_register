@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -30,6 +31,7 @@ class CertificateContainer extends StatelessWidget {
         return CertificateViewModel(
           html: state.certificateState.html,
           noInternet: state.noInternet,
+          lastFetched: state.certificateState.lastFetched,
         );
       },
       builder: (context, vm, actions) {
@@ -41,10 +43,12 @@ class CertificateContainer extends StatelessWidget {
 
 class CertificateViewModel {
   final String? html;
+  final UtcDateTime? lastFetched;
   final bool noInternet;
 
   CertificateViewModel({
     required this.html,
     required this.noInternet,
+    required this.lastFetched,
   });
 }
