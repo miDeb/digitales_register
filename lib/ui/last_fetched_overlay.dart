@@ -52,11 +52,11 @@ class RawLastFetchedOverlay extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(
               vertical: 3,
-              horizontal: 16,
-            ).copyWith(right: 16 + rightPadding),
+              horizontal: 8,
+            ).copyWith(right: 8 + rightPadding),
             decoration: BoxDecoration(
               color: Colors.black.withOpacity(0.55),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(5),
             ),
             child: Text(
               message!,
