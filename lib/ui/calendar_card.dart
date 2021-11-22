@@ -107,7 +107,7 @@ class CalendarCard extends StatelessWidget {
                 ),
             if (hour.teachers.isNotEmpty)
               _ContentItem(
-                title: "Lehrer",
+                title: hour.teachers.length == 1 ? "Lehrer*in" : "Lehrer*innen",
                 content: hour.teachers
                     .map((t) => "${t.firstName} ${t.lastName}")
                     .join(", "),

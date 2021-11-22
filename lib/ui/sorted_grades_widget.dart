@@ -144,7 +144,7 @@ class _SubjectWidgetState extends State<SubjectWidget>
       return null;
     }
     return Text(
-      formatted,
+      "$formatted.",
       style: Theme.of(context).textTheme.caption,
     );
   }

@@ -323,7 +323,7 @@ void _showUserTypeNotSupported(String url) {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Diese App ist ausschließlich für Schüler und Eltern geeignet.",
+                  "Diese App ist ausschließlich für Schüler*innen und Eltern geeignet.",
                   style: Theme.of(context).textTheme.headline5,
                   textAlign: TextAlign.center,
                 ),
