@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:deleteable_tile/deleteable_tile.dart';
@@ -23,13 +22,13 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../app_state.dart';
 import '../container/settings_page.dart';
+import '../util.dart';
 import 'dialog.dart';
 import 'donations.dart';
 import 'network_protocol_page.dart';
@@ -572,18 +571,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: const Text("Feedback geben"),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
-              PackageInfo? info;
-              try {
-                info = await PackageInfo.fromPlatform();
-              } catch (e) {
-                log("failed to get app version for feedback (settings)");
-              }
               launch(
                 // ignore: prefer_interpolation_to_compose_strings
                 "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
-                    (info?.version != null
-                        ? "&entry.1362624919=${Uri.encodeQueryComponent(info!.version)}"
-                        : ""),
+                    ("&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}"),
               );
             },
           ),
@@ -593,27 +584,22 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: const Text("Zum Quellcode"),
             onTap: () => launch("https://github.com/miDeb/digitales_register"),
           ),
-          FutureBuilder(
-            future: PackageInfo.fromPlatform(),
-            builder: (context, AsyncSnapshot<PackageInfo> info) {
-              return AboutListTile(
-                icon: const Icon(Icons.info_outline),
-                applicationIcon: SizedBox(
-                  width: 100,
-                  child: Image.asset("assets/transparent.png"),
-                ),
-                applicationLegalese:
-                    "Copyright Michael Debertol und Simon Wachtler 2019-2021",
-                applicationName: "Digitales Register (Client)",
-                applicationVersion: info.data?.version ?? "Unbekannte Version",
-                aboutBoxChildren: const [
-                  Text("""
+          AboutListTile(
+            icon: const Icon(Icons.info_outline),
+            applicationIcon: SizedBox(
+              width: 100,
+              child: Image.asset("assets/transparent.png"),
+            ),
+            applicationLegalese:
+                "Copyright Michael Debertol und Simon Wachtler 2019-2021",
+            applicationName: "Digitales Register (Client)",
+            applicationVersion: appVersion,
+            aboutBoxChildren: const [
+              Text("""
 Ein Client für das Digitale Register.
 Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung.""")
-                ],
-                child: const Text("Über diese App"),
-              );
-            },
+            ],
+            child: const Text("Über diese App"),
           ),
         ],
       ),

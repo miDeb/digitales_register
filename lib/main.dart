@@ -21,10 +21,12 @@ import 'package:built_redux/built_redux.dart';
 import 'package:dr/container/settings_page.dart';
 import 'package:dr/desktop.dart';
 import 'package:dr/ui/grade_calculator.dart';
+import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:uni_links/uni_links.dart';
 
@@ -52,7 +54,17 @@ typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 // This way it is easier for ui code to dispatch actions.
 final AppActions actions = AppActions();
 
-void main() {
+Future<void> main() async {
+  try {
+    packageInfo = await PackageInfo.fromPlatform();
+  } catch (_) {
+    packageInfo = PackageInfo(
+      appName: "Unknown",
+      packageName: "Unknown",
+      version: "Unknown",
+      buildNumber: "Unknown",
+    );
+  }
   // This is required to access the secure storage
   // (crash report from a desktop user, possible race?)
   WidgetsFlutterBinding.ensureInitialized();

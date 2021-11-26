@@ -20,9 +20,16 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
 
 import 'utc_date_time.dart';
+
+late final PackageInfo packageInfo;
+
+String get appVersion {
+  return packageInfo.version;
+}
 
 Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
     {required bool wrap}) {

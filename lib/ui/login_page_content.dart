@@ -15,17 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fuzzy/fuzzy.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../container/login_page.dart';
+import '../util.dart';
 import 'animated_linear_progress_indicator.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
@@ -199,18 +197,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         onPressed: () async {
-                          PackageInfo? info;
-                          try {
-                            info = await PackageInfo.fromPlatform();
-                          } catch (e) {
-                            log("failed to get app version for feedback (login)");
-                          }
                           launch(
                             // ignore: prefer_interpolation_to_compose_strings
                             "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
-                                (info?.version != null
-                                    ? "&entry.1581750442=${Uri.encodeQueryComponent(info!.version)}"
-                                    : ""),
+                                "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",
                           );
                         },
                         child: const Text("Feedback?"),

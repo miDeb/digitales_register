@@ -19,6 +19,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dr/util.dart';
@@ -69,6 +70,11 @@ class Wrapper {
 
   Wrapper() {
     dio.interceptors.add(CookieManager(cookieJar));
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (client) {
+      client.userAgent =
+          "Digitales-Register-App $appVersion; https://github.com/miDeb/digitales_register";
+    };
     //dio.interceptors.add(DebugInterceptor());
   }
 

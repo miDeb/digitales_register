@@ -34,7 +34,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -119,13 +118,6 @@ NextActionHandler _errorMiddleware(
             } catch (e) {
               // we can't get a stack trace
             }
-            PackageInfo? info;
-            try {
-              info = await PackageInfo.fromPlatform();
-            } catch (e) {
-              log("failed to get app version for feedback (error)");
-            }
-            final appVersion = info?.version;
             var error = e.toString();
             if (e is! ParseException) {
               // ParseExceptions will already provide a more precise stack trace
