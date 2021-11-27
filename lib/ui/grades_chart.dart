@@ -63,16 +63,16 @@ class GradesChart extends StatelessWidget {
         final color = Color(entry.value.color);
         return charts.Series<MapEntry<UtcDateTime, Tuple2<int, String>>,
             UtcDateTime>(
-          colorFn: (_, __) => charts.Color(
-            r: color.red,
-            g: color.green,
-            b: color.blue,
-          ),
           domainFn: (grade, _) => grade.key,
           measureFn: (grade, _) => grade.value.item1 / 100,
           data: s.grades.entries.toList(),
           strokeWidthPxFn: (_, __) => strokeWidth,
           id: s.name,
+          seriesColor: charts.Color(
+            r: color.red,
+            g: color.green,
+            b: color.blue,
+          ),
         );
       },
     ).toList();
@@ -135,6 +135,23 @@ class GradesChart extends StatelessWidget {
     }
   }
 
+  charts.DateTimeExtents dateTimeExtents() {
+    var first = grades.first.data.first.key;
+    var last = grades.first.data.first.key;
+    for (final subject in grades) {
+      for (final grade in subject.data) {
+        if (grade.key.isBefore(first)) first = grade.key;
+        if (grade.key.isAfter(last)) last = grade.key;
+      }
+    }
+    // Add some padding to avoid cutting off the graph at the edge of the diagram
+    final padding = Duration(hours: last.difference(first).inHours ~/ 100);
+    return charts.DateTimeExtents(
+      start: first.subtract(padding),
+      end: last.add(padding),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final darkMode = Theme.of(context).brightness == Brightness.dark;
@@ -154,6 +171,11 @@ class GradesChart extends StatelessWidget {
                       ),
                     ]
                   : null,
+              defaultRenderer: charts.LineRendererConfig(
+                includePoints: isFullscreen,
+                radiusPx: 2,
+                roundEndCaps: true,
+              ),
               selectionModels: [
                 charts.SelectionModelConfig(
                   changedListener: (model) {
@@ -167,7 +189,7 @@ class GradesChart extends StatelessWidget {
                       assert(allDate == null || allDate == date);
                       allDate = date;
                       return _Selection(
-                        "$subject · $type: ${formatGradeFromInt(grade)}",
+                        "$subject – $type: ${formatGradeFromInt(grade)}",
                         Color.fromARGB(
                           color.a,
                           color.r,
@@ -215,6 +237,7 @@ class GradesChart extends StatelessWidget {
               ),
               defaultInteractions: isFullscreen,
               domainAxis: charts.DateTimeAxisSpec(
+                viewport: dateTimeExtents(),
                 tickProviderSpec: charts.StaticDateTimeTickProviderSpec(
                   createDomainAxisTags(
                     Localizations.localeOf(context),
