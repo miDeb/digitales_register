@@ -30,7 +30,5 @@ Future<void> _loadAbsences(
   final dynamic response = await wrapper.send("api/student/dashboard/absences");
   if (response != null) {
     api.actions.absencesActions.loaded(response);
-  } else {
-    api.actions.refreshNoInternet();
   }
 }

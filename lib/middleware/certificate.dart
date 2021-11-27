@@ -31,7 +31,5 @@ Future<void> _loadCertificate(
       await wrapper.send("student/certificate", method: "GET");
   if (response != null) {
     api.actions.certificateActions.loaded(response as String);
-  } else {
-    api.actions.refreshNoInternet();
   }
 }

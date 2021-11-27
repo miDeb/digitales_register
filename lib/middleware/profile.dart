@@ -31,7 +31,6 @@ Future<void> _loadProfile(
   if (api.state.noInternet) return;
   final dynamic result = await wrapper.send("api/profile/get");
   if (result == null) {
-    api.actions.refreshNoInternet();
     return;
   }
   api.actions.profileActions.loaded(result as Object);
@@ -49,7 +48,6 @@ Future<void> _setSendNotificationEmails(
     },
   );
   if (result == null) {
-    api.actions.refreshNoInternet();
     return;
   }
 }
@@ -67,7 +65,6 @@ Future<void> _changeEmail(
     },
   );
   if (result == null) {
-    api.actions.refreshNoInternet();
     return;
   }
   if (result["error"] == null) {

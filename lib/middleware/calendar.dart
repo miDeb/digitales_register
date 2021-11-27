@@ -36,8 +36,6 @@ Future<void> _loadCalendar(
 
   if (data != null) {
     api.actions.calendarActions.loaded(data as Map<String, dynamic>);
-  } else {
-    api.actions.refreshNoInternet();
   }
 }
 

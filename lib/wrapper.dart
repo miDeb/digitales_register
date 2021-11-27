@@ -32,6 +32,8 @@ import 'main.dart';
 import 'ui/dialog.dart';
 import 'utc_date_time.dart';
 
+const requestTimeout = Duration(seconds: 5);
+
 /*
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
@@ -92,17 +94,17 @@ class Wrapper {
   VoidCallback? onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem? onAddProtocolItem;
   late bool safeMode;
-  Future<bool> get noInternet async {
+
+  bool noInternet = false;
+  Future<bool> refreshNoInternet() async {
     final address = url != null ? baseAddress : "https://digitalesregister.it";
     try {
-      final result = await http.get(Uri.parse(address));
-      if (result.statusCode == 200) {
-        return false;
-      }
-      return true;
+      final result = await http.get(Uri.parse(address)).timeout(requestTimeout);
+      noInternet = result.statusCode != 200;
     } catch (e) {
-      return true;
+      noInternet = true;
     }
+    return noInternet;
   }
 
   String? error;
@@ -140,18 +142,23 @@ class Wrapper {
     Map response;
     _clearCookies();
     try {
-      response = getMap((await dio.post<dynamic>(
-        loginAddress,
-        data: {
-          "username": user,
-          "password": pass,
-          if (tfaCode != null) "two_factor": tfaCode,
-        },
-      ))
-          .data)!;
+      response = getMap(
+        (await dio.post<dynamic>(
+          loginAddress,
+          data: {
+            "username": user,
+            "password": pass,
+            if (tfaCode != null) "two_factor": tfaCode,
+          },
+        ).timeout(requestTimeout))
+            .data,
+      )!;
     } catch (e) {
       _loggedIn = false;
       log("Error while logging in", error: e);
+      if (e is TimeoutException || await refreshNoInternet()) {
+        noInternet = true;
+      }
       error = "Unknown Error:\n$e";
       return null;
     }
@@ -347,17 +354,18 @@ class Wrapper {
 
     dynamic responseData;
     try {
-      final response = method == "POST"
-          ? await dio.post<dynamic>(
-              baseAddress + url,
-              data: args,
-            )
-          : method == "GET"
-              ? await dio.get<dynamic>(
+      final response = await (method == "POST"
+              ? dio.post<dynamic>(
                   baseAddress + url,
+                  data: args,
                 )
-              : throw Exception(
-                  "invalid method: $method; expected POST or GET");
+              : method == "GET"
+                  ? dio.get<dynamic>(
+                      baseAddress + url,
+                    )
+                  : throw Exception(
+                      "invalid method: $method; expected POST or GET"))
+          .timeout(requestTimeout);
       responseData = response.data;
     } on Exception catch (e) {
       await _handleError(e);
@@ -387,7 +395,9 @@ class Wrapper {
 
   Future<void> _handleError(Exception e) async {
     log("Error while sending request", error: e);
-    if (await noInternet) {
+    if (e is TimeoutException || await refreshNoInternet()) {
+      noInternet = true;
+      actions.noInternet(true);
       error = "Keine Internetverbindung";
     } else {
       error = e.toString();

@@ -58,7 +58,6 @@ Future<void> _loadGrades(
       );
       if (data == null) {
         api.actions.gradesActions.loadFailed();
-        api.actions.refreshNoInternet();
         return;
       }
       api.actions.gradesActions.loaded(
@@ -93,7 +92,6 @@ Future<void> _loadGradesDetails(
         },
       );
       if (data == null) {
-        api.actions.refreshNoInternet();
         return;
       }
       if (data is String) {
@@ -140,7 +138,6 @@ Future<void> _loadCancelledDescription(
         },
       );
       if (data == null) {
-        api.actions.refreshNoInternet();
         return;
       }
       api.actions.gradesActions.cancelledDescriptionLoaded(

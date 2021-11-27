@@ -89,6 +89,7 @@ List<Middleware<AppState, AppStateBuilder, AppActions>> middleware({
             ..add(AppActionsNames.start, _start)
             ..add(DashboardActionsNames.refresh, _refresh)
             ..add(AppActionsNames.refreshNoInternet, _refreshNoInternet)
+            ..add(AppActionsNames.noInternet, _noInternet)
             ..add(LoginActionsNames.loggedIn, _loggedIn)
             ..add(AppActionsNames.restarted, _restarted)
             ..combine(_absencesMiddleware)
@@ -200,8 +201,17 @@ Future<void> _refreshNoInternet(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  final noInternet = await wrapper.noInternet;
+  final noInternet = await wrapper.refreshNoInternet();
+  await api.actions.noInternet(noInternet);
+}
+
+Future<void> _noInternet(
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
+    ActionHandler next,
+    Action<bool> action) async {
   final prevNoInternet = api.state.noInternet;
+  await next(action);
+  final noInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
     if (noInternet) {
       showSnackBar("Keine Verbindung");
@@ -210,8 +220,7 @@ Future<void> _refreshNoInternet(
         logoutForcedByServer: true,
       );
     }
-    api.actions.noInternet(noInternet);
-    api.actions.load();
+    await api.actions.load();
   }
 }
 
@@ -219,6 +228,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   // By resetting the wrapper we clear all cookies.
   wrapper = Wrapper();
+  wrapper.noInternet = api.state.noInternet;
   await next(action);
   if (!api.state.noInternet) _popAll();
   dynamic login;
@@ -300,7 +310,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
                 ..settingsState.replace(
                   // Override the previous password saving setting with whatever the user chose this time.
                   serializedState.rebuild(
-                    (b) => b.noPasswordSaving = wrapper.safeMode,
+                    (b) => b.noPasswordSaving = api.state.settingsState.noPasswordSaving,
                   ),
                 ),
             ),
@@ -320,7 +330,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
                           : currentState.gradesState.semester,
                     )
                 // Override the previous password saving setting with whatever the user chose this time.
-                ..settingsState.noPasswordSaving = wrapper.safeMode,
+                ..settingsState.noPasswordSaving = api.state.settingsState.noPasswordSaving,
             ),
           );
         }

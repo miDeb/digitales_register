@@ -113,7 +113,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.savePassActions.delete();
     api.actions.loginActions.showChangePass(true);
   } else {
-    final noInternet = await wrapper.noInternet;
+    final noInternet = wrapper.noInternet;
     if (noInternet) {
       api.actions.noInternet(true);
       if (action.payload.offlineEnabled) {
@@ -150,7 +150,6 @@ Future<void> _changePass(
   );
   api.actions.savePassActions.save();
   if (result == null) {
-    api.actions.refreshNoInternet();
     return;
   }
   if (result["error"] != null) {

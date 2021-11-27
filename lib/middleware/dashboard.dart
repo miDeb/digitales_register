@@ -37,7 +37,6 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       args: {"viewFuture": action.payload});
 
   if (data is! List) {
-    api.actions.refreshNoInternet();
     api.actions.dashboardActions.notLoaded();
     return;
   }
@@ -74,9 +73,8 @@ Future<void> _addReminder(
       "text": action.payload.msg,
     },
   );
-  if (result == null) {
+  if (result == null && !wrapper.noInternet) {
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
-    api.actions.refreshNoInternet();
     return;
   }
   api.actions.dashboardActions.homeworkAdded(
@@ -100,10 +98,8 @@ Future<void> _deleteHomework(
   );
   if (result != null && result["success"] == true) {
     await next(action);
-  } else {
+  } else if (!wrapper.noInternet) {
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
-    api.actions.refreshNoInternet();
-    return;
   }
 }
 
@@ -136,8 +132,9 @@ Future<void> _toggleDone(
         ),
       ),
     );
-    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
-    api.actions.refreshNoInternet();
+    if (!wrapper.noInternet) {
+      showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
+    }
   }
 }
 
