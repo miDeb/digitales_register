@@ -544,6 +544,7 @@ class DayWidget extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       day.displayName,
