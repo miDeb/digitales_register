@@ -612,22 +612,38 @@ abstract class Message implements Built<Message, MessageBuilder> {
   String get recipientString;
   String get fromName;
 
-  String? get fileName;
-
-  String? get fileOriginalName;
   int get id;
-  bool get fileAvailable;
-  @BuiltValueField(serialize: false)
-  bool get downloading;
+  BuiltList<MessageAttachmentFile> get attachments;
 
   bool get isNew => timeRead == null;
 
   static Serializer<Message> get serializer => _$messageSerializer;
   factory Message([Function(MessageBuilder b)? updates]) = _$Message;
   Message._();
-  static void _initializeBuilder(MessageBuilder b) {
-    b
-      ..downloading = false
-      ..fileAvailable = false;
-  }
+
+  static void _initializeBuilder(MessageBuilder b) =>
+      b..attachments = ListBuilder<MessageAttachmentFile>();
+}
+
+abstract class MessageAttachmentFile
+    implements Built<MessageAttachmentFile, MessageAttachmentFileBuilder> {
+  String get originalName;
+  String get file;
+  int get messageId;
+  int get id;
+
+  @BuiltValueField(serialize: false)
+  bool get downloading;
+  bool get fileAvailable;
+
+  factory MessageAttachmentFile(
+          [Function(MessageAttachmentFileBuilder b)? updates]) =
+      _$MessageAttachmentFile;
+  MessageAttachmentFile._();
+  static Serializer<MessageAttachmentFile> get serializer =>
+      _$messageAttachmentFileSerializer;
+
+  static void _initializeBuilder(MessageAttachmentFileBuilder b) => b
+    ..fileAvailable = false
+    ..downloading = false;
 }

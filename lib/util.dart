@@ -40,6 +40,19 @@ Widget maybeWrap(Widget widget, Widget Function(Widget w) wrapWidget,
   }
 }
 
+extension ListIntersperse<T> on List<List<T>> {
+  List<T> intersperse(T element) {
+    final result = <T>[];
+    for (int i = 0; i < length; i++) {
+      result.addAll(this[i]);
+      if (i < length - 1) {
+        result.add(element);
+      }
+    }
+    return result;
+  }
+}
+
 extension StringUtils on String? {
   bool get isNullOrEmpty {
     if (this == null) return true;

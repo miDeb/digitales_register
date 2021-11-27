@@ -52,20 +52,35 @@ void _showMessage(
   builder.showMessage = action.payload;
 }
 
-void _downloadFile(
-    MessagesState state, Action<Message> action, MessagesStateBuilder builder) {
-  builder.messages[
-          state.messages.indexWhere((m) => m.id == action.payload.id)] =
-      action.payload.rebuild((b) => b.downloading = true);
+void _downloadFile(MessagesState state, Action<MessageAttachmentFile> action,
+    MessagesStateBuilder builder) {
+  final messageIndex =
+      state.messages.indexWhere((m) => m.id == action.payload.messageId);
+  builder.messages[messageIndex] = builder.messages[messageIndex].rebuild(
+    (b) {
+      final attachmentIndex =
+          b.attachments.build().indexWhere((a) => a.id == action.payload.id);
+      b.attachments[attachmentIndex] = b.attachments[attachmentIndex].rebuild(
+        (b) => b..downloading = true,
+      );
+    },
+  );
 }
 
-void _fileAvailable(
-    MessagesState state, Action<Message> action, MessagesStateBuilder builder) {
-  builder.messages[state.messages
-      .indexWhere((m) => m.id == action.payload.id)] = action.payload.rebuild(
-    (b) => b
-      ..fileAvailable = true
-      ..downloading = false,
+void _fileAvailable(MessagesState state, Action<MessageAttachmentFile> action,
+    MessagesStateBuilder builder) {
+  final messageIndex =
+      state.messages.indexWhere((m) => m.id == action.payload.messageId);
+  builder.messages[messageIndex] = builder.messages[messageIndex].rebuild(
+    (b) {
+      final attachmentIndex =
+          b.attachments.build().indexWhere((a) => a.id == action.payload.id);
+      b.attachments[attachmentIndex] = b.attachments[attachmentIndex].rebuild(
+        (b) => b
+          ..fileAvailable = true
+          ..downloading = false,
+      );
+    },
   );
 }
 
@@ -107,14 +122,47 @@ Message _parseMessage(Map json, MessagesState state) {
         : null
     ..recipientString = getString(json["recipientString"])
     ..fromName = getString(json["fromName"])
-    ..fileName = getString(json["fileName"])
-    ..fileOriginalName = getString(json["fileOriginalName"])
     ..id = getInt(json["id"]);
   final oldMessage = state.messages.firstWhereOrNull(
     (m) => m.id == message.id,
   );
-  if (oldMessage != null && oldMessage.fileName == message.fileName) {
-    message.fileAvailable = oldMessage.fileAvailable;
+  final attachments = ListBuilder<MessageAttachmentFile>();
+  for (final attachmentJson in getList(json["submissions"]) ?? <dynamic>[]) {
+    final attachment = _parseAttachment(getMap(attachmentJson)!, oldMessage);
+    if (attachment != null) {
+      attachments.add(attachment);
+    }
   }
+  message.attachments = attachments;
   return message.build();
+}
+
+MessageAttachmentFile? _parseAttachment(Map json, Message? oldMessage) {
+  if (getString(json["type"]) != "file" ||
+      getBool(json["isDownloadable"]) != true) {
+    return null;
+  }
+
+  final id = getInt(json["id"]);
+  final messageId = getInt(json["messageId"]);
+  final originalName = getString(json["originalName"]);
+  final file = getString(json["file"]);
+
+  if ([id, messageId, originalName, file].contains(null)) {
+    return null;
+  }
+
+  final oldAttachment = oldMessage?.attachments.firstWhereOrNull(
+    (a) => a.id == id,
+  );
+
+  final attachment = MessageAttachmentFileBuilder()
+    ..id = id
+    ..messageId = messageId
+    ..originalName = originalName
+    ..file = file;
+  if (oldAttachment?.file == file) {
+    attachment.fileAvailable = oldAttachment!.fileAvailable;
+  }
+  return attachment.build();
 }

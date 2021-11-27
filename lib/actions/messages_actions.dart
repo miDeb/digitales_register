@@ -27,8 +27,8 @@ abstract class MessagesActions extends ReduxActions {
 
   abstract final VoidActionDispatcher load;
   abstract final ActionDispatcher<List> loaded;
-  abstract final ActionDispatcher<Message> downloadFile;
-  abstract final ActionDispatcher<Message> fileAvailable;
-  abstract final ActionDispatcher<Message> openFile;
+  abstract final ActionDispatcher<MessageAttachmentFile> downloadFile;
+  abstract final ActionDispatcher<MessageAttachmentFile> fileAvailable;
+  abstract final ActionDispatcher<MessageAttachmentFile> openFile;
   abstract final ActionDispatcher<int> markAsRead;
 }

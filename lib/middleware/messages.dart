@@ -41,14 +41,15 @@ Future<void> _loadMessages(
 Future<void> _downloadFile(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
-    Action<Message> action) async {
+    Action<MessageAttachmentFile> action) async {
   if (api.state.noInternet) return;
+  await next(action);
   final success = await downloadFile(
-    "${wrapper.baseAddress}/api/message/download",
-    action.payload.fileOriginalName!,
+    "${wrapper.baseAddress}/api/message/messageSubmissionDownloadEntry",
+    action.payload.originalName,
     <String, dynamic>{
-      "messageId": action.payload.id,
-      "fileName": action.payload.fileName,
+      "messageId": action.payload.messageId,
+      "submissionId": action.payload.id,
     },
   );
   if (success) {
@@ -57,14 +58,13 @@ Future<void> _downloadFile(
   } else {
     showSnackBar("Download fehlgeschlagen");
   }
-  await next(action);
 }
 
 Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next, Action<Message> action) async {
+    ActionHandler next, Action<MessageAttachmentFile> action) async {
   await next(action);
   final saveFile = File(
-      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.fileOriginalName!}");
+      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
   await OpenFile.open(saveFile.path);
 }
 

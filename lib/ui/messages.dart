@@ -19,6 +19,7 @@ import 'dart:convert';
 
 import 'package:badges/badges.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
@@ -30,14 +31,12 @@ import '../data.dart';
 import 'animated_linear_progress_indicator.dart';
 import 'no_internet.dart';
 
-typedef MessageCallback = void Function(Message message);
-
 class MessagesPage extends StatelessWidget {
   final MessagesState? state;
   final bool noInternet;
-  final MessageCallback onDownloadFile;
-  final MessageCallback onOpenFile;
-  final MessageCallback onMarkAsRead;
+  final void Function(MessageAttachmentFile message) onDownloadFile;
+  final void Function(MessageAttachmentFile message) onOpenFile;
+  final void Function(Message message) onMarkAsRead;
 
   const MessagesPage(
       {Key? key,
@@ -96,9 +95,9 @@ class MessagesPage extends StatelessWidget {
 
 class MessageWidget extends StatefulWidget {
   final Message message;
-  final MessageCallback onDownloadFile;
-  final MessageCallback onOpenFile;
-  final MessageCallback onMarkAsRead;
+  final void Function(MessageAttachmentFile message) onDownloadFile;
+  final void Function(MessageAttachmentFile message) onOpenFile;
+  final void Function(Message message) onMarkAsRead;
   final bool noInternet;
   final bool expand;
 
@@ -203,59 +202,66 @@ class _MessageWidgetState extends State<MessageWidget> {
               ),
               const Divider(),
               renderMessage(widget.message.text, context),
-              if (widget.message.fileName != null) ...[
+              if (widget.message.attachments.isNotEmpty) ...[
                 const Divider(),
-                const Text(
-                  "Anhang:",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
                 Text(
-                  widget.message.fileOriginalName!,
+                  widget.message.attachments.length > 1
+                      ? "Anhänge:"
+                      : "Anhang:",
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                AnimatedLinearProgressIndicator(
-                    show: widget.message.downloading),
-                if (!widget.message.fileAvailable)
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: widget.noInternet
-                          ? null
-                          : () {
-                              widget.onDownloadFile(widget.message);
-                            },
-                      child: const Text("Herunterladen"),
-                    ),
-                  ),
-                if (widget.message.fileAvailable)
-                  IntrinsicHeight(
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: TextButton(
-                            onPressed: widget.noInternet
-                                ? null
-                                : () {
-                                    widget.onDownloadFile(widget.message);
-                                  },
-                            child: const Text("Erneut herunterladen"),
-                          ),
-                        ),
-                        const VerticalDivider(
-                          indent: 8,
-                          endIndent: 8,
-                        ),
-                        Expanded(
-                          child: TextButton(
-                            onPressed: () {
-                              widget.onOpenFile(widget.message);
-                            },
-                            child: const Text("Öffnen"),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
               ],
+              ...[
+                for (final attachment in widget.message.attachments)
+                  [
+                    Text(
+                      attachment.originalName,
+                    ),
+                    AnimatedLinearProgressIndicator(
+                        show: attachment.downloading),
+                    if (!attachment.fileAvailable)
+                      SizedBox(
+                        width: double.infinity,
+                        child: TextButton(
+                          onPressed: widget.noInternet
+                              ? null
+                              : () {
+                                  widget.onDownloadFile(attachment);
+                                },
+                          child: const Text("Herunterladen"),
+                        ),
+                      ),
+                    if (attachment.fileAvailable)
+                      IntrinsicHeight(
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: TextButton(
+                                onPressed: widget.noInternet
+                                    ? null
+                                    : () {
+                                        widget.onDownloadFile(attachment);
+                                      },
+                                child: const Text("Erneut herunterladen"),
+                              ),
+                            ),
+                            const VerticalDivider(
+                              indent: 8,
+                              endIndent: 8,
+                            ),
+                            Expanded(
+                              child: TextButton(
+                                onPressed: () {
+                                  widget.onOpenFile(attachment);
+                                },
+                                child: const Text("Öffnen"),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                  ]
+              ].intersperse(const Divider()),
             ],
           ),
         ),
