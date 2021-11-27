@@ -246,29 +246,33 @@ Future<void> _addAccount(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  // Move the current default user credentials into `otherAccounts`
-  final dynamic login = json.decode((await secureStorage.read(key: "login"))!);
-  final otherAccounts = login["otherAccounts"] as List? ?? <Object?>[];
-  if (login["user"] != null &&
-      login["pass"] != null &&
-      login["url"] != null &&
-      login["offlineEnabled"] != null) {
-    otherAccounts.insert(0, <String, Object?>{
-      "user": login["user"],
-      "pass": login["pass"],
-      "url": login["url"],
-      "offlineEnabled": login["offlineEnabled"],
-    });
-  }
-  await secureStorage.write(
-    key: "login",
-    value: json.encode(
-      <String, Object?>{
+  // There might be no loginStorage if "stay logged in" is not enabled.
+  final loginStorage = await secureStorage.read(key: "login");
+  if (loginStorage != null) {
+    // Move the current default user credentials into `otherAccounts`
+    final dynamic login = json.decode(loginStorage);
+    final otherAccounts = login["otherAccounts"] as List? ?? <Object?>[];
+    if (login["user"] != null &&
+        login["pass"] != null &&
+        login["url"] != null &&
+        login["offlineEnabled"] != null) {
+      otherAccounts.insert(0, <String, Object?>{
+        "user": login["user"],
+        "pass": login["pass"],
         "url": login["url"],
-        "otherAccounts": otherAccounts,
-      },
-    ),
-  );
+        "offlineEnabled": login["offlineEnabled"],
+      });
+    }
+    await secureStorage.write(
+      key: "login",
+      value: json.encode(
+        <String, Object?>{
+          "url": login["url"],
+          "otherAccounts": otherAccounts,
+        },
+      ),
+    );
+  }
   api.actions.mountAppState(AppState());
   api.actions.load();
 }

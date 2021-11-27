@@ -43,6 +43,7 @@ class Sidebar extends StatelessWidget {
     required this.otherAccounts,
     required this.selectAccount,
     required this.addAccount,
+    required this.passwordSavingEnabled,
   }) : super(key: key);
 
   final DrawerCallback onDrawerExpansionChange;
@@ -55,7 +56,7 @@ class Sidebar extends StatelessWidget {
       showSettings,
       logout,
       addAccount;
-  final bool tabletMode, drawerExpanded;
+  final bool tabletMode, drawerExpanded, passwordSavingEnabled;
   final Pages currentSelected;
   final String? username, userIcon;
   final List<String> otherAccounts;
@@ -84,9 +85,11 @@ class Sidebar extends StatelessWidget {
                 child: Text(
                   index == 0
                       ? (username ?? "?")
-                      : index == otherAccounts.length + 1
-                          ? "Account hinzufügen"
-                          : otherAccounts[index - 1],
+                      : index <= otherAccounts.length
+                          ? otherAccounts[index - 1]
+                          : passwordSavingEnabled
+                              ? "Account hinzufügen"
+                              : "Account wechseln",
                 ),
               ),
           ],

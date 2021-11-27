@@ -217,6 +217,8 @@ Future<void> _refreshNoInternet(
 
 Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
+  // By resetting the wrapper we clear all cookies.
+  wrapper = Wrapper();
   await next(action);
   if (!api.state.noInternet) _popAll();
   dynamic login;
@@ -275,6 +277,10 @@ Future<void> _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
 Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoggedInPayload> action) async {
+  if (action.payload.fromStorage) {
+    // If we logged in with saved credentials password saving must be enabled.
+    wrapper.safeMode = false;
+  }
   if (!api.state.settingsState.noPasswordSaving &&
       !action.payload.fromStorage) {
     api.actions.savePassActions.save();
@@ -292,7 +298,10 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             api.state.rebuild(
               (b) => b
                 ..settingsState.replace(
-                  serializedState,
+                  // Override the previous password saving setting with whatever the user chose this time.
+                  serializedState.rebuild(
+                    (b) => b.noPasswordSaving = wrapper.safeMode,
+                  ),
                 ),
             ),
           );
@@ -309,7 +318,9 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
                       currentState.gradesState.semester == Semester.all
                           ? serializedState.gradesState.semester
                           : currentState.gradesState.semester,
-                    ),
+                    )
+                // Override the previous password saving setting with whatever the user chose this time.
+                ..settingsState.noPasswordSaving = wrapper.safeMode,
             ),
           );
         }

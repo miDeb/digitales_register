@@ -67,6 +67,7 @@ class SidebarContainer extends StatelessWidget {
                 ..forced = false,
             ),
           ),
+          passwordSavingEnabled: state.passwordSavingEnabled,
         );
       },
       connect: (AppState state) {
@@ -76,7 +77,8 @@ class SidebarContainer extends StatelessWidget {
             ..userIcon = state.config?.imgSource
             ..drawerInitiallyFullyExpanded =
                 state.settingsState.drawerFullyExpanded
-            ..otherAccounts = state.loginState.otherAccounts.toBuilder(),
+            ..otherAccounts = state.loginState.otherAccounts.toBuilder()
+            ..passwordSavingEnabled = !state.settingsState.noPasswordSaving,
         );
       },
     );
@@ -89,6 +91,7 @@ abstract class SidebarViewModel
 
   String? get userIcon;
   bool get drawerInitiallyFullyExpanded;
+  bool get passwordSavingEnabled;
   BuiltList<String> get otherAccounts;
 
   factory SidebarViewModel([void Function(SidebarViewModelBuilder)? updates]) =
