@@ -135,15 +135,16 @@ class GradesChart extends StatelessWidget {
     }
   }
 
-  charts.DateTimeExtents dateTimeExtents() {
-    var first = grades.first.data.first.key;
-    var last = grades.first.data.first.key;
+  charts.DateTimeExtents? dateTimeExtents() {
+    DateTime? first;
+    DateTime? last;
     for (final subject in grades) {
       for (final grade in subject.data) {
-        if (grade.key.isBefore(first)) first = grade.key;
-        if (grade.key.isAfter(last)) last = grade.key;
+        if (first == null || grade.key.isBefore(first)) first = grade.key;
+        if (last == null || grade.key.isAfter(last)) last = grade.key;
       }
     }
+    if (first == null || last == null) return null;
     // Add some padding to avoid cutting off the graph at the edge of the diagram
     final padding = Duration(hours: last.difference(first).inHours ~/ 100);
     return charts.DateTimeExtents(
