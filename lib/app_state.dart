@@ -20,7 +20,6 @@ library app_state;
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
-import 'package:meta/meta.dart';
 
 import 'data.dart';
 import 'utc_date_time.dart';
@@ -181,7 +180,6 @@ abstract class ResetPassState
   }
 }
 
-@immutable
 abstract class NotificationState
     implements Built<NotificationState, NotificationStateBuilder> {
   BuiltList<Notification>? get notifications;
@@ -198,7 +196,6 @@ abstract class NotificationState
   NotificationState._();
 }
 
-@immutable
 abstract class Config implements Built<Config, ConfigBuilder> {
   int get userId;
   int get autoLogoutSeconds;

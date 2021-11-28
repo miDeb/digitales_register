@@ -17,6 +17,7 @@
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,6 +29,9 @@ import 'utc_date_time.dart';
 late final PackageInfo packageInfo;
 
 String get appVersion {
+  if (Platform.environment.containsKey('FLUTTER_TEST')) {
+    return "1.0";
+  }
   return packageInfo.version;
 }
 

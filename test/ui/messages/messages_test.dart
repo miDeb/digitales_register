@@ -37,10 +37,19 @@ void main() {
             <Message>[
               Message(
                 (b) => b
-                  ..downloading = false
-                  ..fileAvailable = false
-                  ..fileName = "attachment.png"
-                  ..fileOriginalName = "Bild.png"
+                  ..attachments = ListBuilder(
+                    <MessageAttachmentFile>[
+                      MessageAttachmentFile(
+                        (b) => b
+                          ..downloading = false
+                          ..fileAvailable = false
+                          ..file = "attachment.png"
+                          ..originalName = "Bild.png"
+                          ..messageId = 123
+                          ..id = 12,
+                      )
+                    ],
+                  )
                   ..fromName = "Sender"
                   ..recipientString = "Empfänger"
                   ..id = 25
@@ -79,10 +88,19 @@ void main() {
             <Message>[
               Message(
                 (b) => b
-                  ..downloading = true
-                  ..fileAvailable = false
-                  ..fileName = "attachment.png"
-                  ..fileOriginalName = "Bild.png"
+                  ..attachments = ListBuilder(
+                    <MessageAttachmentFile>[
+                      MessageAttachmentFile(
+                        (b) => b
+                          ..downloading = true
+                          ..fileAvailable = false
+                          ..file = "attachment.png"
+                          ..originalName = "Bild.png"
+                          ..messageId = 123
+                          ..id = 12,
+                      )
+                    ],
+                  )
                   ..fromName = "Sender"
                   ..recipientString = "Empfänger"
                   ..id = 25
@@ -121,10 +139,19 @@ void main() {
             <Message>[
               Message(
                 (b) => b
-                  ..downloading = false
-                  ..fileAvailable = true
-                  ..fileName = "attachment.png"
-                  ..fileOriginalName = "Bild.png"
+                  ..attachments = ListBuilder(
+                    <MessageAttachmentFile>[
+                      MessageAttachmentFile(
+                        (b) => b
+                          ..downloading = false
+                          ..fileAvailable = true
+                          ..file = "attachment.png"
+                          ..originalName = "Bild.png"
+                          ..messageId = 123
+                          ..id = 12,
+                      )
+                    ],
+                  )
                   ..fromName = "Sender"
                   ..recipientString = "Empfänger"
                   ..id = 25

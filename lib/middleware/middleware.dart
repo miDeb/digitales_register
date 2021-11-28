@@ -32,6 +32,7 @@ import 'package:dr/container/settings_page.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -227,7 +228,10 @@ Future<void> _noInternet(
 Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   // By resetting the wrapper we clear all cookies.
-  wrapper = Wrapper();
+  // However we don't want to reset the wrapper in tests
+  if (wrapper is! Mock) {
+    wrapper = Wrapper();
+  }
   wrapper.noInternet = api.state.noInternet;
   await next(action);
   if (!api.state.noInternet) _popAll();
@@ -310,7 +314,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
                 ..settingsState.replace(
                   // Override the previous password saving setting with whatever the user chose this time.
                   serializedState.rebuild(
-                    (b) => b.noPasswordSaving = api.state.settingsState.noPasswordSaving,
+                    (b) => b.noPasswordSaving =
+                        api.state.settingsState.noPasswordSaving,
                   ),
                 ),
             ),
@@ -330,7 +335,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
                           : currentState.gradesState.semester,
                     )
                 // Override the previous password saving setting with whatever the user chose this time.
-                ..settingsState.noPasswordSaving = api.state.settingsState.noPasswordSaving,
+                ..settingsState.noPasswordSaving =
+                    api.state.settingsState.noPasswordSaving,
             ),
           );
         }

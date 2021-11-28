@@ -160,7 +160,7 @@ void main() {
         matchesGoldenFile("chart_animating_label1.png"),
       );
       await tester.pumpAndSettle();
-      expect(find.text("Fach1 · Schularbeit3: 7+"), findsOneWidget);
+      expect(find.text("Fach1 – Schularbeit3: 7+"), findsOneWidget);
       expect(find.text("4. Januar"), findsOneWidget);
       await expectLater(
         find.byType(GradesChartContainer),
@@ -174,7 +174,7 @@ void main() {
         matchesGoldenFile("chart_animating_label2.png"),
       );
       await tester.pumpAndSettle();
-      expect(find.text("Fach2 · Test: 4"), findsOneWidget);
+      expect(find.text("Fach2 – Test: 4"), findsOneWidget);
       expect(find.text("2. Januar"), findsOneWidget);
       await expectLater(
         find.byType(GradesChartContainer),
@@ -260,7 +260,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text("Tippe auf das Diagramm, um Details zu sehen"),
           findsNothing);
-      expect(find.text("Fach1 · Schularbeit3: 7+"), findsOneWidget);
+      expect(find.text("Fach1 – Schularbeit3: 7+"), findsOneWidget);
 
       expect(find.text("4. Januar"), findsOneWidget);
       expect(find.text("Legende"), findsOneWidget);
@@ -272,7 +272,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text("Tippe auf das Diagramm, um Details zu sehen"),
           findsOneWidget);
-      expect(find.text("Fach1 · Schularbeit3: 7+"), findsNothing);
+      expect(find.text("Fach1 – Schularbeit3: 7+"), findsNothing);
 
       expect(find.text("4. Januar"), findsNothing);
     },

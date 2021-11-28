@@ -176,17 +176,17 @@ Future<void> main() async {
     // the shown week is the previous week
     mockNow = UtcDateTime(2021, 1, 27);
     await tester.pumpWidget(widget);
-    // one circular progressindicator on top, one on the body
-    expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+    // one circular progressindicator on top, one on the body and one for the detail view
+    expect(find.byType(CircularProgressIndicator), findsNWidgets(3));
     expect(find.text("Aktuelle Woche"), findsOneWidget);
     await tester.tap(find.text("Aktuelle Woche"));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 100));
     // weeks are animating, so there are two weeks that show a progress indicator
-    expect(find.byType(CircularProgressIndicator), findsNWidgets(3));
+    expect(find.byType(CircularProgressIndicator), findsNWidgets(4));
     expect(find.text("Aktuelle Woche"), findsNothing);
     await tester.pump(const Duration(milliseconds: 100));
-    expect(find.byType(CircularProgressIndicator), findsNWidgets(2));
+    expect(find.byType(CircularProgressIndicator), findsNWidgets(3));
     expect(find.text("Aktuelle Woche"), findsNothing);
   });
 

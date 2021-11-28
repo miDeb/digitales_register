@@ -71,7 +71,7 @@ Future<void> _markAsRead(
     ActionHandler next,
     Action<int> action) async {
   await next(action);
- await wrapper.send(
+  await wrapper.send(
     "api/message/markAsRead",
     args: {"messageId": action.payload},
   );

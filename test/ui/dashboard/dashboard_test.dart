@@ -30,11 +30,15 @@ import 'package:dr/ui/days.dart';
 import 'package:dr/ui/no_internet.dart';
 import 'package:dr/ui/sidebar.dart';
 import 'package:dr/utc_date_time.dart';
+import 'package:dr/wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockWrapper extends Mock implements Wrapper {}
 
 Future<void> main() async {
   testGoldens('Open drawer in phone mode', (WidgetTester tester) async {
@@ -559,57 +563,70 @@ Future<void> main() async {
 
   testWidgets("check box when offline but not yet in offline mode",
       (WidgetTester tester) async {
-    // HttpClients fail with status code 400 in widget tests.
-    // This will make the app believe that we have no connection.
     secureStorage = const FlutterSecureStorage();
     scaffoldMessengerKey = GlobalKey();
-    final widget = ReduxProvider(
-      store: Store<AppState, AppStateBuilder, AppActions>(
-        appReducerBuilder.build(),
-        AppState(
-          (b) => b.dashboardState
-            ..allDays = ListBuilder(
-              <Day>[
-                Day(
-                  (b) => b
-                    ..date = UtcDateTime.now()
-                    ..deletedHomework = ListBuilder()
-                    ..homework = ListBuilder(<Homework>[
-                      Homework(
-                        (b) => b
-                          ..checkable = true
-                          ..checked = false
-                          ..deleteable = true
-                          ..deleted = false
-                          ..firstSeen = UtcDateTime(2021, 2, 2)
-                          ..id = 0
-                          ..isChanged = false
-                          ..isNew = false
-                          ..type = HomeworkType.homework
-                          ..warningServerSaid = false
-                          ..title = "Title"
-                          ..subtitle = "Subtitle",
-                      ),
-                    ])
-                    ..lastRequested = UtcDateTime.now(),
-                ),
-              ],
-            ),
-        ),
-        AppActions(),
-        middleware: middleware(includeErrorMiddleware: false),
+    final store = Store<AppState, AppStateBuilder, AppActions>(
+      appReducerBuilder.build(),
+      AppState(
+        (b) => b.dashboardState
+          ..allDays = ListBuilder(
+            <Day>[
+              Day(
+                (b) => b
+                  ..date = UtcDateTime.now()
+                  ..deletedHomework = ListBuilder()
+                  ..homework = ListBuilder(<Homework>[
+                    Homework(
+                      (b) => b
+                        ..checkable = true
+                        ..checked = false
+                        ..deleteable = true
+                        ..deleted = false
+                        ..firstSeen = UtcDateTime(2021, 2, 2)
+                        ..id = 0
+                        ..isChanged = false
+                        ..isNew = false
+                        ..type = HomeworkType.homework
+                        ..warningServerSaid = false
+                        ..title = "Title"
+                        ..subtitle = "Subtitle",
+                    ),
+                  ])
+                  ..lastRequested = UtcDateTime.now(),
+              ),
+            ],
+          ),
       ),
+      AppActions(),
+      middleware: middleware(includeErrorMiddleware: false),
+    );
+    final widget = ReduxProvider(
+      store: store,
       child: MaterialApp(
         scaffoldMessengerKey: scaffoldMessengerKey,
         home: DaysContainer(),
         theme: ThemeData(primarySwatch: Colors.deepOrange),
       ),
     );
+    wrapper = MockWrapper();
+    when(() => wrapper.noInternet).thenReturn(true);
+    when(() => wrapper.refreshNoInternet())
+        .thenAnswer((_) => Future.value(true));
+    when(() => wrapper.send(
+          "api/student/dashboard/toggle_reminder",
+          args: {
+            "id": 0,
+            "type": "homework",
+            "value": true,
+          },
+        )).thenAnswer((_) => Future<dynamic>.value());
     await tester.pumpWidget(widget);
     expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
     await tester.tap(find.byType(Checkbox));
     await tester.pumpAndSettle();
-    expect(tester.widget<Checkbox>(find.byType(Checkbox)).onChanged, isNull);
     expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isFalse);
+    store.actions.refreshNoInternet();
+    await tester.pumpAndSettle();
+    expect(tester.widget<Checkbox>(find.byType(Checkbox)).onChanged, isNull);
   });
 }
