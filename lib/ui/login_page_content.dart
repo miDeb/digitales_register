@@ -132,11 +132,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           autofocus: _schoolController.text.isEmpty,
                           controller: _schoolController,
                           onChanged: (v) {
-                            if (widget.vm.servers[v] == null) {
-                              setState(() {
+                            setState(() {
+                              if (widget.vm.servers[v] == null) {
                                 nonCustomServer = null;
-                              });
-                            }
+                              } else {
+                                nonCustomServer =
+                                    Tuple2(v, widget.vm.servers[v]);
+                                _urlController.text = nonCustomServer!.item2!;
+                              }
+                            });
                           },
                           decoration: InputDecoration(
                             labelText: "Schule",
