@@ -177,6 +177,12 @@ class GradesChart extends StatelessWidget {
                 radiusPx: 2,
                 roundEndCaps: true,
               ),
+              layoutConfig: charts.LayoutConfig(
+                bottomMarginSpec: charts.MarginSpec.fixedPixel(16),
+                rightMarginSpec: charts.MarginSpec.fixedPixel(8),
+                leftMarginSpec: charts.MarginSpec.fixedPixel(20),
+                topMarginSpec: charts.MarginSpec.fixedPixel(16),
+              ),
               selectionModels: [
                 charts.SelectionModelConfig(
                   changedListener: (model) {
