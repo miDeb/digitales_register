@@ -100,10 +100,11 @@ class _HoursChunk extends StatelessWidget {
         Card(
           shape: RoundedRectangleBorder(
             side: BorderSide(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.secondary
-                    : Colors.grey,
-                width: 0),
+              color: isSelected
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.grey,
+              width: 0.75,
+            ),
             borderRadius: BorderRadius.circular(8),
           ),
           color: Theme.of(context).scaffoldBackgroundColor,
