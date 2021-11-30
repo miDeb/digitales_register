@@ -1,4 +1,4 @@
-## x.x.x
+## 8.2.0
 - Kalender-Detailansicht neu designt
   - Sie ist nun eine eigene Seite
   - Im Tablet- bzw. PC-Modus wird sie rechts in einer Seitenleiste angezeigt
@@ -7,7 +7,7 @@
 - Bei Mitteilungen können Anhänge wieder heruntergeladen werden
 - "Account hinzufügen" wurde zu "Account wechseln" geändert, wenn "angemeldet bleiben" nicht aktiviert ist
 - In der Notendiagramm-Vollbildansicht werden einzelne Punkte nun hervorgehoben
-- Wenn eine Netzwerkanfrage nach 5 Sekunden nicht abgschlossen wird, wird der Offline-Modus aktiviert.
+- Wenn eine Netzwerkanfrage nach 5 Sekunden nicht abgeschlossen wird, wird der Offline-Modus aktiviert.
   Dadurch wird ein endloses Laden verhindert.
 
 ## 8.1.10
