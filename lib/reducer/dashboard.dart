@@ -59,13 +59,21 @@ void _loaded(DashboardState state, Action<DaysLoadedPayload> action,
   ];
 
   final List<Day> daysToDelete = [];
+  // Due to a bug some days might have been duplicated.
+  // TODO: Remove this once we are confident no users migrate from an affected version anymore.
+  final Set<UtcDateTime> seenDates = {};
 
   builder.allDays.map(
     (day) => day.rebuild(
       (b) {
         final newDay = loadedDays.firstWhereOrNull(
-          (d) => d.date == day.date,
+          (d) => d.date.stripTime() == day.date.stripTime(),
         );
+        if (seenDates.contains(day.date.stripTime())) {
+          daysToDelete.add(day);
+        } else {
+          seenDates.add(day.date.stripTime());
+        }
         if (newDay == null) {
           if (!action.payload.future &&
               day.date.isBefore(

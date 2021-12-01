@@ -57,6 +57,14 @@ class UtcDateTime extends DateTime {
   UtcDateTime add(Duration duration) {
     return super.add(duration).makeUtc();
   }
+
+  UtcDateTime stripTime() {
+    return UtcDateTime(
+      year,
+      month,
+      day,
+    );
+  }
 }
 
 extension MakeUtc on DateTime {
