@@ -31,7 +31,7 @@ import '../data.dart';
 import '../main.dart';
 import '../utc_date_time.dart';
 
-const _pageViewAnimationDuration = Duration(milliseconds: 250);
+const _pageViewAnimationDuration = Duration(milliseconds: 500);
 
 class RightSidebar extends StatefulWidget {
   final Widget child;
@@ -167,7 +167,7 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
           programmaticPageAnimations--;
         });
       } else {
-        // We were previouly closed, so we don't want to show a page animation.
+        // We were previously closed, so we don't want to show a page animation.
         programmaticPageAnimations++;
         _controller.jumpToPage(pageViewIndex);
         programmaticPageAnimations--;
@@ -212,10 +212,14 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
                   },
                 )
               : null,
-          title: Text(
-            selectedDate != null
-                ? DateFormat.MMMEd("de").format(selectedDate!)
-                : "Detailansicht",
+          title: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            child: Text(
+              selectedDate != null
+                  ? DateFormat.MMMEd("de").format(selectedDate!)
+                  : "Detailansicht",
+              key: ValueKey(selectedDate),
+            ),
           ),
           actions: [
             IconButton(
@@ -328,7 +332,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
       itemScrollController.scrollTo(
         index: widget.day.hours.indexOf(targetHour),
         alignment: 0.10,
-        duration: const Duration(milliseconds: 250),
+        duration: const Duration(milliseconds: 500),
         curve: Curves.ease,
       );
     }
