@@ -257,6 +257,7 @@ class GradesChart extends StatelessWidget {
                         ? charts.MaterialPalette.white
                         : charts.MaterialPalette.black,
                   ),
+                  labelAnchor: charts.TickLabelAnchor.inside,
                   lineStyle: charts.LineStyleSpec(
                     thickness: 0,
                     color: charts.MaterialPalette.gray.shadeDefault,
