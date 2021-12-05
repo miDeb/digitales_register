@@ -23,6 +23,7 @@ import 'package:dr/ui/no_internet.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:responsive_scaffold/size_transition.dart' as rsc;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../app_state.dart';
@@ -66,7 +67,7 @@ class _RightSidebarState extends State<RightSidebar>
 
   @override
   Widget build(BuildContext context) {
-    return SizeTransition(
+    return rsc.SizeTransition(
       axis: Axis.horizontal,
       sizeFactor: _animationController,
       axisAlignment: -1,
@@ -144,6 +145,9 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
     if (!widget.show && oldWidget.show) {
       // clear the selection
       actions.calendarActions.select(null);
+    }
+    if (!widget.show) {
+      return;
     }
     if (widget.selectedDay == null) {
       return;
