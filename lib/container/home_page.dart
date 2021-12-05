@@ -54,6 +54,7 @@ abstract class HomePageContentViewModel
 
   factory HomePageContentViewModel.from(AppState state) {
     return HomePageContentViewModel(
-        (b) => b..splash = !state.loginState.loggedIn);
+      (b) => b..splash = !state.loginState.loggedIn,
+    );
   }
 }

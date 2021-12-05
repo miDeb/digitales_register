@@ -103,6 +103,7 @@ abstract class LoggedInPayload
 
   String get username;
   bool get fromStorage;
+  bool? get keepShowingLoadingIndicator;
 }
 
 abstract class LoginFailedPayload

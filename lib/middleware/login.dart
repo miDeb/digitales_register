@@ -74,7 +74,21 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
 
   final url = fixupUrl(action.payload.url);
-  api.actions.loginActions.loggingIn();
+  await api.actions.loginActions.loggingIn();
+  if (action.payload.offlineEnabled) {
+    // log the user in locally so they don't have to
+    // wait for the network request to finish
+    assert(action.payload.fromStorage);
+    await api.actions.loginActions.loggedIn(
+      LoggedInPayload(
+        (b) => b
+          ..username = action.payload.user
+          ..fromStorage = true
+          ..keepShowingLoadingIndicator = true,
+      ),
+    );
+    api.actions.setUrl(url);
+  }
   final dynamic result = await wrapper.login(
     action.payload.user,
     action.payload.pass,
@@ -117,6 +131,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     if (noInternet) {
       api.actions.noInternet(true);
       if (action.payload.offlineEnabled) {
+        assert(action.payload.fromStorage);
         await api.actions.loginActions.loggedIn(
           LoggedInPayload(
             (b) => b
