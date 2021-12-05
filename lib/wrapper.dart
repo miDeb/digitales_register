@@ -32,8 +32,6 @@ import 'main.dart';
 import 'ui/dialog.dart';
 import 'utc_date_time.dart';
 
-const requestTimeout = Duration(seconds: 5);
-
 /*
 // Debug all requests
 // IMPORTANT Don't include in release, contains sensitive info
@@ -99,7 +97,7 @@ class Wrapper {
   Future<bool> refreshNoInternet() async {
     final address = url != null ? baseAddress : "https://digitalesregister.it";
     try {
-      final result = await http.get(Uri.parse(address)).timeout(requestTimeout);
+      final result = await http.get(Uri.parse(address));
       noInternet = result.statusCode != 200;
     } catch (e) {
       noInternet = true;
@@ -150,7 +148,7 @@ class Wrapper {
             "password": pass,
             if (tfaCode != null) "two_factor": tfaCode,
           },
-        ).timeout(requestTimeout))
+        ))
             .data,
       )!;
     } catch (e) {
@@ -355,17 +353,16 @@ class Wrapper {
     dynamic responseData;
     try {
       final response = await (method == "POST"
-              ? dio.post<dynamic>(
+          ? dio.post<dynamic>(
+              baseAddress + url,
+              data: args,
+            )
+          : method == "GET"
+              ? dio.get<dynamic>(
                   baseAddress + url,
-                  data: args,
                 )
-              : method == "GET"
-                  ? dio.get<dynamic>(
-                      baseAddress + url,
-                    )
-                  : throw Exception(
-                      "invalid method: $method; expected POST or GET"))
-          .timeout(requestTimeout);
+              : throw Exception(
+                  "invalid method: $method; expected POST or GET"));
       responseData = response.data;
     } on Exception catch (e) {
       await _handleError(e);
