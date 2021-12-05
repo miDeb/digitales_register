@@ -122,8 +122,7 @@ class SubjectWidget extends StatefulWidget {
   _SubjectWidgetState createState() => _SubjectWidgetState();
 }
 
-class _SubjectWidgetState extends State<SubjectWidget>
-    with TickerProviderStateMixin {
+class _SubjectWidgetState extends State<SubjectWidget> {
   bool closed = true;
   @override
   void didUpdateWidget(SubjectWidget oldWidget) {
@@ -192,7 +191,6 @@ class _SubjectWidgetState extends State<SubjectWidget>
         initiallyExpanded: !closed,
         children: [
           AnimatedSize(
-            vsync: this,
             duration: const Duration(milliseconds: 200),
             curve: Curves.easeIn,
             alignment: Alignment.topCenter,

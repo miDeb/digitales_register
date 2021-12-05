@@ -292,23 +292,17 @@ class GradesChart extends StatelessWidget {
   }
 }
 
-class SelectionWidget extends StatefulWidget {
+class SelectionWidget extends StatelessWidget {
   final UtcDateTime? date;
   final BuiltList<_Selection>? selections;
 
   const SelectionWidget({Key? key, this.date, this.selections})
       : super(key: key);
-  @override
-  _SelectionWidgetState createState() => _SelectionWidgetState();
-}
 
-class _SelectionWidgetState extends State<SelectionWidget>
-    with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
       layoutBuilder: (currentChild, previousChildren) => AnimatedSize(
-        vsync: this,
         alignment: Alignment.topCenter,
         duration: const Duration(milliseconds: 150),
         curve: Curves.ease,
@@ -321,9 +315,9 @@ class _SelectionWidgetState extends State<SelectionWidget>
         ),
       ),
       duration: const Duration(milliseconds: 150),
-      child: widget.date != null && widget.selections?.isNotEmpty == true
+      child: date != null && selections?.isNotEmpty == true
           ? Column(
-              key: ValueKey(widget.selections),
+              key: ValueKey(selections),
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
@@ -337,11 +331,11 @@ class _SelectionWidgetState extends State<SelectionWidget>
                     color: Colors.black,
                   ),
                   child: Text(
-                    DateFormat.MMMMd("de").format(widget.date!),
+                    DateFormat.MMMMd("de").format(date!),
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
-                for (final selection in widget.selections!)
+                for (final selection in selections!)
                   Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
