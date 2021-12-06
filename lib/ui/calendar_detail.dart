@@ -107,8 +107,7 @@ class CalendarDetailPage extends StatefulWidget {
 }
 
 class _CalendarDetailPageState extends State<CalendarDetailPage> {
-  late final PageView _pageView;
-  late final PageController _controller;
+  late PageController _controller;
   UtcDateTime? selectedDate;
   int programmaticPageAnimations = 0;
 
@@ -153,7 +152,11 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
       return;
     }
     final pageViewIndex = _pageViewIndex(widget.selectedDay!);
-    if (pageViewIndex != _controller.page?.round()) {
+    if (!_controller.hasClients) {
+      _controller = PageController(
+        initialPage: pageViewIndex,
+      );
+    } else if (pageViewIndex != _controller.page?.round()) {
       selectedDate = widget.selectedDay;
       if (oldWidget.selectedDay != null) {
         programmaticPageAnimations++;
@@ -182,18 +185,6 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
     _controller = PageController(
       initialPage:
           widget.selectedDay != null ? _pageViewIndex(widget.selectedDay!) : 0,
-    );
-
-    _pageView = PageView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        final date = _dateForPageViewIndex(index);
-        return CalendarDetailItemContainer(
-          date: date,
-          isSidebar: widget.isSidebar,
-        );
-      },
-      controller: _controller,
-      onPageChanged: _handlePageChanged,
     );
 
     selectedDate = widget.selectedDay;
@@ -232,7 +223,17 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
             ),
           ],
         ),
-        body: _pageView,
+        body: PageView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            final date = _dateForPageViewIndex(index);
+            return CalendarDetailItemContainer(
+              date: date,
+              isSidebar: widget.isSidebar,
+            );
+          },
+          controller: _controller,
+          onPageChanged: _handlePageChanged,
+        ),
       ),
       (scaffold) => RightSidebar(
         show: widget.selectedDay != null && widget.show,
