@@ -75,6 +75,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 
   final url = fixupUrl(action.payload.url);
   await api.actions.loginActions.loggingIn();
+
+  bool offlineLogin = false;
   if (action.payload.offlineEnabled) {
     // log the user in locally so they don't have to
     // wait for the network request to finish
@@ -84,11 +86,13 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         (b) => b
           ..username = action.payload.user
           ..fromStorage = true
-          ..keepShowingLoadingIndicator = true,
+          ..offlineOnly = true,
       ),
     );
     api.actions.setUrl(url);
+    offlineLogin = true;
   }
+
   final dynamic result = await wrapper.login(
     action.payload.user,
     action.payload.pass,
@@ -105,7 +109,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     relogin: api.actions.loginActions.automaticallyReloggedIn,
     addProtocolItem: api.actions.addNetworkProtocolItem,
   );
-  if (wrapper.loggedIn) {
+  if (await wrapper.loggedIn) {
     if (!wrapper.config.isStudentOrParent) {
       wrapper.logout(hard: true);
       api.actions.loginActions.loginFailed(
@@ -120,7 +124,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       LoggedInPayload(
         (b) => b
           ..username = wrapper.user
-          ..fromStorage = action.payload.fromStorage,
+          ..fromStorage = action.payload.fromStorage
+          ..secondaryOnlineLogin = offlineLogin,
       ),
     );
   } else if (result is Map && result["error"] == "password_expired") {
@@ -136,7 +141,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           LoggedInPayload(
             (b) => b
               ..username = action.payload.user
-              ..fromStorage = true,
+              ..fromStorage = true
+              ..offlineOnly = true,
           ),
         );
         api.actions.setUrl(url);
@@ -144,9 +150,11 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       }
     }
     api.actions.loginActions.loginFailed(
-      LoginFailedPayload((b) => b
-        ..cause = wrapper.error
-        ..username = action.payload.user),
+      LoginFailedPayload(
+        (b) => b
+          ..cause = wrapper.error
+          ..username = action.payload.user,
+      ),
     );
   }
   api.actions.setUrl(url);

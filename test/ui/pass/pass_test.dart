@@ -160,7 +160,7 @@ void main() {
         relogin: any(named: "relogin"),
       ),
     ).thenAnswer((invocation) async => {"loggedIn": true});
-    when(() => wrapper.loggedIn).thenReturn(true);
+    when(() => wrapper.loggedIn).thenAnswer((_) => Future.value(true));
     when(() => wrapper.config).thenReturn(
       Config(
         (b) => b

@@ -25,7 +25,6 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
 import 'main.dart';
@@ -87,8 +86,9 @@ class Wrapper {
     _url = value;
   }
 
-  bool get loggedIn => _loggedIn;
-  bool _loggedIn = false;
+  Future<bool> get loggedIn => _loggedIn;
+  // This future will be not completed if a login is in progress
+  Future<bool> _loggedIn = Future.value(false);
   VoidCallback? onLogout, onConfigLoaded, onRelogin;
   AddNetworkProtocolItem? onAddProtocolItem;
   late bool safeMode;
@@ -111,11 +111,15 @@ class Wrapper {
   late UtcDateTime _serverLogoutTime;
   late Config config;
   Future<dynamic> login(
-      String? user, String? pass, String? tfaCode, String? url,
-      {VoidCallback? logout,
-      VoidCallback? configLoaded,
-      VoidCallback? relogin,
-      AddNetworkProtocolItem? addProtocolItem}) async {
+    String? user,
+    String? pass,
+    String? tfaCode,
+    String? url, {
+    VoidCallback? logout,
+    VoidCallback? configLoaded,
+    VoidCallback? relogin,
+    AddNetworkProtocolItem? addProtocolItem,
+  }) async {
     if (logout != null) {
       onLogout = logout;
     } else {
@@ -137,6 +141,8 @@ class Wrapper {
       assert(onAddProtocolItem != null);
     }
     this.url = url;
+    final loggedInCompleter = Completer<bool>();
+    _loggedIn = loggedInCompleter.future;
     Map response;
     _clearCookies();
     try {
@@ -152,7 +158,7 @@ class Wrapper {
             .data,
       )!;
     } catch (e) {
-      _loggedIn = false;
+      loggedInCompleter.complete(false);
       log("Error while logging in", error: e);
       if (e is TimeoutException || await refreshNoInternet()) {
         noInternet = true;
@@ -162,7 +168,7 @@ class Wrapper {
     }
     if (getBool(response["loggedIn"]) ?? false) {
       lastInteraction = now;
-      _loggedIn = true;
+      loggedInCompleter.complete(true);
       this.user = user;
       this.pass = pass;
       error = null;
@@ -173,7 +179,7 @@ class Wrapper {
         onConfigLoaded!();
       });
     } else {
-      _loggedIn = false;
+      loggedInCompleter.complete(false);
       error = "[${response["error"]}] ${response["message"]}";
       switch (getString(response["error"])) {
         case "two_factor_needed":
@@ -240,7 +246,7 @@ class Wrapper {
       ))
           .data)!;
     } catch (e) {
-      _loggedIn = false;
+      _loggedIn = Future.value(false);
       log("Failed to change pass", error: e);
       error = "Unknown Error:\n$e";
       return null;
@@ -248,7 +254,7 @@ class Wrapper {
     if (response["error"] != null) {
       error = "[${response["error"]}] ${response["message"]}";
     } else {
-      _loggedIn = false;
+      _loggedIn = Future.value(false);
       this.user = user;
       pass = newPass;
       error = null;
@@ -328,27 +334,23 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
-  final _mutex = Mutex();
   Future<dynamic> send(String url,
       {Map<String, Object?> args = const <String, Object?>{},
       String method = "POST"}) async {
     assert(!url.startsWith("/"));
-    await _mutex.acquire();
-    if (!_loggedIn) {
+    if (!await _loggedIn) {
       if (user != null && pass != null) {
         await login(user, pass, null, this.url);
-        if (!_loggedIn) {
-          _mutex.release();
+        if (!await _loggedIn) {
           return null;
         } else {
           onRelogin!();
         }
       } else {
-        _mutex.release();
+        log("returning null for request to $url, user is not logged in");
         return null;
       }
     }
-    _mutex.release();
 
     dynamic responseData;
     try {
@@ -402,7 +404,7 @@ class Wrapper {
   }
 
   Future<void> _updateLogout() async {
-    if (!_loggedIn) return;
+    if (!await _loggedIn) return;
     if (now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
       //autologout happens soon!
       final result =
@@ -439,7 +441,7 @@ class Wrapper {
       }
       _url = user = pass = null;
     }
-    _loggedIn = false;
+    _loggedIn = Future.value(false);
     _clearCookies();
   }
 

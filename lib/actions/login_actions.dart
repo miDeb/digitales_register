@@ -103,7 +103,14 @@ abstract class LoggedInPayload
 
   String get username;
   bool get fromStorage;
-  bool? get keepShowingLoadingIndicator;
+  bool get offlineOnly;
+  bool get secondaryOnlineLogin;
+
+  static void _initializeBuilder(LoggedInPayloadBuilder b) {
+    b
+      ..offlineOnly = false
+      ..secondaryOnlineLogin = false;
+  }
 }
 
 abstract class LoginFailedPayload

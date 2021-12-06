@@ -301,7 +301,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
   deletedData = false;
   final key = getStorageKey(action.payload.username, wrapper.loginAddress);
-  if (!api.state.loginState.loggedIn) {
+  if (!api.state.loginState.loggedIn && !action.payload.secondaryOnlineLogin) {
+    log("loading state");
     final state = await _readFromStorage(key);
     if (state != null) {
       try {
@@ -362,8 +363,10 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   for (final callback in api.state.loginState.callAfterLogin) {
     callback();
   }
-  api.actions.dashboardActions.load(api.state.dashboardState.future);
-  api.actions.notificationsActions.load();
+  if (!action.payload.offlineOnly) {
+    api.actions.dashboardActions.load(api.state.dashboardState.future);
+    api.actions.notificationsActions.load();
+  }
 }
 
 var _saveUnderway = false;
