@@ -76,6 +76,10 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final url = fixupUrl(action.payload.url);
   await api.actions.loginActions.loggingIn();
 
+  // We need to set the url earlier because other parts of the app will try to read it
+  // because we pretend we are logged in earlier than we actually are.
+  wrapper.url = url;
+
   bool offlineLogin = false;
   if (action.payload.offlineEnabled) {
     // log the user in locally so they don't have to
