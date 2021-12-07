@@ -48,10 +48,7 @@ class _SplashWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: SizedBox(
-          width: 200,
-          child: Image.asset("assets/transparent.png"),
-        ),
+        child: Image.asset("assets/transparent.png"),
       ),
     );
   }
