@@ -56,7 +56,7 @@ void _loggedIn(LoginState state, Action<LoggedInPayload> action,
   builder
     ..errorMsg = null
     ..username = action.payload.username
-    ..loading = action.payload.offlineOnly
+    ..loading = action.payload.keepShowingLoadingIndicator
     ..loggedIn = true;
 }
 

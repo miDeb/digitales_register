@@ -105,11 +105,13 @@ abstract class LoggedInPayload
   bool get fromStorage;
   bool get offlineOnly;
   bool get secondaryOnlineLogin;
+  bool get keepShowingLoadingIndicator;
 
   static void _initializeBuilder(LoggedInPayloadBuilder b) {
     b
       ..offlineOnly = false
-      ..secondaryOnlineLogin = false;
+      ..secondaryOnlineLogin = false
+      ..keepShowingLoadingIndicator = false;
   }
 }
 

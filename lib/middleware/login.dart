@@ -90,7 +90,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         (b) => b
           ..username = action.payload.user
           ..fromStorage = true
-          ..offlineOnly = true,
+          ..offlineOnly = true
+          ..keepShowingLoadingIndicator = true,
       ),
     );
     api.actions.setUrl(url);
