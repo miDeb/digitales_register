@@ -62,7 +62,9 @@ void _loggedIn(LoginState state, Action<LoggedInPayload> action,
 
 void _loggingIn(
     LoginState state, Action<void> action, LoginStateBuilder builder) {
-  builder.loading = true;
+  builder
+    ..loading = true
+    ..errorMsg = null;
 }
 
 void _logout(

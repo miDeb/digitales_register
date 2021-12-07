@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/login_actions.dart';
 import 'package:dr/util.dart';
 
 import '../actions/app_actions.dart';
@@ -35,6 +36,7 @@ import 'settings.dart';
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.mountAppState, _mountState)
   ..add(AppActionsNames.noInternet, _noInternet)
+  ..add(LoginActionsNames.loggingIn, _loggingIn)
   ..add(AppActionsNames.setConfig, _config)
   ..add(AppActionsNames.setUrl, _setUrl)
   ..combineNested(absencesReducerBuilder)
@@ -51,6 +53,10 @@ final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
 
 void _noInternet(AppState state, Action<bool> action, AppStateBuilder builder) {
   builder.noInternet = action.payload;
+}
+
+void _loggingIn(AppState state, Action<void> action, AppStateBuilder builder) {
+  builder.noInternet = false;
 }
 
 void _config(AppState state, Action<Config> action, AppStateBuilder builder) {

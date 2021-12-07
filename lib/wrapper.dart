@@ -120,6 +120,8 @@ class Wrapper {
     VoidCallback? relogin,
     AddNetworkProtocolItem? addProtocolItem,
   }) async {
+    noInternet = false;
+    error = null;
     if (logout != null) {
       onLogout = logout;
     } else {
