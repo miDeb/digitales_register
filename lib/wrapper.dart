@@ -340,7 +340,7 @@ class Wrapper {
       {Map<String, Object?> args = const <String, Object?>{},
       String method = "POST"}) async {
     assert(!url.startsWith("/"));
-    if (!await _loggedIn) {
+    if (!await _loggedIn || now.isAfter(_serverLogoutTime)) {
       if (user != null && pass != null) {
         await login(user, pass, null, this.url);
         if (!await _loggedIn) {
