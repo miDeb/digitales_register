@@ -91,9 +91,7 @@ Future<void> main() async {
       store.actions.start(uri);
       WidgetsBinding.instance!.addObserver(
         LifecycleObserver(
-          () {
-            store.actions.restarted();
-          },
+          store.actions.restarted,
           // this might not finish in time:
           store.actions.saveState,
         ),
@@ -218,17 +216,17 @@ class RegisterApp extends StatelessWidget {
 }
 
 class LifecycleObserver with WidgetsBindingObserver {
-  final VoidCallback onReload;
-  final VoidCallback onLogout;
+  final VoidCallback onForeground;
+  final VoidCallback onBackground;
 
-  LifecycleObserver(this.onReload, this.onLogout);
+  LifecycleObserver(this.onForeground, this.onBackground);
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      onReload();
+      onForeground();
     }
-    if (state == AppLifecycleState.paused) {
-      onLogout();
+    if (state == AppLifecycleState.paused ) {
+      onBackground();
     }
   }
 }
