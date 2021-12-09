@@ -32,6 +32,7 @@ import '../main.dart';
 import '../utc_date_time.dart';
 
 const _pageViewAnimationDuration = Duration(milliseconds: 500);
+const _sidebarAnimationDuration = Duration(milliseconds: 300);
 
 class RightSidebar extends StatefulWidget {
   final Widget child;
@@ -50,7 +51,7 @@ class _RightSidebarState extends State<RightSidebar>
     with SingleTickerProviderStateMixin {
   late final _animationController = AnimationController(
     vsync: this,
-    duration: _pageViewAnimationDuration,
+    duration: _sidebarAnimationDuration,
     value: 0,
   );
   @override
@@ -59,7 +60,7 @@ class _RightSidebarState extends State<RightSidebar>
     if (oldWidget.show != widget.show) {
       _animationController.animateTo(
         widget.show ? 1.0 : 0.0,
-        duration: _pageViewAnimationDuration,
+        duration: _sidebarAnimationDuration,
         curve: Curves.ease,
       );
     }
