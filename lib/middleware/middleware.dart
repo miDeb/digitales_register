@@ -476,9 +476,13 @@ Future<void> _restarted(
 ) async {
   await next(action);
   if (now.difference(wrapper.lastInteraction).inMinutes > 3) {
-    _popAll();
-    api.actions.loginActions.clearAfterLoginCallbacks();
-    api.actions.load();
+    wrapper.interaction();
+    final poppedAnything = _popAll();
+    if (!poppedAnything) {
+      // If we pop something the routeObserver will trigger a reload of the dasboard.
+      // However, if we are on the dashboard already, we need to this here.
+      api.actions.dashboardActions.refresh();
+    }
   }
 }
 
@@ -571,11 +575,23 @@ void redirectAfterLogin(
   }
 }
 
-void _popAll() {
+bool _popAll() {
+  var poppedAnything = false;
   if (WidgetsBinding.instance != null) {
-    navigatorKey?.currentState?.popUntil((route) => route.isFirst);
-    nestedNavKey.currentState?.popUntil((route) => route.isFirst);
+    navigatorKey?.currentState?.popUntil((route) {
+      if (!route.isFirst) {
+        poppedAnything = true;
+      }
+      return route.isFirst;
+    });
+    nestedNavKey.currentState?.popUntil((route) {
+      if (!route.isFirst) {
+        poppedAnything = true;
+      }
+      return route.isFirst;
+    });
   }
+  return poppedAnything;
 }
 
 /// Downloads a file.
