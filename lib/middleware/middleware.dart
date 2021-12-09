@@ -221,6 +221,9 @@ Future<void> _noInternet(
         logoutForcedByServer: true,
       );
     }
+    if (api.state.loginState.loading) {
+      return;
+    }
     await api.actions.load();
   }
 }
