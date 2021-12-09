@@ -316,6 +316,11 @@ class _DaysWidgetState extends State<DaysWidget> {
     return ResponsiveScaffold<Pages>(
       key: scaffoldKey,
       homeBody: body,
+      onRouteChanged: (route) {
+        if (route == Pages.homework) {
+          widget.refresh();
+        }
+      },
       homeFloatingActionButton: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.end,

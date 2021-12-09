@@ -68,6 +68,8 @@ class ResponsiveScaffold<T> extends StatefulWidget {
   /// them and pass them to this navigator manually.
   final GlobalKey<NavigatorState> navKey;
 
+  final void Function(T newSelectedRoute)? onRouteChanged;
+
   const ResponsiveScaffold({
     Key? key,
     required this.homeBody,
@@ -76,6 +78,7 @@ class ResponsiveScaffold<T> extends StatefulWidget {
     required this.navKey,
     required this.homeAppBar,
     this.homeFloatingActionButton,
+    this.onRouteChanged,
   }) : super(key: key);
 
   @override
@@ -97,14 +100,25 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
   // This is required in order not to show an opening animation
   // right when the app is opened
   bool isInitialized = false;
-  late T currentSelected;
+  late final ValueNotifier<T> _currentSelected;
+  T get currentSelected => _currentSelected.value;
+  set currentSelected(T v) {
+    _currentSelected.value = v;
+  } 
 
   @override
   void initState() {
-    currentSelected = widget.homeId;
+    _currentSelected = ValueNotifier(widget.homeId)
+      ..addListener(
+        () {
+          widget.onRouteChanged?.call(currentSelected);
+        },
+      );
     navigatorKey = widget.navKey;
     _drawerAnimationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 250));
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
     super.initState();
   }
 
@@ -188,7 +202,11 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
               appBar: widget.homeAppBar,
               drawer: !tabletMode
                   ? widget.drawerBuilder(
-                      selectContentWidget, goHome, currentSelected, false)
+                      selectContentWidget,
+                      goHome,
+                      currentSelected,
+                      false,
+                    )
                   : null,
               child: Material(
                 child: Row(
@@ -200,7 +218,11 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
                       child: _Drawer(
                         drawerAnimationController: _drawerAnimationController,
                         child: widget.drawerBuilder(
-                            selectContentWidget, goHome, currentSelected, true),
+                          selectContentWidget,
+                          goHome,
+                          currentSelected,
+                          true,
+                        ),
                       ),
                     ),
                     Expanded(
