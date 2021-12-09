@@ -146,10 +146,11 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
       // clear the selection
       actions.calendarActions.select(null);
     }
-    if (!widget.show) {
+    if (widget.selectedDay == null) {
       return;
     }
-    if (widget.selectedDay == null) {
+    selectedDate = widget.selectedDay;
+    if (!widget.show) {
       return;
     }
     final pageViewIndex = _pageViewIndex(widget.selectedDay!);
@@ -158,7 +159,6 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
         initialPage: pageViewIndex,
       );
     } else if (pageViewIndex != _controller.page?.round()) {
-      selectedDate = widget.selectedDay;
       if (oldWidget.selectedDay != null) {
         programmaticPageAnimations++;
         _controller
