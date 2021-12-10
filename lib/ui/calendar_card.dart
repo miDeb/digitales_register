@@ -203,7 +203,7 @@ class _ContentItem extends StatelessWidget {
                 title,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(content),
+              SelectableText(content),
             ],
           ),
         )
