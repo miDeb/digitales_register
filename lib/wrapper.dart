@@ -25,6 +25,7 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
 import 'main.dart';
@@ -336,22 +337,30 @@ class Wrapper {
     return afterStart.substring(0, afterStart.indexOf('"')).trim();
   }
 
+  final _loginMutex = Mutex();
+
   Future<dynamic> send(String url,
       {Map<String, Object?> args = const <String, Object?>{},
       String method = "POST"}) async {
     assert(!url.startsWith("/"));
-    if (!await _loggedIn || now.isAfter(_serverLogoutTime)) {
-      if (user != null && pass != null) {
-        await login(user, pass, null, this.url);
-        if (!await _loggedIn) {
-          return null;
+    await _loginMutex.acquire();
+    try {
+      if (!await _loggedIn || now.isAfter(_serverLogoutTime)) {
+        if (user != null && pass != null) {
+          await login(user, pass, null, this.url);
+          if (!await _loggedIn) {
+
+            return null;
+          } else {
+            onRelogin!();
+          }
         } else {
-          onRelogin!();
+          log("returning null for request to $url, user is not logged in");
+          return null;
         }
-      } else {
-        log("returning null for request to $url, user is not logged in");
-        return null;
       }
+    } finally {
+      _loginMutex.release();
     }
 
     dynamic responseData;
