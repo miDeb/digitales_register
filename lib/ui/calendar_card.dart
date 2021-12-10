@@ -85,6 +85,20 @@ class CalendarCard extends StatelessWidget {
             ),
 
             // Content
+            if (hour.teachers.isNotEmpty)
+              _ContentItem(
+                title: hour.teachers.length == 1 ? "Lehrer*in" : "Lehrer*innen",
+                content: hour.teachers
+                    .map((t) => "${t.firstName} ${t.lastName}")
+                    .join(", "),
+                icon: hour.teachers.length == 1 ? Icons.person : Icons.people,
+              ),
+            if (hour.rooms.isNotEmpty)
+              _ContentItem(
+                title: "Räume",
+                content: hour.rooms.join(", "),
+                icon: Icons.meeting_room,
+              ),
             for (final lessonContent in hour.lessonContents)
               _ContentItem(
                 title: lessonContent.typeName,
@@ -105,20 +119,6 @@ class CalendarCard extends StatelessWidget {
                   content: homeworkExam.name,
                   icon: Icons.assignment,
                 ),
-            if (hour.teachers.isNotEmpty)
-              _ContentItem(
-                title: hour.teachers.length == 1 ? "Lehrer*in" : "Lehrer*innen",
-                content: hour.teachers
-                    .map((t) => "${t.firstName} ${t.lastName}")
-                    .join(", "),
-                icon: hour.teachers.length == 1 ? Icons.person : Icons.people,
-              ),
-            if (hour.rooms.isNotEmpty)
-              _ContentItem(
-                title: "Räume",
-                content: hour.rooms.join(", "),
-                icon: Icons.meeting_room,
-              )
           ]
               .expand(
                 (element) => [
