@@ -583,10 +583,29 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
                 "Copyright Michael Debertol und Simon Wachtler 2019-2021",
             applicationName: "Digitales Register (Client)",
             applicationVersion: appVersion,
-            aboutBoxChildren: const [
-              Text("""
+            aboutBoxChildren: [
+              const Text("""
 Ein Client für das Digitale Register.
-Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung.""")
+Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                "This is free software, and you are welcome to redistribute it under certain conditions.\n"
+                "This program comes with ABSOLUTELY NO WARRANTY.",
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: InkWell(
+                  child: const Text(
+                    "See the GNU General Public License for more details.",
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                  onTap: () {
+                    launch("https://www.gnu.org/licenses/gpl-3.0.html");
+                  },
+                ),
+              )
             ],
             child: const Text("Über diese App"),
           ),
