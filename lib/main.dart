@@ -225,7 +225,7 @@ class LifecycleObserver with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       onForeground();
     }
-    if (state == AppLifecycleState.paused ) {
+    if (state == AppLifecycleState.paused) {
       onBackground();
     }
   }

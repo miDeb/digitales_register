@@ -104,7 +104,7 @@ class ResponsiveScaffoldState<T> extends State<ResponsiveScaffold<T>>
   T get currentSelected => _currentSelected.value;
   set currentSelected(T v) {
     _currentSelected.value = v;
-  } 
+  }
 
   @override
   void initState() {
