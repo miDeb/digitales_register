@@ -351,6 +351,8 @@ class Wrapper {
           if (!await _loggedIn) {
             if (noInternet) {
               actions.noInternet(true);
+            } else {
+              logout(hard: true, logoutForcedByServer: true);
             }
             return null;
           } else {

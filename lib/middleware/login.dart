@@ -54,8 +54,8 @@ Future<void> _logout(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   await next(action);
   if (action.payload.hard) {
     wrapper = Wrapper();
-    api.actions.mountAppState(AppState());
-    api.actions.load();
+    await api.actions.mountAppState(AppState());
+    await api.actions.load();
   }
 }
 
