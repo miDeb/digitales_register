@@ -349,12 +349,17 @@ class Wrapper {
         if (user != null && pass != null) {
           await login(user, pass, null, this.url);
           if (!await _loggedIn) {
-
+            if (noInternet) {
+              actions.noInternet(true);
+            }
             return null;
           } else {
             onRelogin!();
           }
         } else {
+          if (noInternet) {
+            actions.noInternet(true);
+          }
           log("returning null for request to $url, user is not logged in");
           return null;
         }
