@@ -58,20 +58,14 @@ abstract class LoginPayload
           ..add('user', user)
           // ..add('pass', pass) // do not include the password
           ..add('url', url)
-          ..add('fromStorage', fromStorage)
-          ..add('offlineEnabled', offlineEnabled))
+          ..add('fromStorage', fromStorage))
         .toString();
-  }
-
-  static void _initializeBuilder(LoginPayloadBuilder b) {
-    b.offlineEnabled = false;
   }
 
   String get user;
   String get pass;
   String get url;
   bool get fromStorage;
-  bool get offlineEnabled;
 }
 
 abstract class ChangePassPayload

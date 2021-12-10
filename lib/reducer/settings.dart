@@ -28,7 +28,6 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   (s) => s.settingsState,
   (b) => b.settingsState,
 )
-  ..add(SettingsActionsNames.offlineEnabled, _offlineEnabled)
   ..add(SettingsActionsNames.saveNoData, _saveNoData)
   ..add(SettingsActionsNames.saveNoPass, _saveNoPass)
   ..add(SettingsActionsNames.askWhenDeleteReminder, _askWhenDeleteReminder)
@@ -80,11 +79,6 @@ void _saveNoData(
 void _saveNoPass(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.noPasswordSaving = action.payload;
-}
-
-void _offlineEnabled(
-    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
-  builder.offlineEnabled = action.payload;
 }
 
 void _deleteDataOnLogout(

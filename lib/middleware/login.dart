@@ -81,7 +81,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   wrapper.url = url;
 
   bool offlineLogin = false;
-  if (action.payload.offlineEnabled) {
+  if (action.payload.fromStorage) {
     // log the user in locally so they don't have to
     // wait for the network request to finish
     assert(action.payload.fromStorage);
@@ -140,7 +140,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     final noInternet = wrapper.noInternet;
     if (noInternet) {
       await api.actions.noInternet(true);
-      if (action.payload.offlineEnabled) {
+      if (action.payload.fromStorage) {
         assert(action.payload.fromStorage);
         await api.actions.loginActions.loggedIn(
           LoggedInPayload(
@@ -281,13 +281,11 @@ Future<void> _addAccount(
     final otherAccounts = login["otherAccounts"] as List? ?? <Object?>[];
     if (login["user"] != null &&
         login["pass"] != null &&
-        login["url"] != null &&
-        login["offlineEnabled"] != null) {
+        login["url"] != null) {
       otherAccounts.insert(0, <String, Object?>{
         "user": login["user"],
         "pass": login["pass"],
         "url": login["url"],
-        "offlineEnabled": login["offlineEnabled"],
       });
     }
     await secureStorage.write(
@@ -313,15 +311,11 @@ Future<void> _selectAccount(
   login["otherAccounts"] ??= <Object?>[];
   final otherAccounts = login["otherAccounts"] as List<Object?>;
   var selectedIndex = action.payload;
-  if (login["user"] != null &&
-      login["pass"] != null &&
-      login["url"] != null &&
-      login["offlineEnabled"] != null) {
+  if (login["user"] != null && login["pass"] != null && login["url"] != null) {
     otherAccounts.insert(0, <String, Object?>{
       "user": login["user"],
       "pass": login["pass"],
       "url": login["url"],
-      "offlineEnabled": login["offlineEnabled"],
     });
     selectedIndex += 1;
   }
@@ -329,7 +323,6 @@ Future<void> _selectAccount(
   login["user"] = selected["user"];
   login["pass"] = selected["pass"];
   login["url"] = selected["url"];
-  login["offlineEnabled"] = selected["offlineEnabled"];
   await secureStorage.write(key: "login", value: json.encode(login));
   api.actions.mountAppState(AppState());
   api.actions.load();

@@ -69,9 +69,11 @@ void _loggingIn(
 
 void _logout(
     LoginState state, Action<LogoutPayload> action, LoginStateBuilder builder) {
-  builder
-    ..loggedIn = false
-    ..username = null;
+  if (action.payload.hard) {
+    builder
+      ..loggedIn = false
+      ..username = null;
+  }
 }
 
 void _changePass(

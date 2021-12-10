@@ -46,7 +46,6 @@ class SettingsPageContainer extends StatelessWidget {
           onSetNoDataSaving: actions.settingsActions.saveNoData,
           onSetAskWhenDelete: actions.settingsActions.askWhenDeleteReminder,
           onSetDeleteDataOnLogout: actions.settingsActions.deleteDataOnLogout,
-          onSetOfflineEnabled: actions.settingsActions.offlineEnabled,
           onSetSubjectNicks: (map) =>
               actions.settingsActions.subjectNicks(BuiltMap(map)),
           onSetShowCalendarEditNicksBar:
@@ -83,7 +82,6 @@ class SettingsViewModel {
   final bool noDataSaving;
   final bool askWhenDelete;
   final bool deleteDataOnLogout;
-  final bool offlineEnabled;
   final bool showCalendarEditNicksBar;
   final bool showGradesDiagram;
   final bool showAllSubjectsAverage;
@@ -101,7 +99,6 @@ class SettingsViewModel {
         noDataSaving = state.settingsState.noDataSaving,
         askWhenDelete = state.settingsState.askWhenDelete,
         deleteDataOnLogout = state.settingsState.deleteDataOnLogout,
-        offlineEnabled = state.settingsState.offlineEnabled,
         subjectNicks = state.settingsState.subjectNicks.toMap(),
         showSubjectNicks = state.settingsState.scrollToSubjectNicks,
         showGradesSettings = state.settingsState.scrollToGrades,

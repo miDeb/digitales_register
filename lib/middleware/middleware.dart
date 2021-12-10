@@ -216,15 +216,14 @@ Future<void> _noInternet(
   if (prevNoInternet != noInternet) {
     if (noInternet) {
       showSnackBar("Keine Verbindung");
+
       wrapper.logout(
         hard: false,
         logoutForcedByServer: true,
       );
+    } else {
+      await api.actions.dashboardActions.refresh();
     }
-    if (api.state.loginState.loading) {
-      return;
-    }
-    await api.actions.load();
   }
 }
 
@@ -254,7 +253,6 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   final user = getString(login["user"]);
   final pass = getString(login["pass"]);
   final url = getString(login["url"]);
-  final offlineEnabled = getBool(login["offlineEnabled"]);
   final List<String> otherAccounts = List.from(
     (login["otherAccounts"] as List?)
             ?.map<String>((dynamic login) => login["user"] as String) ??
@@ -270,14 +268,11 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   } else {
     if (user != null && pass != null) {
       api.actions.loginActions.login(
-        LoginPayload(
-          (b) => b
-            ..user = user
-            ..pass = pass
-            ..url = url
-            ..fromStorage = true
-            ..offlineEnabled = offlineEnabled,
-        ),
+        LoginPayload((b) => b
+          ..user = user
+          ..pass = pass
+          ..url = url
+          ..fromStorage = true),
       );
     } else {
       api.actions.routingActions.showLogin();

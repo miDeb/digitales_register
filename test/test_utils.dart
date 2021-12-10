@@ -28,7 +28,6 @@ Map<String, String> get initialLoggedInStorage => {
         {
           "user": "username23",
           "pass": "Passwort123",
-          "offlineEnabled": true,
           "url": "https://example.digitales.register.example",
         },
       ),

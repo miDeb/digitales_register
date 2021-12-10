@@ -277,7 +277,6 @@ abstract class SettingsState
   bool get askWhenDelete;
   bool get showCancelled;
   bool get deleteDataOnLogout;
-  bool get offlineEnabled;
   BuiltMap<String, String> get subjectNicks;
 
   // This is not a setting, but relevant for the UI behavior
@@ -314,7 +313,6 @@ abstract class SettingsState
       ..askWhenDelete = false
       ..showCancelled = false
       ..deleteDataOnLogout = false
-      ..offlineEnabled = true
       ..subjectNicks = MapBuilder<String, String>(const {
         "Deutsch": "Deu",
         "Mathematik": "Mat",

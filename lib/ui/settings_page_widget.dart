@@ -44,7 +44,6 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetNoDataSaving;
   final OnSettingChanged<bool> onSetAskWhenDelete;
   final OnSettingChanged<bool> onSetDeleteDataOnLogout;
-  final OnSettingChanged<bool> onSetOfflineEnabled;
   final OnSettingChanged<bool> onSetShowCalendarEditNicksBar;
   final OnSettingChanged<bool> onSetShowGradesDiagram;
   final OnSettingChanged<bool> onSetShowAllSubjectsAverage;
@@ -67,7 +66,6 @@ class SettingsPageWidget extends StatefulWidget {
     required this.onSetNoDataSaving,
     required this.onSetAskWhenDelete,
     required this.onSetDeleteDataOnLogout,
-    required this.onSetOfflineEnabled,
     required this.onSetShowCalendarEditNicksBar,
     required this.onSetShowGradesDiagram,
     required this.onSetShowAllSubjectsAverage,
@@ -197,15 +195,6 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               widget.onSetNoDataSaving(!value);
             },
             value: !widget.vm.noDataSaving,
-          ),
-          SwitchListTile.adaptive(
-            title: const Text("Offline-Login"),
-            onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
-                ? (bool value) {
-                    widget.onSetOfflineEnabled(value);
-                  }
-                : null,
-            value: widget.vm.offlineEnabled,
           ),
           SwitchListTile.adaptive(
             title: const Text("Daten beim Ausloggen löschen"),

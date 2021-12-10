@@ -27,7 +27,6 @@ abstract class SettingsActions extends ReduxActions {
   SettingsActions._();
 
   abstract final ActionDispatcher<bool> saveNoPass;
-  abstract final ActionDispatcher<bool> offlineEnabled;
   abstract final ActionDispatcher<bool> saveNoData;
   abstract final ActionDispatcher<bool> deleteDataOnLogout;
   abstract final ActionDispatcher<BuiltMap<String, String>> subjectNicks;
