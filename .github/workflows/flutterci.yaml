@@ -31,7 +31,9 @@ jobs:
         run: flutter config --enable-linux-desktop
 
       - name: Build Flutter app
-        run: flutter build linux -v
+        run: |
+          flutter packages run build_runner build
+          flutter build linux -v
 
       - name: Build Tarball
         run: |
