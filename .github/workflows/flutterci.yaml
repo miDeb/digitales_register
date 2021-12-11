@@ -25,7 +25,7 @@ jobs:
           channel: stable
 
       - name: Install linux app dependencies
-        run: sudo apt-get update -y && sudo apt-get install -y ninja-build libgtk-3-dev dpkg-dev pkg-config
+        run: sudo apt-get update -y && sudo apt-get install -y ninja-build libgtk-3-dev dpkg-dev pkg-config libjsoncpp-dev libsecret-1-dev
 
       - name: Enable desktop support
         run: flutter config --enable-linux-desktop
@@ -38,12 +38,12 @@ jobs:
           cp -fr build/linux/x64/release/bundle linux/packaging/usr/bin
           mkdir -p AppDir/
           cp -r linux/packaging/usr AppDir/
-          ln -sr AppDir/usr/bin/flutube AppDir/flutube
-          tar czf flutube-linux-x86_64.tar.gz -C AppDir/ .
+          ln -sr AppDir/usr/bin/digitales_register AppDir/digitales_register
+          tar czf digitales_register-linux-x86_64.tar.gz -C AppDir/ .
       - uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./flutube-linux-x86_64*
+          file: ./digitales_register-linux-x86_64*
           file_glob: true
           prerelease: ${{ github.event_name != 'release' }}
           release_name: ${{ github.event_name == 'release' && github.event.release.name || 'Development Build' }}
