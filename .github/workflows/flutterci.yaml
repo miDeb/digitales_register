@@ -38,11 +38,7 @@ jobs:
 
       - name: Build Tarball
         run: |
-          cp -fr build/linux/x64/release/bundle linux/packaging/usr/bin
-          mkdir -p AppDir/
-          cp -r linux/packaging/usr AppDir/
-          ln -sr AppDir/usr/bin/digitales_register AppDir/digitales_register
-          tar czf digitales_register-linux-x86_64.tar.gz -C AppDir/ .
+          tar czf digitales_register-linux-x86_64.tar.gz -C build/linux/x64/release/bundle/ .
       - uses: svenstaro/upload-release-action@latest
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
