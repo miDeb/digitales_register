@@ -1,13 +1,16 @@
-push:
-  branches:
-    - main
-  paths-ignore:
-    - "README.md"
-workflow_dispatch:
-release:
-  types:
-    - created
-    - edited
+name: FlutterCi
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+  workflow_dispatch:
+  release:
+    types:
+      - created
+      - edited
 
 jobs:
   
