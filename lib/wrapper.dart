@@ -38,17 +38,17 @@ import 'utc_date_time.dart';
 class DebugInterceptor extends Interceptor {
   @override
   Future onRequest(RequestOptions options) async {
-    log("Request, uri: ${options.uri},\ndata: ${options.data},\nheaders: ${options.headers}");
+    print("Request, uri: ${options.uri},\ndata: ${options.data},\nheaders: ${options.headers}");
     return super.onRequest(options);
   }
 
   @override
   Future onResponse(Response response) async {
-    log("Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
+    print("Response, uri: ${response.request.uri},\nheaders: ${response.headers}");
     if (response.data.toString().length <= 100) {
-      log(response.data.toString());
+      print(response.data.toString());
     } else {
-      log(response.data.toString().substring(0, 100));
+      print(response.data.toString().substring(0, 100));
     }
     return response;
   }
@@ -162,7 +162,7 @@ class Wrapper {
       )!;
     } catch (e) {
       loggedInCompleter.complete(false);
-      log("Error while logging in", error: e);
+      print("Error while logging in: $e");
       if (e is TimeoutException || await refreshNoInternet()) {
         noInternet = true;
       }
@@ -250,7 +250,7 @@ class Wrapper {
           .data)!;
     } catch (e) {
       _loggedIn = Future.value(false);
-      log("Failed to change pass", error: e);
+      print("Failed to change pass: $e");
       error = "Unknown Error:\n$e";
       return null;
     }
@@ -362,7 +362,7 @@ class Wrapper {
           if (noInternet) {
             actions.noInternet(true);
           }
-          log("returning null for request to $url, user is not logged in");
+          print("returning null for request to $url, user is not logged in");
           return null;
         }
       }
@@ -411,7 +411,7 @@ class Wrapper {
   }
 
   Future<void> _handleError(Exception e) async {
-    log("Error while sending request", error: e);
+    print("Error while sending request: $e");
     if (e is TimeoutException || await refreshNoInternet()) {
       noInternet = true;
       actions.noInternet(true);

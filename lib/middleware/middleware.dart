@@ -80,6 +80,7 @@ List<Middleware<AppState, AppStateBuilder, AppActions>> middleware({
   @visibleForTesting bool includeErrorMiddleware = true,
 }) =>
     [
+      _loggingMiddleware,
       if (includeErrorMiddleware) _errorMiddleware,
       _saveStateMiddleware,
       (MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
@@ -108,12 +109,21 @@ List<Middleware<AppState, AppStateBuilder, AppActions>> middleware({
           .build(),
     ];
 
+int actionCount = 0;
+NextActionHandler _loggingMiddleware(
+        MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
+    (ActionHandler next) => (Action action) async {
+          final actionNumber = actionCount++;
+          print("dispatching action no. $actionNumber: $action");
+          await next(action);
+          print("finished dispatching action no. $actionNumber");
+        };
+
 NextActionHandler _errorMiddleware(
         MiddlewareApi<AppState, AppStateBuilder, AppActions> api) =>
     (ActionHandler next) => (Action action) async {
           Future<void> handleError(dynamic e, StackTrace? trace) async {
-            log("Error caught by error middleware",
-                error: e, stackTrace: trace);
+            print("Error caught by error middleware $e\n$trace");
             var stackTrace = trace;
             try {
               stackTrace ??= e.stackTrace as StackTrace?;
@@ -243,7 +253,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   } catch (e) {
     login = const <Never, Never>{};
     showSnackBar("Fehler beim Laden der gespeicherten Daten");
-    log("Failed to load login credentials", error: e);
+    print("Failed to load login credentials: $e");
     try {
       secureStorage.deleteAll();
     } catch (e) {
@@ -300,7 +310,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   deletedData = false;
   final key = getStorageKey(action.payload.username, wrapper.loginAddress);
   if (!api.state.loginState.loggedIn && !action.payload.secondaryOnlineLogin) {
-    log("loading state");
+    print("loading state");
     final state = await _readFromStorage(key);
     if (state != null) {
       try {
@@ -347,7 +357,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
-        log("Failed to load data", error: e);
+        print("Failed to load data: $e");
         await next(action);
       }
     } else {

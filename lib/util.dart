@@ -157,7 +157,7 @@ Never _unexpectedType<T>(dynamic value) {
 String? getString(dynamic value) {
   if (value == null) return null;
   if (value is! String) {
-    log("getString: expected String but got ${value.runtimeType}");
+    print("getString: expected String but got ${value.runtimeType}");
   }
   return value.toString();
 }

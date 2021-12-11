@@ -261,7 +261,7 @@ GradeGroupSubmission? _parseGradeGroupSubmission(Map data) {
         ..userId = getInt(data["userId"]),
     );
   } catch (e, s) {
-    log("Failed to parse GradeGroupSubmission", error: e, stackTrace: s);
+    print("Failed to parse GradeGroupSubmission: $e\n $s");
     // TODO: figure out a way to notify the user about this failure.
     return null;
   }
