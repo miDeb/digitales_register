@@ -40,6 +40,9 @@ jobs:
 
       - name: Build Tarball
         run: |
+          cp linux/icon.png build/linux/x64/release/bundle/icon.png
+          cp linux/digitales_register.desktop build/linux/x64/release/bundle/digitales_register.desktop
+          cp linux/digitales_register.metainfo.xml build/linux/x64/release/bundle/digitales_register.metainfo.xml
           tar czf digitales_register-linux-x86_64.tar.gz -C build/linux/x64/release/bundle/ .
       - uses: svenstaro/upload-release-action@latest
         with:
