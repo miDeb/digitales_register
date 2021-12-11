@@ -66,13 +66,13 @@ class RawLastFetchedOverlay extends StatelessWidget {
 
 String formatTimeAgo(UtcDateTime dateTime) {
   final diff = UtcDateTime.now().difference(dateTime);
-  if (diff.inDays > 1) {
-    return "vor ${diff.inDays} Tagen";
-  } else if (diff.inHours > 1) {
-    return "vor ${diff.inHours} Stunden";
-  } else if (diff.inMinutes > 1) {
-    return "vor ${diff.inMinutes} Minuten";
+  if (diff.inDays >= 1) {
+    return "vor ${diff.inDays} ${diff.inDays == 1 ? "Tag": "Tagen"}";
+  } else if (diff.inHours >= 1) {
+    return "vor ${diff.inHours} ${diff.inHours == 1 ? "Stunde": "Stunden"}";
+  } else if (diff.inMinutes >= 1) {
+    return "vor ${diff.inMinutes} ${diff.inMinutes == 1 ? "Minute": "Minuten"}";
   } else {
-    return "vor ${diff.inSeconds} Sekunden";
+    return "vor ${diff.inSeconds} ${diff.inSeconds == 1 ? "Sekunde": "Sekunden"}";
   }
 }
