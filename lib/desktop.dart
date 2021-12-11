@@ -45,24 +45,32 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<Box<String>> hiveBox = getEncryptedBox();
   DesktopSecureStorage();
   static Future<Box<String>> getEncryptedBox() async {
+    print("getting box");
     final applicationDocumentDirectory = await getApplicationSupportDirectory();
-    final homeDirectory =
+    print("dir: $applicationDocumentDirectory");
+    final dbDirectory =
         Directory("${applicationDocumentDirectory.path}/RegisterDB");
-    if (!await homeDirectory.exists()) {
-      await homeDirectory.create();
+    if (!await dbDirectory.exists()) {
+      print("creating file");
+      await dbDirectory.create();
     }
-    Hive.init(homeDirectory.path);
+    print("init hive");
+    Hive.init(dbDirectory.path);
+    print("getting biometricStorage");
     final biometricStorage = await BiometricStorage().getStorage(
       "",
       options: StorageFileInitOptions(
         authenticationRequired: false,
       ),
     );
+    print("reading key");
     var key = await biometricStorage.read();
     if (key == null) {
+      print("generating new key");
       key = base64UrlEncode(Hive.generateSecureKey());
       await biometricStorage.write(key);
     }
+    print("openBox");
     return Hive.openBox('database',
         encryptionCipher: HiveAesCipher(base64Decode(key)));
   }
