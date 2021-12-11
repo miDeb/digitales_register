@@ -32,7 +32,8 @@ jobs:
 
       - name: Build Flutter app
         run: |
-          flutter packages run build_runner build
+          flutter pub get
+          flutter pub run build_runner build
           flutter build linux -v
 
       - name: Build Tarball
