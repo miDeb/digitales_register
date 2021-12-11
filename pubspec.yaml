@@ -19,7 +19,8 @@ dependencies:
     git:
       url: https://github.com/miDeb/flutter_badges.git
       ref: nnbd
-  biometric_storage: ^4.0.0-dev.1
+  biometric_storage:
+    path: packages/biometric_storage
   built_collection: ^5.1.0
   built_redux:
     git:
