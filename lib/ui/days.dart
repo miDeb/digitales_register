@@ -280,8 +280,6 @@ class _DaysWidgetState extends State<DaysWidget> {
         daysShouldShowLastFetched = true;
       }
       body = LastFetchedOverlay(
-        // Avoid getting covered by the "^" (scroll up) fab
-        rightPadding: 50,
         noInternet: widget.vm.noInternet,
         lastFetched: lastFetched,
         child: ListView.builder(
