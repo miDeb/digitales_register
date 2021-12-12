@@ -26,6 +26,7 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
+    <release version="8.2.3" date="2021-12-12" />
     <release version="8.2.2" date="2021-12-12" />
   </releases>
   <launchable type="desktop-id">io.github.mideb.digitales_register.desktop</launchable>
