@@ -14,6 +14,9 @@ Inoffizielle App für das Digitale Register (http://xxxxxx.digitalesregister.it)
   <img alt="Microsoft Store badge logo" src="https://getbadgecdn.azureedge.net/images/German_L.png" width="250">
 </a>
 
+### Linux
+<a href='https://flathub.org/apps/details/io.github.mideb.digitales_register'><img width='240' alt='Download on Flathub' src='https://flathub.org/assets/badges/flathub-badge-en.png'/></a>
+
 ## Run it from source
 * First, run `flutter packages run build_runner build` in your terminal to generate the necessary files.
 * Launch the app with `flutter run`. This will launch a debug build of the app. For a release build (which is faster), run `flutter run --release` instead.
