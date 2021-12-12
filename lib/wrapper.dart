@@ -109,7 +109,7 @@ class Wrapper {
   String? error;
 
   UtcDateTime lastInteraction = now;
-  late UtcDateTime _serverLogoutTime;
+  UtcDateTime? _serverLogoutTime;
   late Config config;
   Future<dynamic> login(
     String? user,
@@ -345,7 +345,8 @@ class Wrapper {
     assert(!url.startsWith("/"));
     await _loginMutex.acquire();
     try {
-      if (!await _loggedIn || now.isAfter(_serverLogoutTime)) {
+      if (!await _loggedIn ||
+          (_serverLogoutTime != null && now.isAfter(_serverLogoutTime!))) {
         if (user != null && pass != null) {
           await login(user, pass, null, this.url);
           if (!await _loggedIn) {
@@ -423,7 +424,8 @@ class Wrapper {
 
   Future<void> _updateLogout() async {
     if (!await _loggedIn) return;
-    if (now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime)) {
+    if (_serverLogoutTime != null &&
+        now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime!)) {
       //autologout happens soon!
       final result =
           getMap(await send("api/auth/extendSession", args: <String, Object?>{
