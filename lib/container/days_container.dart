@@ -17,6 +17,7 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
@@ -142,12 +143,12 @@ abstract class DaysViewModel
 
 // Map all (previously by the server used) homework types to the titles they
 // would have been used with. Probably incomplete.
-const typesToTitles = {
-  HomeworkType.grade: ["Bewertung"],
-  HomeworkType.gradeGroup: ["Testarbeit", "Schularbeit", "Prüfung"],
-  HomeworkType.homework: ["Erinnerung"],
-  HomeworkType.lessonHomework: ["Hausaufgabe"],
-  HomeworkType.observation: ["Beobachtung"],
+late final typesToTitles = {
+  HomeworkType.grade: [l10n.grade()],
+  HomeworkType.gradeGroup: l10n.exams(),
+  HomeworkType.homework: [l10n.reminder()],
+  HomeworkType.lessonHomework: [l10n.homework()],
+  HomeworkType.observation: [l10n.observation()],
 };
 
 bool isBlacklisted(Homework homework, BuiltList<HomeworkType> blacklist) {

@@ -24,6 +24,8 @@ import '../app_state.dart';
 import '../data.dart';
 import '../ui/absence.dart';
 
+// TODO: localize
+
 class AbsenceGroupContainer extends StatelessWidget {
   final int group;
 

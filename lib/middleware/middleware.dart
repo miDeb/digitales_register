@@ -29,6 +29,7 @@ import 'package:dr/container/certificate_container.dart';
 import 'package:dr/container/grades_page_container.dart';
 import 'package:dr/container/messages_container.dart';
 import 'package:dr/container/settings_page.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -151,25 +152,9 @@ NextActionHandler _errorMiddleware(
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            """
-Ein Fehler ist aufgetreten.
-${e is UnexpectedLogoutException ? """
-
-Dieser Fehler kann auftreten, wenn zwei Geräte gleichzeitig auf dasselbe Konto zugreifen.
-In diesem Fall kannst du versuchen, die App zu schließen und erneut zu öffnen.
-
-Falls dies nicht zutrifft, bitte benachrichtige uns, damit wir diesen Fehler beheben können.""" : e is ParseException ? """
-
-Beim Einlesen der Daten ist ein Fehler aufgetreten.
-Bitte benachrichtige uns, damit wir diesen Fehler beheben können.
-Bitte beachte, dass das Fehlerprotokoll möglicherweise private Daten enthält.""" : """
-
-Eine Funktion wird eventuell noch nicht unterstützt.
-Bitte benachrichtige uns, damit wir diesen Fehler beheben können:"""}
-
- --  Fehlerprotokoll: --
-
-$error""",
+                            "${l10n.unexpectedError()}\n"
+                            "${e is UnexpectedLogoutException ? l10n.unexpectedLogout() : e is ParseException ? l10n.parseError() : l10n.generalErrorMessage()}\n"
+                            " --  ${l10n.errorLog()}: --\n\n$error",
                           ),
                         ),
                       ],
@@ -215,7 +200,7 @@ Future<void> _noInternet(
   final noInternet = api.state.noInternet;
   if (prevNoInternet != noInternet) {
     if (noInternet) {
-      showSnackBar("Keine Verbindung");
+      showSnackBar(l10n.noConnection());
 
       wrapper.logout(
         hard: false,
@@ -242,12 +227,12 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     login = json.decode(await secureStorage.read(key: "login") ?? "{}");
   } catch (e) {
     login = const <Never, Never>{};
-    showSnackBar("Fehler beim Laden der gespeicherten Daten");
+    showSnackBar(l10n.failedLoadingData());
     log("Failed to load login credentials", error: e);
     try {
       secureStorage.deleteAll();
     } catch (e) {
-      showSnackBar("Bitte versuche, die App neu zu installieren.");
+      showSnackBar(l10n.tryReinstalling());
     }
   }
   final user = getString(login["user"]);
@@ -346,7 +331,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         api.actions.settingsActions
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
-        showSnackBar("Fehler beim Laden der gespeicherten Daten");
+        showSnackBar(l10n.failedLoadingData());
         log("Failed to load data", error: e);
         await next(action);
       }
@@ -439,7 +424,7 @@ Future<String?> _readFromStorage(String key) async {
     try {
       secureStorage.deleteAll();
     } catch (e) {
-      showSnackBar("Fehler: Bitte versuche, die App neu zu installieren.");
+      showSnackBar(l10n.tryReinstalling());
     }
     return null;
   }
@@ -527,7 +512,7 @@ void _start(
         }
         break;
       default:
-        showSnackBar("Dieser Link konnte nicht geöffnet werden");
+        showSnackBar(l10n.failedOpeningLink());
     }
     redirectAfterLogin(action.payload!.fragment, api);
   }
@@ -566,7 +551,7 @@ void redirectAfterLogin(
       );
       break;
     default:
-      showSnackBar("Dieser Link konnte nicht geöffnet werden");
+      showSnackBar(l10n.failedOpeningLink());
   }
 }
 

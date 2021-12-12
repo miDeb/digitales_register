@@ -1,0 +1,1270 @@
+{
+  "@@last_modified": "2021-12-12T22:10:18.760934",
+  "exams": "Test,Schularbeit,Prüfung",
+  "@exams": {
+    "description": "A comma-separated list of lesson contents that represent exams.\nThis is used to mark exams differently in the calendar view and the homework page",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "grade": "Bewertung",
+  "@grade": {
+    "description": "The title used by digitalesregister.it for grades in the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "homework": "Hausaufgabe",
+  "@homework": {
+    "description": "The title used by digitalesregister.it for homework in the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "observation": "Beobachtung",
+  "@observation": {
+    "description": "The title used by digitalesregister.it for observations in the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noAbsencesYet": "Noch keine Absenzen",
+  "@noAbsencesYet": {
+    "description": "Displayed if there are no absences",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesStatistic": "Statistik",
+  "@absencesStatistic": {
+    "description": "Title for statistics for absences",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesForSchool": "Absenzen im Auftrag der Schule",
+  "@absencesForSchool": {
+    "description": "Subtitle for absences justified by the school",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesDelays": "Verspätungen",
+  "@absencesDelays": {
+    "description": "Subtitle for absences where the student arrived too late",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesJustified": "Entschuldigte Absenzen",
+  "@absencesJustified": {
+    "description": "Subtitle for absences that were justified",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesNotJustified": "Nicht entschuldigte Absenzen",
+  "@absencesNotJustified": {
+    "description": "Subtitle for absences that are not justified",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesPercentageTitle": "Abwesenheit",
+  "@absencesPercentageTitle": {
+    "description": "Subtitle for the percentage of absences",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "formatSingleHour": "{hour}. Stunde",
+  "@formatSingleHour": {
+    "description": "Format 'hour' as the lesson index this lesson occurs",
+    "type": "text",
+    "placeholders_order": [
+      "hour"
+    ],
+    "placeholders": {
+      "hour": {
+        "example": "1"
+      }
+    }
+  },
+  "formatHoursSpan": "{from}. – {to}. Stunde",
+  "@formatHoursSpan": {
+    "description": "Format 'from' - 'to' as the hours this lesson spans",
+    "type": "text",
+    "placeholders_order": [
+      "from",
+      "to"
+    ],
+    "placeholders": {
+      "from": {
+        "example": "1"
+      },
+      "to": {
+        "example": "2"
+      }
+    }
+  },
+  "teachers": "{howMany,plural, =1{Lehrer*in}other{Lehrer*innen}}",
+  "@teachers": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "rooms": "{howMany,plural, =1{Raum}other{Räume}}",
+  "@rooms": {
+    "description": "The rooms that are booked for this lesson",
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "detailView": "Detailansicht",
+  "@detailView": {
+    "description": "Displayed as the title of the calendar detail view in edge cases",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noSchool": "Keine Schule",
+  "@noSchool": {
+    "description": "Displayed in the calendar detail view for weekends",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noSchoolShort": "Frei",
+  "@noSchoolShort": {
+    "description": "Displayed in the calendar master view for holidays",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "currentWeek": "Aktuelle Woche",
+  "@currentWeek": {
+    "description": "Label of the button to jump to the current week",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chooseADate": "Wähle ein Datum",
+  "@chooseADate": {
+    "description": "The user can tap this button to select a date",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "editNicks": "Kürzel bearbeiten",
+  "@editNicks": {
+    "description": "The user can tap this button to edit subject nicks",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changeEmail": "Email-Adresse ändern",
+  "@changeEmail": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "currentPassword": "Aktuelles Passwort",
+  "@currentPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newEmail": "Neue Email-Adresse",
+  "@newEmail": {
+    "description": "The new email address",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "save": "Speichern",
+  "@save": {
+    "description": "Save changed settings",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "profile": "Profil",
+  "@profile": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sendEmailsForNotifications": "Emails für Benachrichtigungen senden",
+  "@sendEmailsForNotifications": {
+    "description": "Whether to send emails for notifications",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changePassword": "Passwort ändern",
+  "@changePassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "loginSettings": "Anmeldung",
+  "@loginSettings": {
+    "description": "Header for login-related settings",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "stayLoggedIn": "Angemeldet bleiben",
+  "@stayLoggedIn": {
+    "description": "Whether the user wants to stay logged in",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "stayLoggedInDesc": "Deine Zugangsdaten werden lokal gespeichert",
+  "@stayLoggedInDesc": {
+    "description": "Tell the user that their credentials will be saved locally if they choose to stay logged in",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "saveData": "Daten lokal speichern",
+  "@saveData": {
+    "description": "Whether the user wants to save data locally",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "saveDataDesc": "Sehen, wann etwas eingetragen wurde",
+  "@saveDataDesc": {
+    "description": "Tell the user that they'll see when new homework was added if they choose to enable saving data",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteDataOnLogout": "Daten beim Ausloggen löschen",
+  "@deleteDataOnLogout": {
+    "description": "Whether the user wants to have their data deleted when they log out",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "appearance": "Aussehen",
+  "@appearance": {
+    "description": "Header for ui-related settings",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "followDeviceTheme": "Geräte-Theme folgen",
+  "@followDeviceTheme": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "lightMode": "Hell",
+  "@lightMode": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "darkMode": "Dunkel",
+  "@darkMode": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "subjectColors": "Fächerfarben",
+  "@subjectColors": {
+    "description": "Dropdown that allows user to choose a color for a specific subject",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "colorHomework": "Hausaufgaben mit diesen Farben umrahmen",
+  "@colorHomework": {
+    "description": "Whether to draw the border around homework in these colors",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "testsAlwaysRed": "Tests immer rot umrahmen",
+  "@testsAlwaysRed": {
+    "description": "Whether to draw the border around tests in red, even if colorHomework is enabled",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dashboardSettings": "Merkheft",
+  "@dashboardSettings": {
+    "description": "Header for settings related to the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "highlightNewOrChangedEntries": "Neue oder geänderte Einträge markieren",
+  "@highlightNewOrChangedEntries": {
+    "description": "Whether to highlight new, changed or deleted entries in the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "ignoreDuplicateEntries": "Doppelte Einträge ignorieren",
+  "@ignoreDuplicateEntries": {
+    "description": "Whether to ignore duplicated entries in the homework view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "askWhenDeletingReminders": "Beim Löschen von Erinnerungen fragen",
+  "@askWhenDeletingReminders": {
+    "description": "Whether to show a confirmation dialog when deleting reminders",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradesSettings": "Noten",
+  "@gradesSettings": {
+    "description": "Header for settings related to grades",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "showGradesChart": "Noten in einem Diagramm darstellen",
+  "@showGradesChart": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "showSubjectsAverage": "Durchschnitt aller Fächer anzeigen",
+  "@showSubjectsAverage": {
+    "description": "Whether to show the average of all averages of all subjects",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "excludeSubjectsFromAverage": "Fächer aus dem Notendurchschnitt ausschließen",
+  "@excludeSubjectsFromAverage": {
+    "description": "Subjects not to consider for the average",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noSubjectExcluded": "Kein Fach ausgeschlossen",
+  "@noSubjectExcluded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "calendarSettings": "Kalender",
+  "@calendarSettings": {
+    "description": "Header for settings related to the calendar view",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "subjectNicks": "Fächerkürzel",
+  "@subjectNicks": {
+    "description": "Dropdown to edit subject nicks",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "showEditNicksBar": "Hinweis zum Bearbeiten von Kürzeln",
+  "@showEditNicksBar": {
+    "description": "Whether to show a hint to allow the user to edit subject nicks if some are missing",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "showEditNicksBarDesc": "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist",
+  "@showEditNicksBarDesc": {
+    "description": "Tell the user that the hint is shown if nicks are missing",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "advancedSettings": "Erweitert",
+  "@advancedSettings": {
+    "description": "Header for advanced settings",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "iosMode": "iOS-Mode",
+  "@iosMode": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "iosModeDesc": "Imitiere das Aussehen einer iOS-App (ein bisschen)",
+  "@iosModeDesc": {
+    "description": "iOS mode imitates the look and feel of an ios app (a bit)",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "networkProtocol": "Netzwerkprotokoll",
+  "@networkProtocol": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nothingThere": "Nichts vorhanden",
+  "@nothingThere": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "params": "Parameter",
+  "@params": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "response": "Antwort",
+  "@response": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "copiedToClipboard": "In die Zwischenablage kopiert",
+  "@copiedToClipboard": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "supportUs": "Unterstütze uns jetzt!",
+  "@supportUs": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "giveFeedback": "Feedback geben",
+  "@giveFeedback": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "openSourceCode": "Zum Quellcode",
+  "@openSourceCode": {
+    "description": "Opens a link to github",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "about": "Über diese App",
+  "@about": {
+    "description": "Opens the about dialog",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "registerClient": "Digitales Register (Client)",
+  "@registerClient": {
+    "description": "App name shown in the about dialog, clarifying that this information is about the client",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "aboutDesc": "Ein Client für das Digitale Register.\nGroßes Dankeschön an das Vinzentinum für die freundliche Unterstützung.",
+  "@aboutDesc": {
+    "description": "Say that this is a client for the digital register. Thank my school for supporting this project",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addNick": "Kürzel hinzufügen",
+  "@addNick": {
+    "description": "Add a subject nick",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "editNick": "Kürzel hinzufügen",
+  "@editNick": {
+    "description": "Edit a subject nick",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "subject": "Fach",
+  "@subject": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "nick": "Kürzel",
+  "@nick": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "cancel": "Abbrechen",
+  "@cancel": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addSubject": "Fach hinzufügen",
+  "@addSubject": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chooseColor": "Farbe auswählen",
+  "@chooseColor": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "select": "Auswählen",
+  "@select": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noEntries": "Keine Einträge vorhanden",
+  "@noEntries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newEntries": "Neue Einträge",
+  "@newEntries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "register": "Register",
+  "@register": {
+    "description": "The app name",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "past": "Vergangenheit",
+  "@past": {
+    "description": "Button that allows to view past homework",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "future": "Zukunft",
+  "@future": {
+    "description": "Button that allows to view future homework",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reminder": "Erinnerung",
+  "@reminder": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deletedEntries": "Gelöschte Einträge",
+  "@deletedEntries": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "neverAsk": "Nie fragen",
+  "@neverAsk": {
+    "description": "Toggle to disable the confirmation dialog when deleting reminders",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleteReminderQ": "Erinnerung löschen?",
+  "@deleteReminderQ": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "delete": "Löschen",
+  "@delete": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "versions": "Versionen",
+  "@versions": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "current": "aktuell",
+  "@current": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "added": "neu",
+  "@added": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "deleted": "gelöscht",
+  "@deleted": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changed": "geändert",
+  "@changed": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "reAdded": "wiederhergestellt",
+  "@reAdded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "attachments": "{howMany,plural, =1{Anhang}other{Anhänge}}",
+  "@attachments": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "download": "Herunterladen",
+  "@download": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloadAgain": "Erneut herunterladen",
+  "@downloadAgain": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "openFile": "Öffnen",
+  "@openFile": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradesAndTests": "Noten & Tests",
+  "@gradesAndTests": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "homeworkAndReminders": "Hausaufgaben & Erinnerungen",
+  "@homeworkAndReminders": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "observations": "Beobachtungen",
+  "@observations": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "today": "Heute",
+  "@today": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tomorrow": "Morgen",
+  "@tomorrow": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "yesterday": "Gestern",
+  "@yesterday": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "logoutTitle": "Abmelden",
+  "@logoutTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "settingsTitle": "Einstellungen",
+  "@settingsTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "dasboardTitle": "Hausaufgaben",
+  "@dasboardTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradesTitle": "Noten",
+  "@gradesTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absencesTitle": "Absenzen",
+  "@absencesTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "calendarTitle": "Kalender",
+  "@calendarTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "certificateTitle": "Zeugnis",
+  "@certificateTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "messagesTitle": "Mitteilungen",
+  "@messagesTitle": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "collapse": "Einklappen",
+  "@collapse": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "expand": "Ausklappen",
+  "@expand": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addAccount": "Account hinzufügen",
+  "@addAccount": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "changeAccount": "Account wechseln",
+  "@changeAccount": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradeCalculator": "Notenrechner",
+  "@gradeCalculator": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "createNewGrade": "Neue Note erstellen",
+  "@createNewGrade": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "add": "Hinzufügen",
+  "@add": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "average": "Durchschnitt",
+  "@average": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "grades": "{howMany,plural, =1{Note}other{Noten}}",
+  "@grades": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "gradeCalculatorHint": "Um zu beginnen, importiere entweder bestehende Noten aus einem Fach\noder füge eine erste Note hinzu.",
+  "@gradeCalculatorHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "importGrades": "Noten importieren",
+  "@importGrades": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "addGrade": "Note hinzufügen",
+  "@addGrade": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "selectSubject": "Fach auswählen",
+  "@selectSubject": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "firstSemester": "Erstes Semester",
+  "@firstSemester": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "secondSemester": "Zweites Semester",
+  "@secondSemester": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "bothSemester": "Beide Semester",
+  "@bothSemester": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "import": "Importieren",
+  "@import": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noGradesAvailable": "Für dieses Fach sind in diesem Zeitraum keine Noten verfügbar",
+  "@noGradesAvailable": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "invalidValue": "Ungültiger Wert",
+  "@invalidValue": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "weighting": "Gewichtung",
+  "@weighting": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chartLegend": "Legende",
+  "@chartLegend": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradesChart": "Notendiagramm",
+  "@gradesChart": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "chartTapHint": "Tippe auf das Diagramm, um Details zu sehen",
+  "@chartTapHint": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradeAverage": "Notendurchschnitt",
+  "@gradeAverage": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sortGradesByType": "Noten nach Art sortieren",
+  "@sortGradesByType": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "showDeletedGrades": "Gelöschte Noten anzeigen",
+  "@showDeletedGrades": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "subjectExcluded": "Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen",
+  "@subjectExcluded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "gradeCalculatorDesc": "Berechne den Durchschnitt von beliebigen Noten",
+  "@gradeCalculatorDesc": {
+    "description": "The grade calculator allows calculating the average of arbitrary grades",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noGradeForAverage": "keine Note eingetragen",
+  "@noGradeForAverage": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noConnection": "Keine Verbindung",
+  "@noConnection": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "offlineModeActive": "Offline-Modus aktiv.",
+  "@offlineModeActive": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "lastSynced": "Zuletzt synchronisiert",
+  "@lastSynced": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "formatDays": "{howMany,plural, =1{Tag}other{Tage}}",
+  "@formatDays": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "formatHours": "{howMany,plural, =1{Stunde}other{Stunden}}",
+  "@formatHours": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "formatMinutes": "{howMany,plural, =1{Minute}other{Minuten}}",
+  "@formatMinutes": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "formatSeconds": "{howMany,plural, =1{Sekunde}other{Sekunden}}",
+  "@formatSeconds": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany"
+    ],
+    "placeholders": {
+      "howMany": {}
+    }
+  },
+  "school": "Schule",
+  "@school": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "differentSchool": "Andere Schule",
+  "@differentSchool": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "schoolNotFound": "Schule nicht gefunden",
+  "@schoolNotFound": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSchoolName": "Bitte gib den Namen der Schule ein",
+  "@enterSchoolName": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "address": "Adresse",
+  "@address": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "username": "Benutzername",
+  "@username": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "resetPassword": "Passwort zurücksetzen",
+  "@resetPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "password": "Passwort",
+  "@password": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "oldPassword": "Altes Passwort",
+  "@oldPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "newPassword": "Neues Passwort",
+  "@newPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "forgotPassword": "Passwort vergessen",
+  "@forgotPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "forceChangePassword": "Du musst dein Passwort ändern:",
+  "@forceChangePassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "passwordRequirements": "Das neue Passwort muss:\n- mindestens 10 Zeichen lang sein\n- mindestens einen Großbuchstaben enthalten\n- mindestens einen Kleinbuchstaben enthalten\n- mindestens eine Zahl enthalten\n- mindestens ein Sonderzeichen enthalten\n- nicht mit dem alten Passwort übereinstimmen",
+  "@passwordRequirements": {
+    "description": "Stupid password requirements",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "repeatNewPassword": "Neues Passwort wiederholen",
+  "@repeatNewPassword": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "passwordsDontMatch": "Die neuen Passwörter stimmen noch nicht überein",
+  "@passwordsDontMatch": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "otherAccounts": "Andere Accounts",
+  "@otherAccounts": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "connectionFailed": "Keine Verbindung mit \"{to}\" möglich. Bitte überprüfe deine Internetverbindung.\nWenn du \"Andere Schule\" ausgewählt hast, musst du eine gültige Adresse eingeben.",
+  "@connectionFailed": {
+    "type": "text",
+    "placeholders_order": [
+      "to"
+    ],
+    "placeholders": {
+      "to": {}
+    }
+  },
+  "login": "Login",
+  "@login": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sendPassResetRequest": "Anfrage zum Zurücksetzen senden",
+  "@sendPassResetRequest": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "emailAddress": "Email-Adresse",
+  "@emailAddress": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "ok": "Ok",
+  "@ok": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noMessages": "Noch keine Mitteilungen",
+  "@noMessages": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sent": "Gesendet",
+  "@sent": {
+    "description": "Label for the datetime the message was sent",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "from": "Von",
+  "@from": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "to": "An",
+  "@to": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "notifications": "Benachrichtigungen",
+  "@notifications": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "noNotifications": "Keine Benachrichtigungen",
+  "@noNotifications": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "readAll": "Alle gelesen",
+  "@readAll": {
+    "description": "Button that allows the user to mark all notifications as read",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failedToSave": "Beim Speichern ist ein Fehler aufgetreten",
+  "@failedToSave": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "downloaded": "Heruntergeladen",
+  "@downloaded": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failedToDownload": "Download fehlgeschlagen",
+  "@failedToDownload": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "enterSomething": "Bitte gib etwas ein",
+  "@enterSomething": {
+    "description": "Shown when the user tries to login without a password/username",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "sorry": "Tut uns leid!",
+  "@sorry": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "userKindNotSupported": "Dieser Benutzertyp wird nicht unterstützt.",
+  "@userKindNotSupported": {
+    "description": "Shown when a teacher tries to log in",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "userKindNotSupportedDesc": "Diese App ist ausschließlich für Schüler*innen und Eltern geeignet.",
+  "@userKindNotSupportedDesc": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "back": "Zurück",
+  "@back": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "goToWebClient": "Hier geht's zur Website",
+  "@goToWebClient": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "passwordChanged": "Passwort erfolgreich geändert",
+  "@passwordChanged": {
+    "description": "Shown when a teacher tries to log in",
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unexpectedError": "Ein Fehler ist aufgetreten.",
+  "@unexpectedError": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "unexpectedLogout": "Dieser Fehler kann auftreten, wenn zwei Geräte gleichzeitig auf dasselbe Konto zugreifen.\nIn diesem Fall kannst du versuchen, die App zu schließen und erneut zu öffnen.\n\nFalls dies nicht zutrifft, bitte benachrichtige uns, damit wir diesen Fehler beheben können.",
+  "@unexpectedLogout": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "parseError": "Beim Einlesen der Daten ist ein Fehler aufgetreten.\nBitte benachrichtige uns, damit wir diesen Fehler beheben können.\nBitte beachte, dass das Fehlerprotokoll möglicherweise private Daten enthält.",
+  "@parseError": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "generalErrorMessage": "Eine Funktion wird eventuell noch nicht unterstützt.\nBitte benachrichtige uns, damit wir diesen Fehler beheben können:",
+  "@generalErrorMessage": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "errorLog": "Fehlerprotokoll",
+  "@errorLog": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failedLoadingData": "Fehler beim Laden der gespeicherten Daten",
+  "@failedLoadingData": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "tryReinstalling": "Bitte versuche, die App neu zu installieren.",
+  "@tryReinstalling": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "failedOpeningLink": "Dieser Link konnte nicht geöffnet werden",
+  "@failedOpeningLink": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  }
+}

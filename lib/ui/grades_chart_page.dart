@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 
 import '../container/chart_legend_container.dart';
@@ -27,7 +28,7 @@ class GradesChartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notendiagramm"),
+        title: Text(l10n.gradesChart()),
       ),
       body: Column(
         mainAxisSize: MainAxisSize.min,

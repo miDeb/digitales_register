@@ -51,10 +51,10 @@ Future<void> _downloadFile(
     },
   );
   if (success) {
-    showSnackBar("Heruntergeladen");
+    showSnackBar(l10n.downloaded());
     api.actions.messagesActions.fileAvailable(action.payload);
   } else {
-    showSnackBar("Download fehlgeschlagen");
+    showSnackBar(l10n.failedToDownload());
   }
 }
 

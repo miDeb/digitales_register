@@ -1,6 +1,8 @@
 import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 
+import 'package:dr/l10n/l10n.dart' as l10n;
+
 class LastFetchedOverlay extends StatelessWidget {
   final bool noInternet;
   final Widget child;
@@ -19,7 +21,7 @@ class LastFetchedOverlay extends StatelessWidget {
     }
     return RawLastFetchedOverlay(
       message:
-          "Offline-Modus aktiv. Zuletzt synchronisiert ${formatTimeAgo(lastFetched!)}.",
+          "${l10n.offlineModeActive()}. ${l10n.lastSynced()} ${formatTimeAgo(lastFetched!)}.",
       child: child,
     );
   }
@@ -64,6 +66,7 @@ class RawLastFetchedOverlay extends StatelessWidget {
   }
 }
 
+// TODO: localize
 String formatTimeAgo(UtcDateTime dateTime) {
   final diff = UtcDateTime.now().difference(dateTime);
   if (diff.inDays >= 1) {

@@ -17,6 +17,7 @@
 
 import 'package:dr/container/calendar_card_container.dart';
 import 'package:dr/container/calendar_detail_container.dart';
+import 'package:dr/l10n/l10n.dart';
 import 'package:dr/ui/calendar_week.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/ui/no_internet.dart';
@@ -208,8 +209,8 @@ class _CalendarDetailPageState extends State<CalendarDetailPage> {
             duration: const Duration(milliseconds: 250),
             child: Text(
               selectedDate != null
-                  ? DateFormat.MMMEd("de").format(selectedDate!)
-                  : "Detailansicht",
+                  ? DateFormat.MMMEd().format(selectedDate!)
+                  : detailView(),
               key: ValueKey(selectedDate),
             ),
           ),
@@ -382,7 +383,7 @@ class _NoSchool extends StatelessWidget {
           150,
         ),
         Text(
-          "Keine Schule",
+          noSchool(),
           style: Theme.of(context).textTheme.headline4,
         ),
       ],

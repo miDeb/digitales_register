@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,8 +29,8 @@ class NetworkProtocol extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
-        ? const Center(
-            child: Text("Nichts vorhanden"),
+        ? Center(
+            child: Text(l10n.nothingThere()),
           )
         : ListView.builder(
             itemCount: items.length,
@@ -52,11 +53,11 @@ class _Item extends StatelessWidget {
       title: Text(item.address),
       children: <Widget>[
         _Detail(
-          type: "Parameter",
+          type: l10n.params(),
           content: item.parameters,
         ),
         _Detail(
-          type: "Antwort",
+          type: l10n.response(),
           content: item.response,
         ),
       ],
@@ -83,12 +84,12 @@ class _Detail extends StatelessWidget {
                 icon: const Icon(Icons.assignment),
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: content));
-                  showSnackBar("In die Zwischenablage kopiert");
+                  showSnackBar(l10n.copiedToClipboard());
                 },
               )
             ],
           ),
-          Text(content ?? "Keine $type"),
+          Text(content ?? l10n.nothingThere()),
         ],
       ),
     );

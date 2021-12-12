@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
@@ -33,8 +34,8 @@ class AbsencesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const ResponsiveAppBar(
-        title: Text("Absenzen"),
+      appBar: ResponsiveAppBar(
+        title: Text(absencesTitle()),
       ),
       body: LastFetchedOverlay(
         lastFetched: state.lastFetched,
@@ -61,7 +62,7 @@ class AbsencesBody extends StatelessWidget {
         ? state.absences.isEmpty
             ? Center(
                 child: Text(
-                  "Noch keine Absenzen",
+                  noAbsencesYet(),
                   style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center,
                 ),
@@ -93,36 +94,36 @@ class AbsencesStatisticWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      title: const Text("Statistik"),
+      title: Text(absencesStatistic()),
       children: <Widget>[
         if (stat.counter != null)
           ListTile(
-            title: const Text("Absenzen"),
+            title: Text(absencesTitle()),
             trailing: Text(stat.counter.toString()),
           ),
         if (stat.counterForSchool != null)
           ListTile(
-            title: const Text("Absenzen im Auftrag der Schule"),
+            title: Text(absencesForSchool()),
             trailing: Text(stat.counterForSchool.toString()),
           ),
         if (stat.delayed != null)
           ListTile(
-            title: const Text("Verspätungen"),
+            title: Text(absencesDelays()),
             trailing: Text(stat.delayed.toString()),
           ),
         if (stat.justified != null)
           ListTile(
-            title: const Text("Entschuldigte Absenzen"),
+            title: Text(absencesJustified()),
             trailing: Text(stat.justified.toString()),
           ),
         if (stat.notJustified != null)
           ListTile(
-            title: const Text("Nicht entschuldigte Absenzen"),
+            title: Text(absencesJustified()),
             trailing: Text(stat.notJustified.toString()),
           ),
         if (stat.percentage != null)
           ListTile(
-            title: const Text("Abwesenheit"),
+            title: Text(absencesPercentageTitle()),
             trailing: Text("${stat.percentage} %"),
           ),
       ],

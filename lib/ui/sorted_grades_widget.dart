@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:dr/container/grades_page_container.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -48,12 +49,12 @@ class SortedGradesWidget extends StatelessWidget {
       key: ValueKey(vm.semester),
       children: <Widget>[
         SwitchListTile.adaptive(
-          title: const Text("Noten nach Art sortieren"),
+          title: Text(l10n.sortGradesByType()),
           onChanged: sortByTypeCallback,
           value: vm.sortByType,
         ),
         SwitchListTile.adaptive(
-          title: const Text("Gelöschte Noten anzeigen"),
+          title: Text(l10n.showDeletedGrades()),
           onChanged: showCancelledCallback,
           value: vm.showCancelled!,
         ),
@@ -77,22 +78,21 @@ class SortedGradesWidget extends StatelessWidget {
             (element) => element.toLowerCase() == s.name.toLowerCase(),
           ),
         ))
-          const ListTile(
+          ListTile(
             title: Text(
-              "* Du hast dieses Fach aus dem Notendurchschnitt ausgeschlossen",
-              style: TextStyle(color: Colors.grey),
+              "* ${l10n.subjectExcluded()}",
+              style: const TextStyle(color: Colors.grey),
             ),
           ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: ListTile(
             title: Row(
-              children: const [
-                Text("Notenrechner"),
+              children: [
+                Text(l10n.gradeCalculator()),
               ],
             ),
-            subtitle:
-                const Text("Berechne den Durchschnitt von beliebigen Noten"),
+            subtitle: Text(l10n.gradeCalculatorDesc()),
             onTap: showGradeCalculator,
           ),
         ),

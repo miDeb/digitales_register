@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart' hide Notification;
@@ -46,7 +47,7 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Benachrichtigungen"),
+        title: Text(l10n.notifications()),
       ),
       body: LastFetchedOverlay(
         lastFetched: lastFetched,
@@ -56,7 +57,7 @@ class NotificationPage extends StatelessWidget {
           child: notifications.isEmpty
               ? Center(
                   child: Text(
-                    "Keine Benachrichtigungen",
+                    l10n.noNotifications(),
                     style: Theme.of(context).textTheme.headline4,
                     textAlign: TextAlign.center,
                   ),
@@ -71,10 +72,10 @@ class NotificationPage extends StatelessWidget {
                           onPressed: noInternet ? null : deleteAllNotifications,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Text("Alle gelesen"),
-                              SizedBox(width: 8),
-                              Icon(Icons.done_all),
+                            children: [
+                              Text(l10n.readAll()),
+                              const SizedBox(width: 8),
+                              const Icon(Icons.done_all),
                             ],
                           ),
                         ),
@@ -165,7 +166,6 @@ class NotificationWidget extends StatelessWidget {
                   icon: const Icon(
                     Icons.done,
                   ),
-                  tooltip: "Gelesen",
                   onPressed: noInternet!
                       ? null
                       : () async {
@@ -178,7 +178,6 @@ class NotificationWidget extends StatelessWidget {
                   icon: const Icon(
                     Icons.exit_to_app,
                   ),
-                  tooltip: "Zu Mitteilungen wechseln",
                   onPressed: () => goToMessage(notification.objectId!),
                 )
             ],

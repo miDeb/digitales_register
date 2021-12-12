@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
@@ -30,7 +31,7 @@ class Certificate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const ResponsiveAppBar(title: Text("Zeugnis")),
+      appBar: ResponsiveAppBar(title: Text(certificateTitle())),
       body: vm.html == null
           ? Center(
               child: vm.noInternet

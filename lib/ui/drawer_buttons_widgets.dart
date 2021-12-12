@@ -17,6 +17,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:dr/l10n/l10n.dart' as l10n;
+
 class LogoutButtonWidget extends StatelessWidget {
   final VoidCallback onLogout;
 
@@ -25,7 +27,7 @@ class LogoutButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text("Logout"),
+      title: Text(l10n.logoutTitle()),
       trailing: const Icon(Icons.exit_to_app),
       onTap: () {
         onLogout();
@@ -45,7 +47,7 @@ class SettingsButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Einstellungen"),
+      title:  Text(l10n.settingsTitle()),
       trailing: const Icon(Icons.settings),
       onTap: () {
         onShowSettings();
@@ -65,7 +67,7 @@ class GradesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Noten"),
+      title: Text(l10n.gradesTitle()),
       trailing: const Icon(Icons.grade),
       onTap: () {
         onShowGrades();
@@ -85,7 +87,7 @@ class AbsencesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Absenzen"),
+      title: Text(l10n.absencesTitle()),
       trailing: const Icon(Icons.hotel),
       onTap: () {
         onShowAbsences();
@@ -105,7 +107,7 @@ class CalendarButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Kalender"),
+      title: Text(l10n.calendarTitle()),
       trailing: const Icon(Icons.calendar_today),
       onTap: () {
         onShowCalendar();
@@ -125,7 +127,7 @@ class CertificateButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Zeugnis"),
+      title: Text(l10n.certificateTitle()),
       trailing: const Icon(Icons.list),
       onTap: () {
         onShowCertificate();
@@ -146,7 +148,7 @@ class MessagesButtonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       selected: selected,
-      title: const Text("Mitteilungen"),
+      title:  Text(l10n.messagesTitle()),
       trailing: const Icon(Icons.message),
       onTap: () {
         onShowMessages();

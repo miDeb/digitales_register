@@ -19,17 +19,19 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 import 'app_state.dart';
+import 'l10n/l10n.dart' as l10n;
 import 'utc_date_time.dart';
 import 'util.dart';
 
 part 'data.g.dart';
 
 bool estimateShouldWarn(String name) {
-  return name == "Schularbeit" ||
-      name == "Testarbeit" ||
-      name.contains("Prüfung");
+  return l10n.exams().any(
+        (element) => name.contains(element),
+      );
 }
 
 abstract class Day implements Built<Day, DayBuilder> {
@@ -60,22 +62,12 @@ abstract class Day implements Built<Day, DayBuilder> {
   static String format(UtcDateTime date) {
     final UtcDateTime today = dateToday();
     final Duration difference = date.difference(today);
-    if (difference.inDays == 0) return "Heute";
-    if (difference.inDays == 1) return "Morgen";
+    if (difference.inDays == 0) return l10n.today();
+    if (difference.inDays == 1) return l10n.tomorrow();
     if (difference.inDays == -1) {
-      return "Gestern";
+      return l10n.yesterday();
     } else {
-      final String? weekday = {
-        1: "Montag",
-        2: "Dienstag",
-        3: "Mittwoch",
-        4: "Donnerstag",
-        5: "Freitag",
-        6: "Samstag",
-        7: "Sonntag",
-      }[date.weekday];
-      final String dateString = "${date.day}.${date.month}.";
-      return "$weekday, $dateString";
+      return DateFormat("EEEE, dd.MM.").format(date);
     }
   }
 }
@@ -184,7 +176,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 }
 
 String formatGradeFromString(String? grade) {
-  if (grade == null) return "keine Note eingetragen";
+  if (grade == null) return l10n.noGradeForAverage();
   final List<String> split = grade.split(".");
   assert(split.length == 2);
   final int mainGrade = int.parse(split[0]);
@@ -338,7 +330,7 @@ abstract class Subject implements Built<Subject, SubjectBuilder> {
     for (final entry in entries) {
       String type;
       if (entry is Observation) {
-        type = "Beobachtung";
+        type = l10n.observation();
       } else if (entry is GradeDetail) {
         type = entry.type;
       } else {

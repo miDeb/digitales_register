@@ -17,6 +17,7 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart' hide Builder;
@@ -118,7 +119,7 @@ String? _lastFetchedMessage(AppState state) {
   if (timeAgoString == null) {
     return null;
   }
-  return "Offline-Modus aktiv. $timeAgoString.";
+  return "${l10n.offlineModeActive()}. $timeAgoString.";
 }
 
 String? formatTimeAgoPerSemester({
@@ -139,7 +140,7 @@ String? formatTimeAgoPerSemester({
     final firstFormatted = formatTimeAgo(first);
     final secondFormatted = formatTimeAgo(second);
     if (firstFormatted != secondFormatted) {
-      return "Zuletzt synchronisiert $firstFormatted (1. Semester) / $secondFormatted (2. Semester)";
+      return "${l10n.lastSynced()} $firstFormatted (${l10n.firstSemester()}) / $secondFormatted (${l10n.secondSemester()})";
     }
     lastFetchedFormatted = firstFormatted;
   } else {
@@ -149,5 +150,5 @@ String? formatTimeAgoPerSemester({
     }
     lastFetchedFormatted = formatTimeAgo(last);
   }
-  return "Zuletzt synchronisiert $lastFetchedFormatted";
+  return "${l10n.lastSynced()} $lastFetchedFormatted";
 }

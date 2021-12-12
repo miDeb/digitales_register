@@ -17,6 +17,7 @@
 
 import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
+import 'package:dr/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -34,7 +35,7 @@ class CalendarCard extends StatelessWidget {
   }) : super(key: key);
 
   String formatTime(UtcDateTime dateTime) {
-    return DateFormat.Hm("de").format(dateTime);
+    return DateFormat.Hm().format(dateTime);
   }
 
   @override
@@ -75,8 +76,8 @@ class CalendarCard extends StatelessWidget {
             // Time (index and time)
             _ContentItem(
               title: hour.fromHour == hour.toHour
-                  ? "${hour.fromHour}. Stunde"
-                  : "${hour.fromHour}. – ${hour.toHour}. Stunde",
+                  ? formatSingleHour(hour.fromHour)
+                  : formatHoursSpan(hour.fromHour, hour.toHour),
               content: hour.timeSpans
                   .map((span) =>
                       "${formatTime(span.from)} – ${formatTime(span.to)}")
@@ -87,7 +88,7 @@ class CalendarCard extends StatelessWidget {
             // Content
             if (hour.teachers.isNotEmpty)
               _ContentItem(
-                title: hour.teachers.length == 1 ? "Lehrer*in" : "Lehrer*innen",
+                title: teachers(hour.teachers.length),
                 content: hour.teachers
                     .map((t) => "${t.firstName} ${t.lastName}")
                     .join(", "),
@@ -95,7 +96,7 @@ class CalendarCard extends StatelessWidget {
               ),
             if (hour.rooms.isNotEmpty)
               _ContentItem(
-                title: "Räume",
+                title: rooms(hour.rooms.length),
                 content: hour.rooms.join(", "),
                 icon: Icons.meeting_room,
               ),

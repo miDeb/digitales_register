@@ -66,7 +66,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     api.actions.loginActions.loginFailed(
       LoginFailedPayload(
         (b) async => b
-          ..cause = "Bitte gib etwas ein"
+          ..cause = l10n.enterSomething()
           ..username = action.payload.user,
       ),
     );
@@ -119,7 +119,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       wrapper.logout(hard: true);
       api.actions.loginActions.loginFailed(
         LoginFailedPayload(
-          (b) => b..cause = "Dieser Benutzertyp wird nicht unterstützt.",
+          (b) => b..cause = l10n.userKindNotSupported(),
         ),
       );
       _showUserTypeNotSupported(url);
@@ -197,7 +197,7 @@ Future<void> _changePass(
       ),
     );
     navigatorKey?.currentState?.pop();
-    showSnackBar("Passwort erfolgreich geändert");
+    showSnackBar(l10n.passwordChanged());
   }
 }
 
@@ -339,7 +339,7 @@ void _showUserTypeNotSupported(String url) {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Tut uns leid!",
+                  l10n.sorry(),
                   style: Theme.of(context).textTheme.headline4,
                   textAlign: TextAlign.center,
                 ),
@@ -347,7 +347,7 @@ void _showUserTypeNotSupported(String url) {
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Text(
-                  "Diese App ist ausschließlich für Schüler*innen und Eltern geeignet.",
+                  l10n.userKindNotSupportedDesc(),
                   style: Theme.of(context).textTheme.headline5,
                   textAlign: TextAlign.center,
                 ),
@@ -357,15 +357,15 @@ void _showUserTypeNotSupported(String url) {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      "Zurück",
+                    child: Text(
+                      l10n.back(),
                     ),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
                     onPressed: () => launch(url),
-                    child: const Text(
-                      "Hier geht's zur Website",
+                    child: Text(
+                      l10n.goToWebClient(),
                     ),
                   ),
                 ],

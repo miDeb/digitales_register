@@ -18,6 +18,7 @@
 import 'dart:io';
 
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -153,8 +154,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ? _Theme.dark
             : _Theme.light;
     return Scaffold(
-      appBar: const ResponsiveAppBar(
-        title: Text("Einstellungen"),
+      appBar: ResponsiveAppBar(
+        title: Text(l10n.settingsTitle()),
       ),
       body: ListView(
         controller: controller,
@@ -162,7 +163,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           const SizedBox(height: 8),
           ListTile(
             title: Text(
-              "Profil",
+              l10n.profile(),
               style: Theme.of(context).textTheme.headline5,
             ),
             trailing: const Icon(Icons.chevron_right),
@@ -175,29 +176,29 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(0),
             child: ListTile(
               title: Text(
-                "Anmeldung",
+                l10n.loginSettings(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
           ),
           SwitchListTile.adaptive(
-            title: const Text("Angemeldet bleiben"),
-            subtitle: const Text("Deine Zugangsdaten werden lokal gespeichert"),
+            title: Text(l10n.stayLoggedIn()),
+            subtitle: Text(l10n.stayLoggedInDesc()),
             onChanged: (bool value) {
               widget.onSetNoPassSaving(!value);
             },
             value: !widget.vm.noPassSaving,
           ),
           SwitchListTile.adaptive(
-            title: const Text("Daten lokal speichern"),
-            subtitle: const Text('Sehen, wann etwas eingetragen wurde'),
+            title: Text(l10n.saveData()),
+            subtitle: Text(l10n.saveDataDesc()),
             onChanged: (bool value) {
               widget.onSetNoDataSaving(!value);
             },
             value: !widget.vm.noDataSaving,
           ),
           SwitchListTile.adaptive(
-            title: const Text("Daten beim Ausloggen löschen"),
+            title: Text(l10n.deleteDataOnLogout()),
             onChanged: !widget.vm.noPassSaving && !widget.vm.noDataSaving
                 ? (bool value) {
                     widget.onSetDeleteDataOnLogout(value);
@@ -212,7 +213,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(1),
             child: ListTile(
               title: Text(
-                "Aussehen",
+                l10n.appearance(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
@@ -221,19 +222,19 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             value: _Theme.followDevice,
             groupValue: currentTheme,
             onChanged: _selectTheme,
-            title: const Text("Geräte-Theme folgen"),
+            title: Text(l10n.followDeviceTheme()),
           ),
           RadioListTile(
             value: _Theme.light,
             groupValue: currentTheme,
             onChanged: _selectTheme,
-            title: const Text("Hell"),
+            title: Text(l10n.lightMode()),
           ),
           RadioListTile(
             value: _Theme.dark,
             groupValue: currentTheme,
             onChanged: _selectTheme,
-            title: const Text("Dunkel"),
+            title: Text(l10n.darkMode()),
           ),
           const Divider(
             indent: 15,
@@ -241,7 +242,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             height: 0,
           ),
           ExpansionTile(
-            title: const Text("Fächerfarben"),
+            title: Text(l10n.subjectColors()),
             children: [
               for (final theme in widget.vm.subjectThemes.entries)
                 ListTile(
@@ -277,15 +278,15 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ],
           ),
           SwitchListTile.adaptive(
-            title: const Text(
-              "Hausaufgaben mit diesen Farben umrahmen",
+            title: Text(
+              l10n.colorHomework(),
             ),
             value: widget.vm.dashboardColorBorders,
             onChanged: widget.onSetDashboardColorBorders,
           ),
           SwitchListTile.adaptive(
-            title: const Text(
-              "Tests immer rot umrahmen",
+            title: Text(
+              l10n.testsAlwaysRed(),
             ),
             value: widget.vm.dashboardColorTestsInRed,
             onChanged: widget.onSetDashboardColorTestsInRed,
@@ -297,27 +298,27 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(2),
             child: ListTile(
               title: Text(
-                "Merkheft",
+                l10n.dashboardSettings(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
           ),
           SwitchListTile.adaptive(
-            title: const Text("Neue oder geänderte Einträge markieren"),
+            title: Text(l10n.highlightNewOrChangedEntries()),
             onChanged: (bool value) {
               widget.onSetDashboardMarkNewOrChangedEntries(value);
             },
             value: widget.vm.dashboardMarkNewOrChangedEntries,
           ),
           SwitchListTile.adaptive(
-            title: const Text("Doppelte Einträge ignorieren"),
+            title: Text(l10n.ignoreDuplicateEntries()),
             onChanged: (bool value) {
               widget.onSetDashboardDeduplicateEntries(value);
             },
             value: widget.vm.dashboardDeduplicateEntries,
           ),
           SwitchListTile.adaptive(
-            title: const Text("Beim Löschen von Erinnerungen fragen"),
+            title: Text(l10n.askWhenDeletingReminders()),
             onChanged: (bool value) {
               widget.onSetAskWhenDelete(value);
             },
@@ -330,27 +331,27 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(3),
             child: ListTile(
               title: Text(
-                "Noten",
+                l10n.gradesSettings(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
           ),
           SwitchListTile.adaptive(
-            title: const Text("Noten in einem Diagramm darstellen"),
+            title: Text(l10n.showGradesChart()),
             onChanged: (bool value) {
               widget.onSetShowGradesDiagram(value);
             },
             value: widget.vm.showGradesDiagram,
           ),
           SwitchListTile.adaptive(
-            title: const Text('Durchschnitt aller Fächer anzeigen'),
+            title: Text(l10n.showSubjectsAverage()),
             onChanged: (bool value) {
               widget.onSetShowAllSubjectsAverage(value);
             },
             value: widget.vm.showAllSubjectsAverage,
           ),
           ListTile(
-            title: const Text("Fächer aus dem Notendurchschnitt ausschließen"),
+            title: Text(l10n.excludeSubjectsFromAverage()),
             trailing: IconButton(
               icon: const Icon(Icons.add),
               onPressed: () async {
@@ -372,12 +373,12 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             crossFadeState: widget.vm.ignoreForGradesAverage.isEmpty
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
-            firstChild: const Padding(
-              padding: EdgeInsets.only(left: 16),
+            firstChild: Padding(
+              padding: const EdgeInsets.only(left: 16),
               child: ListTile(
                 title: Text(
-                  "Kein Fach ausgeschlossen",
-                  style: TextStyle(color: Colors.grey),
+                  l10n.noSubjectExcluded(),
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ),
             ),
@@ -421,14 +422,14 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(4),
             child: ListTile(
               title: Text(
-                "Kalender",
+                l10n.calendarSettings(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
           ),
           ExpansionTile(
             initiallyExpanded: widget.vm.showSubjectNicks,
-            title: const Text("Fächerkürzel"),
+            title: Text(l10n.subjectNicks()),
             children: List.generate(
               widget.vm.subjectNicks.length + 1,
               (i) {
@@ -501,9 +502,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ),
           ),
           SwitchListTile.adaptive(
-            title: const Text("Hinweis zum Bearbeiten von Kürzeln"),
-            subtitle: const Text(
-                "Wird angezeigt, wenn für ein Fach kein Kürzel vorhanden ist"),
+            title: Text(l10n.showEditNicksBar()),
+            subtitle: Text(
+              l10n.showEditNicksBarDesc(),
+            ),
             onChanged: (bool value) {
               widget.onSetShowCalendarEditNicksBar(value);
             },
@@ -516,23 +518,22 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             key: const ObjectKey(5),
             child: ListTile(
               title: Text(
-                "Erweitert",
+                l10n.advancedSettings(),
                 style: Theme.of(context).textTheme.headline5,
               ),
             ),
           ),
           if (Platform.isAndroid)
             SwitchListTile.adaptive(
-              title: const Text("iOS Mode"),
-              subtitle: const Text(
-                  "Imitiere das Aussehen einer iOS-App (ein bisschen)"),
+              title: Text(l10n.iosMode()),
+              subtitle: Text(l10n.iosModeDesc()),
               onChanged: (bool value) {
                 widget.onSetPlatformOverride(value);
               },
               value: DynamicTheme.of(context)!.platformOverride,
             ),
           ListTile(
-            title: const Text("Netzwerkprotokoll"),
+            title: Text(l10n.networkProtocol()),
             onTap: () {
               Navigator.push(
                 context,
@@ -546,9 +547,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ),
           ListTile(
             leading: const Icon(Icons.monetization_on),
-            title: const Text(
-              "Unterstütze uns jetzt!",
-            ),
+            title: Text(l10n.supportUs()),
             trailing: const Icon(Icons.open_in_new),
             onTap: () {
               Navigator.of(context).push(
@@ -557,7 +556,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ),
           ListTile(
             leading: const Icon(Icons.feedback),
-            title: const Text("Feedback geben"),
+            title: Text(l10n.giveFeedback()),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
               launch(
@@ -570,7 +569,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ListTile(
             leading: const Icon(Icons.code),
             trailing: const Icon(Icons.open_in_new),
-            title: const Text("Zum Quellcode"),
+            title: Text(l10n.openSourceCode()),
             onTap: () => launch("https://github.com/miDeb/digitales_register"),
           ),
           AboutListTile(
@@ -581,12 +580,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ),
             applicationLegalese:
                 "Copyright Michael Debertol und Simon Wachtler 2019-2021",
-            applicationName: "Digitales Register (Client)",
+            applicationName: l10n.registerClient(),
             applicationVersion: appVersion,
             aboutBoxChildren: [
-              const Text("""
-Ein Client für das Digitale Register.
-Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
+              Text(l10n.aboutDesc()),
               const SizedBox(
                 height: 8,
               ),
@@ -607,7 +604,7 @@ Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
                 ),
               )
             ],
-            child: const Text("Über diese App"),
+            child: Text(l10n.about()),
           ),
         ],
       ),
@@ -664,17 +661,17 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: Text("Kürzel ${forNewNick ? "hinzufügen" : "bearbeiten"}"),
+      title: Text(forNewNick ? l10n.addNick() : l10n.editNick()),
       content: Row(
         children: [
           Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              Text("Fach"),
-              SizedBox(
+            children:  [
+              Text(l10n.subject()),
+           const   SizedBox(
                 height: 27,
               ),
-              Text("Kürzel"),
+              Text(l10n.nick()),
             ],
           ),
           const SizedBox(
@@ -729,7 +726,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Abbrechen"),
+          child: Text(l10n.cancel()),
         ),
         ElevatedButton(
           onPressed: subjectController!.text != "" && nickController!.text != ""
@@ -742,7 +739,7 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                   );
                 }
               : null,
-          child: const Text("Fertig"),
+          child:  Text(l10n.save()),
         ),
       ],
     );
@@ -779,7 +776,7 @@ class _AddSubjectState extends State<AddSubject> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: const Text("Fach hinzufügen"),
+      title: Text(l10n.addSubject()),
       content: TypeAheadField<String>(
         suggestionsCallback: (pattern) {
           return widget.availableSubjects!.where((suggestion) =>
@@ -802,7 +799,7 @@ class _AddSubjectState extends State<AddSubject> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Abbrechen"),
+          child: Text(l10n.cancel()),
         ),
         ElevatedButton(
           onPressed: subjectController!.text != ""
@@ -810,7 +807,7 @@ class _AddSubjectState extends State<AddSubject> {
                   Navigator.of(context).pop(subjectController!.text);
                 }
               : null,
-          child: const Text("Fertig"),
+          child: Text(l10n.save()),
         ),
       ],
     );
@@ -836,7 +833,7 @@ class _ColorPickerState extends State<_ColorPicker> {
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
-      title: const Text("Farbe auswählen"),
+      title: Text(l10n.chooseColor()),
       content: SingleChildScrollView(
         child: MaterialPicker(
           pickerColor: color!,
@@ -852,7 +849,7 @@ class _ColorPickerState extends State<_ColorPicker> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("Abbrechen"),
+          child: Text(l10n.cancel()),
         ),
         ElevatedButton(
           onPressed: color != widget.initialColor
@@ -860,7 +857,7 @@ class _ColorPickerState extends State<_ColorPicker> {
                   Navigator.pop(context, color);
                 }
               : null,
-          child: const Text("Auswählen"),
+          child: Text(l10n.save()),
         ),
       ],
     );

@@ -74,7 +74,7 @@ Future<void> _addReminder(
     },
   );
   if (result == null && !wrapper.noInternet) {
-    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
+    showSnackBar(l10n.failedToDownload());
     return;
   }
   api.actions.dashboardActions.homeworkAdded(
@@ -99,7 +99,7 @@ Future<void> _deleteHomework(
   if (result != null && result["success"] == true) {
     await next(action);
   } else if (!wrapper.noInternet) {
-    showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
+    showSnackBar(l10n.failedToDownload());
   }
 }
 
@@ -133,7 +133,7 @@ Future<void> _toggleDone(
       ),
     );
     if (!wrapper.noInternet) {
-      showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
+      showSnackBar(l10n.failedToDownload());
     }
   }
 }
@@ -163,10 +163,10 @@ Future<void> _downloadAttachment(
     },
   );
   if (success) {
-    showSnackBar("Heruntergeladen");
+    showSnackBar(l10n.downloaded());
     api.actions.dashboardActions.attachmentReady(action.payload);
   } else {
-    showSnackBar("Download fehlgeschlagen");
+    showSnackBar(l10n.failedToDownload());
   }
 }
 

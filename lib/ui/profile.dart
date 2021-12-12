@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 
 import '../app_state.dart';
@@ -41,7 +42,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Profil"),
+        title: Text(l10n.profile()),
       ),
       body: profileState.name == null
           ? Center(
@@ -60,19 +61,19 @@ class Profile extends StatelessWidget {
                   ),
                 ),
                 SwitchListTile.adaptive(
-                  title: const Text("Emails für Benachrichtigungen senden"),
+                  title: Text(l10n.sendEmailsForNotifications()),
                   value: profileState.sendNotificationEmails!,
                   onChanged: noInternet ? null : setSendNotificationEmails,
                 ),
                 ListTile(
-                  title: const Text("Email-Adresse ändern"),
+                  title: Text(l10n.changeEmail()),
                   subtitle: Text(profileState.email!),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: changeEmail,
                   enabled: !noInternet,
                 ),
                 ListTile(
-                  title: const Text("Passwort ändern"),
+                  title: Text(l10n.changePassword()),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: changePass,
                   enabled: !noInternet,

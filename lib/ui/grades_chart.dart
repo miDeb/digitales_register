@@ -17,6 +17,7 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';
@@ -332,7 +333,7 @@ class SelectionWidget extends StatelessWidget {
                     color: Colors.black,
                   ),
                   child: Text(
-                    DateFormat.MMMMd("de").format(date!),
+                    DateFormat.MMMMd().format(date!),
                     style: const TextStyle(color: Colors.white),
                   ),
                 ),
@@ -370,8 +371,8 @@ class SelectionWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.grey.shade700,
               ),
-              child: const Text(
-                "Tippe auf das Diagramm, um Details zu sehen",
+              child: Text(
+                l10n.chartTapHint(),
                 style: TextStyle(color: Colors.white),
               ),
             ),

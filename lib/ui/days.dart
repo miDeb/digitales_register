@@ -20,6 +20,7 @@ import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:dr/container/notification_icon_container.dart';
 import 'package:dr/container/sidebar_container.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
@@ -365,7 +366,7 @@ class _DaysWidgetState extends State<DaysWidget> {
             FloatingActionButton.extended(
               backgroundColor: Colors.red,
               icon: const Icon(Icons.arrow_drop_down),
-              label: const Text("Neue Einträge"),
+              label: Text(l10n.newEntries()),
               onPressed: () async {
                 await controller.scrollToIndex(
                   _targets.first,
@@ -376,7 +377,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         ],
       ),
       homeAppBar: ResponsiveAppBar(
-        title: const Text("Register"),
+        title: Text(l10n.register()),
         actions: <Widget>[
           if (widget.vm.noInternet)
             TextButton(
@@ -386,10 +387,10 @@ class _DaysWidgetState extends State<DaysWidget> {
               ),
               onPressed: widget.refreshNoInternet,
               child: Row(
-                children: const [
-                  Text("Keine Verbindung"),
-                  SizedBox(width: 8),
-                  Icon(Icons.refresh),
+                children: [
+                  Text(l10n.noConnection()),
+                  const SizedBox(width: 8),
+                  const Icon(Icons.refresh),
                 ],
               ),
             ),
@@ -448,7 +449,7 @@ class DashboardHeader extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onSwitchFuture,
               child: Text(
-                future ? "Vergangenheit" : "Zukunft",
+                future ? l10n.past() : l10n.future(),
               ),
             ),
           ),
@@ -501,21 +502,20 @@ class DayWidget extends StatelessWidget {
         String message = "";
         return StatefulBuilder(
           builder: (context, setState) => InfoDialog(
-            title: const Text("Erinnerung"),
+            title: Text(l10n.reminder()),
             content: TextField(
               autofocus: true,
               maxLines: null,
               onChanged: (msg) {
                 setState(() => message = msg);
               },
-              decoration: const InputDecoration(hintText: 'zB. Hausaufgabe'),
             ),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text("Abbrechen"),
+                child: Text(l10n.cancel()),
               ),
               ElevatedButton(
                 onPressed: message.isNullOrEmpty
@@ -523,8 +523,8 @@ class DayWidget extends StatelessWidget {
                     : () {
                         Navigator.pop(context, message);
                       },
-                child: const Text(
-                  "Speichern",
+                child: Text(
+                  l10n.save(),
                 ),
               ),
             ],
@@ -555,7 +555,7 @@ class DayWidget extends StatelessWidget {
                     ),
                     if (showLastFetched)
                       Text(
-                        "Zuletzt synchronisiert ${formatTimeAgo(day.lastRequested)}.",
+                        "${l10n.lastSynced()} ${formatTimeAgo(day.lastRequested)}.",
                         style: Theme.of(context).textTheme.caption,
                       ),
                   ],
@@ -590,7 +590,7 @@ class DayWidget extends StatelessWidget {
                         context: context,
                         builder: (_context) {
                           return InfoDialog(
-                            title: const Text("Gelöschte Einträge"),
+                            title: Text(l10n.deletedEntries()),
                             content: SingleChildScrollView(
                               child: Column(
                                 children: day.deletedHomework
@@ -698,23 +698,23 @@ class ItemWidget extends StatelessWidget {
         return InfoDialog(
           content: StatefulBuilder(
             builder: (context, setState) => SwitchListTile.adaptive(
-              title: const Text("Nie fragen"),
+              title: Text(l10n.neverAsk()),
               onChanged: (bool value) {
                 setState(() => ask = !value);
               },
               value: !ask,
             ),
           ),
-          title: const Text("Erinnerung löschen?"),
+          title: Text(l10n.deleteReminderQ()),
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Abbrechen"),
+              child: Text(l10n.cancel()),
             ),
             ElevatedButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text(
-                "Löschen",
+              child: Text(
+                l10n.delete(),
               ),
             )
           ],
@@ -738,7 +738,7 @@ class ItemWidget extends StatelessWidget {
                 Text(formatChanged(historyItem)),
                 if (historyItem.previousVersion != null)
                   ExpansionTile(
-                    title: const Text("Versionen"),
+                    title: Text(l10n.versions()),
                     children: <Widget>[
                       ItemWidget(
                         item: historyItem,
@@ -827,12 +827,12 @@ class ItemWidget extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(20),
                                       badgeContent: Text(
                                         isHistory && isCurrent
-                                            ? "aktuell"
+                                            ? l10n.current()
                                             : item.isNew
-                                                ? "neu"
+                                                ? l10n.added()
                                                 : item.deleted
-                                                    ? "gelöscht"
-                                                    : "geändert",
+                                                    ? l10n.deleted()
+                                                    : l10n.changed(),
                                         style: const TextStyle(
                                             color: Colors.white),
                                       ),
@@ -950,8 +950,10 @@ class ItemWidget extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text("Anhang",
-                        style: Theme.of(context).textTheme.subtitle1),
+                    child: Text(
+                      l10n.attachments(1),
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
                   ),
                 ),
                 for (final attachment in item.gradeGroupSubmissions!)
@@ -996,6 +998,7 @@ class ItemWidget extends StatelessWidget {
   }
 }
 
+// TODO: localize this
 String formatChanged(Homework hw) {
   String date;
   if (hw.lastNotSeen == null) {
@@ -1056,7 +1059,7 @@ class AttachmentWidget extends StatelessWidget {
                   : () {
                       downloadCallback(ggs);
                     },
-              child: const Text("Herunterladen"),
+              child: Text(l10n.download()),
             )
           else
             IntrinsicHeight(
@@ -1069,7 +1072,7 @@ class AttachmentWidget extends StatelessWidget {
                           : () {
                               downloadCallback(ggs);
                             },
-                      child: const Text("Erneut herunterladen"),
+                      child: Text(l10n.downloadAgain()),
                     ),
                   ),
                   const VerticalDivider(
@@ -1081,7 +1084,7 @@ class AttachmentWidget extends StatelessWidget {
                       onPressed: () {
                         openCallback(ggs);
                       },
-                      child: const Text("Öffnen"),
+                      child: Text(l10n.openFile()),
                     ),
                   ),
                 ],

@@ -18,6 +18,7 @@
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:flutter/material.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 
 import '../main.dart';
 
@@ -88,8 +89,8 @@ class Sidebar extends StatelessWidget {
                       : index <= otherAccounts.length
                           ? otherAccounts[index - 1]
                           : passwordSavingEnabled
-                              ? "Account hinzufügen"
-                              : "Account wechseln",
+                              ? l10n.addAccount()
+                              : l10n.changeAccount(),
                 ),
               ),
           ],
@@ -109,8 +110,8 @@ class Sidebar extends StatelessWidget {
         ),
       ),
       titleTooltip: username ?? "?",
-      toggleTooltipCollapsed: "Ausklappen",
-      toggleTooltipExpanded: "Einklappen",
+      toggleTooltipCollapsed: l10n.expand(),
+      toggleTooltipExpanded: l10n.collapse(),
       toggleTitle: const SizedBox(),
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       avatar:
@@ -128,48 +129,48 @@ class Sidebar extends StatelessWidget {
           CollapsibleItem(
             isSelected: currentSelected == Pages.homework,
             icon: Icons.assignment,
-            text: "Hausaufgaben",
+            text: l10n.dasboardTitle(),
             onPressed: goHome,
           ),
         CollapsibleItem(
           onPressed: showGrades,
           isSelected: currentSelected == Pages.grades,
-          text: "Noten",
+          text: l10n.gradesTitle(),
           icon: Icons.grade,
         ),
         CollapsibleItem(
-            text: "Absenzen",
+            text: l10n.absencesTitle(),
             icon: Icons.hotel,
             isSelected: currentSelected == Pages.absences,
             onPressed: showAbsences),
         CollapsibleItem(
-          text: "Kalender",
+          text: l10n.calendarTitle(),
           icon: Icons.calendar_today,
           isSelected: currentSelected == Pages.calendar,
           onPressed: showCalendar,
         ),
         CollapsibleItem(
-          text: "Zeugnis",
+          text: l10n.certificateTitle(),
           icon: Icons.list,
           isSelected: currentSelected == Pages.certificate,
           onPressed: showCertificate,
         ),
         CollapsibleItem(
-          text: "Mitteilungen",
+          text: l10n.messagesTitle(),
           icon: Icons.message,
           isSelected: currentSelected == Pages.messages,
           onPressed: showMessages,
         ),
         CollapsibleItem(
           hasDivider: true,
-          text: "Einstellungen",
+          text: l10n.settingsTitle(),
           icon: Icons.settings,
           isSelected: currentSelected == Pages.settings,
           onPressed: showSettings,
         ),
         CollapsibleItem(
           hasDivider: true,
-          text: "Abmelden",
+          text: l10n.logoutTitle(),
           icon: Icons.logout,
           onPressed: logout,
         ),

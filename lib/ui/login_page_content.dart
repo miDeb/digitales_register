@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -112,7 +113,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.vm.changePass ? 'Passwort ändern' : 'Login'),
+          title:
+              Text(widget.vm.changePass ? l10n.changePassword() : l10n.login()),
           automaticallyImplyLeading:
               widget.vm.changePass && !widget.vm.mustChangePass,
         ),
@@ -143,12 +145,13 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             });
                           },
                           decoration: InputDecoration(
-                            labelText: "Schule",
+                            labelText: l10n.school(),
                             errorText: !_schoolFocusNode.hasFocus &&
-                                    _schoolController.text != "Andere Schule" &&
+                                    _schoolController.text !=
+                                        l10n.differentSchool() &&
                                     _schoolController.text.isNotEmpty &&
                                     nonCustomServer == null
-                                ? "Schule nicht gefunden"
+                                ? l10n.schoolNotFound()
                                 : null,
                           ),
                         ),
@@ -162,7 +165,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               suggestion,
                               widget.vm.servers[suggestion],
                             );
-                            if (suggestion == "Andere Schule") {
+                            if (suggestion == l10n.differentSchool()) {
                               nonCustomServer = null;
                               _urlController.text = ".digitalesregister.it";
                               _urlController.selection =
@@ -179,15 +182,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             ...Fuzzy(widget.vm.servers.keys.toList())
                                 .search(pattern)
                                 .map((e) => e.item),
-                            "Andere Schule",
+                            l10n.differentSchool(),
                           ];
                           return candidates;
                         },
                         noItemsFoundBuilder: (context) {
-                          return const ListTile(
+                          return ListTile(
                             title: Text(
-                              "Bitte gib den Namen der Schule ein",
-                              style: TextStyle(color: Colors.grey),
+                              l10n.enterSchoolName(),
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           );
                         },
@@ -207,7 +210,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",
                           );
                         },
-                        child: const Text("Feedback?"),
+                        child: Text(l10n.giveFeedback()),
                       ),
                     ),
                   ],
@@ -219,8 +222,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
                         children: [
                           if (!widget.vm.changePass) ...[
                             TextField(
-                              decoration:
-                                  const InputDecoration(labelText: 'Adresse'),
+                              decoration: InputDecoration(
+                                labelText: l10n.address(),
+                              ),
                               controller: _urlController,
                               enabled: !widget.vm.loading,
                               keyboardType: TextInputType.url,
@@ -232,8 +236,9 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             autofillHints: widget.vm.loading
                                 ? null
                                 : [AutofillHints.username],
-                            decoration: const InputDecoration(
-                                labelText: 'Benutzername'),
+                            decoration: InputDecoration(
+                              labelText: l10n.username(),
+                            ),
                             controller: _usernameController,
                             enabled: !widget.vm.loading,
                           ),
@@ -242,9 +247,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ? null
                                 : [AutofillHints.password],
                             decoration: InputDecoration(
-                                labelText: widget.vm.changePass
-                                    ? 'Altes Passwort'
-                                    : 'Passwort'),
+                              labelText: widget.vm.changePass
+                                  ? l10n.oldPassword()
+                                  : l10n.password(),
+                            ),
                             controller: _passwordController,
                             obscureText: true,
                             enabled: !widget.vm.loading,
@@ -258,8 +264,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ),
                               onPressed: () => widget.onRequestPassReset(url),
-                              child: const Text(
-                                "Passwort vergessen",
+                              child: Text(
+                                l10n.forgotPassword(),
                               ),
                             ),
                           ),
@@ -268,10 +274,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                               height: 8,
                             ),
                             if (widget.vm.mustChangePass)
-                              const ListTile(
+                              ListTile(
                                 contentPadding: EdgeInsets.zero,
                                 title: Text(
-                                  "Du musst dein Passwort ändern:",
+                                  l10n.forceChangePassword(),
                                 ),
                               ),
                             Container(
@@ -283,22 +289,16 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 ),
                               ),
                               padding: const EdgeInsets.all(8),
-                              child: const Text(
-                                "Das neue Passwort muss:\n"
-                                "- mindestens 10 Zeichen lang sein\n"
-                                "- mindestens einen Großbuchstaben enthalten\n"
-                                "- mindestens einen Kleinbuchstaben enthalten\n"
-                                "- mindestens eine Zahl enthalten\n"
-                                "- mindestens ein Sonderzeichen enthalten\n"
-                                "- nicht mit dem alten Passwort übereinstimmen",
+                              child: Text(
+                                l10n.passwordRequirements(),
                               ),
                             ),
                             TextField(
                               autofillHints: widget.vm.loading
                                   ? null
                                   : [AutofillHints.newPassword],
-                              decoration: const InputDecoration(
-                                  labelText: 'Neues Passwort'),
+                              decoration: InputDecoration(
+                                  labelText: l10n.newPassword()),
                               controller: _newPassword1Controller,
                               obscureText: true,
                               enabled: !widget.vm.loading,
@@ -315,10 +315,10 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   ? null
                                   : [AutofillHints.newPassword],
                               decoration: InputDecoration(
-                                labelText: 'Neues Passwort wiederholen',
+                                labelText: l10n.repeatNewPassword(),
                                 errorText: newPasswordsMatch
                                     ? null
-                                    : "Die neuen Passwörter stimmen nicht überein",
+                                    : l10n.passwordsDontMatch(),
                               ),
                               controller: _newPassword2Controller,
                               obscureText: true,
@@ -355,8 +355,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                   },
                             child: Text(
                               widget.vm.changePass
-                                  ? 'Passwort ändern'
-                                  : 'Login',
+                                  ? l10n.changePassword()
+                                  : l10n.login(),
                             ),
                           ),
                           const Divider(),
@@ -365,9 +365,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     ),
                   ),
                   SwitchListTile.adaptive(
-                    title: const Text("Angemeldet bleiben"),
-                    subtitle: const Text(
-                        "Deine Zugangsdaten werden lokal gespeichert"),
+                    title: Text(l10n.stayLoggedIn()),
+                    subtitle: Text(l10n.stayLoggedInDesc()),
                     value: !safeMode,
                     onChanged: widget.vm.loading
                         ? null
@@ -384,7 +383,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     ),
                     ListTile(
                       title: Text(
-                        "Andere Accounts",
+                        l10n.otherAccounts(),
                         style: Theme.of(context).textTheme.headline6,
                       ),
                     ),
@@ -404,7 +403,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     child: widget.vm.error?.isNotEmpty == true
                         ? Text(
                             widget.vm.noInternet
-                                ? 'Keine Verbindung mit "${widget.vm.url}" möglich. Bitte überprüfe deine Internetverbindung.\nWenn du "Andere Schule" ausgewählt hast, musst du eine gültige Adresse eingeben.'
+                                ? l10n.connectionFailed(widget.vm.url!)
                                 : widget.vm.error!,
                             style: Theme.of(context)
                                 .textTheme

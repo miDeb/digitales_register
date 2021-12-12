@@ -17,6 +17,8 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
+import 'package:dr/l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:tuple/tuple.dart';
@@ -152,7 +154,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
         int? weight;
         return StatefulBuilder(
           builder: (context, setState) => InfoDialog(
-            title: const Text("Neue Note erstellen"),
+            title: Text(createNewGrade()),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -182,8 +184,8 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text(
-                  "Abbrechen",
+                child: Text(
+                  l10n.cancel(),
                 ),
               ),
               ElevatedButton(
@@ -192,8 +194,8 @@ class _GradeCalculatorState extends State<GradeCalculator> {
                         Navigator.pop(context, Tuple2(grade!, weight!));
                       }
                     : null,
-                child: const Text(
-                  "Hinzufügen",
+                child: Text(
+                  l10n.add(),
                 ),
               ),
             ],
@@ -246,7 +248,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
     final showGreeting = grades.isEmpty;
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Notenrechner"),
+        title: Text(l10n.gradeCalculator()),
       ),
       body: AnimatedCrossFade(
         firstChild: Greeting(
@@ -266,7 +268,7 @@ class _GradeCalculatorState extends State<GradeCalculator> {
           ? null
           : FloatingActionButton.extended(
               onPressed: addGrade,
-              label: const Text("Note hinzufügen"),
+              label: Text(l10n.addGrade()),
               icon: const Icon(Icons.add),
             ),
     );
@@ -292,9 +294,10 @@ class GradesList extends StatelessWidget {
         Material(
           elevation: 2,
           child: ListTile(
-            title: const Text("Durchschnitt"),
-            subtitle:
-                Text(grades.length == 1 ? "1 Note" : "${grades.length} Noten"),
+            title: Text(l10n.average()),
+            subtitle: Text(
+              "${grades.length} ${l10n.grades(grades.length)}",
+            ),
             trailing: Text(_calculateAverage(grades)),
           ),
         ),
@@ -413,7 +416,7 @@ class Greeting extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(32),
           child: Text(
-            "Um zu beginnen, importiere entweder bestehende Noten aus einem Fach\noder füge eine erste Note hinzu.",
+            l10n.gradeCalculatorHint(),
             style: Theme.of(context).textTheme.headline6,
             textAlign: TextAlign.center,
           ),
@@ -425,10 +428,10 @@ class Greeting extends StatelessWidget {
               onPressed: import,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.save_alt),
-                  SizedBox(width: 8),
-                  Text("Noten importieren"),
+                children: [
+                  const Icon(Icons.save_alt),
+                  const SizedBox(width: 8),
+                  Text(l10n.importGrades()),
                 ],
               ),
             ),
@@ -441,10 +444,10 @@ class Greeting extends StatelessWidget {
               onPressed: add,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.add),
-                  SizedBox(width: 8),
-                  Text("Note hinzufügen"),
+                children: [
+                  const Icon(Icons.add),
+                  const SizedBox(width: 8),
+                  Text(l10n.addGrade()),
                 ],
               ),
             ),
@@ -505,7 +508,7 @@ class _ImportGradesState extends State<_ImportGrades> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Noten importieren"),
+        title: Text(l10n.importGrades()),
       ),
       body: Column(
         children: [
@@ -518,7 +521,7 @@ class _ImportGradesState extends State<_ImportGrades> {
                 ),
             ],
             value: selectedSubject,
-            hint: const Text("Fach auswählen"),
+            hint: Text(l10n.selectSubject()),
             onChanged: (subject) {
               setState(() {
                 selectedSubject = subject;
@@ -530,7 +533,7 @@ class _ImportGradesState extends State<_ImportGrades> {
             height: 16,
           ),
           RadioListTile<Semester>(
-            title: const Text("Erstes Semester"),
+            title: Text(l10n.firstSemester()),
             value: Semester.first,
             groupValue: selectedSemester,
             onChanged: (value) {
@@ -541,7 +544,7 @@ class _ImportGradesState extends State<_ImportGrades> {
             },
           ),
           RadioListTile<Semester>(
-            title: const Text("Zweites Semester"),
+            title: Text(l10n.secondSemester()),
             value: Semester.second,
             groupValue: selectedSemester,
             onChanged: (value) {
@@ -552,7 +555,7 @@ class _ImportGradesState extends State<_ImportGrades> {
             },
           ),
           RadioListTile<Semester>(
-            title: const Text("Beide Semester"),
+            title: Text(l10n.bothSemester()),
             value: Semester.all,
             groupValue: selectedSemester,
             onChanged: (value) {
@@ -574,17 +577,17 @@ class _ImportGradesState extends State<_ImportGrades> {
                       Navigator.pop(context, grades);
                     }
                   : null,
-              child: const Text("Importieren"),
+              child: Text(l10n.import()),
             ),
           ),
           if (selectedSemester != null &&
               selectedSubject != null &&
               grades!.isEmpty)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Für dieses Fach sind in diesem Zeitraum keine Noten verfügbar",
-                style: TextStyle(color: Colors.red),
+                l10n.noGradesAvailable(),
+                style: const TextStyle(color: Colors.red),
               ),
             ),
         ],
@@ -659,8 +662,10 @@ class _InputState extends State<_Input> {
                 (!widget.showErrorForEmptyInput && controller.text.isEmpty) ||
                 focusNode.hasFocus
             ? null
-            : "Ungültiger Wert",
-        labelText: widget.inputType == _InputType.grade ? "Note" : "Gewichtung",
+            : l10n.invalidValue(),
+        labelText: widget.inputType == _InputType.grade
+            ? l10n.grades(1)
+            : l10n.weighting(),
         suffixText: widget.inputType == _InputType.weight ? "%" : null,
       ),
       onChanged: (_) {

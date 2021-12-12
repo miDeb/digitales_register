@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
@@ -42,7 +43,7 @@ class GradesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ResponsiveAppBar(
-        title: const Text("Noten"),
+        title: Text(l10n.gradesTitle()),
         actions: <Widget>[
           Theme(
             data: ThemeData.dark(),
@@ -90,7 +91,7 @@ class GradesPage extends StatelessWidget {
                             ListTile(
                               title: Row(
                                 children: [
-                                  const Text("Notendurchschnitt"),
+                                  Text(l10n.gradeAverage()),
                                   IconButton(
                                     icon: const Icon(Icons.settings),
                                     onPressed: showGradesSettings,

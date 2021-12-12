@@ -17,6 +17,7 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:dr/app_state.dart';
+import 'package:dr/l10n/l10n.dart';
 import 'package:dr/main.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
@@ -171,9 +172,9 @@ class CalendarDayWidget extends StatelessWidget {
     }
     return Column(
       children: <Widget>[
-        Text(DateFormat("E", "de").format(calendarDay.date)),
+        Text(DateFormat("E").format(calendarDay.date)),
         Text(
-          DateFormat("dd.MM", "de").format(calendarDay.date),
+          DateFormat("dd.MM.").format(calendarDay.date),
           style: DefaultTextStyle.of(context).style.copyWith(fontSize: 12),
         ),
         if (chunks.isNotEmpty) ...[
@@ -216,7 +217,7 @@ class CalendarDayWidget extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Frei",
+                  noSchoolShort(),
                   style: Theme.of(context).textTheme.subtitle1,
                 ),
               ],

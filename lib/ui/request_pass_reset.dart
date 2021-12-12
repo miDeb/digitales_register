@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/l10n/l10n.dart' as l10n;
 import 'package:flutter/material.dart';
 
 class RequestPassReset extends StatefulWidget {
@@ -38,7 +39,7 @@ class _RequestPassResetState extends State<RequestPassReset> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Passwort vergessen"),
+        title:  Text(l10n.forgotPassword()),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -50,13 +51,13 @@ class _RequestPassResetState extends State<RequestPassReset> {
                 TextField(
                   autofillHints: const [AutofillHints.username],
                   controller: _usernameController,
-                  decoration: const InputDecoration(labelText: 'Benutzername'),
+                  decoration: InputDecoration(labelText: l10n.username()),
                 ),
                 TextField(
                   autofillHints: const [AutofillHints.email],
                   keyboardType: TextInputType.emailAddress,
                   controller: _emailController,
-                  decoration: const InputDecoration(labelText: 'Email-Adresse'),
+                  decoration: InputDecoration(labelText: l10n.emailAddress()),
                 ),
                 const SizedBox(height: 16),
                 ElevatedButton(
@@ -64,7 +65,7 @@ class _RequestPassResetState extends State<RequestPassReset> {
                     _usernameController.text,
                     _emailController.text,
                   ),
-                  child: const Text("Anfrage zum Zurücksetzen senden"),
+                  child:  Text(l10n.sendPassResetRequest()),
                 ),
                 const SizedBox(height: 16),
                 if (widget.message != null)

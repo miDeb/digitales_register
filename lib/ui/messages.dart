@@ -25,6 +25,7 @@ import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:quill_delta_viewer/quill_delta_viewer.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
+import 'package:dr/l10n/l10n.dart' as l10n;
 
 import '../app_state.dart';
 import '../data.dart';
@@ -49,8 +50,8 @@ class MessagesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const ResponsiveAppBar(
-        title: Text("Mitteilungen"),
+      appBar: ResponsiveAppBar(
+        title: Text(l10n.messagesTitle()),
       ),
       body: state == null
           ? noInternet
@@ -68,7 +69,7 @@ class MessagesPage extends StatelessWidget {
                   if (state!.messages.isEmpty)
                     Center(
                       child: Text(
-                        "Noch keine Mitteilungen",
+                        l10n.noMessages(),
                         style: Theme.of(context).textTheme.headline4,
                         textAlign: TextAlign.center,
                       ),
@@ -148,9 +149,9 @@ class _MessageWidgetState extends State<MessageWidget> {
             Badge(
               shape: BadgeShape.square,
               borderRadius: BorderRadius.circular(20),
-              badgeContent: const Text(
-                "neu",
-                style: TextStyle(color: Colors.white),
+              badgeContent: Text(
+                l10n.added(),
+                style: const TextStyle(color: Colors.white),
               ),
             )
         ],
@@ -168,9 +169,9 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: "Gesendet: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    TextSpan(
+                      text: "${l10n.sent()}: ",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(
                         text: DateFormat("d.M.yy H:mm")
@@ -181,9 +182,9 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: "Von: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    TextSpan(
+                      text: "${l10n.from()}: ",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: widget.message.fromName)
                   ],
@@ -192,9 +193,9 @@ class _MessageWidgetState extends State<MessageWidget> {
               Text.rich(
                 TextSpan(
                   children: [
-                    const TextSpan(
-                      text: "An: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    TextSpan(
+                      text: "${l10n.to()}: ",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     TextSpan(text: widget.message.recipientString)
                   ],
@@ -205,9 +206,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               if (widget.message.attachments.isNotEmpty) ...[
                 const Divider(),
                 Text(
-                  widget.message.attachments.length > 1
-                      ? "Anhänge:"
-                      : "Anhang:",
+                  "${l10n.attachments(widget.message.attachments.length)}:",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
@@ -228,7 +227,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                               : () {
                                   widget.onDownloadFile(attachment);
                                 },
-                          child: const Text("Herunterladen"),
+                          child:  Text(l10n.download()),
                         ),
                       ),
                     if (attachment.fileAvailable)
@@ -242,7 +241,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                     : () {
                                         widget.onDownloadFile(attachment);
                                       },
-                                child: const Text("Erneut herunterladen"),
+                                child:  Text(l10n.downloadAgain()),
                               ),
                             ),
                             const VerticalDivider(
@@ -254,7 +253,7 @@ class _MessageWidgetState extends State<MessageWidget> {
                                 onPressed: () {
                                   widget.onOpenFile(attachment);
                                 },
-                                child: const Text("Öffnen"),
+                                child: Text(l10n.openFile()),
                               ),
                             ),
                           ],

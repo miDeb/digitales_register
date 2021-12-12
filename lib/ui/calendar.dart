@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:dr/container/calendar_detail_container.dart';
+import 'package:dr/l10n/l10n.dart';
 import 'package:dr/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -57,7 +58,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
   late Animation<double> _chevronOpacityAnimation;
   late AnimationController _dateRangeOpacityController;
   late Animation<double> _dateRangeOpacityAnimation;
-  final DateFormat _dateFormat = DateFormat("dd.MM.yy");
+  final DateFormat _dateFormat = DateFormat.yMd();
   final Curve _animatePageCurve = Curves.ease;
   final Duration _animatePageDuration = const Duration(milliseconds: 200);
 
@@ -180,7 +181,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
               children: [
                 Scaffold(
                   appBar: ResponsiveAppBar(
-                    title: const Text("Kalender"),
+                    title: Text(calendarTitle()),
                     actions: <Widget>[
                       if (toMonday(now) != widget.vm.currentMonday)
                         TextButton(
@@ -194,8 +195,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                 curve: _animatePageCurve,
                                 duration: _animatePageDuration);
                           },
-                          child: const Text(
-                            "Aktuelle Woche",
+                          child: Text(
+                            currentWeek(),
                           ),
                         ),
                     ],
@@ -255,7 +256,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                         "${_dateFormat.format(widget.vm.first!)} - ${_dateFormat.format(widget.vm.last!)}",
                                       )
                                     : widget.vm.noInternet
-                                        ? const Text("Wähle ein Datum")
+                                        ? Text(chooseADate())
                                         : const CircularProgressIndicator(),
                               ),
                             ),
@@ -383,12 +384,13 @@ class EditNickBar extends StatelessWidget {
                       child: TextButton(
                         onPressed: onShowEditNicks,
                         child: Row(
-                          children: const [
+                          children: [
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8),
-                              child: Text("Kürzel bearbeiten"),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(editNicks()),
                             ),
-                            Spacer(),
+                            const Spacer(),
                           ],
                         ),
                       ),
