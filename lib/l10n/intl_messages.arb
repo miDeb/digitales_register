@@ -1,5 +1,5 @@
 {
-  "@@last_modified": "2021-12-12T22:10:18.760934",
+  "@@last_modified": "2021-12-13T16:53:04.192826",
   "exams": "Test,Schularbeit,Prüfung",
   "@exams": {
     "description": "A comma-separated list of lesson contents that represent exams.\nThis is used to mark exams differently in the calendar view and the homework page",
@@ -77,34 +77,82 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "formatSingleHour": "{hour}. Stunde",
-  "@formatSingleHour": {
-    "description": "Format 'hour' as the lesson index this lesson occurs",
+  "absenceDuration": "{fromDate} {fromHour}. Stunde – {toDate} {toHour} Stunde",
+  "@absenceDuration": {
+    "description": "The dates will be formatted using DateFormat.Md() (e.g. 13.12.)",
+    "type": "text",
+    "placeholders_order": [
+      "fromDate",
+      "fromHour",
+      "toDate",
+      "toHour"
+    ],
+    "placeholders": {
+      "fromDate": {},
+      "fromHour": {},
+      "toDate": {},
+      "toHour": {}
+    }
+  },
+  "absenceJustifiedBy": "Am {date} umd {time} von {justifyingUser} entschuldigt",
+  "@absenceJustifiedBy": {
+    "description": "Date will be formatted using DateFormat.",
+    "type": "text",
+    "placeholders_order": [
+      "date",
+      "time",
+      "justifyingUser"
+    ],
+    "placeholders": {
+      "date": {},
+      "time": {},
+      "justifyingUser": {}
+    }
+  },
+  "absenceJustified": "entschuldigt",
+  "@absenceJustified": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absenceJustifiedBySchool": "Im Auftrag der Schule (entschuldigt)",
+  "@absenceJustifiedBySchool": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absenceNotJustified": "Nicht entschuldigt",
+  "@absenceNotJustified": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "absenceNotYetJustified": "Noch nicht entschuldigt",
+  "@absenceNotYetJustified": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "lessonIndex": "{hour}. Stunde",
+  "@lessonIndex": {
     "type": "text",
     "placeholders_order": [
       "hour"
     ],
     "placeholders": {
-      "hour": {
-        "example": "1"
-      }
+      "hour": {}
     }
   },
-  "formatHoursSpan": "{from}. – {to}. Stunde",
-  "@formatHoursSpan": {
-    "description": "Format 'from' - 'to' as the hours this lesson spans",
+  "lessonSpan": "{from}. – {to}. Stunde",
+  "@lessonSpan": {
     "type": "text",
     "placeholders_order": [
       "from",
       "to"
     ],
     "placeholders": {
-      "from": {
-        "example": "1"
-      },
-      "to": {
-        "example": "2"
-      }
+      "from": {},
+      "to": {}
     }
   },
   "teachers": "{howMany,plural, =1{Lehrer*in}other{Lehrer*innen}}",
@@ -608,7 +656,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "added": "neu",
+  "isNew": "neu",
+  "@isNew": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
+  "added": "eingetragen",
   "@added": {
     "type": "text",
     "placeholders_order": [],
@@ -631,6 +685,57 @@
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
+  },
+  "beforeDateTime": "Vor {date} um {time} {action}.",
+  "@beforeDateTime": {
+    "description": "action is either added, deleted, changed or reAdded.",
+    "type": "text",
+    "placeholders_order": [
+      "date",
+      "time",
+      "action"
+    ],
+    "placeholders": {
+      "date": {},
+      "time": {},
+      "action": {}
+    }
+  },
+  "onDateBetweenTimes": "Am {date} zwischen {timeFrom} und {timeTo} {action}.",
+  "@onDateBetweenTimes": {
+    "description": "action is either added, deleted, changed or reAdded.",
+    "type": "text",
+    "placeholders_order": [
+      "date",
+      "timeFrom",
+      "timeTo",
+      "action"
+    ],
+    "placeholders": {
+      "date": {},
+      "timeFrom": {},
+      "timeTo": {},
+      "action": {}
+    }
+  },
+  "betweenDateTimes": "Zwischen {dateFrom} um {timeFrom} und {dateTo} um {timeTo} {action}.",
+  "@betweenDateTimes": {
+    "description": "action is either added, deleted, changed or reAdded.",
+    "type": "text",
+    "placeholders_order": [
+      "dateFrom",
+      "timeFrom",
+      "dateTo",
+      "timeTo",
+      "action"
+    ],
+    "placeholders": {
+      "dateFrom": {},
+      "timeFrom": {},
+      "dateTo": {},
+      "timeTo": {},
+      "action": {}
+    }
   },
   "attachments": "{howMany,plural, =1{Anhang}other{Anhänge}}",
   "@attachments": {
@@ -979,6 +1084,18 @@
     ],
     "placeholders": {
       "howMany": {}
+    }
+  },
+  "formatTimeAgo": "vor {howMany} {unit}",
+  "@formatTimeAgo": {
+    "type": "text",
+    "placeholders_order": [
+      "howMany",
+      "unit"
+    ],
+    "placeholders": {
+      "howMany": {},
+      "unit": {}
     }
   },
   "school": "Schule",

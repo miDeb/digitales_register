@@ -150,7 +150,7 @@ class _MessageWidgetState extends State<MessageWidget> {
               shape: BadgeShape.square,
               borderRadius: BorderRadius.circular(20),
               badgeContent: Text(
-                l10n.added(),
+                l10n.isNew(),
                 style: const TextStyle(color: Colors.white),
               ),
             )

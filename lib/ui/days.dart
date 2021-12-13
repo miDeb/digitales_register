@@ -829,7 +829,7 @@ class ItemWidget extends StatelessWidget {
                                         isHistory && isCurrent
                                             ? l10n.current()
                                             : item.isNew
-                                                ? l10n.added()
+                                                ? l10n.isNew()
                                                 : item.deleted
                                                     ? l10n.deleted()
                                                     : l10n.changed(),
@@ -998,28 +998,41 @@ class ItemWidget extends StatelessWidget {
   }
 }
 
-// TODO: localize this
 String formatChanged(Homework hw) {
-  String date;
-  if (hw.lastNotSeen == null) {
-    date =
-        "Vor ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)} ";
-  } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen!)) {
-    date = "Am ${DateFormat("EEEE, dd.MM,", "de").format(hw.firstSeen)}"
-        " zwischen ${DateFormat("HH:mm", "de").format(hw.lastNotSeen!)} und ${DateFormat("HH:mm", "de").format(hw.firstSeen)}";
-  } else {
-    date =
-        "Zwischen ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.lastNotSeen!)} "
-        "und ${DateFormat("EEEE, dd.MM, HH:mm,", "de").format(hw.firstSeen)}";
-  }
+  final String action;
+
   if (hw.deleted) {
-    return "$date gelöscht.";
+    action = l10n.deleted();
   } else if (hw.previousVersion == null) {
-    return "$date eingetragen.";
+    action = l10n.added();
   } else if (hw.previousVersion!.deleted) {
-    return "$date wiederhergestellt.";
+    action = l10n.reAdded();
   } else {
-    return "$date geändert.";
+    action = l10n.changed();
+  }
+  if (hw.lastNotSeen == null) {
+    return l10n.beforeDateTime(
+      DateFormat.MMMMEEEEd().format(hw.firstSeen),
+      DateFormat.Hm().format(
+        hw.firstSeen,
+      ),
+      action,
+    );
+  } else if (toDate(hw.firstSeen) == toDate(hw.lastNotSeen!)) {
+    return l10n.onDateBetweenTimes(
+      DateFormat.MMMMEEEEd().format(hw.firstSeen),
+      DateFormat.Hm().format(hw.firstSeen),
+      DateFormat.Hm().format(hw.lastNotSeen!),
+      action,
+    );
+  } else {
+    return l10n.betweenDateTimes(
+      DateFormat.MMMMEEEEd().format(hw.firstSeen),
+      DateFormat.Hm().format(hw.firstSeen),
+      DateFormat.MMMMEEEEd().format(hw.lastNotSeen!),
+      DateFormat.Hm().format(hw.lastNotSeen!),
+      action,
+    );
   }
 }
 

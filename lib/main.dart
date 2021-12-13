@@ -26,9 +26,11 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:intl/intl_standalone.dart';
 
 import 'actions/app_actions.dart';
 import 'app_state.dart';
@@ -68,6 +70,9 @@ Future<void> main() async {
   // This is required to access the secure storage
   // (crash report from a desktop user, possible race?)
   WidgetsFlutterBinding.ensureInitialized();
+
+  await findSystemLocale();
+
   navigatorKey = GlobalKey();
   scaffoldKey = GlobalKey();
   scaffoldMessengerKey = GlobalKey();

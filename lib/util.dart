@@ -89,7 +89,7 @@ extension MapEntryToTuple<K, V> on MapEntry<K, V> {
   }
 }
 
-NumberFormat gradeAverageFormat = NumberFormat("#0.##", "de");
+late NumberFormat gradeAverageFormat = NumberFormat("#0.##", Intl.defaultLocale);
 
 class ParseException implements Exception {
   final String payload;

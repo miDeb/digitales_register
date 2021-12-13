@@ -65,26 +65,62 @@ String absencesPercentageTitle() => Intl.message(
       name: "absencesPercentageTitle",
       desc: "Subtitle for the percentage of absences",
     );
-
-// ----- calendar -----
-String formatSingleHour(int hour) => Intl.message(
-      "$hour. Stunde",
-      name: "formatSingleHour",
-      args: [hour],
-      examples: const {
-        "hour": "1",
-      },
-      desc: "Format 'hour' as the lesson index this lesson occurs",
+String absenceDuration(
+  String fromDate,
+  int fromHour,
+  String toDate,
+  int toHour,
+) =>
+    Intl.message(
+      "$fromDate $fromHour. Stunde – $toDate $toHour Stunde",
+      name: "absenceDuration",
+      args: [
+        fromDate,
+        fromHour,
+        toDate,
+        toHour,
+      ],
+      desc: "The dates will be formatted using DateFormat.Md() (e.g. 13.12.)",
     );
-String formatHoursSpan(int from, int to) => Intl.message(
+String absenceJustifiedBy(
+  String date,
+  String time,
+  String justifyingUser,
+) =>
+    Intl.message("Am $date umd $time von $justifyingUser entschuldigt",
+        name: "absenceJustifiedBy",
+        args: [
+          date,
+          time,
+          justifyingUser,
+        ],
+        desc: "Date will be formatted using DateFormat.");
+String absenceJustified() => Intl.message(
+      "entschuldigt",
+      name: "absenceJustified",
+    );
+String absenceJustifiedBySchool() => Intl.message(
+      "Im Auftrag der Schule (entschuldigt)",
+      name: "absenceJustifiedBySchool",
+    );
+String absenceNotJustified() => Intl.message(
+      "Nicht entschuldigt",
+      name: "absenceNotJustified",
+    );
+String absenceNotYetJustified() => Intl.message(
+      "Noch nicht entschuldigt",
+      name: "absenceNotYetJustified",
+    );
+// ----- calendar -----
+String lessonIndex(int hour) => Intl.message(
+      "$hour. Stunde",
+      name: "lessonIndex",
+      args: [hour],
+    );
+String lessonSpan(int from, int to) => Intl.message(
       "$from. – $to. Stunde",
-      name: "formatHoursSpan",
+      name: "lessonSpan",
       args: [from, to],
-      examples: const {
-        "from": "1",
-        "to": "2",
-      },
-      desc: "Format 'from' - 'to' as the hours this lesson spans",
     );
 String teachers(int howMany) => Intl.plural(
       howMany,
@@ -450,8 +486,12 @@ String current() => Intl.message(
       "aktuell",
       name: "current",
     );
-String added() => Intl.message(
+String isNew() => Intl.message(
       "neu",
+      name: "isNew",
+    );
+String added() => Intl.message(
+      "eingetragen",
       name: "added",
     );
 String deleted() => Intl.message(
@@ -465,6 +505,57 @@ String changed() => Intl.message(
 String reAdded() => Intl.message(
       "wiederhergestellt",
       name: "reAdded",
+    );
+String beforeDateTime(
+  String date,
+  String time,
+  String action,
+) =>
+    Intl.message(
+      "Vor $date um $time $action.",
+      name: "beforeDateTime",
+      args: [
+        date,
+        time,
+        action,
+      ],
+      desc: "action is either added, deleted, changed or reAdded.",
+    );
+String onDateBetweenTimes(
+  String date,
+  String timeFrom,
+  String timeTo,
+  String action,
+) =>
+    Intl.message(
+      "Am $date zwischen $timeFrom und $timeTo $action.",
+      name: "onDateBetweenTimes",
+      args: [
+        date,
+        timeFrom,
+        timeTo,
+        action,
+      ],
+      desc: "action is either added, deleted, changed or reAdded.",
+    );
+String betweenDateTimes(
+  String dateFrom,
+  String timeFrom,
+  String dateTo,
+  String timeTo,
+  String action,
+) =>
+    Intl.message(
+      "Zwischen $dateFrom um $timeFrom und $dateTo um $timeTo $action.",
+      name: "betweenDateTimes",
+      args: [
+        dateFrom,
+        timeFrom,
+        dateTo,
+        timeTo,
+        action,
+      ],
+      desc: "action is either added, deleted, changed or reAdded.",
     );
 String attachments(int howMany) => Intl.plural(
       howMany,
@@ -707,6 +798,14 @@ String formatSeconds(int howMany) => Intl.plural(
       args: [howMany],
       one: "Sekunde",
       other: "Sekunden",
+    );
+String formatTimeAgo(int howMany, String unit) => Intl.message(
+      "vor $howMany $unit",
+      args: [
+        howMany,
+        unit,
+      ],
+      name: "formatTimeAgo",
     );
 
 // ---- login -----

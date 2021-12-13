@@ -76,8 +76,8 @@ class CalendarCard extends StatelessWidget {
             // Time (index and time)
             _ContentItem(
               title: hour.fromHour == hour.toHour
-                  ? formatSingleHour(hour.fromHour)
-                  : formatHoursSpan(hour.fromHour, hour.toHour),
+                  ? lessonIndex(hour.fromHour)
+                  : lessonSpan(hour.fromHour, hour.toHour),
               content: hour.timeSpans
                   .map((span) =>
                       "${formatTime(span.from)} – ${formatTime(span.to)}")
