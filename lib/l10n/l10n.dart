@@ -94,7 +94,7 @@ String absenceJustifiedBy(
           time,
           justifyingUser,
         ],
-        desc: "Date will be formatted using DateFormat.");
+        desc: "Date will be formatted using DateFormat.yMd()");
 String absenceJustified() => Intl.message(
       "entschuldigt",
       name: "absenceJustified",
