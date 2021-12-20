@@ -32,7 +32,7 @@ Future<void> _loadMessages(
   await next(action);
   final dynamic response = await wrapper.send("api/message/getMyMessages");
   if (response != null) {
-    api.actions.messagesActions.loaded(response as List);
+    await api.actions.messagesActions.loaded(response as List);
   }
 }
 
@@ -52,7 +52,7 @@ Future<void> _downloadFile(
   );
   if (success) {
     showSnackBar("Heruntergeladen");
-    api.actions.messagesActions.fileAvailable(action.payload);
+    await api.actions.messagesActions.fileAvailable(action.payload);
   } else {
     showSnackBar("Download fehlgeschlagen");
   }

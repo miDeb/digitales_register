@@ -33,7 +33,7 @@ Future<void> _loadNotifications(
   final dynamic data = await wrapper.send("api/notification/unread");
 
   if (data != null) {
-    api.actions.notificationsActions.loaded(data as List);
+    await api.actions.notificationsActions.loaded(data as List);
   }
 }
 
@@ -55,7 +55,7 @@ Future<void> _deleteAllNotifications(
   await next(action);
   for (final n in api.state.notificationState.notifications!
       .where((n) => n.type == "message" && n.objectId != null)) {
-    api.actions.messagesActions.markAsRead(n.objectId!);
+    await api.actions.messagesActions.markAsRead(n.objectId!);
   }
   await wrapper.send(
     "api/notification/markAsRead",

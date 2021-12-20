@@ -74,7 +74,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
   }) async {
-    (await hiveBox).delete(key);
+    await (await hiveBox).delete(key);
   }
 
   @override
@@ -83,7 +83,7 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
   }) async {
-    (await hiveBox).clear();
+    await (await hiveBox).clear();
   }
 
   @override

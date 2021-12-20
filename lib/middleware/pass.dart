@@ -31,9 +31,9 @@ Future<void> _setSavePass(
   wrapper.safeMode = action.payload;
   if (!api.state.loginState.loggedIn) return;
   if (!action.payload) {
-    api.actions.savePassActions.save();
+    await api.actions.savePassActions.save();
   } else {
-    api.actions.savePassActions.delete();
+    await api.actions.savePassActions.delete();
   }
 }
 
@@ -43,7 +43,7 @@ Future<void> _savePass(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (wrapper.user == null || wrapper.pass == null || wrapper.safeMode) {
     return;
   }
-  secureStorage.write(
+  await secureStorage.write(
     key: "login",
     value: json.encode(
       <String, Object?>{
@@ -62,7 +62,7 @@ Future<void> _deletePass(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  secureStorage.write(
+  await secureStorage.write(
     key: "login",
     value: json.encode(
       <String, Object?>{

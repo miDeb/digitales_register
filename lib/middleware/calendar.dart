@@ -35,7 +35,7 @@ Future<void> _loadCalendar(
       args: {"startDate": DateFormat("yyyy-MM-dd").format(action.payload)});
 
   if (data != null) {
-    api.actions.calendarActions.loaded(data as Map<String, dynamic>);
+    await api.actions.calendarActions.loaded(data as Map<String, dynamic>);
   }
 }
 
@@ -49,8 +49,8 @@ Future<void> _selectionChanged(
   }
   final newWeek = toMonday(action.payload!.date);
   if (api.state.calendarState.currentMonday != newWeek) {
-    api.actions.calendarActions.setCurrentMonday(newWeek);
-    api.actions.calendarActions.load(newWeek);
+    await api.actions.calendarActions.setCurrentMonday(newWeek);
+    await api.actions.calendarActions.load(newWeek);
   }
 }
 
@@ -61,7 +61,7 @@ Future<void> _weekChanged(
   await next(action);
   final selectedDate = api.state.calendarState.selection?.date;
   if (selectedDate != null && toMonday(selectedDate) != action.payload) {
-    api.actions.calendarActions.select(
+    await api.actions.calendarActions.select(
       CalendarSelection(
         (b) => b
           ..date = UtcDateTime(
@@ -79,5 +79,5 @@ Future<void> _clearSelection(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  api.actions.calendarActions.select(null);
+  await api.actions.calendarActions.select(null);
 }

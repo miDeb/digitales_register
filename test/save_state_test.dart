@@ -134,7 +134,7 @@ void main() {
         middleware: middleware(includeErrorMiddleware: false),
       );
       // dispatch any action to trigger a state save
-      store.actions.setUrl("abc");
+      await store.actions.setUrl("abc");
       // saving the state is throttled by five seconds
       async.elapse(const Duration(seconds: 1));
 

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
@@ -52,6 +53,7 @@ typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 
 // Actions are now global (although this doesn't seem to be the case in the official example).
 // This way it is easier for ui code to dispatch actions.
+// TODO: This is actually a bad idea for testing. It should be removed again.
 final AppActions actions = AppActions();
 
 Future<void> main() async {
@@ -88,7 +90,7 @@ Future<void> main() async {
           store.actions.start(event);
         });
       }
-      store.actions.start(uri);
+      unawaited(store.actions.start(uri));
       WidgetsBinding.instance!.addObserver(
         LifecycleObserver(
           store.actions.restarted,

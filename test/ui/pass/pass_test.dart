@@ -52,7 +52,7 @@ void main() {
       middleware: middleware(includeErrorMiddleware: false),
     );
     await tester.pumpWidget(RegisterApp(store: store));
-    store.actions.start(null);
+    await store.actions.start(null);
     await tester.pumpAndSettle();
     await expectLater(
       find.byType(MaterialApp),
@@ -199,7 +199,7 @@ void main() {
       middleware: middleware(includeErrorMiddleware: false),
     );
     await tester.pumpWidget(RegisterApp(store: store));
-    store.actions.start(null);
+    await store.actions.start(null);
     await tester.pumpAndSettle();
 
     await tester.tap(find.byIcon(Icons.settings));

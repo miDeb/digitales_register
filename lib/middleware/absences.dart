@@ -29,6 +29,6 @@ Future<void> _loadAbsences(
   await next(action);
   final dynamic response = await wrapper.send("api/student/dashboard/absences");
   if (response != null) {
-    api.actions.absencesActions.loaded(response);
+    await api.actions.absencesActions.loaded(response);
   }
 }

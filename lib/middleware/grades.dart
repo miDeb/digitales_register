@@ -37,7 +37,7 @@ Future<void> _setSemester(
     ActionHandler next,
     Action<Semester> action) async {
   await next(action);
-  api.actions.gradesActions.load(action.payload);
+  await api.actions.gradesActions.load(action.payload);
 }
 
 Future<void> _loadGrades(
@@ -57,10 +57,10 @@ Future<void> _loadGrades(
         args: {"studentId": api.state.config!.userId},
       );
       if (data == null) {
-        api.actions.gradesActions.loadFailed();
+        await api.actions.gradesActions.loadFailed();
         return;
       }
-      api.actions.gradesActions.loaded(
+      await api.actions.gradesActions.loaded(
         SubjectsLoadedPayload(
           (b) => b
             ..data = data
@@ -97,7 +97,7 @@ Future<void> _loadGradesDetails(
       if (data is String) {
         data = json.decode(data);
       }
-      api.actions.gradesActions.detailsLoaded(
+      await api.actions.gradesActions.detailsLoaded(
         SubjectDetailLoadedPayload(
           (b) => b
             ..data = data
@@ -109,7 +109,7 @@ Future<void> _loadGradesDetails(
           .firstWhere((s) => s.id == action.payload.subject.id)
           .grades[s]!
           .where((g) => g.cancelled)) {
-        api.actions.gradesActions.loadCancelledDescription(
+        await api.actions.gradesActions.loadCancelledDescription(
           LoadGradeCancelledDescriptionPayload(
             (b) => b
               ..semester = s.toBuilder()
@@ -140,7 +140,7 @@ Future<void> _loadCancelledDescription(
       if (data == null) {
         return;
       }
-      api.actions.gradesActions.cancelledDescriptionLoaded(
+      await api.actions.gradesActions.cancelledDescriptionLoaded(
         GradeCancelledDescriptionLoadedPayload(
           (b) => b
             ..grade = action.payload.grade.toBuilder()
@@ -194,7 +194,7 @@ class SemesterLock {
         final last = waitlist.entries.first;
         waitlist.remove(last.key);
         for (final f in last.value) {
-          synchronized(last.key, f);
+          unawaited(synchronized(last.key, f));
         }
       }
       usersOfCurrent--;

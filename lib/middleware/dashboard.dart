@@ -37,10 +37,10 @@ Future<void> _loadDays(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       args: {"viewFuture": action.payload});
 
   if (data is! List) {
-    api.actions.dashboardActions.notLoaded();
+    await api.actions.dashboardActions.notLoaded();
     return;
   }
-  api.actions.dashboardActions.loaded(
+  await api.actions.dashboardActions.loaded(
     DaysLoadedPayload(
       (b) => b
         ..data = data
@@ -58,7 +58,7 @@ Future<void> _switchFuture(
     ActionHandler next,
     Action<void> action) async {
   await next(action);
-  api.actions.dashboardActions.load(api.state.dashboardState.future);
+  await api.actions.dashboardActions.load(api.state.dashboardState.future);
 }
 
 Future<void> _addReminder(
@@ -77,7 +77,7 @@ Future<void> _addReminder(
     showSnackBar("Beim Speichern ist ein Fehler aufgetreten");
     return;
   }
-  api.actions.dashboardActions.homeworkAdded(
+  await api.actions.dashboardActions.homeworkAdded(
     HomeworkAddedPayload(
       (b) => b
         ..data = result
@@ -143,7 +143,7 @@ Future<void> _markNotSeenEntries(
     ActionHandler next,
     Action<bool> action) async {
   if (!action.payload) {
-    api.actions.dashboardActions.markAllAsSeen();
+    await api.actions.dashboardActions.markAllAsSeen();
   }
   await next(action);
 }
@@ -164,7 +164,7 @@ Future<void> _downloadAttachment(
   );
   if (success) {
     showSnackBar("Heruntergeladen");
-    api.actions.dashboardActions.attachmentReady(action.payload);
+    await api.actions.dashboardActions.attachmentReady(action.payload);
   } else {
     showSnackBar("Download fehlgeschlagen");
   }

@@ -242,7 +242,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                   if (result == null) return;
                                   final date = toMonday(result.makeUtc());
                                   if (date != widget.vm.currentMonday) {
-                                    _controller.animateToPage(
+                                    await _controller.animateToPage(
                                       pageOf(date),
                                       curve: _animatePageCurve,
                                       duration: _animatePageDuration,

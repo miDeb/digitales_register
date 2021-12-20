@@ -127,7 +127,7 @@ NextActionHandler _errorMiddleware(
             }
             error +=
                 "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
-            navigatorKey?.currentState?.push(
+            await navigatorKey?.currentState?.push(
               MaterialPageRoute<void>(
                 fullscreenDialog: true,
                 builder: (_) {
@@ -142,7 +142,7 @@ NextActionHandler _errorMiddleware(
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              launch(
+                              await launch(
                                   "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
                             },
                             child: const Text("Entwickler benachrichtigen"),
@@ -181,12 +181,12 @@ $error""",
           }
 
           if (action.name == AppActionsNames.error.name) {
-            handleError(action.payload, null);
+            await handleError(action.payload, null);
           } else {
             try {
               await next(action);
             } catch (e, stackTrace) {
-              handleError(e, stackTrace);
+              await handleError(e, stackTrace);
             }
           }
         };
@@ -245,7 +245,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     showSnackBar("Fehler beim Laden der gespeicherten Daten");
     log("Failed to load login credentials", error: e);
     try {
-      secureStorage.deleteAll();
+      await secureStorage.deleteAll();
     } catch (e) {
       showSnackBar("Bitte versuche, die App neu zu installieren.");
     }
@@ -258,16 +258,16 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
             ?.map<String>((dynamic login) => login["user"] as String) ??
         <String>[],
   );
-  api.actions.loginActions.setAvailableAccounts(otherAccounts);
+  await api.actions.loginActions.setAvailableAccounts(otherAccounts);
   if ((api.state.url != null && api.state.url != url) ||
       (api.state.loginState.username != null &&
           api.state.loginState.username != user)) {
     // TODO: Figure out when exactly we'd hit this code path and how to handle it better.
-    api.actions.savePassActions.delete();
-    api.actions.routingActions.showLogin();
+    await api.actions.savePassActions.delete();
+    await api.actions.routingActions.showLogin();
   } else {
     if (user != null && pass != null) {
-      api.actions.loginActions.login(
+      await api.actions.loginActions.login(
         LoginPayload((b) => b
           ..user = user
           ..pass = pass
@@ -275,7 +275,7 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..fromStorage = true),
       );
     } else {
-      api.actions.routingActions.showLogin();
+      await api.actions.routingActions.showLogin();
     }
   }
 }
@@ -283,8 +283,10 @@ Future<void> _load(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
 Future<void> _refresh(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<void> action) async {
   await next(action);
-  api.actions.dashboardActions.load(api.state.dashboardState.future);
-  api.actions.notificationsActions.load();
+  await Future.wait([
+    api.actions.dashboardActions.load(api.state.dashboardState.future),
+    api.actions.notificationsActions.load(),
+  ]);
 }
 
 Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
@@ -295,7 +297,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   }
   if (!api.state.settingsState.noPasswordSaving &&
       !action.payload.fromStorage) {
-    api.actions.savePassActions.save();
+    await api.actions.savePassActions.save();
   }
   deletedData = false;
   final key = getStorageKey(action.payload.username, wrapper.loginAddress);
@@ -307,7 +309,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         final serializedState =
             serializers.deserialize(json.decode(state) as Object);
         if (serializedState is SettingsState) {
-          api.actions.mountAppState(
+          await api.actions.mountAppState(
             api.state.rebuild(
               (b) => b
                 ..settingsState.replace(
@@ -321,7 +323,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           );
         } else if (serializedState is AppState) {
           final currentState = api.state;
-          api.actions.mountAppState(
+          await api.actions.mountAppState(
             serializedState.rebuild(
               (b) => b
                 ..loginState.replace(currentState.loginState)
@@ -343,7 +345,7 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         // next not at the beginning: bug fix (serialization)
         await next(action);
 
-        api.actions.settingsActions
+        await api.actions.settingsActions
             .saveNoPass(api.state.settingsState.noPasswordSaving);
       } catch (e) {
         showSnackBar("Fehler beim Laden der gespeicherten Daten");
@@ -362,8 +364,8 @@ Future<void> _loggedIn(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     callback();
   }
   if (!action.payload.offlineOnly) {
-    api.actions.dashboardActions.load(api.state.dashboardState.future);
-    api.actions.notificationsActions.load();
+    await api.actions.dashboardActions.load(api.state.dashboardState.future);
+    await api.actions.notificationsActions.load();
   }
 }
 
@@ -437,7 +439,7 @@ Future<String?> _readFromStorage(String key) async {
     return secureStorage.read(key: key);
   } catch (e) {
     try {
-      secureStorage.deleteAll();
+      await secureStorage.deleteAll();
     } catch (e) {
       showSnackBar("Fehler: Bitte versuche, die App neu zu installieren.");
     }
@@ -476,28 +478,28 @@ Future<void> _restarted(
     if (!poppedAnything) {
       // If we pop something the routeObserver will trigger a reload of the dasboard.
       // However, if we are on the dashboard already, we need to this here.
-      api.actions.dashboardActions.refresh();
+      await api.actions.dashboardActions.refresh();
     }
   }
 }
 
-void _start(
+Future<void> _start(
   MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   ActionHandler next,
   Action<Uri?> action,
-) {
-  api.actions.loginActions.clearAfterLoginCallbacks();
+) async {
+  await api.actions.loginActions.clearAfterLoginCallbacks();
   if (action.payload != null) {
-    api.actions.setUrl(action.payload!.origin);
+    await api.actions.setUrl(action.payload!.origin);
     final parameters = action.payload!.queryParameters;
     switch (parameters["semesterWechsel"]) {
       case "1":
-        api.actions.loginActions.addAfterLoginCallback(
+        await api.actions.loginActions.addAfterLoginCallback(
           () => api.actions.gradesActions.setSemester(Semester.first),
         );
         break;
       case "2":
-        api.actions.loginActions.addAfterLoginCallback(
+        await api.actions.loginActions.addAfterLoginCallback(
           () => api.actions.gradesActions.setSemester(Semester.second),
         );
     }
@@ -509,7 +511,7 @@ void _start(
         if (parameters["resetmail"] == "true") {
           final email = parameters["email"];
           final token = parameters["token"];
-          api.actions.routingActions.showPassReset(
+          await api.actions.routingActions.showPassReset(
             ShowPassResetPayload(
               (b) => b
                 ..token = token
@@ -519,49 +521,49 @@ void _start(
           return;
         }
         if (parameters["username"] != null) {
-          api.actions.loginActions.setUsername(parameters["username"]!);
+          await api.actions.loginActions.setUsername(parameters["username"]!);
         }
         if (parameters["redirect"] != null) {
-          redirectAfterLogin(
+          await redirectAfterLogin(
               parameters["redirect"]!.replaceFirst("#", ""), api);
         }
         break;
       default:
         showSnackBar("Dieser Link konnte nicht geöffnet werden");
     }
-    redirectAfterLogin(action.payload!.fragment, api);
+    await redirectAfterLogin(action.payload!.fragment, api);
   }
-  api.actions.load();
+  await api.actions.load();
 }
 
-void redirectAfterLogin(
-    String location, MiddlewareApi<AppState, AppStateBuilder, AppActions> api) {
+Future<void> redirectAfterLogin(String location,
+    MiddlewareApi<AppState, AppStateBuilder, AppActions> api) async {
   switch (location) {
     case "":
     case "dashboard/student":
       break;
     case "student/absences":
-      api.actions.loginActions.addAfterLoginCallback(
+      await api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showAbsences,
       );
       break;
     case "calendar/student":
-      api.actions.loginActions.addAfterLoginCallback(
+      await api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showCalendar,
       );
       break;
     case "student/subjects":
-      api.actions.loginActions.addAfterLoginCallback(
+      await api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showGrades,
       );
       break;
     case "student/certificate":
-      api.actions.loginActions.addAfterLoginCallback(
+      await api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showCertificate,
       );
       break;
     case "message/list":
-      api.actions.loginActions.addAfterLoginCallback(
+      await api.actions.loginActions.addAfterLoginCallback(
         api.actions.routingActions.showMessages,
       );
       break;

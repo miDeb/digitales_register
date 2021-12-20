@@ -351,7 +351,7 @@ class Wrapper {
           await login(user, pass, null, this.url);
           if (!await _loggedIn) {
             if (noInternet) {
-              actions.noInternet(true);
+              await actions.noInternet(true);
             } else {
               logout(hard: true, logoutForcedByServer: true);
             }
@@ -361,7 +361,7 @@ class Wrapper {
           }
         } else {
           if (noInternet) {
-            actions.noInternet(true);
+            await actions.noInternet(true);
           }
           log("returning null for request to $url, user is not logged in");
           return null;
@@ -415,7 +415,7 @@ class Wrapper {
     log("Error while sending request", error: e);
     if (e is TimeoutException || await refreshNoInternet()) {
       noInternet = true;
-      actions.noInternet(true);
+      await actions.noInternet(true);
       error = "Keine Internetverbindung";
     } else {
       error = e.toString();

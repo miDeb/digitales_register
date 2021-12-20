@@ -33,7 +33,7 @@ Future<void> _loadProfile(
   if (result == null) {
     return;
   }
-  api.actions.profileActions.loaded(result as Object);
+  await api.actions.profileActions.loaded(result as Object);
 }
 
 Future<void> _setSendNotificationEmails(
@@ -73,5 +73,5 @@ Future<void> _changeEmail(
   } else {
     showSnackBar("[${result["error"]}]: ${result["message"]}");
   }
-  api.actions.profileActions.load();
+  await api.actions.profileActions.load();
 }

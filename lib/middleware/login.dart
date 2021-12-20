@@ -63,7 +63,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<LoginPayload> action) async {
   await next(action);
   if (action.payload.user == "" || action.payload.pass == "") {
-    api.actions.loginActions.loginFailed(
+    await api.actions.loginActions.loginFailed(
       LoginFailedPayload(
         (b) async => b
           ..cause = "Bitte gib etwas ein"
@@ -94,7 +94,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
           ..keepShowingLoadingIndicator = true,
       ),
     );
-    api.actions.setUrl(url);
+    await api.actions.setUrl(url);
     offlineLogin = true;
   }
 
@@ -117,7 +117,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   if (await wrapper.loggedIn) {
     if (!wrapper.config.isStudentOrParent) {
       wrapper.logout(hard: true);
-      api.actions.loginActions.loginFailed(
+      await api.actions.loginActions.loginFailed(
         LoginFailedPayload(
           (b) => b..cause = "Dieser Benutzertyp wird nicht unterstützt.",
         ),
@@ -134,8 +134,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
   } else if (result is Map && result["error"] == "password_expired") {
-    api.actions.savePassActions.delete();
-    api.actions.loginActions.showChangePass(true);
+    await api.actions.savePassActions.delete();
+    await api.actions.loginActions.showChangePass(true);
   } else {
     final noInternet = wrapper.noInternet;
     if (noInternet) {
@@ -150,11 +150,11 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
               ..offlineOnly = true,
           ),
         );
-        api.actions.setUrl(url);
+        await api.actions.setUrl(url);
         return;
       }
     }
-    api.actions.loginActions.loginFailed(
+    await api.actions.loginActions.loginFailed(
       LoginFailedPayload(
         (b) => b
           ..cause = wrapper.error
@@ -162,7 +162,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     );
   }
-  api.actions.setUrl(url);
+  await api.actions.setUrl(url);
 }
 
 Future<void> _changePass(
@@ -176,18 +176,18 @@ Future<void> _changePass(
     action.payload.oldPass,
     action.payload.newPass,
   );
-  api.actions.savePassActions.save();
+  await api.actions.savePassActions.save();
   if (result == null) {
     return;
   }
   if (result["error"] != null) {
-    api.actions.loginActions.loginFailed(
+    await api.actions.loginActions.loginFailed(
       LoginFailedPayload((b) => b
         ..cause = wrapper.error
         ..username = action.payload.user),
     );
   } else {
-    api.actions.loginActions.login(
+    await api.actions.loginActions.login(
       LoginPayload(
         (b) => b
           ..user = action.payload.user
@@ -207,15 +207,15 @@ Future<void> _loginFailed(
     Action<LoginFailedPayload> action) async {
   await next(action);
 
-  api.actions.savePassActions.delete();
-  api.actions.routingActions.showLogin();
+  await api.actions.savePassActions.delete();
+  await api.actions.routingActions.showLogin();
 }
 
 Future<void> _showChangePass(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  api.actions.routingActions.showLogin();
+  await api.actions.routingActions.showLogin();
   await next(action);
 }
 
@@ -236,10 +236,10 @@ Future<void> _requestPassReset(
   ))
       .data;
   if (result["error"] != null) {
-    api.actions.loginActions
+    await api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
   } else {
-    api.actions.loginActions
+    await api.actions.loginActions
         .passResetSucceeded((result["message"] as String?)!);
   }
 }
@@ -261,10 +261,11 @@ Future<void> _resetPass(
   ))
       .data;
   if (result["error"] != null) {
-    api.actions.loginActions
+    await api.actions.loginActions
         .passResetFailed("[${result["error"]}]: ${result["message"]}");
   } else {
-    api.actions.loginActions.passResetSucceeded(result["message"] as String);
+    await api.actions.loginActions
+        .passResetSucceeded(result["message"] as String);
   }
 }
 
@@ -298,8 +299,8 @@ Future<void> _addAccount(
       ),
     );
   }
-  api.actions.mountAppState(AppState());
-  api.actions.load();
+  await api.actions.mountAppState(AppState());
+  await api.actions.load();
 }
 
 Future<void> _selectAccount(
@@ -324,8 +325,8 @@ Future<void> _selectAccount(
   login["pass"] = selected["pass"];
   login["url"] = selected["url"];
   await secureStorage.write(key: "login", value: json.encode(login));
-  api.actions.mountAppState(AppState());
-  api.actions.load();
+  await api.actions.mountAppState(AppState());
+  await api.actions.load();
 }
 
 void _showUserTypeNotSupported(String url) {

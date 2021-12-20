@@ -15,3 +15,4 @@ linter:
     avoid_multiple_declarations_per_line: false
     require_trailing_commas: false
     avoid_escaping_inner_quotes: false
+    unawaited_futures: true

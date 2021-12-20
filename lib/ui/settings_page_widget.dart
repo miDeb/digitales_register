@@ -144,7 +144,8 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   Widget build(BuildContext context) {
     if (widget.vm.showSubjectNicks) {
       WidgetsBinding.instance!.addPostFrameCallback((_) async {
-        controller.scrollToIndex(4, preferPosition: AutoScrollPosition.begin);
+        await controller.scrollToIndex(4,
+            preferPosition: AutoScrollPosition.begin);
       });
     }
     final currentTheme = DynamicTheme.of(context)!.followDevice
@@ -560,7 +561,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: const Text("Feedback geben"),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
-              launch(
+              await launch(
                 // ignore: prefer_interpolation_to_compose_strings
                 "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
                     ("&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}"),

@@ -107,7 +107,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
         if (widget.vm.changePass && !widget.vm.mustChangePass) {
           return true;
         }
-        SystemNavigator.pop();
+        await SystemNavigator.pop();
         return false;
       },
       child: Scaffold(
@@ -201,7 +201,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         onPressed: () async {
-                          launch(
+                          await launch(
                             // ignore: prefer_interpolation_to_compose_strings
                             "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
                                 "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",

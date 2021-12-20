@@ -30,6 +30,6 @@ Future<void> _loadCertificate(
   final dynamic response =
       await wrapper.send("student/certificate", method: "GET");
   if (response != null) {
-    api.actions.certificateActions.loaded(response as String);
+    await api.actions.certificateActions.loaded(response as String);
   }
 }
