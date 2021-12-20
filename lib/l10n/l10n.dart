@@ -776,7 +776,7 @@ String formatDays(int howMany) => Intl.plural(
       name: "formatDays",
       args: [howMany],
       one: "Tag",
-      other: "Tage",
+      other: "Tagen",
     );
 String formatHours(int howMany) => Intl.plural(
       howMany,
