@@ -244,6 +244,11 @@ const Map<String, String> schools = {
       "https://mittelschule-brixen.digitalesregister.it",
   "Mittelschule Naturns": "https://ms-naturns.digitalesregister.it",
   "Grundschule Marling": "https://gs-marling.digitalesregister.it",
-  "Mittelschule Peter Rosegger":
-      "https://ms-untermais.digitalesregister.it/v2/login",
+  "Mittelschule Peter Rosegger": "https://ms-untermais.digitalesregister.it",
+  "Mittelschulen SSP Bozen Stadtzentrum":
+      "https://ms-bozenstadtzentrum.digitalesregister.it",
+  "Grundschule R. Stolz SSP Bozen Stadtzentrum":
+      "https://gs-bozenstadtzentrum.digitalesregister.it",
+  "Grundschule Quirein SSP Bozen Stadtzentrum":
+      "https://gs-quirein.digitalesregister.it",
 };
