@@ -113,8 +113,10 @@ const Map<String, String> schools = {
   "SSP Ahrntal": "https://ssp-ahrntal.digitalesregister.it",
   "MS Algund": "https://ms-algund.digitalesregister.it",
   "SSP Algund - Grundschulen": "https://ssp-algund.digitalesregister.it",
-  "Grundschulen SSP Bozen Europa (Grundschule J. H. Pestalozzi, Grundschule A. Langer)":
+  "Grundschule J. H. Pestalozzi (SSP Bozen Europa)":
       "https://gs-bozeneuropa.digitalesregister.it",
+  "Grundschule A. Langer (SSP Bozen Europa)":
+      "https://gs-langer.digitalesregister.it",
   "Mittelschule SSP Bozen Europa (Mittelschule A. Schweitzer)":
       "https://ms-bozeneuropa.digitalesregister.it",
   "SSP Bruneck 1": "https://bruneck1.digitalesregister.it",
@@ -133,8 +135,8 @@ const Map<String, String> schools = {
   "Grundschule Vierschach": "https://gs-vierschach.digitalesregister.it",
   "Grundschule Winnebach": "https://gs-winnebach.digitalesregister.it",
   "SSP Innichen": "https://ssp-innichen.digitalesregister.it",
-  "Grundschulen SSP Karneid": "https://gs-sspkarneid.digitalesregister.it",
-  "Mittelschule SSP Karneid": "https://ms-sspkarneid.digitalesregister.it",
+  "Mittelschule Blumau (SSP Karneid)":
+      "https://ms-sspkarneid.digitalesregister.it",
   "SSP Lana": "https://ssp-lana.digitalesregister.it",
   "SSP Lana Grundschulen": "https://ssplana-gs.digitalesregister.it",
   "Grundschule Goldrain": "https://gs-goldrain.digitalesregister.it",
@@ -205,7 +207,7 @@ const Map<String, String> schools = {
   "SSP Ulten": "https://ssp-ulten.digitalesregister.it",
   "Schulsprengel Vintl": "https://ssp-vintl.digitalesregister.it",
   "MS Welsberg": "https://ms-welsberg.digitalesregister.it",
-  "Schulsprengel Sterzing I (GS Sterzing J.Rampold, GS Gossensaß, MS Gossensaß, GS Innerpflersch)":
+  "Schulsprengel Sterzing I (Grundschulen in Sterzing, Gossensaß und Innerpflersch)":
       "https://sterzing1.digitalesregister.it",
   "GS Ahornach": "https://gs-ahornach.digitalesregister.it",
   "GS Lappach": "https://gs-lappach.digitalesregister.it",
@@ -251,4 +253,15 @@ const Map<String, String> schools = {
       "https://gs-bozenstadtzentrum.digitalesregister.it",
   "Grundschule Quirein SSP Bozen Stadtzentrum":
       "https://gs-quirein.digitalesregister.it",
+  "Grundschule Partschins": "https://gs-partschins.digitalesregister.it",
+  "Grundschulen SSP Naturns": "https://gs-naturns.digitalesregister.it",
+  "MS Tirol": "https://ms-tirol.digitalesregister.it",
+  "Grunschule Algund": "https://gs-algund.digitalesregister.it",
+  "Grundschule Voelseraicha": "https://gs-voelseraicha.digitalesregister.it",
+  "Mittelschule Gossensaß": "https://ms-goss.digitalesregister.it",
+  "Grundschule Steinegg": "https://gs-steinegg.digitalesregister.it",
+  "Grundschule Kardaun": "https://gs-kardaun.digitalesregister.it",
+  "Grundschule Karneid": "https://gs-karneid.digitalesregister.it",
+  "Grundschule Blumau": "https://gs-blumau.digitalesregister.it",
+  "Grundschule Tiers": "https://gs-tiers.digitalesregister.it",
 };
