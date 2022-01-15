@@ -57,6 +57,7 @@ typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 final AppActions actions = AppActions();
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   try {
     packageInfo = await PackageInfo.fromPlatform();
   } catch (_) {
@@ -67,9 +68,6 @@ Future<void> main() async {
       buildNumber: "Unknown",
     );
   }
-  // This is required to access the secure storage
-  // (crash report from a desktop user, possible race?)
-  WidgetsFlutterBinding.ensureInitialized();
   navigatorKey = GlobalKey();
   scaffoldKey = GlobalKey();
   scaffoldMessengerKey = GlobalKey();
