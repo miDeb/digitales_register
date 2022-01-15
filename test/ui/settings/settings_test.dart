@@ -142,7 +142,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.scrollUntilVisible(
           find.text("Fächerkürzel"),
-          150,
+          200,
         );
         await tester.tap(find.text("Fächerkürzel"));
         await tester.pumpAndSettle();
@@ -213,7 +213,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.scrollUntilVisible(
           find.text("Fächerkürzel"),
-          150,
+          200,
         );
         await tester.tap(find.text("Fächerkürzel"));
         await tester.pumpAndSettle();
@@ -282,7 +282,7 @@ void main() {
         await tester.pumpAndSettle();
         await tester.scrollUntilVisible(
           find.text("Fächerkürzel"),
-          150,
+          200,
         );
         await tester.tap(find.text("Fächerkürzel"));
         await tester.pumpAndSettle();
