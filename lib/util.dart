@@ -234,7 +234,7 @@ String fixupUrl(String enteredUrl) {
   return url;
 }
 
-Future<bool> canConnectTo(String url) async {
+Future<bool> cannotConnectTo(String url) async {
   var noInternet = false;
   try {
     final result = await http.get(Uri.parse(url));

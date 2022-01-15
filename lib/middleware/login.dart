@@ -245,7 +245,7 @@ Future<void> _requestPassReset(
           .passResetSucceeded((result["message"] as String?)!);
     }
   } catch (e) {
-    if (await canConnectTo(api.state.url!)) {
+    if (await cannotConnectTo(api.state.url!)) {
       await api.actions.loginActions
           .passResetFailed("Keine Verbindung mit \"${api.state.url}\" möglich");
     } else {
