@@ -126,7 +126,7 @@ NextActionHandler _errorMiddleware(
               error += "\n\n$stackTrace";
             }
             error +=
-                "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}";
+                "\n\nApp Version: $appVersion\nOS: ${Platform.operatingSystem}\nServer: ${api.state.url}";
             await navigatorKey?.currentState?.push(
               MaterialPageRoute<void>(
                 fullscreenDialog: true,
