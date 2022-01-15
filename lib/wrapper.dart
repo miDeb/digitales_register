@@ -108,8 +108,8 @@ class Wrapper {
 
   String? error;
 
-  UtcDateTime lastInteraction = now;
-  UtcDateTime? _serverLogoutTime;
+  DateTime lastInteraction = DateTime.now();
+  DateTime? _serverLogoutTime;
   late Config config;
   Future<dynamic> login(
     String? user,
@@ -170,7 +170,7 @@ class Wrapper {
       return null;
     }
     if (getBool(response["loggedIn"]) ?? false) {
-      lastInteraction = now;
+      lastInteraction = DateTime.now();
       loggedInCompleter.complete(true);
       this.user = user;
       this.pass = pass;
@@ -425,7 +425,9 @@ class Wrapper {
   Future<void> _updateLogout() async {
     if (!await _loggedIn) return;
     if (_serverLogoutTime != null &&
-        now.add(const Duration(seconds: 25)).isAfter(_serverLogoutTime!)) {
+        DateTime.now()
+            .add(const Duration(seconds: 25))
+            .isAfter(_serverLogoutTime!)) {
       //autologout happens soon!
       final result =
           getMap(await send("api/auth/extendSession", args: <String, Object?>{
@@ -440,15 +442,14 @@ class Wrapper {
         return;
       } else {
         _serverLogoutTime = DateTime.fromMillisecondsSinceEpoch(
-                (result["newExpiration"] as int) * 1000)
-            .makeUtc();
+            (result["newExpiration"] as int) * 1000);
       }
     }
     Future.delayed(const Duration(seconds: 5), _updateLogout);
   }
 
   void interaction() {
-    lastInteraction = now;
+    lastInteraction = DateTime.now();
   }
 
   void logout({required bool hard, bool logoutForcedByServer = false}) {
