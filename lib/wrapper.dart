@@ -97,13 +97,7 @@ class Wrapper {
   bool noInternet = false;
   Future<bool> refreshNoInternet() async {
     final address = url != null ? baseAddress : "https://digitalesregister.it";
-    try {
-      final result = await http.get(Uri.parse(address));
-      noInternet = result.statusCode != 200;
-    } catch (e) {
-      noInternet = true;
-    }
-    return noInternet;
+    return noInternet = await canConnectTo(address);
   }
 
   String? error;

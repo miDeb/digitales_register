@@ -23,6 +23,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:tuple/tuple.dart';
+import 'package:http/http.dart' as http;
 
 import 'utc_date_time.dart';
 
@@ -231,4 +232,15 @@ String fixupUrl(String enteredUrl) {
     url = url.substring(0, url.length - defaultUrlPath.length);
   }
   return url;
+}
+
+Future<bool> canConnectTo(String url) async {
+  var noInternet = false;
+  try {
+    final result = await http.get(Uri.parse(url));
+    noInternet = result.statusCode != 200;
+  } catch (e) {
+    noInternet = true;
+  }
+  return noInternet;
 }

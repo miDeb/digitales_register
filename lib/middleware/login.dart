@@ -226,21 +226,31 @@ Future<void> _requestPassReset(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<RequestPassResetPayload> action) async {
+  await next(action);
   // the api url DOES NOT contain /v2/ in the path. This is intentional.
-  final dynamic result = (await (passDio ?? dio.Dio()).post<dynamic>(
-    "${api.state.url}/api/auth/resetPassword",
-    data: {
-      "email": action.payload.email,
-      "username": action.payload.user,
-    },
-  ))
-      .data;
-  if (result["error"] != null) {
-    await api.actions.loginActions
-        .passResetFailed("[${result["error"]}]: ${result["message"]}");
-  } else {
-    await api.actions.loginActions
-        .passResetSucceeded((result["message"] as String?)!);
+  try {
+    final dynamic result = (await (passDio ?? dio.Dio()).post<dynamic>(
+      "${api.state.url}/api/auth/resetPassword",
+      data: {
+        "email": action.payload.email,
+        "username": action.payload.user,
+      },
+    ))
+        .data;
+    if (getMap(result)?["error"] != null) {
+      await api.actions.loginActions
+          .passResetFailed("[${result["error"]}]: ${result["message"]}");
+    } else {
+      await api.actions.loginActions
+          .passResetSucceeded((result["message"] as String?)!);
+    }
+  } catch (e) {
+    if (await canConnectTo(api.state.url!)) {
+      await api.actions.loginActions
+          .passResetFailed("Keine Verbindung mit \"${api.state.url}\" möglich");
+    } else {
+      rethrow;
+    }
   }
 }
 
