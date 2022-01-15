@@ -65,7 +65,7 @@ Future<void> _showLogin(
   });
 
   if (currentRoute?.settings.name != "/login") {
-    await navigatorKey!.currentState?.pushNamed("/login");
+    unawaited(navigatorKey!.currentState?.pushNamed("/login"));
   }
 }
 
@@ -74,7 +74,7 @@ Future<void> _showRequestPassReset(
     ActionHandler next,
     Action<String> action) async {
   await api.actions.setUrl(action.payload);
-  await navigatorKey!.currentState!.pushNamed("/request_pass_reset");
+  unawaited(navigatorKey!.currentState!.pushNamed("/request_pass_reset"));
   await next(action);
 }
 
@@ -82,7 +82,7 @@ Future<void> _showPassReset(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/pass_reset");
+  unawaited(navigatorKey!.currentState!.pushNamed("/pass_reset"));
   await next(action);
 }
 
@@ -90,7 +90,7 @@ Future<void> _showChangeEmail(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/change_email");
+  unawaited(navigatorKey!.currentState!.pushNamed("/change_email"));
   await next(action);
 }
 
@@ -98,7 +98,7 @@ Future<void> _showProfile(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/profile");
+  unawaited(navigatorKey!.currentState!.pushNamed("/profile"));
   await api.actions.profileActions.load();
   await next(action);
 }
@@ -107,7 +107,7 @@ Future<void> _showNotifications(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/notifications");
+  unawaited(navigatorKey!.currentState!.pushNamed("/notifications"));
   await next(action);
 }
 
@@ -124,15 +124,15 @@ Future<void> _showEditCalendarSubjectNicks(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/settings");
   await next(action);
+  unawaited(navigatorKey!.currentState!.pushNamed("/settings"));
 }
 
 Future<void> _showEditGradesAverageSettings(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/settings");
+  unawaited(navigatorKey!.currentState!.pushNamed("/settings"));
   await next(action);
 }
 
@@ -200,7 +200,7 @@ Future<void> _showGradesChart(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/gradesChart");
+  unawaited(navigatorKey!.currentState!.pushNamed("/gradesChart"));
   await next(action);
 }
 
@@ -208,7 +208,7 @@ Future<void> _showGradeCalculator(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<void> action) async {
-  await navigatorKey!.currentState!.pushNamed("/gradeCalculator");
+  unawaited(navigatorKey!.currentState!.pushNamed("/gradeCalculator"));
   await api.actions.gradesActions.load(Semester.all);
   await next(action);
 }
