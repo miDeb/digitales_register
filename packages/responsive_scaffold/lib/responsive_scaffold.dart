@@ -1,7 +1,6 @@
 library responsive_scaffold;
 
 import 'package:flutter/material.dart' hide SizeTransition;
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_portal/flutter_portal.dart';
 import 'package:responsive_scaffold/size_transition.dart';
 

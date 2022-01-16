@@ -24,13 +24,11 @@ import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:mutex/mutex.dart';
 
 import 'app_state.dart';
 import 'main.dart';
 import 'ui/dialog.dart';
-import 'utc_date_time.dart';
 
 /*
 // Debug all requests
