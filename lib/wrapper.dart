@@ -330,6 +330,7 @@ class Wrapper {
   }
 
   final _loginMutex = Mutex();
+  DateTime? _lastUnexpectedLogout;
 
   Future<dynamic> send(String url,
       {Map<String, Object?> args = const <String, Object?>{},
@@ -396,9 +397,23 @@ class Wrapper {
     //</script>
 
     if (responseData is String &&
-        RegExp(r'\s*<script type="text/javascript">\n?\s*window\.location = "https://.+\.digitalesregister.it/v2/login";\n?\s*</script>')
+        RegExp(r'^[\s\n]*<script type="text/javascript">\n?\s*window\.location = "https://.+\.digitalesregister.it/v2/login";\n?\s*</script>[\s\n]*$')
             .hasMatch(responseData)) {
-      throw UnexpectedLogoutException();
+      // This is a very frequently reported bug, but I don't have an idea as to why this is happening.
+      // Possible causes might be that the user's time is off, or the user might be trying to log in from a different device at the same time.
+
+      // Try to recover by manually setting the _loggedIn flag to false and retrying the request.
+      // Since this has the potential of ending up in an infinite loop we only attempt it once every minute.
+      if (_lastUnexpectedLogout == null ||
+          DateTime.now().difference(_lastUnexpectedLogout!).inSeconds > 60) {
+        _loggedIn = Future.value(false);
+        _lastUnexpectedLogout = DateTime.now();
+        log("unexpectedly logged out by server, setting _loggedIn flag and retrying");
+        return send(url, args: args, method: method);
+      } else {
+        log("unexpectedly logged out by server, but last attempt to relogin was less than a minute ago, not retrying");
+        throw UnexpectedLogoutException();
+      }
     }
     return responseData;
   }
