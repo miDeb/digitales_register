@@ -1,3 +1,6 @@
+## 8.2.5
+- Unerwartete Logouts werden jetzt behandelt.
+
 ## 8.2.0
 - Kalender-Detailansicht neu designt
   - Sie ist nun eine eigene Seite

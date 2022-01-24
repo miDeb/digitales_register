@@ -26,6 +26,11 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
+    <release version="8.2.5" date="2022-01-15">
+      <description>
+        Unerwartete Logouts werden jetzt behandelt.
+      </description>
+    </release>
     <release version="8.2.4" date="2022-01-15" />
     <release version="8.2.3" date="2021-12-12" />
     <release version="8.2.2" date="2021-12-12" />
