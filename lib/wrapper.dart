@@ -169,7 +169,7 @@ class Wrapper {
       error = null;
       await _loadConfig().then((_) {
         _serverLogoutTime =
-            now.add(Duration(seconds: config.autoLogoutSeconds));
+            DateTime.now().add(Duration(seconds: config.autoLogoutSeconds));
         _updateLogout();
         onConfigLoaded!();
       });
@@ -339,7 +339,8 @@ class Wrapper {
     await _loginMutex.acquire();
     try {
       if (!await _loggedIn ||
-          (_serverLogoutTime != null && now.isAfter(_serverLogoutTime!))) {
+          (_serverLogoutTime != null &&
+              DateTime.now().isAfter(_serverLogoutTime!))) {
         if (user != null && pass != null) {
           await login(user, pass, null, this.url);
           if (!await _loggedIn) {
