@@ -472,7 +472,7 @@ Future<void> _restarted(
   Action<void> action,
 ) async {
   await next(action);
-  if (now.difference(wrapper.lastInteraction).inMinutes > 3) {
+  if (DateTime.now().difference(wrapper.lastInteraction).inMinutes > 3) {
     wrapper.interaction();
     final poppedAnything = _popAll();
     if (!poppedAnything) {
