@@ -154,7 +154,7 @@ class Wrapper {
       )!;
     } catch (e) {
       loggedInCompleter.complete(false);
-      log("Error while logging in", error: e);
+      log("Error while logging in (login failed)", error: e);
       if (e is TimeoutException || await refreshNoInternet()) {
         noInternet = true;
       }
@@ -162,6 +162,7 @@ class Wrapper {
       return null;
     }
     if (getBool(response["loggedIn"]) ?? false) {
+      log("login succeeded");
       lastInteraction = DateTime.now();
       loggedInCompleter.complete(true);
       this.user = user;
@@ -174,6 +175,7 @@ class Wrapper {
         onConfigLoaded!();
       });
     } else {
+      log("login did not succeed");
       loggedInCompleter.complete(false);
       error = "[${response["error"]}] ${response["message"]}";
       switch (getString(response["error"])) {
@@ -332,15 +334,38 @@ class Wrapper {
   final _loginMutex = Mutex();
   DateTime? _lastUnexpectedLogout;
 
-  Future<dynamic> send(String url,
-      {Map<String, Object?> args = const <String, Object?>{},
-      String method = "POST"}) async {
+  Future<dynamic> send(
+    String url, {
+    Map<String, Object?> args = const <String, Object?>{},
+    String method = "POST",
+    bool isRetryAfterUnexpectedLogout = false,
+  }) async {
     assert(!url.startsWith("/"));
     await _loginMutex.acquire();
     try {
-      if (!await _loggedIn ||
-          (_serverLogoutTime != null &&
-              DateTime.now().isAfter(_serverLogoutTime!))) {
+      // If we somehow did not yet notice that we were logged out set the flag now
+      if (_serverLogoutTime != null &&
+          DateTime.now().isAfter(_serverLogoutTime!)) {
+        _loggedIn = Future.value(false);
+      }
+      if (isRetryAfterUnexpectedLogout) {
+        // If we noticed an unexpected logout, we set the loggedIn flag here and try logging in again.
+        // Since this has the potential of ending up in an infinite loop we only attempt a login following an unexpected logout
+        // at most once every minute.
+        if (_lastUnexpectedLogout
+                ?.add(const Duration(minutes: 1))
+                .isAfter(DateTime.now()) ??
+            false) {
+          log("unexpected logout: not trying to relogin, last relogin attempt was less than a minute ago.");
+          log("  retrying just the request (we might have logged in in the meantime, as requests are running in parallel).");
+        } else {
+          log("unexpected logout: trying to relogin and retrying the request after that.");
+          _loggedIn = Future.value(false);
+          _lastUnexpectedLogout = DateTime.now();
+        }
+      }
+
+      if (!await _loggedIn) {
         if (user != null && pass != null) {
           await login(user, pass, null, this.url);
           if (!await _loggedIn) {
@@ -392,7 +417,7 @@ class Wrapper {
       ..response = stringifyMaybeJson(responseData)
       ..parameters = stringifyMaybeJson(args)));
 
-    // returned if we were logged out:
+    // returned if we were logged out (there should be whitespace at both ends, but the editor is removing it):
     //	<script type="text/javascript">
     //window.location = "https://vinzentinum.digitalesregister.it/v2/login";
     //</script>
@@ -403,18 +428,19 @@ class Wrapper {
       // This is a very frequently reported bug, but I don't have an idea as to why this is happening.
       // Possible causes might be that the user's time is off, or the user might be trying to log in from a different device at the same time.
 
-      // Try to recover by manually setting the _loggedIn flag to false and retrying the request.
-      // Since this has the potential of ending up in an infinite loop we only attempt it once every minute.
-      if (_lastUnexpectedLogout == null ||
-          DateTime.now().difference(_lastUnexpectedLogout!).inSeconds > 60) {
-        _loggedIn = Future.value(false);
-        _lastUnexpectedLogout = DateTime.now();
-        log("unexpectedly logged out by server, setting _loggedIn flag and retrying");
-        return send(url, args: args, method: method);
-      } else {
-        log("unexpectedly logged out by server, but last attempt to relogin was less than a minute ago, not retrying");
+      // If this is already a retry, don't retry again. We really don't know anymore what's going on.
+      if (isRetryAfterUnexpectedLogout) {
+        log("retrying the request was unsuccessful, we seem to be still logged out.");
         throw UnexpectedLogoutException();
       }
+
+      // Retry the request.
+      return send(
+        url,
+        args: args,
+        method: method,
+        isRetryAfterUnexpectedLogout: true,
+      );
     }
     return responseData;
   }
