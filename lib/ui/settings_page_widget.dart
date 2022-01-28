@@ -545,17 +545,18 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               );
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.monetization_on),
-            title: const Text(
-              "Unterstütze uns jetzt!",
+          // Apple does not allow donation links
+          if (!(Platform.isIOS || Platform.isMacOS))
+            ListTile(
+              leading: const Icon(Icons.monetization_on),
+              title: const Text(
+                "Unterstütze uns jetzt!",
+              ),
+              onTap: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (context) => Donate()));
+              },
             ),
-            trailing: const Icon(Icons.open_in_new),
-            onTap: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (context) => Donate()));
-            },
-          ),
           ListTile(
             leading: const Icon(Icons.feedback),
             title: const Text("Feedback geben"),
