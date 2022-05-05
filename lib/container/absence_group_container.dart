@@ -43,15 +43,15 @@ class AbsenceGroupContainer extends StatelessWidget {
         final last = absenceGroup.absences.first; //<---
         var fromTo = "";
         if (first.date == last.date) {
-          fromTo += "${DateFormat("d.M.").format(first.date)}, ";
+          fromTo += "${DateFormat("EE d.M.yyyy", "de").format(first.date)}, ";
           if (first == last) {
             fromTo += "${first.hour}. h";
           } else {
-            fromTo += "${first.hour}-${last.hour}. h";
+            fromTo += "${first.hour}. - ${last.hour}. h";
           }
         } else {
           fromTo +=
-              "${DateFormat("d.M.").format(first.date)} ${first.hour}. h - ${DateFormat("d.M.").format(last.date)} ${last.hour}. h ";
+              "${DateFormat("EE d.M.yyyy", "de").format(first.date)} ${first.hour}. h - ${DateFormat("EE d.M.yyyy", "de").format(last.date)} ${last.hour}. h ";
         }
         var duration = "";
         if (absenceGroup.hours != 0) {
@@ -66,7 +66,7 @@ class AbsenceGroupContainer extends StatelessWidget {
           case AbsenceJustified.justified:
             justifiedString = absenceGroup.reasonSignature != null &&
                     absenceGroup.reasonTimestamp != null
-                ? "${DateFormat("'Am' d.M.yy 'um' HH:mm:ss").format(absenceGroup.reasonTimestamp!)} von ${absenceGroup.reasonSignature} entschuldigt"
+                ? "${DateFormat("EE d.M.yyyy 'um' HH:mm:ss", "de").format(absenceGroup.reasonTimestamp!)} von ${absenceGroup.reasonSignature} entschuldigt"
                 : "entschuldigt";
             break;
           case AbsenceJustified.forSchool:
@@ -79,8 +79,13 @@ class AbsenceGroupContainer extends StatelessWidget {
             justifiedString = "Noch nicht entschuldigt";
             break;
         }
-        return AbsencesViewModel(fromTo, duration, justifiedString,
-            absenceGroup.reason, absenceGroup.justified);
+        return AbsencesViewModel(
+          fromTo,
+          duration,
+          justifiedString,
+          absenceGroup.reason,
+          absenceGroup.justified,
+        );
       },
     );
   }

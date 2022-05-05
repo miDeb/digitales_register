@@ -24,6 +24,7 @@ import 'package:dr/data.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 
@@ -39,6 +40,14 @@ void main() {
     final widget = ReduxProvider(
       store: store,
       child: MaterialApp(
+        supportedLocales: const [
+          Locale('de', 'DE'),
+        ],
+        localizationsDelegates: const [
+          GlobalCupertinoLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+        ],
         home: AbsencesPageContainer(),
       ),
     );

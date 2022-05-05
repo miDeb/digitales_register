@@ -365,10 +365,15 @@ abstract class AbsencesState
 
   AbsenceStatistic? get statistic;
   BuiltList<AbsenceGroup> get absences;
+  BuiltList<FutureAbsence> get futureAbsences;
 
   UtcDateTime? get lastFetched;
 
-  //static void _initializeBuilder()
+  static void _initializeBuilder(AbsencesStateBuilder builder) {
+    builder
+      ..absences = ListBuilder<AbsenceGroup>()
+      ..futureAbsences = ListBuilder<FutureAbsence>();
+  }
 }
 
 abstract class CalendarState

@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/ui/absence.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
@@ -58,7 +59,7 @@ class AbsencesBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return state.statistic != null
-        ? state.absences.isEmpty
+        ? state.absences.isEmpty && state.futureAbsences.isEmpty
             ? Center(
                 child: Text(
                   "Noch keine Absenzen",
@@ -70,6 +71,8 @@ class AbsencesBody extends StatelessWidget {
                 AbsencesStatisticWidget(
                   stat: state.statistic!,
                 ),
+                for (final futureAbsence in state.futureAbsences)
+                  FutureAbsenceWidget(absence: futureAbsence),
                 ...List.generate(
                   state.absences.length,
                   (n) => AbsenceGroupContainer(

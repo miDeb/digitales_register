@@ -16,6 +16,7 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../container/absence_group_container.dart';
 import '../data.dart';
@@ -79,6 +80,102 @@ class AbsenceGroupWidget extends StatelessWidget {
               vm.justifiedString,
               textAlign: TextAlign.center,
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FutureAbsenceWidget extends StatelessWidget {
+  final FutureAbsence absence;
+  const FutureAbsenceWidget({
+    Key? key,
+    required this.absence,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var fromTo = "";
+    if (absence.startDate == absence.endDate) {
+      fromTo += "${DateFormat("EE d.M.yyyy").format(absence.startDate)}, ";
+      if (absence.startHour == absence.endHour) {
+        fromTo += "${absence.startHour}. h";
+      } else {
+        fromTo += "${absence.startHour}. - ${absence.endHour}. h";
+      }
+    } else {
+      fromTo +=
+          "${DateFormat("EE d.M.yyyy").format(absence.startDate)} ${absence.startHour}. h - ${DateFormat("EE d.M.yyyy").format(absence.endDate)} ${absence.endHour}. h ";
+    }
+
+    String justifiedString;
+    switch (absence.justified) {
+      case AbsenceJustified.justified:
+        justifiedString = "Entschuldigt";
+        break;
+      case AbsenceJustified.forSchool:
+        justifiedString = "Im Auftrag der Schule (entschuldigt)";
+        break;
+      case AbsenceJustified.notJustified:
+        justifiedString = "Nicht entschuldigt";
+        break;
+      default:
+        justifiedString = "Noch nicht entschuldigt";
+        break;
+    }
+
+    final divider = Row(
+      children: const [
+        Spacer(),
+        Flexible(
+          flex: 48,
+          child: Divider(
+            height: 8,
+          ),
+        ),
+        Spacer(),
+      ],
+    );
+
+    return Card(
+      shape: RoundedRectangleBorder(
+        side: absence.justified == AbsenceJustified.notYetJustified ||
+                absence.justified == AbsenceJustified.notJustified
+            ? const BorderSide(color: Colors.red)
+            : const BorderSide(color: Colors.green, width: 0),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      color: Colors.transparent,
+      elevation: 0,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: <Widget>[
+            Text(
+              fromTo,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            divider,
+            if (absence.note != null) ...[
+              Text(absence.note!),
+              divider,
+            ],
+            if (absence.reason != null) ...[
+              RichText(
+                text: TextSpan(
+                  children: [
+                    const TextSpan(
+                      text: "Begründung: ",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    TextSpan(text: absence.reason),
+                  ],
+                ),
+              ),
+              divider,
+            ],
+            Text("Im Voraus eingetragen, $justifiedString"),
           ],
         ),
       ),

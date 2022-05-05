@@ -463,6 +463,27 @@ abstract class AbsenceGroup
   static Serializer<AbsenceGroup> get serializer => _$absenceGroupSerializer;
 }
 
+abstract class FutureAbsence
+    implements Built<FutureAbsence, FutureAbsenceBuilder> {
+  AbsenceJustified get justified;
+  String? get reason;
+  String? get note;
+
+  String? get reasonSignature;
+  DateTime? get reasonTimestamp;
+
+  DateTime get startDate;
+  DateTime get endDate;
+
+  int get startHour;
+  int get endHour;
+
+  factory FutureAbsence([void Function(FutureAbsenceBuilder) updates]) =
+      _$FutureAbsence;
+  FutureAbsence._();
+  static Serializer<FutureAbsence> get serializer => _$futureAbsenceSerializer;
+}
+
 abstract class AbsenceStatistic
     implements Built<AbsenceStatistic, AbsenceStatisticBuilder> {
   factory AbsenceStatistic([Function(AbsenceStatisticBuilder b)? updates]) =
