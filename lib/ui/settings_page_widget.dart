@@ -545,8 +545,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               );
             },
           ),
-          // Apple does not allow donation links
-          if (!(Platform.isIOS || Platform.isMacOS))
+          if (!Platform.isMacOS)
             ListTile(
               leading: const Icon(Icons.monetization_on),
               title: const Text(
@@ -582,7 +581,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
               child: Image.asset("assets/transparent.png"),
             ),
             applicationLegalese:
-                "Copyright Michael Debertol und Simon Wachtler 2019-2021",
+                "Copyright Michael Debertol und Simon Wachtler 2019-2022",
             applicationName: "Digitales Register (Client)",
             applicationVersion: appVersion,
             aboutBoxChildren: [
