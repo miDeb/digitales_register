@@ -66,7 +66,7 @@ class AbsenceGroupContainer extends StatelessWidget {
           case AbsenceJustified.justified:
             justifiedString = absenceGroup.reasonSignature != null &&
                     absenceGroup.reasonTimestamp != null
-                ? "${DateFormat("EE d.M.yyyy 'um' HH:mm:ss", "de").format(absenceGroup.reasonTimestamp!)} von ${absenceGroup.reasonSignature} entschuldigt"
+                ? "${DateFormat("EE d.M.yyyy 'um' HH:mm", "de").format(absenceGroup.reasonTimestamp!)} als „${absenceGroup.reasonSignature}“ entschuldigt"
                 : "entschuldigt";
             break;
           case AbsenceJustified.forSchool:
@@ -85,6 +85,7 @@ class AbsenceGroupContainer extends StatelessWidget {
           justifiedString,
           absenceGroup.reason,
           absenceGroup.justified,
+          absenceGroup.note,
         );
       },
     );
@@ -96,8 +97,15 @@ class AbsencesViewModel {
   final String duration;
   final String justifiedString;
   final String? reason;
+  final String? note;
   final AbsenceJustified justified;
 
-  AbsencesViewModel(this.fromTo, this.duration, this.justifiedString,
-      this.reason, this.justified);
+  AbsencesViewModel(
+    this.fromTo,
+    this.duration,
+    this.justifiedString,
+    this.reason,
+    this.justified,
+    this.note,
+  );
 }

@@ -67,6 +67,7 @@ AbsenceGroup _parseAbsence(dynamic g) {
           ? UtcDateTime.tryParse(g["reason_timestamp"] as String)
           : null
       ..reason = getString(g["reason"])
+      ..note = getString(g["note"])
       ..absences = ListBuilder(
         (g["group"] as List).map<Absence>(
           (dynamic a) {

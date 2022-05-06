@@ -71,8 +71,25 @@ class AbsencesBody extends StatelessWidget {
                 AbsencesStatisticWidget(
                   stat: state.statistic!,
                 ),
+                const Divider(height: 0),
+                if (state.futureAbsences.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0).copyWith(top: 16),
+                    child: Text(
+                      "Im Voraus eingetragene Absenzen",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
                 for (final futureAbsence in state.futureAbsences)
                   FutureAbsenceWidget(absence: futureAbsence),
+                if (state.absences.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.all(8.0).copyWith(top: 16),
+                    child: Text(
+                      "Absenzen",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
                 ...List.generate(
                   state.absences.length,
                   (n) => AbsenceGroupContainer(

@@ -449,6 +449,7 @@ abstract class Competence implements Built<Competence, CompetenceBuilder> {
 abstract class AbsenceGroup
     implements Built<AbsenceGroup, AbsenceGroupBuilder> {
   String? get reason;
+  String? get note;
 
   String? get reasonSignature;
 

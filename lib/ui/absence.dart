@@ -27,6 +27,19 @@ class AbsenceGroupWidget extends StatelessWidget {
   const AbsenceGroupWidget({Key? key, required this.vm}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final divider = Row(
+      children: const [
+        Spacer(),
+        Flexible(
+          flex: 48,
+          child: Divider(
+            height: 8,
+          ),
+        ),
+        Spacer(),
+      ],
+    );
+
     return Card(
       shape: RoundedRectangleBorder(
         side: vm.justified == AbsenceJustified.notYetJustified ||
@@ -43,18 +56,11 @@ class AbsenceGroupWidget extends StatelessWidget {
           children: <Widget>[
             if (vm.reason != null) ...[
               Text(vm.reason!),
-              Row(
-                children: const [
-                  Spacer(),
-                  Flexible(
-                    flex: 48,
-                    child: Divider(
-                      height: 8,
-                    ),
-                  ),
-                  Spacer(),
-                ],
-              ),
+              divider,
+            ],
+            if (vm.note != null) ...[
+              Text(vm.note!),
+              divider,
             ],
             Text(
               vm.fromTo,
@@ -64,18 +70,7 @@ class AbsenceGroupWidget extends StatelessWidget {
               vm.duration,
               style: Theme.of(context).textTheme.bodyText2,
             ),
-            Row(
-              children: const [
-                Spacer(),
-                Flexible(
-                  flex: 48,
-                  child: Divider(
-                    height: 8,
-                  ),
-                ),
-                Spacer(),
-              ],
-            ),
+            divider,
             Text(
               vm.justifiedString,
               textAlign: TextAlign.center,
@@ -98,7 +93,8 @@ class FutureAbsenceWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     var fromTo = "";
     if (absence.startDate == absence.endDate) {
-      fromTo += "${DateFormat("EE d.M.yyyy").format(absence.startDate)}, ";
+      fromTo +=
+          "${DateFormat("EE d.M.yyyy", "de").format(absence.startDate)}, ";
       if (absence.startHour == absence.endHour) {
         fromTo += "${absence.startHour}. h";
       } else {
@@ -106,7 +102,7 @@ class FutureAbsenceWidget extends StatelessWidget {
       }
     } else {
       fromTo +=
-          "${DateFormat("EE d.M.yyyy").format(absence.startDate)} ${absence.startHour}. h - ${DateFormat("EE d.M.yyyy").format(absence.endDate)} ${absence.endHour}. h ";
+          "${DateFormat("EE d.M.yyyy", "de").format(absence.startDate)} ${absence.startHour}. h - ${DateFormat("EE d.M.yyyy", "de").format(absence.endDate)} ${absence.endHour}. h ";
     }
 
     String justifiedString;
@@ -115,7 +111,7 @@ class FutureAbsenceWidget extends StatelessWidget {
         justifiedString = "Entschuldigt";
         break;
       case AbsenceJustified.forSchool:
-        justifiedString = "Im Auftrag der Schule (entschuldigt)";
+        justifiedString = "Em Auftrag der Schule (entschuldigt)";
         break;
       case AbsenceJustified.notJustified:
         justifiedString = "Nicht entschuldigt";
@@ -152,30 +148,24 @@ class FutureAbsenceWidget extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            Text(
-              fromTo,
-              style: Theme.of(context).textTheme.subtitle1,
-            ),
-            divider,
             if (absence.note != null) ...[
               Text(absence.note!),
               divider,
             ],
             if (absence.reason != null) ...[
-              RichText(
-                text: TextSpan(
-                  children: [
-                    const TextSpan(
-                      text: "Begründung: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    TextSpan(text: absence.reason),
-                  ],
-                ),
-              ),
+              Text(absence.reason!),
               divider,
             ],
-            Text("Im Voraus eingetragen, $justifiedString"),
+            Text(
+              fromTo,
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            divider,
+            Text(
+              "${DateFormat("EE d.M.yyyy 'um' HH:mm", "de").format(absence.reasonTimestamp!)} als „${absence.reasonSignature}“ eingetragen",
+            ),
+            divider,
+            Text(justifiedString),
           ],
         ),
       ),
