@@ -114,7 +114,6 @@ class Wrapper {
     AddNetworkProtocolItem? addProtocolItem,
   }) async {
     noInternet = false;
-    error = null;
     if (logout != null) {
       onLogout = logout;
     } else {
