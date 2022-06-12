@@ -67,14 +67,14 @@ class DynamicThemeState extends State<DynamicTheme>
   bool get platformOverride => _platformOverride;
 
   Brightness _getDeviceBrightness() {
-    return WidgetsBinding.instance!.window.platformBrightness;
+    return WidgetsBinding.instance.window.platformBrightness;
   }
 
   @override
   void initState() {
     super.initState();
     _initVariables();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _load();
   }
 
@@ -124,7 +124,7 @@ class DynamicThemeState extends State<DynamicTheme>
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 

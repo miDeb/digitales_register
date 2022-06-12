@@ -180,7 +180,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     controller.addListener(() {
       update();
     });
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       update();
       _afterFirstFrame = true;
       setState(() {});

@@ -79,7 +79,7 @@ Future<void> main() async {
     middleware: middleware(),
   );
   runApp(RegisterApp(store: store));
-  WidgetsBinding.instance!.addPostFrameCallback(
+  WidgetsBinding.instance.addPostFrameCallback(
     (_) async {
       Uri? uri;
       if (Platform.isAndroid) {
@@ -89,7 +89,7 @@ Future<void> main() async {
         });
       }
       unawaited(store.actions.start(uri));
-      WidgetsBinding.instance!.addObserver(
+      WidgetsBinding.instance.addObserver(
         LifecycleObserver(
           store.actions.restarted,
           // this might not finish in time:

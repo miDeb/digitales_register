@@ -73,6 +73,9 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     await (await hiveBox).delete(key);
   }
@@ -82,6 +85,9 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     await (await hiveBox).clear();
   }
@@ -92,6 +98,9 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     return (await hiveBox).get(key);
   }
@@ -101,6 +110,9 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     return (await hiveBox).toMap() as Map<String, String>;
   }
@@ -112,6 +124,9 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     return (await hiveBox).put(key, value!);
   }
@@ -122,7 +137,28 @@ class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
     secure_storage.IOSOptions? iOptions,
     secure_storage.AndroidOptions? aOptions,
     secure_storage.LinuxOptions? lOptions,
+    secure_storage.MacOsOptions? mOptions,
+    secure_storage.WindowsOptions? wOptions,
+    secure_storage.WebOptions? webOptions,
   }) async {
     return (await hiveBox).containsKey(key);
   }
+
+  @override
+  secure_storage.AndroidOptions get aOptions => throw UnimplementedError();
+
+  @override
+  secure_storage.IOSOptions get iOptions => throw UnimplementedError();
+
+  @override
+  secure_storage.LinuxOptions get lOptions => throw UnimplementedError();
+
+  @override
+  secure_storage.MacOsOptions get mOptions => throw UnimplementedError();
+
+  @override
+  secure_storage.WindowsOptions get wOptions => throw UnimplementedError();
+
+  @override
+  secure_storage.WebOptions get webOptions => throw UnimplementedError();
 }

@@ -10,11 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  quill_delta:
-    git:
-      url: https://github.com/miDeb/quill-delta-dart.git
-      ref: nnbd
-  url_launcher: ^6.0.0-nullsafety.6
+  quill_delta: ^3.0.0-nullsafety.2
+  url_launcher: ^6.0.0
 
 dev_dependencies:
   flutter_test:

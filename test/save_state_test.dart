@@ -44,6 +44,9 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     return storage.containsKey(key);
   }
@@ -54,6 +57,9 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     storage.remove(key);
   }
@@ -63,6 +69,9 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     storage.clear();
   }
@@ -73,6 +82,9 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     return storage[key];
   }
@@ -82,6 +94,9 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     return storage;
   }
@@ -93,9 +108,30 @@ class FakeSecureStorage implements FlutterSecureStorage {
     IOSOptions? iOptions,
     AndroidOptions? aOptions,
     LinuxOptions? lOptions,
+    MacOsOptions? mOptions,
+    WindowsOptions? wOptions,
+    WebOptions? webOptions,
   }) async {
     storage[key!] = value!;
   }
+
+  @override
+  AndroidOptions get aOptions => throw UnimplementedError();
+
+  @override
+  IOSOptions get iOptions => throw UnimplementedError();
+
+  @override
+  LinuxOptions get lOptions => throw UnimplementedError();
+
+  @override
+  MacOsOptions get mOptions => throw UnimplementedError();
+
+  @override
+  WindowsOptions get wOptions => throw UnimplementedError();
+
+  @override
+  WebOptions get webOptions => throw UnimplementedError();
 }
 
 class StorageHelper {

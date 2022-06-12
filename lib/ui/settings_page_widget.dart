@@ -100,7 +100,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   @override
   void initState() {
     if (widget.vm.showSubjectNicks) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         await controller.scrollToIndex(4,
             preferPosition: AutoScrollPosition.begin);
         if (!mounted) return;
@@ -115,7 +115,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       });
     }
     if (widget.vm.showGradesSettings) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         controller.scrollToIndex(3, preferPosition: AutoScrollPosition.begin);
       });
     }
@@ -143,7 +143,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.vm.showSubjectNicks) {
-      WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
         await controller.scrollToIndex(4,
             preferPosition: AutoScrollPosition.begin);
       });

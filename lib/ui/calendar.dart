@@ -152,7 +152,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
     if (!tabletMode &&
         oldWidget.vm.selection == null &&
         widget.vm.selection != null) {
-      WidgetsBinding.instance?.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context)
             .push<void>(
               MaterialPageRoute(

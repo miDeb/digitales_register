@@ -316,7 +316,7 @@ class _CalendarDetailState extends State<CalendarDetail> {
     final targetHour = widget.targetHour;
     if (targetHour != null) {
       // Run this after the next frame
-      WidgetsBinding.instance!.addPostFrameCallback(
+      WidgetsBinding.instance.addPostFrameCallback(
         (_) {
           itemScrollController.jumpTo(
             index: widget.day.hours.indexOf(targetHour),
