@@ -24,7 +24,6 @@ import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:dr/wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:mocktail/mocktail.dart';
@@ -126,17 +125,6 @@ void main() {
         },
       ),
     ).called(1);
-
-    expect(
-      tester.takeException(),
-      isA<MissingPluginException>().having(
-        (e) => e.message,
-        "message",
-        contains(
-          "flutter_keyboard_visibility",
-        ),
-      ),
-    );
   });
 
   testGoldens("Change pass", (WidgetTester tester) async {
@@ -198,6 +186,7 @@ void main() {
       AppActions(),
       middleware: middleware(includeErrorMiddleware: false),
     );
+
     await tester.pumpWidget(RegisterApp(store: store));
     await store.actions.start(null);
     await tester.pumpAndSettle();

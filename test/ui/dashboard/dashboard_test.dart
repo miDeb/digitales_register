@@ -209,14 +209,14 @@ Future<void> main() async {
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now()
+                    ..date = UtcDateTime.now().add(const Duration(days: 1))
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
                     ..lastRequested = UtcDateTime.now(),
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now()
+                    ..date = UtcDateTime.now().add(const Duration(days: 2))
                     ..deletedHomework = ListBuilder(
                       <Homework>[
                         Homework(
@@ -274,7 +274,7 @@ Future<void> main() async {
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now()
+                    ..date = UtcDateTime.now().add(const Duration(days: 3))
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
                     ..lastRequested = UtcDateTime.now(),
@@ -296,6 +296,7 @@ Future<void> main() async {
     expect(find.byType(DayWidget), findsNWidgets(4));
     expect(find.byType(ItemWidget), findsNWidgets(3));
     expect(find.byIcon(Icons.delete), findsOneWidget);
+    await tester.pumpAndSettle();
     await expectLater(
         find.byType(DaysWidget), matchesGoldenFile("multiple_entries.png"));
   });

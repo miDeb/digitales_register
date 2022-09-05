@@ -19,8 +19,11 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:golden_toolkit/golden_toolkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
+  SharedPreferences.setMockInitialValues({});
+
   return GoldenToolkit.runWithConfiguration(
     () async {
       await loadAppFonts();

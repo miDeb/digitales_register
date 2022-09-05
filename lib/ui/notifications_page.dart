@@ -61,6 +61,8 @@ class NotificationPage extends StatelessWidget {
                   ),
                 )
               : ListView.builder(
+                  // For some reason the outgoing animation is not triggered if we don't add this key
+                  key: const ValueKey("notifications list"),
                   itemCount: notifications.length + 1,
                   itemBuilder: (_, n) {
                     if (n == 0) {

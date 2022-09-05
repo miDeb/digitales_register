@@ -45,20 +45,23 @@ class CalendarWeek extends StatefulWidget {
 }
 
 class _CalendarWeekState extends State<CalendarWeek> {
+  late Timer timer;
   @override
   void initState() {
     super.initState();
     // Periodically rebuild to update the current time indicator
-    Timer.periodic(
+    timer = Timer.periodic(
       const Duration(minutes: 1),
       (timer) {
-        if (mounted) {
-          setState(() {});
-        } else {
-          timer.cancel();
-        }
+        setState(() {});
       },
     );
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
   }
 
   @override

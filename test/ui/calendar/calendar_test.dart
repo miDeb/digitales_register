@@ -59,6 +59,11 @@ Future<void> main() async {
                               ..fromHour = 1
                               ..toHour = 2
                               ..rooms = ListBuilder()
+                              ..timeSpans = ListBuilder(<TimeSpan>[
+                                TimeSpan((b) => b
+                                  ..from = UtcDateTime(2022, 9, 5, 22)
+                                  ..to = UtcDateTime(2022, 9, 5, 23))
+                              ])
                               ..homeworkExams = ListBuilder(
                                 <HomeworkExam>[
                                   HomeworkExam(
