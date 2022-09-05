@@ -51,7 +51,13 @@ class _CalendarWeekState extends State<CalendarWeek> {
     // Periodically rebuild to update the current time indicator
     Timer.periodic(
       const Duration(minutes: 1),
-      (timer) => setState(() {}),
+      (timer) {
+        if (mounted) {
+          setState(() {});
+        } else {
+          timer.cancel();
+        }
+      },
     );
   }
 
@@ -257,8 +263,14 @@ class _HoursChunk extends StatelessWidget {
         children: <Widget>[
           Card(
             elevation: 0,
-            clipBehavior: Clip.antiAlias,
+            clipBehavior: Clip.hardEdge,
             shape: RoundedRectangleBorder(
+              side: BorderSide(
+                color: isSelected
+                    ? Theme.of(context).colorScheme.secondary
+                    : Colors.grey,
+                width: 0.75,
+              ),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -288,7 +300,7 @@ class _HoursChunk extends StatelessWidget {
               ),
             ),
           ),
-          IgnorePointer(
+          /*IgnorePointer(
             child: Card(
               shape: RoundedRectangleBorder(
                 side: BorderSide(
@@ -303,7 +315,7 @@ class _HoursChunk extends StatelessWidget {
               elevation: 0,
               child: Container(),
             ),
-          ),
+          ),*/
           if (isCurrentHour)
             Positioned(
               left: 0,

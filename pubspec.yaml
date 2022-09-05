@@ -46,7 +46,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   flutter_localizations:
     sdk: flutter
-  flutter_secure_storage: ^5.0.2
+  flutter_secure_storage: ^6.0.0
   flutter_svg: ^1.0.3
   flutter_typeahead: ^4.0.0
   flutter_widget_from_html_core: ^0.8.5+3
@@ -76,6 +76,10 @@ dependencies:
       ref: modernized
       path: uni_links/
   url_launcher: ^6.1.0
+
+dependency_overrides:
+  file: ^6.1.4
+  fwfh_text_style: ^2.22.08+1
 
 dev_dependencies:
   build_runner: ^2.1.10
