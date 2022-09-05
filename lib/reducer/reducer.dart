@@ -16,22 +16,21 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/app_actions.dart';
 import 'package:dr/actions/login_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/reducer/absences.dart';
+import 'package:dr/reducer/calendar.dart';
+import 'package:dr/reducer/certificate.dart';
+import 'package:dr/reducer/dashboard.dart';
+import 'package:dr/reducer/grades.dart';
+import 'package:dr/reducer/login.dart';
+import 'package:dr/reducer/messages.dart';
+import 'package:dr/reducer/network_protocol.dart';
+import 'package:dr/reducer/notifications.dart';
+import 'package:dr/reducer/profile_reducer.dart';
+import 'package:dr/reducer/settings.dart';
 import 'package:dr/util.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import 'absences.dart';
-import 'calendar.dart';
-import 'certificate.dart';
-import 'dashboard.dart';
-import 'grades.dart';
-import 'login.dart';
-import 'messages.dart';
-import 'network_protocol.dart';
-import 'notifications.dart';
-import 'profile_reducer.dart';
-import 'settings.dart';
 
 final appReducerBuilder = ReducerBuilder<AppState, AppStateBuilder>()
   ..add(AppActionsNames.mountAppState, _mountState)

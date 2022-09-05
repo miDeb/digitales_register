@@ -17,15 +17,14 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/dialog.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:tuple/tuple.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../util.dart';
-import 'dialog.dart';
 
 bool isGradeInRange(int grade) {
   return grade >= 0 && grade <= 1000;
@@ -389,7 +388,7 @@ class GradeTile extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 16),
                 child: Text(
                   grade.description!,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
               )
           ],
@@ -414,7 +413,7 @@ class Greeting extends StatelessWidget {
           padding: const EdgeInsets.all(32),
           child: Text(
             "Um zu beginnen, importiere entweder bestehende Noten aus einem Fach\noder füge eine erste Note hinzu.",
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.titleLarge,
             textAlign: TextAlign.center,
           ),
         ),

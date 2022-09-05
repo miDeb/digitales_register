@@ -15,15 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/app_state.dart';
+import 'package:dr/container/absence_group_container.dart';
+import 'package:dr/data.dart';
 import 'package:dr/ui/absence.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/ui/no_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
-
-import '../app_state.dart';
-import '../container/absence_group_container.dart';
-import '../data.dart';
-import 'no_internet.dart';
 
 class AbsencesPage extends StatelessWidget {
   final AbsencesState state;
@@ -63,7 +62,7 @@ class AbsencesBody extends StatelessWidget {
             ? Center(
                 child: Text(
                   "Noch keine Absenzen",
-                  style: Theme.of(context).textTheme.headline4,
+                  style: Theme.of(context).textTheme.headlineMedium,
                   textAlign: TextAlign.center,
                 ),
               )
@@ -77,7 +76,7 @@ class AbsencesBody extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0).copyWith(top: 16),
                     child: Text(
                       "Im Voraus eingetragene Absenzen",
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                 for (final futureAbsence in state.futureAbsences)
@@ -87,7 +86,7 @@ class AbsencesBody extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0).copyWith(top: 16),
                     child: Text(
                       "Absenzen",
-                      style: Theme.of(context).textTheme.subtitle1,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                 ...List.generate(

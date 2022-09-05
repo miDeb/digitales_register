@@ -35,7 +35,7 @@ class UserProfile extends StatelessWidget {
           children: <Widget>[
             Text(
               name,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             Text("$username · $role"),
           ],

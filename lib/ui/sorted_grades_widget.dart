@@ -15,15 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/app_state.dart';
 import 'package:dr/container/grades_page_container.dart';
+import 'package:dr/container/sorted_grades_container.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/animated_linear_progress_indicator.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../app_state.dart';
-import '../container/sorted_grades_container.dart';
-import '../data.dart';
-import '../util.dart';
-import 'animated_linear_progress_indicator.dart';
 
 typedef ViewSubjectDetailCallback = void Function(Subject s);
 typedef SetBoolCallback = void Function(bool byType);
@@ -144,7 +143,7 @@ class _SubjectWidgetState extends State<SubjectWidget> {
     }
     return Text(
       "$formatted.",
-      style: Theme.of(context).textTheme.caption,
+      style: Theme.of(context).textTheme.bodySmall,
     );
   }
 
@@ -272,7 +271,7 @@ class GradeWidget extends StatelessWidget {
               if (!grade.description.isNullOrEmpty)
                 Text(
                   grade.description!,
-                  style: Theme.of(context).textTheme.bodyText2,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               Text(
                 "${DateFormat("dd.MM.yy").format(grade.date)}: ${grade.type} - ${grade.weightPercentage}%",
@@ -280,12 +279,12 @@ class GradeWidget extends StatelessWidget {
               ),
               Text(
                 grade.created,
-                style: Theme.of(context).textTheme.caption,
+                style: Theme.of(context).textTheme.bodySmall,
               ),
               if (!grade.cancelledDescription.isNullOrEmpty)
                 Text(
                   grade.cancelledDescription!,
-                  style: Theme.of(context).textTheme.caption,
+                  style: Theme.of(context).textTheme.bodySmall,
                 ),
             ],
           ),

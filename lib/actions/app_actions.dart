@@ -16,20 +16,19 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_redux/built_redux.dart';
-
-import '../app_state.dart';
-import 'absences_actions.dart';
-import 'calendar_actions.dart';
-import 'certificate_actions.dart';
-import 'dashboard_actions.dart';
-import 'grades_actions.dart';
-import 'login_actions.dart';
-import 'messages_actions.dart';
-import 'notifications_actions.dart';
-import 'profile_actions.dart';
-import 'routing_actions.dart';
-import 'save_pass_actions.dart';
-import 'settings_actions.dart';
+import 'package:dr/actions/absences_actions.dart';
+import 'package:dr/actions/calendar_actions.dart';
+import 'package:dr/actions/certificate_actions.dart';
+import 'package:dr/actions/dashboard_actions.dart';
+import 'package:dr/actions/grades_actions.dart';
+import 'package:dr/actions/login_actions.dart';
+import 'package:dr/actions/messages_actions.dart';
+import 'package:dr/actions/notifications_actions.dart';
+import 'package:dr/actions/profile_actions.dart';
+import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/actions/save_pass_actions.dart';
+import 'package:dr/actions/settings_actions.dart';
+import 'package:dr/app_state.dart';
 
 part 'app_actions.g.dart';
 

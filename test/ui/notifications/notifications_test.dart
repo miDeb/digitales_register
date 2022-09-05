@@ -346,8 +346,6 @@ void main() {
     ).thenAnswer(
       (invocation) => Future<dynamic>.value(""),
     );
-    // TODO: remove when https://github.com/felangel/mocktail/pull/34 is merged
-    registerFallbackValue<Map<String, Object?>>({});
     when(
       () => wrapper.send(
         "api/message/markAsRead",

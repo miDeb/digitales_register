@@ -22,13 +22,12 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/main.dart';
+import 'package:dr/ui/dialog.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:mutex/mutex.dart';
-
-import 'app_state.dart';
-import 'main.dart';
-import 'ui/dialog.dart';
 
 /*
 // Debug all requests
@@ -72,6 +71,7 @@ class Wrapper {
         (client) {
       client.userAgent =
           "Digitales-Register-App $appVersion; https://github.com/miDeb/digitales_register";
+      return null;
     };
     //dio.interceptors.add(DebugInterceptor());
   }

@@ -18,6 +18,12 @@
 import 'dart:io';
 
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/container/settings_page.dart';
+import 'package:dr/ui/dialog.dart';
+import 'package:dr/ui/donations.dart';
+import 'package:dr/ui/network_protocol_page.dart';
+import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -25,13 +31,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../app_state.dart';
-import '../container/settings_page.dart';
-import '../util.dart';
-import 'dialog.dart';
-import 'donations.dart';
-import 'network_protocol_page.dart';
 
 enum _Theme {
   light,
@@ -164,7 +163,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
           ListTile(
             title: Text(
               "Profil",
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headlineSmall,
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: widget.onShowProfile,
@@ -177,7 +176,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Anmeldung",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
@@ -214,7 +213,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Aussehen",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
@@ -299,7 +298,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Merkheft",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
@@ -332,7 +331,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Noten",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
@@ -423,7 +422,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Kalender",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),
@@ -518,7 +517,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             child: ListTile(
               title: Text(
                 "Erweitert",
-                style: Theme.of(context).textTheme.headline5,
+                style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),
           ),

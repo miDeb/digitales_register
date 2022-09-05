@@ -15,10 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/chart_legend_container.dart';
+import 'package:dr/container/grades_chart_container.dart';
 import 'package:flutter/material.dart';
-
-import '../container/chart_legend_container.dart';
-import '../container/grades_chart_container.dart';
 
 class GradesChartPage extends StatelessWidget {
   const GradesChartPage({Key? key}) : super(key: key);

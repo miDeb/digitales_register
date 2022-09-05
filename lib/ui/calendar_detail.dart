@@ -15,21 +15,20 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/app_state.dart';
 import 'package:dr/container/calendar_card_container.dart';
 import 'package:dr/container/calendar_detail_container.dart';
+import 'package:dr/data.dart';
+import 'package:dr/main.dart';
 import 'package:dr/ui/calendar_week.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/ui/no_internet.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/size_transition.dart' as rsc;
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
-import '../app_state.dart';
-import '../data.dart';
-import '../main.dart';
-import '../utc_date_time.dart';
 
 const _pageViewAnimationDuration = Duration(milliseconds: 500);
 const _sidebarAnimationDuration = Duration(milliseconds: 300);
@@ -383,7 +382,7 @@ class _NoSchool extends StatelessWidget {
         ),
         Text(
           "Keine Schule",
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ],
     );

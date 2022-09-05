@@ -16,13 +16,12 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:collection/collection.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/ui/calendar.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../ui/calendar.dart';
-import '../utc_date_time.dart';
 
 class CalendarContainer extends StatelessWidget {
   @override

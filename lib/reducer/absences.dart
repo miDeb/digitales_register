@@ -18,11 +18,11 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 
-import '../actions/absences_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../utc_date_time.dart';
-import '../util.dart';
+import 'package:dr/actions/absences_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 
 final absencesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     AbsencesState, AbsencesStateBuilder>(

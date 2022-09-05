@@ -19,12 +19,11 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
 import 'package:dr/actions/app_actions.dart';
 import 'package:dr/actions/login_actions.dart';
+import 'package:dr/app_state.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/sidebar.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../app_state.dart';
 
 part 'sidebar_container.g.dart';
 

@@ -22,13 +22,32 @@ import 'dart:io';
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:dr/actions/absences_actions.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/actions/calendar_actions.dart';
+import 'package:dr/actions/certificate_actions.dart';
+import 'package:dr/actions/dashboard_actions.dart';
+import 'package:dr/actions/grades_actions.dart';
+import 'package:dr/actions/login_actions.dart';
 import 'package:dr/actions/messages_actions.dart';
+import 'package:dr/actions/notifications_actions.dart';
+import 'package:dr/actions/profile_actions.dart';
+import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/actions/save_pass_actions.dart';
+import 'package:dr/actions/settings_actions.dart';
+import 'package:dr/app_state.dart';
 import 'package:dr/container/absences_page_container.dart';
 import 'package:dr/container/calendar_container.dart';
 import 'package:dr/container/certificate_container.dart';
 import 'package:dr/container/grades_page_container.dart';
 import 'package:dr/container/messages_container.dart';
 import 'package:dr/container/settings_page.dart';
+import 'package:dr/data.dart';
+import 'package:dr/main.dart';
+import 'package:dr/serializers.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
+import 'package:dr/wrapper.dart';
 import 'package:flutter/material.dart' hide Action, Notification;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
@@ -37,26 +56,6 @@ import 'package:mutex/mutex.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../actions/absences_actions.dart';
-import '../actions/app_actions.dart';
-import '../actions/calendar_actions.dart';
-import '../actions/certificate_actions.dart';
-import '../actions/dashboard_actions.dart';
-import '../actions/grades_actions.dart';
-import '../actions/login_actions.dart';
-import '../actions/notifications_actions.dart';
-import '../actions/profile_actions.dart';
-import '../actions/routing_actions.dart';
-import '../actions/save_pass_actions.dart';
-import '../actions/settings_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../main.dart';
-import '../serializers.dart';
-import '../utc_date_time.dart';
-import '../util.dart';
-import '../wrapper.dart';
 
 part 'absences.dart';
 part 'calendar.dart';
@@ -575,20 +574,18 @@ Future<void> redirectAfterLogin(String location,
 
 bool _popAll() {
   var poppedAnything = false;
-  if (WidgetsBinding.instance != null) {
-    navigatorKey?.currentState?.popUntil((route) {
-      if (!route.isFirst) {
-        poppedAnything = true;
-      }
-      return route.isFirst;
-    });
-    nestedNavKey.currentState?.popUntil((route) {
-      if (!route.isFirst) {
-        poppedAnything = true;
-      }
-      return route.isFirst;
-    });
-  }
+  navigatorKey?.currentState?.popUntil((route) {
+    if (!route.isFirst) {
+      poppedAnything = true;
+    }
+    return route.isFirst;
+  });
+  nestedNavKey.currentState?.popUntil((route) {
+    if (!route.isFirst) {
+      poppedAnything = true;
+    }
+    return route.isFirst;
+  });
   return poppedAnything;
 }
 

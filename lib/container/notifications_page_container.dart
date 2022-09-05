@@ -15,15 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/notifications_page.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:tuple/tuple.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../ui/notifications_page.dart';
-import '../utc_date_time.dart';
 
 class NotificationPageContainer extends StatelessWidget {
   @override

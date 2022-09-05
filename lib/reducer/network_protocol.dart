@@ -17,8 +17,8 @@
 
 import 'package:built_redux/built_redux.dart';
 
-import '../actions/app_actions.dart';
-import '../app_state.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
 
 final networkProtocolReducerBuilder = NestedReducerBuilder<AppState,
     AppStateBuilder, NetworkProtocolState, NetworkProtocolStateBuilder>(

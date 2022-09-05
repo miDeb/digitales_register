@@ -16,13 +16,12 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_collection/built_collection.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/ui/settings_page_widget.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../ui/settings_page_widget.dart';
 
 class SettingsPageContainer extends StatelessWidget {
   @override

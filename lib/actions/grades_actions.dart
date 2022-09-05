@@ -18,8 +18,8 @@
 import 'package:built_redux/built_redux.dart';
 import 'package:built_value/built_value.dart';
 
-import '../app_state.dart';
-import '../data.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
 
 part 'grades_actions.g.dart';
 

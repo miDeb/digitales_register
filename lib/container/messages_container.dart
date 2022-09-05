@@ -15,13 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/ui/messages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 import 'package:tuple/tuple.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../ui/messages.dart';
 
 class MessagesPageContainer extends StatelessWidget {
   @override

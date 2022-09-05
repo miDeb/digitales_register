@@ -15,16 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/calendar_container.dart';
 import 'package:dr/container/calendar_detail_container.dart';
+import 'package:dr/container/calendar_week_container.dart';
 import 'package:dr/main.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
-
-import '../container/calendar_container.dart';
-import '../container/calendar_week_container.dart';
-import '../utc_date_time.dart';
-import '../util.dart';
 
 const tabletLayoutBreakPoint = 825;
 
@@ -185,7 +184,8 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                       if (toMonday(now) != widget.vm.currentMonday)
                         TextButton(
                           style: TextButton.styleFrom(
-                            primary: Theme.of(context).colorScheme.onPrimary,
+                            foregroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                           ),
                           onPressed: () {
@@ -226,7 +226,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                               child: TextButton(
                                 style: ButtonStyle(
                                   textStyle: MaterialStateProperty.all(
-                                      Theme.of(context).textTheme.headline6),
+                                      Theme.of(context).textTheme.titleLarge),
                                 ),
                                 onPressed: () async {
                                   final result = await showDatePicker(

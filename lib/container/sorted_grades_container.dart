@@ -17,14 +17,13 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/actions/grades_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/sorted_grades_widget.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../actions/grades_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../ui/sorted_grades_widget.dart';
 
 part 'sorted_grades_container.g.dart';
 

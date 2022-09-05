@@ -18,18 +18,17 @@
 import 'dart:convert';
 
 import 'package:badges/badges.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/animated_linear_progress_indicator.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/ui/no_internet.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:quill_delta/quill_delta.dart';
 import 'package:quill_delta_viewer/quill_delta_viewer.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
-
-import '../app_state.dart';
-import '../data.dart';
-import 'animated_linear_progress_indicator.dart';
-import 'no_internet.dart';
 
 class MessagesPage extends StatelessWidget {
   final MessagesState? state;
@@ -69,7 +68,7 @@ class MessagesPage extends StatelessWidget {
                     Center(
                       child: Text(
                         "Noch keine Mitteilungen",
-                        style: Theme.of(context).textTheme.headline4,
+                        style: Theme.of(context).textTheme.headlineMedium,
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -141,7 +140,7 @@ class _MessageWidgetState extends State<MessageWidget> {
           Expanded(
             child: Text(
               widget.message.subject,
-              style: textTheme.subtitle1,
+              style: textTheme.titleMedium,
             ),
           ),
           if (widget.message.isNew || initiallyExpanded)

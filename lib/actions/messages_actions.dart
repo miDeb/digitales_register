@@ -17,7 +17,7 @@
 
 import 'package:built_redux/built_redux.dart';
 
-import '../data.dart';
+import 'package:dr/data.dart';
 
 part 'messages_actions.g.dart';
 

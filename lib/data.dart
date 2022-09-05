@@ -20,9 +20,9 @@ import 'package:built_value/built_value.dart';
 import 'package:built_value/serializer.dart';
 import 'package:collection/collection.dart';
 
-import 'app_state.dart';
-import 'utc_date_time.dart';
-import 'util.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 
 part 'data.g.dart';
 
@@ -563,7 +563,8 @@ abstract class CalendarHour
   BuiltList<HomeworkExam> get homeworkExams;
   BuiltList<LessonContent> get lessonContents;
   int get length => toHour - fromHour + 1;
-  int get lengthAsMinutes => timeSpans.last.to.difference(timeSpans.first.from).inMinutes;
+  int get lengthAsMinutes =>
+      timeSpans.last.to.difference(timeSpans.first.from).inMinutes;
   bool get warning => homeworkExams.any((it) => it.warning);
 
   BuiltList<Teacher> get teachers;

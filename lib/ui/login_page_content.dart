@@ -15,16 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/login_page.dart';
+import 'package:dr/ui/animated_linear_progress_indicator.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../container/login_page.dart';
-import '../util.dart';
-import 'animated_linear_progress_indicator.dart';
 
 typedef LoginCallback = void Function(String user, String pass, String url);
 typedef ChangePassCallback = void Function(
@@ -197,14 +196,14 @@ class _LoginPageContentState extends State<LoginPageContent> {
                       alignment: Alignment.centerLeft,
                       child: TextButton(
                         style: TextButton.styleFrom(
-                          primary: Colors.grey,
+                          foregroundColor: Colors.grey,
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         onPressed: () async {
                           await launch(
                             // ignore: prefer_interpolation_to_compose_strings
-                            "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url" +
-                                "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",
+                            "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url"
+                            "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",
                           );
                         },
                         child: const Text("Feedback?"),
@@ -253,7 +252,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             alignment: Alignment.centerLeft,
                             child: TextButton(
                               style: TextButton.styleFrom(
-                                primary: Colors.grey,
+                                foregroundColor: Colors.grey,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 16),
                               ),
@@ -385,7 +384,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                     ListTile(
                       title: Text(
                         "Andere Accounts",
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                     ),
                     Column(
@@ -408,7 +407,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 : widget.vm.error!,
                             style: Theme.of(context)
                                 .textTheme
-                                .bodyText2!
+                                .bodyMedium!
                                 .copyWith(color: Colors.red),
                           )
                         : const SizedBox(),

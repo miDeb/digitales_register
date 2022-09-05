@@ -15,13 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/certificate_container.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/ui/no_internet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
-
-import '../container/certificate_container.dart';
-import 'no_internet.dart';
 
 class Certificate extends StatelessWidget {
   final CertificateViewModel vm;

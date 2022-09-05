@@ -15,12 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/container/days_container.dart';
+import 'package:dr/container/home_page.dart';
+import 'package:dr/main.dart';
+import 'package:dr/ui/splash.dart';
 import 'package:flutter/material.dart';
-
-import '../container/days_container.dart';
-import '../container/home_page.dart';
-import '../main.dart';
-import 'splash.dart';
 
 typedef DrawerCallback = void Function(bool isOpened);
 

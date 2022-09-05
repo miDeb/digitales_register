@@ -29,7 +29,7 @@ class NoInternet extends StatelessWidget {
             "Keine Verbindung",
             style: Theme.of(context)
                 .textTheme
-                .headline6!
+                .titleLarge!
                 .copyWith(color: Colors.red),
           ),
           const SizedBox(

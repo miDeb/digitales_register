@@ -17,10 +17,9 @@
 
 import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import '../utc_date_time.dart';
 
 class CalendarCard extends StatelessWidget {
   final CalendarHour hour;
@@ -67,7 +66,7 @@ class CalendarCard extends StatelessWidget {
                 Expanded(
                   child: Text(
                     hour.subject,
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
               ],

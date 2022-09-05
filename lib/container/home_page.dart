@@ -16,13 +16,11 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:built_value/built_value.dart';
-
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/ui/home_page_content.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../ui/home_page_content.dart';
 
 part 'home_page.g.dart';
 

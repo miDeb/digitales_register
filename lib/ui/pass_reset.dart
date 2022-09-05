@@ -118,7 +118,7 @@ class _PassResetState extends State<PassReset> {
                     Center(
                       child: Text(
                         widget.message!,
-                        style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: widget.failure ? Colors.red : Colors.green),
                       ),
                     ),

@@ -15,15 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/actions/login_actions.dart';
+import 'package:dr/app_state.dart';
 // ignore_for_file: avoid_escaping_inner_quotes
 import 'package:dr/config.dart';
+import 'package:dr/ui/login_page_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../actions/login_actions.dart';
-import '../app_state.dart';
-import '../ui/login_page_content.dart';
 
 class LoginPage extends StatelessWidget {
   @override

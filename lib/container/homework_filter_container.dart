@@ -17,13 +17,12 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/ui/homework_filter.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../ui/homework_filter.dart';
 
 part 'homework_filter_container.g.dart';
 

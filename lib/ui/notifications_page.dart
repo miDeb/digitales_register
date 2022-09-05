@@ -16,14 +16,13 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/data.dart';
+import 'package:dr/main.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
 import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart' hide Notification;
 import 'package:intl/intl.dart';
-
-import '../data.dart';
-import '../main.dart';
-import '../util.dart';
 
 class NotificationPage extends StatelessWidget {
   final List<Notification> notifications;
@@ -57,7 +56,7 @@ class NotificationPage extends StatelessWidget {
               ? Center(
                   child: Text(
                     "Keine Benachrichtigungen",
-                    style: Theme.of(context).textTheme.headline4,
+                    style: Theme.of(context).textTheme.headlineMedium,
                     textAlign: TextAlign.center,
                   ),
                 )
@@ -135,7 +134,7 @@ class NotificationWidget extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         notification.title,
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ),
                     if (!notification.subTitle.isNullOrEmpty)
@@ -143,7 +142,7 @@ class NotificationWidget extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           notification.subTitle!,
-                          style: Theme.of(context).textTheme.bodyText2,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ),
                     Padding(
@@ -153,7 +152,7 @@ class NotificationWidget extends StatelessWidget {
                         child: Text(
                           DateFormat("d.M.yy H:mm")
                               .format(notification.timeSent),
-                          style: Theme.of(context).textTheme.caption,
+                          style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
                     ),

@@ -17,11 +17,10 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/actions/settings_actions.dart';
+import 'package:dr/app_state.dart';
 import 'package:flutter/material.dart' hide Action;
-
-import '../actions/routing_actions.dart';
-import '../actions/settings_actions.dart';
-import '../app_state.dart';
 
 final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     SettingsState, SettingsStateBuilder>(

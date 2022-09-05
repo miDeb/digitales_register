@@ -17,9 +17,9 @@
 
 import 'package:built_redux/built_redux.dart';
 
-import '../actions/profile_actions.dart';
-import '../app_state.dart';
-import '../util.dart';
+import 'package:dr/actions/profile_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/util.dart';
 
 final profileReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     ProfileState, ProfileStateBuilder>(

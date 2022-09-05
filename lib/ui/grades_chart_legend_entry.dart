@@ -47,7 +47,7 @@ class GradesChartLegendEntry extends StatelessWidget {
               padding: const EdgeInsets.only(left: 8),
               child: Text(
                 name,
-                style: Theme.of(context).textTheme.subtitle1,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ),
           ),

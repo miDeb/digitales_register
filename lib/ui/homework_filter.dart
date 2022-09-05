@@ -17,10 +17,9 @@
 
 import 'package:badges/badges.dart';
 import 'package:built_collection/built_collection.dart';
+import 'package:dr/container/homework_filter_container.dart';
+import 'package:dr/data.dart';
 import 'package:flutter/material.dart';
-
-import '../container/homework_filter_container.dart';
-import '../data.dart';
 
 typedef HomeworkBlacklistCallback = void Function(
     ListBuilder<HomeworkType> blacklist);

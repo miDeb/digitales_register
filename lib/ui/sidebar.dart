@@ -16,10 +16,9 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:collapsible_sidebar/collapsible_sidebar.dart';
+import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:flutter/material.dart';
-
-import '../main.dart';
 
 typedef SelectAccountCallback = void Function(int index);
 
@@ -69,7 +68,7 @@ class Sidebar extends StatelessWidget {
       alwaysExpanded: !tabletMode,
       expanded: drawerExpanded,
       iconSize: 30,
-      textStyle: Theme.of(context).textTheme.subtitle1,
+      textStyle: Theme.of(context).textTheme.titleMedium,
       fitItemsToBottom: true,
       borderRadius: 0,
       minWidth: 70,
@@ -120,7 +119,7 @@ class Sidebar extends StatelessWidget {
               : Image.network(userIcon!),
       unselectedIconColor: Theme.of(context).iconTheme.color!,
       selectedIconColor: Theme.of(context).colorScheme.secondary,
-      unselectedTextColor: Theme.of(context).textTheme.subtitle1!.color!,
+      unselectedTextColor: Theme.of(context).textTheme.titleMedium!.color!,
       selectedTextColor: Theme.of(context).colorScheme.secondary,
       selectedIconBox: Theme.of(context).colorScheme.secondary.withAlpha(20),
       items: [

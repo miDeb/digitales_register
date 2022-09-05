@@ -17,9 +17,9 @@
 
 import 'package:built_redux/built_redux.dart';
 
-import '../actions/login_actions.dart';
-import '../actions/routing_actions.dart';
-import '../app_state.dart';
+import 'package:dr/actions/login_actions.dart';
+import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/app_state.dart';
 
 final resetPassReducerBuilder = NestedReducerBuilder<LoginState,
     LoginStateBuilder, ResetPassState, ResetPassStateBuilder>(

@@ -19,13 +19,13 @@ import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:collection/collection.dart' show IterableExtension;
 
-import '../actions/app_actions.dart';
-import '../actions/grades_actions.dart';
-import '../actions/login_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../utc_date_time.dart';
-import '../util.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/actions/grades_actions.dart';
+import 'package:dr/actions/login_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 
 final gradesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     GradesState, GradesStateBuilder>(

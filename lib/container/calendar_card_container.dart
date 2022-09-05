@@ -16,13 +16,12 @@
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
 import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
 import 'package:dr/ui/calendar_card.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../app_state.dart';
-import '../utc_date_time.dart';
 
 class CalendarCardContainer extends StatelessWidget {
   final CalendarHour hour;

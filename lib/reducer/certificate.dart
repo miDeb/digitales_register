@@ -17,9 +17,8 @@
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/actions/certificate_actions.dart';
+import 'package:dr/app_state.dart';
 import 'package:dr/utc_date_time.dart';
-
-import '../app_state.dart';
 
 final certificateReducerBuilder = NestedReducerBuilder<AppState,
     AppStateBuilder, CertificateState, CertificateStateBuilder>(

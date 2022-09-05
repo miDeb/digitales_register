@@ -17,15 +17,14 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/built_value.dart';
+import 'package:dr/actions/app_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/ui/grades_page.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart' hide Builder;
 import 'package:flutter_built_redux/flutter_built_redux.dart';
-
-import '../actions/app_actions.dart';
-import '../app_state.dart';
-import '../ui/grades_page.dart';
-import '../utc_date_time.dart';
 
 part 'grades_page_container.g.dart';
 

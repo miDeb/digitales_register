@@ -18,13 +18,12 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 import 'package:collection/collection.dart' show IterableExtension;
+import 'package:dr/actions/messages_actions.dart';
 import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
-
-import '../actions/messages_actions.dart';
-import '../app_state.dart';
-import '../data.dart';
-import '../utc_date_time.dart';
 
 final messagesReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     MessagesState, MessagesStateBuilder>(

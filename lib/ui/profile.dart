@@ -15,12 +15,11 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:dr/app_state.dart';
+import 'package:dr/container/settings_page.dart';
+import 'package:dr/ui/no_internet.dart';
+import 'package:dr/ui/user_profile.dart';
 import 'package:flutter/material.dart';
-
-import '../app_state.dart';
-import '../container/settings_page.dart';
-import 'no_internet.dart';
-import 'user_profile.dart';
 
 class Profile extends StatelessWidget {
   final ProfileState profileState;

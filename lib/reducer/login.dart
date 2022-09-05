@@ -18,10 +18,10 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
 
-import '../actions/login_actions.dart';
-import '../actions/routing_actions.dart';
-import '../app_state.dart';
-import 'pass_reset.dart';
+import 'package:dr/actions/login_actions.dart';
+import 'package:dr/actions/routing_actions.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/reducer/pass_reset.dart';
 
 final loginReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
     LoginState, LoginStateBuilder>(

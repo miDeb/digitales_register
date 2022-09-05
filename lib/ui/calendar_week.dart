@@ -214,7 +214,7 @@ class _CalendarDayWidget extends StatelessWidget {
                 ),
                 Text(
                   "Frei",
-                  style: Theme.of(context).textTheme.subtitle1,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
               ],
             ),

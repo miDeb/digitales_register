@@ -18,27 +18,26 @@
 import 'package:badges/badges.dart';
 import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/container/days_container.dart';
+import 'package:dr/container/homework_filter_container.dart';
 import 'package:dr/container/notification_icon_container.dart';
 import 'package:dr/container/sidebar_container.dart';
+import 'package:dr/data.dart';
 import 'package:dr/main.dart';
 import 'package:dr/middleware/middleware.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
+import 'package:dr/ui/dialog.dart';
 import 'package:dr/ui/last_fetched_overlay.dart';
+import 'package:dr/ui/no_internet.dart';
+import 'package:dr/utc_date_time.dart';
+import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:tuple/tuple.dart';
-
-import '../app_state.dart';
-import '../container/days_container.dart';
-import '../container/homework_filter_container.dart';
-import '../data.dart';
-import '../utc_date_time.dart';
-import '../util.dart';
-import 'dialog.dart';
-import 'no_internet.dart';
 
 typedef AddReminderCallback = void Function(Day day, String reminder);
 typedef RemoveReminderCallback = void Function(Homework hw, Day day);
@@ -252,7 +251,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           padding: const EdgeInsets.all(32),
           child: Text(
             "Keine Einträge vorhanden",
-            style: Theme.of(context).textTheme.headline4,
+            style: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
           ),
         );
@@ -381,7 +380,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           if (widget.vm.noInternet)
             TextButton(
               style: TextButton.styleFrom(
-                primary: Theme.of(context).colorScheme.onPrimary,
+                foregroundColor: Theme.of(context).colorScheme.onPrimary,
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
               onPressed: widget.refreshNoInternet,
@@ -396,7 +395,7 @@ class _DaysWidgetState extends State<DaysWidget> {
           if (widget.vm.showNotifications) NotificationIconContainer(),
         ],
       ),
-      drawerBuilder: (_widgetSelected, goHome, currentSelected, tabletMode) {
+      drawerBuilder: (widgetSelected, goHome, currentSelected, tabletMode) {
         // _widgetSelected is not passed down because routing is done by
         // accessing the ResponsiveScaffoldState via the GlobalKey and calling
         // selectContentWidget on it.
@@ -551,12 +550,12 @@ class DayWidget extends StatelessWidget {
                   children: [
                     Text(
                       day.displayName,
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     if (showLastFetched)
                       Text(
                         "Zuletzt synchronisiert ${formatTimeAgo(day.lastRequested)}.",
-                        style: Theme.of(context).textTheme.caption,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
                   ],
                 ),
@@ -588,7 +587,7 @@ class DayWidget extends StatelessWidget {
                     onPressed: () {
                       showDialog<void>(
                         context: context,
-                        builder: (_context) {
+                        builder: (context) {
                           return InfoDialog(
                             title: const Text("Gelöschte Einträge"),
                             content: SingleChildScrollView(
@@ -729,7 +728,7 @@ class ItemWidget extends StatelessWidget {
     final historyItem = isDeletedView ? item.previousVersion : item;
     showDialog<void>(
       context: context,
-      builder: (_context) {
+      builder: (context) {
         return InfoDialog(
           title: Text(historyItem!.title),
           content: SingleChildScrollView(
@@ -940,7 +939,7 @@ class ItemWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     formatChanged(item),
-                    style: Theme.of(context).textTheme.caption,
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ),
               ],
@@ -951,7 +950,7 @@ class ItemWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text("Anhang",
-                        style: Theme.of(context).textTheme.subtitle1),
+                        style: Theme.of(context).textTheme.titleMedium),
                   ),
                 ),
                 for (final attachment in item.gradeGroupSubmissions!)

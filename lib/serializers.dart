@@ -18,9 +18,9 @@
 import 'package:built_collection/built_collection.dart';
 import 'package:built_value/serializer.dart';
 
-import 'app_state.dart';
-import 'data.dart';
-import 'utc_date_time.dart';
+import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
+import 'package:dr/utc_date_time.dart';
 
 part 'serializers.g.dart';
 
