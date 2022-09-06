@@ -207,7 +207,7 @@ const Map<String, String> schools = {
   "SSP Ulten": "https://ssp-ulten.digitalesregister.it",
   "Schulsprengel Vintl": "https://ssp-vintl.digitalesregister.it",
   "Mittelschule Welsberg": "https://ms-welsberg.digitalesregister.it",
-  "Grundschulen Welsberg": "https://ssp-welsberg.digitalesregister.it/v2/login",
+  "Grundschulen Welsberg": "https://ssp-welsberg.digitalesregister.it",
   "Schulsprengel Sterzing I (Grundschulen in Sterzing, Gossensaß und Innerpflersch)":
       "https://sterzing1.digitalesregister.it",
   "GS Ahornach": "https://gs-ahornach.digitalesregister.it",
@@ -265,8 +265,7 @@ const Map<String, String> schools = {
   "Grundschule Karneid": "https://gs-karneid.digitalesregister.it",
   "Grundschule Blumau": "https://gs-blumau.digitalesregister.it",
   "Grundschule Tiers": "https://gs-tiers.digitalesregister.it",
-  "Mittelschule K. Fischnaller":
-      "https://fischnaler.digitalesregister.it/v2/login",
+  "Mittelschule K. Fischnaller": "https://fischnaler.digitalesregister.it",
   "Grundschulen Schulsprengel Sterzing 2":
-      "https://gs-sterzing2.digitalesregister.it/v2/login",
+      "https://gs-sterzing2.digitalesregister.it",
 };
