@@ -471,7 +471,7 @@ Future<void> _restarted(
   Action<void> action,
 ) async {
   await next(action);
-  if (await wrapper.loggedIn &&
+  if (api.state.loginState.loggedIn &&
       DateTime.now().difference(wrapper.lastInteraction).inMinutes > 3) {
     wrapper.interaction();
     final poppedAnything = _popAll();
