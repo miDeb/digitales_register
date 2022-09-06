@@ -151,27 +151,32 @@ class _LoginPageContentState extends State<LoginPageContent> {
                                 : null,
                           ),
                         ),
-                        itemBuilder: (context, itemData) => ListTile(
-                          title: Text(itemData),
+                        itemBuilder: (context, suggestion) => Listener(
+                          onPointerUp: (_) {
+                            setState(() {
+                              _schoolController.text = suggestion;
+                              nonCustomServer = Tuple2(
+                                suggestion,
+                                widget.vm.servers[suggestion],
+                              );
+                              if (suggestion == "Andere Schule") {
+                                nonCustomServer = null;
+                                _urlController.text = ".digitalesregister.it";
+                                _urlController.selection =
+                                    TextSelection.fromPosition(
+                                  const TextPosition(offset: 0),
+                                );
+                              } else {
+                                _urlController.text = nonCustomServer!.item2!;
+                              }
+                            });
+                          },
+                          child: ListTile(
+                            title: Text(suggestion),
+                          ),
                         ),
                         onSuggestionSelected: (suggestion) {
-                          setState(() {
-                            _schoolController.text = suggestion;
-                            nonCustomServer = Tuple2(
-                              suggestion,
-                              widget.vm.servers[suggestion],
-                            );
-                            if (suggestion == "Andere Schule") {
-                              nonCustomServer = null;
-                              _urlController.text = ".digitalesregister.it";
-                              _urlController.selection =
-                                  TextSelection.fromPosition(
-                                const TextPosition(offset: 0),
-                              );
-                            } else {
-                              _urlController.text = nonCustomServer!.item2!;
-                            }
-                          });
+                          // Handled by Listener to work around issues on desktop platforms.
                         },
                         suggestionsCallback: (String pattern) {
                           final candidates = [
