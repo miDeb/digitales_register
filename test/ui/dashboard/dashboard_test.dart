@@ -176,6 +176,7 @@ Future<void> main() async {
   });
 
   testGoldens('Multiple Entries', (WidgetTester tester) async {
+    final now = UtcDateTime(2050);
     final widget = ReduxProvider(
       store: Store<AppState, AppStateBuilder, AppActions>(
         ReducerBuilder<AppState, AppStateBuilder>().build(),
@@ -185,7 +186,7 @@ Future<void> main() async {
               <Day>[
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now()
+                    ..date = now
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder(<Homework>[
                       Homework(
@@ -194,7 +195,7 @@ Future<void> main() async {
                           ..checked = false
                           ..deleteable = false
                           ..deleted = false
-                          ..firstSeen = UtcDateTime.now()
+                          ..firstSeen = now
                           ..id = 1
                           ..isChanged = false
                           ..isNew = false
@@ -205,18 +206,18 @@ Future<void> main() async {
                           ..gradeFormatted = "7/9",
                       ),
                     ])
-                    ..lastRequested = UtcDateTime.now(),
+                    ..lastRequested = now,
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now().add(const Duration(days: 1))
+                    ..date = now.add(const Duration(days: 1))
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = UtcDateTime.now(),
+                    ..lastRequested = now,
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now().add(const Duration(days: 2))
+                    ..date = now.add(const Duration(days: 2))
                     ..deletedHomework = ListBuilder(
                       <Homework>[
                         Homework(
@@ -225,7 +226,7 @@ Future<void> main() async {
                             ..checked = true
                             ..deleteable = false
                             ..deleted = true
-                            ..firstSeen = UtcDateTime.now()
+                            ..firstSeen = now
                             ..id = 1234
                             ..isChanged = false
                             ..isNew = false
@@ -244,7 +245,7 @@ Future<void> main() async {
                             ..checked = true
                             ..deleteable = false
                             ..deleted = false
-                            ..firstSeen = UtcDateTime.now()
+                            ..firstSeen = now
                             ..id = 0
                             ..isChanged = false
                             ..isNew = false
@@ -259,7 +260,7 @@ Future<void> main() async {
                             ..checked = false
                             ..deleteable = false
                             ..deleted = false
-                            ..firstSeen = UtcDateTime.now()
+                            ..firstSeen = now
                             ..id = 1
                             ..isChanged = false
                             ..isNew = false
@@ -270,14 +271,14 @@ Future<void> main() async {
                         ),
                       ],
                     )
-                    ..lastRequested = UtcDateTime.now(),
+                    ..lastRequested = now,
                 ),
                 Day(
                   (b) => b
-                    ..date = UtcDateTime.now().add(const Duration(days: 3))
+                    ..date = now.add(const Duration(days: 3))
                     ..deletedHomework = ListBuilder()
                     ..homework = ListBuilder()
-                    ..lastRequested = UtcDateTime.now(),
+                    ..lastRequested = now,
                 ),
               ],
             ),
