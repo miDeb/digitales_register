@@ -563,8 +563,6 @@ abstract class CalendarHour
   BuiltList<HomeworkExam> get homeworkExams;
   BuiltList<LessonContent> get lessonContents;
   int get length => toHour - fromHour + 1;
-  int get lengthAsMinutes =>
-      timeSpans.last.to.difference(timeSpans.first.from).inMinutes;
   bool get warning => homeworkExams.any((it) => it.warning);
 
   BuiltList<Teacher> get teachers;

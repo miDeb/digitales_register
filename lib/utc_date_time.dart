@@ -65,8 +65,6 @@ class UtcDateTime extends DateTime {
       day,
     );
   }
-
-  int get minutesSinceMidnight => difference(stripTime()).inMinutes;
 }
 
 extension MakeUtc on DateTime {

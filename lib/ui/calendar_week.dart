@@ -15,10 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'dart:async';
-
 import 'package:built_collection/built_collection.dart';
-import 'package:collection/collection.dart';
 import 'package:dr/app_state.dart';
 import 'package:dr/container/calendar_week_container.dart';
 import 'package:dr/data.dart';
@@ -32,7 +29,7 @@ import 'package:intl/intl.dart';
 
 const holidayIconSize = 65.0;
 
-class CalendarWeek extends StatefulWidget {
+class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
 
   const CalendarWeek({
@@ -41,120 +38,120 @@ class CalendarWeek extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CalendarWeek> createState() => _CalendarWeekState();
+  Widget build(BuildContext context) {
+    final latestHour =
+        vm.days.fold<int>(0, (a, b) => a < b.toHour ? b.toHour : a);
+    return vm.days.isEmpty
+        ? vm.noInternet
+            ? const NoInternet()
+            : const Center(
+                child: CircularProgressIndicator(),
+              )
+        : LastFetchedOverlay(
+            lastFetched: vm.days.first.lastFetched,
+            noInternet: vm.noInternet,
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Row(
+                    children: vm.days
+                        .map(
+                          (d) => Expanded(
+                            child: CalendarDayWidget(
+                              calendarDay: d,
+                              max: latestHour,
+                              subjectNicks: vm.subjectNicks,
+                              isSelected: vm.selection?.date == d.date,
+                              selectedHour: vm.selection?.date == d.date
+                                  ? vm.selection?.hour
+                                  : null,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                ),
+              ],
+            ),
+          );
+  }
 }
 
-class _CalendarWeekState extends State<CalendarWeek> {
-  late Timer timer;
-  @override
-  void initState() {
-    super.initState();
-    // Periodically rebuild to update the current time indicator
-    timer = Timer.periodic(
-      const Duration(minutes: 1),
-      (timer) {
-        setState(() {});
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
+class _HoursChunk extends StatelessWidget {
+  final BuiltMap<String, String> subjectNicks;
+  final List<CalendarHour> hours;
+  final CalendarDay day;
+  final int? selectedHour;
+  final bool isSelected;
+  const _HoursChunk({
+    Key? key,
+    required this.subjectNicks,
+    required this.hours,
+    required this.day,
+    required this.selectedHour,
+    required this.isSelected,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (widget.vm.days.isEmpty) {
-      if (widget.vm.noInternet) {
-        return const NoInternet();
-      } else {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-    }
-    final latestEnd = widget.vm.days.fold<int?>(
-      null,
-      (a, b) => a == null ||
-              (b.hours.isNotEmpty &&
-                  a < b.hours.last.timeSpans.last.to.minutesSinceMidnight)
-          ? b.hours.lastOrNull?.timeSpans.last.to.minutesSinceMidnight
-          : a,
-    );
-    final earliestStart = widget.vm.days.fold<int?>(
-      null,
-      (a, b) => a == null ||
-              (b.hours.isNotEmpty &&
-                  a > b.hours.first.timeSpans.first.from.minutesSinceMidnight)
-          ? b.hours.firstOrNull?.timeSpans.first.from.minutesSinceMidnight
-          : a,
-    );
-    return LastFetchedOverlay(
-      lastFetched: widget.vm.days.first.lastFetched,
-      noInternet: widget.vm.noInternet,
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Row(
-              children: widget.vm.days
-                  .map(
-                    (d) => Expanded(
-                      child: _CalendarDayWidget(
-                        earliestStart: earliestStart,
-                        latestEnd: latestEnd,
-                        calendarDay: d,
-                        subjectNicks: widget.vm.subjectNicks,
-                        isSelected: widget.vm.selection?.date == d.date,
-                        selectedHour: widget.vm.selection?.date == d.date
-                            ? widget.vm.selection?.hour
-                            : null,
-                      ),
+    return Stack(
+      children: <Widget>[
+        Card(
+          shape: RoundedRectangleBorder(
+            side: BorderSide(
+              color: isSelected
+                  ? Theme.of(context).colorScheme.secondary
+                  : Colors.grey,
+              width: 0.75,
+            ),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          elevation: 0,
+          child: Container(),
+        ),
+        Card(
+          color: Colors.transparent,
+          elevation: 0,
+          clipBehavior: Clip.antiAlias,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Column(
+            children: List.generate(
+              hours.length * 2 - 1,
+              (n) => n.isEven
+                  ? HourWidget(
+                      hour: hours[n ~/ 2],
+                      subjectNicks: subjectNicks,
+                      day: day,
+                      isSelected: selectedHour == hours[n ~/ 2].fromHour,
+                    )
+                  : const Divider(
+                      height: 0,
                     ),
-                  )
-                  .toList(),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
-int durationAsMinutes(List<CalendarHour> chunk) {
-  final end = chunk.last.timeSpans.last.to;
-  final start = chunk.first.timeSpans.first.from;
-  return end.difference(start).inMinutes;
-}
-
-class _CalendarDayWidget extends StatelessWidget {
-  final int? earliestStart, latestEnd;
+class CalendarDayWidget extends StatelessWidget {
+  final int max;
   final CalendarDay calendarDay;
   final BuiltMap<String, String> subjectNicks;
   final bool isSelected;
   final int? selectedHour;
 
-  int distanceAsMinutes(
-      List<CalendarHour>? earlier, List<CalendarHour>? later) {
-    final end =
-        later?.first.timeSpans.first.from.minutesSinceMidnight ?? latestEnd;
-    final start =
-        earlier?.last.timeSpans.last.to.minutesSinceMidnight ?? earliestStart;
-    if (end == null || start == null) {
-      return 0;
-    }
-    return end - start;
-  }
-
-  const _CalendarDayWidget({
+  const CalendarDayWidget({
     Key? key,
+    required this.max,
     required this.calendarDay,
     required this.subjectNicks,
     required this.isSelected,
     required this.selectedHour,
-    required this.earliestStart,
-    required this.latestEnd,
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -181,11 +178,13 @@ class _CalendarDayWidget extends StatelessWidget {
         if (chunks.isNotEmpty) ...[
           for (var i = 0; i < chunks.length; i++) ...[
             Expanded(
-              flex: distanceAsMinutes(i == 0 ? null : chunks[i - 1], chunks[i]),
+              flex: chunks[i].first.fromHour -
+                  (i == 0 ? 0 : chunks[i - 1].last.toHour) -
+                  1,
               child: Container(),
             ),
             Expanded(
-              flex: durationAsMinutes(chunks[i]),
+              flex: chunks[i].last.toHour - chunks[i].first.fromHour + 1,
               child: _HoursChunk(
                 hours: chunks[i],
                 subjectNicks: subjectNicks,
@@ -196,7 +195,7 @@ class _CalendarDayWidget extends StatelessWidget {
             )
           ],
           Expanded(
-            flex: distanceAsMinutes(calendarDay.hours.toList(), null),
+            flex: max - calendarDay.toHour,
             child: Container(),
           )
         ] else
@@ -227,151 +226,12 @@ class _CalendarDayWidget extends StatelessWidget {
   }
 }
 
-class _HoursChunk extends StatelessWidget {
-  final BuiltMap<String, String> subjectNicks;
-  final List<CalendarHour> hours;
-  final CalendarDay day;
-  final int? selectedHour;
-  final bool isSelected;
-  const _HoursChunk({
-    Key? key,
-    required this.subjectNicks,
-    required this.hours,
-    required this.day,
-    required this.selectedHour,
-    required this.isSelected,
-  }) : super(key: key);
-
-  bool containsDateTime(UtcDateTime dateTime) {
-    return !hours.first.timeSpans.first.from.isAfter(dateTime) &&
-        !hours.last.timeSpans.last.to.isBefore(dateTime);
-  }
-
-  int minutesSinceBeginning(List<CalendarHour> hours, UtcDateTime dateTime) {
-    return dateTime.difference(hours.first.timeSpans.first.from).inMinutes;
-  }
-
-  int distanceInMinutes(CalendarHour earlier, CalendarHour later) {
-    return later.timeSpans.first.from.minutesSinceMidnight -
-        earlier.timeSpans.last.to.minutesSinceMidnight;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final now = UtcDateTime(2022, 6, 13, 11, 55);
-    final isCurrentHour = containsDateTime(now);
-    final theme = Theme.of(context);
-    return LayoutBuilder(
-      builder: (context, constraints) => Stack(
-        children: <Widget>[
-          Card(
-            elevation: 0,
-            clipBehavior: Clip.hardEdge,
-            shape: RoundedRectangleBorder(
-              side: BorderSide(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.secondary
-                    : Colors.grey,
-                width: 0.75,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Column(
-              children: List.generate(
-                hours.length * 2 - 1,
-                (index) => index.isEven
-                    ? _HourWidget(
-                        hour: hours[index ~/ 2],
-                        subjectNicks: subjectNicks,
-                        day: day,
-                        isSelected: selectedHour == hours[index ~/ 2].fromHour,
-                      )
-                    : Expanded(
-                        flex: distanceInMinutes(
-                            hours[index ~/ 2], hours[index ~/ 2 + 1]),
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            return Divider(
-                              thickness: constraints.maxHeight,
-                              color: theme.brightness == Brightness.dark
-                                  ? theme.scaffoldBackgroundColor
-                                  : Colors.grey.shade300,
-                            );
-                          },
-                        ),
-                      ),
-              ),
-            ),
-          ),
-          /*IgnorePointer(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.secondary
-                      : Colors.grey,
-                  width: 0.75,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              color: Colors.transparent,
-              elevation: 0,
-              child: Container(),
-            ),
-          ),*/
-          if (isCurrentHour)
-            Positioned(
-              left: 0,
-              right: 2,
-              top: (constraints.maxHeight -
-                          8 /* the card`s vertical padding */) *
-                      minutesSinceBeginning(hours, now) /
-                      durationAsMinutes(hours) -
-                  // half of the indicator`s size
-                  5 +
-                  // the card`s margin to the top
-                  4,
-              child: const _CurrentTimeIndicator(),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CurrentTimeIndicator extends StatelessWidget {
-  const _CurrentTimeIndicator({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.secondary;
-    return Row(
-      children: [
-        Container(
-          height: 10,
-          width: 10,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: 2,
-            decoration: BoxDecoration(color: color),
-          ),
-        )
-      ],
-    );
-  }
-}
-
-class _HourWidget extends StatelessWidget {
+class HourWidget extends StatelessWidget {
   final CalendarHour hour;
   final CalendarDay day;
   final BuiltMap<String, String> subjectNicks;
   final bool isSelected;
-  const _HourWidget({
+  const HourWidget({
     Key? key,
     required this.hour,
     required this.subjectNicks,
@@ -381,16 +241,14 @@ class _HourWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Flexible(
-      flex: hour.lengthAsMinutes,
+      flex: hour.length,
       child: ClipRect(
         child: InkWell(
           onTap: () {
             actions.calendarActions.select(
-              CalendarSelection(
-                (b) => b
-                  ..date = day.date
-                  ..hour = hour.fromHour,
-              ),
+              CalendarSelection((b) => b
+                ..date = day.date
+                ..hour = hour.fromHour),
             );
           },
           child: Container(
