@@ -268,4 +268,8 @@ const Map<String, String> schools = {
   "Mittelschule K. Fischnaller": "https://fischnaler.digitalesregister.it",
   "Grundschulen Schulsprengel Sterzing 2":
       "https://gs-sterzing2.digitalesregister.it",
+  "Grundschulen SSP Brixen Milland":
+      "https://gs-brixenmilland.digitalesregister.it",
+  "Mittelschule Pacher SSP Brixen/Milland":
+      "https://ms-brixenmilland.digitalesregister.it",
 };
