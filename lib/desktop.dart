@@ -35,12 +35,16 @@ secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
   if (isDesktop()) {
     return DesktopSecureStorage();
   } else {
-    return const secure_storage.FlutterSecureStorage();
+    return const secure_storage.FlutterSecureStorage(
+      aOptions: secure_storage.AndroidOptions(
+        encryptedSharedPreferences: true,
+      ),
+    );
   }
 }
 
 // Uses a different implementation to work on desktop. We cannot switch to
-// this impl for every platform because that would break bakcwards compatibility.
+// this impl for every platform because that would break backwards compatibility.
 class DesktopSecureStorage implements secure_storage.FlutterSecureStorage {
   Future<Box<String>> hiveBox = getEncryptedBox();
   DesktopSecureStorage();
