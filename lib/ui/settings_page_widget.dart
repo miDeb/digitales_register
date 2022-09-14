@@ -27,7 +27,6 @@ import 'package:dr/ui/network_protocol_page.dart';
 import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -641,22 +640,32 @@ class EditSubjectsNicks extends StatefulWidget {
 }
 
 class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
-  TextEditingController? nickController;
-  FocusNode? focusNode;
+  late TextEditingController nickController;
+  late TextEditingController subjectNameController;
+  late FocusNode nickFocusNode, nameFocusNode;
   late bool forNewNick;
-  late String subjectName = widget.subjectName ?? "";
+
   @override
   void initState() {
     forNewNick = widget.subjectName!.isEmpty;
     nickController = TextEditingController(text: widget.subjectNick);
-    focusNode = FocusNode();
+    subjectNameController = TextEditingController(text: widget.subjectName)
+      ..addListener(
+        () {
+          setState(() {});
+        },
+      );
+    nickFocusNode = FocusNode();
+    nameFocusNode = FocusNode();
     super.initState();
   }
 
   @override
   void dispose() {
-    nickController!.dispose();
-    focusNode!.dispose();
+    nickController.dispose();
+    subjectNameController.dispose();
+    nickFocusNode.dispose();
+    nameFocusNode.dispose();
     super.dispose();
   }
 
@@ -683,8 +692,9 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Autocomplete<String>(
-                  initialValue: TextEditingValue(text: subjectName),
+                RawAutocomplete<String>(
+                  focusNode: nameFocusNode,
+                  textEditingController: subjectNameController,
                   optionsBuilder: (textEditingValue) {
                     return widget.suggestions!.where((suggestion) => suggestion
                         .toLowerCase()
@@ -711,26 +721,22 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                       onFieldSubmitted: (String value) {
                         onFieldSubmitted();
                       },
-                      autofocus: subjectName.isEmpty,
+                      autofocus: subjectNameController.text.isEmpty,
                     );
-                  },
-                  onSelected: (option) {
-                    setState(() {
-                      subjectName = option;
-                    });
                   },
                 ),
                 TextField(
                   controller: nickController,
                   textCapitalization: TextCapitalization.sentences,
                   onChanged: (_) => setState(() {}),
-                  focusNode: focusNode,
+                  focusNode: nickFocusNode,
                   onSubmitted: (_) {
-                    if (subjectName != "" && nickController!.text != "") {
+                    if (subjectNameController.text != "" &&
+                        nickController.text != "") {
                       Navigator.of(context).pop(
                         MapEntry(
-                          subjectName,
-                          nickController!.text,
+                          subjectNameController.text,
+                          nickController.text,
                         ),
                       );
                     }
@@ -749,16 +755,17 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectName != "" && nickController!.text != ""
-              ? () {
-                  Navigator.of(context).pop(
-                    MapEntry(
-                      subjectName,
-                      nickController!.text,
-                    ),
-                  );
-                }
-              : null,
+          onPressed:
+              subjectNameController.text != "" && nickController.text != ""
+                  ? () {
+                      Navigator.of(context).pop(
+                        MapEntry(
+                          subjectNameController.text,
+                          nickController.text,
+                        ),
+                      );
+                    }
+                  : null,
           child: const Text("Fertig"),
         ),
       ],
@@ -775,24 +782,41 @@ class AddSubject extends StatefulWidget {
 }
 
 class _AddSubjectState extends State<AddSubject> {
-  String subjectName = "";
+  late TextEditingController subjectNameController;
+  late FocusNode focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode = FocusNode();
+    subjectNameController = TextEditingController()
+      ..addListener(
+        () {
+          setState(() {});
+        },
+      );
+  }
+
+  @override
+  void dispose() {
+    subjectNameController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
       title: const Text("Fach hinzufügen"),
-      content: Autocomplete<String>(
+      content: RawAutocomplete<String>(
+        focusNode: focusNode,
+        textEditingController: subjectNameController,
         optionsBuilder: (textEditingValue) {
           return widget.availableSubjects!.where(
             (suggestion) => suggestion
                 .toLowerCase()
                 .contains(textEditingValue.text.toLowerCase()),
           );
-        },
-        onSelected: (option) {
-          setState(() {
-            subjectName = option;
-          });
         },
         optionsViewBuilder: (context, onSelected, options) {
           return AutocompleteOptions(
@@ -814,7 +838,7 @@ class _AddSubjectState extends State<AddSubject> {
             onFieldSubmitted: (String value) {
               onFieldSubmitted();
             },
-            autofocus: subjectName.isEmpty,
+            autofocus: subjectNameController.text.isEmpty,
           );
         },
       ),
@@ -826,9 +850,9 @@ class _AddSubjectState extends State<AddSubject> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectName != ""
+          onPressed: subjectNameController.text != ""
               ? () {
-                  Navigator.of(context).pop(subjectName);
+                  Navigator.of(context).pop(subjectNameController.text);
                 }
               : null,
           child: const Text("Fertig"),
