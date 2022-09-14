@@ -724,6 +724,9 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                       autofocus: subjectNameController.text.isEmpty,
                     );
                   },
+                  onSelected: (_) {
+                    nameFocusNode.unfocus();
+                  },
                 ),
                 TextField(
                   controller: nickController,
@@ -840,6 +843,9 @@ class _AddSubjectState extends State<AddSubject> {
             },
             autofocus: subjectNameController.text.isEmpty,
           );
+        },
+        onSelected: (_) {
+          focusNode.unfocus();
         },
       ),
       actions: <Widget>[

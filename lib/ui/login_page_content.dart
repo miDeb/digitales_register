@@ -206,8 +206,8 @@ class _LoginPageContentState extends State<LoginPageContent> {
                             ];
                           },
                           onSelected: (option) {
+                            _schoolFocusNode.unfocus();
                             setState(() {
-                              _schoolController.text = option;
                               selectedPresetServer = Tuple2(
                                 option,
                                 widget.vm.servers[option],
