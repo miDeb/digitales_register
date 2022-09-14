@@ -15,12 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+import 'package:collection/collection.dart';
 import 'package:dr/container/login_page.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
+import 'package:dr/ui/autocomplete_options.dart';
 import 'package:dr/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:fuzzy/fuzzy.dart';
 import 'package:tuple/tuple.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +57,7 @@ class LoginPageContent extends StatefulWidget {
 }
 
 class _LoginPageContentState extends State<LoginPageContent> {
-  final _usernameController = TextEditingController(),
+  late final _usernameController = TextEditingController(),
       _passwordController = TextEditingController(),
       _newPassword1Controller = TextEditingController(),
       _newPassword2Controller = TextEditingController(),
@@ -72,7 +73,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
   final _schoolFocusNode = FocusNode();
   late bool safeMode;
   bool newPasswordsMatch = true;
-  Tuple2<String, String?>? nonCustomServer;
+  Tuple2<String, String?>? selectedPresetServer;
   @override
   void initState() {
     safeMode = widget.vm.safeMode;
@@ -81,12 +82,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
     }
     if (widget.vm.url != null) {
       _urlController.text = widget.vm.url!;
-      for (final entry in widget.vm.servers.entries) {
-        if (Uri.parse(entry.value).host == Uri.parse(widget.vm.url!).host) {
-          nonCustomServer = Tuple2(entry.key, entry.value);
-          _schoolController.text = entry.key;
-          break;
-        }
+      final school = widget.vm.servers.entries.firstWhereOrNull(
+        (entry) =>
+            Uri.parse(entry.value).host == Uri.parse(widget.vm.url!).host,
+      );
+      if (school != null) {
+        selectedPresetServer = Tuple2(school.key, school.value);
+        _schoolController.text = school.key;
+      } else {
+        _schoolController.text = "Andere Schule";
       }
     }
     _schoolFocusNode.addListener(() {
@@ -97,7 +101,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
     super.initState();
   }
 
-  String get url => nonCustomServer?.item2 ?? _urlController.text;
+  String get url => selectedPresetServer?.item2 ?? _urlController.text;
 
   @override
   Widget build(BuildContext context) {
@@ -124,78 +128,105 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   if (!widget.vm.changePass) ...[
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: TypeAheadField<String>(
-                        textFieldConfiguration: TextFieldConfiguration(
-                          enabled: !widget.vm.loading,
+                      // TODO: Remove once https://github.com/flutter/flutter/issues/78746 is fixed.
+                      child: LayoutBuilder(builder: (context, constraints) {
+                        return RawAutocomplete<String>(
                           focusNode: _schoolFocusNode,
-                          autofocus: _schoolController.text.isEmpty,
-                          controller: _schoolController,
-                          onChanged: (v) {
-                            setState(() {
-                              if (widget.vm.servers[v] == null) {
-                                nonCustomServer = null;
-                              } else {
-                                nonCustomServer =
-                                    Tuple2(v, widget.vm.servers[v]);
-                                _urlController.text = nonCustomServer!.item2!;
-                              }
-                            });
+                          textEditingController: _schoolController,
+                          optionsViewBuilder: (context, onSelected, options) {
+                            return AutocompleteOptions(
+                              displayStringForOption:
+                                  RawAutocomplete.defaultStringForOption,
+                              onSelected: onSelected,
+                              options: options,
+                              maxOptionsHeight: 200,
+                              width: constraints.maxWidth,
+                            );
                           },
-                          decoration: InputDecoration(
-                            labelText: "Schule",
-                            errorText: !_schoolFocusNode.hasFocus &&
-                                    _schoolController.text != "Andere Schule" &&
-                                    _schoolController.text.isNotEmpty &&
-                                    nonCustomServer == null
-                                ? "Schule nicht gefunden"
-                                : null,
-                          ),
-                        ),
-                        itemBuilder: (context, suggestion) => Listener(
-                          onPointerUp: (_) {
+                          fieldViewBuilder: (context, textEditingController,
+                              focusNode, onFieldSubmitted) {
+                            return TextFormField(
+                              controller: textEditingController,
+                              focusNode: focusNode,
+                              onFieldSubmitted: (String value) {
+                                onFieldSubmitted();
+                              },
+                              autofocus: _schoolController.text.isEmpty,
+                              enabled: !widget.vm.loading,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (widget.vm.servers[value] == null) {
+                                    selectedPresetServer = null;
+                                  } else {
+                                    selectedPresetServer =
+                                        Tuple2(value, widget.vm.servers[value]);
+                                    _urlController.text =
+                                        selectedPresetServer!.item2!;
+                                  }
+                                });
+                              },
+                              decoration: InputDecoration(
+                                labelText: "Schule",
+                                errorText: !_schoolFocusNode.hasFocus &&
+                                        _schoolController.text !=
+                                            "Andere Schule" &&
+                                        _schoolController.text.isNotEmpty &&
+                                        selectedPresetServer == null
+                                    ? "Schule nicht gefunden"
+                                    : null,
+                              ),
+                            );
+                          },
+                          optionsBuilder: (textEditingValue) {
+                            // Require at least three input characters.
+                            if (textEditingValue.text.trim().length < 3) {
+                              return [];
+                            }
+
+                            // If we found a perfect match, do not show other options.
+                            if (widget.vm.servers
+                                .containsKey(textEditingValue.text)) {
+                              return [
+                                textEditingValue.text,
+                              ];
+                            }
+
+                            return [
+                              ...Fuzzy(
+                                widget.vm.servers.keys.toList(),
+                                options: FuzzyOptions<String>(
+                                  maxPatternLength: 256,
+                                  tokenize: true,
+                                ),
+                              )
+                                  .search(textEditingValue.text)
+                                  .take(15)
+                                  .map((e) => e.item),
+                              "Andere Schule",
+                            ];
+                          },
+                          onSelected: (option) {
                             setState(() {
-                              _schoolController.text = suggestion;
-                              nonCustomServer = Tuple2(
-                                suggestion,
-                                widget.vm.servers[suggestion],
+                              _schoolController.text = option;
+                              selectedPresetServer = Tuple2(
+                                option,
+                                widget.vm.servers[option],
                               );
-                              if (suggestion == "Andere Schule") {
-                                nonCustomServer = null;
+                              if (option == "Andere Schule") {
+                                selectedPresetServer = null;
                                 _urlController.text = ".digitalesregister.it";
                                 _urlController.selection =
                                     TextSelection.fromPosition(
                                   const TextPosition(offset: 0),
                                 );
                               } else {
-                                _urlController.text = nonCustomServer!.item2!;
+                                _urlController.text =
+                                    selectedPresetServer!.item2!;
                               }
                             });
                           },
-                          child: ListTile(
-                            title: Text(suggestion),
-                          ),
-                        ),
-                        onSuggestionSelected: (suggestion) {
-                          // Handled by Listener to work around issues on desktop platforms.
-                        },
-                        suggestionsCallback: (String pattern) {
-                          final candidates = [
-                            ...Fuzzy(widget.vm.servers.keys.toList())
-                                .search(pattern)
-                                .map((e) => e.item),
-                            "Andere Schule",
-                          ];
-                          return candidates;
-                        },
-                        noItemsFoundBuilder: (context) {
-                          return const ListTile(
-                            title: Text(
-                              "Bitte gib den Namen der Schule ein",
-                              style: TextStyle(color: Colors.grey),
-                            ),
-                          );
-                        },
-                      ),
+                        );
+                      }),
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
@@ -205,10 +236,15 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           padding: const EdgeInsets.symmetric(horizontal: 32),
                         ),
                         onPressed: () async {
-                          await launch(
-                            // ignore: prefer_interpolation_to_compose_strings
-                            "https://docs.google.com/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform?usp=pp_url"
-                            "&entry.1581750442=${Uri.encodeQueryComponent(appVersion)}",
+                          await launchUrl(
+                            Uri.https(
+                              "docs.google.com",
+                              "/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform",
+                              <String, String>{
+                                "usp": "pp_url",
+                                "entry.1581750442": appVersion,
+                              },
+                            ),
                           );
                         },
                         child: const Text("Feedback?"),
@@ -406,14 +442,17 @@ class _LoginPageContentState extends State<LoginPageContent> {
                   ],
                   Center(
                     child: widget.vm.error?.isNotEmpty == true
-                        ? Text(
-                            widget.vm.noInternet
-                                ? 'Keine Verbindung mit "${widget.vm.url}" möglich. Bitte überprüfe deine Internetverbindung.\nWenn du "Andere Schule" ausgewählt hast, musst du eine gültige Adresse eingeben.'
-                                : widget.vm.error!,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: Colors.red),
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              widget.vm.noInternet
+                                  ? 'Keine Verbindung mit "${widget.vm.url}" möglich. Bitte überprüfe deine Internetverbindung.\nWenn du "Andere Schule" ausgewählt hast, musst du eine gültige Adresse eingeben.'
+                                  : widget.vm.error!,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: Colors.red),
+                            ),
                           )
                         : const SizedBox(),
                   ),

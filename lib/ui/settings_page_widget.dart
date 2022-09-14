@@ -20,14 +20,15 @@ import 'dart:io';
 import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:dr/app_state.dart';
 import 'package:dr/container/settings_page.dart';
+import 'package:dr/ui/autocomplete_options.dart';
 import 'package:dr/ui/dialog.dart';
 import 'package:dr/ui/donations.dart';
 import 'package:dr/ui/network_protocol_page.dart';
 import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -640,14 +641,13 @@ class EditSubjectsNicks extends StatefulWidget {
 }
 
 class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
-  TextEditingController? subjectController;
   TextEditingController? nickController;
   FocusNode? focusNode;
   late bool forNewNick;
+  late String subjectName = widget.subjectName ?? "";
   @override
   void initState() {
     forNewNick = widget.subjectName!.isEmpty;
-    subjectController = TextEditingController(text: widget.subjectName);
     nickController = TextEditingController(text: widget.subjectNick);
     focusNode = FocusNode();
     super.initState();
@@ -655,7 +655,6 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
 
   @override
   void dispose() {
-    subjectController!.dispose();
     nickController!.dispose();
     focusNode!.dispose();
     super.dispose();
@@ -684,23 +683,42 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                TypeAheadField<String>(
-                  suggestionsCallback: (pattern) {
+                Autocomplete<String>(
+                  initialValue: TextEditingValue(text: subjectName),
+                  optionsBuilder: (textEditingValue) {
                     return widget.suggestions!.where((suggestion) => suggestion
                         .toLowerCase()
-                        .contains(pattern.toLowerCase()));
+                        .contains(textEditingValue.text.toLowerCase()));
                   },
-                  itemBuilder: (BuildContext context, String? suggestion) {
-                    return ListTile(title: Text(suggestion!));
+                  optionsViewBuilder: (context, onSelected, options) {
+                    return AutocompleteOptions(
+                      displayStringForOption:
+                          RawAutocomplete.defaultStringForOption,
+                      onSelected: onSelected,
+                      options: options,
+                      maxOptionsHeight: 200,
+                      // We can't use a LayoutBuilder to get the size inside an AlertDialog,
+                      // so we hardcode it here.
+                      // TODO: Remove once https://github.com/flutter/flutter/issues/78746 is fixed.
+                      width: 170,
+                    );
                   },
-                  onSuggestionSelected: (suggestion) {
-                    subjectController!.text = suggestion;
+                  fieldViewBuilder: (context, textEditingController, focusNode,
+                      onFieldSubmitted) {
+                    return TextFormField(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      onFieldSubmitted: (String value) {
+                        onFieldSubmitted();
+                      },
+                      autofocus: subjectName.isEmpty,
+                    );
                   },
-                  textFieldConfiguration: TextFieldConfiguration(
-                    controller: subjectController,
-                    autofocus: subjectController!.text.isEmpty,
-                  ),
-                  hideOnEmpty: true,
+                  onSelected: (option) {
+                    setState(() {
+                      subjectName = option;
+                    });
+                  },
                 ),
                 TextField(
                   controller: nickController,
@@ -708,11 +726,10 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
                   onChanged: (_) => setState(() {}),
                   focusNode: focusNode,
                   onSubmitted: (_) {
-                    if (subjectController!.text != "" &&
-                        nickController!.text != "") {
+                    if (subjectName != "" && nickController!.text != "") {
                       Navigator.of(context).pop(
                         MapEntry(
-                          subjectController!.text,
+                          subjectName,
                           nickController!.text,
                         ),
                       );
@@ -732,11 +749,11 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectController!.text != "" && nickController!.text != ""
+          onPressed: subjectName != "" && nickController!.text != ""
               ? () {
                   Navigator.of(context).pop(
                     MapEntry(
-                      subjectController!.text,
+                      subjectName,
                       nickController!.text,
                     ),
                   );
@@ -752,50 +769,54 @@ class _EditSubjectsNicksState extends State<EditSubjectsNicks> {
 class AddSubject extends StatefulWidget {
   final List<String>? availableSubjects;
 
-  const AddSubject({Key? key, this.availableSubjects}) : super(key: key);
+  const AddSubject({super.key, this.availableSubjects});
   @override
   _AddSubjectState createState() => _AddSubjectState();
 }
 
 class _AddSubjectState extends State<AddSubject> {
-  TextEditingController? subjectController;
-  @override
-  void initState() {
-    subjectController = TextEditingController();
-    subjectController!.addListener(() {
-      setState(() {
-        // if the subjectController's text changed, we might update the buttons
-      });
-    });
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    subjectController!.dispose();
-    super.dispose();
-  }
+  String subjectName = "";
 
   @override
   Widget build(BuildContext context) {
     return InfoDialog(
       title: const Text("Fach hinzufügen"),
-      content: TypeAheadField<String>(
-        suggestionsCallback: (pattern) {
-          return widget.availableSubjects!.where((suggestion) =>
-              suggestion.toLowerCase().contains(pattern.toLowerCase()));
+      content: Autocomplete<String>(
+        optionsBuilder: (textEditingValue) {
+          return widget.availableSubjects!.where(
+            (suggestion) => suggestion
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase()),
+          );
         },
-        itemBuilder: (BuildContext context, String? suggestion) {
-          return ListTile(title: Text(suggestion!));
+        onSelected: (option) {
+          setState(() {
+            subjectName = option;
+          });
         },
-        onSuggestionSelected: (suggestion) {
-          subjectController!.text = suggestion;
+        optionsViewBuilder: (context, onSelected, options) {
+          return AutocompleteOptions(
+            displayStringForOption: RawAutocomplete.defaultStringForOption,
+            onSelected: onSelected,
+            options: options,
+            maxOptionsHeight: 200,
+            // We can't use a LayoutBuilder to get the size inside an AlertDialog,
+            // so we hardcode it here.
+            // TODO: Remove once https://github.com/flutter/flutter/issues/78746 is fixed.
+            width: 233,
+          );
         },
-        textFieldConfiguration: TextFieldConfiguration(
-          controller: subjectController,
-          autofocus: subjectController!.text.isEmpty,
-        ),
-        hideOnEmpty: true,
+        fieldViewBuilder:
+            (context, textEditingController, focusNode, onFieldSubmitted) {
+          return TextFormField(
+            controller: textEditingController,
+            focusNode: focusNode,
+            onFieldSubmitted: (String value) {
+              onFieldSubmitted();
+            },
+            autofocus: subjectName.isEmpty,
+          );
+        },
       ),
       actions: <Widget>[
         TextButton(
@@ -805,9 +826,9 @@ class _AddSubjectState extends State<AddSubject> {
           child: const Text("Abbrechen"),
         ),
         ElevatedButton(
-          onPressed: subjectController!.text != ""
+          onPressed: subjectName != ""
               ? () {
-                  Navigator.of(context).pop(subjectController!.text);
+                  Navigator.of(context).pop(subjectName);
                 }
               : null,
           child: const Text("Fertig"),

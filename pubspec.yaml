@@ -12,7 +12,7 @@ version: 8.2.6+39
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
   badges: ^2.0.2
@@ -48,7 +48,6 @@ dependencies:
     sdk: flutter
   flutter_secure_storage: ^6.0.0
   flutter_svg: ^1.0.3
-  flutter_typeahead: ^4.0.0
   flutter_widget_from_html_core: ^0.8.5+3
   fuzzy: ^0.4.0-nullsafety.0
   hive: ^2.0.0

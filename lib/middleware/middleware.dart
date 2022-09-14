@@ -505,6 +505,7 @@ Future<void> _start(
     }
     switch (action.payload!.path) {
       case "":
+      case "/":
       case "/v2/":
         break;
       case "/v2/login":
