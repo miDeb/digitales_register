@@ -1,3 +1,6 @@
+## 8.2.6
+- Neue Schulen wurden hinzugefügt.
+
 ## 8.2.5
 - Unerwartete Logouts werden jetzt behandelt.
 
