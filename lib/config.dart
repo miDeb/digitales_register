@@ -67,7 +67,6 @@ const Map<String, String> schools = {
   "Realgymnasium und Fachoberschule für Bauwesen „Peter Anich“ Bozen":
       "https://rg-fob.digitalesregister.it",
   "RG/TFO Albert Einstein Meran": "https://rgtfo-me.digitalesregister.it",
-  "Grundschulsprengel Brixen": "https://brixen1.digitalesregister.it",
   "SSP Sarntal": "https://ssp-sarntal.digitalesregister.it",
   "GS Kastelruth": "https://gs-kastelruth.digitalesregister.it",
   "GS St. Michael": "https://gs-michael.digitalesregister.it",
@@ -112,7 +111,10 @@ const Map<String, String> schools = {
       "https://gs-weissenbach.digitalesregister.it",
   "SSP Ahrntal": "https://ssp-ahrntal.digitalesregister.it",
   "MS Algund": "https://ms-algund.digitalesregister.it",
-  "SSP Algund - Grundschulen": "https://ssp-algund.digitalesregister.it",
+  "GS Algund": "https://gs-algund.digitalesregister.it",
+  "GS Marling": "https://gs-marling.digitalesregister.it",
+  "GS Partschins": "https://gs-partschins.digitalesregister.it",
+  "GS Rabland": "https://gs-rabland.digitalesregister.it",
   "Grundschule J. H. Pestalozzi (SSP Bozen Europa)":
       "https://gs-bozeneuropa.digitalesregister.it",
   "Grundschule A. Langer (SSP Bozen Europa)":
@@ -121,9 +123,6 @@ const Map<String, String> schools = {
       "https://ms-bozeneuropa.digitalesregister.it",
   "SSP Bruneck 1": "https://bruneck1.digitalesregister.it",
   "Mittelschule Bruneck II": "https://meusburger.digitalesregister.it",
-  "Grundschulen im SSP Deutschnofen":
-      "https://gs-deutschnofen.digitalesregister.it",
-  "SSP Deutschnofen": "https://ssp-deutschnofen.digitalesregister.it",
   "Grundschule Frangart": "https://gs-frangart.digitalesregister.it",
   "Grundschule Girlan": "https://gs-girlan.digitalesregister.it",
   "Schulsprengel Eppan": "https://ssp-eppan.digitalesregister.it",
@@ -163,8 +162,7 @@ const Map<String, String> schools = {
   "Grundschule Oswald von Wolkenstein Meran":
       "https://gsoswaldvonwolkenstein.digitalesregister.it",
   "MS Carl Wolf": "https://mscarlwolf.digitalesregister.it",
-  "Grundschulen SSP Untermais": "https://gs-untermais.digitalesregister.it",
-  "MS Rosegger und Tirol": "https://ms-untermais.digitalesregister.it",
+  "GS Erckert": "https://gs-erckert.digitalesregister.it",
   "SSP Nonsberg Grundschule": "https://sspnonsberg-gs.digitalesregister.it",
   "SSP Nonsberg Mittelschule": "https://sspnonsberg-ms.digitalesregister.it",
   "Grundschule Geiselsberg": "https://gs-geiselsberg.digitalesregister.it",
@@ -265,11 +263,21 @@ const Map<String, String> schools = {
   "Grundschule Karneid": "https://gs-karneid.digitalesregister.it",
   "Grundschule Blumau": "https://gs-blumau.digitalesregister.it",
   "Grundschule Tiers": "https://gs-tiers.digitalesregister.it",
-  "Mittelschule K. Fischnaller": "https://fischnaler.digitalesregister.it",
+  "Mittelschule K. Fischnaler": "https://fischnaler.digitalesregister.it",
   "Grundschulen Schulsprengel Sterzing 2":
       "https://gs-sterzing2.digitalesregister.it",
   "Grundschulen SSP Brixen Milland":
       "https://gs-brixenmilland.digitalesregister.it",
   "Mittelschule Pacher SSP Brixen/Milland":
       "https://ms-brixenmilland.digitalesregister.it",
+  "Grundschulsprengel Vahrn": "https://gsp-vahrn.digitalesregister.it",
+  "Grundschule Sinich": "https://gs-sinich.digitalesregister.it",
+  "Grundschule Tirol": "https://gs-tirol.digitalesregister.it",
+  "Grundschule Deutschnofen": "https://gs-deutschnofen.digitalesregister.it",
+  "Grundschule Eggen": "https://gs-eggen.digitalesregister.it",
+  "Grundschule Petersberg": "https://gs-petersberg.digitalesregister.it",
+  "Grundschule Welschnofen": "https://gs-welschnofen.digitalesregister.it",
+  "Grundschule Gummer": "https://gs-gummer.digitalesregister.it",
+  "Mittelschule Deutschnofen": "https://ms-deutschnofen.digitalesregister.it",
+  "Mittelschule Welschnofen": "https://ms-welschnofen.digitalesregister.it",
 };
