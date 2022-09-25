@@ -4,6 +4,6 @@
 - Check the Changelog
 - Push all changes and check that CI is green
 - Create the release on Github
-- Update the Flathub repo (new version and sha256)
-- Publish to Windows Store
+- Update the Flathub repo (new version and sha256, check by running `flatpak-builder --user --install --force-clean build-dir io.github.mideb.digitales_register.yaml`)
+- Publish to Windows Store (`flutter build windows`, then `flutter pub run msix:create --store`)
 - Publish Android, iOS and macOS versions
