@@ -1,3 +1,6 @@
+## 8.2.7
+- Das Icon im Microsoft Store wurde korrigiert.
+
 ## 8.2.6
 - Neue Schulen wurden hinzugefügt.
 
