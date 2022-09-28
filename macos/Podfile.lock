@@ -1,6 +1,8 @@
 PODS:
   - biometric_storage (0.0.1):
     - FlutterMacOS
+  - flutter_secure_storage_macos (3.3.1):
+    - FlutterMacOS
   - FlutterMacOS (1.0.0)
   - package_info_plus_macos (0.0.1):
     - FlutterMacOS
@@ -13,6 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - biometric_storage (from `Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos`)
+  - flutter_secure_storage_macos (from `Flutter/ephemeral/.symlinks/plugins/flutter_secure_storage_macos/macos`)
   - FlutterMacOS (from `Flutter/ephemeral`)
   - package_info_plus_macos (from `Flutter/ephemeral/.symlinks/plugins/package_info_plus_macos/macos`)
   - path_provider_macos (from `Flutter/ephemeral/.symlinks/plugins/path_provider_macos/macos`)
@@ -22,6 +25,8 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   biometric_storage:
     :path: Flutter/ephemeral/.symlinks/plugins/biometric_storage/macos
+  flutter_secure_storage_macos:
+    :path: Flutter/ephemeral/.symlinks/plugins/flutter_secure_storage_macos/macos
   FlutterMacOS:
     :path: Flutter/ephemeral
   package_info_plus_macos:
@@ -35,12 +40,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   biometric_storage: 43caa6e7ef00e8e19c074216e7e1786dacda9e76
-  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  flutter_secure_storage_macos: 6ceee8fbc7f484553ad17f79361b556259df89aa
+  FlutterMacOS: ae6af50a8ea7d6103d888583d46bd8328a7e9811
   package_info_plus_macos: f010621b07802a241d96d01876d6705f15e77c1c
-  path_provider_macos: 160cab0d5461f0c0e02995469a98f24bdb9a3f1f
-  shared_preferences_macos: 480ce071d0666e37cef23fe6c702293a3d21799e
-  url_launcher_macos: 45af3d61de06997666568a7149c1be98b41c95d4
+  path_provider_macos: 3c0c3b4b0d4a76d2bf989a913c2de869c5641a19
+  shared_preferences_macos: a64dc611287ed6cbe28fd1297898db1336975727
+  url_launcher_macos: 597e05b8e514239626bcf4a850fcf9ef5c856ec3
 
 PODFILE CHECKSUM: 6eac6b3292e5142cfc23bdeb71848a40ec51c14c
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.3
