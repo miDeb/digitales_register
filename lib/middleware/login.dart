@@ -157,7 +157,7 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     await api.actions.loginActions.loginFailed(
       LoginFailedPayload(
         (b) => b
-          ..cause = wrapper.error
+          ..cause = wrapper.error ?? "Unknown error"
           ..username = action.payload.user,
       ),
     );
