@@ -96,7 +96,7 @@ class ParseException implements Exception {
   final String parent;
   final StackTrace trace;
 
-  /// If false, the ParseException will be rethrown in [tryParse], instead it
+  /// If false, the ParseException will not be rethrown in [tryParse] but
   /// will be wrapped in another ParseException to provide more context.
   final bool hasEnoughContext;
 
@@ -115,7 +115,7 @@ class ParseException implements Exception {
       indentedParent.writeln(line);
     }
 
-    return "ParseException\nwhile parsing:\n\n$payload\n\nThe following was thrown:\n\n$indentedParent\n\n$trace";
+    return "ParseException\n\nThe following was thrown:\n\n$indentedParent\n\n$trace\n\nwhile parsing:\n\n$payload";
   }
 }
 

@@ -38,9 +38,12 @@ void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
   final t = action.payload.map((k, dynamic e) {
     final date = UtcDateTime.parse(k);
     return MapEntry(
-        date,
-        tryParse<CalendarDayBuilder, dynamic>(
-            e, (dynamic e) => _parseCalendarDay(getMap(e)!, date)).build());
+      date,
+      tryParse<CalendarDayBuilder, dynamic>(
+          e,
+          (dynamic e) => _parseCalendarDay(
+              getMap(getMap(e)!.values.first.values.first)!, date)).build(),
+    );
   });
   builder.days.addAll(t);
 }
@@ -56,20 +59,6 @@ void _selectedDay(CalendarState state, Action<CalendarSelection?> action,
 }
 
 CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
-  // needed because JSON now looks like:
-  // "2019-11-04": {
-  //    "1": {
-  //      "1": {
-  //        "1": {
-  //           // actual data
-  //        },
-  //        "2"...
-  //      },
-  //    },
-  // }
-  if (day.length == 1) {
-    return _parseCalendarDay(getMap(day.values.single)!, date);
-  }
   return CalendarDayBuilder()
     ..lastFetched = UtcDateTime.now()
     ..date = date

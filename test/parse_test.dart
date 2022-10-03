@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
+// ignore_for_file: implicit_dynamic_list_literal
+
 import 'dart:convert';
 
 import 'package:built_redux/built_redux.dart';
@@ -24,7 +26,7 @@ import 'package:dr/middleware/middleware.dart';
 import 'package:dr/reducer/reducer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-// client-subbmitted (name changed)
+// customer-submitted (name changed)
 const absencesJson = {
   "absences": [
     {
@@ -247,6 +249,189 @@ const absencesJson = {
   "isAbsencesSelfDeclarationMandatory": true
 };
 
+// customer-submitted (names changed)
+final calendarJson = {
+  "2022-09-27": {
+    "1": {
+      "1": {
+        "1": {
+          "isLesson": 1,
+          "lesson": {
+            "id": null,
+            "date": "2022-09-28",
+            "hour": 1,
+            "toHour": 10,
+            "timeStart": 24000,
+            "timeEnd": 27300,
+            "timeToEnd": 55800,
+            "timeStartObject": {
+              "h": "07",
+              "m": "40",
+              "ts": 24000,
+              "text": "07:40",
+              "html": "07<sup>40</sup>"
+            },
+            "timeEndObject": {
+              "h": "08",
+              "m": "35",
+              "ts": 27300,
+              "text": "08:35",
+              "html": "08<sup>35</sup>"
+            },
+            "timeToEndObject": {
+              "h": "16",
+              "m": "30",
+              "ts": 55800,
+              "text": "16:30",
+              "html": "16<sup>30</sup>"
+            },
+            "timeShowEnabled": true,
+            "classId": 337,
+            "className": "1D",
+            "classComment": "",
+            "description": "",
+            "note": "",
+            "lessonShow": true,
+            "teachers": [
+              {"id": 6597, "firstName": "Tom", "lastName": "Smith"},
+              {"id": 6607, "firstName": "Jonathan", "lastName": "Xi"}
+            ],
+            "teachersToNotify": <dynamic>[],
+            "teacherMyself": null,
+            "isAutoNotify": false,
+            "isLessonTypeNotifyOn": false,
+            "exp_lt_default": false,
+            "isSecretary": false,
+            "subject": {
+              "id": 158,
+              "name": "Projekttag \"Einstieg in die Mittelschule\"",
+              "lernfeld": 0,
+              "defaultLessonContent": "",
+              "defaultLessonContentType": 0
+            },
+            "homeworkExams": <dynamic>[],
+            "lessonContents": <dynamic>[],
+            "rooms": <dynamic>[],
+            "readOnly": true,
+            "isSubstitute": 0,
+            "linkToPreviousHour": 0,
+            "linkedHours": <dynamic>[
+              {
+                "id": null,
+                "date": "2022-09-28",
+                "hour": 2,
+                "toHour": 2,
+                "timeStart": 27300,
+                "timeEnd": 30300,
+                "timeToEnd": 30300,
+                "timeStartObject": {
+                  "h": "08",
+                  "m": "35",
+                  "ts": 27300,
+                  "text": "08:35",
+                  "html": "08<sup>35</sup>"
+                },
+                "timeEndObject": {
+                  "h": "09",
+                  "m": "25",
+                  "ts": 30300,
+                  "text": "09:25",
+                  "html": "09<sup>25</sup>"
+                },
+                "timeToEndObject": {
+                  "h": "09",
+                  "m": "25",
+                  "ts": 30300,
+                  "text": "09:25",
+                  "html": "09<sup>25</sup>"
+                },
+                "timeShowEnabled": true,
+                "classId": 337,
+                "className": "1D",
+                "classComment": "",
+                "description": "",
+                "note": "",
+                "lessonShow": true,
+                "teachers": [
+                  {"id": 6597, "firstName": "Tom", "lastName": "Smith"},
+                  {"id": 6607, "firstName": "Jonathan", "lastName": "Xi"}
+                ],
+                "teachersToNotify": [],
+                "teacherMyself": null,
+                "isAutoNotify": false,
+                "isLessonTypeNotifyOn": false,
+                "exp_lt_default": false,
+                "isSecretary": false,
+                "subject": {
+                  "id": 158,
+                  "name": "Projekttag \"Einstieg in die Mittelschule\"",
+                  "lernfeld": 0,
+                  "defaultLessonContent": "",
+                  "defaultLessonContentType": 0
+                },
+                "homeworkExams": [],
+                "lessonContents": [],
+                "rooms": [],
+                "readOnly": true,
+                "isSubstitute": 0,
+                "linkToPreviousHour": 1,
+                "linkedHours": [],
+                "criticalObservations": [],
+                "missingStudents": [],
+                "students": [],
+                "grades": [],
+                "observations": [],
+                "absenceOpenAbsencesStudents": []
+              },
+              {
+                "id": null,
+                "date": "2022-09-28",
+                "hour": 3,
+                "toHour": 3,
+                "timeStart": 30300,
+                "timeEnd": 33300,
+                "timeToEnd": 33300,
+                "timeStartObject": {
+                  "h": "09",
+                  "m": "25",
+                  "ts": 30300,
+                  "text": "09:25",
+                  "html": "09<sup>25</sup>"
+                },
+                "timeEndObject": {
+                  "h": "10",
+                  "m": "15",
+                  "ts": 33300,
+                  "text": "10:15",
+                  "html": "10<sup>15</sup>"
+                },
+                "timeToEndObject": {
+                  "h": "10",
+                  "m": "15",
+                  "ts": 33300,
+                  "text": "10:15",
+                  "html": "10<sup>15</sup>"
+                },
+                "timeShowEnabled": true,
+                "classId": 337,
+                "className": "1D",
+                "classComment": "",
+                "description": "",
+                "note": "",
+                "lessonShow": true,
+                "teachers": [
+                  {"id": 6597, "firstName": "Tom", "lastName": "Smith"},
+                  {"id": 6607, "firstName": "Jonathan", "lastName": "Xi"}
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+};
+
 void main() {
   final store = Store<AppState, AppStateBuilder, AppActions>(
     appReducerBuilder.build(),
@@ -254,11 +439,19 @@ void main() {
     AppActions(),
     middleware: middleware(includeErrorMiddleware: false),
   );
+
   test('parse absences', () {
     // should not throw
     store.actions.absencesActions.loaded(absencesJson);
     store.actions.absencesActions.loaded(json.encode(absencesJson));
     store.actions.absencesActions
         .loaded(json.decode(json.encode(absencesJson)));
+  });
+
+  test('parse calendar', () {
+    // should not throw
+    store.actions.calendarActions.loaded(calendarJson);
+    store.actions.calendarActions
+        .loaded(json.decode(json.encode(calendarJson)) as Map<String, dynamic>);
   });
 }
