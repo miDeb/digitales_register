@@ -24,12 +24,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_built_redux/flutter_built_redux.dart';
 
 class CalendarCardContainer extends StatelessWidget {
-  final CalendarHour hour;
+  final int hourIndex;
   final UtcDateTime day;
 
   const CalendarCardContainer({
     Key? key,
-    required this.hour,
+    required this.hourIndex,
     required this.day,
   }) : super(key: key);
 
@@ -41,14 +41,21 @@ class CalendarCardContainer extends StatelessWidget {
           hour: state.hour,
           theme: state.theme,
           selected: state.selected,
+          onDownloadFile: actions.calendarActions.onDownloadFile,
+          onOpenFile: actions.calendarActions.onOpenFile,
+          noInternet: state.noInternet,
         );
       },
-      connect: (state) => CalendarCardViewModel(
-        hour: hour,
-        theme: state.settingsState.subjectThemes[hour.subject]!,
-        selected: state.calendarState.selection?.date == day &&
-            state.calendarState.selection?.hour == hour.fromHour,
-      ),
+      connect: (state) {
+        final hour = state.calendarState.days[day]!.hours[hourIndex];
+        return CalendarCardViewModel(
+          hour: hour,
+          theme: state.settingsState.subjectThemes[hour.subject]!,
+          selected: state.calendarState.selection?.date == day &&
+              state.calendarState.selection?.hour == hour.fromHour,
+          noInternet: state.noInternet,
+        );
+      },
     );
   }
 }
@@ -57,8 +64,10 @@ class CalendarCardViewModel {
   final CalendarHour hour;
   final SubjectTheme theme;
   final bool selected;
+  final bool noInternet;
 
   CalendarCardViewModel({
+    required this.noInternet,
     required this.hour,
     required this.theme,
     required this.selected,

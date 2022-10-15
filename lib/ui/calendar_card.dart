@@ -17,19 +17,29 @@
 
 import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
+import 'package:dr/ui/animated_linear_progress_indicator.dart';
 import 'package:dr/utc_date_time.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+typedef SubmissionCallback = void Function(LessonContentSubmission submission);
 
 class CalendarCard extends StatelessWidget {
   final CalendarHour hour;
   final SubjectTheme theme;
   final bool selected;
+  final SubmissionCallback onDownloadFile;
+  final SubmissionCallback onOpenFile;
+  final bool noInternet;
+
   const CalendarCard({
     Key? key,
     required this.hour,
     required this.theme,
     required this.selected,
+    required this.onDownloadFile,
+    required this.onOpenFile,
+    required this.noInternet,
   }) : super(key: key);
 
   String formatTime(UtcDateTime dateTime) {
@@ -98,12 +108,20 @@ class CalendarCard extends StatelessWidget {
                 content: hour.rooms.join(", "),
                 icon: Icons.meeting_room,
               ),
-            for (final lessonContent in hour.lessonContents)
+            for (final lessonContent in hour.lessonContents) ...[
               _ContentItem(
                 title: lessonContent.typeName,
                 content: lessonContent.name,
                 icon: Icons.school,
               ),
+              for (final submission in lessonContent.submissions)
+                _SubmissionWidget(
+                  submission: submission,
+                  noInternet: noInternet,
+                  onDownloadFile: onDownloadFile,
+                  onOpenFile: onOpenFile,
+                )
+            ],
             for (HomeworkExam homeworkExam in hour.homeworkExams)
               if (estimateShouldWarn(homeworkExam.typeName))
                 _ContentItem(
@@ -206,6 +224,92 @@ class _ContentItem extends StatelessWidget {
             ],
           ),
         )
+      ],
+    );
+  }
+}
+
+class _SubmissionWidget extends StatelessWidget {
+  final LessonContentSubmission submission;
+  final bool noInternet;
+  final SubmissionCallback onDownloadFile;
+  final SubmissionCallback onOpenFile;
+  const _SubmissionWidget({
+    super.key,
+    required this.submission,
+    required this.noInternet,
+    required this.onDownloadFile,
+    required this.onOpenFile,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(top: 4),
+          child: Icon(
+            Icons.attachment,
+            color: Colors.grey,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                submission.originalName,
+              ),
+              AnimatedLinearProgressIndicator(show: submission.downloading),
+              if (!submission.fileAvailable)
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: noInternet
+                        ? null
+                        : () {
+                            onDownloadFile(submission);
+                          },
+                    child: const Text("Herunterladen"),
+                  ),
+                ),
+              if (submission.fileAvailable)
+                IntrinsicHeight(
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: TextButton(
+                          onPressed: noInternet
+                              ? null
+                              : () {
+                                  onDownloadFile(submission);
+                                },
+                          child: const Text(
+                            "Erneut herunterladen",
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      const VerticalDivider(
+                        indent: 8,
+                        endIndent: 8,
+                      ),
+                      Expanded(
+                        child: TextButton(
+                          onPressed: () {
+                            onOpenFile(submission);
+                          },
+                          child: const Text("Öffnen"),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+            ],
+          ),
+        ),
       ],
     );
   }

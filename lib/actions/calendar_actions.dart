@@ -17,6 +17,7 @@
 
 import 'package:built_redux/built_redux.dart';
 import 'package:dr/app_state.dart';
+import 'package:dr/data.dart';
 
 import 'package:dr/utc_date_time.dart';
 
@@ -30,4 +31,7 @@ abstract class CalendarActions extends ReduxActions {
   abstract final ActionDispatcher<Map<String, dynamic>> loaded;
   abstract final ActionDispatcher<UtcDateTime> setCurrentMonday;
   abstract final ActionDispatcher<CalendarSelection?> select;
+  abstract final ActionDispatcher<LessonContentSubmission> onDownloadFile;
+  abstract final ActionDispatcher<LessonContentSubmission> onOpenFile;
+  abstract final ActionDispatcher<LessonContentSubmission> fileAvailable;
 }

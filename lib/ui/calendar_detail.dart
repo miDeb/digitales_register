@@ -347,14 +347,13 @@ class _CalendarDetailState extends State<CalendarDetail> {
       itemScrollController: itemScrollController,
       itemCount: widget.day.hours.length,
       itemBuilder: (context, index) {
-        final hour = widget.day.hours[index];
         return Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 8.0,
             vertical: 4,
           ),
           child: CalendarCardContainer(
-            hour: hour,
+            hourIndex: index,
             day: widget.day.date,
           ),
         );

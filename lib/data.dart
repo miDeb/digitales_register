@@ -618,11 +618,36 @@ abstract class LessonContent
     implements Built<LessonContent, LessonContentBuilder> {
   String get name;
   String get typeName;
+  BuiltList<LessonContentSubmission> get submissions;
 
   static Serializer<LessonContent> get serializer => _$lessonContentSerializer;
   factory LessonContent([void Function(LessonContentBuilder) updates]) =
       _$LessonContent;
   LessonContent._();
+}
+
+abstract class LessonContentSubmission
+    implements Built<LessonContentSubmission, LessonContentSubmissionBuilder> {
+  String get originalName;
+  String get type;
+  String get id;
+  String get lessonContentId;
+  UtcDateTime get date;
+
+  @BuiltValueField(serialize: false)
+  bool get downloading;
+  bool get fileAvailable;
+
+  static Serializer<LessonContentSubmission> get serializer =>
+      _$lessonContentSubmissionSerializer;
+  factory LessonContentSubmission(
+          [void Function(LessonContentSubmissionBuilder) updates]) =
+      _$LessonContentSubmission;
+  LessonContentSubmission._();
+
+  static void _initializeBuilder(LessonContentSubmissionBuilder b) => b
+    ..fileAvailable = false
+    ..downloading = false;
 }
 
 abstract class Message implements Built<Message, MessageBuilder> {

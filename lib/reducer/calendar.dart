@@ -31,7 +31,9 @@ final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 )
   ..add(CalendarActionsNames.loaded, _loaded)
   ..add(CalendarActionsNames.setCurrentMonday, _currentMonday)
-  ..add(CalendarActionsNames.select, _selectedDay);
+  ..add(CalendarActionsNames.select, _selectedDay)
+  ..add(CalendarActionsNames.onDownloadFile, _downloadFile)
+  ..add(CalendarActionsNames.fileAvailable, _fileAvailable);
 
 void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
@@ -71,12 +73,13 @@ CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
               ),
             ))
           .map<CalendarHour>(
-        (dynamic h) => tryParse(getMap(h)!, _parseHour).build(),
+        (dynamic h) =>
+            tryParse(getMap(h)!, (Map map) => _parseHour(map, date)).build(),
       ),
     );
 }
 
-CalendarHourBuilder _parseHour(Map hour) {
+CalendarHourBuilder _parseHour(Map hour, UtcDateTime date) {
   final lesson = getMap(hour["lesson"])!;
   final timeSpans = ListBuilder<TimeSpan>();
   for (final linkedLesson in <dynamic>[
@@ -124,8 +127,8 @@ CalendarHourBuilder _parseHour(Map hour) {
           (dynamic e) => tryParse(getMap(e)!, _parseHomeworkExam)),
     )
     ..lessonContents = ListBuilder(
-      (lesson["lessonContents"] as List).map<LessonContent>(
-          (dynamic e) => tryParse(getMap(e)!, _parseLessonContent)),
+      (lesson["lessonContents"] as List).map<LessonContent>((dynamic e) =>
+          tryParse(getMap(e)!, (Map map) => _parseLessonContent(map, date))),
     );
 }
 
@@ -143,10 +146,109 @@ HomeworkExam _parseHomeworkExam(Map homeworkExam) {
     ..typeName = getString(homeworkExam["typeName"]));
 }
 
-LessonContent _parseLessonContent(Map lessonContent) {
+LessonContent _parseLessonContent(Map lessonContent, UtcDateTime date) {
   return LessonContent(
     (b) => b
       ..name = getString(lessonContent["name"])
-      ..typeName = getString(lessonContent["typeName"]),
+      ..typeName = getString(lessonContent["typeName"])
+      ..submissions = tryParse(
+          getList(lessonContent["lessonContentSubmissions"]), (List? input) {
+        return input
+            ?.map((dynamic submission) =>
+                _parseLessonContentSubmission(getMap(submission)!, date))
+            .whereType<LessonContentSubmission>()
+            .toBuiltList()
+            .toBuilder();
+      }),
+  );
+}
+
+LessonContentSubmission? _parseLessonContentSubmission(
+    Map submission, UtcDateTime date) {
+  final type = getString(submission["type"]);
+  if (type != "file") {
+    return null;
+  }
+  return LessonContentSubmission(
+    (b) => b
+      ..type = type
+      ..originalName = getString(submission["originalName"])
+      ..id = getString(submission["id"])
+      ..lessonContentId = getString(submission["lessonContentId"])
+      ..date = date,
+  );
+}
+
+void _downloadFile(CalendarState state, Action<LessonContentSubmission> action,
+    CalendarStateBuilder builder) {
+  builder.days[action.payload.date] =
+      builder.days[action.payload.date]!.rebuild(
+    (b) => b
+      ..hours = ListBuilder(
+        <CalendarHour>[
+          for (final hour in b.hours.build())
+            hour.rebuild(
+              (b) => b
+                ..lessonContents = ListBuilder(
+                  <LessonContent>[
+                    for (final lessonContent in b.lessonContents.build())
+                      lessonContent.rebuild(
+                        (b) => b
+                          ..submissions = ListBuilder(
+                            <LessonContentSubmission>[
+                              for (final submission in b.submissions.build())
+                                if (submission.originalName ==
+                                    action.payload.originalName)
+                                  submission.rebuild(
+                                    (b) => b..downloading = true,
+                                  )
+                                else
+                                  submission
+                            ],
+                          ),
+                      )
+                  ],
+                ),
+            )
+        ],
+      ),
+  );
+}
+
+void _fileAvailable(CalendarState state, Action<LessonContentSubmission> action,
+    CalendarStateBuilder builder) {
+  builder.days[action.payload.date] =
+      builder.days[action.payload.date]!.rebuild(
+    (b) => b
+      ..hours = ListBuilder(
+        <CalendarHour>[
+          for (final hour in b.hours.build())
+            hour.rebuild(
+              (b) => b
+                ..lessonContents = ListBuilder(
+                  <LessonContent>[
+                    for (final lessonContent in b.lessonContents.build())
+                      lessonContent.rebuild(
+                        (b) => b
+                          ..submissions = ListBuilder(
+                            <LessonContentSubmission>[
+                              for (final submission in b.submissions.build())
+                                if (submission.originalName ==
+                                    action.payload.originalName)
+                                  submission.rebuild(
+                                    (b) => b
+                                      ..downloading = false
+                                      ..fileAvailable = true,
+                                  )
+                                else
+                                  submission
+                            ],
+                          ),
+                      )
+                  ],
+                ),
+            )
+        ],
+      ),
   );
 }
