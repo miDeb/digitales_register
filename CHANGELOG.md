@@ -1,3 +1,7 @@
+## 8.2.8
+- Dateianhänge von Stundenbeschreibungen im Kalender können nun heruntergeladen werden.
+- Unter Windows wird nun im "Über diese App"-Bereich die richtige App-Version angezeigt.
+
 ## 8.2.7
 - Das Icon im Microsoft Store wurde korrigiert.
 

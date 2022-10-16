@@ -26,11 +26,17 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
+    <release version="8.2.8" date="2022-10-16">
+      <description>
+        Dateianhänge von Stundenbeschreibungen im Kalender können nun heruntergeladen werden.
+      </description>
+    </release>
     <release version="8.2.6" date="2022-09-24">
       <description>
         Die Liste der voreingestellten Schulen wurde aktualisiert.
       </description>
-    </release><release version="8.2.5" date="2022-01-25">
+    </release>
+    <release version="8.2.5" date="2022-01-25">
       <description>
         Unerwartete Logouts werden jetzt behandelt.
       </description>

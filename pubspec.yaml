@@ -7,7 +7,7 @@ description: A new Flutter project.
 # Both the version and the builder number may be overridden in flutter
 # build by specifying --build-name and --build-number, respectively.
 # Read more about versioning at semver.org.
-version: 8.2.7+40
+version: 8.2.8+41
 
 publish_to: none
 
@@ -144,7 +144,7 @@ msix_config:
   publisher_display_name: Michael Debertol
   identity_name: 2097MichaelDebertol.DigitalesRegister
   publisher: CN=2508760A-808B-4829-867A-4DB53593750E
-  msix_version: 8.2.7.0
+  msix_version: 8.2.8.0
   logo_path: assets/4.0x/transparent.png
   architecture: x64
   capabilities: "internetClient"
