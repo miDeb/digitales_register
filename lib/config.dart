@@ -187,7 +187,8 @@ const Map<String, String> schools = {
   "Grundschule Toblach": "https://gs-toblach.digitalesregister.it",
   "GS Wahlen": "https://gs-wahlen.digitalesregister.it",
   "SSP Toblach": "https://ssp-toblach.digitalesregister.it",
-  "Schulsprengel Tramin": "https://ssp-tramin.digitalesregister.it",
+  "Grundschule Tramin": "https://gs-tramin.digitalesregister.it",
+  "Mittelschule Tramin": "https://ssp-tramin.digitalesregister.it",
   "Grundschule Afing SSP Tschögglberg": "https://gs-afing.digitalesregister.it",
   "Grundschule Flaas SSP Tschögglberg": "https://gs-flaas.digitalesregister.it",
   "Grundschule Jenesien SSP Tschögglberg":
