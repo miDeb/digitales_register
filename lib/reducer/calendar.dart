@@ -17,6 +17,7 @@
 
 import 'package:built_collection/built_collection.dart';
 import 'package:built_redux/built_redux.dart';
+import 'package:collection/collection.dart';
 
 import 'package:dr/actions/calendar_actions.dart';
 import 'package:dr/app_state.dart';
@@ -37,16 +38,22 @@ final calendarReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
 
 void _loaded(CalendarState state, Action<Map<String, dynamic>> action,
     CalendarStateBuilder builder) {
-  final t = action.payload.map((k, dynamic e) {
-    final date = UtcDateTime.parse(k);
-    return MapEntry(
-      date,
-      tryParse<CalendarDayBuilder, dynamic>(
+  final t = action.payload.map(
+    (k, dynamic e) {
+      final date = UtcDateTime.parse(k);
+      return MapEntry(
+        date,
+        tryParse<CalendarDayBuilder, dynamic>(
           e,
           (dynamic e) => _parseCalendarDay(
-              getMap(getMap(e)!.values.first.values.first)!, date)).build(),
-    );
-  });
+            getMap(getMap(e)!.values.first.values.first)!,
+            date,
+            state.days[date],
+          ),
+        ).build(),
+      );
+    },
+  );
   builder.days.addAll(t);
 }
 
@@ -60,7 +67,11 @@ void _selectedDay(CalendarState state, Action<CalendarSelection?> action,
   builder.selection = action.payload?.toBuilder();
 }
 
-CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
+CalendarDayBuilder _parseCalendarDay(
+  Map day,
+  UtcDateTime date,
+  CalendarDay? oldDay,
+) {
   return CalendarDayBuilder()
     ..lastFetched = UtcDateTime.now()
     ..date = date
@@ -73,13 +84,23 @@ CalendarDayBuilder _parseCalendarDay(Map day, UtcDateTime date) {
               ),
             ))
           .map<CalendarHour>(
-        (dynamic h) =>
-            tryParse(getMap(h)!, (Map map) => _parseHour(map, date)).build(),
+        (dynamic h) => tryParse(
+          getMap(h)!,
+          (Map map) => _parseHour(
+            map,
+            date,
+            oldDay,
+          ),
+        ).build(),
       ),
     );
 }
 
-CalendarHourBuilder _parseHour(Map hour, UtcDateTime date) {
+CalendarHourBuilder _parseHour(
+  Map hour,
+  UtcDateTime date,
+  CalendarDay? oldDay,
+) {
   final lesson = getMap(hour["lesson"])!;
   final timeSpans = ListBuilder<TimeSpan>();
   for (final linkedLesson in <dynamic>[
@@ -107,9 +128,19 @@ CalendarHourBuilder _parseHour(Map hour, UtcDateTime date) {
       ),
     );
   }
+
+  final fromHour = getInt(lesson["hour"])!;
+  final toHour = getInt(lesson["toHour"])!;
+
+  final oldHour = oldDay?.hours.firstWhereOrNull(
+    (hour) =>
+        (hour.fromHour <= fromHour && hour.toHour >= toHour) ||
+        (hour.fromHour >= fromHour && hour.toHour <= toHour),
+  );
+
   return CalendarHourBuilder()
-    ..fromHour = getInt(lesson["hour"])
-    ..toHour = getInt(lesson["toHour"])
+    ..fromHour = fromHour
+    ..toHour = toHour
     ..timeSpans = timeSpans
     ..rooms = ListBuilder(
       getList(lesson["rooms"])!.map<String>((dynamic r) => r["name"] as String),
@@ -127,8 +158,16 @@ CalendarHourBuilder _parseHour(Map hour, UtcDateTime date) {
           (dynamic e) => tryParse(getMap(e)!, _parseHomeworkExam)),
     )
     ..lessonContents = ListBuilder(
-      (lesson["lessonContents"] as List).map<LessonContent>((dynamic e) =>
-          tryParse(getMap(e)!, (Map map) => _parseLessonContent(map, date))),
+      (lesson["lessonContents"] as List).map<LessonContent>(
+        (dynamic e) => tryParse(
+          getMap(e)!,
+          (Map map) => _parseLessonContent(
+            map,
+            date,
+            oldHour,
+          ),
+        ),
+      ),
     );
 }
 
@@ -146,7 +185,8 @@ HomeworkExam _parseHomeworkExam(Map homeworkExam) {
     ..typeName = getString(homeworkExam["typeName"]));
 }
 
-LessonContent _parseLessonContent(Map lessonContent, UtcDateTime date) {
+LessonContent _parseLessonContent(
+    Map lessonContent, UtcDateTime date, CalendarHour? oldHour) {
   return LessonContent(
     (b) => b
       ..name = getString(lessonContent["name"])
@@ -154,8 +194,13 @@ LessonContent _parseLessonContent(Map lessonContent, UtcDateTime date) {
       ..submissions = tryParse(
           getList(lessonContent["lessonContentSubmissions"]), (List? input) {
         return input
-            ?.map((dynamic submission) =>
-                _parseLessonContentSubmission(getMap(submission)!, date))
+            ?.map(
+              (dynamic submission) => _parseLessonContentSubmission(
+                getMap(submission)!,
+                date,
+                oldHour,
+              ),
+            )
             .whereType<LessonContentSubmission>()
             .toBuiltList()
             .toBuilder();
@@ -164,18 +209,31 @@ LessonContent _parseLessonContent(Map lessonContent, UtcDateTime date) {
 }
 
 LessonContentSubmission? _parseLessonContentSubmission(
-    Map submission, UtcDateTime date) {
+  Map submission,
+  UtcDateTime date,
+  CalendarHour? oldHour,
+) {
   final type = getString(submission["type"]);
   if (type != "file") {
     return null;
   }
+  final originalName = getString(submission["originalName"]);
+  final id = getString(submission["id"]);
+  final fileAvailable = oldHour?.lessonContents.any((content) =>
+          content.submissions.any((submission) =>
+              submission.originalName == originalName &&
+              submission.id == id &&
+              submission.fileAvailable)) ??
+      false;
+
   return LessonContentSubmission(
     (b) => b
       ..type = type
-      ..originalName = getString(submission["originalName"])
-      ..id = getString(submission["id"])
+      ..originalName = originalName
+      ..id = id
       ..lessonContentId = getString(submission["lessonContentId"])
-      ..date = date,
+      ..date = date
+      ..fileAvailable = fileAvailable,
   );
 }
 
