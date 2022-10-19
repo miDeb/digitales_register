@@ -20,3 +20,9 @@ Inoffizielle App für das Digitale Register (http://xxxxxx.digitalesregister.it)
 ## Run it from source
 * First, run `flutter packages run build_runner build` in your terminal to generate the necessary files.
 * Launch the app with `flutter run`. This will launch a debug build of the app. For a release build (which is faster), run `flutter run --release` instead.
+
+## Demo Mode
+If you want to use the app without having an actual account, select `Vinzentinum` as the school, `demo-user-6540` as the user and `demo` as the password.
+You will be logged in to a (local) demo account that displays dummy data. Please note that some features
+may not work as usual and data might not be consistent. This features was implemented to make it possible to review the app from countries where `digitalesregister.it`
+is not accessible, so that the app can be made available in the app stores.

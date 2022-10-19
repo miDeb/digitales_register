@@ -23,6 +23,7 @@ import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:dr/app_state.dart';
+import 'package:dr/demo.dart';
 import 'package:dr/main.dart';
 import 'package:dr/ui/dialog.dart';
 import 'package:dr/util.dart';
@@ -64,6 +65,7 @@ class Wrapper {
   String get loginAddress => "${baseAddress}api/auth/login";
   String get baseAddress => "$url/v2/";
   String? user, pass, _url;
+  bool demoMode = false;
 
   Wrapper() {
     dio.interceptors.add(CookieManager(cookieJar));
@@ -113,6 +115,29 @@ class Wrapper {
     VoidCallback? relogin,
     AddNetworkProtocolItem? addProtocolItem,
   }) async {
+    if (user == "demo-user-6540" &&
+        pass == "demo" &&
+        url == "https://vinzentinum.digitalesregister.it") {
+      demoMode = true;
+      _loggedIn = Future.value(true);
+      this.user = user;
+      this.pass = pass;
+      config = Config(
+        (b) => b
+          ..autoLogoutSeconds = 300
+          ..currentSemesterMaybe = 1
+          ..fullName = "Demo User"
+          ..imgSource =
+              "https://vinzentinum.digitalesregister.it/v2/theme/icons/profile_empty.png"
+          ..isStudentOrParent = true
+          ..userId = 0,
+      );
+      configLoaded?.call();
+      return;
+    } else {
+      demoMode = false;
+    }
+
     noInternet = false;
     if (logout != null) {
       onLogout = logout;
@@ -339,6 +364,9 @@ class Wrapper {
     String method = "POST",
     bool isRetryAfterUnexpectedLogout = false,
   }) async {
+    if (demoMode) {
+      return getDemoResponse(url, args);
+    }
     assert(!url.startsWith("/"));
     await _loginMutex.acquire();
     try {
