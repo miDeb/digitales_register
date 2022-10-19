@@ -1,3 +1,7 @@
+## 8.2.9
+- Eine Schule wurde hinzugefügt.
+- Ein Demo-Modus ist nun verfügbar (Schule: Vinzentinum, User: "demo-user-6540", PW: "demo").
+
 ## 8.2.8
 - Dateianhänge von Stundenbeschreibungen im Kalender können nun heruntergeladen werden.
 - Unter Windows wird nun im "Über diese App"-Bereich die richtige App-Version angezeigt.
