@@ -22,7 +22,6 @@ final _calendarMiddleware =
       ..add(CalendarActionsNames.load, _loadCalendar)
       ..add(CalendarActionsNames.select, _selectionChanged)
       ..add(CalendarActionsNames.setCurrentMonday, _weekChanged)
-      ..add(CalendarActionsNames.onDownloadFile, _downloadSubmission)
       ..add(CalendarActionsNames.onOpenFile, _openSubmission)
       ..add(RoutingActionsNames.showCalendar, _clearSelection);
 
@@ -84,31 +83,27 @@ Future<void> _clearSelection(
   await api.actions.calendarActions.select(null);
 }
 
-Future<void> _downloadSubmission(
-    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next,
-    Action<LessonContentSubmission> action) async {
-  if (api.state.noInternet) return;
-  await next(action);
-  final success = await downloadFile(
-    "${wrapper.baseAddress}/api/lessonContent/lessonContentSubmissionDownloadEntry",
-    action.payload.originalName,
-    <String, dynamic>{
-      "parentId": action.payload.lessonContentId,
-      "submissionId": action.payload.id,
-    },
-  );
-  if (success) {
-    await api.actions.calendarActions.fileAvailable(action.payload);
-  }
-}
-
 Future<void> _openSubmission(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<LessonContentSubmission> action) async {
   await next(action);
-  final saveFile = File(
-      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
-  await OpenFile.open(saveFile.path);
+
+  if (!action.payload.fileAvailable ||
+      !await canOpenFile(action.payload.originalName)) {
+    await api.actions.calendarActions.onDownloadFile(action.payload);
+    final success = await downloadFile(
+      "${wrapper.baseAddress}api/lessonContent/lessonContentSubmissionDownloadEntry",
+      action.payload.originalName,
+      <String, dynamic>{
+        "parentId": action.payload.lessonContentId,
+        "submissionId": action.payload.id,
+      },
+    );
+    if (success) {
+      await api.actions.calendarActions.fileAvailable(action.payload);
+    }
+  }
+
+  await openFile(action.payload.originalName);
 }

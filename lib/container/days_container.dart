@@ -66,7 +66,6 @@ class DaysContainer extends StatelessWidget {
               actions.dashboardActions.markDeletedHomeworkAsSeen,
           markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
           refreshNoInternet: actions.refreshNoInternet,
-          onDownloadAttachment: actions.dashboardActions.downloadAttachment,
           onOpenAttachment: actions.dashboardActions.openAttachment,
         );
       },

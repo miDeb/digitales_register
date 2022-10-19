@@ -21,7 +21,6 @@ final _messagesMiddleware =
     MiddlewareBuilder<AppState, AppStateBuilder, AppActions>()
       ..add(MessagesActionsNames.load, _loadMessages)
       ..add(MessagesActionsNames.markAsRead, _markAsRead)
-      ..add(MessagesActionsNames.downloadFile, _downloadFile)
       ..add(MessagesActionsNames.openFile, _openFile);
 
 Future<void> _loadMessages(
@@ -36,34 +35,28 @@ Future<void> _loadMessages(
   }
 }
 
-Future<void> _downloadFile(
-    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next,
-    Action<MessageAttachmentFile> action) async {
-  if (api.state.noInternet) return;
-  await next(action);
-  final success = await downloadFile(
-    "${wrapper.baseAddress}/api/message/messageSubmissionDownloadEntry",
-    action.payload.originalName,
-    <String, dynamic>{
-      "messageId": action.payload.messageId,
-      "submissionId": action.payload.id,
-    },
-  );
-  if (success) {
-    showSnackBar("Heruntergeladen");
-    await api.actions.messagesActions.fileAvailable(action.payload);
-  } else {
-    showSnackBar("Download fehlgeschlagen");
-  }
-}
-
 Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next, Action<MessageAttachmentFile> action) async {
   await next(action);
-  final saveFile = File(
-      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
-  await OpenFile.open(saveFile.path);
+
+  if (!action.payload.fileAvailable ||
+      !await canOpenFile(action.payload.originalName)) {
+    await api.actions.messagesActions.downloadFile(action.payload);
+
+    final success = await downloadFile(
+      "${wrapper.baseAddress}api/message/messageSubmissionDownloadEntry",
+      action.payload.originalName,
+      <String, dynamic>{
+        "messageId": action.payload.messageId,
+        "submissionId": action.payload.id,
+      },
+    );
+    if (success) {
+      await api.actions.messagesActions.fileAvailable(action.payload);
+    }
+  }
+
+  await openFile(action.payload.originalName);
 }
 
 Future<void> _markAsRead(

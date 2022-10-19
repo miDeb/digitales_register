@@ -590,22 +590,62 @@ bool _popAll() {
   return poppedAnything;
 }
 
+Future<String> _getAttachmentDownloadDirectory() async {
+  try {
+    final directory = await getDownloadsDirectory();
+    if (directory != null) {
+      return directory.path;
+    }
+  } catch (_) {}
+  return (await getApplicationDocumentsDirectory()).path;
+}
+
 /// Downloads a file.
 ///
 /// Returns true on success and false on a failure.
 Future<bool> downloadFile(
-    String url, String fileName, Map<String, dynamic> parameters) async {
+  String url,
+  String fileName,
+  Map<String, dynamic> parameters,
+) async {
+  await wrapper.ensureLoggedIn();
+
   final saveFile = File(
-    "${(await getApplicationDocumentsDirectory()).path}/$fileName",
+    "${await _getAttachmentDownloadDirectory()}/$fileName",
   );
-  final result = await wrapper.dio.get<dynamic>(
-    url,
-    queryParameters: parameters,
-    options: dio.Options(responseType: dio.ResponseType.stream),
+  var success = true;
+  try {
+    final result = await wrapper.dio.get<dynamic>(
+      url,
+      queryParameters: parameters,
+      options: dio.Options(responseType: dio.ResponseType.stream),
+    );
+    final sink = saveFile.openWrite();
+    await sink.addStream((result.data as dio.ResponseBody).stream);
+    await sink.flush();
+    await sink.close();
+    success = result.statusCode == 200;
+  } catch (e) {
+    log("failed to download file $url: $e");
+    success = false;
+  }
+
+  if (!success && saveFile.existsSync()) {
+    // The download was not successful, we should not keep the empty file or whatever was downloaded.
+    saveFile.deleteSync();
+  }
+
+  return success;
+}
+
+Future<bool> canOpenFile(String fileName) async {
+  return File(
+    "${await _getAttachmentDownloadDirectory()}/$fileName",
+  ).existsSync();
+}
+
+Future<void> openFile(String fileName) async {
+  await OpenFile.open(
+    "${await _getAttachmentDownloadDirectory()}/$fileName",
   );
-  final sink = saveFile.openWrite();
-  await sink.addStream((result.data as dio.ResponseBody).stream);
-  await sink.flush();
-  await sink.close();
-  return result.statusCode == 200;
 }

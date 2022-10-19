@@ -73,7 +73,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining("Sehr geehrte Eltern"), findsOneWidget);
     expect(find.text("Anhang:"), findsOneWidget);
-    expect(find.text("Herunterladen"), findsOneWidget);
+    expect(find.text("Öffnen"), findsOneWidget);
     await expectLater(
       find.byType(MaterialApp),
       matchesGoldenFile("with_attachment.png"),

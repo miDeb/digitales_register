@@ -358,16 +358,9 @@ class Wrapper {
   final _loginMutex = Mutex();
   DateTime? _lastUnexpectedLogout;
 
-  Future<dynamic> send(
-    String url, {
-    Map<String, Object?> args = const <String, Object?>{},
-    String method = "POST",
+  Future<bool> ensureLoggedIn({
     bool isRetryAfterUnexpectedLogout = false,
   }) async {
-    if (demoMode) {
-      return getDemoResponse(url, args);
-    }
-    assert(!url.startsWith("/"));
     await _loginMutex.acquire();
     try {
       // If we somehow did not yet notice that we were logged out set the flag now
@@ -394,14 +387,14 @@ class Wrapper {
 
       if (!await _loggedIn) {
         if (user != null && pass != null) {
-          await login(user, pass, null, this.url);
+          await login(user, pass, null, url);
           if (!await _loggedIn) {
             if (noInternet) {
               await actions.noInternet(true);
             } else {
               logout(hard: true, logoutForcedByServer: true);
             }
-            return null;
+            return false;
           } else {
             onRelogin!();
           }
@@ -409,12 +402,31 @@ class Wrapper {
           if (noInternet) {
             await actions.noInternet(true);
           }
-          log("returning null for request to $url, user is not logged in");
-          return null;
+          return false;
         }
       }
     } finally {
       _loginMutex.release();
+    }
+    return true;
+  }
+
+  Future<dynamic> send(
+    String url, {
+    Map<String, Object?> args = const <String, Object?>{},
+    String method = "POST",
+    bool isRetryAfterUnexpectedLogout = false,
+  }) async {
+    if (demoMode) {
+      return getDemoResponse(url, args);
+    }
+    assert(!url.startsWith("/"));
+
+    if (!await ensureLoggedIn(
+      isRetryAfterUnexpectedLogout: isRetryAfterUnexpectedLogout,
+    )) {
+      log("returning null for request to $url, user is not logged in");
+      return null;
     }
 
     dynamic responseData;

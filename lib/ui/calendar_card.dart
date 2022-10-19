@@ -28,7 +28,6 @@ class CalendarCard extends StatelessWidget {
   final CalendarHour hour;
   final SubjectTheme theme;
   final bool selected;
-  final SubmissionCallback onDownloadFile;
   final SubmissionCallback onOpenFile;
   final bool noInternet;
 
@@ -37,7 +36,6 @@ class CalendarCard extends StatelessWidget {
     required this.hour,
     required this.theme,
     required this.selected,
-    required this.onDownloadFile,
     required this.onOpenFile,
     required this.noInternet,
   }) : super(key: key);
@@ -118,7 +116,6 @@ class CalendarCard extends StatelessWidget {
                 _SubmissionWidget(
                   submission: submission,
                   noInternet: noInternet,
-                  onDownloadFile: onDownloadFile,
                   onOpenFile: onOpenFile,
                 )
             ],
@@ -232,13 +229,11 @@ class _ContentItem extends StatelessWidget {
 class _SubmissionWidget extends StatelessWidget {
   final LessonContentSubmission submission;
   final bool noInternet;
-  final SubmissionCallback onDownloadFile;
   final SubmissionCallback onOpenFile;
   const _SubmissionWidget({
     super.key,
     required this.submission,
     required this.noInternet,
-    required this.onDownloadFile,
     required this.onOpenFile,
   });
 
@@ -263,50 +258,17 @@ class _SubmissionWidget extends StatelessWidget {
                 submission.originalName,
               ),
               AnimatedLinearProgressIndicator(show: submission.downloading),
-              if (!submission.fileAvailable)
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    onPressed: noInternet
-                        ? null
-                        : () {
-                            onDownloadFile(submission);
-                          },
-                    child: const Text("Herunterladen"),
-                  ),
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: !submission.fileAvailable && noInternet
+                      ? null
+                      : () {
+                          onOpenFile(submission);
+                        },
+                  child: const Text("Öffnen"),
                 ),
-              if (submission.fileAvailable)
-                IntrinsicHeight(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: TextButton(
-                          onPressed: noInternet
-                              ? null
-                              : () {
-                                  onDownloadFile(submission);
-                                },
-                          child: const Text(
-                            "Erneut herunterladen",
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
-                      const VerticalDivider(
-                        indent: 8,
-                        endIndent: 8,
-                      ),
-                      Expanded(
-                        child: TextButton(
-                          onPressed: () {
-                            onOpenFile(submission);
-                          },
-                          child: const Text("Öffnen"),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
+              ),
             ],
           ),
         ),

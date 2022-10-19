@@ -58,7 +58,7 @@ class DaysWidget extends StatefulWidget {
   final VoidCallback setDoNotAskWhenDeleteCallback;
   final VoidCallback refresh;
   final VoidCallback refreshNoInternet;
-  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
+  final AttachmentCallback onOpenAttachment;
 
   const DaysWidget({
     Key? key,
@@ -73,7 +73,6 @@ class DaysWidget extends StatefulWidget {
     required this.setDoNotAskWhenDeleteCallback,
     required this.refresh,
     required this.refreshNoInternet,
-    required this.onDownloadAttachment,
     required this.onOpenAttachment,
   }) : super(key: key);
   @override
@@ -226,7 +225,6 @@ class _DaysWidgetState extends State<DaysWidget> {
       removeReminderCallback: widget.removeReminderCallback,
       toggleDoneCallback: widget.toggleDoneCallback,
       setDoNotAskWhenDeleteCallback: widget.setDoNotAskWhenDeleteCallback,
-      onDownloadAttachment: widget.onDownloadAttachment,
       onOpenAttachment: widget.onOpenAttachment,
       colorBorders: widget.vm.colorBorders,
       colorTestsInRed: widget.vm.colorTestsInRed,
@@ -464,7 +462,7 @@ class DayWidget extends StatelessWidget {
   final RemoveReminderCallback removeReminderCallback;
   final ToggleDoneCallback toggleDoneCallback;
   final VoidCallback setDoNotAskWhenDeleteCallback;
-  final AttachmentCallback onDownloadAttachment, onOpenAttachment;
+  final AttachmentCallback onOpenAttachment;
   final bool colorBorders, colorTestsInRed;
   final BuiltMap<String, SubjectTheme> subjectThemes;
 
@@ -485,7 +483,6 @@ class DayWidget extends StatelessWidget {
     required this.removeReminderCallback,
     required this.toggleDoneCallback,
     required this.setDoNotAskWhenDeleteCallback,
-    required this.onDownloadAttachment,
     required this.onOpenAttachment,
     required this.colorBorders,
     required this.subjectThemes,
@@ -640,7 +637,6 @@ class DayWidget extends StatelessWidget {
             noInternet: vm.noInternet,
             controller: controller,
             index: ++i,
-            onDownloadAttachment: onDownloadAttachment,
             onOpenAttachment: onOpenAttachment,
             subjectThemes: subjectThemes,
             colorBorder: colorBorders,
@@ -663,7 +659,7 @@ class ItemWidget extends StatelessWidget {
       isCurrent,
       colorBorder,
       colorTestsInRed;
-  final AttachmentCallback? onDownloadAttachment, onOpenAttachment;
+  final AttachmentCallback? onOpenAttachment;
   final BuiltMap<String, SubjectTheme> subjectThemes;
 
   final AutoScrollController? controller;
@@ -682,7 +678,6 @@ class ItemWidget extends StatelessWidget {
     this.isDeletedView = false,
     required this.noInternet,
     this.isCurrent = true,
-    this.onDownloadAttachment,
     this.onOpenAttachment,
     required this.colorBorder,
     required this.subjectThemes,
@@ -957,7 +952,6 @@ class ItemWidget extends StatelessWidget {
                   AttachmentWidget(
                     ggs: attachment,
                     noInternet: noInternet,
-                    downloadCallback: onDownloadAttachment!,
                     openCallback: onOpenAttachment!,
                   )
               ]
@@ -1025,14 +1019,12 @@ UtcDateTime toDate(UtcDateTime dateTime) {
 
 class AttachmentWidget extends StatelessWidget {
   final GradeGroupSubmission ggs;
-  final AttachmentCallback downloadCallback;
   final AttachmentCallback openCallback;
   final bool noInternet;
 
   const AttachmentWidget(
       {Key? key,
       required this.ggs,
-      required this.downloadCallback,
       required this.noInternet,
       required this.openCallback})
       : super(key: key);
@@ -1048,44 +1040,14 @@ class AttachmentWidget extends StatelessWidget {
           ),
           ListTile(title: Text(ggs.originalName)),
           AnimatedLinearProgressIndicator(show: ggs.downloading),
-          if (!ggs.fileAvailable)
-            TextButton(
-              onPressed: noInternet
-                  ? null
-                  : () {
-                      downloadCallback(ggs);
-                    },
-              child: const Text("Herunterladen"),
-            )
-          else
-            IntrinsicHeight(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextButton(
-                      onPressed: noInternet
-                          ? null
-                          : () {
-                              downloadCallback(ggs);
-                            },
-                      child: const Text("Erneut herunterladen"),
-                    ),
-                  ),
-                  const VerticalDivider(
-                    indent: 8,
-                    endIndent: 8,
-                  ),
-                  Expanded(
-                    child: TextButton(
-                      onPressed: () {
-                        openCallback(ggs);
-                      },
-                      child: const Text("Öffnen"),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+          TextButton(
+            onPressed: !ggs.fileAvailable && noInternet
+                ? null
+                : () {
+                    openCallback(ggs);
+                  },
+            child: const Text("Öffnen"),
+          )
         ],
       ),
     );

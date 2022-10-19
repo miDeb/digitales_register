@@ -33,18 +33,16 @@ import 'package:responsive_scaffold/responsive_scaffold.dart';
 class MessagesPage extends StatelessWidget {
   final MessagesState? state;
   final bool noInternet;
-  final void Function(MessageAttachmentFile message) onDownloadFile;
   final void Function(MessageAttachmentFile message) onOpenFile;
   final void Function(Message message) onMarkAsRead;
 
-  const MessagesPage(
-      {Key? key,
-      required this.state,
-      required this.noInternet,
-      required this.onDownloadFile,
-      required this.onOpenFile,
-      required this.onMarkAsRead})
-      : super(key: key);
+  const MessagesPage({
+    Key? key,
+    required this.state,
+    required this.noInternet,
+    required this.onOpenFile,
+    required this.onMarkAsRead,
+  }) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +75,6 @@ class MessagesPage extends StatelessWidget {
                     itemBuilder: (context, i) {
                       return MessageWidget(
                         message: state!.messages[i],
-                        onDownloadFile: onDownloadFile,
                         onOpenFile: onOpenFile,
                         onMarkAsRead: onMarkAsRead,
                         noInternet: noInternet,
@@ -94,7 +91,6 @@ class MessagesPage extends StatelessWidget {
 
 class MessageWidget extends StatefulWidget {
   final Message message;
-  final void Function(MessageAttachmentFile message) onDownloadFile;
   final void Function(MessageAttachmentFile message) onOpenFile;
   final void Function(Message message) onMarkAsRead;
   final bool noInternet;
@@ -103,7 +99,6 @@ class MessageWidget extends StatefulWidget {
   const MessageWidget({
     Key? key,
     required this.message,
-    required this.onDownloadFile,
     required this.onOpenFile,
     required this.noInternet,
     required this.onMarkAsRead,
@@ -217,48 +212,20 @@ class _MessageWidgetState extends State<MessageWidget> {
                       attachment.originalName,
                     ),
                     AnimatedLinearProgressIndicator(
-                        show: attachment.downloading),
-                    if (!attachment.fileAvailable)
-                      SizedBox(
-                        width: double.infinity,
-                        child: TextButton(
-                          onPressed: widget.noInternet
-                              ? null
-                              : () {
-                                  widget.onDownloadFile(attachment);
-                                },
-                          child: const Text("Herunterladen"),
-                        ),
+                      show: attachment.downloading,
+                    ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed:
+                            !attachment.fileAvailable && widget.noInternet
+                                ? null
+                                : () {
+                                    widget.onOpenFile(attachment);
+                                  },
+                        child: const Text("Öffnen"),
                       ),
-                    if (attachment.fileAvailable)
-                      IntrinsicHeight(
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: TextButton(
-                                onPressed: widget.noInternet
-                                    ? null
-                                    : () {
-                                        widget.onDownloadFile(attachment);
-                                      },
-                                child: const Text("Erneut herunterladen"),
-                              ),
-                            ),
-                            const VerticalDivider(
-                              indent: 8,
-                              endIndent: 8,
-                            ),
-                            Expanded(
-                              child: TextButton(
-                                onPressed: () {
-                                  widget.onOpenFile(attachment);
-                                },
-                                child: const Text("Öffnen"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
+                    ),
                   ]
               ].intersperse(const Divider()),
             ],

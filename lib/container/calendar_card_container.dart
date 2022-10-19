@@ -41,7 +41,6 @@ class CalendarCardContainer extends StatelessWidget {
           hour: state.hour,
           theme: state.theme,
           selected: state.selected,
-          onDownloadFile: actions.calendarActions.onDownloadFile,
           onOpenFile: actions.calendarActions.onOpenFile,
           noInternet: state.noInternet,
         );

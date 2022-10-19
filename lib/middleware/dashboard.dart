@@ -24,7 +24,6 @@ final _dashboardMiddleware = MiddlewareBuilder<AppState, AppStateBuilder,
   ..add(DashboardActionsNames.addReminder, _addReminder)
   ..add(DashboardActionsNames.deleteHomework, _deleteHomework)
   ..add(DashboardActionsNames.toggleDone, _toggleDone)
-  ..add(DashboardActionsNames.downloadAttachment, _downloadAttachment)
   ..add(DashboardActionsNames.openAttachment, _openAttachment)
   ..add(SettingsActionsNames.markNotSeenDashboardEntries, _markNotSeenEntries);
 
@@ -148,34 +147,29 @@ Future<void> _markNotSeenEntries(
   await next(action);
 }
 
-Future<void> _downloadAttachment(
-    MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
-    ActionHandler next,
-    Action<GradeGroupSubmission> action) async {
-  if (api.state.noInternet) return;
-  await next(action);
-  final success = await downloadFile(
-    "${wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
-    action.payload.originalName,
-    <String, dynamic>{
-      "submissionId": action.payload.id,
-      "parentId": action.payload.gradeGroupId,
-    },
-  );
-  if (success) {
-    showSnackBar("Heruntergeladen");
-    await api.actions.dashboardActions.attachmentReady(action.payload);
-  } else {
-    showSnackBar("Download fehlgeschlagen");
-  }
-}
-
 Future<void> _openAttachment(
     MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     ActionHandler next,
     Action<GradeGroupSubmission> action) async {
   await next(action);
-  final saveFile = File(
-      "${(await getApplicationDocumentsDirectory()).path}/${action.payload.originalName}");
-  await OpenFile.open(saveFile.path);
+
+  if (!action.payload.fileAvailable ||
+      !await canOpenFile(action.payload.originalName)) {
+    await api.actions.dashboardActions.downloadAttachment(action.payload);
+
+    await next(action);
+    final success = await downloadFile(
+      "${wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
+      action.payload.originalName,
+      <String, dynamic>{
+        "submissionId": action.payload.id,
+        "parentId": action.payload.gradeGroupId,
+      },
+    );
+    if (success) {
+      await api.actions.dashboardActions.attachmentReady(action.payload);
+    }
+  }
+
+  await openFile(action.payload.originalName);
 }
