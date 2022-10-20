@@ -100,8 +100,11 @@ Future<void> _openSubmission(
         "submissionId": action.payload.id,
       },
     );
-    if (success) {
-      await api.actions.calendarActions.fileAvailable(action.payload);
+    await api.actions.calendarActions.fileAvailable(
+      action.payload.rebuild((b) => b..fileAvailable = success),
+    );
+    if (!success) {
+      return;
     }
   }
 

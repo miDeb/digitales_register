@@ -76,7 +76,7 @@ void _fileAvailable(MessagesState state, Action<MessageAttachmentFile> action,
           b.attachments.build().indexWhere((a) => a.id == action.payload.id);
       b.attachments[attachmentIndex] = b.attachments[attachmentIndex].rebuild(
         (b) => b
-          ..fileAvailable = true
+          ..fileAvailable = action.payload.fileAvailable
           ..downloading = false,
       );
     },

@@ -296,7 +296,8 @@ void _fileAvailable(CalendarState state, Action<LessonContentSubmission> action,
                                   submission.rebuild(
                                     (b) => b
                                       ..downloading = false
-                                      ..fileAvailable = true,
+                                      ..fileAvailable =
+                                          action.payload.fileAvailable,
                                   )
                                 else
                                   submission

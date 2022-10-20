@@ -51,8 +51,10 @@ Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
         "submissionId": action.payload.id,
       },
     );
-    if (success) {
-      await api.actions.messagesActions.fileAvailable(action.payload);
+    await api.actions.messagesActions.fileAvailable(
+        action.payload.rebuild((b) => b..fileAvailable = success));
+    if (!success) {
+      return;
     }
   }
 

@@ -166,8 +166,10 @@ Future<void> _openAttachment(
         "parentId": action.payload.gradeGroupId,
       },
     );
-    if (success) {
-      await api.actions.dashboardActions.attachmentReady(action.payload);
+    await api.actions.dashboardActions.attachmentReady(
+        action.payload.rebuild((b) => b..fileAvailable = success));
+    if (!success) {
+      return;
     }
   }
 

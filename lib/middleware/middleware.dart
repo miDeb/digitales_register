@@ -45,6 +45,7 @@ import 'package:dr/container/settings_page.dart';
 import 'package:dr/data.dart';
 import 'package:dr/main.dart';
 import 'package:dr/serializers.dart';
+import 'package:dr/ui/dialog.dart';
 import 'package:dr/utc_date_time.dart';
 import 'package:dr/util.dart';
 import 'package:dr/wrapper.dart';
@@ -614,6 +615,14 @@ Future<bool> downloadFile(
     "${await _getAttachmentDownloadDirectory()}/$fileName",
   );
   var success = true;
+  if (saveFile.existsSync()) {
+    final shouldOverwrite = await askShouldOverwriteFile(fileName);
+    if (shouldOverwrite == null) {
+      return false;
+    } else if (!shouldOverwrite) {
+      return true;
+    }
+  }
   try {
     final result = await wrapper.dio.get<dynamic>(
       url,
@@ -647,5 +656,29 @@ Future<bool> canOpenFile(String fileName) async {
 Future<void> openFile(String fileName) async {
   await OpenFile.open(
     "${await _getAttachmentDownloadDirectory()}/$fileName",
+  );
+}
+
+Future<bool?> askShouldOverwriteFile(String fileName) async {
+  return navigatorKey!.currentState!.push<bool>(
+    DialogRoute(
+      builder: (context) {
+        return InfoDialog(
+          title: Text("Die Datei \"$fileName\" existiert bereits."),
+          content: const Text("Erneut herunterladen?"),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Bestehende Datei verwenden"),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("Erneut herunterladen"),
+            ),
+          ],
+        );
+      },
+      context: navigatorKey!.currentContext!,
+    ),
   );
 }

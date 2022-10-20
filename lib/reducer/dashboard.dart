@@ -400,7 +400,7 @@ void _attachmentReady(DashboardState state, Action<GradeGroupSubmission> action,
             (s) => s.file == action.payload.file
                 ? s.rebuild(
                     (b) => b
-                      ..fileAvailable = true
+                      ..fileAvailable = action.payload.fileAvailable
                       ..downloading = false,
                   )
                 : s,
