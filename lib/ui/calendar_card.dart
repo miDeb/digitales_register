@@ -254,6 +254,10 @@ class _SubmissionWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                "Anhang",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text(
                 submission.originalName,
               ),
@@ -266,7 +270,10 @@ class _SubmissionWidget extends StatelessWidget {
                       : () {
                           onOpenFile(submission);
                         },
-                  child: const Text("Öffnen"),
+                  child: const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Öffnen"),
+                  ),
                 ),
               ),
             ],
