@@ -664,8 +664,11 @@ Future<bool?> askShouldOverwriteFile(String fileName) async {
     DialogRoute(
       builder: (context) {
         return InfoDialog(
-          title: Text("Die Datei \"$fileName\" existiert bereits."),
-          content: const Text("Erneut herunterladen?"),
+          title: const Text("Datei existiert bereits"),
+          content: Text(
+            "Die Datei \"$fileName\" ist bereits im Downloads-Ordner vorhanden.\n\n"
+            "Wenn die Datei erneut heruntergeladen wird, wird die bestehende Datei ersetzt.",
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
