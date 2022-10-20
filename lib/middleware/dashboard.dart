@@ -154,13 +154,13 @@ Future<void> _openAttachment(
   await next(action);
 
   if (!action.payload.fileAvailable ||
-      !await canOpenFile(action.payload.originalName)) {
+      !await canOpenFile(action.payload.uniqueName)) {
     await api.actions.dashboardActions.downloadAttachment(action.payload);
 
     await next(action);
     final success = await downloadFile(
       "${wrapper.baseAddress}api/gradeGroup/gradeGroupSubmissionDownloadEntry",
-      action.payload.originalName,
+      action.payload.uniqueName,
       <String, dynamic>{
         "submissionId": action.payload.id,
         "parentId": action.payload.gradeGroupId,
@@ -171,5 +171,5 @@ Future<void> _openAttachment(
     }
   }
 
-  await openFile(action.payload.originalName);
+  await openFile(action.payload.uniqueName);
 }

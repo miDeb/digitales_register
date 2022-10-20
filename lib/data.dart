@@ -240,6 +240,8 @@ abstract class GradeGroupSubmission
   int get gradeGroupId;
   int get userId;
 
+  String get uniqueName => "hw_${id}_${gradeGroupId}_$originalName";
+
   static void _initializeBuilder(GradeGroupSubmissionBuilder b) => b
     ..downloading = false
     ..fileAvailable = false;
@@ -638,6 +640,8 @@ abstract class LessonContentSubmission
   bool get downloading;
   bool get fileAvailable;
 
+  String get uniqueName => "cal_${lessonContentId}_${id}_$originalName";
+
   static Serializer<LessonContentSubmission> get serializer =>
       _$lessonContentSubmissionSerializer;
   factory LessonContentSubmission(
@@ -682,6 +686,8 @@ abstract class MessageAttachmentFile
   @BuiltValueField(serialize: false)
   bool get downloading;
   bool get fileAvailable;
+
+  String get uniqueName => "msg_${messageId}_${id}_$originalName";
 
   factory MessageAttachmentFile(
           [Function(MessageAttachmentFileBuilder b)? updates]) =

@@ -40,12 +40,12 @@ Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
   await next(action);
 
   if (!action.payload.fileAvailable ||
-      !await canOpenFile(action.payload.originalName)) {
+      !await canOpenFile(action.payload.uniqueName)) {
     await api.actions.messagesActions.downloadFile(action.payload);
 
     final success = await downloadFile(
       "${wrapper.baseAddress}api/message/messageSubmissionDownloadEntry",
-      action.payload.originalName,
+      action.payload.uniqueName,
       <String, dynamic>{
         "messageId": action.payload.messageId,
         "submissionId": action.payload.id,
@@ -56,7 +56,7 @@ Future<void> _openFile(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
     }
   }
 
-  await openFile(action.payload.originalName);
+  await openFile(action.payload.uniqueName);
 }
 
 Future<void> _markAsRead(

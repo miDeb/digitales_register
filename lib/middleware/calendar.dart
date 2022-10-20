@@ -90,11 +90,11 @@ Future<void> _openSubmission(
   await next(action);
 
   if (!action.payload.fileAvailable ||
-      !await canOpenFile(action.payload.originalName)) {
+      !await canOpenFile(action.payload.uniqueName)) {
     await api.actions.calendarActions.onDownloadFile(action.payload);
     final success = await downloadFile(
       "${wrapper.baseAddress}api/lessonContent/lessonContentSubmissionDownloadEntry",
-      action.payload.originalName,
+      action.payload.uniqueName,
       <String, dynamic>{
         "parentId": action.payload.lessonContentId,
         "submissionId": action.payload.id,
@@ -105,5 +105,5 @@ Future<void> _openSubmission(
     }
   }
 
-  await openFile(action.payload.originalName);
+  await openFile(action.payload.uniqueName);
 }
