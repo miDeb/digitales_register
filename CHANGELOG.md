@@ -1,6 +1,7 @@
 ## 8.2.9
 - Eine Schule wurde hinzugefügt.
 - Ein Demo-Modus ist nun verfügbar (Schule: Vinzentinum, User: "demo-user-6540", PW: "demo").
+- Die UX von Dateianhängen wurde verbessert.
 
 ## 8.2.8
 - Dateianhänge von Stundenbeschreibungen im Kalender können nun heruntergeladen werden.

@@ -26,10 +26,11 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
-    <release version="8.2.9" date="2022-10-19">
+    <release version="8.2.9" date="2022-10-21">
       <description>
         <p>Eine Schule wurde hinzugefügt.</p>
         <p>Ein Demo-Modus ist nun verfügbar (Schule: Vinzentinum, User: "demo-user-6540", PW: "demo").</p>
+        <p>Die UX von Dateianhängen wurde verbessert.</p>
       </description>
     </release>
     <release version="8.2.8" date="2022-10-16">
