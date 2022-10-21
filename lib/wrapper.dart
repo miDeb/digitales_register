@@ -488,6 +488,7 @@ class Wrapper {
     log("Error while sending request", error: e);
     if (e is TimeoutException || await refreshNoInternet()) {
       noInternet = true;
+      _loggedIn = Future.value(false);
       await actions.noInternet(true);
       error = "Keine Internetverbindung";
     } else {
