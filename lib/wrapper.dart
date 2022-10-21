@@ -497,15 +497,20 @@ class Wrapper {
 
   Future<void> _updateLogout() async {
     if (!await _loggedIn) return;
+    if (demoMode) return;
     if (_serverLogoutTime != null &&
         DateTime.now()
             .add(const Duration(seconds: 25))
             .isAfter(_serverLogoutTime!)) {
       //autologout happens soon!
-      final result =
-          getMap(await send("api/auth/extendSession", args: <String, Object?>{
-        "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
-      }));
+      final result = getMap(
+        await send(
+          "api/auth/extendSession",
+          args: <String, Object?>{
+            "lastAction": lastInteraction.millisecondsSinceEpoch ~/ 1000,
+          },
+        ),
+      );
       if (result == null) {
         logout(hard: safeMode, logoutForcedByServer: true);
         return;
