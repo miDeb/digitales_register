@@ -10,8 +10,8 @@ Inoffizielle App für das Digitale Register (http://xxxxxx.digitalesregister.it)
 <a href="https://apps.apple.com/us/app/digitales-register/id1546447854?itsct=apps_box_badge&amp;itscg=30200" style="display: inline-block; overflow: hidden; border-radius: 13px; width: 250px; height: 83px;"><img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/de-de?size=250x83&amp;releaseDate=1609200000&h=c0c347c2e3e174c681774abe55a01914" alt="Download on the App Store" style="border-radius: 13px; width: 250px; height: 83px;"></a>
 
 ### Windows
-<a target="_blank" href="https://www.microsoft.com/store/apps/9N3QQ0J3V0HQ?cid=storebadge&amp;ocid=badge">
-  <img alt="Microsoft Store badge logo" src="https://getbadgecdn.azureedge.net/images/German_L.png" width="250">
+<a target="_blank" href="https://www.microsoft.com/store/apps/9N3QQ0J3V0HQ">
+  <img alt="Microsoft Store badge logo" src="https://get.microsoft.com/images/de-de dark.svg" width="250">
 </a>
 
 ### Linux
