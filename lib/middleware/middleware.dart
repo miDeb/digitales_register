@@ -391,20 +391,24 @@ NextActionHandler _saveStateMiddleware(
             if (_saveUnderway && !immediately) {
               return;
             }
-            final user = getStorageKey(
-                _stateToSave.loginState.username, wrapper.loginAddress);
+
             _saveUnderway = true;
 
             Future<void> save() async {
+              final state = _stateToSave;
+              final user = getStorageKey(
+                state.loginState.username,
+                wrapper.loginAddress,
+              );
               _saveUnderway = false;
               String toSave;
-              if (!_stateToSave.settingsState.noDataSaving && !deletedData) {
+              if (!state.settingsState.noDataSaving && !deletedData) {
                 toSave = json.encode(
-                  serializers.serialize(_stateToSave),
+                  serializers.serialize(state),
                 );
               } else {
                 toSave = json.encode(
-                  serializers.serialize(_stateToSave.settingsState),
+                  serializers.serialize(state.settingsState),
                 );
               }
               if (_lastSave == toSave && _lastUsernameSaved == user) return;
