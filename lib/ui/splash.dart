@@ -46,9 +46,16 @@ class SplashScreen extends StatelessWidget {
 class _SplashWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final darkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       body: Center(
-        child: Image.asset("assets/transparent.png"),
+        child: FractionallySizedBox(
+          heightFactor: 0.5,
+          widthFactor: 0.5,
+          child: Image.asset(
+            darkMode ? "assets/splash_dark.png" : "assets/splash_light.png",
+          ),
+        ),
       ),
     );
   }
