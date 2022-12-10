@@ -56,7 +56,8 @@ typedef SingleArgumentVoidCallback<T> = void Function(T arg);
 final AppActions actions = AppActions();
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  binding.deferFirstFrame();
   try {
     packageInfo = await PackageInfo.fromPlatform();
   } catch (_) {
@@ -97,6 +98,7 @@ Future<void> main() async {
       );
     },
   );
+  binding.allowFirstFrame();
 }
 
 class RegisterApp extends StatelessWidget {

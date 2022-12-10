@@ -101,7 +101,8 @@ flutter_icons:
 flutter_native_splash:
   color: "fafafa"
   color_dark: "303030"
-  image: "assets/4.0x/transparent.png"
+  image: "assets/4.0x/splash-light.png"
+  image_dark: "assets/4.0x/splash-dark.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

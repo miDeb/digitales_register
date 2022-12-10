@@ -26,6 +26,7 @@ import 'package:dr/ui/donations.dart';
 import 'package:dr/ui/network_protocol_page.dart';
 import 'package:dr/util.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:responsive_scaffold/responsive_scaffold.dart';
@@ -584,9 +585,35 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             applicationName: "Digitales Register (Client)",
             applicationVersion: appVersion,
             aboutBoxChildren: [
-              const Text("""
-Ein Client für das Digitale Register.
-Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
+              const Text("Ein Client für das Digitale Register."),
+              Text.rich(
+                TextSpan(children: [
+                  const TextSpan(text: "Entwickelt von "),
+                  TextSpan(
+                    text: "Michael Debertol",
+                    style: const TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse("https://blog.debertol.com"),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                  ),
+                  const TextSpan(text: " @ "),
+                  TextSpan(
+                    text: "evvvolution.com",
+                    style: const TextStyle(color: Colors.blue),
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        launchUrl(
+                          Uri.parse("https://evvvolution.com"),
+                          mode: LaunchMode.externalApplication,
+                        );
+                      },
+                  ),
+                ]),
+              ),
               const SizedBox(
                 height: 8,
               ),
@@ -602,7 +629,10 @@ Großes Dankeschön an das Vinzentinum für die freundliche Unterstützung."""),
                     style: TextStyle(color: Colors.blue),
                   ),
                   onTap: () {
-                    launch("https://www.gnu.org/licenses/gpl-3.0.html");
+                    launchUrl(
+                      Uri.parse("https://www.gnu.org/licenses/gpl-3.0.html"),
+                      mode: LaunchMode.externalApplication,
+                    );
                   },
                 ),
               )
