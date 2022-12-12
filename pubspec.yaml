@@ -145,7 +145,7 @@ msix_config:
   publisher_display_name: Michael Debertol
   identity_name: 2097MichaelDebertol.DigitalesRegister
   publisher: CN=2508760A-808B-4829-867A-4DB53593750E
-  msix_version: 8.2.9.0
+  msix_version: 8.2.10.0
   logo_path: assets/4.0x/transparent.png
   architecture: x64
   capabilities: "internetClient"
