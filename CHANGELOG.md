@@ -1,3 +1,7 @@
+## 8.2.10
+- Add "evvvolution.com" branding
+- Minor bug fix
+
 ## 8.2.9
 - Eine Schule wurde hinzugefügt.
 - Ein Demo-Modus ist nun verfügbar (Schule: Vinzentinum, User: "demo-user-6540", PW: "demo").
