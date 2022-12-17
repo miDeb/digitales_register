@@ -90,6 +90,7 @@ class SettingsViewModel {
   final bool showGradesSettings;
   final bool dashboardColorBorders;
   final bool dashboardColorTestsInRed;
+  final bool demoMode;
   final List<String> allSubjects;
   final List<String> ignoreForGradesAverage;
   final BuiltMap<String, SubjectTheme> subjectThemes;
@@ -113,5 +114,6 @@ class SettingsViewModel {
         allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
             state.settingsState.ignoreForGradesAverage.toList(),
-        subjectThemes = state.settingsState.subjectThemes;
+        subjectThemes = state.settingsState.subjectThemes,
+        demoMode = state.isDemo;
 }

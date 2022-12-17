@@ -26,6 +26,11 @@ import 'package:dr/utc_date_time.dart';
 
 part 'app_state.g.dart';
 
+bool isDemoUser({required String? url, required String? username}) {
+  return username == "demo-user-6540" &&
+      url == "https://vinzentinum.digitalesregister.it";
+}
+
 abstract class AppState implements Built<AppState, AppStateBuilder> {
   DashboardState get dashboardState;
   @BuiltValueField(serialize: false)
@@ -54,6 +59,8 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   @BuiltValueField(serialize: false)
   String? get url;
   static Serializer<AppState> get serializer => _$appStateSerializer;
+
+  bool get isDemo => isDemoUser(url: url, username: loginState.username);
 
   List<String> extractAllSubjects() {
     final subjects = <String>{};

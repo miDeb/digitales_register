@@ -160,16 +160,18 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
       body: ListView(
         controller: controller,
         children: <Widget>[
-          const SizedBox(height: 8),
-          ListTile(
-            title: Text(
-              "Profil",
-              style: Theme.of(context).textTheme.headlineSmall,
+          if (!widget.vm.demoMode) ...[
+            const SizedBox(height: 8),
+            ListTile(
+              title: Text(
+                "Profil",
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: widget.onShowProfile,
             ),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: widget.onShowProfile,
-          ),
-          const Divider(),
+            const Divider(),
+          ],
           AutoScrollTag(
             controller: controller,
             index: 0,

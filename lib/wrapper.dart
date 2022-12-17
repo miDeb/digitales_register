@@ -115,9 +115,7 @@ class Wrapper {
     VoidCallback? relogin,
     AddNetworkProtocolItem? addProtocolItem,
   }) async {
-    if (user == "demo-user-6540" &&
-        pass == "demo" &&
-        url == "https://vinzentinum.digitalesregister.it") {
+    if (isDemoUser(url: url, username: user)) {
       demoMode = true;
       _loggedIn = Future.value(true);
       this.user = user;
