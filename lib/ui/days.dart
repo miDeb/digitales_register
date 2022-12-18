@@ -61,7 +61,7 @@ class DaysWidget extends StatefulWidget {
   final AttachmentCallback onOpenAttachment;
 
   const DaysWidget({
-    Key? key,
+    super.key,
     required this.vm,
     required this.markAsSeenCallback,
     required this.markDeletedHomeworkAsSeenCallback,
@@ -74,7 +74,7 @@ class DaysWidget extends StatefulWidget {
     required this.refresh,
     required this.refreshNoInternet,
     required this.onOpenAttachment,
-  }) : super(key: key);
+  });
   @override
   _DaysWidgetState createState() => _DaysWidgetState();
 }
@@ -413,10 +413,10 @@ class DashboardHeader extends StatelessWidget {
   final VoidCallback onSwitchFuture;
   final bool future;
   const DashboardHeader({
-    Key? key,
+    super.key,
     required this.future,
     required this.onSwitchFuture,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +474,7 @@ class DayWidget extends StatelessWidget {
   final bool showLastFetched;
 
   const DayWidget({
-    Key? key,
+    super.key,
     required this.day,
     required this.vm,
     required this.controller,
@@ -488,7 +488,7 @@ class DayWidget extends StatelessWidget {
     required this.subjectThemes,
     required this.colorTestsInRed,
     required this.showLastFetched,
-  }) : super(key: key);
+  });
 
   Future<String?> showEnterReminderDialog(BuildContext context) async {
     return showDialog(
@@ -666,7 +666,7 @@ class ItemWidget extends StatelessWidget {
   final int? index;
 
   const ItemWidget({
-    Key? key,
+    super.key,
     required this.item,
     this.removeThis,
     this.toggleDone,
@@ -682,7 +682,7 @@ class ItemWidget extends StatelessWidget {
     required this.colorBorder,
     required this.subjectThemes,
     required this.colorTestsInRed,
-  }) : super(key: key);
+  });
 
   Future<Tuple2<bool, bool>> _showConfirmDelete(BuildContext context) async {
     var ask = true;
@@ -1023,11 +1023,10 @@ class AttachmentWidget extends StatelessWidget {
   final bool noInternet;
 
   const AttachmentWidget(
-      {Key? key,
+      {super.key,
       required this.ggs,
       required this.noInternet,
-      required this.openCallback})
-      : super(key: key);
+      required this.openCallback});
   @override
   Widget build(BuildContext context) {
     return Padding(

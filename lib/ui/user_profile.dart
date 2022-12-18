@@ -21,11 +21,11 @@ class UserProfile extends StatelessWidget {
   final String name, username, role;
 
   const UserProfile({
-    Key? key,
+    super.key,
     required this.name,
     required this.username,
     required this.role,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Center(

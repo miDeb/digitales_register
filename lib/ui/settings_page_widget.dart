@@ -61,7 +61,7 @@ class SettingsPageWidget extends StatefulWidget {
   final SettingsViewModel vm;
 
   const SettingsPageWidget({
-    Key? key,
+    super.key,
     required this.onSetNoPassSaving,
     required this.onSetNoDataSaving,
     required this.onSetAskWhenDelete,
@@ -81,7 +81,7 @@ class SettingsPageWidget extends StatefulWidget {
     required this.onSetDashboardColorBorders,
     required this.onSetSubjectTheme,
     required this.onSetDashboardColorTestsInRed,
-  }) : super(key: key);
+  });
 
   @override
   _SettingsPageWidgetState createState() => _SettingsPageWidgetState();
@@ -665,8 +665,7 @@ class EditSubjectsNicks extends StatefulWidget {
   final List<String>? suggestions;
 
   const EditSubjectsNicks(
-      {Key? key, this.subjectName, this.subjectNick, this.suggestions})
-      : super(key: key);
+      {super.key, this.subjectName, this.subjectNick, this.suggestions});
   @override
   _EditSubjectsNicksState createState() => _EditSubjectsNicksState();
 }
@@ -903,7 +902,7 @@ class _AddSubjectState extends State<AddSubject> {
 class _ColorPicker extends StatefulWidget {
   final Color? initialColor;
 
-  const _ColorPicker({Key? key, this.initialColor}) : super(key: key);
+  const _ColorPicker({this.initialColor});
   @override
   _ColorPickerState createState() => _ColorPickerState();
 }

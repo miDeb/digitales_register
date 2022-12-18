@@ -124,7 +124,7 @@ String _calculateAverage(List<_Grade> grades) {
 typedef _UpdateGrade = void Function(_Grade previous, _Grade? updated);
 
 class GradeCalculator extends StatefulWidget {
-  const GradeCalculator({Key? key}) : super(key: key);
+  const GradeCalculator({super.key});
   @override
   _GradeCalculatorState createState() => _GradeCalculatorState();
 }
@@ -279,11 +279,10 @@ class GradesList extends StatelessWidget {
   final VoidCallback addGrade;
 
   const GradesList(
-      {Key? key,
+      {super.key,
       required this.grades,
       required this.updateGrade,
-      required this.addGrade})
-      : super(key: key);
+      required this.addGrade});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -321,8 +320,7 @@ class GradeTile extends StatelessWidget {
   final _Grade grade;
   final _UpdateGrade updateGrade;
 
-  const GradeTile({Key? key, required this.grade, required this.updateGrade})
-      : super(key: key);
+  const GradeTile({super.key, required this.grade, required this.updateGrade});
 
   @override
   Widget build(BuildContext context) {
@@ -402,8 +400,7 @@ class GradeTile extends StatelessWidget {
 class Greeting extends StatelessWidget {
   final VoidCallback import, add;
 
-  const Greeting({Key? key, required this.import, required this.add})
-      : super(key: key);
+  const Greeting({super.key, required this.import, required this.add});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -457,7 +454,7 @@ class Greeting extends StatelessWidget {
 class _ImportGrades extends StatefulWidget {
   final List<Subject> subjects;
 
-  const _ImportGrades({Key? key, required this.subjects}) : super(key: key);
+  const _ImportGrades({required this.subjects});
   @override
   _ImportGradesState createState() => _ImportGradesState();
 }
@@ -602,13 +599,12 @@ class _Input extends StatefulWidget {
   final bool autofocus;
 
   const _Input({
-    Key? key,
     required this.inputType,
     this.initial,
     required this.updateValue,
     this.showErrorForEmptyInput = true,
     this.autofocus = false,
-  }) : super(key: key);
+  });
   @override
   _InputState createState() => _InputState();
 }

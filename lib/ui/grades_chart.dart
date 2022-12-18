@@ -44,12 +44,11 @@ class GradesChart extends StatelessWidget {
       ValueNotifier(null);
 
   GradesChart({
-    Key? key,
+    super.key,
     required Map<SubjectGrades, SubjectTheme> graphs,
     this.goFullscreen,
     required this.isFullscreen,
-  })  : grades = convert(graphs),
-        super(key: key);
+  }) : grades = convert(graphs);
 
   static List<
           charts
@@ -296,8 +295,7 @@ class SelectionWidget extends StatelessWidget {
   final UtcDateTime? date;
   final BuiltList<_Selection>? selections;
 
-  const SelectionWidget({Key? key, this.date, this.selections})
-      : super(key: key);
+  const SelectionWidget({super.key, this.date, this.selections});
 
   @override
   Widget build(BuildContext context) {

@@ -42,7 +42,7 @@ class LoginPageContent extends StatefulWidget {
   final SelectAccountCallback onSelectAccount;
 
   const LoginPageContent({
-    Key? key,
+    super.key,
     required this.vm,
     required this.onLogin,
     required this.setSaveNoPass,
@@ -50,7 +50,7 @@ class LoginPageContent extends StatefulWidget {
     required this.onChangePass,
     required this.onRequestPassReset,
     required this.onSelectAccount,
-  }) : super(key: key);
+  });
 
   @override
   _LoginPageContentState createState() => _LoginPageContentState();

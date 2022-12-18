@@ -22,9 +22,12 @@ class RequestPassReset extends StatefulWidget {
   final bool failure;
   final String? message;
 
-  const RequestPassReset(
-      {Key? key, required this.resetPass, required this.failure, this.message})
-      : super(key: key);
+  const RequestPassReset({
+    super.key,
+    required this.resetPass,
+    required this.failure,
+    this.message,
+  });
   @override
   _RequestPassResetState createState() => _RequestPassResetState();
 }

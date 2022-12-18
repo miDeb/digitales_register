@@ -28,11 +28,10 @@ class GradesChartLegendEntry extends StatelessWidget {
   // calls to setThickness are delayed by 100 ms to reduce jankiness. This leads
   // to some weird code.
   const GradesChartLegendEntry(
-      {Key? key,
+      {super.key,
       required this.config,
       required this.name,
-      required this.setThickness})
-      : super(key: key);
+      required this.setThickness});
   @override
   Widget build(BuildContext context) {
     var thickness = config.thick.toDouble();

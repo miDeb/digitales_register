@@ -28,10 +28,10 @@ class CalendarCardContainer extends StatelessWidget {
   final UtcDateTime day;
 
   const CalendarCardContainer({
-    Key? key,
+    super.key,
     required this.hourIndex,
     required this.day,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

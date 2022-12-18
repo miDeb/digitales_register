@@ -29,13 +29,13 @@ class Profile extends StatelessWidget {
   final VoidCallback changePass;
 
   const Profile({
-    Key? key,
+    super.key,
     required this.profileState,
     required this.setSendNotificationEmails,
     required this.changeEmail,
     required this.changePass,
     required this.noInternet,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(

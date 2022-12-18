@@ -24,11 +24,11 @@ class InfoDialog extends StatelessWidget {
   final List<Widget>? actions;
 
   const InfoDialog({
-    Key? key,
+    super.key,
     required this.title,
     this.content,
     this.actions,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

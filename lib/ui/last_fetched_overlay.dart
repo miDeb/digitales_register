@@ -6,11 +6,11 @@ class LastFetchedOverlay extends StatelessWidget {
   final Widget child;
   final UtcDateTime? lastFetched;
   const LastFetchedOverlay({
-    Key? key,
+    super.key,
     required this.child,
     required this.noInternet,
     required this.lastFetched,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,10 +29,10 @@ class RawLastFetchedOverlay extends StatelessWidget {
   final String? message;
   final Widget child;
   const RawLastFetchedOverlay({
-    Key? key,
+    super.key,
     required this.message,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

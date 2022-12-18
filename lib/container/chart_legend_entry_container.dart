@@ -27,8 +27,7 @@ part 'chart_legend_entry_container.g.dart';
 class ChartLegendEntryContainer extends StatelessWidget {
   final String subjectName;
 
-  const ChartLegendEntryContainer({Key? key, required this.subjectName})
-      : super(key: key);
+  const ChartLegendEntryContainer({super.key, required this.subjectName});
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, ChartLegendEntryVM>(

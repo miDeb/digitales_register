@@ -24,12 +24,11 @@ class PassReset extends StatefulWidget {
   final VoidCallback onClose;
 
   const PassReset(
-      {Key? key,
+      {super.key,
       required this.resetPass,
       required this.failure,
       this.message,
-      required this.onClose})
-      : super(key: key);
+      required this.onClose});
   @override
   _PassResetState createState() => _PassResetState();
 }

@@ -32,13 +32,13 @@ class CalendarCard extends StatelessWidget {
   final bool noInternet;
 
   const CalendarCard({
-    Key? key,
+    super.key,
     required this.hour,
     required this.theme,
     required this.selected,
     required this.onOpenFile,
     required this.noInternet,
-  }) : super(key: key);
+  });
 
   String formatTime(UtcDateTime dateTime) {
     return DateFormat.Hm("de").format(dateTime);
@@ -152,10 +152,10 @@ class CircledLetter extends StatelessWidget {
   final String letter;
   final Color color;
   const CircledLetter({
-    Key? key,
+    super.key,
     required this.letter,
     required this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -189,12 +189,11 @@ class _ContentItem extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   const _ContentItem({
-    Key? key,
     required this.title,
     required this.content,
     required this.icon,
     this.iconColor = Colors.grey,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +230,6 @@ class _SubmissionWidget extends StatelessWidget {
   final bool noInternet;
   final SubmissionCallback onOpenFile;
   const _SubmissionWidget({
-    super.key,
     required this.submission,
     required this.noInternet,
     required this.onOpenFile,

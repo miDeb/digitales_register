@@ -25,7 +25,7 @@ import 'package:responsive_scaffold/responsive_scaffold.dart';
 class Certificate extends StatelessWidget {
   final CertificateViewModel vm;
 
-  const Certificate({Key? key, required this.vm}) : super(key: key);
+  const Certificate({super.key, required this.vm});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

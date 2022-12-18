@@ -34,13 +34,13 @@ class SortedGradesWidget extends StatelessWidget {
   final VoidCallback showGradeCalculator;
 
   const SortedGradesWidget({
-    Key? key,
+    super.key,
     required this.vm,
     required this.viewSubjectDetail,
     required this.sortByTypeCallback,
     required this.showCancelledCallback,
     required this.showGradeCalculator,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -107,15 +107,14 @@ class SubjectWidget extends StatefulWidget {
   final VoidCallback viewSubjectDetail;
 
   const SubjectWidget(
-      {Key? key,
+      {super.key,
       required this.sortByType,
       required this.subject,
       required this.viewSubjectDetail,
       required this.showCancelled,
       required this.semester,
       required this.noInternet,
-      required this.ignoredForAverage})
-      : super(key: key);
+      required this.ignoredForAverage});
 
   @override
   _SubjectWidgetState createState() => _SubjectWidgetState();
@@ -255,7 +254,7 @@ const lineThrough = TextStyle(decoration: TextDecoration.lineThrough);
 class GradeWidget extends StatelessWidget {
   final GradeDetail grade;
 
-  const GradeWidget({Key? key, required this.grade}) : super(key: key);
+  const GradeWidget({super.key, required this.grade});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -308,8 +307,7 @@ class GradeWidget extends StatelessWidget {
 class ObservationWidget extends StatelessWidget {
   final Observation observation;
 
-  const ObservationWidget({Key? key, required this.observation})
-      : super(key: key);
+  const ObservationWidget({super.key, required this.observation});
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -330,8 +328,7 @@ class CompetenceWidget extends StatelessWidget {
   final bool cancelled;
 
   const CompetenceWidget(
-      {Key? key, required this.competence, required this.cancelled})
-      : super(key: key);
+      {super.key, required this.competence, required this.cancelled});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -359,7 +356,7 @@ class CompetenceWidget extends StatelessWidget {
 class Star extends StatelessWidget {
   final bool filled;
 
-  const Star({Key? key, required this.filled}) : super(key: key);
+  const Star({super.key, required this.filled});
   @override
   Widget build(BuildContext context) {
     return Icon(filled ? Icons.star : Icons.star_border);
@@ -371,8 +368,7 @@ class GradeTypeWidget extends StatelessWidget {
   final List<DetailEntry> entries;
 
   const GradeTypeWidget(
-      {Key? key, required this.typeName, required this.entries})
-      : super(key: key);
+      {super.key, required this.typeName, required this.entries});
   @override
   Widget build(BuildContext context) {
     final displayGrades = entries

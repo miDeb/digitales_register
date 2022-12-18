@@ -22,9 +22,9 @@ class AnimatedLinearProgressIndicator extends StatefulWidget {
   final bool show;
 
   const AnimatedLinearProgressIndicator({
-    Key? key,
+    super.key,
     required this.show,
-  }) : super(key: key);
+  });
   @override
   _AnimatedLinearProgressIndicatorState createState() =>
       _AnimatedLinearProgressIndicatorState();

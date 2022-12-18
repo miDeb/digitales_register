@@ -33,9 +33,9 @@ class CalendarWeek extends StatelessWidget {
   final CalendarWeekViewModel vm;
 
   const CalendarWeek({
-    Key? key,
+    super.key,
     required this.vm,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +84,12 @@ class _HoursChunk extends StatelessWidget {
   final int? selectedHour;
   final bool isSelected;
   const _HoursChunk({
-    Key? key,
     required this.subjectNicks,
     required this.hours,
     required this.day,
     required this.selectedHour,
     required this.isSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,13 +145,13 @@ class CalendarDayWidget extends StatelessWidget {
   final int? selectedHour;
 
   const CalendarDayWidget({
-    Key? key,
+    super.key,
     required this.max,
     required this.calendarDay,
     required this.subjectNicks,
     required this.isSelected,
     required this.selectedHour,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     final chunks = <List<CalendarHour>>[];
@@ -232,12 +231,12 @@ class HourWidget extends StatelessWidget {
   final BuiltMap<String, String> subjectNicks;
   final bool isSelected;
   const HourWidget({
-    Key? key,
+    super.key,
     required this.hour,
     required this.subjectNicks,
     required this.day,
     required this.isSelected,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Flexible(

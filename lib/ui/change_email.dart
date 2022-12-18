@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 class ChangeEmail extends StatefulWidget {
   final ChangeEmailCallback changeEmail;
 
-  const ChangeEmail({Key? key, required this.changeEmail}) : super(key: key);
+  const ChangeEmail({super.key, required this.changeEmail});
   @override
   _ChangeEmailState createState() => _ChangeEmailState();
 }

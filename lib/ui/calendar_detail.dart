@@ -37,10 +37,10 @@ class RightSidebar extends StatefulWidget {
   final Widget child;
   final bool show;
   const RightSidebar({
-    Key? key,
+    super.key,
     required this.child,
     required this.show,
-  }) : super(key: key);
+  });
 
   @override
   State<RightSidebar> createState() => _RightSidebarState();
@@ -95,12 +95,12 @@ class CalendarDetailPage extends StatefulWidget {
   final int? selectedHour;
   final bool isSidebar, show;
   const CalendarDetailPage({
-    Key? key,
+    super.key,
     required this.selectedDay,
     required this.selectedHour,
     required this.isSidebar,
     required this.show,
-  }) : super(key: key);
+  });
 
   @override
   _CalendarDetailPageState createState() => _CalendarDetailPageState();
@@ -252,14 +252,14 @@ class CalendarDetailWrapper extends StatelessWidget {
   final bool loading;
   final bool isSidebar;
   const CalendarDetailWrapper({
-    Key? key,
+    super.key,
     required this.day,
     required this.targetHour,
     required this.noInternet,
     required this.date,
     required this.loading,
     required this.isSidebar,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -296,11 +296,11 @@ class CalendarDetail extends StatefulWidget {
   final CalendarHour? targetHour;
   final bool noInternet;
   const CalendarDetail({
-    Key? key,
+    super.key,
     required this.day,
     required this.targetHour,
     required this.noInternet,
-  }) : super(key: key);
+  });
 
   @override
   State<CalendarDetail> createState() => _CalendarDetailState();
@@ -365,9 +365,8 @@ class _CalendarDetailState extends State<CalendarDetail> {
 class _NoSchool extends StatelessWidget {
   final UtcDateTime date;
   const _NoSchool({
-    Key? key,
     required this.date,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

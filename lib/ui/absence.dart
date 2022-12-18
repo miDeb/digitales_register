@@ -23,7 +23,7 @@ import 'package:intl/intl.dart';
 class AbsenceGroupWidget extends StatelessWidget {
   final AbsencesViewModel vm;
 
-  const AbsenceGroupWidget({Key? key, required this.vm}) : super(key: key);
+  const AbsenceGroupWidget({super.key, required this.vm});
   @override
   Widget build(BuildContext context) {
     final divider = Row(
@@ -84,9 +84,9 @@ class AbsenceGroupWidget extends StatelessWidget {
 class FutureAbsenceWidget extends StatelessWidget {
   final FutureAbsence absence;
   const FutureAbsenceWidget({
-    Key? key,
+    super.key,
     required this.absence,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

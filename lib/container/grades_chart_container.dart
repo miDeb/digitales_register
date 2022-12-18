@@ -27,8 +27,7 @@ import 'package:tuple/tuple.dart';
 class GradesChartContainer extends StatelessWidget {
   final bool isFullscreen;
 
-  const GradesChartContainer({Key? key, required this.isFullscreen})
-      : super(key: key);
+  const GradesChartContainer({super.key, required this.isFullscreen});
 
   @override
   Widget build(BuildContext context) {

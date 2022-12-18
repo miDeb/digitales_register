@@ -28,8 +28,7 @@ class HomeworkFilter extends StatefulWidget {
   final HomeworkFilterVM vm;
   final HomeworkBlacklistCallback callback;
 
-  const HomeworkFilter({Key? key, required this.vm, required this.callback})
-      : super(key: key);
+  const HomeworkFilter({super.key, required this.vm, required this.callback});
 
   @override
   _HomeworkFilterState createState() => _HomeworkFilterState();

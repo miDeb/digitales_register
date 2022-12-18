@@ -27,9 +27,9 @@ class HomePageContent extends StatelessWidget {
   final HomePageContentViewModel vm;
 
   const HomePageContent({
-    Key? key,
+    super.key,
     required this.vm,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

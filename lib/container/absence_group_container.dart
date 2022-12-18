@@ -27,9 +27,9 @@ class AbsenceGroupContainer extends StatelessWidget {
   final int group;
 
   const AbsenceGroupContainer({
-    Key? key,
+    super.key,
     required this.group,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, AbsencesViewModel>(

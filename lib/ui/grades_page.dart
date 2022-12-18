@@ -31,11 +31,11 @@ class GradesPage extends StatelessWidget {
   final VoidCallback showGradesSettings;
 
   const GradesPage({
-    Key? key,
+    super.key,
     required this.vm,
     required this.changeSemester,
     required this.showGradesSettings,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

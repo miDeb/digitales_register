@@ -38,13 +38,13 @@ class Calendar extends StatefulWidget {
   final VoidCallback closeEditNicksBar;
 
   const Calendar({
-    Key? key,
+    super.key,
     required this.vm,
     required this.dayCallback,
     required this.currentMondayCallback,
     required this.showEditSubjectNicks,
     required this.closeEditNicksBar,
-  }) : super(key: key);
+  });
 
   @override
   _CalendarState createState() => _CalendarState();
@@ -347,11 +347,10 @@ class EditNickBar extends StatelessWidget {
   final VoidCallback onShowEditNicks, onClose;
 
   const EditNickBar(
-      {Key? key,
+      {super.key,
       required this.show,
       required this.onShowEditNicks,
-      required this.onClose})
-      : super(key: key);
+      required this.onClose});
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(

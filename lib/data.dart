@@ -210,7 +210,7 @@ class HomeworkType extends EnumClass {
       observation = _$e,
       homework = _$f;
 
-  const HomeworkType._(String name) : super(name);
+  const HomeworkType._(super.name);
   static BuiltSet<HomeworkType> get values => _$values2;
   static HomeworkType valueOf(String name) => _$valueOf2(name);
   static Serializer<HomeworkType> get serializer => _$homeworkTypeSerializer;
@@ -535,7 +535,7 @@ class AbsenceJustified extends EnumClass {
     }
   }
 
-  const AbsenceJustified._(String name) : super(name);
+  const AbsenceJustified._(super.name);
   static BuiltSet<AbsenceJustified> get values => _$values;
   static AbsenceJustified valueOf(String name) => _$valueOf(name);
 }

@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 class ChartLegend extends StatelessWidget {
   final BuiltList<String> vm;
 
-  const ChartLegend({Key? key, required this.vm}) : super(key: key);
+  const ChartLegend({super.key, required this.vm});
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

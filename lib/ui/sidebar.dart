@@ -24,7 +24,7 @@ typedef SelectAccountCallback = void Function(int index);
 
 class Sidebar extends StatelessWidget {
   const Sidebar({
-    Key? key,
+    super.key,
     required this.drawerExpanded,
     required this.onDrawerExpansionChange,
     required this.username,
@@ -43,7 +43,7 @@ class Sidebar extends StatelessWidget {
     required this.selectAccount,
     required this.addAccount,
     required this.passwordSavingEnabled,
-  }) : super(key: key);
+  });
 
   final DrawerCallback onDrawerExpansionChange;
   final VoidCallback goHome,

@@ -33,11 +33,10 @@ class SidebarContainer extends StatelessWidget {
   final Pages currentSelected;
 
   const SidebarContainer(
-      {Key? key,
+      {super.key,
       required this.tabletMode,
       required this.goHome,
-      required this.currentSelected})
-      : super(key: key);
+      required this.currentSelected});
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, SidebarViewModel>(

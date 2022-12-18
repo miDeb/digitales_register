@@ -23,8 +23,7 @@ class NotificationIcon extends StatelessWidget {
   final VoidCallback onTap;
 
   const NotificationIcon(
-      {Key? key, required this.notifications, required this.onTap})
-      : super(key: key);
+      {super.key, required this.notifications, required this.onTap});
   @override
   Widget build(BuildContext context) {
     return notifications != 0

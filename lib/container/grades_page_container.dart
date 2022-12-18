@@ -29,7 +29,7 @@ import 'package:flutter_built_redux/flutter_built_redux.dart';
 part 'grades_page_container.g.dart';
 
 class GradesPageContainer extends StatelessWidget {
-  const GradesPageContainer({Key? key}) : super(key: key);
+  const GradesPageContainer({super.key});
 
   @override
   Widget build(BuildContext context) {

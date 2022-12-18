@@ -32,10 +32,10 @@ class CalendarDetailContainer extends StatelessWidget {
   final bool isSidebar;
   final bool show;
   const CalendarDetailContainer({
-    Key? key,
+    super.key,
     required this.isSidebar,
     required this.show,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +71,10 @@ class CalendarDetailItemContainer extends StatelessWidget {
   final UtcDateTime date;
   final bool isSidebar;
   const CalendarDetailItemContainer({
-    Key? key,
+    super.key,
     required this.date,
     required this.isSidebar,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

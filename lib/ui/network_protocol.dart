@@ -23,7 +23,7 @@ import 'package:flutter/services.dart';
 class NetworkProtocol extends StatelessWidget {
   final List<NetworkProtocolItem> items;
 
-  const NetworkProtocol({Key? key, required this.items}) : super(key: key);
+  const NetworkProtocol({super.key, required this.items});
   @override
   Widget build(BuildContext context) {
     return items.isEmpty
@@ -44,7 +44,7 @@ class NetworkProtocol extends StatelessWidget {
 class _Item extends StatelessWidget {
   final NetworkProtocolItem item;
 
-  const _Item({Key? key, required this.item}) : super(key: key);
+  const _Item({required this.item});
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
@@ -67,7 +67,7 @@ class _Detail extends StatelessWidget {
   final String type;
   final String? content;
 
-  const _Detail({Key? key, required this.type, this.content}) : super(key: key);
+  const _Detail({required this.type, this.content});
   @override
   Widget build(BuildContext context) {
     return Padding(

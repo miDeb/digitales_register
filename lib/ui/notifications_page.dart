@@ -33,14 +33,14 @@ class NotificationPage extends StatelessWidget {
   final UtcDateTime? lastFetched;
 
   const NotificationPage({
-    Key? key,
+    super.key,
     required this.notifications,
     required this.deleteNotification,
     required this.deleteAllNotifications,
     required this.noInternet,
     required this.goToMessage,
     required this.lastFetched,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,13 +106,13 @@ class NotificationWidget extends StatelessWidget {
   final bool isLast;
 
   const NotificationWidget({
-    Key? key,
+    super.key,
     required this.notification,
     required this.onDelete,
     required this.noInternet,
     required this.goToMessage,
     required this.isLast,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Deleteable(

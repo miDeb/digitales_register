@@ -37,12 +37,12 @@ class MessagesPage extends StatelessWidget {
   final void Function(Message message) onMarkAsRead;
 
   const MessagesPage({
-    Key? key,
+    super.key,
     required this.state,
     required this.noInternet,
     required this.onOpenFile,
     required this.onMarkAsRead,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,13 +97,13 @@ class MessageWidget extends StatefulWidget {
   final bool expand;
 
   const MessageWidget({
-    Key? key,
+    super.key,
     required this.message,
     required this.onOpenFile,
     required this.noInternet,
     required this.onMarkAsRead,
     required this.expand,
-  }) : super(key: key);
+  });
 
   @override
   _MessageWidgetState createState() => _MessageWidgetState();

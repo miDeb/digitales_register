@@ -20,7 +20,7 @@ import 'package:dr/container/grades_chart_container.dart';
 import 'package:flutter/material.dart';
 
 class GradesChartPage extends StatelessWidget {
-  const GradesChartPage({Key? key}) : super(key: key);
+  const GradesChartPage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -31,9 +31,9 @@ class CalendarWeekContainer extends StatelessWidget {
   final UtcDateTime monday;
 
   const CalendarWeekContainer({
-    Key? key,
+    super.key,
     required this.monday,
-  }) : super(key: key);
+  });
   @override
   Widget build(BuildContext context) {
     return StoreConnection<AppState, AppActions, CalendarWeekViewModel>(

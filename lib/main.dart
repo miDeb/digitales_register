@@ -103,9 +103,9 @@ Future<void> main() async {
 
 class RegisterApp extends StatelessWidget {
   const RegisterApp({
-    Key? key,
+    super.key,
     required this.store,
-  }) : super(key: key);
+  });
 
   final Store<AppState, AppStateBuilder, AppActions> store;
 
