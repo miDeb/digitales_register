@@ -142,8 +142,11 @@ NextActionHandler _errorMiddleware(
                         Center(
                           child: ElevatedButton(
                             onPressed: () async {
-                              await launch(
-                                  "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}");
+                              await launchUrl(
+                                Uri.parse(
+                                  "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}",
+                                ),
+                              );
                             },
                             child: const Text("Entwickler benachrichtigen"),
                           ),

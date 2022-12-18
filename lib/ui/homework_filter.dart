@@ -44,7 +44,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
       trailing: Padding(
         padding: const EdgeInsets.only(right: 8),
         child: Badge(
-          badgeContent: Container(
+          badgeContent: const ColoredBox(
             color: Colors.red,
           ),
           showBadge: widget.vm.currentBlacklist.isNotEmpty,

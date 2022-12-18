@@ -186,7 +186,7 @@ class QuillDeltaViewer extends StatelessWidget {
       recognizer: isLink
           ? (TapGestureRecognizer()
             ..onTap = () {
-              launch(link!);
+              launchUrl(Uri.parse(link!));
             })
           : null,
     );

@@ -563,10 +563,10 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             title: const Text("Feedback geben"),
             trailing: const Icon(Icons.open_in_new),
             onTap: () async {
-              await launch(
-                // ignore: prefer_interpolation_to_compose_strings
-                "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url" +
-                    ("&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}"),
+              await launchUrl(
+                Uri.parse(
+                  "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}",
+                ),
               );
             },
           ),
@@ -574,7 +574,9 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             leading: const Icon(Icons.code),
             trailing: const Icon(Icons.open_in_new),
             title: const Text("Zum Quellcode"),
-            onTap: () => launch("https://github.com/miDeb/digitales_register"),
+            onTap: () => launchUrl(
+              Uri.parse("https://github.com/miDeb/digitales_register"),
+            ),
           ),
           AboutListTile(
             icon: const Icon(Icons.info_outline),

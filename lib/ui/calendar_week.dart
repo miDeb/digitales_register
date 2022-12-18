@@ -250,7 +250,7 @@ class HourWidget extends StatelessWidget {
                 ..hour = hour.fromHour),
             );
           },
-          child: Container(
+          child: DecoratedBox(
             decoration: BoxDecoration(
               border: hour.warning
                   ? const Border(

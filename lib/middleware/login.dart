@@ -374,7 +374,7 @@ void _showUserTypeNotSupported(String url) {
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
-                    onPressed: () => launch(url),
+                    onPressed: () => launchUrl(Uri.parse(url)),
                     child: const Text(
                       "Hier geht's zur Website",
                     ),

@@ -210,7 +210,7 @@ class _DaysWidgetState extends State<DaysWidget> {
         height: 160,
       );
     }
-    if (n % 2 == 0) {
+    if (n.isEven) {
       return const Divider(
         height: 16,
       );

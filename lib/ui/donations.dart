@@ -39,9 +39,10 @@ class Donate extends StatelessWidget {
                         ? "assets/coffee-white.png"
                         : "assets/coffee-black.png"),
                     onTap: () {
-                      launch(
-                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YBGW9QXH8UM3Q&source=url",
-                        forceSafariVC: false,
+                      launchUrl(
+                        Uri.parse(
+                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YBGW9QXH8UM3Q&source=url",
+                        ),
                       );
                     }),
               ),
@@ -58,9 +59,10 @@ class Donate extends StatelessWidget {
                         ? "assets/goenner-white.png"
                         : "assets/goenner-black.png"),
                     onTap: () {
-                      launch(
-                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DFBK2QCD7EF6C&source=url",
-                        forceSafariVC: false,
+                      launchUrl(
+                        Uri.parse(
+                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DFBK2QCD7EF6C&source=url",
+                        ),
                       );
                     }),
               ),
@@ -77,9 +79,10 @@ class Donate extends StatelessWidget {
                         ? "assets/herz-white.png"
                         : "assets/herz-black.png"),
                     onTap: () {
-                      launch(
-                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5ZCCEN697H3W4&source=url",
-                        forceSafariVC: false,
+                      launchUrl(
+                        Uri.parse(
+                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5ZCCEN697H3W4&source=url",
+                        ),
                       );
                     }),
               ),
@@ -96,9 +99,10 @@ class Donate extends StatelessWidget {
                         ? "assets/Sparschwein-white.png"
                         : "assets/Sparschwein-black.png"),
                     onTap: () {
-                      launch(
-                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6Z2Q5BDH9GLWS&source=url",
-                        forceSafariVC: false,
+                      launchUrl(
+                        Uri.parse(
+                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6Z2Q5BDH9GLWS&source=url",
+                        ),
                       );
                     }),
               ),
@@ -116,7 +120,13 @@ class Donate extends StatelessWidget {
             Row(
               children: <Widget>[
                 GestureDetector(
-                  onTap: _launchURL,
+                  onTap: () {
+                    launchUrl(
+                      Uri.parse(
+                        'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url',
+                      ),
+                    );
+                  },
                   child: Image.asset(
                     'assets/paypal.png', // On click should redirect to an URL
                     width: 180.0,
@@ -139,24 +149,15 @@ class Donate extends StatelessWidget {
                         ? "assets/herz-white.png"
                         : "assets/herz-black.png"),
                     onTap: () {
-                      launch(
-                        "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url",
-                        forceSafariVC: false,
+                      launchUrl(
+                        Uri.parse(
+                          "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url",
+                        ),
                       );
                     }),
               ),
             ),
           ],
         ));
-  }
-}
-
-Future<void> _launchURL() async {
-  const url =
-      'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQTWZSRWSUXKN&source=url';
-  if (await canLaunch(url)) {
-    await launch(url);
-  } else {
-    throw 'Could not launch $url';
   }
 }

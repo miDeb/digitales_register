@@ -234,7 +234,7 @@ class _CalendarState extends State<Calendar> with TickerProviderStateMixin {
                                     firstDate: UtcDateTime(2018),
                                     lastDate: UtcDateTime(2050),
                                     initialDate: widget.vm.currentMonday,
-                                    selectableDayPredicate: (final day) {
+                                    selectableDayPredicate: (day) {
                                       return day.weekday != DateTime.sunday &&
                                           day.weekday != DateTime.saturday;
                                     },
@@ -360,7 +360,7 @@ class EditNickBar extends StatelessWidget {
           const SizedBox(
             height: 8,
           ),
-          Container(
+          DecoratedBox(
             decoration: BoxDecoration(
               boxShadow: const [
                 BoxShadow(
