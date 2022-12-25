@@ -81,6 +81,7 @@ Future<void> main() async {
   runApp(RegisterApp(store: store));
   WidgetsBinding.instance.addPostFrameCallback(
     (_) async {
+      binding.allowFirstFrame();
       Uri? uri;
       if (Platform.isAndroid) {
         uri = await getInitialUri();
@@ -98,7 +99,6 @@ Future<void> main() async {
       );
     },
   );
-  binding.allowFirstFrame();
 }
 
 class RegisterApp extends StatelessWidget {
