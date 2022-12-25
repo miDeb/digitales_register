@@ -73,7 +73,7 @@ const Map<String, String> schools = {
   "GS St. Oswald": "https://gs-oswald.digitalesregister.it",
   "GS Seis": "https://gs-seis.digitalesregister.it",
   "GS Völs": "https://gs-voels.digitalesregister.it",
-  "Schulsprengel Schlern": "https://sspschlern-ms.digitalesregister.it",
+  "Mittelschule Schlern": "https://sspschlern-ms.digitalesregister.it",
   "Grundschule Moos im Passeier": "https://gs-moos.digitalesregister.it",
   "Grundschule Platt in Passeier": "https://gs-platt.digitalesregister.it",
   "Grundschule Rabenstein in Passeier":
@@ -82,7 +82,7 @@ const Map<String, String> schools = {
   "Grundschule Stuls in Passeier": "https://gs-stuls.digitalesregister.it",
   "Grundschule Walten in Passeier": "https://gs-walten.digitalesregister.it",
   "SSP St. Leonhard": "https://ssp-stleonhard.digitalesregister.it",
-  "Mühlbach": "https://ssp-muehlbach.digitalesregister.it",
+  "SSP Mühlbach (Grund- und Mittelschulen)": "https://ssp-muehlbach.digitalesregister.it",
   "Grundschulen Sterzing III (Kematen, Mauls, St. Jakob, Stilfes, Trens, Wiesen)":
       "https://gs-sterzing3.digitalesregister.it",
   "SSP Sterzing 3 (Vigil Raber)":
@@ -257,7 +257,7 @@ const Map<String, String> schools = {
   "Grundschulen SSP Naturns": "https://gs-naturns.digitalesregister.it",
   "MS Tirol": "https://ms-tirol.digitalesregister.it",
   "Grunschule Algund": "https://gs-algund.digitalesregister.it",
-  "Grundschule Voelseraicha": "https://gs-voelseraicha.digitalesregister.it",
+  "Grundschule Völser Aicha": "https://gs-voelseraicha.digitalesregister.it",
   "Mittelschule Gossensaß": "https://ms-goss.digitalesregister.it",
   "Grundschule Steinegg": "https://gs-steinegg.digitalesregister.it",
   "Grundschule Kardaun": "https://gs-kardaun.digitalesregister.it",
