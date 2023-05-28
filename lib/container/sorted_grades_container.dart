@@ -37,9 +37,10 @@ class SortedGradesContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return SortedGradesWidget(
           vm: vm,
-          showCancelledCallback: actions.settingsActions.showCancelledGrades,
-          sortByTypeCallback: actions.settingsActions.gradesTypeSorted,
-          showGradeCalculator: actions.routingActions.showGradeCalculator,
+          showCancelledCallback:
+              actions.settingsActions.showCancelledGrades.call,
+          sortByTypeCallback: actions.settingsActions.gradesTypeSorted.call,
+          showGradeCalculator: actions.routingActions.showGradeCalculator.call,
           viewSubjectDetail: (s) => actions.gradesActions.loadDetails(
             LoadSubjectDetailsPayload(
               (b) => b

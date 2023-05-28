@@ -111,8 +111,8 @@ Future<void> _login(MiddlewareApi<AppState, AppStateBuilder, AppActions> api,
       ),
     ),
     configLoaded: () => api.actions.setConfig(wrapper.config),
-    relogin: api.actions.loginActions.automaticallyReloggedIn,
-    addProtocolItem: api.actions.addNetworkProtocolItem,
+    relogin: api.actions.loginActions.automaticallyReloggedIn.call,
+    addProtocolItem: api.actions.addNetworkProtocolItem.call,
   );
   if (await wrapper.loggedIn) {
     if (!wrapper.config.isStudentOrParent) {

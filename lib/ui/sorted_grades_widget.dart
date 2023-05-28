@@ -85,8 +85,8 @@ class SortedGradesWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: ListTile(
-            title: Row(
-              children: const [
+            title: const Row(
+              children: [
                 Text("Notenrechner"),
               ],
             ),

@@ -381,8 +381,8 @@ class EditNickBar extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: TextButton(
                         onPressed: onShowEditNicks,
-                        child: Row(
-                          children: const [
+                        child: const Row(
+                          children: [
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8),
                               child: Text("Kürzel bearbeiten"),

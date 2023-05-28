@@ -419,9 +419,9 @@ class Greeting extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: import,
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Icon(Icons.save_alt),
                   SizedBox(width: 8),
                   Text("Noten importieren"),
@@ -435,9 +435,9 @@ class Greeting extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             child: ElevatedButton(
               onPressed: add,
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: const [
+                children: [
                   Icon(Icons.add),
                   SizedBox(width: 8),
                   Text("Note hinzufügen"),

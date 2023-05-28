@@ -30,8 +30,8 @@ class PassResetContainer extends StatelessWidget {
         return PassReset(
           message: state.message,
           failure: state.failure,
-          resetPass: actions.loginActions.resetPass,
-          onClose: actions.load,
+          resetPass: actions.loginActions.resetPass.call,
+          onClose: actions.load.call,
         );
       },
     );

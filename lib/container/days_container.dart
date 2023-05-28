@@ -34,8 +34,8 @@ class DaysContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return DaysWidget(
           vm: vm,
-          onSwitchFuture: actions.dashboardActions.switchFuture,
-          refresh: actions.dashboardActions.refresh,
+          onSwitchFuture: actions.dashboardActions.switchFuture.call,
+          refresh: actions.dashboardActions.refresh.call,
           addReminderCallback: (day, msg) {
             actions.dashboardActions.addReminder(
               AddReminderPayload(
@@ -61,12 +61,12 @@ class DaysContainer extends StatelessWidget {
           setDoNotAskWhenDeleteCallback: () {
             actions.settingsActions.askWhenDeleteReminder(false);
           },
-          markAsSeenCallback: actions.dashboardActions.markAsSeen,
+          markAsSeenCallback: actions.dashboardActions.markAsSeen.call,
           markDeletedHomeworkAsSeenCallback:
-              actions.dashboardActions.markDeletedHomeworkAsSeen,
-          markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen,
-          refreshNoInternet: actions.refreshNoInternet,
-          onOpenAttachment: actions.dashboardActions.openAttachment,
+              actions.dashboardActions.markDeletedHomeworkAsSeen.call,
+          markAllAsSeenCallback: actions.dashboardActions.markAllAsSeen.call,
+          refreshNoInternet: actions.refreshNoInternet.call,
+          onOpenAttachment: actions.dashboardActions.openAttachment.call,
         );
       },
       connect: (state) {

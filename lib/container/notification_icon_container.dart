@@ -28,7 +28,7 @@ class NotificationIconContainer extends StatelessWidget {
       builder: (context, vm, actions) {
         return NotificationIcon(
           notifications: vm,
-          onTap: actions.routingActions.showNotifications,
+          onTap: actions.routingActions.showNotifications.call,
         );
       },
       connect: (state) {

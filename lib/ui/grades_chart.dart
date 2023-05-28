@@ -36,9 +36,8 @@ class GradesChart extends StatelessWidget {
   final VoidCallback? goFullscreen;
   final bool isFullscreen;
   final List<
-          charts
-              .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>>
-      grades;
+      charts
+      .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>> grades;
 
   final ValueNotifier<Tuple2<UtcDateTime, BuiltList<_Selection>>?> selection =
       ValueNotifier(null);
@@ -52,7 +51,7 @@ class GradesChart extends StatelessWidget {
 
   static List<
           charts
-              .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>>
+          .Series<MapEntry<UtcDateTime, Tuple2<int, String>>, UtcDateTime>>
       convert(Map<SubjectGrades, SubjectTheme> data) {
     return data.entries.where((entry) => entry.value.thick != 0).map(
       (entry) {

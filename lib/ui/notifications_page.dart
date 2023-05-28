@@ -70,9 +70,9 @@ class NotificationPage extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: noInternet ? null : deleteAllNotifications,
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
+                            children: [
                               Text("Alle gelesen"),
                               SizedBox(width: 8),
                               Icon(Icons.done_all),

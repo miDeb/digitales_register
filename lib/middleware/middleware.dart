@@ -553,27 +553,27 @@ Future<void> redirectAfterLogin(String location,
       break;
     case "student/absences":
       await api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showAbsences,
+        api.actions.routingActions.showAbsences.call,
       );
       break;
     case "calendar/student":
       await api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showCalendar,
+        api.actions.routingActions.showCalendar.call,
       );
       break;
     case "student/subjects":
       await api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showGrades,
+        api.actions.routingActions.showGrades.call,
       );
       break;
     case "student/certificate":
       await api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showCertificate,
+        api.actions.routingActions.showCertificate.call,
       );
       break;
     case "message/list":
       await api.actions.loginActions.addAfterLoginCallback(
-        api.actions.routingActions.showMessages,
+        api.actions.routingActions.showMessages.call,
       );
       break;
     default:

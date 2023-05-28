@@ -41,29 +41,32 @@ class SettingsPageContainer extends StatelessWidget {
           onSetPlatformOverride: (o) {
             DynamicTheme.of(context)!.setPlatformOverride(o);
           },
-          onSetNoPassSaving: actions.settingsActions.saveNoPass,
-          onSetNoDataSaving: actions.settingsActions.saveNoData,
-          onSetAskWhenDelete: actions.settingsActions.askWhenDeleteReminder,
-          onSetDeleteDataOnLogout: actions.settingsActions.deleteDataOnLogout,
+          onSetNoPassSaving: actions.settingsActions.saveNoPass.call,
+          onSetNoDataSaving: actions.settingsActions.saveNoData.call,
+          onSetAskWhenDelete:
+              actions.settingsActions.askWhenDeleteReminder.call,
+          onSetDeleteDataOnLogout:
+              actions.settingsActions.deleteDataOnLogout.call,
           onSetSubjectNicks: (map) =>
               actions.settingsActions.subjectNicks(BuiltMap(map)),
           onSetShowCalendarEditNicksBar:
-              actions.settingsActions.showCalendarSubjectNicksBar,
-          onSetShowGradesDiagram: actions.settingsActions.showGradesDiagram,
+              actions.settingsActions.showCalendarSubjectNicksBar.call,
+          onSetShowGradesDiagram:
+              actions.settingsActions.showGradesDiagram.call,
           onSetShowAllSubjectsAverage:
-              actions.settingsActions.showAllSubjectsAverage,
+              actions.settingsActions.showAllSubjectsAverage.call,
           onSetDashboardMarkNewOrChangedEntries:
-              actions.settingsActions.markNotSeenDashboardEntries,
+              actions.settingsActions.markNotSeenDashboardEntries.call,
           onSetDashboardDeduplicateEntries:
-              actions.settingsActions.deduplicateDashboardEntries,
-          onShowProfile: actions.routingActions.showProfile,
+              actions.settingsActions.deduplicateDashboardEntries.call,
+          onShowProfile: actions.routingActions.showProfile.call,
           onSetIgnoreForGradesAverage: (list) =>
               actions.settingsActions.ignoreSubjectsForAverage(BuiltList(list)),
           onSetDashboardColorBorders:
-              actions.settingsActions.dashboardColorBorders,
+              actions.settingsActions.dashboardColorBorders.call,
           onSetDashboardColorTestsInRed:
-              actions.settingsActions.dashboardColorTestsInRed,
-          onSetSubjectTheme: actions.settingsActions.setSubjectTheme,
+              actions.settingsActions.dashboardColorTestsInRed.call,
+          onSetSubjectTheme: actions.settingsActions.setSubjectTheme.call,
         );
       },
       connect: (state) {

@@ -31,11 +31,11 @@ class CalendarContainer extends StatelessWidget {
         return Calendar(
           vm: vm,
           showEditSubjectNicks:
-              actions.routingActions.showEditCalendarSubjectNicks,
+              actions.routingActions.showEditCalendarSubjectNicks.call,
           closeEditNicksBar: () =>
               actions.settingsActions.showCalendarSubjectNicksBar(false),
-          dayCallback: actions.calendarActions.load,
-          currentMondayCallback: actions.calendarActions.setCurrentMonday,
+          dayCallback: actions.calendarActions.load.call,
+          currentMondayCallback: actions.calendarActions.setCurrentMonday.call,
         );
       },
       connect: (state) {

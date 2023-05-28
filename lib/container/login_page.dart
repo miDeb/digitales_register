@@ -53,10 +53,10 @@ class LoginPage extends StatelessWidget {
               ),
             );
           },
-          setSaveNoPass: actions.settingsActions.saveNoPass,
-          onReload: actions.load,
-          onRequestPassReset: actions.routingActions.showRequestPassReset,
-          onSelectAccount: actions.loginActions.selectAccount,
+          setSaveNoPass: actions.settingsActions.saveNoPass.call,
+          onReload: actions.load.call,
+          onRequestPassReset: actions.routingActions.showRequestPassReset.call,
+          onSelectAccount: actions.loginActions.selectAccount.call,
         );
       },
       connect: (state) {

@@ -82,7 +82,8 @@ const Map<String, String> schools = {
   "Grundschule Stuls in Passeier": "https://gs-stuls.digitalesregister.it",
   "Grundschule Walten in Passeier": "https://gs-walten.digitalesregister.it",
   "SSP St. Leonhard": "https://ssp-stleonhard.digitalesregister.it",
-  "SSP Mühlbach (Grund- und Mittelschulen)": "https://ssp-muehlbach.digitalesregister.it",
+  "SSP Mühlbach (Grund- und Mittelschulen)":
+      "https://ssp-muehlbach.digitalesregister.it",
   "Grundschulen Sterzing III (Kematen, Mauls, St. Jakob, Stilfes, Trens, Wiesen)":
       "https://gs-sterzing3.digitalesregister.it",
   "SSP Sterzing 3 (Vigil Raber)":

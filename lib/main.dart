@@ -92,9 +92,9 @@ Future<void> main() async {
       unawaited(store.actions.start(uri));
       WidgetsBinding.instance.addObserver(
         LifecycleObserver(
-          store.actions.restarted,
+          store.actions.restarted.call,
           // this might not finish in time:
-          store.actions.saveState,
+          store.actions.saveState.call,
         ),
       );
     },

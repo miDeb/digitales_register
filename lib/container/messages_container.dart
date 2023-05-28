@@ -30,7 +30,7 @@ class MessagesPageContainer extends StatelessWidget {
         return MessagesPage(
           state: vm.item1,
           noInternet: vm.item2,
-          onOpenFile: actions.messagesActions.openFile,
+          onOpenFile: actions.messagesActions.openFile.call,
           onMarkAsRead: (m) => actions.messagesActions.markAsRead(m.id),
         );
       },
