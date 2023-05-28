@@ -565,7 +565,7 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             onTap: () async {
               await launchUrl(
                 Uri.parse(
-                  "https://docs.google.com/forms/d/e/1FAIpQLSerGRl3T_segGmFlVjl3NbEgxjfvI3XpxfMNKDAAfB614vbDQ/viewform?usp=pp_url&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}",
+                  "https://docs.google.com/forms/d/e/1FAIpQLSeRYFLq346UH6sMzKicMHwE8KhtnTm4KBv_yho5b0GSrRsluA/viewform?usp=sf_link&entry.1362624919=${Uri.encodeQueryComponent(appVersion)}",
                 ),
               );
             },

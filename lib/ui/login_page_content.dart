@@ -239,7 +239,7 @@ class _LoginPageContentState extends State<LoginPageContent> {
                           await launchUrl(
                             Uri.https(
                               "docs.google.com",
-                              "/forms/d/e/1FAIpQLSep4nbDf0G2UjzGF_S2e_w-dDYo3WJAR_0RxGK5rXwgtZblOQ/viewform",
+                              "forms/d/e/1FAIpQLSe3BLgrC74kUiAnCGSfZ_P0HYXw0yPl3OWVatNTJv8Yh3ZN0A/viewform?usp=sf_link",
                               <String, String>{
                                 "usp": "pp_url",
                                 "entry.1581750442": appVersion,

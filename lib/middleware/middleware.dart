@@ -144,7 +144,7 @@ NextActionHandler _errorMiddleware(
                             onPressed: () async {
                               await launchUrl(
                                 Uri.parse(
-                                  "https://docs.google.com/forms/d/e/1FAIpQLSdvfb5ZuV4EWTlkiS_BV7bPJL8HrGkFsFSZQ9K_12rFJUsQJQ/viewform?usp=pp_url&entry.1875208362=${Uri.encodeQueryComponent(error)}",
+                                  "https://docs.google.com/forms/d/e/1FAIpQLScTmSAZzj0bjwX_8IHVx9dVTTVrncJJpZo_D20dF7mrnU_zdQ/viewform?usp=sf_link&entry.1875208362=${Uri.encodeQueryComponent(error)}",
                                 ),
                               );
                             },
