@@ -110,7 +110,7 @@ class FutureAbsenceWidget extends StatelessWidget {
         justifiedString = "Entschuldigt";
         break;
       case AbsenceJustified.forSchool:
-        justifiedString = "Em Auftrag der Schule (entschuldigt)";
+        justifiedString = "Im Auftrag der Schule (entschuldigt)";
         break;
       case AbsenceJustified.notJustified:
         justifiedString = "Nicht entschuldigt";
@@ -160,9 +160,11 @@ class FutureAbsenceWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             divider,
-            Text(
-              "${DateFormat("EE d.M.yyyy 'um' HH:mm", "de").format(absence.reasonTimestamp!)} als „${absence.reasonSignature}“ eingetragen",
-            ),
+            if (absence.reasonTimestamp != null &&
+                absence.reasonSignature != null)
+              Text(
+                "${DateFormat("EE d.M.yyyy 'um' HH:mm", "de").format(absence.reasonTimestamp!)} als „${absence.reasonSignature}“ eingetragen",
+              ),
             divider,
             Text(justifiedString),
           ],
