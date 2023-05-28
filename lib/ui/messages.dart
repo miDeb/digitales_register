@@ -17,7 +17,7 @@
 
 import 'dart:convert';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:dr/app_state.dart';
 import 'package:dr/data.dart';
 import 'package:dr/ui/animated_linear_progress_indicator.dart';
@@ -139,8 +139,8 @@ class _MessageWidgetState extends State<MessageWidget> {
             ),
           ),
           if (widget.message.isNew || initiallyExpanded)
-            Badge(
-              shape: BadgeShape.square,
+            badge.Badge(
+              shape: badge.BadgeShape.square,
               borderRadius: BorderRadius.circular(20),
               badgeContent: const Text(
                 "neu",

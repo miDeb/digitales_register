@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:built_collection/built_collection.dart';
 import 'package:dr/container/homework_filter_container.dart';
 import 'package:dr/data.dart';
@@ -43,7 +43,7 @@ class _HomeworkFilterState extends State<HomeworkFilter>
       title: const SizedBox(),
       trailing: Padding(
         padding: const EdgeInsets.only(right: 8),
-        child: Badge(
+        child: badge.Badge(
           badgeContent: const ColoredBox(
             color: Colors.red,
           ),

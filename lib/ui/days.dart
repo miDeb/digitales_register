@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:built_collection/built_collection.dart';
 import 'package:deleteable_tile/deleteable_tile.dart';
 import 'package:dr/app_state.dart';
@@ -103,7 +103,7 @@ class _DaysWidgetState extends State<DaysWidget> {
     if (ctx != null) {
       final renderBox = ctx.findRenderObject()! as RenderBox;
       final RenderAbstractViewport viewport =
-          RenderAbstractViewport.of(renderBox)!;
+          RenderAbstractViewport.of(renderBox);
       var offsetToReveal = viewport.getOffsetToReveal(renderBox, 0.5).offset;
       if (offsetToReveal < 0) offsetToReveal = 0;
       final currentOffset = controller.offset;
@@ -382,8 +382,8 @@ class _DaysWidgetState extends State<DaysWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
               onPressed: widget.refreshNoInternet,
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   Text("Keine Verbindung"),
                   SizedBox(width: 8),
                   Icon(Icons.refresh),
@@ -564,7 +564,7 @@ class DayWidget extends StatelessWidget {
                   key: ValueKey(index),
                   highlightColor: Colors.grey.withOpacity(0.5),
                   child: IconButton(
-                    icon: Badge(
+                    icon: badge.Badge(
                       badgeContent: Icon(
                         Icons.delete,
                         size: 15,
@@ -577,7 +577,7 @@ class DayWidget extends StatelessWidget {
                           : Theme.of(context).scaffoldBackgroundColor,
                       toAnimate: day.deletedHomework.any((h) => h.isChanged),
                       padding: EdgeInsets.zero,
-                      position: BadgePosition.topStart(),
+                      position: badge.BadgePosition.topStart(),
                       elevation: 0,
                       child: const Icon(Icons.info_outline),
                     ),
@@ -816,8 +816,8 @@ class ItemWidget extends StatelessWidget {
                                     (isHistory && isCurrent))
                                   Positioned(
                                     right: 0,
-                                    child: Badge(
-                                      shape: BadgeShape.square,
+                                    child: badge.Badge(
+                                      shape: badge.BadgeShape.square,
                                       borderRadius: BorderRadius.circular(20),
                                       badgeContent: Text(
                                         isHistory && isCurrent
@@ -883,7 +883,7 @@ class ItemWidget extends StatelessWidget {
                                       ? item.previousVersion!.previousVersion
                                       : item.previousVersion) !=
                                   null
-                              ? Badge(
+                              ? badge.Badge(
                                   badgeContent:
                                       const Icon(Icons.edit, size: 15),
                                   padding: EdgeInsets.zero,

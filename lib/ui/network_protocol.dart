@@ -70,6 +70,7 @@ class _Detail extends StatelessWidget {
   const _Detail({required this.type, this.content});
   @override
   Widget build(BuildContext context) {
+    final content = this.content ?? "Keine $type";
     return Padding(
       padding: const EdgeInsets.only(left: 24, bottom: 8),
       child: Column(
@@ -87,7 +88,7 @@ class _Detail extends StatelessWidget {
               )
             ],
           ),
-          Text(content ?? "Keine $type"),
+          Text(content),
         ],
       ),
     );

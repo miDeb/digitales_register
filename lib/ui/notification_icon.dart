@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with digitales_register.  If not, see <http://www.gnu.org/licenses/>.
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 
 class NotificationIcon extends StatelessWidget {
@@ -29,12 +29,12 @@ class NotificationIcon extends StatelessWidget {
     return notifications != 0
         ? IconButton(
             visualDensity: VisualDensity.standard,
-            icon: Badge(
+            icon: badge.Badge(
               badgeContent: Text(
                 notifications.toString(),
                 style: const TextStyle(color: Colors.white),
               ),
-              position: BadgePosition.bottomEnd(),
+              position: badge.BadgePosition.bottomEnd(),
               child: const Icon(Icons.notifications),
             ),
             onPressed: onTap,
