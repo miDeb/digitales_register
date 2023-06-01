@@ -60,7 +60,7 @@ const Map<String, String> schools = {
       "https://mariengarten.digitalesregister.it",
   "Maria Hueber Gymnasium": "https://mhg.digitalesregister.it",
   "Mittelschule Klausen": "https://ms-klausen.digitalesregister.it",
-  "MS Neumarkt": "https://ms-neumarkt.digitalesregister.it",
+  "MS Neumarkt & Salurn (Noldin)": "https://ms-neumarkt.digitalesregister.it",
   "Oberschulzentrum Sterzing": "https://osz-sterzing.digitalesregister.it",
   "OFL Auer": "https://oflauer.digitalesregister.it",
   "WFO Auer": "https://wfoauer.digitalesregister.it",
@@ -73,7 +73,8 @@ const Map<String, String> schools = {
   "GS St. Oswald": "https://gs-oswald.digitalesregister.it",
   "GS Seis": "https://gs-seis.digitalesregister.it",
   "GS Völs": "https://gs-voels.digitalesregister.it",
-  "Mittelschule Schlern": "https://sspschlern-ms.digitalesregister.it",
+  "Mittelschule Schlern (Kastelruth)":
+      "https://sspschlern-ms.digitalesregister.it",
   "Grundschule Moos im Passeier": "https://gs-moos.digitalesregister.it",
   "Grundschule Platt in Passeier": "https://gs-platt.digitalesregister.it",
   "Grundschule Rabenstein in Passeier":
@@ -111,7 +112,7 @@ const Map<String, String> schools = {
   "Grundschule Weissenbach / Ahrntal":
       "https://gs-weissenbach.digitalesregister.it",
   "SSP Ahrntal": "https://ssp-ahrntal.digitalesregister.it",
-  "MS Algund": "https://ms-algund.digitalesregister.it",
+  "MS Algund/Partschins": "https://ms-algund.digitalesregister.it",
   "GS Algund": "https://gs-algund.digitalesregister.it",
   "GS Marling": "https://gs-marling.digitalesregister.it",
   "GS Partschins": "https://gs-partschins.digitalesregister.it",
@@ -137,7 +138,7 @@ const Map<String, String> schools = {
   "SSP Innichen": "https://ssp-innichen.digitalesregister.it",
   "Mittelschule Blumau (SSP Karneid)":
       "https://ms-sspkarneid.digitalesregister.it",
-  "SSP Lana": "https://ssp-lana.digitalesregister.it",
+  "MS Lana": "https://ssp-lana.digitalesregister.it",
   "SSP Lana Grundschulen": "https://ssplana-gs.digitalesregister.it",
   "Grundschule Goldrain": "https://gs-goldrain.digitalesregister.it",
   "Grundschule Kastelbell": "https://gs-kastelbell.digitalesregister.it",
@@ -248,7 +249,7 @@ const Map<String, String> schools = {
   "Mittelschule Naturns": "https://ms-naturns.digitalesregister.it",
   "Grundschule Marling": "https://gs-marling.digitalesregister.it",
   "Mittelschule Peter Rosegger": "https://ms-untermais.digitalesregister.it",
-  "Mittelschulen SSP Bozen Stadtzentrum":
+  "Mittelschulen SSP Bozen Stadtzentrum (Aufschnaiter/Egger-Lienz)":
       "https://ms-bozenstadtzentrum.digitalesregister.it",
   "Grundschule R. Stolz SSP Bozen Stadtzentrum":
       "https://gs-bozenstadtzentrum.digitalesregister.it",
@@ -282,4 +283,11 @@ const Map<String, String> schools = {
   "Grundschule Gummer": "https://gs-gummer.digitalesregister.it",
   "Mittelschule Deutschnofen": "https://ms-deutschnofen.digitalesregister.it",
   "Mittelschule Welschnofen": "https://ms-welschnofen.digitalesregister.it",
+  "Grundschule Natz": "https://natz.digitalesregister.it",
+  "MS Schenna": "https://ms-schenna.digitalesregister.it",
+  "MS Prad": "https://ms-prad.digitalesregister.it",
+  "GS Prad (Prad, Lichtenberg, Stilfs)": "https://gs-prad.digitalesregister.it",
+  "GS Sulden SSP Prad": "https://sulden.digitalesregister.it",
+  "Scola elementera Sëlva y Scola elementera S. Cristina":
+      "https://se-selva.digitalesregister.it"
 };
