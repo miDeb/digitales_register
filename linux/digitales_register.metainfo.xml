@@ -26,6 +26,12 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
+    <release version="8.2.11" date="2023-06-02">
+      <description>
+        <p>Bug fixes</p>
+        <p>Updated schools</p>
+      </description>
+    </release>
     <release version="8.2.10" date="2022-12-12">
       <description>
         <p>Updated Branding</p>

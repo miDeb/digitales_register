@@ -1,3 +1,7 @@
+## 8.2.11
+- Minor bug fix
+- Update schools
+
 ## 8.2.10
 - Add "evvvolution.com" branding
 - Minor bug fix
