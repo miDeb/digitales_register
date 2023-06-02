@@ -200,10 +200,10 @@ packages:
     dependency: transitive
     description:
       name: code_builder
-      sha256: "0d43dd1288fd145de1ecc9a3948ad4a6d5a82f0a14c4fdd0892260787d975cbe"
+      sha256: "4ad01d6e56db961d29661561effde45e519939fdaeb46c351275b182eac70189"
       url: "https://pub.dev"
     source: hosted
-    version: "4.4.0"
+    version: "4.5.0"
   collapsible_sidebar:
     dependency: "direct main"
     description:
@@ -667,10 +667,10 @@ packages:
     dependency: "direct dev"
     description:
       name: msix
-      sha256: "5dbf26361fbff0e74abd06c80f0b446476c739eea017d833d15e093c3c778fdd"
+      sha256: "26fabf10f65464f5198e9a9e3d242627efef56e418d52d6be466e2e126095647"
       url: "https://pub.dev"
     source: hosted
-    version: "3.13.2"
+    version: "3.14.0"
   mutex:
     dependency: "direct main"
     description:
@@ -692,10 +692,10 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: "84143bc7337c12de137f026cb9e8d8104c43aa73"
+      resolved-ref: "5028bb18379df881d30b42c61b0e6e686daba60e"
       url: "https://github.com/miDeb/open_file.git"
     source: git
-    version: "3.0.3"
+    version: "3.3.1"
   package_config:
     dependency: transitive
     description:
@@ -1137,10 +1137,10 @@ packages:
     dependency: transitive
     description:
       name: universal_io
-      sha256: "06866290206d196064fd61df4c7aea1ffe9a4e7c4ccaa8fcded42dd41948005d"
+      sha256: "1722b2dcc462b4b2f3ee7d188dad008b6eb4c40bbd03a3de451d82c78bba9aad"
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.2"
   url_launcher:
     dependency: "direct main"
     description:
