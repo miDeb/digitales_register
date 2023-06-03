@@ -698,7 +698,7 @@ Future<bool?> askShouldOverwriteFile(String fileName) async {
 }
 
 Future<void> _checkShowUnmaintainedAlert() async {
-  final appDirectory = await getApplicationDocumentsDirectory();
+  final appDirectory = await getApplicationSupportDirectory();
   final file = File("${appDirectory.path}/unmaintainedAlertShown");
   if (file.existsSync()) {
     return;
