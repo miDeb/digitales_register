@@ -61,6 +61,8 @@ abstract class CalendarWeekViewModel
   BuiltMap<String, String> get subjectNicks;
   bool get noInternet;
   CalendarSelection? get selection;
+  bool get colorBackground;
+  BuiltMap<String, SubjectTheme> get subjectThemes;
 
   factory CalendarWeekViewModel(
           [void Function(CalendarWeekViewModelBuilder)? updates]) =
@@ -82,7 +84,9 @@ abstract class CalendarWeekViewModel
               ),
         )
         ..noInternet = state.noInternet
-        ..selection = state.calendarState.selection?.toBuilder(),
+        ..selection = state.calendarState.selection?.toBuilder()
+        ..colorBackground = state.settingsState.calendarColorBackground
+        ..subjectThemes = state.settingsState.subjectThemes.toBuilder(),
     );
   }
 }

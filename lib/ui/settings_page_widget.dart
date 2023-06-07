@@ -53,6 +53,7 @@ class SettingsPageWidget extends StatefulWidget {
   final OnSettingChanged<bool> onSetFollowDeviceDarkMode;
   final OnSettingChanged<bool> onSetPlatformOverride;
   final OnSettingChanged<bool> onSetDashboardColorBorders;
+  final OnSettingChanged<bool> onSetCalenderColorBackground;
   final OnSettingChanged<bool> onSetDashboardColorTestsInRed;
   final OnSettingChanged<MapEntry<String, SubjectTheme>> onSetSubjectTheme;
   final OnSettingChanged<Map<String, String>> onSetSubjectNicks;
@@ -79,6 +80,7 @@ class SettingsPageWidget extends StatefulWidget {
     required this.onShowProfile,
     required this.onSetIgnoreForGradesAverage,
     required this.onSetDashboardColorBorders,
+    required this.onSetCalenderColorBackground,
     required this.onSetSubjectTheme,
     required this.onSetDashboardColorTestsInRed,
   });
@@ -285,6 +287,13 @@ class _SettingsPageWidgetState extends State<SettingsPageWidget> {
             ),
             value: widget.vm.dashboardColorBorders,
             onChanged: widget.onSetDashboardColorBorders,
+          ),
+          SwitchListTile.adaptive(
+            title: const Text(
+              "Stunden im Kalender mit diesen Farben färben",
+            ),
+            value: widget.vm.calendarColorBackground,
+            onChanged: widget.onSetCalenderColorBackground,
           ),
           SwitchListTile.adaptive(
             title: const Text(

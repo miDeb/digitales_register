@@ -65,6 +65,8 @@ class CalendarWeek extends StatelessWidget {
                               selectedHour: vm.selection?.date == d.date
                                   ? vm.selection?.hour
                                   : null,
+                              colorBackground: vm.colorBackground,
+                              subjectThemes: vm.subjectThemes,
                             ),
                           ),
                         )
@@ -83,12 +85,17 @@ class _HoursChunk extends StatelessWidget {
   final CalendarDay day;
   final int? selectedHour;
   final bool isSelected;
+  final bool colorBackground;
+  final BuiltMap<String, SubjectTheme> subjectThemes;
+
   const _HoursChunk({
     required this.subjectNicks,
     required this.hours,
     required this.day,
     required this.selectedHour,
     required this.isSelected,
+    required this.colorBackground,
+    required this.subjectThemes,
   });
 
   @override
@@ -125,6 +132,17 @@ class _HoursChunk extends StatelessWidget {
                       subjectNicks: subjectNicks,
                       day: day,
                       isSelected: selectedHour == hours[n ~/ 2].fromHour,
+                      backgroundColor: colorBackground
+                          ? Color(subjectThemes[hours[n ~/ 2].subject]!.color)
+                              .withOpacity(0.25)
+                          : const Color(0).withOpacity(0),
+                      selectedBackgroundColor: colorBackground
+                          ? Color(subjectThemes[hours[n ~/ 2].subject]!.color)
+                              .withOpacity(0.5)
+                          : Theme.of(context)
+                              .colorScheme
+                              .secondary
+                              .withAlpha(35),
                     )
                   : const Divider(
                       height: 0,
@@ -143,6 +161,8 @@ class CalendarDayWidget extends StatelessWidget {
   final BuiltMap<String, String> subjectNicks;
   final bool isSelected;
   final int? selectedHour;
+  final bool colorBackground;
+  final BuiltMap<String, SubjectTheme> subjectThemes;
 
   const CalendarDayWidget({
     super.key,
@@ -151,6 +171,8 @@ class CalendarDayWidget extends StatelessWidget {
     required this.subjectNicks,
     required this.isSelected,
     required this.selectedHour,
+    required this.colorBackground,
+    required this.subjectThemes
   });
   @override
   Widget build(BuildContext context) {
@@ -190,6 +212,8 @@ class CalendarDayWidget extends StatelessWidget {
                 day: calendarDay,
                 selectedHour: selectedHour,
                 isSelected: isSelected,
+                colorBackground: colorBackground,
+                subjectThemes: subjectThemes,
               ),
             )
           ],
@@ -230,12 +254,17 @@ class HourWidget extends StatelessWidget {
   final CalendarDay day;
   final BuiltMap<String, String> subjectNicks;
   final bool isSelected;
+  final Color backgroundColor;
+  final Color selectedBackgroundColor;
+
   const HourWidget({
     super.key,
     required this.hour,
     required this.subjectNicks,
     required this.day,
     required this.isSelected,
+    required this.backgroundColor,
+    required this.selectedBackgroundColor,
   });
   @override
   Widget build(BuildContext context) {
@@ -258,8 +287,8 @@ class HourWidget extends StatelessWidget {
                     )
                   : null,
               color: isSelected
-                  ? Theme.of(context).colorScheme.secondary.withAlpha(35)
-                  : null,
+                  ? selectedBackgroundColor
+                  : backgroundColor,
             ),
             child: Center(
               child: Column(

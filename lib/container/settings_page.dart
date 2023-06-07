@@ -64,6 +64,7 @@ class SettingsPageContainer extends StatelessWidget {
               actions.settingsActions.ignoreSubjectsForAverage(BuiltList(list)),
           onSetDashboardColorBorders:
               actions.settingsActions.dashboardColorBorders.call,
+          onSetCalenderColorBackground: actions.settingsActions.calendarColorBackground.call,
           onSetDashboardColorTestsInRed:
               actions.settingsActions.dashboardColorTestsInRed.call,
           onSetSubjectTheme: actions.settingsActions.setSubjectTheme.call,
@@ -92,6 +93,7 @@ class SettingsViewModel {
   final bool showSubjectNicks;
   final bool showGradesSettings;
   final bool dashboardColorBorders;
+  final bool calendarColorBackground;
   final bool dashboardColorTestsInRed;
   final bool demoMode;
   final List<String> allSubjects;
@@ -113,6 +115,7 @@ class SettingsViewModel {
         dashboardDeduplicateEntries =
             state.settingsState.dashboardDeduplicateEntries,
         dashboardColorBorders = state.settingsState.dashboardColorBorders,
+        calendarColorBackground = state.settingsState.calendarColorBackground,
         dashboardColorTestsInRed = state.settingsState.dashboardColorTestsInRed,
         allSubjects = state.extractAllSubjects(),
         ignoreForGradesAverage =
