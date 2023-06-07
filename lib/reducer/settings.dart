@@ -52,6 +52,7 @@ final settingsReducerBuilder = NestedReducerBuilder<AppState, AppStateBuilder,
   ..add(SettingsActionsNames.setSubjectTheme, _setSubjectTheme)
   ..add(SettingsActionsNames.drawerExpandedChange, _drawerFullyExpanded)
   ..add(SettingsActionsNames.dashboardColorBorders, _dashboardColorBorders)
+  ..add(SettingsActionsNames.calendarColorBackground, _calendarColorBackground)
   ..add(
       SettingsActionsNames.dashboardColorTestsInRed, _dashboardColorTestsInRed);
 
@@ -156,6 +157,11 @@ void _drawerFullyExpanded(
 void _dashboardColorBorders(
     SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
   builder.dashboardColorBorders = action.payload;
+}
+
+void _calendarColorBackground(
+    SettingsState state, Action<bool> action, SettingsStateBuilder builder) {
+  builder.calendarColorBackground = action.payload;
 }
 
 void _dashboardColorTestsInRed(

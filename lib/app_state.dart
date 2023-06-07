@@ -300,6 +300,8 @@ abstract class SettingsState
 
   // whether to color the borders of items in the color specified by subjectThemes
   bool get dashboardColorBorders;
+  // whether to color the background of widgets in the calendar in the color specified by subjectThemes
+  bool get calendarColorBackground;
   bool get dashboardColorTestsInRed;
   BuiltMap<String, SubjectTheme> get subjectThemes;
   BuiltList<String> get ignoreForGradesAverage;
@@ -343,6 +345,7 @@ abstract class SettingsState
       ..drawerFullyExpanded = true
       ..ignoreForGradesAverage = ListBuilder()
       ..dashboardColorBorders = false
+      ..calendarColorBackground = false
       ..dashboardColorTestsInRed = true
       ..scrollToGrades = false
       ..scrollToSubjectNicks = false;
