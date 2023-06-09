@@ -441,13 +441,21 @@ String getStorageKey(String? user, String server) {
   return json.encode({"username": user, "server_url": server});
 }
 
+String escapeKey(String key) {
+  if (Platform.isWindows) {
+    // secure_storage does not support certain characters on Windows.
+    return key.replaceAll(RegExp(r'[\\/:*?"<>|]'), "_");
+  }
+  return key;
+}
+
 Future<void> _writeToStorage(String key, String txt) async {
-  await secureStorage.write(key: key, value: txt);
+  await secureStorage.write(key: escapeKey(key), value: txt);
 }
 
 Future<String?> _readFromStorage(String key) async {
   try {
-    return secureStorage.read(key: key);
+    return secureStorage.read(key: escapeKey(key));
   } catch (e) {
     try {
       await secureStorage.deleteAll();

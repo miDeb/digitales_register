@@ -32,7 +32,7 @@ bool isDesktop() {
 }
 
 secure_storage.FlutterSecureStorage getFlutterSecureStorage() {
-  if (isDesktop()) {
+  if (isDesktop() && !Platform.isWindows) {
     return DesktopSecureStorage();
   } else {
     return const secure_storage.FlutterSecureStorage(
