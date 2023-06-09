@@ -26,6 +26,11 @@ Einzelne Funktionen, wie das Eintragen von neuen Absenzen, sind jedoch noch nich
 </p>
   </description>
   <releases>
+    <release version="8.2.15" date="2023-06-10">
+      <description>
+        <p>Fächerfarben für den Kalender! (Danke an @yegvla!)</p>
+      </description>
+    </release>
     <release version="8.2.12" date="2023-06-03">
       <description>
         <p>Bug fix</p>
