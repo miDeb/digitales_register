@@ -1,3 +1,12 @@
+## 8.12.15
+- Fächerfarben für den Kalender! (Danke an @yegvla!)
+
+## 8.2.13 / 8.2.14
+- Attempts to fix a failure to load any data from storage on Windows.
+
+## 8.2.12
+- Bug fix for desktop
+
 ## 8.2.11
 - Minor bug fix
 - Update schools
