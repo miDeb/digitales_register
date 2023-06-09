@@ -135,7 +135,7 @@ class _HoursChunk extends StatelessWidget {
                       backgroundColor: colorBackground
                           ? Color(subjectThemes[hours[n ~/ 2].subject]!.color)
                               .withOpacity(0.25)
-                          : const Color(0).withOpacity(0),
+                          : Colors.transparent,
                       selectedBackgroundColor: colorBackground
                           ? Color(subjectThemes[hours[n ~/ 2].subject]!.color)
                               .withOpacity(0.5)
@@ -172,7 +172,7 @@ class CalendarDayWidget extends StatelessWidget {
     required this.isSelected,
     required this.selectedHour,
     required this.colorBackground,
-    required this.subjectThemes
+    required this.subjectThemes,
   });
   @override
   Widget build(BuildContext context) {
@@ -286,9 +286,7 @@ class HourWidget extends StatelessWidget {
                       left: BorderSide(color: Colors.red, width: 5),
                     )
                   : null,
-              color: isSelected
-                  ? selectedBackgroundColor
-                  : backgroundColor,
+              color: isSelected ? selectedBackgroundColor : backgroundColor,
             ),
             child: Center(
               child: Column(

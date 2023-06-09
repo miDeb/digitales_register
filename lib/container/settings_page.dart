@@ -64,7 +64,8 @@ class SettingsPageContainer extends StatelessWidget {
               actions.settingsActions.ignoreSubjectsForAverage(BuiltList(list)),
           onSetDashboardColorBorders:
               actions.settingsActions.dashboardColorBorders.call,
-          onSetCalenderColorBackground: actions.settingsActions.calendarColorBackground.call,
+          onSetCalenderColorBackground:
+              actions.settingsActions.calendarColorBackground.call,
           onSetDashboardColorTestsInRed:
               actions.settingsActions.dashboardColorTestsInRed.call,
           onSetSubjectTheme: actions.settingsActions.setSubjectTheme.call,
