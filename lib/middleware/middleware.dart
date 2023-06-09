@@ -712,6 +712,17 @@ Future<void> _checkShowUnmaintainedAlert() async {
     return;
   }
 
+  // A version of this app stored this file to the applications documents directory,
+  // which is Documents/ for desktop. The directory was therefore fixed, but we should
+  // still check for the file in the old location.
+  final legacyFile = File(
+      "${(await getApplicationDocumentsDirectory()).path}/unmaintainedAlertShown");
+  if (legacyFile.existsSync()) {
+    // create the file in the correct location
+    file.createSync();
+    return;
+  }
+
   final isBeforeJuly2023 = DateTime.now().isBefore(DateTime(2023, 7));
 
   await showDialog<void>(
