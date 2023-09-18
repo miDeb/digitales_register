@@ -28,6 +28,7 @@ part 'data.g.dart';
 
 bool estimateShouldWarn(String name) {
   return name == "Schularbeit" ||
+      name == "Lernkontrolle" ||
       name == "Testarbeit" ||
       name.contains("Prüfung");
 }
