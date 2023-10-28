@@ -611,13 +611,16 @@ bool _popAll() {
 }
 
 Future<String> _getAttachmentDownloadDirectory() async {
+  // TODO: this remains to be tested on all platforms
   try {
-    final directory = await getDownloadsDirectory();
-    if (directory != null) {
-      return directory.path;
-    }
-  } catch (_) {}
-  return (await getApplicationDocumentsDirectory()).path;
+    return (await getExternalStorageDirectories(
+            type: StorageDirectory.downloads))!
+        .first
+        .path;
+  } catch (_) {
+    log("failed to get download directory, falling back to application storage");
+    return (await getApplicationDocumentsDirectory()).path;
+  }
 }
 
 /// Downloads a file.
@@ -673,6 +676,7 @@ Future<bool> canOpenFile(String fileName) async {
 }
 
 Future<void> openFile(String fileName) async {
+  log("opening file: $fileName");
   await OpenFile.open(
     "${await _getAttachmentDownloadDirectory()}/$fileName",
   );
