@@ -119,8 +119,8 @@ class CalendarCard extends StatelessWidget {
                   onOpenFile: onOpenFile,
                 )
             ],
-            for (HomeworkExam homeworkExam in hour.homeworkExams)
-              if (estimateShouldWarn(homeworkExam.typeName))
+            for (final HomeworkExam homeworkExam in hour.homeworkExams)
+              if (homeworkExam.warning)
                 _ContentItem(
                   title: homeworkExam.typeName,
                   content: homeworkExam.name,

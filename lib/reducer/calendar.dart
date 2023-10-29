@@ -177,6 +177,7 @@ HomeworkExam _parseHomeworkExam(Map homeworkExam) {
     ..hasGradeGroupSubmissions =
         getBool(homeworkExam["hasGradeGroupSubmissions"])
     ..hasGrades = getBool(homeworkExam["hasGrades"])
+    ..warning = homeworkExam["homework"] == 0
     ..homework = homeworkExam["homework"] != 0
     ..id = getInt(homeworkExam["id"])
     ..name = getString(homeworkExam["name"])

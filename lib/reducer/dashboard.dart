@@ -205,7 +205,7 @@ Homework _parseHomework(Map data) {
       ..title = getString(data["title"])
       ..subtitle = getString(data["subtitle"])
       ..label = getString(data["label"])
-      ..warningServerSaid = getBool(data["warning"]) ?? b.warningServerSaid
+      ..warning = data["homework"] == 0
       ..checkable = getBool(data["checkable"]) ?? b.checkable
       ..checked = getBool(data["checked"]) ?? false
       ..deleteable = getBool(data["deleteable"]) ?? b.deleteable
