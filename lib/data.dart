@@ -26,13 +26,6 @@ import 'package:dr/util.dart';
 
 part 'data.g.dart';
 
-bool estimateShouldWarn(String name) {
-  return name == "Schularbeit" ||
-      name == "Lernkontrolle" ||
-      name == "Testarbeit" ||
-      name.contains("Prüfung");
-}
-
 abstract class Day implements Built<Day, DayBuilder> {
   factory Day([void Function(DayBuilder)? updates]) = _$Day;
   Day._();
@@ -98,12 +91,9 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
   String? get gradeFormatted;
 
   String? get grade;
-  // It's always false for tests :(. I only saw a warning for a grade entry with
-  // a 'null' grade.
-  @BuiltValueField(wireName: "warning")
-  bool get warningServerSaid;
+
   // Heuristics to still show a warning when it would make sense
-  bool get warning => warningServerSaid || estimateShouldWarn(title);
+  bool get warning;
   bool get checkable;
   bool get checked;
   bool get deleteable;
@@ -125,7 +115,6 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
-        warningServerSaid == other.warningServerSaid &&
         type == other.type;
   }
 
@@ -164,7 +153,6 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
         label == other.label &&
         gradeFormatted == other.gradeFormatted &&
         grade == other.grade &&
-        warningServerSaid == other.warningServerSaid &&
         type == other.type;
   }
 
@@ -177,7 +165,7 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
     ..isNew = false
     ..isChanged = false
     ..deleted = false
-    ..warningServerSaid = false
+    ..warning = false
     ..checkable = false
     ..deleteable = false
     ..deleted = false
@@ -566,7 +554,7 @@ abstract class CalendarHour
   BuiltList<HomeworkExam> get homeworkExams;
   BuiltList<LessonContent> get lessonContents;
   int get length => toHour - fromHour + 1;
-  bool get warning => homeworkExams.any((it) => it.warning);
+  bool get warning => homeworkExams.any((it) => it.warning == true);
 
   BuiltList<Teacher> get teachers;
 
@@ -610,7 +598,7 @@ abstract class HomeworkExam
   bool get hasGradeGroupSubmissions;
   int get typeId;
   String get typeName;
-  bool get warning => estimateShouldWarn(typeName);
+  bool get warning;
   static Serializer<HomeworkExam> get serializer => _$homeworkExamSerializer;
   factory HomeworkExam([Function(HomeworkExamBuilder b)? updates]) =
       _$HomeworkExam;
