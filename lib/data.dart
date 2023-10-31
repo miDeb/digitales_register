@@ -92,7 +92,6 @@ abstract class Homework implements Built<Homework, HomeworkBuilder> {
 
   String? get grade;
 
-  // Heuristics to still show a warning when it would make sense
   bool get warning;
   bool get checkable;
   bool get checked;
