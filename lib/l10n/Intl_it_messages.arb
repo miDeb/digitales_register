@@ -1,0 +1,1387 @@
+{
+	"@@last_modified": "2021-12-13T16:53:04.192826",
+	"exams": "Esami,compito scolastico,esame",
+	"@exams": {
+		"description": "A comma-separated list of lesson contents that represent exams.\nThis is used to mark exams differently in the calendar view and the homework page",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"grade": "Valutazione",
+	"@grade": {
+		"description": "The title used by digitalesregister.it for grades in the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"homework": "Compiti per casa",
+	"@homework": {
+		"description": "The title used by digitalesregister.it for homework in the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"observation": "Osservazione",
+	"@observation": {
+		"description": "The title used by digitalesregister.it for observations in the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noAbsencesYet": "Ancora nessuna assenza",
+	"@noAbsencesYet": {
+		"description": "Displayed if there are no absences",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesStatistic": "Statistiche",
+	"@absencesStatistic": {
+		"description": "Title for statistics for absences",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesForSchool": "Assenze da scuola",
+	"@absencesForSchool": {
+		"description": "Subtitle for absences justified by the school",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesDelays": "Ritardi",
+	"@absencesDelays": {
+		"description": "Subtitle for absences where the student arrived too late",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesJustified": "Assenze giustificate",
+	"@absencesJustified": {
+		"description": "Subtitle for absences that were justified",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesNotJustified": "Assenze non giustificate",
+	"@absencesNotJustified": {
+		"description": "Subtitle for absences that are not justified",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesPercentageTitle": "Assenza",
+	"@absencesPercentageTitle": {
+		"description": "Subtitle for the percentage of absences",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absenceDuration": "{fromDate} {fromHour}. Ora - {toDate} {toHour} Ora",
+	"@absenceDuration": {
+		"description": "The dates will be formatted using DateFormat.Md() (e.g. 13.12.)",
+		"type": "text",
+		"placeholders_order": [
+			"fromDate",
+			"fromHour",
+			"toDate",
+			"toHour"
+		],
+		"placeholders": {
+			"fromDate": {},
+			"fromHour": {},
+			"toDate": {},
+			"toHour": {}
+		}
+	},
+	"absenceJustifiedBy": "Giustificata da {justifyingUser} il {date} alle {time}",
+	"@absenceJustifiedBy": {
+		"description": "Date will be formatted using DateFormat.",
+		"type": "text",
+		"placeholders_order": [
+			"date",
+			"time",
+			"justifyingUser"
+		],
+		"placeholders": {
+			"date": {},
+			"time": {},
+			"justifyingUser": {}
+		}
+	},
+	"absenceJustified": "giustificata",
+	"@absenceJustified": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absenceJustifiedBySchool": "Giustificata dalla scuola",
+	"@absenceJustifiedBySchool": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absenceNotJustified": "Non giustificata",
+	"@absenceNotJustified": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absenceNotYetJustified": "Non ancora giustificata",
+	"@absenceNotYetJustified": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"lessonIndex": "{hour}. Ora",
+	"@lessonIndex": {
+		"type": "text",
+		"placeholders_order": [
+			"hour"
+		],
+		"placeholders": {
+			"hour": {}
+		}
+	},
+	"lessonSpan": "{from}. - {to}. Ora",
+	"@lessonSpan": {
+		"type": "text",
+		"placeholders_order": [
+			"from",
+			"to"
+		],
+		"placeholders": {
+			"from": {},
+			"to": {}
+		}
+	},
+	"teachers": "{howMany,plural, =1{Insegnante*}other{Insegnanti}}",
+	"@teachers": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"rooms": "{howMany,plural, =1{classe}other{classi}}",
+	"@rooms": {
+		"description": "The rooms that are booked for this lesson",
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"detailView": "Visualizzazione dettagliata",
+	"@detailView": {
+		"description": "Displayed as the title of the calendar detail view in edge cases",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noSchool": "Nessuna scuola",
+	"@noSchool": {
+		"description": "Displayed in the calendar detail view for weekends",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noSchoolShort": "No scuola",
+	"@noSchoolShort": {
+		"description": "Displayed in the calendar master view for holidays",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"currentWeek": "Settimana corrente",
+	"@currentWeek": {
+		"description": "Label of the button to jump to the current week",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"chooseADate": "Scegli una data",
+	"@chooseADate": {
+		"description": "The user can tap this button to select a date",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"editNicks": "Modifica nickname",
+	"@editNicks": {
+		"description": "The user can tap this button to edit subject nicks",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"changeEmail": "Cambia indirizzo email",
+	"@changeEmail": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"currentPassword": "Password attuale",
+	"@currentPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"newEmail": "Nuovo indirizzo email",
+	"@newEmail": {
+		"description": "The new email address",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"save": "Salva",
+	"@save": {
+		"description": "Save changed settings",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"profile": "Profilo",
+	"@profile": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"sendEmailsForNotifications": "Invia email per notifiche",
+	"@sendEmailsForNotifications": {
+		"description": "Whether to send emails for notifications",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"changePassword": "Cambia password",
+	"@changePassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"loginSettings": "Impostazioni di accesso",
+	"@loginSettings": {
+		"description": "Header for login-related settings",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"stayLoggedIn": "Resta connesso",
+	"@stayLoggedIn": {
+		"description": "Whether the user wants to stay logged in",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"stayLoggedInDesc": "I tuoi dati di accesso saranno memorizzati localmente",
+	"@stayLoggedInDesc": {
+		"description": "Tell the user that their credentials will be saved locally if they choose to stay logged in",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"saveData": "Salva dati localmente",
+	"@saveData": {
+		"description": "Whether the user wants to save data locally",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"saveDataDesc": "Vedi quando stato inserito qualcosa",
+	"@saveDataDesc": {
+		"description": "Tell the user that they'll see when new homework was added if they choose to enable saving data",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"deleteDataOnLogout": "Elimina dati al logout",
+	"@deleteDataOnLogout": {
+		"description": "Whether the user wants to have their data deleted when they log out",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"appearance": "Aspetto",
+	"@appearance": {
+		"description": "Header for ui-related settings",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"followDeviceTheme": "Segui tema del dispositivo",
+	"@followDeviceTheme": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"lightMode": "Modalità chiara",
+	"@lightMode": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"darkMode": "MOdalità scura",
+	"@darkMode": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"subjectColors": "Colori dei soggetti",
+	"@subjectColors": {
+		"description": "Dropdown that allows user to choose a color for a specific subject",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"colorHomework": "Colora i compiti con questi colori",
+	"@colorHomework": {
+		"description": "Whether to draw the border around homework in these colors",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"testsAlwaysRed": "Test sempre con colore rosso",
+	"@testsAlwaysRed": {
+		"description": "Whether to draw the border around tests in red, even if colorHomework is enabled",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"dashboardSettings": "Impostazioni della dashboard",
+	"@dashboardSettings": {
+		"description": "Header for settings related to the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"highlightNewOrChangedEntries": "Sottolinea nuove voci o quelle modificate",
+	"@highlightNewOrChangedEntries": {
+		"description": "Whether to highlight new, changed or deleted entries in the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"ignoreDuplicateEntries": "Ignora voci duplicate",
+	"@ignoreDuplicateEntries": {
+		"description": "Whether to ignore duplicated entries in the homework view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"askWhenDeletingReminders": "Chiedi quando si elimina un avviso",
+	"@askWhenDeletingReminders": {
+		"description": "Whether to show a confirmation dialog when deleting reminders",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradesSettings": "Impostazioni dei voti",
+	"@gradesSettings": {
+		"description": "Header for settings related to grades",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"showGradesChart": "Mostra grafico dei voti",
+	"@showGradesChart": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"showSubjectsAverage": "Mostra media di tutti i soggetti",
+	"@showSubjectsAverage": {
+		"description": "Whether to show the average of all averages of all subjects",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"excludeSubjectsFromAverage": "Escludi soggetti dalla media dei voti",
+	"@excludeSubjectsFromAverage": {
+		"description": "Subjects not to consider for the average",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noSubjectExcluded": "Nessun soggetto escluso",
+	"@noSubjectExcluded": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"calendarSettings": "Impostazioni del calendario",
+	"@calendarSettings": {
+		"description": "Header for settings related to the calendar view",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"subjectNicks": "Nickname dei soggetti",
+	"@subjectNicks": {
+		"description": "Dropdown to edit subject nicks",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"showEditNicksBar": "Mostra barra di modifica nickname",
+	"@showEditNicksBar": {
+		"description": "Whether to show a hint to allow the user to edit subject nicks if some are missing",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"showEditNicksBarDesc": "Viene visualizzato se non è presente alcuna abbreviazione per un argomento",
+	"@showEditNicksBarDesc": {
+		"description": "Tell the user that the hint is shown if nicks are missing",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"advancedSettings": "Impostazioni avanzate",
+	"@advancedSettings": {
+		"description": "Header for advanced settings",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"iosMode": "Modalità iOS",
+	"@iosMode": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"iosModeDesc": "Imita l'aspetto di un'app iOS (in qualche modo)",
+	"@iosModeDesc": {
+		"description": "iOS mode imitates the look and feel of an ios app (a bit)",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"networkProtocol": "Protocollo di rete",
+	"@networkProtocol": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"nothingThere": "Nessuno disponibile",
+	"@nothingThere": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"params": "Parametri",
+	"@params": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"response": "Risposta",
+	"@response": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"copiedToClipboard": "Copia negli appunti",
+	"@copiedToClipboard": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"supportUs": "Sostienici ora!",
+	"@supportUs": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"giveFeedback": "Dai un feedback",
+	"@giveFeedback": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"openSourceCode": "Apri codice sorgente",
+	"@openSourceCode": {
+		"description": "Opens a link to github",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"about": "Informazioni su questa app",
+	"@about": {
+		"description": "Opens the about dialog",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"registerClient": "Registro digitale (Client)",
+	"@registerClient": {
+		"description": "App name shown in the about dialog, clarifying that this information is about the client",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"aboutDesc": "Un client per il registro digitale.\nGrazie mille a Vinzentinum per l'aiuto amichevole.",
+	"@aboutDesc": {
+		"description": "Say that this is a client for the digital register. Thank my school for supporting this project",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"addNick": "Aggiungi nickname",
+	"@addNick": {
+		"description": "Add a subject nick",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"editNick": "Modifica nickname",
+	"@editNick": {
+		"description": "Edit a subject nick",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"subject": "Soggetto",
+	"@subject": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"nick": "Nickname",
+	"@nick": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"cancel": "Annulla",
+	"@cancel": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"addSubject": "Aggiungi soggetto",
+	"@addSubject": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"chooseColor": "Scegli colore",
+	"@chooseColor": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"select": "Seleziona",
+	"@select": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noEntries": "Nessuna voce disponibile",
+	"@noEntries": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"newEntries": "Nuove voci",
+	"@newEntries": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"register": "Registro",
+	"@register": {
+		"description": "The app name",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"past": "Passato",
+	"@past": {
+		"description": "Button that allows to view past homework",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"future": "Futuro",
+	"@future": {
+		"description": "Button that allows to view future homework",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"reminder": "Avviso",
+	"@reminder": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"deletedEntries": "Entrate eliminate",
+	"@deletedEntries": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"neverAsk": "Non chiedere",
+	"@neverAsk": {
+		"description": "Toggle to disable the confirmation dialog when deleting reminders",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"deleteReminderQ": "Elimina avviso?",
+	"@deleteReminderQ": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"delete": "Elimina",
+	"@delete": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"versions": "Versioni",
+	"@versions": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"current": "attuale",
+	"@current": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"isNew": "nuovo",
+	"@isNew": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"added": "inserito",
+	"@added": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"deleted": "eliminato",
+	"@deleted": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"changed": "modificato",
+	"@changed": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"reAdded": "ripristinato",
+	"@reAdded": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"beforeDateTime": "Prima di {date} alle {time} {action}.",
+	"@beforeDateTime": {
+		"description": "action is either added, deleted, changed or reAdded.",
+		"type": "text",
+		"placeholders_order": [
+			"date",
+			"time",
+			"action"
+		],
+		"placeholders": {
+			"date": {},
+			"time": {},
+			"action": {}
+		}
+	},
+	"onDateBetweenTimes": "Il {date} tra {timeFrom} e {timeTo} {action}.",
+	"@onDateBetweenTimes": {
+		"description": "action is either added, deleted, changed or reAdded.",
+		"type": "text",
+		"placeholders_order": [
+			"date",
+			"timeFrom",
+			"timeTo",
+			"action"
+		],
+		"placeholders": {
+			"date": {},
+			"timeFrom": {},
+			"timeTo": {},
+			"action": {}
+		}
+	},
+	"betweenDateTimes": "Tra {dateFrom} alle {timeFrom} e {dateTo} alle {timeTo} {action}.",
+	"@betweenDateTimes": {
+		"description": "action is either added, deleted, changed or reAdded.",
+		"type": "text",
+		"placeholders_order": [
+			"dateFrom",
+			"timeFrom",
+			"dateTo",
+			"timeTo",
+			"action"
+		],
+		"placeholders": {
+			"dateFrom": {},
+			"timeFrom": {},
+			"dateTo": {},
+			"timeTo": {},
+			"action": {}
+		}
+	},
+	"attachments": "{howMany,plural, =1{Allegato}other{Allegati}}",
+	"@attachments": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"download": "Scarica",
+	"@download": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"downloadAgain": "Scarica nuovamente",
+	"@downloadAgain": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"openFile": "Apri file",
+	"@openFile": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradesAndTests": "Note & Test",
+	"@gradesAndTests": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"homeworkAndReminders": "Compiti & Avvisi",
+	"@homeworkAndReminders": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"observations": "Osservazioni",
+	"@observations": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"today": "Oggi",
+	"@today": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"tomorrow": "Domani",
+	"@tomorrow": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"yesterday": "Ieri",
+	"@yesterday": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"logoutTitle": "Disconnetti",
+	"@logoutTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"settingsTitle": "Impostazioni",
+	"@settingsTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"dasboardTitle": "Compiti per casa",
+	"@dasboardTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradesTitle": "Voti",
+	"@gradesTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"absencesTitle": "Assenze",
+	"@absencesTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"calendarTitle": "Calendario",
+	"@calendarTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"certificateTitle": "Certificato",
+	"@certificateTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"messagesTitle": "Messaggi",
+	"@messagesTitle": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"collapse": "Riduci",
+	"@collapse": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"expand": "Aumenta",
+	"@expand": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"addAccount": "Aggiungi account",
+	"@addAccount": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"changeAccount": "Cambia account",
+	"@changeAccount": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradeCalculator": "Calcolatore dei voti",
+	"@gradeCalculator": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"createNewGrade": "Crea nuovo voto",
+	"@createNewGrade": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"add": "Aggiungi",
+	"@add": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"average": "Media",
+	"@average": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"grades": "{howMany,plural, =1{Voto}other{Voti}}",
+	"@grades": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"gradeCalculatorHint": "Per iniziare, importa voti esistenti da un soggetto\no aggiungi una primo voto.",
+	"@gradeCalculatorHint": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"importGrades": "Importa voti",
+	"@importGrades": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"addGrade": "Aggiungi voto",
+	"@addGrade": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"selectSubject": "Seleziona soggetto",
+	"@selectSubject": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"firstSemester": "Primo semestre",
+	"@firstSemester": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"secondSemester": "Secondo semestre",
+	"@secondSemester": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"bothSemester": "Entrambi i semestri",
+	"@bothSemester": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"import": "Importa",
+	"@import": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noGradesAvailable": "Non sono disponibili voti per questo soggetto in questo periodo",
+	"@noGradesAvailable": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"invalidValue": "Valore non valido",
+	"@invalidValue": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"weighting": "Peso",
+	"@weighting": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"chartLegend": "Legenda",
+	"@chartLegend": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradesChart": "Grafico dei voti",
+	"@gradesChart": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"chartTapHint": "Tocca il grafico per vedere i dettagli",
+	"@chartTapHint": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradeAverage": "Media dei voti",
+	"@gradeAverage": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"sortGradesByType": "Ordina voti per tipo",
+	"@sortGradesByType": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"showDeletedGrades": "Mostra voti eliminati",
+	"@showDeletedGrades": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"subjectExcluded": "Hai escluso questo soggetto dalla media dei voti",
+	"@subjectExcluded": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"gradeCalculatorDesc": "Calcola la media di qualsiasi voto",
+	"@gradeCalculatorDesc": {
+		"description": "The grade calculator allows calculating the average of arbitrary grades",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noGradeForAverage": "Non ci sono voti per la media",
+	"@noGradeForAverage": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noConnection": "Nessuna connessione",
+	"@noConnection": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"offlineModeActive": "Modalità offline attiva.",
+	"@offlineModeActive": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"lastSynced": "Ultima sincronizzazione",
+	"@lastSynced": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"formatDays": "{howMany,plural, =1{Giorno}other{Giorni}}",
+	"@formatDays": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"formatHours": "{howMany,plural, =1{Ora}other{Ore}}",
+	"@formatHours": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": []
+		}
+	},
+	"formatMinutes": "{howMany,plural, =1{Minuto}other{Minuti}}",
+	"@formatMinutes": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"formatSeconds": "{howMany,plural, =1{Secondo}other{Secondi}}",
+	"@formatSeconds": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany"
+		],
+		"placeholders": {
+			"howMany": {}
+		}
+	},
+	"formatTimeAgo": "prima {howMany} {unit}",
+	"@formatTimeAgo": {
+		"type": "text",
+		"placeholders_order": [
+			"howMany",
+			"unit"
+		],
+		"placeholders": {
+			"howMany": {},
+			"unit": {}
+		}
+	},
+	"school": "Scuola",
+	"@school": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"differentSchool": "Altra scuola",
+	"@differentSchool": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"schoolNotFound": "Scuola non trovata",
+	"@schoolNotFound": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"enterSchoolName": "Inserisci il nome della scuola",
+	"@enterSchoolName": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"address": "Indirizzo",
+	"@address": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"username": "Nome utente",
+	"@username": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"resetPassword": "Resetta password",
+	"@resetPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"password": "Password",
+	"@password": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"oldPassword": "Vecchia password",
+	"@oldPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"newPassword": "Nuova password",
+	"@newPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"forgotPassword": "Password dimenticata",
+	"@forgotPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"forceChangePassword": "È necessario modificare la password::",
+	"@forceChangePassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"passwordRequirements": "La nuova password deve:\n- avere almeno 10 caratteri\n- contenere almeno un carattere maiuscolo\n- contenere almeno un carattere minuscolo\n- contenere almeno un numero\n- contenere almeno un carattere speciale\n- non essere uguale alla vecchia password",
+	"@passwordRequirements": {
+		"description": "Stupid password requirements",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"repeatNewPassword": "Ripeti nuova password",
+	"@repeatNewPassword": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"passwordsDontMatch": "Le nuove password non coincidono",
+	"@passwordsDontMatch": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"otherAccounts": "Altri account",
+	"@otherAccounts": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"connectionFailed": "Impossibile connettersi a \"{to}\". Per favore controlla la tua connessione internet.\nSe hai selezionato \"Altra scuola\", devi inserire un indirizzo valido.",
+	"@connectionFailed": {
+		"type": "text",
+		"placeholders_order": [
+			"to"
+		],
+		"placeholders": {
+			"to": {}
+		}
+	},
+	"login": "Accedi",
+	"@login": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"sendPassResetRequest": "Richiesta di reset password",
+	"@sendPassResetRequest": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"emailAddress": "Indirizzo email",
+	"@emailAddress": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"ok": "Ok",
+	"@ok": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noMessages": "Nessun messaggio",
+	"@noMessages": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"sent": "Inviato",
+	"@sent": {
+		"description": "Label for the datetime the message was sent",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"from": "Da",
+	"@from": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"to": "A",
+	"@to": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"notifications": "Notifiche",
+	"@notifications": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"noNotifications": "Nessuna notifica",
+	"@noNotifications": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"readAll": "Leggi tutto",
+	"@readAll": {
+		"description": "Button that allows the user to mark all notifications as read",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"failedToSave": "Errore durante il salvataggio",
+	"@failedToSave": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"downloaded": "Scaricato",
+	"@downloaded": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"failedToDownload": "Download fallito",
+	"@failedToDownload": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"enterSomething": "Inserisci qualcosa",
+	"@enterSomething": {
+		"description": "Shown when the user tries to login without a password\/username",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"sorry": "Mi dispiace!",
+	"@sorry": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"userKindNotSupported": "Questo tipo di utente non è supportato.",
+	"@userKindNotSupported": {
+		"description": "Shown when a teacher tries to log in",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"userKindNotSupportedDesc": "Questa app è adatta solo a studenti e genitori.",
+	"@userKindNotSupportedDesc": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"back": "Indietro",
+	"@back": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"goToWebClient": "Vai al client web",
+	"@goToWebClient": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"passwordChanged": "Password modificata con successo",
+	"@passwordChanged": {
+		"description": "Shown when a teacher tries to log in",
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"unexpectedError": "Errore imprevisto.",
+	"@unexpectedError": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"unexpectedLogout": "Questo errore può verificarsi se due dispositivi accedono allo stesso account contemporaneamente.\nIn questo caso puoi provare a chiudere l'app e riaprirla.\n\nSe non è questo il caso, contattaci per aiutarti a risolvere questo problema.",
+	"@unexpectedLogout": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"parseError": "Errore durante l'elaborazione dei dati.\nContattaci per aiutarti a risolvere questo problema.\nNota che il log degli errori potrebbe contenere dati privati.",
+	"@parseError": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"generalErrorMessage": "Una funzionalità potrebbe non essere ancora supportata.\nContattaci per aiutarti a risolvere questo problema:",
+	"@generalErrorMessage": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"errorLog": "Log degli errori",
+	"@errorLog": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"failedLoadingData": "Errore durante il caricamento dei dati salvati",
+	"@failedLoadingData": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"tryReinstalling": "Prova a reinstallare l'app.",
+	"@tryReinstalling": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	},
+	"failedOpeningLink": "Questo link non può essere aperto",
+	"@failedOpeningLink": {
+		"type": "text",
+		"placeholders_order": [],
+		"placeholders": {}
+	}
+}
