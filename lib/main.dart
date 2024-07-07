@@ -121,14 +121,8 @@ class RegisterApp extends StatelessWidget {
             if (overridePlatform && Platform.isAndroid) {
               platform = TargetPlatform.iOS;
             }
-            return brightness == Brightness.dark
-                ? ThemeData(
-                    primarySwatch: Colors.teal,
-                    brightness: brightness,
-                    platform: platform,
-                  )
-                : ThemeData(
-                    primarySwatch: Colors.deepOrange,
+            return ThemeData(
+                    colorSchemeSeed: Colors.deepOrange,
                     brightness: brightness,
                     platform: platform,
                   );

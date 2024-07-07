@@ -43,25 +43,22 @@ class GradesPage extends StatelessWidget {
       appBar: ResponsiveAppBar(
         title: const Text("Noten"),
         actions: <Widget>[
-          Theme(
-            data: ThemeData.dark(),
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton<Semester>(
-                value: vm.showSemester,
-                items: Semester.values
-                    .map(
-                      (s) => DropdownMenuItem(
-                        value: s,
-                        child: Text(
-                          s.name,
-                        ),
+          DropdownButtonHideUnderline(
+            child: DropdownButton<Semester>(
+              value: vm.showSemester,
+              items: Semester.values
+                  .map(
+                    (s) => DropdownMenuItem(
+                      value: s,
+                      child: Text(
+                        s.name,
                       ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  if (vm.showSemester != value) changeSemester(value!);
-                },
-              ),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (vm.showSemester != value) changeSemester(value!);
+              },
             ),
           ),
         ],
